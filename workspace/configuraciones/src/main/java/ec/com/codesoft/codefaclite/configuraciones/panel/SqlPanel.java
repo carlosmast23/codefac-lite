@@ -6,6 +6,10 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -35,6 +39,11 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
         txtAreaSql = new javax.swing.JTextArea();
         btnEjecutarComandos = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblResultados = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        txtErrores = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -59,8 +68,9 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
 
         btnEjecutarComandos.setText("Ejecutar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnEjecutarComandos, gridBagConstraints);
 
@@ -74,6 +84,44 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
 
+        jScrollPane2.setViewportView(tblResultados);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.5;
+        jPanel1.add(jScrollPane2, gridBagConstraints);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel2.setText("Salida:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtErrores, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel3.setText("Consola de Resultados:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel3, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -83,8 +131,47 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEjecutarComandos;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblResultados;
     private javax.swing.JTextArea txtAreaSql;
+    private javax.swing.JTextField txtErrores;
     // End of variables declaration//GEN-END:variables
+
+    public JButton getBtnEjecutarComandos() {
+        return btnEjecutarComandos;
+    }
+
+    public void setBtnEjecutarComandos(JButton btnEjecutarComandos) {
+        this.btnEjecutarComandos = btnEjecutarComandos;
+    }
+
+    public JTable getTblResultados() {
+        return tblResultados;
+    }
+
+    public void setTblResultados(JTable tblResultados) {
+        this.tblResultados = tblResultados;
+    }
+
+    public JTextArea getTxtAreaSql() {
+        return txtAreaSql;
+    }
+
+    public void setTxtAreaSql(JTextArea txtAreaSql) {
+        this.txtAreaSql = txtAreaSql;
+    }
+
+    public JTextField getTxtErrores() {
+        return txtErrores;
+    }
+
+    public void setTxtErrores(JTextField txtErrores) {
+        this.txtErrores = txtErrores;
+    }
+
+    
 }

@@ -45,6 +45,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -503,6 +505,19 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         Integer numeracionNueva=utilidadFacade.obtenerCodigoMaximo(prefijo, nombreTabla);
         return UtilidadesCodigos.generarFormatoCodigo(prefijo,numeracionNueva,ParametrosSistemaCodefac.TAMANIO_CODIGOS);
         
+    }
+    
+    public List ejecutarConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException
+    {
+        try
+        {
+            //AbstractFacade.entityManager.create
+            Query query=AbstractFacade.entityManager.createNativeQuery(queryStr);
+            return query.getResultList();
+        }catch(Exception e)
+        {
+            throw new ServicioCodefacException(e.getMessage());
+        }
     }
 
 
