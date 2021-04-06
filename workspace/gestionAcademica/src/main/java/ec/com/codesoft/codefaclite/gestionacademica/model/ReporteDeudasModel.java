@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -286,7 +287,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             return dataListOriginal;
         }
         
-        Map<String,ReporteDeudasData> mapResultadoTemp=new HashMap<String,ReporteDeudasData>();
+        Map<String,ReporteDeudasData> mapResultadoTemp=new LinkedHashMap<String,ReporteDeudasData>();
         
         for (ReporteDeudasData dataOriginal : dataListOriginal) 
         {
@@ -302,11 +303,8 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         }
         
         //devolver el valor como una lista
-        List respuesta=UtilidadesMap.castMapToList(mapResultadoTemp);
-        System.out.println("Imprimir errores");
-        for (Object object : respuesta) {
-            System.out.println("dato agregado:"+object);
-        }
+        List<ReporteDeudasData> respuesta=UtilidadesMap.castMapToList(mapResultadoTemp);
+               
         return respuesta;
         //return dataListOriginal;
         

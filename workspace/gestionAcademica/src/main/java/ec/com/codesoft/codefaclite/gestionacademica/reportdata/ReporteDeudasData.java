@@ -23,6 +23,7 @@ public class ReporteDeudasData implements ExcelDatosInterface , Cloneable {
     private String estudiante;
     private String rubro;
     private String valor;
+    private Integer nivel;
 
     public ReporteDeudasData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro, String valor) {
         this.nivelAcademicoEstudiante = nivelAcademicoEstudiante;
@@ -86,6 +87,15 @@ public class ReporteDeudasData implements ExcelDatosInterface , Cloneable {
     {
         this.valor=new BigDecimal(this.valor).add(new BigDecimal(valorStr)).toString();
     }
+    
+    public Integer getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(Integer nivel) {
+        this.nivel = nivel;
+    }
+
 
     @Override
     public List<TipoDato> getDatos() {
@@ -120,6 +130,8 @@ public class ReporteDeudasData implements ExcelDatosInterface , Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
+
+   
     
     
 }

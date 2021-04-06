@@ -38,9 +38,10 @@ public abstract class UtilidadesMap {
         return resultadoMap;
     }
     
+
     public static List castMapToList(Map map)
     {
-        return new ArrayList(map.keySet());
+        return new ArrayList(map.values());
     }
     
     public interface MapCastListIf<C,V,L>

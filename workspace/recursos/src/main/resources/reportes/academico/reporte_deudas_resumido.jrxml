@@ -180,7 +180,13 @@
 		<band height="12" splitType="Stretch">
 			<textField>
 				<reportElement x="10" y="0" width="26" height="12" uuid="4c240566-c775-42ce-a546-3520a39f0b82"/>
-				<textElement>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{nivelAcademico_COUNT}]]></textFieldExpression>
