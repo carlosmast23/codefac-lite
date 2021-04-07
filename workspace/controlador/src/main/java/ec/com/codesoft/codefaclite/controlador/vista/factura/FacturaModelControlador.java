@@ -919,6 +919,50 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     }
     
     /**
+     * Actualmente el metodo solo sirve para agregar productos
+     * @param codigoDetalle
+     * @param tipoDocumentoEnum
+     * @param empresa
+     * @return 
+     */
+    public static Producto listenerBuscarProducto(String codigoDetalle,TipoDocumentoEnum tipoDocumentoEnum,Empresa empresa)
+    {
+        //Solo validar si existe datos ingresados en el combo
+        if (codigoDetalle.trim().equals("")) {
+            return null;
+        }
+        
+        
+            try {
+                //TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
+
+                switch (tipoDocumentoEnum) {
+                    case ACADEMICO:
+                        //agregarRubroAcademico();
+                        break;
+                    case PRESUPUESTOS:
+                        //agregarPresupuesto();
+                        break;
+                    case INVENTARIO:
+                    case LIBRE:
+
+                        //Map<String,Object> mapParametros=new HashMap<String,Object>();
+                        //mapParametros.put("codigoPersonalizado", getTxtCodigoDetalle().getText()); //TODO: VER COMO MANEJAR TODOS LOS TIPOS DE CODIGO, VER UNA OPCION DE PARAMETRIZAR POR QUE CODIGO SE QUIERE TRABAJAR
+                        //List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(getTxtCodigoDetalle().getText(),session.getEmpresa());
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoDetalle, empresa);
+                        return producto;
+
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return null;
+    
+    }
+    
+    /**
      * TODO: Metodo temporal para separar por lote e individual pero toca unir 
      * @param facturas
      * @param nombre
