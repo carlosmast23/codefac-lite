@@ -173,6 +173,16 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         
     }
     
+    protected Object ejecutarTransaccionConResultado(MetodoInterfaceTransaccionResultado interfaz) throws ServicioCodefacException
+    {
+        return ejecutarTransaccionGenerico(new TransaccionIf() {
+            @Override
+            public Object transaccionGenerica() throws ServicioCodefacException, RemoteException {
+                return interfaz.transaccion();
+            }
+        });
+    }
+    
     
     /**
      * Metodo Que me permite ejecutar un conjunto de procesos en el jpa como un proceso
@@ -180,9 +190,21 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
      * @throws PersistenceException 
      */
     protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws ServicioCodefacException
-   {
-       
+    {
+        ejecutarTransaccionGenerico(new TransaccionIf() {
+            @Override
+            public Object transaccionGenerica() throws ServicioCodefacException, RemoteException {
+                interfaz.transaccion();
+                return null;
+            }
+        });
+    }
+    
+    private Object ejecutarTransaccionGenerico(TransaccionIf interfaz) throws ServicioCodefacException
+    {
+        
         EntityTransaction transaccion = entityManager.getTransaction();
+        Object resultadoTransaccion=null;
         
         //No se puede iniciar una nueva transaccion si previamente existe otra
        //TODO: En teoria deberia ver una forma de tener varios entity manager sincronizados y no como en este caso que solo permite una transacción a la vez
@@ -204,6 +226,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             
        }
        
+       
        if (transaccion.isActive()) 
        {
            //TODO: Solución de prueba temporal
@@ -220,7 +243,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         try {        
             
             transaccion.begin();
-            interfaz.transaccion();
+            resultadoTransaccion=interfaz.transaccionGenerica();
             transaccion.commit();
             //transaccion.setRollbackOnly();
             //entityManager.clear(); //Supuestamente esto no es neceario y solo se estaba usando supuestamente para errores de cache
@@ -283,6 +306,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             throw new ServicioCodefacException(e.getMessage());
             //throw e;
         }
+        return resultadoTransaccion;
+        
     }
 
     protected Facade getFacade()
@@ -308,5 +333,10 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     {
         AbstractFacade.detachRecursive(entidad);
     }    
+    
+    public interface  TransaccionIf
+    {
+        public Object transaccionGenerica() throws ServicioCodefacException,RemoteException;
+    }
     
 }

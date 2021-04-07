@@ -507,18 +507,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         
     }
     
-    public List ejecutarConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException
-    {
-        try
-        {
-            //AbstractFacade.entityManager.create
-            Query query=AbstractFacade.entityManager.createNativeQuery(queryStr);
-            return query.getResultList();
-        }catch(Exception e)
-        {
-            throw new ServicioCodefacException(e.getMessage());
-        }
-    }
+    
 
 
 }

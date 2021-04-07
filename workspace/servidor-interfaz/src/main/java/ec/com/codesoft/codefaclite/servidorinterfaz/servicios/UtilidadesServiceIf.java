@@ -49,8 +49,6 @@ public interface UtilidadesServiceIf extends Remote
     
     public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException;
     
-    public List ejecutarConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException;
-    
     
     
 }

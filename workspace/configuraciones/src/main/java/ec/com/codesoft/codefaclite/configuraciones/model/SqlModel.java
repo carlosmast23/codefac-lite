@@ -37,8 +37,9 @@ public class SqlModel extends SqlPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    getTxtErrores().setText("");
                     String queryStr=getTxtAreaSql().getText();
-                    List<Object[]> ejemplo=ServiceFactory.getFactory().getUtilidadesServiceIf().ejecutarConsultaNativa(queryStr);
+                    List<Object[]> ejemplo=ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarConsultaNativa(queryStr);
                     System.out.println("Tamanio:"+ejemplo.size());
                     construirModeloTabla(ejemplo);
                 } catch (RemoteException ex) {
