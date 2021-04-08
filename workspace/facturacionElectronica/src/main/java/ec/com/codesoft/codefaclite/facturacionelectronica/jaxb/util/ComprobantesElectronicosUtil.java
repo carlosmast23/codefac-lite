@@ -229,9 +229,6 @@ public abstract class ComprobantesElectronicosUtil {
     public static boolean eliminarArchivo(String rutaArchivo) {
         File archivo = new File(rutaArchivo);
         archivo.delete();
-        System.out.println(archivo.exists());
-        System.out.println(archivo.canWrite());
-        System.out.println(archivo.isDirectory());
          
         if (archivo.exists() && archivo.canWrite() && !archivo.isDirectory()) {
             archivo.delete();
