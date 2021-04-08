@@ -141,4 +141,6 @@ public abstract class ParametrosSistemaCodefac {
      * Variable que establece la cantidad maxima de días previos que se pueden emitir una factura
      */
     public static final Integer MAX_DIAS_FACURAR=30;
+    
+    public static final Integer MAX_COMPROBANTES_ELECTRONICOS_LOTE=35;
 }

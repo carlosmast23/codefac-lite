@@ -114,4 +114,14 @@ public class UtilidadesArchivos {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return nombrePrincipal+"-"+simpleDateFormat.format(UtilidadesFecha.getFechaHoy())+"."+formato;
     }
+    
+    public static Long obtenerTamanioArchivoEnKb(File archivo)
+    {
+        try {
+            return Files.size(archivo.toPath())/ 1024;
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0l;
+    }
 }

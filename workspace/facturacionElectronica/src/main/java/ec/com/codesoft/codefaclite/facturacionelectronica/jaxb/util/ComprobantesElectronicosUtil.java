@@ -56,7 +56,7 @@ import org.w3c.dom.Document;
  */
 public abstract class ComprobantesElectronicosUtil {
 
-    public static void generarArchivoXml(StringWriter xml, String path) {
+    public static File generarArchivoXml(StringWriter xml, String path) {
         File file = new File(path);
         //crear toda la ruta si no existe
         if (!file.exists()) {
@@ -82,6 +82,7 @@ public abstract class ComprobantesElectronicosUtil {
                 Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return file;
     }
     
      /**
