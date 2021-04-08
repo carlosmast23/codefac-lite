@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -121,6 +122,19 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
             }
         });
                 
+    }
+    
+    public Bodega crearBodegaDefectoSinTransaccion(Sucursal sucursal)
+    {
+        Bodega bodega=new Bodega();
+        bodega.setNombre(ParametrosSistemaCodefac.BODEGA_NOMBRE_DEFECTO);
+        bodega.setDescripcion("Bodega creada automática");
+        bodega.setEmpresa(sucursal.getEmpresa());
+        bodega.setEncargado("");
+        bodega.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        bodega.setSucursal(sucursal);
+        bodega.setTipoBodegaEnum(Bodega.TipoBodegaEnum.VENTA);
+        return bodega;
     }
     
     public Bodega buscarPorNombre(String nombre) throws ServicioCodefacException,RemoteException

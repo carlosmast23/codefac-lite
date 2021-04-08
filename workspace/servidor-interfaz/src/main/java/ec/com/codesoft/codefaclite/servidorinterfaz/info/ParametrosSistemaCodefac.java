@@ -59,9 +59,8 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final Integer LIMITE_CARACTERES_SMS=160;
     
-    /**
-     * 
-     */
+    public static final String BODEGA_NOMBRE_DEFECTO="Bodega principal";
+    
     public static final String CARPETA_DATOS_TEMPORALES="tmp";
     
     
