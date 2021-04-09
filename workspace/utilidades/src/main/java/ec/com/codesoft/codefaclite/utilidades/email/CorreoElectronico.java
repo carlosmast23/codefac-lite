@@ -117,6 +117,7 @@ public class CorreoElectronico {
             props.put("mail.smtps.host", propiedadCorreo.getHost());
             props.put("mail.smtps.auth", "true");
             props.put("mail.transport.protocol", "smtps");
+            props.put("mail.smtps.ssl.protocols", "TLSv1.1 TLSv1.2");
         }
         else
         {
@@ -125,6 +126,10 @@ public class CorreoElectronico {
             props.put("mail.smtp.host",propiedadCorreo.getHost());
             props.put("mail.smtp.port",propiedadCorreo.getPort().toString());
             props.put("mail.transport.protocol", "smtp");
+            //props.put("mail.smtp.socketFactory.fallback", "true");
+            //TODO: Sin este código no funcionaba para hostings como Godaddy
+            // Accept only TLS 1.1 and 1.2
+            props.setProperty("mail.smtp.ssl.protocols", "TLSv1.1 TLSv1.2");
         }
         System.out.println("====>PROPIEDADES EMAIL <===========");
         System.out.println(props);
