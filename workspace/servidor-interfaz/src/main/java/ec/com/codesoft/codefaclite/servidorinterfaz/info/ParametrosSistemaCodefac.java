@@ -143,4 +143,6 @@ public abstract class ParametrosSistemaCodefac {
     public static final Integer MAX_DIAS_FACURAR=30;
     
     public static final Integer MAX_COMPROBANTES_ELECTRONICOS_LOTE=35;
+    
+    public static final Boolean PROFORMA_MODO_PRUEBA=false;
 }

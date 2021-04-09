@@ -1872,45 +1872,53 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 }
             }
         });
+        
+        
     }
     
     private void cargarConfiguracionesCorreo(ComprobanteElectronicoService servicio,Empresa empresa) throws RuntimeException
     {
-        servicio.setMetodoEnvioInterface(new MetodosEnvioInterface() {
-            @Override
-            public void enviarCorreo(String mensaje, String subject, List<String> destinatorios, Map<String,String> pathFiles) throws Exception {
-                CorreoCodefac correo=new CorreoCodefac() {
-                    @Override
-                    public String getMensaje() {
-                        return mensaje;
-                    }
-                    
-                    @Override
-                    public String getTitulo() {
-                        return subject;
-                    }
-                    
-                    @Override
-                    public Map<String,String> getPathFiles() {
-                        return pathFiles;
-                    }
-                    
-                    @Override
-                    public List<String> getDestinatorios() {
-                        return destinatorios;
-                    }
+        
+        MetodosEnvioInterface envioCorreoIf=new MetodosEnvioInterface() {
+            private CorreoCodefac correo;
+            
+            private void crearObjectoCorreo(String mensaje, String subject, List<String> destinatorios, Map<String, String> pathFiles)
+            {
+                correo = new CorreoCodefac() {
                 };
+            }
+            
+            @Override
+            public void enviarCorreo(String mensaje, String subject, List<String> destinatorios, Map<String, String> pathFiles) throws Exception 
+            {
+                //Si es la primera conexion que se va a ejecutar creo el primero objecto
+                if(correo==null)
+                {
+                    crearObjectoCorreo(mensaje, subject, destinatorios, pathFiles);
+                    correo.modoSession=true;
+                }
                 
                 try
                 {
-                    correo.enviarCorreo(empresa);
+                    correo.enviarCorreo(empresa, mensaje, subject, destinatorios, pathFiles);
                 }catch(RuntimeException e)
                 {
                     e.printStackTrace();
                     throw new RuntimeException(e);
                 }
             }
-        });
+
+            @Override
+            public void cerrarSesion() {
+                if(correo!=null)
+                {
+                    correo.cerrarSesionCodefacCorreo();
+                }
+            }
+        };
+        
+        
+        servicio.setMetodoEnvioInterface(envioCorreoIf);
     }
 
     @Override

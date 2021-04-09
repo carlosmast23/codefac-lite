@@ -15,4 +15,5 @@ import java.util.Map;
  */
 public interface MetodosEnvioInterface { 
     public abstract void enviarCorreo(String mensaje,String subject,List<String> destinatorios,Map<String,String> pathFiles) throws Exception;
+    public abstract void cerrarSesion();
 }

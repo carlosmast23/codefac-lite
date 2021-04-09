@@ -1435,34 +1435,16 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     private void enviarCorreo(Empleado empleado, String mensaje)
     {
-        CorreoCodefac correoCodefac = new CorreoCodefac() {
-            @Override
-            public String getMensaje() {
-                return mensaje;
-            }
-
-            @Override
-            public String getTitulo() {
-                return "Orden Compra";
-            }
-
-            @Override
-            public Map<String, String> getPathFiles() {
-                HashMap<String, String> mapArchivos = new HashMap<String, String>();
+        CorreoCodefac correoCodefac = new CorreoCodefac();
+        
+        HashMap<String, String> mapArchivos = new HashMap<String, String>();
                 mapArchivos.put("Comunicado.pdf", PATH_REPORTE_TMP);
-                return mapArchivos;
-            }
-
-            @Override
-            public List<String> getDestinatorios() {
+                
                 List<String> destinatarios = new ArrayList<String>();
                 destinatarios.add(empleado.getCorreoElectronico());
-                return destinatarios;
-            }
-        };
 
         try {
-            correoCodefac.enviarCorreo(session.getEmpresa());
+            correoCodefac.enviarCorreo(session.getEmpresa(),mensaje,"Orden Compra",destinatarios,mapArchivos);
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
         }

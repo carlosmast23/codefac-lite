@@ -33,10 +33,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.Destinatar
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -118,19 +120,23 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
                 //Verifica si existen comprobantes electrónicos para procesar primero
                 if(comprobantes.size()>0)
                 {
-                    ///Procesar las facturas de forma electronica
-                    ClienteInterfaceComprobanteLote cic = getInterazEscritorio().getInterfaceCallBack();
-                    ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(
-                            ComprobanteElectronicoService.ETAPA_GENERAR, 
-                            ComprobanteElectronicoService.ETAPA_AUTORIZAR, 
-                            null,
-                            comprobantes, 
-                            session.getEmpresa().getIdentificacion(),
-                            cic,
-                            true,
-                            session.getEmpresa(),
-                            false
-                    );
+                    List<List> datosProcesar=UtilidadesLista.dividirLista(ParametrosSistemaCodefac.MAX_COMPROBANTES_ELECTRONICOS_LOTE, comprobantes);
+                    for (List<ComprobanteDataInterface> comprobanteList : datosProcesar) {
+                        ///Procesar las facturas de forma electronica
+                        ClienteInterfaceComprobanteLote cic = getInterazEscritorio().getInterfaceCallBack();
+                        
+                        ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(
+                                ComprobanteElectronicoService.ETAPA_GENERAR,
+                                ComprobanteElectronicoService.ETAPA_AUTORIZAR,
+                                null,
+                                new ArrayList<ComprobanteDataInterface>(comprobanteList),
+                                session.getEmpresa().getIdentificacion(),
+                                cic,
+                                true,
+                                session.getEmpresa(),
+                                false
+                        );
+                    }
                 }
                 
             }
@@ -484,6 +490,11 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
         if(puntoEmisionSeleccionado==null)
         {
             throw new ServicioCodefacException("Seleccione un punto de emisión para continuar");
+        }
+        
+        if(ventasSeleccionadasList.size()>ParametrosSistemaCodefac.MAX_COMPROBANTES_ELECTRONICOS_LOTE)
+        {
+            throw new ServicioCodefacException("Por el momento no se puede procesar en lote más de "+ParametrosSistemaCodefac.MAX_COMPROBANTES_ELECTRONICOS_LOTE+" Comprobantes");
         }
     }
 

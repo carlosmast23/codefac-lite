@@ -52,6 +52,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
@@ -379,9 +380,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
         {
+            
             if(modo.equals(CrudEnum.CREAR))
             {
-                validacionInicialProforma(factura.getProforma());            
+                if(!ParametrosSistemaCodefac.PROFORMA_MODO_PRUEBA)
+                {
+                    validacionInicialProforma(factura.getProforma());            
+                }
             }
             
         }
@@ -407,8 +412,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         Factura proforma=factura.getProforma();
         if(proforma!=null)
         {
-            proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
-            entityManager.merge(proforma);
+            if(!ParametrosSistemaCodefac.PROFORMA_MODO_PRUEBA)
+            {
+                proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
+                entityManager.merge(proforma);
+            }
         }
         
         //Si es nota de venta generar un número de autorización cualquiera

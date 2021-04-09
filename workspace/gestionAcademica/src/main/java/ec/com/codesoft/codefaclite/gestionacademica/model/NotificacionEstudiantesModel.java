@@ -205,35 +205,15 @@ public class NotificacionEstudiantesModel extends NotificacionEstudiantesPanel {
     }
 
     private void enviarCorreo(EstudianteInscrito estudianteInscrito, String mensaje, String titulo) {
-        CorreoCodefac correoCodefac = new CorreoCodefac() {
-            @Override
-            public String getMensaje() {
-                return mensaje;
-            }
-
-            @Override
-            public String getTitulo() {
-                return titulo;
-            }
-
-            @Override
-            public Map<String, String> getPathFiles() {
-                HashMap<String, String> mapArchivos = new HashMap<String, String>();
-                //mapArchivos.put("comunicado.pdf", PATH_REPORTE_TMP);
-                return mapArchivos;
-            }
-
-            @Override
-            public List<String> getDestinatorios() {
-                List<String> destinatarios = new ArrayList<String>();
-                Persona representante = (estudianteInscrito.getEstudiante().getRepresentante() != null) ? estudianteInscrito.getEstudiante().getRepresentante() : estudianteInscrito.getEstudiante().getRepresentante2();
-                destinatarios.add((representante != null) ? representante.getCorreoElectronico() : "");
-                return destinatarios;
-            }
-        };
+        CorreoCodefac correoCodefac = new CorreoCodefac();
+         HashMap<String, String> mapArchivos = new HashMap<String, String>();
+        
+        List<String> destinatarios = new ArrayList<String>();
+        Persona representante = (estudianteInscrito.getEstudiante().getRepresentante() != null) ? estudianteInscrito.getEstudiante().getRepresentante() : estudianteInscrito.getEstudiante().getRepresentante2();
+        destinatarios.add((representante != null) ? representante.getCorreoElectronico() : "");
 
         try {
-            correoCodefac.enviarCorreo(session.getEmpresa());
+            correoCodefac.enviarCorreo(session.getEmpresa(),mensaje,titulo,destinatarios,mapArchivos);
             //Todo:Ver si poner un mensaje para saber que el correo fue enviado correctamente
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);

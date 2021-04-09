@@ -43,16 +43,13 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> implements Cloneable{
+public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> implements Cloneable {
 
     private static final long serialVersionUID = -1238278914412853684L;
-    
-    
+
     //public static final String ESTADO_FACTURADO="F";
     //public static final String ESTADO_ANULADO="A";
     //public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
-    
-    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,110 +57,95 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     //@Column(name = "TIPO_IDENTIFICACION_ID")
     //private Long tipoClienteId;
-   
-    
-
     //@Column(name = "IVA_SRI_ID")
     @JoinColumn(name = "IVA_SRI_ID")
     private ImpuestoDetalle ivaSriId;
-    
+
     @Column(name = "TOTAL_SUBSIDIO")
     private BigDecimal totalSubsidio;
-  
+
     @Column(name = "ESTADO_NOTA_CREDITO")
     private String estadoNotaCredito;
-    
+
     @Column(name = "TIPO_IDENTIFICACION_CODIGO_SRI")
     private String tipoIdentificacionCodigoSri;
-    
+
     @Column(name = "ESTADO_ENVIADO_GUIA_REMISION")
     private String estadoEnviadoGuiaRemision;
-    
+
     @Column(name = "FECHA_VENCIMIENTO_FACTURA")
     protected Date fechaVencimiento;
-    
+
     @Column(name = "COD_ORIGEN_TRANSACCION")
     private String codigoOrigenTransaccion;
-    
+
     @JoinColumn(name = "REFERIDO_ID")
-    @ManyToOne    
+    @ManyToOne
     private Persona referido;
-    
+
     @JoinColumn(name = "TIPO_IDENTIFICACION_ID")
     private SriIdentificacion sriIdentificacion;
-    
+
     @JoinColumn(name = "VENDEDOR_ID")
     private Empleado vendedor;
-    
+
     @JoinColumn(name = "USUARIO_ID")
     private Usuario usuario;
-    
+
     @JoinColumn(name = "PEDIDO_ID")
     private Factura proforma;
-    
+
     @Column(name = "ZONA_ID")
     private Long zonaId;
-    
+
     @Column(name = "ZONA_NOMBRE")
     private String zonaNombre;
-    
+
     @Column(name = "RUTA_ID")
     private Long rutaId;
-    
+
     @Column(name = "RUTA_NOMBRE")
     private String rutaNombre;
-    
+
     @Column(name = "VENTA_CREDITO")
     private String ventaCredito;
-    
+
     @Column(name = "DIAS_CREDITO")
     private Integer diasCredito;
-    
-        
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FormaPago> formaPagos;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaAdicional> datosAdicionales;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<NotaCredito> notasCredito;
 
     public Factura() {
-        this.datosAdicionales=new ArrayList<FacturaAdicional>();
-        this.formaPagos=new ArrayList<FormaPago>();
-        
+        this.datosAdicionales = new ArrayList<FacturaAdicional>();
+        this.formaPagos = new ArrayList<FormaPago>();
+
     }
-    
-    
+
     public Long getId() {
         return id;
     }
-
-
 
     public ImpuestoDetalle getIvaSriId() {
         return ivaSriId;
     }
 
-
-
-
-
     public void setId(Long id) {
         this.id = id;
     }
 
-
-
     public void setIvaSriId(ImpuestoDetalle ivaSriId) {
         this.ivaSriId = ivaSriId;
     }
-
-
 
     public List<FacturaDetalle> getDetalles() {
         return detalles;
@@ -181,7 +163,6 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }*/
-
     public List<FormaPago> getFormaPagos() {
         return formaPagos;
     }
@@ -245,7 +226,7 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setEstadoEnviadoGuiaRemision(String estadoEnviadoGuiaRemision) {
         this.estadoEnviadoGuiaRemision = estadoEnviadoGuiaRemision;
     }
-    
+
     public EnumSiNo getEstadoEnviadoGuiaRemisionEnum() {
         return EnumSiNo.getEnumByLetra(estadoEnviadoGuiaRemision);
     }
@@ -261,7 +242,7 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setCodigoOrigenTransaccion(String codigoOrigenTransaccion) {
         this.codigoOrigenTransaccion = codigoOrigenTransaccion;
     }
-    
+
     public OrigenTransaccionEnum getCodigoOrigenTransaccionEnum() {
         return OrigenTransaccionEnum.buscarPorCodigo(codigoOrigenTransaccion);
     }
@@ -270,153 +251,125 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         this.codigoOrigenTransaccion = codigoOrigenTransaccionEnum.getCodigo();
     }
 
-    
-    
-    
-    
     /**
      * Informacion adicional
      */
-    
-    public EstadoNotaCreditoEnum getEstadoNotaCreditoEnum()
-    {
+    public EstadoNotaCreditoEnum getEstadoNotaCreditoEnum() {
         return EstadoNotaCreditoEnum.getEnum(estadoNotaCredito);
     }
-            
-    public void addDetalle(FacturaDetalle detalle)
-    {
-        if(this.detalles==null)
-        {
-            this.detalles=new ArrayList<FacturaDetalle>();
+
+    public void addDetalle(FacturaDetalle detalle) {
+        if (this.detalles == null) {
+            this.detalles = new ArrayList<FacturaDetalle>();
         }
         detalle.setFactura(this);
-        this.detalles.add(detalle);        
+        this.detalles.add(detalle);
     }
-    
-     /**
+
+    /**
      * Formas de pago adicional
      */
-    public void addFormaPago(FormaPago formaPago)
-    {
-        if(this.formaPagos==null)
-        {
-            this.formaPagos=new ArrayList<FormaPago>();
+    public void addFormaPago(FormaPago formaPago) {
+        if (this.formaPagos == null) {
+            this.formaPagos = new ArrayList<FormaPago>();
         }
         formaPago.setFactura(this);
         this.formaPagos.add(formaPago);
-        
+
     }
-    
-    public void restarValorFormaPago(BigDecimal total)
-    {
+
+    public void restarValorFormaPago(BigDecimal total) {
         //TODO: Terminar de implementar para varias formas de pago
-        if(this.formaPagos!=null)
-        {
+        if (this.formaPagos != null) {
             for (FormaPago formaPago : formaPagos) {
                 formaPago.setTotal(formaPago.getTotal().subtract(total));
             }
         }
     }
-    
-    public BigDecimal getTotalFormasPago()
-    {
+
+    public BigDecimal getTotalFormasPago() {
         BigDecimal totalFormasPago = BigDecimal.ZERO;
         int res;
-        if (formaPagos!= null) {
+        if (formaPagos != null) {
             for (FormaPago fp : formaPagos) {
                 totalFormasPago = totalFormasPago.add(fp.getTotal());
             }
         }
         return totalFormasPago;
         //totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
-    
+
     }
-    
-    
-    public BigDecimal getTotalFormasPagoCartera()
-    {
+
+    public BigDecimal getTotalFormasPagoCartera() {
         BigDecimal totalFormasPago = BigDecimal.ZERO;
-        if (formaPagos!= null) {
+        if (formaPagos != null) {
             for (FormaPago fp : formaPagos) {
-                if(fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
-                {
+                if (fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS)) {
                     totalFormasPago = totalFormasPago.add(fp.getTotal());
                 }
             }
         }
         return totalFormasPago;
-    
+
     }
-    
-    public BigDecimal getTotalFormasPagoSinCartera()
-    {
+
+    public BigDecimal getTotalFormasPagoSinCartera() {
         BigDecimal totalFormasPago = BigDecimal.ZERO;
-        if (formaPagos!= null) {
+        if (formaPagos != null) {
             for (FormaPago fp : formaPagos) {
-                if(!fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
-                {
+                if (!fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS)) {
                     totalFormasPago = totalFormasPago.add(fp.getTotal());
                 }
             }
         }
         return totalFormasPago;
         //totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
-    
+
     }
-    
-    public FormaPago buscarFormaPagoSinGrabar(SriFormaPago sriFormaPago)
-    {
-        if(formaPagos!=null)
-        {
+
+    public FormaPago buscarFormaPagoSinGrabar(SriFormaPago sriFormaPago) {
+        if (formaPagos != null) {
             for (FormaPago formaPago : formaPagos) {
-                if(sriFormaPago.getAlias().equals(formaPago.getSriFormaPago().getAlias()))
-                {
+                if (sriFormaPago.getAlias().equals(formaPago.getSriFormaPago().getAlias())) {
                     return formaPago;
                 }
             }
         }
         return null;
     }
-    
+
     /**
      * Obtiene una forma de pago que se distita de cartera
-     * @return 
+     *
+     * @return
      */
-    public FormaPago buscarFormaPagoDistintaDeCartera()
-    {
-        if(formaPagos!=null)
-        {
+    public FormaPago buscarFormaPagoDistintaDeCartera() {
+        if (formaPagos != null) {
             for (FormaPago formaPago : formaPagos) {
-                if(!formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
-                {
+                if (!formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS)) {
                     return formaPago;
                 }
             }
         }
         return null;
     }
-    
-    public List<FormaPago> buscarListaFormasPagoDistintaDeCartera()
-    {
-        List<FormaPago> formasPago=new ArrayList<FormaPago>();
-        if(formaPagos!=null)
-        {
+
+    public List<FormaPago> buscarListaFormasPagoDistintaDeCartera() {
+        List<FormaPago> formasPago = new ArrayList<FormaPago>();
+        if (formaPagos != null) {
             for (FormaPago formaPago : formaPagos) {
-                if(!formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
-                {
+                if (!formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS)) {
                     formasPago.add(formaPago);
                 }
             }
         }
         return formasPago;
     }
-    
-    public FormaPago buscarFormaPagoConCartera()
-    {
-        if (formaPagos!= null) {
+
+    public FormaPago buscarFormaPagoConCartera() {
+        if (formaPagos != null) {
             for (FormaPago fp : formaPagos) {
-                if(fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS))
-                {
+                if (fp.getSriFormaPago().getAlias().equals(SriFormaPago.FORMA_PAGO_CARTERA_ALIAS)) {
                     return fp;
                 }
             }
@@ -463,8 +416,6 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setRutaNombre(String rutaNombre) {
         this.rutaNombre = rutaNombre;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -490,8 +441,6 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         }
         return true;
     }
-   
-    
 
     public Empleado getVendedor() {
         return vendedor;
@@ -524,20 +473,19 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setVentaCredito(String ventaCredito) {
         this.ventaCredito = ventaCredito;
     }
-    
-   public Boolean getVentaCreditoBool() {
-       EnumSiNo enumSiNo=getVentaCreditoEnum();
-       if(enumSiNo!=null)
-       {
-        return getVentaCreditoEnum().getBool();
-       }
-       return false;
+
+    public Boolean getVentaCreditoBool() {
+        EnumSiNo enumSiNo = getVentaCreditoEnum();
+        if (enumSiNo != null) {
+            return getVentaCreditoEnum().getBool();
+        }
+        return false;
     }
 
     public void setVentaCreditoBool(Boolean ventaCreditoBool) {
         this.ventaCredito = EnumSiNo.getEnumByBoolean(ventaCreditoBool).getLetra();
     }
-    
+
     public EnumSiNo getVentaCreditoEnum() {
         return EnumSiNo.getEnumByLetra(ventaCredito);
     }
@@ -553,39 +501,31 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setDiasCredito(Integer diasCredito) {
         this.diasCredito = diasCredito;
     }
-    
-    
-    
-    
+
     /**
-     * Metodo que devuelve los datos adicionales de la factura en tipo de dato Map
+     * Metodo que devuelve los datos adicionales de la factura en tipo de dato
+     * Map
      */
     public Map<String, String> getMapAdicional() {
-       Map<String,String> parametroMap=new LinkedHashMap<String ,String>();
-        if(getDatosAdicionales()!=null)
-        {
-            for (FacturaAdicional datoAdicional : getDatosAdicionales()) 
-            {
-                parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+        Map<String, String> parametroMap = new LinkedHashMap<String, String>();
+        if (getDatosAdicionales() != null) {
+            for (FacturaAdicional datoAdicional : getDatosAdicionales()) {
+                parametroMap.put(datoAdicional.getCampo(), datoAdicional.getValor());
             }
         }
         return parametroMap;
     }
-    
-    
+
     /**
      * Metodo que permite saber si en la factura fueron ingresados correos
-     * @return 
+     *
+     * @return
      */
-    public boolean verificarExistenCorreosIngresados()
-    {
-        if(datosAdicionales!=null)
-        {
+    public boolean verificarExistenCorreosIngresados() {
+        if (datosAdicionales != null) {
             for (FacturaAdicional datosAdicional : datosAdicionales) {
-                if(datosAdicional.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra()))
-                {
-                    if(datosAdicional.getValor()!=null && !datosAdicional.getValor().isEmpty())
-                    {
+                if (datosAdicional.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra())) {
+                    if (datosAdicional.getValor() != null && !datosAdicional.getValor().isEmpty()) {
                         return true;
                     }
                 }
@@ -593,14 +533,12 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         }
         return false;
     }
-    
-    public BigDecimal calcularSubsidio()
-    {
-        BigDecimal subSidioTotal=BigDecimal.ZERO;
-        if(detalles!=null)
-        {
+
+    public BigDecimal calcularSubsidio() {
+        BigDecimal subSidioTotal = BigDecimal.ZERO;
+        if (detalles != null) {
             for (FacturaDetalle detalle : detalles) {
-                subSidioTotal=subSidioTotal.add(detalle.calcularSubsidio());
+                subSidioTotal = subSidioTotal.add(detalle.calcularSubsidio());
             }
         }
         return subSidioTotal;
@@ -615,10 +553,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     @Override
     public void addDatoAdicionalAbstract(FacturaAdicional comprobanteAdicional) {
-        FacturaAdicional datoAdicional=(FacturaAdicional) comprobanteAdicional;
-        if(this.datosAdicionales==null)
-        {
-            this.datosAdicionales=new ArrayList<FacturaAdicional>();
+        FacturaAdicional datoAdicional = (FacturaAdicional) comprobanteAdicional;
+        if (this.datosAdicionales == null) {
+            this.datosAdicionales = new ArrayList<FacturaAdicional>();
         }
         datoAdicional.setFactura(this);
         this.datosAdicionales.add(datoAdicional);
@@ -626,18 +563,18 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     @Override
     public List<DetalleFacturaNotaCeditoAbstract> getDetallesComprobante() {
-        return (List<DetalleFacturaNotaCeditoAbstract>)(List<?>)detalles;
+        return (List<DetalleFacturaNotaCeditoAbstract>) (List<?>) detalles;
     }
-    
+
     /**
-     * Estados que me permiten distinger en que seccion del programa se esta generando la factura o pedido
+     * Estados que me permiten distinger en que seccion del programa se esta
+     * generando la factura o pedido
      */
-    public enum OrigenTransaccionEnum
-    {
-        ESCRITORIO("Escritorio","esc"),
-        APLICACION_WEB("Web","web"),
-        WIDGETS_VENTA_DIARIA("Venta Diaria Widget","wvd");
-        
+    public enum OrigenTransaccionEnum {
+        ESCRITORIO("Escritorio", "esc"),
+        APLICACION_WEB("Web", "web"),
+        WIDGETS_VENTA_DIARIA("Venta Diaria Widget", "wvd");
+
         private String nombre;
         private String codigo;
 
@@ -653,31 +590,24 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         public String getNombre() {
             return nombre;
         }
-        
-        
-        
-        public static OrigenTransaccionEnum buscarPorCodigo(String codigo)
-        {
+
+        public static OrigenTransaccionEnum buscarPorCodigo(String codigo) {
             for (OrigenTransaccionEnum value : OrigenTransaccionEnum.values()) {
-                if(value.getCodigo().equals(codigo))
-                {
+                if (value.getCodigo().equals(codigo)) {
                     return value;
                 }
             }
             return null;
         }
-        
-        
-        
+
     }
-    
-    
-    public enum EstadoNotaCreditoEnum
-    {
+
+    public enum EstadoNotaCreditoEnum {
         /**
-         * Estado por defecto cuando no aplique ninguna nota de credito a la factura
+         * Estado por defecto cuando no aplique ninguna nota de credito a la
+         * factura
          */
-        SIN_ANULAR("N","Sin anular"),
+        SIN_ANULAR("N", "Sin anular"),
         /**
          * Estado anulado cuando una nota de credito anulo totalmente la factura
          */
@@ -687,8 +617,6 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
          * factura
          */
         ANULADO_PARCIAL("P", "Anulado Parcial");
-        
-        
 
         private EstadoNotaCreditoEnum(String estado, String nombre) {
             this.estado = estado;
@@ -705,7 +633,7 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         public String getNombre() {
             return nombre;
         }
-        
+
         public static EstadoNotaCreditoEnum getEnum(String estado) {
 
             for (EstadoNotaCreditoEnum enumerador : EstadoNotaCreditoEnum.values()) {
@@ -715,79 +643,102 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
             }
             return null;
         }
-        
-        
-    
+
     }
-    
-    public GeneralEnumEstado getEnumEstadoProforma()
-    {
+
+    public GeneralEnumEstado getEnumEstadoProforma() {
         return GeneralEnumEstado.getEnum(estado);
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
-    }
-            
-    /**
-     * Metodo que me prmite obtener facturas dividas especialmente util en la facturación manual cuando necesito
-     * facturar una cantidad más grande de detalles que la que permite la hoja fisica
-     * @param limiteDetalle
-     * @return 
-     */
-    public List<Factura> dividirFactura(int limiteDetalle) throws ServicioCodefacException
-    {
-        if(limiteDetalle==0)
+        Factura facturaClonada = (Factura) super.clone(); //To change body of generated methods, choose Tools | Templates.
+        
+        if(facturaClonada.getFormaPagos()!=null)
         {
-            throw new ServicioCodefacException("No se tiene configurado un límite para los detalles de las facturas físicas");
+            for (FormaPago formaPago : facturaClonada.getFormaPagos()) {
+                formaPago.setId(null);
+                formaPago.setFactura(facturaClonada);
+            }
         }
         
-        List<Factura> nuevasFacturasDivididas=new ArrayList<Factura>();
-        for (int i = 0; i < this.detalles.size(); i=i+limiteDetalle) 
+        if(facturaClonada.getDetalles()!=null)
         {
-            Factura nuevaFactura=nuevaFacturaConLimite(i,i+limiteDetalle);
+            for (FacturaDetalle facturaDetalle : facturaClonada.getDetalles()) {
+                facturaDetalle.setId(null);
+                facturaDetalle.setFactura(facturaClonada);
+            }
+        }
+        
+        if(facturaClonada.getDatosAdicionales()!=null)
+        {
+            for (FacturaAdicional datoAdicional : facturaClonada.getDatosAdicionales()) {
+                datoAdicional.setId(null);
+                datoAdicional.setFactura(facturaClonada);
+            }
+        }
+        //if(facturaClonada.)
+        //{
+        
+        //}
+        
+        return facturaClonada;
+    }
+
+    /**
+     * Metodo que me prmite obtener facturas dividas especialmente util en la
+     * facturación manual cuando necesito facturar una cantidad más grande de
+     * detalles que la que permite la hoja fisica
+     *
+     * @param limiteDetalle
+     * @return
+     */
+    public List<Factura> dividirFactura(int limiteDetalle) throws ServicioCodefacException {
+        if (limiteDetalle == 0) {
+            throw new ServicioCodefacException("No se tiene configurado un límite para los detalles de las facturas físicas");
+        }
+
+        List<Factura> nuevasFacturasDivididas = new ArrayList<Factura>();
+        for (int i = 0; i < this.detalles.size(); i = i + limiteDetalle) {
+            Factura nuevaFactura = nuevaFacturaConLimite(i, i + limiteDetalle);
             nuevasFacturasDivididas.add(nuevaFactura);
         }
         return nuevasFacturasDivididas;
     }
-    
-    public Factura nuevaFacturaConLimite(int limiteInicia, int limiteFinal)
-    {
-        if(limiteFinal>detalles.size())
-        {
-            limiteFinal=detalles.size();
+
+    public Factura nuevaFacturaConLimite(int limiteInicia, int limiteFinal) {
+        if (limiteFinal > detalles.size()) {
+            limiteFinal = detalles.size();
         }
-        
-        Factura facturaNueva=null;
+
+        Factura facturaNueva = null;
         try {
-            facturaNueva=(Factura) clone();
+            facturaNueva = (Factura) clone();
             facturaNueva.setCliente(null);
             facturaNueva.setCliente(getCliente());
-            
-            facturaNueva.detalles=new ArrayList<>();
-                        
-            List<FacturaDetalle> detallesTmp=new ArrayList<FacturaDetalle>(detalles.subList(limiteInicia,limiteFinal));
+
+            facturaNueva.detalles = new ArrayList<>();
+
+            List<FacturaDetalle> detallesTmp = new ArrayList<FacturaDetalle>(detalles.subList(limiteInicia, limiteFinal));
             //List<FacturaDetalle> detallesNuevos=new ArrayList<FacturaDetalle>();
-            
+
             for (FacturaDetalle detalleTmp : detallesTmp) {
                 //detalleTmp.setFactura(facturaNueva);
                 facturaNueva.addDetalle(detalleTmp);
             }
-            
+
             ///////////////////////////////////////////////////
-            facturaNueva.datosAdicionales=new ArrayList<>();
-            
+            facturaNueva.datosAdicionales = new ArrayList<>();
+
             /*List<FacturaAdicional> facturaAdicionalListTmp=new ArrayList<FacturaAdicional>(datosAdicionales);
             
             for (FacturaAdicional detalleTmp : facturaAdicionalListTmp) {
                 //detalleTmp.setFactura(facturaNueva);
                 facturaNueva.addDatoAdicional(detalleTmp);
             }*/
-                        
             //////////////////////////////////////////////////
-            facturaNueva.formaPagos=new ArrayList<>();
-            
+            facturaNueva.formaPagos = new ArrayList<>();
+
             /*List<FormaPago> formaPagoTmpList =new ArrayList<FormaPago>(formaPagos);
             
             for (FormaPago detalleTmp : formaPagoTmpList) {
@@ -795,29 +746,29 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
                 facturaNueva.addFormaPago(detalleTmp);
             }*/
             facturaNueva.calcularTotalesDesdeDetalles();
-            
+
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
         }
         return facturaNueva;
     }
-    
+
     /**
-     * Metodo que me permite obtener la cantidad de productos vendidos en la factura
-     * @return 
+     * Metodo que me permite obtener la cantidad de productos vendidos en la
+     * factura
+     *
+     * @return
      */
-    public BigDecimal cantidadTotalProductos()
-    {
-        BigDecimal cantidadTotal=BigDecimal.ZERO;
-        
-        if(detalles!=null)
-        {
+    public BigDecimal cantidadTotalProductos() {
+        BigDecimal cantidadTotal = BigDecimal.ZERO;
+
+        if (detalles != null) {
             for (FacturaDetalle detalle : detalles) {
-                cantidadTotal=cantidadTotal.add(detalle.getCantidad());
+                cantidadTotal = cantidadTotal.add(detalle.getCantidad());
             }
         }
-        
+
         return cantidadTotal;
     }
-    
+
 }
