@@ -222,8 +222,8 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             //TODO: Verficar si se puede mejorar esta linea de codigo
             empresaLicencia.tipoLicencia=tipoLicencia;
             empresaLicencia.modulosSistema=validacion.getLicencia().getModulosSistema();
-            empresaLicencia.cantidadUsuarios=Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
-            empresaLicencia.usuarioLicencia=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
+            empresaLicencia.cantidadUsuarios=Integer.parseInt(validacion.obtenerLicencia().getString(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+            empresaLicencia.usuarioLicencia=validacion.obtenerLicencia().getString(Licencia.PROPIEDAD_USUARIO);
             
             ParametroCodefacService servicioParametros=new ParametroCodefacService();
             empresaLicencia.pathEmpresa=servicioParametros.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa).valor;
@@ -396,7 +396,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                 return true;
             }            
             
-            String usuario=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
+            String usuario=validacion.obtenerLicencia().getString(Licencia.PROPIEDAD_USUARIO);
             Licencia licenciaOnline=new Licencia();
             
             try
@@ -410,7 +410,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             
             
             Licencia licenciaFisica=new Licencia();
-            licenciaFisica.cargarLicenciaFisica(validacion.obtenerLicencia());
+            licenciaFisica.cargarPropiedadesLicenciaFisica(validacion.obtenerLicencia());
 
 
             if(licenciaOnline.compararOtraLicencia(licenciaFisica))

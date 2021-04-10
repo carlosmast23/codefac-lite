@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
+import ec.com.codesoft.codefaclite.utilidades.varios.InterfazRed;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.io.FileWriter;
@@ -23,6 +24,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.jfree.util.Log;
 
 /**
@@ -44,8 +47,8 @@ public class Licencia implements Serializable{
      */
     public static final String PROPIEDAD_INTERFAZ_RED="interfaz_red";
     
-    private String mac;
-    private Properties propiedades;
+    private List<InterfazRed> macListValidas;
+    private PropertiesConfiguration propiedades;
     private TipoLicenciaEnum tipoLicenciaEnum;
     
     
@@ -68,45 +71,74 @@ public class Licencia implements Serializable{
     
     
 
-    public Licencia(Properties propiedades) {
+    public Licencia(PropertiesConfiguration propiedades) {
         this.propiedades = propiedades;
         //this.mac=obtenerMac(interfazRed);
-        this.tipoLicenciaEnum=TipoLicenciaEnum.getEnumByNombre(propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA));        
+        //propiedades.getString(PROPIEDAD_TIPO_LICENCIA);
+        this.tipoLicenciaEnum=TipoLicenciaEnum.getEnumByNombre(propiedades.getString(PROPIEDAD_TIPO_LICENCIA));        
     }
     
     
-    public String obtenerMac(String interfazRed)
+    public List<InterfazRed> obtenerInterfacesRedDisponibles(String interfazRedDefecto)
     {
         //UtilidadVarios.obtenerMac();
-        return UtilidadVarios.obtenerMacSinInternet(interfazRed);
+        return UtilidadVarios.obtenerMacSinInternet(interfazRedDefecto);
     }
     
     public boolean validarLicencia()
     {
-        cargarLicenciaFisica(propiedades);
-        this.tipoLicenciaEnum=TipoLicenciaEnum.getEnumByNombre(propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA));
+        cargarPropiedadesLicenciaFisica(propiedades);
+        this.tipoLicenciaEnum=TipoLicenciaEnum.getEnumByNombre(propiedades.getString(PROPIEDAD_TIPO_LICENCIA));
         
         if(this.tipoLicenciaEnum==null)
         {
             return false; //Si no existe ningun tipo de usuario reporta falso
         }
 
-        //cargarModulosOffline();ver si cargado todos los datos oofline
-
+        
         String modulosStr=getModulosStr(); //Obtiene los valores de los modulos activos con una cadena para validar la licencia
                
         try
         {
-            //Validacion cuando el usuario si esta registrado con licencia gratis 
-            String licenciaTxt=usuario + ":" + mac + ":" + tipoLicenciaEnum.getLetra()+":"+cantidadClientes+":"+modulosStr;
-            LOG.log(Level.INFO,licenciaTxt);
-            return UtilidadesHash.verificarHashBcrypt(licenciaTxt, licencia);
+            for(InterfazRed interfazRed:macListValidas)
+            {
+                //Validacion cuando el usuario si esta registrado con licencia gratis 
+                String licenciaTxt=usuario + ":" + interfazRed.mac + ":" + tipoLicenciaEnum.getLetra()+":"+cantidadClientes+":"+modulosStr;
+                LOG.log(Level.INFO,licenciaTxt);
+                Boolean validacionLicencia= UtilidadesHash.verificarHashBcrypt(licenciaTxt, licencia);
+                if(validacionLicencia)
+                {
+                    //Antes de devolver el resulto verifico si la interfaz de red fue modificada para grabar
+                    verificarInterfazRedModificada(interfazRed);
+                    return true;
+                }
+            }
+            
         }
         catch(java.lang.IllegalArgumentException iae)
         {
-            return false;
+            iae.printStackTrace();
         }
+        
+        return false;
 
+    }
+    
+    private void verificarInterfazRedModificada(InterfazRed interfazRed )
+    {
+        if(nombreInterfazRed!=null)
+        {
+            if(!nombreInterfazRed.equals(interfazRed.nombre))
+            {
+                try {
+                    propiedades.setProperty(Licencia.PROPIEDAD_INTERFAZ_RED, interfazRed.nombre);
+                    //Grabar las nuevas modificaciones en el archivo grabar
+                    propiedades.save();
+                } catch (ConfigurationException ex) {
+                    Logger.getLogger(Licencia.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
     
     /**
@@ -146,7 +178,7 @@ public class Licencia implements Serializable{
         }
     }
 
-    public void cargarLicenciaFisica(Properties propiedades)
+    public void cargarPropiedadesLicenciaFisica(PropertiesConfiguration propiedades)
     {   
         //Si no existe ningun propiedad cargada omito este paso porque no va a cargar ningun dato
         if(propiedades==null)
@@ -154,13 +186,15 @@ public class Licencia implements Serializable{
             return ;
         }
         
-        this.usuario = propiedades.getProperty(Licencia.PROPIEDAD_USUARIO);
-        this.nombreInterfazRed = propiedades.getProperty(Licencia.PROPIEDAD_INTERFAZ_RED);
-        this.licencia = propiedades.getProperty(Licencia.PROPIEDAD_LICENCIA);
-        this.tipoLicenciaEnum = TipoLicenciaEnum.getEnumByNombre(propiedades.getProperty(Licencia.PROPIEDAD_TIPO_LICENCIA));
-        this.cantidadClientes = Integer.parseInt(propiedades.getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+        this.usuario = propiedades.getString(Licencia.PROPIEDAD_USUARIO);
         
-        this.mac=obtenerMac(nombreInterfazRed);
+        //Nombre de la interfaz de red con la cual se debe buscar para validar la licencia
+        this.nombreInterfazRed = propiedades.getString(Licencia.PROPIEDAD_INTERFAZ_RED);
+        this.licencia = propiedades.getString(Licencia.PROPIEDAD_LICENCIA);
+        this.tipoLicenciaEnum = TipoLicenciaEnum.getEnumByNombre(propiedades.getString(Licencia.PROPIEDAD_TIPO_LICENCIA));
+        this.cantidadClientes = Integer.parseInt(propiedades.getString(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+        
+        this.macListValidas=obtenerInterfacesRedDisponibles(nombreInterfazRed);
         
         //Cargar los modulos activos desde el archivo de propiedades
         this.modulosActivos=new ArrayList<ModuloCodefacEnum>();
@@ -263,7 +297,7 @@ public class Licencia implements Serializable{
     
     ////METODOS GET AND SET //////////////////////
     
-    public Properties getPropiedades() {
+    public PropertiesConfiguration getPropiedades() {
         return propiedades;
     }
 

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -123,5 +125,29 @@ public class UtilidadesArchivos {
             Logger.getLogger(UtilidadesArchivos.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0l;
+    }
+    
+    public static Boolean grabarArchivoPropiedadesFile(String path,Properties prop,String comentarios)
+    {
+        try {
+            FileOutputStream fr=null;
+            File file=new File(path);
+            
+            //crear toda la ruta si no existe
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                //file.mkdir();
+            }
+            
+            fr = new FileOutputStream(file);
+            prop.store(fr,comentarios);
+            fr.close();
+            return true;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(UtilidadesArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }
