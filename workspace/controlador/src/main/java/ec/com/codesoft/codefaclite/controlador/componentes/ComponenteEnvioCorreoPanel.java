@@ -110,33 +110,14 @@ public class ComponenteEnvioCorreoPanel extends javax.swing.JPanel {
                     return ;
                 }
                 
-                CorreoCodefac correoCodefac = new CorreoCodefac() {
-                    @Override
-                    public String getMensaje() {
-                        return txtCorreoMensaje.getText();
-                    }
-
-                    @Override
-                    public String getTitulo() {
-                        return txtCorreoTitulo.getText();
-                    }
-
-                    @Override
-                    public Map<String, String> getPathFiles() {
-                        HashMap<String, String> mapArchivos = new HashMap<String, String>();
-                        return mapArchivos;
-                    }
-
-                    @Override
-                    public List<String> getDestinatorios() {
-                        List<String> destinatarios = new ArrayList<String>();
-                        destinatarios.add(correoInterface.getCorreo());
-                        return destinatarios;
-                    }
-                };
+                CorreoCodefac correoCodefac = new CorreoCodefac();
+                
+                List<String> destinatarios = new ArrayList<String>();
+                destinatarios.add(correoInterface.getCorreo());
+                HashMap<String, String> mapArchivos = new HashMap<String, String>();
 
                 try {
-                    correoCodefac.enviarCorreo(correoInterface.getEmpresa());
+                    correoCodefac.enviarCorreo(correoInterface.getEmpresa(),txtCorreoMensaje.getText(),txtCorreoTitulo.getText(),destinatarios,mapArchivos);
                     DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
                 } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
                     Logger.getLogger(ComponenteEnvioCorreoPanel.class.getName()).log(Level.SEVERE, null, ex);

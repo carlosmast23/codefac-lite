@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.cartera.busqueda.CarteraBusqueda;
 import ec.com.codesoft.codefaclite.cartera.panel.CarteraPanel;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CarteraData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
@@ -24,6 +25,8 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.CarteraCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
@@ -89,6 +92,11 @@ public class CarteraModel extends CarteraPanel{
     private List<Cartera> carteraDocumentosCruzar;
     
     private List<CarteraCruce> cruces;
+    
+    /**
+     * Referencia que me permite tener una variable para poder seleccionar el estudiante cuando se un abono a un estudiante
+     */
+    private Estudiante estudianteSeleccionado;
     
 
     public CarteraModel() {
@@ -270,6 +278,7 @@ public class CarteraModel extends CarteraPanel{
         getTxtDescripcionDetalle().setText("");
         getTxtPreimpreso().setText("");
         getTxtAutorizacion().setText("");
+        getTxtReferenciaDetalle().setText("");
     }
 
     //@Override
@@ -326,11 +335,42 @@ public class CarteraModel extends CarteraPanel{
         getTxtReferenciaManual().setText(cartera.getReferenciaManual());
         getTxtPreimpreso().setText(cartera.getPreimpreso());
         
+        cargarDatosReferencia(cartera);
+        
         cargarCruces();
         actualizaVistaTablaDetalles();
         actualizarTablaCruces();
         actualizarTablaDocumentosCruzar();
         actualizarTablaCrucesDetalle();
+        
+        
+    }
+    
+    private void cargarDatosReferencia(Cartera cartera)
+    {
+        getTxtReferenciaDetalle().setText("");
+        //TODO: Optimizar para ver si se puede poner en un servicio del lado del servidor para optener el resultado directo
+        if(cartera.getSegundaReferenciaTipo()!=null)
+        {
+            switch(cartera.getSegundaReferenciaTipoEnum())
+            {
+                case ABONOS_ACADEMICO:
+                {
+                    try {
+                        Estudiante estudiante= ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(cartera.getSegundaReferenciaId());
+                        if(estudiante!=null)
+                        {
+                            getTxtReferenciaDetalle().setText(estudiante.getNombreCompleto());
+                        }                    
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                    break;
+
+            }
+        }
+        
         
     }
     
@@ -622,6 +662,21 @@ public class CarteraModel extends CarteraPanel{
             }
         });*/
         
+        getBtnAgregarReferencia().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EstudianteBusquedaDialogo aulaBusquedaDialogo = new EstudianteBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Estudiante estudiante = (Estudiante) buscarDialogoModel.getResultado();
+                
+                if (estudiante != null) {
+                    getTxtReferenciaDetalle().setText(estudiante.getNombreCompleto());
+                    estudianteSeleccionado=estudiante;
+                }
+            }
+        });
+        
         getBtnCruzar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -674,15 +729,7 @@ public class CarteraModel extends CarteraPanel{
         getBtnAgregarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarteraDetalle carteraDetalle=new CarteraDetalle();
-                if( setearDatosDetalle(carteraDetalle,CrudEnum.CREAR))
-                {
-                    cartera.addDetalle(carteraDetalle);
-
-                    //Actualizar la vista
-                    actualizaVistaTablaDetalles();
-                    limpiarDetalleVista();
-                }
+                btnListerAgregar();
                 
             }
         });
@@ -714,8 +761,22 @@ public class CarteraModel extends CarteraPanel{
             }
         });
     }
+        
     
-    private boolean setearDatosDetalle(CarteraDetalle carteraDetalle,CrudEnum crudEnum)
+    private void btnListerAgregar()
+    {
+        CarteraDetalle carteraDetalle = new CarteraDetalle();
+
+        if (setearDatosDetalle(carteraDetalle, CrudEnum.CREAR)) {
+            cartera.addDetalle(carteraDetalle);
+
+            //Actualizar la vista
+            actualizaVistaTablaDetalles();
+            limpiarDetalleVista();
+        }
+    }
+    
+    private Boolean validarAgregarDetalle()
     {
         /**
          * TODO: Analziar para seprar esto en otra funcion
@@ -745,7 +806,24 @@ public class CarteraModel extends CarteraPanel{
             DialogoCodefac.mensaje("Advertencia","No se puede ingresar valores menores iguales que cero", DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
         }
-
+        
+        
+        
+        
+        return true;
+    }
+    
+    private boolean setearDatosDetalle(CarteraDetalle carteraDetalle,CrudEnum crudEnum)
+    {
+        //Si no termina la validacion no termino de agregar a la pantalla
+        if(!validarAgregarDetalle())
+        {
+            return false;
+        }
+        
+        BigDecimal total = new BigDecimal(getTxtValorDetalle().getText());
+        String descripcion = getTxtDescripcionDetalle().getText();
+        
         carteraDetalle.setTotal(total);
         carteraDetalle.setDescripcion(descripcion);
         
@@ -760,6 +838,7 @@ public class CarteraModel extends CarteraPanel{
             carteraDetalle.setSaldo(total);
             carteraDetalle.setId(Long.parseLong(System.identityHashCode(carteraDetalle)*-1+"")); //Cuando creo un objeto por primera vez creo un hashCode para despues poder relacionar con los cruces
         }
+                
         return true;
     }
     
@@ -1060,6 +1139,17 @@ public class CarteraModel extends CarteraPanel{
         
         cartera.setReferenciaManual(getTxtReferenciaManual().getText());
         
+        DocumentoEnum documentoSeleccionadoEnum= (DocumentoEnum) getCmbDocumentoCartera().getSelectedItem();
+        if(documentoSeleccionadoEnum.equals(DocumentoEnum.ABONOS_ACADEMICO))
+        {
+            cartera.setSegundaReferenciaTipo(DocumentoEnum.ABONOS_ACADEMICO);
+            if(estudianteSeleccionado!=null)
+            {
+                cartera.setSegundaReferenciaId(estudianteSeleccionado.getIdEstudiante());
+                cartera.setSegundaReferenciaDescripcion(estudianteSeleccionado.getNombreCompleto());
+            }
+        }
+        
     }
 
     private void validar() throws ExcepcionCodefacLite {
@@ -1076,6 +1166,17 @@ public class CarteraModel extends CarteraPanel{
                 throw new ExcepcionCodefacLite("Advertencia tipo de documento no es permitido");
             }
         }
+        
+        DocumentoEnum documentoSeleccionadoEnum = (DocumentoEnum) getCmbDocumentoCartera().getSelectedItem();
+        if (documentoSeleccionadoEnum.equals(DocumentoEnum.ABONOS_ACADEMICO)) 
+        {
+            if (estudianteSeleccionado == null) 
+            {
+                throw new ExcepcionCodefacLite( "No se puede grabar una abono académico, sin seleccionar un estudiante");
+            }
+
+        }
+        
     }
     
     

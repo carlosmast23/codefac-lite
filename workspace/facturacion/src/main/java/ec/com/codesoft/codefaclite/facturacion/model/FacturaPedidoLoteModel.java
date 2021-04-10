@@ -157,7 +157,7 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
         String titulo[]=new String[]{
             "Objeto",
             "Seleccion",
-            "Preimpreso",
+            "Secuencial",
             "Fecha",
             "Identificación",
             "Razón Social",
@@ -233,9 +233,25 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
                 Factura value=valueTmp.factura;
                 String nombreComercial=(value.getSucursal().getNombreComercial()!=null)?value.getSucursal().getNombreComercial():"";
                 String vendedor=(value.getVendedor()!=null)?value.getVendedor().getNombresCompletos():"";
+                
+                //Valores por defeto para el Credito
+                Boolean credito=true;
+                Integer diasCredito=0;
+                
+                if(value.getVentaCredito()!=null)
+                {
+                    credito=value.getVentaCreditoEnum().getBool();
+                }
+                
+                if(value.getDiasCredito()!=null)
+                {
+                    diasCredito=value.getDiasCredito();
+                }
+                
+                
                 return new Object[]{
                     valueTmp,
-                    value.getPreimpreso(),
+                    value.getSecuencial(),
                     value.getFechaEmision(),
                     value.getIdentificacion(),
                     value.getRazonSocial(),
@@ -244,8 +260,8 @@ public class FacturaPedidoLoteModel extends FacturaPedidoLotePanel implements Co
                     "",//Ruta                    
                     valueTmp.documentoEnum,
                     value.getTotal(),
-                    valueTmp.credito,
-                    valueTmp.dias
+                    credito,
+                    diasCredito
                 };
             }
 

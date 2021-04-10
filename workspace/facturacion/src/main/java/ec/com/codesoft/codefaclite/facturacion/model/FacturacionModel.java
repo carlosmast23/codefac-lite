@@ -192,10 +192,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -257,8 +254,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
-        initModelTablaDatoAdicional();
+        initModelTablaDatoAdicional();        
         //setearVariablesIniciales();
+    }
+    
+    /**
+     * TODO: unir con la parte web para no mostrar información no necesaria para el usuario
+     */
+    private void setearVisibilidadComponentes()
+    {
+        try {
+            
+            getChkPagoConCartera().setVisible(false);
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_CARTERA,EnumSiNo.SI))
+            {
+                getChkPagoConCartera().setVisible(true);
+                
+            }  
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Factura getFactura() {
@@ -709,15 +725,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
                             factura.getVendedor().getNombresCompletos(), 
                             ComprobanteAdicional.Tipo.TIPO_OTRO) {
-                    });*/
-                                   
-                    FacturaAdicional facturaAdicional=new FacturaAdicional(
-                            ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
-                            factura.getVendedor().getNombresCompletos(), 
-                            ComprobanteAdicional.Tipo.TIPO_OTRO);
-                    
-                    factura.addDatoAdicional(facturaAdicional);
-                    
+                    });*/                                  
+                                        
                     //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
                     cargarTablaDatosAdicionales();
                 }
@@ -1949,6 +1958,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getCmbPreciosVenta().removeAllItems();
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
+        getTxtDiasCredito().setValue(0);
         
         
         
@@ -2456,6 +2466,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setEmpresa(session.getEmpresa());
         factura.setUsuario(session.getUsuario());
         factura.setSucursalEmpresa(session.getSucursal());
+        
+        factura.setVentaCreditoEnum(EnumSiNo.getEnumByBoolean(getChkHabilitarCredito().isSelected()));
+        factura.setDiasCredito((Integer) getTxtDiasCredito().getValue());
         //factura.setVendedor(vendedor);
         
         //factura.setIvaSriId(session.get;
@@ -2530,6 +2543,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         iniciarValoresIniciales();
+        setearVisibilidadComponentes();
         
     }
 
@@ -2593,6 +2607,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(factura.getFechaVencimiento()!=null)
         {
             getCmbFechaVencimiento().setDate(factura.getFechaVencimiento());
+        }
+        
+        if(factura.getVentaCredito()!=null)
+        {
+            getChkHabilitarCredito().setSelected(factura.getVentaCreditoEnum().getBool());
+        }
+        
+        if(factura.getDiasCredito()!=null)
+        {
+            getTxtDiasCredito().setValue(factura.getDiasCredito());
         }
         
     }
@@ -3274,49 +3298,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void keyPressed(KeyEvent e) {
                 
-                //Solo validar si existe datos ingresados en el combo
-                if(getTxtCodigoDetalle().getText().trim().equals(""))
-                {
-                    return;
-                }
-                
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    Producto producto=FacturaModelControlador.listenerBuscarProducto(getTxtCodigoDetalle().getText(), controlador.getTipoDocumentoEnumSeleccionado(), session.getEmpresa());
 
-                    try {
-                        TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
-                        
-                        switch (tipoDocumentoEnum) {
-                            case ACADEMICO:
-                                //agregarRubroAcademico();
-                                break;
-                            case PRESUPUESTOS:
-                                //agregarPresupuesto();
-                                break;
-                            case INVENTARIO:
-                            case LIBRE:
-                                
-                                //Map<String,Object> mapParametros=new HashMap<String,Object>();
-                                //mapParametros.put("codigoPersonalizado", getTxtCodigoDetalle().getText()); //TODO: VER COMO MANEJAR TODOS LOS TIPOS DE CODIGO, VER UNA OPCION DE PARAMETRIZAR POR QUE CODIGO SE QUIERE TRABAJAR
-                                //List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(getTxtCodigoDetalle().getText(),session.getEmpresa());
-                                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(getTxtCodigoDetalle().getText(),session.getEmpresa());
-                                if(producto==null)
-                                {
-                                    if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
-                                       btnListenerCrearProducto();
-                                    }
-                                }
-                                else
-                                {
-                                    controlador.agregarProductoVista(producto);
-                                }
-
-                                break;
-                                
+                    if (producto == null) {
+                        if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                            btnListenerCrearProducto();
                         }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } else {
+                        controlador.agregarProductoVista(producto);
                     }
                 }
 
@@ -3853,6 +3843,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public ComprobanteDataInterface obtenerComprobanteData() {
         return FacturaModelControlador.obtenerComprobanteData(factura);
+    }
+
+    @Override
+    public Estudiante getEStudiante() {
+        return estudiante;
     }
 
 }

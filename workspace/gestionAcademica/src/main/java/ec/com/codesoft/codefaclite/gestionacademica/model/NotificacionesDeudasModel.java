@@ -670,34 +670,16 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     }
 
     private void enviarCorreo(EstudianteInscrito estudianteInscrito, String mensaje,String titulo) {
-        CorreoCodefac correoCodefac = new CorreoCodefac() {
-            @Override
-            public String getMensaje() {
-                return mensaje;
-            }
+        CorreoCodefac correoCodefac = new CorreoCodefac();
 
-            @Override
-            public String getTitulo() {
-                return titulo;
-            }
+        HashMap<String, String> mapArchivos = new HashMap<String, String>();
+        mapArchivos.put("comunicado.pdf", PATH_REPORTE_TMP);
 
-            @Override
-            public Map<String, String> getPathFiles() {
-                HashMap<String, String> mapArchivos = new HashMap<String, String>();
-                mapArchivos.put("comunicado.pdf", PATH_REPORTE_TMP);
-                return mapArchivos;
-            }
-
-            @Override
-            public List<String> getDestinatorios() {
-                List<String> destinatarios = new ArrayList<String>();
-                destinatarios.add(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
-                return destinatarios;
-            }
-        };
+        List<String> destinatarios = new ArrayList<String>();
+        destinatarios.add(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
 
         try {
-            correoCodefac.enviarCorreo(session.getEmpresa());
+            correoCodefac.enviarCorreo(session.getEmpresa(),mensaje,titulo,destinatarios,mapArchivos);
             //Todo:Ver si poner un mensaje para saber que el correo fue enviado correctamente
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);

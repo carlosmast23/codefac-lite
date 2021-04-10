@@ -86,6 +86,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -373,6 +374,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void abrirDialogoBuscarCliente() {
         System.out.println("Abriendo dialogo init");
         ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession());
+        clienteBusquedaDialogo.setPrimeraColumnaNombre(true);
         //abrirDialogoBusqueda(clienteBusquedaDialogo);
         UtilidadesDialogo.abrirDialogoBusqueda(clienteBusquedaDialogo);
         System.out.println("Abriendo dialogo fin");
@@ -732,8 +734,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml");
         mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
         
-        reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER, "pl_firmas_factura.jrxml");
-        mapParametros.put("pl_firmas_factura",reportDatosAdicionales);
+        //reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER, "pl_firmas_factura.jrxml");
+        //mapParametros.put("pl_firmas_factura",reportDatosAdicionales);
         
 
         /*try {
@@ -1125,6 +1127,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             }
         }
         
+    }
+
+    public Estudiante getEStudiante() {
+        return null;
     }
 
     /**

@@ -33,6 +33,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -250,6 +253,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         } else {
             parameters.put("nivelacademico", "TODOS");
         }
+        
         ///// Imprimir reporte de excel o pdf
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
             @Override
@@ -257,7 +261,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 try {
                     Excel excel = new Excel();
                     String nombreCabeceras[] = {"Identificación", "Estudiante", "Nivel Academico", "Rubro", "Valor"};
-                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, construirDataResumidoReporte(tipoReporteEnum, data));
                     excel.abrirDocumento();
                 } catch (IOException ex) {
                     Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -270,10 +274,40 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
             @Override
             public void pdf() {
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, construirDataResumidoReporte(tipoReporteEnum, data), panelPadre, "Reporte Deudas");
             }
         });
 
+    }
+    
+    private List<ReporteDeudasData> construirDataResumidoReporte(ReporteDeudasData.TipoReporteEnum tipoReporteEnum,List<ReporteDeudasData> dataListOriginal) 
+    {
+        if(tipoReporteEnum.equals(ReporteDeudasData.TipoReporteEnum.DETALLADO))
+        {
+            return dataListOriginal;
+        }
+        
+        Map<String,ReporteDeudasData> mapResultadoTemp=new LinkedHashMap<String,ReporteDeudasData>();
+        
+        for (ReporteDeudasData dataOriginal : dataListOriginal) 
+        {
+            ReporteDeudasData dataNueva=mapResultadoTemp.get(dataOriginal.getEstudiante());
+            if(dataNueva==null)
+            {
+                dataNueva=new ReporteDeudasData(dataOriginal.getNivelAcademicoEstudiante(), dataOriginal.getCedulaEstudiante(),dataOriginal.getEstudiante(),dataOriginal.getRubro());                
+                mapResultadoTemp.put(dataOriginal.getEstudiante(), dataNueva);
+            }
+            
+            //sumar el valor del total
+            dataNueva.sumarValor(dataOriginal.getValor());
+        }
+        
+        //devolver el valor como una lista
+        List<ReporteDeudasData> respuesta=UtilidadesMap.castMapToList(mapResultadoTemp);
+               
+        return respuesta;
+        //return dataListOriginal;
+        
     }
 
     @Override

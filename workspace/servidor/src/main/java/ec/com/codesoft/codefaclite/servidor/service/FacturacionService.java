@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -46,10 +47,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DiaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
@@ -123,7 +126,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         ComprobantesService servicioComprobante = new ComprobantesService();
                         servicioComprobante.setearSecuencialComprobanteSinTransaccion(liquidacionCompra);           
-                        setearDatosCliente(liquidacionCompra);
+                        setearDatosClienteYDistribuidor(liquidacionCompra);
                         grabarDetallesFacturaSinTransaccion(liquidacionCompra); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     
@@ -158,7 +161,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                         
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
-                        setearDatosCliente(proforma);
+                        setearDatosClienteYDistribuidor(proforma);
                         grabarDetallesFacturaSinTransaccion(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     
@@ -168,6 +171,40 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         
         return proforma;
+    }
+    
+    /**
+     * Estos datos se graban en la misma factura para poder hacer un reporte mas rapido y evitar hacer tantas consultas
+     * @param proforma 
+     */
+    private void setearDatosDistribuidor(Factura venta) throws RemoteException, ServicioCodefacException
+    {
+        //Si la proforma tiene una zona la grabo con los datos de la oficina del cliente
+        if(venta.getSucursal().getZona()!=null)
+        {
+            venta.setZonaId(venta.getSucursal().getZona().getId());
+            venta.setZonaNombre(venta.getSucursal().getZona().getNombre());
+        }
+        
+        //Si la venta viene previamente de una proforma y tiene datos de los vendedores entonces selecciono los mismos valores
+        Factura proformaTmp=venta.getProforma();
+        if(proformaTmp==null)
+        {
+            //Si el cliente tiene un vendedor consulto a que ruta pertenece el cliente
+            if(venta.getVendedor()!=null)
+            {
+                RutaService rutaService=new RutaService();
+                Integer dia=UtilidadesFecha.obtenerDiaSemana(venta.getFechaEmision()); //Por el momento busca la ruta segun el día que esta generando la proforma o factura
+                DiaEnum diaEnum=DiaEnum.buscarPorNumero(dia);
+                Ruta ruta=rutaService.consultarRutaActivaPorVendedorYCliente(venta.getVendedor(),venta.getSucursal(),diaEnum);
+                if(ruta!=null)
+                {
+                    venta.setRutaId(ruta.getId());
+                    venta.setRutaNombre(ruta.getNombre());
+                }
+            }
+        }
+        
     }
     
     private void asignarVendedorProforma(Factura proforma)
@@ -190,7 +227,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                setearDatosCliente(proforma);
+                setearDatosClienteYDistribuidor(proforma);
                 entityManager.merge(proforma);
             }
         });
@@ -201,12 +238,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * Metodo que permite setear los datos del cliente en la venta para poder datos estaticos para realizar control de la venta
      * @param venta 
      */
-    private void setearDatosCliente(Factura venta)
+    private void setearDatosClienteYDistribuidor(Factura venta) throws RemoteException, ServicioCodefacException
     {
         venta.setRazonSocial(venta.getCliente().getRazonSocial());
         venta.setIdentificacion(venta.getCliente().getIdentificacion());
         venta.setDireccion(venta.getSucursal().getDireccion());
-        venta.setTelefono(venta.getCliente().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos        
+        venta.setTelefono(venta.getCliente().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos 
+        
+        setearDatosDistribuidor(venta);
     }
     
     /**
@@ -341,9 +380,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
         {
+            
             if(modo.equals(CrudEnum.CREAR))
             {
-                validacionInicialProforma(factura.getProforma());            
+                if(!ParametrosSistemaCodefac.PROFORMA_MODO_PRUEBA)
+                {
+                    validacionInicialProforma(factura.getProforma());            
+                }
             }
             
         }
@@ -357,18 +400,23 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
         //Setear los datos del cliente en la factura para tener un historico y vovler a consultar
         //Todo: Ver si es necesario corregir este problema tambien en la factura cuando edita
-        factura.setRazonSocial(factura.getCliente().getRazonSocial());
-        factura.setIdentificacion(factura.getCliente().getIdentificacion());
-        factura.setDireccion(factura.getSucursal().getDireccion());
-        factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
+        //factura.setRazonSocial(factura.getCliente().getRazonSocial());
+        //factura.setIdentificacion(factura.getCliente().getIdentificacion());
+        //factura.setDireccion(factura.getSucursal().getDireccion());
+        //factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
+        setearDatosClienteYDistribuidor(factura);        
+        
         asignarVendedorAutomatico(factura);
         
         //Cambiar el estado si viene de un pedido si fuera el caso
         Factura proforma=factura.getProforma();
         if(proforma!=null)
         {
-            proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
-            entityManager.merge(proforma);
+            if(!ParametrosSistemaCodefac.PROFORMA_MODO_PRUEBA)
+            {
+                proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
+                entityManager.merge(proforma);
+            }
         }
         
         //Si es nota de venta generar un número de autorización cualquiera
@@ -418,7 +466,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
        
         factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
-        //facturaFacade.create(factura);
         entityManager.persist(factura);
         entityManager.flush();
 
@@ -433,6 +480,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     break;
                 case INVENTARIO:
                     //Todo: Mejorar esta parte por el momento cuando es una proforma no proceso el tema del inventario
+                    //TODO: Parece que la parte de proforma deveria estar en la parte superior por que no debe afectar a ningun otro modulo
                     if (factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA)) {
                         break;
                     }
@@ -679,12 +727,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario) throws java.rmi.RemoteException 
     {
-        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,sucursal,usuario,null,null);
+        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,sucursal,usuario,null,null,false);
     }
     
-    public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) throws java.rmi.RemoteException 
+    public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) throws java.rmi.RemoteException 
     {
-        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,sucursal,usuario,vendedor,enviadoGuiaRemision);
+        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,sucursal,usuario,vendedor,enviadoGuiaRemision,quitarVentasAnuladasNCTotal);
     }
     
     public Long obtenerFacturasReporteTamanio(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) throws java.rmi.RemoteException 

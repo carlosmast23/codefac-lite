@@ -271,27 +271,48 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             }
             //getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
             
-            getTxtClaveFirma().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
+            parametroCodefac=parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA);
+            if(parametroCodefac!=null)
+            {
+                getTxtClaveFirma().setText(UtilidadesEncriptar.desencriptar(parametroCodefac.getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
+            }
+            
+            
             if(parametros.get(ParametroCodefac.IMAGEN_FONDO)!=null)
             {
                 getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
             }
             
+            //TODO: Mejorar esta parte buscando el iva por defecto
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("tarifa", Integer.parseInt(parametros.get(ParametroCodefac.IVA_DEFECTO).getValor()));
-            List<ImpuestoDetalle> lista = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
-            getCmbIvaDefault().getModel().setSelectedItem(lista.get(0));
+            parametroCodefac=parametros.get(ParametroCodefac.IVA_DEFECTO);
+            if(parametroCodefac!=null)
+            {
+                map.put("tarifa", Integer.parseInt(parametroCodefac.getValor()));
+                List<ImpuestoDetalle> lista = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
+                getCmbIvaDefault().getModel().setSelectedItem(lista.get(0));
+            }
+            
             /**
              * Cargar el modo de facturacion por defecto
              */
-            String modoProduccion = parametros.get(ParametroCodefac.MODO_FACTURACION).getValor();
-            getCmbModoFacturacion().setSelectedItem(modoProduccion);
+            parametroCodefac=parametros.get(ParametroCodefac.MODO_FACTURACION);
+            if(parametroCodefac!=null)
+            {
+                String modoProduccion = parametros.get(ParametroCodefac.MODO_FACTURACION).getValor();
+                getCmbModoFacturacion().setSelectedItem(modoProduccion);
+            }
             
             /**
              * Cargar el tipo de facturacion
              */
-            String letra=parametros.get(ParametroCodefac.TIPO_FACTURACION).getValor();
-            getCmbTipoFacturacion().setSelectedItem(ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(letra));
+            parametroCodefac=parametros.get(ParametroCodefac.TIPO_FACTURACION);
+            if(parametroCodefac!=null)
+            {
+                String letra=parametroCodefac.getValor();
+                getCmbTipoFacturacion().setSelectedItem(ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(letra));
+            }
+            
             listenerCmbTipoFacturacion(); //modifica las acciones para esta accion
             
             getTxtSmtpHost().setText(parametros.get(ParametroCodefac.SMTP_HOST).getValor());

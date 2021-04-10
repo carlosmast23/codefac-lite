@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -50,7 +50,7 @@ public class TransportistaService extends ServiceAbstract<Transportista, Transpo
     }
 
     public void eliminar(Transportista t) {
-        t.setEstado(TransportistaEnumEstado.ELIMINADO.getEstado());
+        t.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         this.transportistaFacade.edit(t);
     }
     

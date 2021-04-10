@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -15,5 +16,5 @@ import java.util.List;
  */
 public interface DepartamentoServiceIf extends ServiceAbstractIf<Departamento>
 {
-
+    public List<Departamento> obtenerActivos() throws ServicioCodefacException,RemoteException;
 }

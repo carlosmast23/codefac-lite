@@ -45,6 +45,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -504,6 +506,8 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         return UtilidadesCodigos.generarFormatoCodigo(prefijo,numeracionNueva,ParametrosSistemaCodefac.TAMANIO_CODIGOS);
         
     }
+    
+    
 
 
 }

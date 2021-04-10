@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -335,7 +335,7 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
         return txtDireccion;
     }
 
-    public TransportistaPanel(JComboBox<TransportistaEnumEstado> cmbEstado, JComboBox<Persona.TipoIdentificacionEnum> cmbIdentificacion, JLabel jLabel1, JLabel jLabel10, JLabel jLabel11, JLabel jLabel12, JLabel jLabel2, JLabel jLabel3, JLabel jLabel4, JLabel jLabel5, JLabel jLabel6, JLabel jLabel7, JLabel jLabel8, JLabel jLabel9, JLabel lblEspacio1, JLabel lblEspacio2, JLabel lblEspacio3, JLabel lblEspacio4, JTextField txtApellidos, JTextField txtCelular, JTextField txtCorreo, JTextField txtDireccion, JTextField txtIdentificacion, JTextField txtNombreComercial, JTextField txtNombres, JTextField txtPlaca, JTextField txtRazonSocial, JTextField txtTelefono) {
+    public TransportistaPanel(JComboBox<GeneralEnumEstado> cmbEstado, JComboBox<Persona.TipoIdentificacionEnum> cmbIdentificacion, JLabel jLabel1, JLabel jLabel10, JLabel jLabel11, JLabel jLabel12, JLabel jLabel2, JLabel jLabel3, JLabel jLabel4, JLabel jLabel5, JLabel jLabel6, JLabel jLabel7, JLabel jLabel8, JLabel jLabel9, JLabel lblEspacio1, JLabel lblEspacio2, JLabel lblEspacio3, JLabel lblEspacio4, JTextField txtApellidos, JTextField txtCelular, JTextField txtCorreo, JTextField txtDireccion, JTextField txtIdentificacion, JTextField txtNombreComercial, JTextField txtNombres, JTextField txtPlaca, JTextField txtRazonSocial, JTextField txtTelefono) {
         this.cmbEstado = cmbEstado;
         this.cmbIdentificacion = cmbIdentificacion;
         this.jLabel1 = jLabel1;
@@ -433,16 +433,16 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
         this.txtTelefono = txtTelefono;
     }
 
-    public JComboBox<TransportistaEnumEstado> getCmbEstado() {
+    public JComboBox<GeneralEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
 
-    public void setCmbEstado(JComboBox<TransportistaEnumEstado> cmbEstado) {
+    public void setCmbEstado(JComboBox<GeneralEnumEstado> cmbEstado) {
         this.cmbEstado = cmbEstado;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<TransportistaEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<Persona.TipoIdentificacionEnum> cmbIdentificacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

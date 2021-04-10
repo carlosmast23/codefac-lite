@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -81,6 +82,16 @@ public class CarteraDetalle implements Serializable,Cloneable {
     public void setTipoReferencia(String tipoReferencia) {
         this.tipoReferencia = tipoReferencia;
     }
+    
+    public DocumentoEnum getTipoReferenciaEnum() {
+        return DocumentoEnum.obtenerDocumentoPorCodigo(tipoReferencia);
+    }
+
+    public void setTipoReferenciaEnum(DocumentoEnum documentoEnum) {
+        this.tipoReferencia = documentoEnum.getCodigo();
+    }
+    
+    
 
     public Long getReferenciaId() {
         return referenciaId;

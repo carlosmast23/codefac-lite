@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.reportdata;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +16,14 @@ import java.util.List;
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteDeudasData implements ExcelDatosInterface{
+public class ReporteDeudasData implements ExcelDatosInterface , Cloneable {
 
     private String nivelAcademicoEstudiante;
     private String cedulaEstudiante;
     private String estudiante;
     private String rubro;
     private String valor;
+    private Integer nivel;
 
     public ReporteDeudasData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro, String valor) {
         this.nivelAcademicoEstudiante = nivelAcademicoEstudiante;
@@ -29,6 +31,14 @@ public class ReporteDeudasData implements ExcelDatosInterface{
         this.estudiante = estudiante;
         this.rubro = rubro;
         this.valor = valor;
+    }
+    
+    public ReporteDeudasData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro) {
+        this.nivelAcademicoEstudiante = nivelAcademicoEstudiante;
+        this.cedulaEstudiante = cedulaEstudiante;
+        this.estudiante = estudiante;
+        this.rubro = rubro;
+        this.valor = "0";
     }
 
     
@@ -72,6 +82,20 @@ public class ReporteDeudasData implements ExcelDatosInterface{
     public void setValor(String valor) {
         this.valor = valor;
     }
+    
+    public void sumarValor(String valorStr)
+    {
+        this.valor=new BigDecimal(this.valor).add(new BigDecimal(valorStr)).toString();
+    }
+    
+    public Integer getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(Integer nivel) {
+        this.nivel = nivel;
+    }
+
 
     @Override
     public List<TipoDato> getDatos() {
@@ -101,6 +125,13 @@ public class ReporteDeudasData implements ExcelDatosInterface{
         
         
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
     
     
 }

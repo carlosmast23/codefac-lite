@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -85,6 +86,14 @@ public class Departamento implements Serializable
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstado(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
 
     public String getTipo() {
         return tipo;
@@ -138,6 +147,10 @@ public class Departamento implements Serializable
     {
         Otros("Otros","o"),
         Ventas("Ventas","v"),
+        /**
+         * Categoria utilizada para vendedores que deben facturar externamente desde la web o la app y solo deben ver sus clientes de ruta
+         */
+        Vendedores_Externos("Vendedores Externos","e"),
         Supervisor("Supervisor","s");
 
         private TipoEnum(String nombre, String letra) {

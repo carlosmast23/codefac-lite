@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.list;
 
+//import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,5 +59,13 @@ public abstract class UtilidadesLista {
     public static <T> List<T> arrayToList(T[] array){
         List<T> lista = Arrays.asList(array);
         return lista;
+    }
+    
+    public static List<List> dividirLista(Integer tamanioDividir,List listaOriginal)
+    {
+        //TODO: Comentado por que algo esta afectando al proyecto
+        //return Lists.partition(listaOriginal,tamanioDividir);
+        return null;
+        
     }
 }

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
@@ -26,6 +27,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoOrdenamientoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
@@ -38,6 +41,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -86,12 +90,26 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws RemoteException, ServicioCodefacException {
-                
+                validacionGrabar(cartera);
                 grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
             }
         });
         
         return cartera;
+    }
+    
+    private void validacionGrabar(Cartera cartera) throws ServicioCodefacException
+    {
+        if(cartera.getSegundaReferenciaTipoEnum()!=null)
+        {
+            if(cartera.getSegundaReferenciaTipoEnum().equals(DocumentoEnum.ABONOS_ACADEMICO))
+            {
+                if(cartera.getSegundaReferenciaId()==null)
+                {
+                    throw new ServicioCodefacException("No se puede grabar un abono académico sin tener una referencia del estudiante");
+                }
+            }
+        }
     }
     
     /**
@@ -465,6 +483,27 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     }
     
     /**
+     * TODO: Tal vez esto debe estar en el servicio de la factura
+     * @param factura
+     * @return 
+     */
+    private Estudiante buscarEstudianteFactura(Factura factura) throws RemoteException
+    {
+        for (FacturaDetalle detalle : factura.getDetalles()) {
+            if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
+            {
+                RubroEstudianteService servicio=new RubroEstudianteService();
+                RubroEstudiante rubroSeleccionado =servicio.buscarPorId(detalle.getReferenciaId());
+                if(rubroSeleccionado!=null)
+                {
+                    return rubroSeleccionado.getEstudianteInscrito().getEstudiante();
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
      * Permite crear cruces automaticos cuando no se quiere generar la cuenta por cobrar en la venta
      * @param factura documento facturar
      * @param carteraFactura cartera de la factura
@@ -487,14 +526,17 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         if(formaPagoConCartera!=null)
         {
             try {
+                //Si la factura tiene ligado un estudiante lo consulto de los datos adicionales
+                
                 //Verificar que el cliente tiene el saldo disponible para cruzar
-                BigDecimal saldoDisponibleCliente=obtenerSaldoDisponibleCruzar(factura.getCliente(),factura.getEmpresa());
+                Estudiante estudiante=buscarEstudianteFactura(factura);
+                BigDecimal saldoDisponibleCliente=obtenerSaldoDisponibleCruzar(factura.getCliente(),factura.getEmpresa(),estudiante);
                 if(saldoDisponibleCliente.compareTo(formaPagoConCartera.getTotal())<0)
                 {
                     new ServicioCodefacException("El cliente no tiene suficiente saldo para pagar con cartera");
                 }
                 
-                List<Cartera> carteraAbonos=obtenerCarteraPorCobrar(factura.getCliente(),factura.getEmpresa());
+                List<Cartera> carteraAbonos=obtenerCarteraPorCobrar(factura.getCliente(),estudiante,factura.getEmpresa());
                 BigDecimal totalCruzado=BigDecimal.ZERO; //Acumulador para saber hasta cuantos cruces hacer de cartera
                 for (Cartera carteraAbono : carteraAbonos) {
                     for (CarteraDetalle detalle : carteraAbono.getDetalles()) 
@@ -871,8 +913,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @throws ServicioCodefacException
      * @throws RemoteException 
      */
-    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal) throws ServicioCodefacException, RemoteException {
-        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal);
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento) throws ServicioCodefacException, RemoteException {
+        return carteraFacade.getCarteraSaldoCero(persona, fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal,documento);
     }
     
     /*public List<Cartera> listaCartera(Empresa empresa,Date fechaInicial,Date fechaFinal,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,)
@@ -1040,23 +1082,39 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return null;
     }
     
-    public List<Cartera> obtenerCarteraPorCobrar(Persona cliente,Empresa empresa) throws ServicioCodefacException, RemoteException 
+    public List<Cartera> obtenerCarteraPorCobrar(Persona cliente,Estudiante estudiante,Empresa empresa) throws ServicioCodefacException, RemoteException 
     {
         return (List<Cartera>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException {
-                return getFacade().obtenerCarteraPorCobrarFacade(cliente, empresa);
+                if(estudiante==null)
+                {
+                    return getFacade().obtenerCarteraPorCobrarFacade(cliente, empresa);
+                }else
+                {
+                    return getFacade().obtenerCarteraPorCobrarEstudianteFacade(estudiante, empresa);
+                }
+                
             }
         });
         
     }
     
-    public BigDecimal obtenerSaldoDisponibleCruzar(Persona cliente,Empresa empresa) throws ServicioCodefacException, RemoteException 
+    
+    
+    public BigDecimal obtenerSaldoDisponibleCruzar(Persona cliente,Empresa empresa,Estudiante estudiante) throws ServicioCodefacException, RemoteException 
     {
         return (BigDecimal) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException {
-                return getFacade().obtenerSaldoDisponibleCruzarFacade(cliente, empresa);
+                if(estudiante==null)
+                {
+                    return getFacade().obtenerSaldoDisponibleCruzarFacade(cliente, empresa);
+                }
+                else
+                {
+                    return getFacade().obtenerSaldoDisponibleCruzarEstudianteFacade(estudiante, empresa);
+                }
             }
         });
     }

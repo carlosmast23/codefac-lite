@@ -29,8 +29,9 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
     protected String nombreDetalleDocumento;
     protected String subtotalDetalle;
     protected String saldoDetalle;
+    protected String referenciaDescripcion;
     
-    public CarteraDocumentoData(String codigo, String descripcion, String valor, String saldo, String preimpreso, String fechaEmision, String persona, String documento, String codigoDetalleDocumento, String nombreDetalleDocumento, String subtotalDetalle, String saldoDetalle) 
+    public CarteraDocumentoData(String codigo, String descripcion, String valor, String saldo, String preimpreso, String fechaEmision, String persona, String documento, String codigoDetalleDocumento, String nombreDetalleDocumento, String subtotalDetalle, String saldoDetalle,String referenciaDescripcion) 
     {
         this.codigo = codigo;
         this.descripcion = descripcion;
@@ -44,6 +45,7 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
         this.nombreDetalleDocumento = nombreDetalleDocumento;
         this.subtotalDetalle = subtotalDetalle;
         this.saldoDetalle = saldoDetalle;
+        this.referenciaDescripcion=referenciaDescripcion;
     }
 
     public String getCodigo() {
@@ -141,6 +143,16 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
     public void setSaldoDetalle(String saldoDetalle) {
         this.saldoDetalle = saldoDetalle;
     }
+
+    public String getReferenciaDescripcion() {
+        return referenciaDescripcion;
+    }
+
+    public void setReferenciaDescripcion(String referenciaDescripcion) {
+        this.referenciaDescripcion = referenciaDescripcion;
+    }
+    
+    
     
     
 
@@ -151,6 +163,7 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
         tiposDatos.add(new TipoDato(this.codigo,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.documento, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.persona,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referenciaDescripcion,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.descripcion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaEmision, Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.preimpreso,Excel.TipoDataEnum.TEXTO));
@@ -164,6 +177,7 @@ public class CarteraDocumentoData implements ExcelDatosInterface {
         "Código",
         "Documento",
         "Cliente/Proveedor",
+        "Referencia",
         "Descripción",
         "Fecha",
         "Preimpreso",

@@ -184,6 +184,29 @@ public class UtilidadesFecha {
 
     }
     
+    /**
+     * Obtiene el dia con respecto a la semana
+     * @param date
+     * @return 
+     */
+    public static int obtenerDiaSemana(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        Integer diaSemana=cal.get(Calendar.DAY_OF_WEEK);
+        
+        //Corregir problema que devuelve por deecto que el primer dia de la semana es el domingo
+        if(diaSemana==1)
+        {
+            diaSemana=7;
+        }else
+        {
+            diaSemana=diaSemana-1;
+        }
+        
+        return diaSemana;
+
+    }
+    
     public static String formatoDiaMesAño(Date date)
     {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

@@ -56,7 +56,7 @@ import org.w3c.dom.Document;
  */
 public abstract class ComprobantesElectronicosUtil {
 
-    public static void generarArchivoXml(StringWriter xml, String path) {
+    public static File generarArchivoXml(StringWriter xml, String path) {
         File file = new File(path);
         //crear toda la ruta si no existe
         if (!file.exists()) {
@@ -82,6 +82,7 @@ public abstract class ComprobantesElectronicosUtil {
                 Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return file;
     }
     
      /**
@@ -229,9 +230,6 @@ public abstract class ComprobantesElectronicosUtil {
     public static boolean eliminarArchivo(String rutaArchivo) {
         File archivo = new File(rutaArchivo);
         archivo.delete();
-        System.out.println(archivo.exists());
-        System.out.println(archivo.canWrite());
-        System.out.println(archivo.isDirectory());
          
         if (archivo.exists() && archivo.canWrite() && !archivo.isDirectory()) {
             archivo.delete();

@@ -245,32 +245,14 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
                 /**
                  * Metodo final para enviar los correos
                  */
-                CorreoCodefac correoCodefac = new CorreoCodefac() {
-                    @Override
-                    public String getMensaje() {
-                        return "Los archivos de los reportes estan adjuntos en el mensaje.";
-                    }
-
-                    @Override
-                    public String getTitulo() {
-                        return "Reportes Generados Codefac";
-                    }
-
-                    @Override
-                    public Map<String, String> getPathFiles() {
-                        return archivosAdjuntos;
-                    }
-
-                    @Override
-                    public List<String> getDestinatorios() {
-                        ArrayList<String> correos = new ArrayList<String>();
+                CorreoCodefac correoCodefac = new CorreoCodefac() {};
+                
+                 ArrayList<String> correos = new ArrayList<String>();
                         correos.add(empleadoSeleccionado.getCorreoElectronico());
-                        return correos;
-                    }
-                };
 
                 try {
-                    correoCodefac.enviarCorreo(session.getEmpresa());
+                    //correoCodefac.enviarCorreo(empresa, title, title, correos, archivosAdjuntos);
+                    correoCodefac.enviarCorreo(session.getEmpresa(),"Los archivos de los reportes estan adjuntos en el mensaje.","Reportes Generados Codefac",correos,null);
                     panelPadre.cambiarCursorNormal();
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
                 } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {

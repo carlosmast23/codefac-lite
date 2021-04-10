@@ -50,11 +50,21 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
                 PersonaService personaService=new PersonaService();
                 personaService.crearConsumidorFinalSinTransaccion(p);
                 
+                //Grabar parametros por defecto
+                ParametroCodefacService parametroService=new ParametroCodefacService();
+                parametroService.crearParametroPorDefectoEmpresaSinTrasaccion(p);
+                
+                //TODO: Por el momento no puedo crear una bodega por defecto en este punto por que necesito una sucursal
+                //BodegaService bodegaService=new BodegaService();
+                //bodegaService.buscarPorNombre(nombre);
+                
             }
         });
         
         return p;
     }
+    
+    
     
     /*public void editar(Empresa p)
     {

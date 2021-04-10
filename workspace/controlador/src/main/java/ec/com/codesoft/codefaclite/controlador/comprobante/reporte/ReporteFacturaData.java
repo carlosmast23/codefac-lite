@@ -75,7 +75,11 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     
     protected String formaPago;
     
+    /**
+     * Datos para empresas de distribucion
+     */
     protected String zona;
+    protected String ruta;
     
     public ReporteFacturaData() {
     }
@@ -380,6 +384,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     public void setZona(String zona) {
         this.zona = zona;
     }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
     
     
     
@@ -416,6 +428,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.razonSocialCliente, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreLegalCliente, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.ruta, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.zona, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.documento, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.estadoFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.tipoEmision, Excel.TipoDataEnum.TEXTO));

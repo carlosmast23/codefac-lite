@@ -190,26 +190,12 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
             
             ventasList=consultarFacturas(fechaInicial, fechaFin, comprobanteEnum, documentoFiltro, vendedorSeleccionado);
             
+            //Consultar facturas sin autorizar cuando esta activo el modo en las configuraciones
             if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.MODO_FACTURACION_GUIA_REMISION,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
             {
                 ventasList.addAll(consultarFacturas(fechaInicial, fechaFin, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR, DocumentoEnum.FACTURA, vendedorSeleccionado));
-            }
-            
-            /*ventasList=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporte(
-                    null,
-                    new java.sql.Date(fechaInicial.getTime()),
-                    new java.sql.Date(fechaFin.getTime()),
-                    ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,
-                    Boolean.FALSE,
-                    null,
-                    Boolean.FALSE,
-                    null,
-                    session.getEmpresa(),
-                    DocumentoEnum.FACTURA,
-                    null,
-                    null,
-                    vendedorSeleccionado,
-                    EnumSiNo.NO);*/
+            }            
+
             
         } catch (RemoteException ex) {
             Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -233,7 +219,8 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
                     null,
                     null,
                     vendedorSeleccionado,
-                    EnumSiNo.NO);
+                    EnumSiNo.NO,
+                    true);
         } catch (RemoteException ex) {
             Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);
         }

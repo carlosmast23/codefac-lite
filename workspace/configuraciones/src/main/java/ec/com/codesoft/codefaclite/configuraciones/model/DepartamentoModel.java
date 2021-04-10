@@ -71,7 +71,7 @@ public class DepartamentoModel extends DepartamentoPanel
         try {
             setearDatos();
             DepartamentoServiceIf servicio = ServiceFactory.getFactory().getDepartamentoServiceIf();
-            servicio.grabar(departamento);
+            servicio.editar(departamento);
             DialogoCodefac.mensaje("Editar", "Se edito correctamente el departamento ", DialogoCodefac.MENSAJE_CORRECTO);
             limpiar();
         } catch (ServicioCodefacException ex) {
@@ -94,7 +94,7 @@ public class DepartamentoModel extends DepartamentoPanel
                     try {
                         this.departamento.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                         DepartamentoServiceIf servicio = ServiceFactory.getFactory().getDepartamentoServiceIf();
-                        servicio.editar(departamento);
+                        servicio.eliminar(departamento);
                         limpiar();
                         DialogoCodefac.mensaje("Eliminar", "El departamento se elimino correctamente", SOMEBITS);
                     } catch (ServicioCodefacException ex) {
@@ -140,7 +140,7 @@ public class DepartamentoModel extends DepartamentoPanel
         return permisos;
     }
 
-    @Override
+    /*@Override
     public void buscar() throws ExcepcionCodefacLite {
         //super.buscar(); 
         DepartamentoBusquedaDialogo busquedaDialogo = new DepartamentoBusquedaDialogo();
@@ -156,11 +156,11 @@ public class DepartamentoModel extends DepartamentoPanel
         {
             throw new ExcepcionCodefacLite("cancelado metodo buscar");
         }
-    }
+    }*/
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        DepartamentoBusquedaDialogo busquedaDialogo = new DepartamentoBusquedaDialogo();
+        DepartamentoBusquedaDialogo busquedaDialogo = new DepartamentoBusquedaDialogo(GeneralEnumEstado.ACTIVO);
         //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
         return busquedaDialogo;  
     }

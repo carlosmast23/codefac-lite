@@ -70,26 +70,6 @@ public class Cartera implements Serializable{
     @Column(name = "FECHA_CREDITO_FIN")
     private Date fechaFinCredito;
 
-    public Cartera() {
-    }
-
-    public Cartera(Persona persona, BigDecimal total, BigDecimal saldo, String puntoEstablecimiento, String puntoEmision, String codigoDocumento, String tipoCartera, Sucursal sucursal, Usuario usuario,GeneralEnumEstado estadoEnum) {
-        this.persona = persona;
-        this.total = total;
-        this.saldo = saldo;
-        this.puntoEstablecimiento = puntoEstablecimiento;
-        this.puntoEmision = puntoEmision;
-        this.secuencial=0;
-        this.codigoDocumento = codigoDocumento;
-        this.tipoCartera = tipoCartera;
-        this.sucursal = sucursal;
-        this.usuario = usuario;
-        this.fechaCreacion=UtilidadesFecha.getFechaHoy();
-        this.fechaEmision=UtilidadesFecha.getFechaHoy();
-        this.estado=estadoEnum.getEstado();
-    }
-    
-    
     
     /**
      * Referencia que me permite grabar el id  de donde viene el documento y en conjunto con el
@@ -137,12 +117,46 @@ public class Cartera implements Serializable{
     @Column(name = "CODIGO_AUXILIAR")
     private String codigoAuxiliar;
 
+    /**
+     * Variable que me permite identificar de que tipo es la segunda identficacion
+     */
+    @Column(name = "SEGUNDA_REFERENCIA_TIPO")
+    private String segundaReferenciaTipo;
+    
+    /**
+     * Guarda el id de la segunda referencia
+     */
+    @Column(name = "SEGUNDA_REFERENCIA_ID")
+    private Long segundaReferenciaId;
+    
+    @Column(name = "SEGUNDA_REFERENCIA_DESCRIPCION")
+    private String segundaReferenciaDescripcion;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "carteraAfectada", fetch = FetchType.EAGER)
     private List<CarteraCruce> cruces;
+    
+        public Cartera() {
+    }
+
+    public Cartera(Persona persona, BigDecimal total, BigDecimal saldo, String puntoEstablecimiento, String puntoEmision, String codigoDocumento, String tipoCartera, Sucursal sucursal, Usuario usuario,GeneralEnumEstado estadoEnum) {
+        this.persona = persona;
+        this.total = total;
+        this.saldo = saldo;
+        this.puntoEstablecimiento = puntoEstablecimiento;
+        this.puntoEmision = puntoEmision;
+        this.secuencial=0;
+        this.codigoDocumento = codigoDocumento;
+        this.tipoCartera = tipoCartera;
+        this.sucursal = sucursal;
+        this.usuario = usuario;
+        this.fechaCreacion=UtilidadesFecha.getFechaHoy();
+        this.fechaEmision=UtilidadesFecha.getFechaHoy();
+        this.estado=estadoEnum.getEstado();
+    }
 
     public Long getId() {
         return id;
@@ -321,6 +335,40 @@ public class Cartera implements Serializable{
     public void setFechaFinCredito(Date fechaFinCredito) {
         this.fechaFinCredito = fechaFinCredito;
     }
+
+    public String getSegundaReferenciaTipo() {
+        return segundaReferenciaTipo;
+    }
+
+    public void setSegundaReferenciaTipo(String segundaReferenciaTipo) {
+        this.segundaReferenciaTipo = segundaReferenciaTipo;
+    }
+    
+    public DocumentoEnum getSegundaReferenciaTipoEnum() {
+        return DocumentoEnum.obtenerDocumentoPorCodigo(segundaReferenciaTipo);
+    }
+
+    public void setSegundaReferenciaTipo(DocumentoEnum segundaReferenciaTipoEnum) {
+        this.segundaReferenciaTipo = segundaReferenciaTipoEnum.getCodigo();
+    }
+
+
+    public Long getSegundaReferenciaId() {
+        return segundaReferenciaId;
+    }
+
+    public void setSegundaReferenciaId(Long segundaReferenciaId) {
+        this.segundaReferenciaId = segundaReferenciaId;
+    }
+
+    public String getSegundaReferenciaDescripcion() {
+        return segundaReferenciaDescripcion;
+    }
+
+    public void setSegundaReferenciaDescripcion(String segundaReferenciaDescripcion) {
+        this.segundaReferenciaDescripcion = segundaReferenciaDescripcion;
+    }
+    
     
     
     

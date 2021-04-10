@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.list;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,12 @@ public abstract class UtilidadesMap {
         }
         
         return resultadoMap;
+    }
+    
+
+    public static List castMapToList(Map map)
+    {
+        return new ArrayList(map.values());
     }
     
     public interface MapCastListIf<C,V,L>

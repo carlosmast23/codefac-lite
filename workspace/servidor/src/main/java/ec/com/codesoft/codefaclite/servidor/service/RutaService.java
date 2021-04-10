@@ -6,11 +6,15 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.RutaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DiaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -57,6 +61,15 @@ public class RutaService extends ServiceAbstract<Ruta,RutaFacade> implements Rut
         });
     }
     
+    public Ruta consultarRutaActivaPorVendedorYCliente(Empleado vendedor,PersonaEstablecimiento clienteOficina,DiaEnum diaEnum) throws ServicioCodefacException, RemoteException
+    {
+        List<Ruta> resultado=getFacade().consultarRutaActivaPorVendedorYClienteFacade(vendedor, clienteOficina,diaEnum);
+        if(resultado.size()>0)
+        {
+            return resultado.get(0);
+        }
+        return null;
+    }
     
     
     

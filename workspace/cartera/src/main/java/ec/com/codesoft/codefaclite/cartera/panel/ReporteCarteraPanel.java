@@ -62,6 +62,12 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
         cmbTipoSaldo = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         cmbTipoReporte = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        txtClienteProveedor1 = new javax.swing.JTextField();
+        btnBuscarReferencia = new javax.swing.JButton();
+        chkTodosReferencia = new javax.swing.JCheckBox();
+        jLabel12 = new javax.swing.JLabel();
+        cmbDocumento = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -115,7 +121,7 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Tipo de Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -150,7 +156,7 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -198,9 +204,9 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
         jPanel1.add(chkTodosClientes, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel11.setText("Categoria:");
+        jLabel11.setText("Documento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -224,11 +230,61 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
 
         cmbTipoReporte.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoReporte, gridBagConstraints);
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel6.setText("Referencia:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel6, gridBagConstraints);
+
+        txtClienteProveedor1.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtClienteProveedor1, gridBagConstraints);
+
+        btnBuscarReferencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnBuscarReferencia, gridBagConstraints);
+
+        chkTodosReferencia.setSelected(true);
+        chkTodosReferencia.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(chkTodosReferencia, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setText("Categoria:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel12, gridBagConstraints);
+
+        cmbDocumento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbDocumento, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -239,7 +295,10 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarCliente;
+    private javax.swing.JButton btnBuscarReferencia;
     private javax.swing.JCheckBox chkTodosClientes;
+    private javax.swing.JCheckBox chkTodosReferencia;
+    private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumento;
     private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicio;
@@ -249,16 +308,19 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JTable tblDatos;
     private javax.swing.JTextField txtClienteProveedor;
+    private javax.swing.JTextField txtClienteProveedor1;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<Cartera.CarteraCategoriaEnum> getCmbDocumentoCategoriaCartera() {
@@ -319,6 +381,14 @@ public abstract class ReporteCarteraPanel extends ControladorCodefacInterface {
 
     public void setCmbTipoReporte(JComboBox<TipoReporteEnum> cmbTipoReporte) {
         this.cmbTipoReporte = cmbTipoReporte;
+    }
+
+    public JComboBox<Cartera.CarteraCategoriaEnum> getCmbDocumento() {
+        return cmbDocumento;
+    }
+
+    public void setCmbDocumento(JComboBox<Cartera.CarteraCategoriaEnum> cmbDocumento) {
+        this.cmbDocumento = cmbDocumento;
     }
     
     

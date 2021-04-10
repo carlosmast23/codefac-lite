@@ -161,6 +161,13 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
             true,
             false),
     
+    ABONOS_ACADEMICO("Abono Académico",
+            "ABA",
+            DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,
+            new ModuloCodefacEnum[]{},
+            true,
+            false),
+    
     GUIA_REMISION(
             "Guía Remisión",
             "GIR",

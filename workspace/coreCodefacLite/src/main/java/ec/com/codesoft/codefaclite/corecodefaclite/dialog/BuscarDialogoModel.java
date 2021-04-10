@@ -450,7 +450,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             Object valor = en.getValue();
             
             //Solo aplicar esta opcion cuando el tipo de dato enviado es String
-            if(valor.getClass().equals(String.class))
+            if(valor!=null && valor.getClass().equals(String.class))
             {
                 queryDialog.getParametros().put(numero, valor); //Remplazo el antiguo valor por el nuevo con minusculas
             }

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 
 /**
  *
@@ -39,11 +40,14 @@ public class TransportistaBusquedaDialogo implements InterfaceModelFind<Transpor
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "Select t from Transportista t where t.empresa=?2 and ";
+        //Transportista t;
+        //t.getEstado();
+        String queryString = "Select t from Transportista t where t.empresa=?2 and t.estado=?3 and ";
         queryString += "( LOWER(t.razonSocial) like ?1 or t.identificacion like ?1 or LOWER(t.nombres) like ?1 or LOWER(t.apellidos) like ?1)"; 
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter.toLowerCase());
         queryDialog.agregarParametro(2,empresa);
+        queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 

@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
@@ -703,7 +704,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         try {                        
-            BigDecimal saldoDisponibleCartera=ServiceFactory.getFactory().getCarteraServiceIf().obtenerSaldoDisponibleCruzar(factura.getCliente(),session.getEmpresa());
+            
+            BigDecimal saldoDisponibleCartera=ServiceFactory.getFactory().getCarteraServiceIf().obtenerSaldoDisponibleCruzar(factura.getCliente(),session.getEmpresa(),interfaz.getEStudiante());
             
             //Si el cliente no tiene saldo en cartera entonces ya no continua con el proceso
             if(saldoDisponibleCartera==null || saldoDisponibleCartera.compareTo(BigDecimal.ZERO)==0)
@@ -914,6 +916,50 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
         ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion);
 
+    }
+    
+    /**
+     * Actualmente el metodo solo sirve para agregar productos
+     * @param codigoDetalle
+     * @param tipoDocumentoEnum
+     * @param empresa
+     * @return 
+     */
+    public static Producto listenerBuscarProducto(String codigoDetalle,TipoDocumentoEnum tipoDocumentoEnum,Empresa empresa)
+    {
+        //Solo validar si existe datos ingresados en el combo
+        if (codigoDetalle.trim().equals("")) {
+            return null;
+        }
+        
+        
+            try {
+                //TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
+
+                switch (tipoDocumentoEnum) {
+                    case ACADEMICO:
+                        //agregarRubroAcademico();
+                        break;
+                    case PRESUPUESTOS:
+                        //agregarPresupuesto();
+                        break;
+                    case INVENTARIO:
+                    case LIBRE:
+
+                        //Map<String,Object> mapParametros=new HashMap<String,Object>();
+                        //mapParametros.put("codigoPersonalizado", getTxtCodigoDetalle().getText()); //TODO: VER COMO MANEJAR TODOS LOS TIPOS DE CODIGO, VER UNA OPCION DE PARAMETRIZAR POR QUE CODIGO SE QUIERE TRABAJAR
+                        //List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(getTxtCodigoDetalle().getText(),session.getEmpresa());
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoDetalle, empresa);
+                        return producto;
+
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return null;
+    
     }
     
     /**
@@ -1146,6 +1192,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public void setModoEdicionDetalle(Boolean modoEdicionDetalle);
         public void limpiarIngresoDetalleVista();
         public Boolean isPagoConCartera();
+        public Estudiante getEStudiante();
         
         
     }

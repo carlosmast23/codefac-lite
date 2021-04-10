@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -37,6 +38,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -74,6 +77,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         this.session=session;
         iniciarValores();
         agregarListenerBotones();
+        agregarListenerTextField();
         agregarListenerMovimiento();
     }
 
@@ -83,17 +87,70 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         return panel;
     }
     
+    private void agregarListenerTextField()
+    {
+        getTxtCodigoProducto().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    
+                    Producto producto=FacturaModelControlador.listenerBuscarProducto(getTxtCodigoProducto().getText(), (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem(), session.getEmpresa());
+
+                    if (producto == null) {
+                        DialogoCodefac.mensaje(new CodefacMsj("No existe el producto buscado", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    } else {
+                        agregarProductoVista(producto);
+                    }
+                }
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
+        getTxtCantidadProducto().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {                
+                    listenerBotonAgregarProducto();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+    }
+    
     /**
      * TODO: Ver si se une esta funcion con la logica de la factura
      * @param manejaInventario 
      */
-    private void agregarProducto(EnumSiNo manejaInventario)
+    private void buscarProductoDialogo(TipoDocumentoEnum tipoDocumentoEnum )
     {
+        EnumSiNo manejaInventario=EnumSiNo.NO;
+        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
+        {
+            manejaInventario=EnumSiNo.SI;
+        }
+        
         ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
-        productoSeleccionado.setManejarInventarioEnum(manejaInventario);
+        agregarProductoVista((Producto) buscarDialogoModel.getResultado());
+    }
+    
+    private void agregarProductoVista(Producto productoAgregar)
+    {
+        productoSeleccionado = productoAgregar;
+        //productoSeleccionado.setManejarInventarioEnum(manejaInventario);
         banderaProducto = true;
 
         if (productoSeleccionado == null) {
@@ -120,10 +177,10 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                         //TODO: Falta implementar
                         break;
                     case INVENTARIO: 
-                        agregarProducto(EnumSiNo.SI);
+                        buscarProductoDialogo(tipoDocumentoEnum);
                         break;
                     case LIBRE:
-                        agregarProducto(EnumSiNo.NO);
+                        buscarProductoDialogo(tipoDocumentoEnum);
                         break;
                 
                 } 
@@ -137,26 +194,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                    if(banderaProducto){
-                        if(validarCamposIngresar())
-                        {
-                            agregarDetallesFactura(null);
-                            limpiarValoresCamposTextos();
-                            cargarDatosDetalles();
-                            procesarTotales();
-                            banderaProducto = false;
-                            getjTabbedPanel().setSelectedIndex(1);
-                        }else
-                        {
-                            DialogoCodefac.mensaje("Validacion", "Verificar los campos ingresados", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        }
-                    }
-                    else
-                    {
-                        DialogoCodefac.mensaje("Producto", "Se debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    }
-                
-                
+                listenerBotonAgregarProducto();
             }
         });
         
@@ -247,6 +285,24 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             }
         });
     }            
+    
+    private void listenerBotonAgregarProducto()
+    {
+        if (banderaProducto) {
+            if (validarCamposIngresar()) {
+                agregarDetallesFactura(null);
+                limpiarValoresCamposTextos();
+                cargarDatosDetalles();
+                procesarTotales();
+                banderaProducto = false;
+                getjTabbedPanel().setSelectedIndex(1);
+            } else {
+                DialogoCodefac.mensaje("Validacion", "Verificar los campos ingresados", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            }
+        } else {
+            DialogoCodefac.mensaje("Producto", "Se debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+    }
     
     public void iniciarValores()
     {
@@ -402,10 +458,12 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         getTxtCantidadProducto().setText("");
         getTxtDescripcionProducto().setText("");
         getTxtValorUnitarioProducto().setText("");
+        getTxtCodigoProducto().setText("");
     }
     
     public void setearValoresProducto()
     {
+        getTxtCodigoProducto().setText(productoSeleccionado.getCodigoPersonalizado());
         getTxtDescripcionProducto().setText(productoSeleccionado.getNombre());
         getTxtValorUnitarioProducto().setText(""+productoSeleccionado.getValorUnitario());
         getTxtCantidadProducto().requestFocus();

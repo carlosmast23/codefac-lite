@@ -5,18 +5,23 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ParametroCodefacFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Query;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -212,5 +217,65 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         });
     }
     
+    public void crearParametroPorDefectoEmpresaSinTrasaccion(Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+//Datos de un correo por defecto para que puedan hacer pruebas
+        entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.CORREO_USUARIO, "codefac.test@gmail.com"));
+        entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.CORREO_CLAVE, "26hhdTtckLvAO/VRy7q+dQ=="));
+        entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.SMTP_HOST, "smtp.gmail.com"));
+        entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.SMTP_PORT, "587"));
+    }
     
+    private ParametroCodefac crearObjectoSinTransaccion(Empresa empresa,String nombre, String valor)
+    {
+        ParametroCodefac parametro=new ParametroCodefac();
+        parametro.setEmpresa(empresa);
+        parametro.setNombre(nombre);
+        parametro.setValor(valor);
+        return parametro;
+    }
+    
+    /**
+     * TODO: Mover a otro servicio mas entendible para este metodo , lo dejo por el momento en esta pantalla porque necsito un entorno de servicios
+     * @param queryStr
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
+    public List ejecutarConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException
+    {
+        try
+        {
+            Query query=AbstractFacade.entityManager.createNativeQuery(queryStr);
+            //Verificar si es un query de actualizacion o consulta
+            if(queryStr.toLowerCase().indexOf("select ")>=0)
+            {                
+                return query.getResultList();
+            }
+            else
+            {   
+                List<Object[]> resultado=new ArrayList<Object[]>();
+                
+               
+                //Agregar las filas afectadas
+                Integer numeroFilasAfectadas=(Integer) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                    
+                    @Override
+                    public Object transaccion() throws ServicioCodefacException, RemoteException {
+                        return query.executeUpdate();
+                    }                    
+                });
+                Object[] resultadoArray={numeroFilasAfectadas};
+                resultado.add(resultadoArray);
+                return resultado;
+                
+            }
+            
+            
+        }catch(Exception e)
+        {
+            throw new ServicioCodefacException(e.getMessage());
+        }
+        
+    }
 }

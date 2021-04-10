@@ -20,7 +20,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.2.8.7.0";
+    public static final String VERSION="1.2.8.7.3";
     /**
      * El modo de configuracion del sistema
      */
@@ -59,9 +59,8 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final Integer LIMITE_CARACTERES_SMS=160;
     
-    /**
-     * 
-     */
+    public static final String BODEGA_NOMBRE_DEFECTO="Bodega principal";
+    
     public static final String CARPETA_DATOS_TEMPORALES="tmp";
     
     
@@ -142,4 +141,8 @@ public abstract class ParametrosSistemaCodefac {
      * Variable que establece la cantidad maxima de días previos que se pueden emitir una factura
      */
     public static final Integer MAX_DIAS_FACURAR=30;
+    
+    public static final Integer MAX_COMPROBANTES_ELECTRONICOS_LOTE=35;
+    
+    public static final Boolean PROFORMA_MODO_PRUEBA=false;
 }

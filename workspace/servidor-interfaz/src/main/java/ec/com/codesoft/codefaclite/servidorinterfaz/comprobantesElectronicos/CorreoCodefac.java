@@ -25,21 +25,28 @@ import javax.mail.MessagingException;
  *
  * @author Carlos
  */
-public abstract class CorreoCodefac {
+public class CorreoCodefac {
     private CorreoElectronico correoElectronico;
     
-    public abstract String getMensaje();
+    /*public abstract String getMensaje();
     public abstract String getTitulo();
     public abstract Map<String,String> getPathFiles();
-    public abstract List<String> getDestinatorios();
+    public abstract List<String> getDestinatorios();*/
+    
+    public Boolean modoSession;
     
 
     public CorreoCodefac() 
     {
-        
+        modoSession=false;
     }
     
-    public void enviarCorreo(Empresa empresa) throws ExcepcionCorreoCodefac
+    //public void enviarCorreo(Empresa empresa,String mensaje, String subject, List<String> destinatorios, Map<String, String> pathFiles) throws ExcepcionCorreoCodefac
+    //{
+        
+    //}
+    
+    public void enviarCorreo(Empresa empresa,String mensaje, String titulo, List<String> destinatorios, Map<String, String> pathFiles) throws ExcepcionCorreoCodefac
     {
         try
         {
@@ -68,12 +75,27 @@ public abstract class CorreoCodefac {
                 alias=empresa.getRazonSocial();
             }
             
-            correoElectronico=new CorreoElectronico(correo,alias,clave, getMensaje(), getDestinatorios(), getTitulo(),propiedadCorreo);
-            correoElectronico.setPathFiles(getPathFiles());
+            if(modoSession)
+            {
+                //Si no existe la referencia previamente creada creo uno nuevo
+                if (correoElectronico == null) {
+                    correoElectronico = new CorreoElectronico(correo, alias, clave, mensaje, destinatorios,titulo, propiedadCorreo);
+                    correoElectronico.sessionLoteActivo=true;
+                }
+            }
+            else
+            {
+                //Si tiene esta opcion siempre creo una nueva conexion
+                correoElectronico = new CorreoElectronico(correo, alias, clave, mensaje, destinatorios, titulo, propiedadCorreo);
+            }
+            
+            
+           
+            //correoElectronico.setPathFiles(getPathFiles());
             
             try
             {
-                correoElectronico.sendMail();
+                correoElectronico.sendMail(mensaje, destinatorios, titulo, pathFiles);
             }catch(RuntimeException e)
             {
                 e.printStackTrace();
@@ -100,6 +122,25 @@ public abstract class CorreoCodefac {
 
         
     }
+
+    public CorreoElectronico getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(CorreoElectronico correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    public Boolean getModoSession() {
+        return modoSession;
+    }
+
+    public void setModoSession(Boolean modoSession) {
+        this.modoSession = modoSession;
+    }
+    
+    
+    
     
     public class ExcepcionCorreoCodefac extends Exception {
 
@@ -107,6 +148,14 @@ public abstract class CorreoCodefac {
             super(message);
         }
     
+    }
+    
+    public void cerrarSesionCodefacCorreo()
+    {
+        if(correoElectronico!=null)
+        {
+            correoElectronico.cerrarSession();
+        }
     }
     
 }

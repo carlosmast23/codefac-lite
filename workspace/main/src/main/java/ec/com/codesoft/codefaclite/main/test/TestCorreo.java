@@ -21,11 +21,11 @@ import javax.mail.MessagingException;
 public class TestCorreo {
     public static void main(String[] args) {
 
-        try {
+        /*try {
             List<String> correos=new ArrayList<String>();
             correos.add("carlosmast2301@hotmail.es");
             CorreoElectronico correoElectronico=new CorreoElectronico("carlosmast2301@hotmail.es","Empresa ABC","codesoft2302","hola",correos, "Prueba",null);
-            correoElectronico.sendMail();
+            //correoElectronico.sendMail();
         } catch (AuthenticationFailedException ex) {
             System.out.println("Fallo al autentificar el usuario");
             Logger.getLogger(TestCorreo.class.getName()).log(Level.SEVERE, null, ex);
@@ -33,7 +33,7 @@ public class TestCorreo {
             Logger.getLogger(TestCorreo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SmtpNoExisteException ex) {
             Logger.getLogger(TestCorreo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
 
     }
     

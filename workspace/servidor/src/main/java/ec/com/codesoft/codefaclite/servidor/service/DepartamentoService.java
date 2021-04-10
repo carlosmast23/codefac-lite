@@ -12,7 +12,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -44,17 +46,38 @@ public class DepartamentoService extends ServiceAbstract<Departamento, Departame
         }
         return d;
     }*/
-
-    @Override
-    public void editar(Departamento d) {
-        departamentoFacade.edit(d);
+    public List<Departamento> obtenerActivos() throws ServicioCodefacException,RemoteException
+    {
+        //Departamento d;
+        //d.getEstado();        
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+        
+        
     }
 
     @Override
-    public void eliminar(Departamento d) {
+    public void editar(Departamento d) throws ServicioCodefacException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(d);
+            }
+        });
+    }
+
+    @Override
+    public void eliminar(Departamento d) throws ServicioCodefacException {
   
-        d.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        departamentoFacade.edit(d);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                d.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                entityManager.merge(d);
+            }
+        });
+        
     }
 
     public List<Departamento> buscar()

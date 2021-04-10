@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -150,6 +151,14 @@ public class Transportista implements Serializable
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estado) {
+        this.estado = estado.getEstado();
     }
 
     public String getTipoIdentificacion() {

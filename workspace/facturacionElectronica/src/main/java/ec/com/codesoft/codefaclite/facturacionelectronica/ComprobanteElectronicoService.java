@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
@@ -108,6 +109,8 @@ public class ComprobanteElectronicoService implements Runnable {
 
     public static final Integer CODIGO_SRI_MODO_PRUEBAS = 1;
     public static final Integer CODIGO_SRI_MODO_PRODUCCION = 2;
+    
+    public static final Long TAMANIO_MAX_LOTE_KB=512l;
 
     /**
      * Etapa en la que se encuentra la facturacion
@@ -432,7 +435,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            //List<String> comprobantesFirmados=new ArrayList<String>();
+            
             
             if (etapaActual.equals(ETAPA_FIRMAR)) {
                 claveAcceso = obtenerClaveAccesoLote();
@@ -495,8 +498,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 
                 if(enviarCorreoComprobanteAutorizado==false && enviarCorreos==true)
                 {
-                    enviarComprobanteLoteCorreo(CARPETA_FIRMADOS);                  
-                    //generarRide();                    
+                    enviarComprobanteLoteCorreo(CARPETA_FIRMADOS);
                     System.out.println("enviarCorreo()");
                 }
                 
@@ -591,6 +593,11 @@ public class ComprobanteElectronicoService implements Runnable {
         return autorizadosConNoEnviados;
     }
 
+    /**
+     * TODO: UNIR CON EL METODO DE ENVIO CORREO EN LOTE
+     * @param carpetaComprobante
+     * @throws ComprobanteElectronicoException 
+     */
     private void enviarComprobante(String carpetaComprobante) throws ComprobanteElectronicoException {
         //enviarComprobanteCorreo(this.claveAcceso);
         try {
@@ -641,7 +648,11 @@ public class ComprobanteElectronicoService implements Runnable {
                     }
                 }
                 
-                metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicosTemp, archivosPath);
+                if(correosElectronicosTemp.size()>0)
+                {                    
+                    metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicosTemp, archivosPath);
+                    metodoEnvioInterface.cerrarSesion();
+                }
                 
                 /**
                  * ENVIAR SMS SI EL NUMERO ESTA EN LOS CAMPOS ADICIONALES
@@ -694,6 +705,8 @@ public class ComprobanteElectronicoService implements Runnable {
             }
             //}
         }
+        //Una vez que termina de enviar todos los correos termino la session que estaba abierta para los correos
+        metodoEnvioInterface.cerrarSesion();
     }
     
     private void enviarComprobanteCorreo(String claveAccesoTemp,String carpetaEnviarComprobante) throws ComprobanteElectronicoException {
@@ -717,10 +730,6 @@ public class ComprobanteElectronicoService implements Runnable {
                 
                 String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante(),comprobante);
                 
-                //ComprobanteElectronico comprobanteElectronico=buscarComprobanteLote(claveAccesoTemp);
-                //ComprobanteElectronico comprobanteElectronico=(ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
-                
-                
                 List<String> correosElectronicosTemp=comprobante.getCorreos();
                 
                 //Si la lista de correos adicionales  
@@ -734,7 +743,14 @@ public class ComprobanteElectronicoService implements Runnable {
                     }
                 }
                 
+                //Si no existe ingresado correos electronicos entonces no se manda nada
+                if(correosElectronicosTemp.size()==0)
+                {
+                    return ;
+                }
+                
                 metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicosTemp, archivosPath);
+                //metodoEnvioInterface.cerrarSesion();
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
@@ -1242,10 +1258,19 @@ public class ComprobanteElectronicoService implements Runnable {
         }
         
         StringWriter stringWriter = generarXmlLote(comprobantesFirmados, ruc);
-        ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_LOTE));
         
-        //return comprobantesFirmados;
-
+        /**
+         * ====================================================================
+         * Verificar que el tamaño no exeda el permitido por el Sri
+         * ====================================================================
+         */
+        File archivoLoteGenerado=ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_LOTE));
+        Long tamanioArchivo= UtilidadesArchivos.obtenerTamanioArchivoEnKb(archivoLoteGenerado);
+        if(tamanioArchivo>TAMANIO_MAX_LOTE_KB)
+        {
+            throw new ComprobanteElectronicoException("No se puede enviar un archivo superior a "+TAMANIO_MAX_LOTE_KB+"kb", "Error proceso Lote", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+        }        
+       
     }
     
     /**

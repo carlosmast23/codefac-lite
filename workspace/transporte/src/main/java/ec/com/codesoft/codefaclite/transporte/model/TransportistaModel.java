@@ -17,10 +17,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.transporte.panel.TransportistaPanel;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
@@ -192,13 +192,13 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         transportista.setTelefonoConvencional(getTxtTelefono().getText());
         Persona.TipoIdentificacionEnum identificacionEnum = (Persona.TipoIdentificacionEnum) getCmbIdentificacion().getSelectedItem();
         transportista.setTipoIdentificacion(identificacionEnum.getLetra());
-        TransportistaEnumEstado transportistaEnumEstado = (TransportistaEnumEstado) getCmbEstado().getSelectedItem();
+        GeneralEnumEstado transportistaEnumEstado = (GeneralEnumEstado) getCmbEstado().getSelectedItem();
         transportista.setEstado(transportistaEnumEstado.getEstado());
         transportista.setEmpresa(session.getEmpresa());
     }
     
     private boolean prevalidar() {
-        if (getCmbEstado().getSelectedItem().equals(TransportistaEnumEstado.ELIMINADO)) {
+        if (getCmbEstado().getSelectedItem().equals(GeneralEnumEstado.ELIMINADO)) {
             DialogoCodefac.mensaje("Advertencia", "Si desea eliminar el transportista seleccione el boton de eliminar, seleccione otro estado", DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
         }
@@ -234,7 +234,7 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         getTxtTelefono().setText(transportista.getTelefonoConvencional());
         Persona.TipoIdentificacionEnum tipoIdentificacionEnum = Persona.TipoIdentificacionEnum.obtenerPorLetra(transportista.getTipoIdentificacion());
         getCmbIdentificacion().setSelectedItem(tipoIdentificacionEnum);
-        TransportistaEnumEstado transportistaEnumEstado = TransportistaEnumEstado.getEnum(transportista.getEstado());
+        GeneralEnumEstado transportistaEnumEstado = GeneralEnumEstado.getEnum(transportista.getEstado());
         getCmbEstado().setSelectedItem(transportistaEnumEstado);
   
     }
@@ -242,7 +242,7 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
     public void cargarCombos()
     {
         getCmbEstado().removeAllItems();
-        for(TransportistaEnumEstado tee : TransportistaEnumEstado.values())
+        for(GeneralEnumEstado tee : GeneralEnumEstado.values())
         {
             getCmbEstado().addItem(tee);
         }
