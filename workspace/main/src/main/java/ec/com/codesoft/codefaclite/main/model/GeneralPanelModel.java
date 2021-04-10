@@ -276,11 +276,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerGraphics();
         agregarListenerItemMenu();
         cargarDatosAdicionales();
-        actualizarTituloCodefac();
-               
+        actualizarTituloCodefac();        
         habilitarBotones(false);  
+        abrirAsistenteConfiguracion();
         
     }
+    
+    public void abrirAsistenteConfiguracion()
+    {
+        /**
+         * Solo abrir el asistente cuando no tiene grabado ninguna empresa
+         */
+        if(sessionCodefac.getEmpresa()==null)
+        {
+            VentanaEnum ventanaAsistente=VentanaEnum.ASISTENTE_CONFIGURACION;
+            abrirVentanaCodefac((ControladorCodefacInterface) ventanaAsistente.getInstance(), ventanaAsistente);
+        }
+    }   
     
     public void agregarPanelesSecundarios()
     {
@@ -410,7 +422,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 setVentanasMenuList(null);
                 actualizarNotificacionesCodefac();
                 MonitorComprobanteModel.getInstance().eliminarTodosDatos();
-                setearEtiquetasPantallaPrincipal();
+                setearEtiquetasPiePaginaPantallaPrincipal();
                 setVisible(true);
                 break;
 
@@ -3509,7 +3521,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     /**
      * Metodo que permite escribir los datos inferiores de la empresa y el usuario
      */
-    public void setearEtiquetasPantallaPrincipal()
+    public void setearEtiquetasPiePaginaPantallaPrincipal()
     {
         try {
             String nombreUsuario=(sessionCodefac.getUsuario()!=null)?sessionCodefac.getUsuario().getNick():"Sin usuario";

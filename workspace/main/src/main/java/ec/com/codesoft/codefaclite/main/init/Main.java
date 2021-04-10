@@ -697,7 +697,7 @@ public class Main {
             //TODO:Aqui esta verificando para ver si podemos poner publicidad
            
             panel.ipServidor=ipServidor;
-            panel.setearEtiquetasPantallaPrincipal();
+            panel.setearEtiquetasPiePaginaPantallaPrincipal();
             
             panel.iniciarComponentesGenerales();
             //frameAplicacion.dispose(); //Libero el recurso de la pantalla que tiene el icono en la barra de tareas
