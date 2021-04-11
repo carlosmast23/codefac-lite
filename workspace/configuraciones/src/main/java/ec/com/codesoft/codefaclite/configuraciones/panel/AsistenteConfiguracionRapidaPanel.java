@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
@@ -121,8 +122,10 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jPasswordField1 = new javax.swing.JPasswordField();
         jPasswordField2 = new javax.swing.JPasswordField();
         lblEspacio34959 = new javax.swing.JLabel();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnAtrasPantalla = new javax.swing.JButton();
+        btnAvanzarPantalla = new javax.swing.JButton();
         btnTerminar = new javax.swing.JButton();
-        btnAvanzarPantalla1 = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -130,6 +133,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         setResizable(true);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        tabVentana.setEnabled(false);
 
         pnlEmpresaSucursal3.setLayout(new java.awt.GridBagLayout());
 
@@ -170,7 +175,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
         jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel20.setText("<html> \t<body> \t\t<center><h3>Requisitos Previos</h3></center> \t\t<p>- Tener un RUC</p> \t\t<p>- Permisos para facturación electrónica en el Sri</p> \t\t<p>- Firma Electrónica en formato p12</p> \t\t<p>- Correo Electrónico (preferencia GMAIL)</p> \t\t<p>- Cuenta creada en la página de CODEFAC</p> \t</body> </html>");
+        jLabel20.setText("<html> \t<body> \t\t<center> \t\t\t<h3>Requisitos Previos</h3> \t\t</center> \t\t<p>- Tener RUC y Permisos para facturación electrónica en el Sri</p>\t\t \t\t<p>- Firma Electrónica en formato p12</p> \t\t<p>- Correo Electrónico (preferencia GMAIL)</p> \t\t<p>- Cuenta creada en la página de CODEFAC</p> \t</body> </html>");
         jLabel20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -178,7 +183,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal3.add(jLabel20, gridBagConstraints);
 
         tabVentana.addTab("Inicio", pnlEmpresaSucursal3);
@@ -739,11 +744,13 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal2.add(jLabel48, gridBagConstraints);
 
         jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel29.setText("<html> \t<body> \t\t<center><h3>Consideraciones Finales</h3></center> \t\t<p>- Los datos Ingresados en este momento serán utilizados para configurar el sistema</p> \t\t<p>- Si algún dato fue ingresado de forma incorrecta despues se puede editar</p> \t\t<p>- Algunas funciones no están disponibles para los usuarios gratuitos</p> \t\t<p>- Si no tiene toda la información requerida el asistente se abriera de nuevo la próxima vez</p> \t\t<p>- Finalmente presione el <b>botón de Terminar</b> y luego tiene que volver a ingresar con el usuario creado</p> \t</body> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel29, gridBagConstraints);
@@ -796,28 +803,37 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(tabVentana, gridBagConstraints);
 
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        btnAtrasPantalla.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnAtrasPantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/atras.png"))); // NOI18N
+        btnAtrasPantalla.setText("Atras");
+        btnAtrasPantalla.setFocusable(false);
+        btnAtrasPantalla.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAtrasPantalla.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAtrasPantalla);
+
+        btnAvanzarPantalla.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnAvanzarPantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/enviar.png"))); // NOI18N
+        btnAvanzarPantalla.setText("Siguiente");
+        btnAvanzarPantalla.setFocusable(false);
+        btnAvanzarPantalla.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAvanzarPantalla.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAvanzarPantalla);
+
         btnTerminar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnTerminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/visto.png"))); // NOI18N
         btnTerminar.setText("Terminar");
-        btnTerminar.setEnabled(false);
+        btnTerminar.setFocusable(false);
+        btnTerminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTerminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnTerminar);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(btnTerminar, gridBagConstraints);
-
-        btnAvanzarPantalla1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnAvanzarPantalla1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/enviar.png"))); // NOI18N
-        btnAvanzarPantalla1.setText("Siguiente");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(btnAvanzarPantalla1, gridBagConstraints);
+        jPanel1.add(jToolBar1, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -830,7 +846,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAvanzarPantalla1;
+    private javax.swing.JButton btnAtrasPantalla;
+    private javax.swing.JButton btnAvanzarPantalla;
     private javax.swing.JButton btnEmpresaCargarLogo;
     private javax.swing.JButton btnTerminar;
     private javax.swing.JCheckBox chkEmpresaObligadoContabilidad;
@@ -881,6 +898,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JPasswordField jPasswordField2;
     private javax.swing.JTextField jTextField29;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio123;
@@ -918,13 +936,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JTextField txtWhatsapp;
     // End of variables declaration//GEN-END:variables
 
-    public JButton getBtnAvanzarPantalla1() {
-        return btnAvanzarPantalla1;
-    }
-
-    public void setBtnAvanzarPantalla1(JButton btnAvanzarPantalla1) {
-        this.btnAvanzarPantalla1 = btnAvanzarPantalla1;
-    }
+    
 
     public JButton getBtnEmpresaCargarLogo() {
         return btnEmpresaCargarLogo;
@@ -932,14 +944,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
     public void setBtnEmpresaCargarLogo(JButton btnEmpresaCargarLogo) {
         this.btnEmpresaCargarLogo = btnEmpresaCargarLogo;
-    }
-
-    public JButton getBtnTerminar() {
-        return btnTerminar;
-    }
-
-    public void setBtnTerminar(JButton btnTerminar) {
-        this.btnTerminar = btnTerminar;
     }
 
     public JCheckBox getChkEmpresaObligadoContabilidad() {
@@ -1158,5 +1162,33 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtWhatsapp = txtWhatsapp;
     }
 
+    @ButtonBinding(actionListener = "controlador.listenerBtnAvanzarPantalla")
+    public JButton getBtnAvanzarPantalla() {
+        return btnAvanzarPantalla;
+    }
+
+    public void setBtnAvanzarPantalla(JButton btnAvanzarPantalla) {
+        this.btnAvanzarPantalla = btnAvanzarPantalla;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerBtnAtrasPantalla")
+    public JButton getBtnAtrasPantalla() {
+        return btnAtrasPantalla;
+    }
+
+    public void setBtnAtrasPantalla(JButton btnAtrasPantalla) {
+        this.btnAtrasPantalla = btnAtrasPantalla;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerBtnTerminar",habilitarBoton = "controlador.botonTerminarHabilitar" )
+    public JButton getBtnTerminar() {
+        return btnTerminar;
+    }
+
+    public void setBtnTerminar(JButton btnTerminar) {
+        this.btnTerminar = btnTerminar;
+    }
+
+    
     
 }
