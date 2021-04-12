@@ -7,28 +7,41 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.AsistenteConfiguracionRapidaPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.configuraciones.AsistenteConfiguracionRapidaControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.RutaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRapidaPanel implements AsistenteConfiguracionRapidaControlador.SwingIf{
+public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRapidaPanel implements AsistenteConfiguracionRapidaControlador.SwingIf,ControladorVistaIf{
 
     private AsistenteConfiguracionRapidaControlador controlador;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         controlador=new AsistenteConfiguracionRapidaControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);        
+        //listenerBotones();
     }
     
+       
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
@@ -109,5 +122,16 @@ public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRa
         this.controlador = controlador;
     }
 
+    @Override
+    public Boolean ejecutarValidadoresVista() {
+        return panelPadre.validarPorGrupo(null);
+    }
+
+    @Override
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
+    }
+
+    
     
 }

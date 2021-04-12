@@ -126,8 +126,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
              */
             this.estadoFormulario = GeneralPanelInterface.ESTADO_GRABAR;
             DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);            
-            //DialogoCodefac.mensaje("Firma", "Datos actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            dispose(); //TODO: En esta parte analizar porque cuando se sale del formulario no se borra de la lita de ventas abiertas del menu
+            
+            dispose(); //TODO: En esta parte analizar porque cuando se sale del formulario no se borra de la lista de ventas abiertas del menu
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -5,6 +5,11 @@
     <artifactId>controlador</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <parent>
+        <groupId>ec.com.codesoft.codefaclite</groupId>
+        <artifactId>mavenCodefacLite</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <repositories>
         <repository>
             <id>unknown-jars-temp-repo</id>

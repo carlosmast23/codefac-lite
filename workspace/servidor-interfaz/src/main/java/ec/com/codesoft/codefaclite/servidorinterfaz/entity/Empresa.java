@@ -82,6 +82,14 @@ public class Empresa implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
     private List<Sucursal> sucursales;
 
+    public Empresa() {
+    }
+
+    public Empresa(String identificacion) {
+        this.identificacion = identificacion;
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -131,17 +139,35 @@ public class Empresa implements Serializable {
         this.nombreLegal = nombreLegal;
     }
 
-    public String getObligadoLlevarContabilidad() {
-        return obligadoLlevarContabilidad;
-    }
-    
     public EnumSiNo getObligadoLlevarContabilidadEnum() {
         return EnumSiNo.getEnumByNombre(obligadoLlevarContabilidad);
+    }
+
+    public String getObligadoLlevarContabilidad() {
+        return obligadoLlevarContabilidad;
     }
 
     public void setObligadoLlevarContabilidad(String obligadoLlevarContabilidad) {
         this.obligadoLlevarContabilidad = obligadoLlevarContabilidad;
     }
+    
+    public Boolean getObligadoLlevarContabilidadBool() {
+        if(obligadoLlevarContabilidad!=null)
+        {
+            EnumSiNo enumSiNo=EnumSiNo.getEnumByNombre(obligadoLlevarContabilidad);
+            if(enumSiNo!=null)
+            {
+                return enumSiNo.getBool();
+            }
+        }
+            
+        return false;
+    }
+
+    public void setObligadoLlevarContabilidadBool(Boolean obligadoLlevarContabilidadBool) {
+        this.obligadoLlevarContabilidad = EnumSiNo.getEnumByBoolean(obligadoLlevarContabilidadBool).getNombre();
+    }
+
 
     public String getContribuyenteEspecial() {
         return contribuyenteEspecial;
@@ -230,6 +256,23 @@ public class Empresa implements Serializable {
 
     public void setContribuyenteRegimenMicroempresas(String contribuyenteRegimenMicroempresas) {
         this.contribuyenteRegimenMicroempresas = contribuyenteRegimenMicroempresas;
+    }
+    
+    public Boolean getContribuyenteRegimenMicroempresasBool() {
+        if(contribuyenteRegimenMicroempresas!=null)
+        {
+            EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(contribuyenteRegimenMicroempresas);
+            if(enumSiNo!=null)
+            {
+                return enumSiNo.getBool();
+            }
+        }
+            
+        return false;
+    }
+
+    public void setContribuyenteRegimenMicroempresasBool(Boolean contribuyenteRegimenMicroempresasBool) {
+        this.contribuyenteRegimenMicroempresas = EnumSiNo.getEnumByBoolean(contribuyenteRegimenMicroempresasBool).getLetra();
     }
     
     public EnumSiNo getContribuyenteRegimenMicroempresasEnum() {

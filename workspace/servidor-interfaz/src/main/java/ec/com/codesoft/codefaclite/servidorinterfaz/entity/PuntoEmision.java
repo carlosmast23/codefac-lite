@@ -109,6 +109,16 @@ public class PuntoEmision implements Serializable{
     public void setTipoFacturacion(String tipoFacturacion) {
         this.tipoFacturacion = tipoFacturacion;
     }
+    
+    
+    public ComprobanteEntity.TipoEmisionEnum getTipoFacturacionEnum() {
+        return ComprobanteEntity.TipoEmisionEnum.getEnumByLetra(tipoFacturacion);
+    }
+
+    public void setTipoFacturacionEnum(ComprobanteEntity.TipoEmisionEnum tipoFacturacionEnum) {
+        this.tipoFacturacion = tipoFacturacionEnum.getLetra();
+    }
+    
 
     public String getEstado() {
         return estado;
@@ -116,6 +126,14 @@ public class PuntoEmision implements Serializable{
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
     }
 
     public Integer getSecuencialFactura() {
@@ -236,10 +254,10 @@ public class PuntoEmision implements Serializable{
         return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(),3,"0");
     }
     
-    public GeneralEnumEstado getEstadoEnum()
-    {
-        return GeneralEnumEstado.getEnum(estado);
-    }
+    //public GeneralEnumEstado getEstadoEnum()
+    //{
+    //    return GeneralEnumEstado.getEnum(estado);
+    //}
 
     public Sucursal getSucursal() {
         return sucursal;
@@ -249,10 +267,10 @@ public class PuntoEmision implements Serializable{
         this.sucursal = sucursal;
     }
     
-    public ComprobanteEntity.TipoEmisionEnum getTipoFacturacionEnum()
+    /*public ComprobanteEntity.TipoEmisionEnum getTipoFacturacionEnum()
     {
         return ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(tipoFacturacion);
-    }
+    }*/
     
     /**
      * ========================================================================

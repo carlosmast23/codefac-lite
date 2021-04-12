@@ -6,14 +6,14 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>../utilidades</module>
         <module>../crm</module>
         <module>../facturacionElectronica</module>
         <module>../main</module>
         <module>../recursos</module>
         <module>../servidor</module>
         <module>../ws-client-iess</module>
-        <module>../coreCodefacLite</module>
-        <module>../utilidades</module>
+        <module>../coreCodefacLite</module>        
         <module>../controlador</module>
         <module>../facturacion</module>
         <module>../configuraciones</module>

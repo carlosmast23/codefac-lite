@@ -70,6 +70,12 @@ public class Usuario implements Serializable{
     private Empresa empresa;
     
     /**
+     * Variable que me permite almacenar de forma temporal para ver si las claves estan duplicadas
+     */
+    @Transient
+    private String repetirClave;
+    
+    /**
      * Variable que me sirve solo para saber si el usuario ingresado es root
      */
     @Transient
@@ -220,6 +226,16 @@ public class Usuario implements Serializable{
     public void setCajasSessionUsuario(List<CajaSession> cajasSessionUsuario) {
         this.cajasSessionUsuario = cajasSessionUsuario;
     }
+
+    public String getRepetirClave() {
+        return repetirClave;
+    }
+
+    public void setRepetirClave(String repetirClave) {
+        this.repetirClave = repetirClave;
+    }
+    
+    
 
     @Override
     public int hashCode() {

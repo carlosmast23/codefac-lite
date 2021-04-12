@@ -6,7 +6,10 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
@@ -114,13 +117,13 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel30 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
-        jTextField29 = new javax.swing.JTextField();
+        txtUsuarioNick = new javax.swing.JTextField();
         jLabel48 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         lblEspacio123 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        txtUsuarioRepetirClave = new javax.swing.JPasswordField();
+        txtUsuarioClave = new javax.swing.JPasswordField();
         lblEspacio34959 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         btnAtrasPantalla = new javax.swing.JButton();
@@ -469,6 +472,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel18, gridBagConstraints);
+
+        txtFirmaNombre.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
@@ -660,16 +665,12 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel47, gridBagConstraints);
-
-        txtFirmaContraseña.setText("jPasswordField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtFirmaContraseña, gridBagConstraints);
-
-        txtCorreoClave.setText("jPasswordField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
@@ -724,7 +725,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel37, gridBagConstraints);
 
-        jTextField29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtUsuarioNick.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
@@ -732,7 +733,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.ipadx = 155;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal2.add(jTextField29, gridBagConstraints);
+        pnlEmpresaSucursal2.add(txtUsuarioNick, gridBagConstraints);
 
         jLabel48.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
         jLabel48.setText("Los datos ingresados en este momento son para poder acceder al sistema");
@@ -767,7 +768,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.weightx = 0.6;
         pnlEmpresaSucursal2.add(lblEspacio123, gridBagConstraints);
 
-        jPasswordField1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtUsuarioRepetirClave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
@@ -775,9 +776,9 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal2.add(jPasswordField1, gridBagConstraints);
+        pnlEmpresaSucursal2.add(txtUsuarioRepetirClave, gridBagConstraints);
 
-        jPasswordField2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtUsuarioClave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
@@ -785,7 +786,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal2.add(jPasswordField2, gridBagConstraints);
+        pnlEmpresaSucursal2.add(txtUsuarioClave, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -895,9 +896,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JTextField jTextField29;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio1;
@@ -933,6 +931,9 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JSpinner txtSucursalCodigo;
     private javax.swing.JTextField txtSucursalDireccion;
     private javax.swing.JTextField txtSucursalTelefono;
+    private javax.swing.JPasswordField txtUsuarioClave;
+    private javax.swing.JTextField txtUsuarioNick;
+    private javax.swing.JPasswordField txtUsuarioRepetirClave;
     private javax.swing.JTextField txtWhatsapp;
     // End of variables declaration//GEN-END:variables
 
@@ -946,6 +947,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.btnEmpresaCargarLogo = btnEmpresaCargarLogo;
     }
 
+    @CheckBoxBinding(value = "controlador.empresa.obligadoLlevarContabilidadBool")
     public JCheckBox getChkEmpresaObligadoContabilidad() {
         return chkEmpresaObligadoContabilidad;
     }
@@ -954,6 +956,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.chkEmpresaObligadoContabilidad = chkEmpresaObligadoContabilidad;
     }
 
+    @CheckBoxBinding(value = "controlador.empresa.contribuyenteRegimenMicroempresasBool")
     public JCheckBox getChkEmpresaRegimenMicroempresa() {
         return chkEmpresaRegimenMicroempresa;
     }
@@ -1010,6 +1013,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtCorreoUsuario = txtCorreoUsuario;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.agenteRetencionResolucion")
     public JTextField getTxtEmpresaAgenteRetencion() {
         return txtEmpresaAgenteRetencion;
     }
@@ -1018,14 +1022,16 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaAgenteRetencion = txtEmpresaAgenteRetencion;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.facebook")
     public JTextField getTxtEmpresaFacebook() {
         return txtEmpresaFacebook;
     }
-
+    
     public void setTxtEmpresaFacebook(JTextField txtEmpresaFacebook) {
         this.txtEmpresaFacebook = txtEmpresaFacebook;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.instagram")
     public JTextField getTxtEmpresaInstagram() {
         return txtEmpresaInstagram;
     }
@@ -1034,6 +1040,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaInstagram = txtEmpresaInstagram;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.nombreLegal")
     public JTextField getTxtEmpresaNombreComercial() {
         return txtEmpresaNombreComercial;
     }
@@ -1050,6 +1057,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaNombreLogo = txtEmpresaNombreLogo;
     }
 
+    //@ValidacionCodefacAnotacion(requerido = true)
+    @TextFieldBinding(value = "controlador.empresa.razonSocial")
     public JTextField getTxtEmpresaRazonSocial() {
         return txtEmpresaRazonSocial;
     }
@@ -1058,6 +1067,9 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaRazonSocial = txtEmpresaRazonSocial;
     }
 
+    
+    //@ValidacionCodefacAnotacion(requerido = true)
+    @TextFieldBinding(value = "controlador.empresa.identificacion")
     public JTextField getTxtEmpresaRuc() {
         return txtEmpresaRuc;
     }
@@ -1138,6 +1150,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtSucursalCodigo = txtSucursalCodigo;
     }
 
+    @TextFieldBinding(value = "controlador.sucursal.direcccion")
     public JTextField getTxtSucursalDireccion() {
         return txtSucursalDireccion;
     }
@@ -1146,6 +1159,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtSucursalDireccion = txtSucursalDireccion;
     }
 
+    @TextFieldBinding(value = "controlador.sucursal.telefono")
     public JTextField getTxtSucursalTelefono() {
         return txtSucursalTelefono;
     }
@@ -1154,6 +1168,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtSucursalTelefono = txtSucursalTelefono;
     }
 
+    @TextFieldBinding(value = "controlador.sucursal.celular")
     public JTextField getTxtWhatsapp() {
         return txtWhatsapp;
     }
@@ -1187,6 +1202,35 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
     public void setBtnTerminar(JButton btnTerminar) {
         this.btnTerminar = btnTerminar;
+    }
+
+    //@ValidacionCodefacAnotacion(requerido = true)
+    @TextFieldBinding(value = "controlador.usuario.nick")
+    public JTextField getTxtUsuarioNick() {
+        return txtUsuarioNick;
+    }
+
+    
+    public void setTxtUsuarioNick(JTextField txtUsuarioNick) {
+        this.txtUsuarioNick = txtUsuarioNick;
+    }
+    
+    @TextFieldBinding(value = "controlador.usuario.clave")
+    public JPasswordField getTxtUsuarioClave() {
+        return txtUsuarioClave;
+    }
+
+    public void setTxtUsuarioClave(JPasswordField txtUsuarioClave) {
+        this.txtUsuarioClave = txtUsuarioClave;
+    }
+
+    @TextFieldBinding(value = "controlador.usuario.repetirClave")
+    public JPasswordField getTxtUsuarioRepetirClave() {
+        return txtUsuarioRepetirClave;
+    }
+
+    public void setTxtUsuarioRepetirClave(JPasswordField txtUsuarioRepetirClave) {
+        this.txtUsuarioRepetirClave = txtUsuarioRepetirClave;
     }
 
     

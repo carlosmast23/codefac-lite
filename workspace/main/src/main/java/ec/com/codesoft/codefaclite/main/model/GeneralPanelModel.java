@@ -1732,7 +1732,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //System.out.println(metodo.getName());
             if(validacion!=null)
             {
-                if(validacion.grupo().equals(grupo))
+                //Validar todos los campos cuando no tiene puesto el grupo
+                if(grupo==null || validacion.grupo().equals(grupo))
                 {
                     try {
                         JTextComponent componente=(JTextComponent) metodo.invoke(panel);

@@ -268,7 +268,18 @@ public abstract class ComponentBindingAbstract<T,A> {
         
         String nombreMetodoFinal=metodosRecursivos[metodosRecursivos.length-1];
         Method metodoEjecutar=UtilidadesReflexion.buscarMetodoPorNombre(contexto.getClass(),nombreMetodoFinal);
-        UtilidadesReflexion.ejcutarMetodo(metodoEjecutar,contexto);
+        
+        if (metodoEjecutar == null) 
+        {
+            //TODO: Por el momento solo imprimo el log para saber donde esta el prolema pero deveria devolver la exepcion a un nivel superior
+            String mensajeError="Error de reflexion al ejecutar el metodo null : " +nombreMetodoFinal;
+            System.err.println(mensajeError);
+            Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, null, mensajeError);
+        }   
+        else
+        {        
+            UtilidadesReflexion.ejcutarMetodo(metodoEjecutar,contexto);
+        }
        
     }
     

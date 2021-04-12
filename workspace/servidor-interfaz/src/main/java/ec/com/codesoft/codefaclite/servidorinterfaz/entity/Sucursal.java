@@ -36,7 +36,10 @@ public class Sucursal implements Serializable{
     
     @Column(name = "TIPO")
     private String tipo;
-    
+    /**
+     * TODO: Cuidado al cambiar de nombre en las vistas MVC SWING
+     * Pantalla inicial de configuracion
+     */
     @Column(name = "DIRECCION")
     private String direcccion;
     

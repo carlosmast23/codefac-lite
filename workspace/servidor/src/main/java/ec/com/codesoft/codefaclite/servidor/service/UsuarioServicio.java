@@ -401,38 +401,38 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                
-                if (UtilidadesServidor.mapEmpresasLicencias.get(entity.getEmpresa()).tipoLicencia.equals(TipoLicenciaEnum.GRATIS)) {
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                    mapParametros.put("empresa",entity.getEmpresa());
-                    List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
-                    if (usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) 
-                    {
-                        throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
-                    }
-                }
-
-                entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave())); //Cifrar la clave para que no puede ser legible 
-                entityManager.persist(entity);
-                
-                //Grabar los puntos de emision asigandos al usuario
-                if(entity.getPuntosEmisionUsuario()!=null)
-                {
-                    for (PuntoEmisionUsuario puntoEmisionUsuario : entity.getPuntosEmisionUsuario()) {
-                        if(puntoEmisionUsuario.getId()==null)
-                        {
-                            entityManager.persist(puntoEmisionUsuario);
-                        }
-                    }
-                }
-                
-
+                grabarSinTransaccion(entity);
             }
         });
                 
         return entity;
     
+    }
+    
+    public void grabarSinTransaccion(Usuario entity) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        if (UtilidadesServidor.mapEmpresasLicencias.get(entity.getEmpresa()).tipoLicencia.equals(TipoLicenciaEnum.GRATIS)) {
+            Map<String, Object> mapParametros = new HashMap<String, Object>();
+            mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+            mapParametros.put("empresa", entity.getEmpresa());
+            List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
+            if (usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) {
+                throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
+            }
+        }
+
+        entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave())); //Cifrar la clave para que no puede ser legible 
+        entityManager.persist(entity);
+
+        //Grabar los puntos de emision asigandos al usuario
+        if (entity.getPuntosEmisionUsuario() != null) {
+            for (PuntoEmisionUsuario puntoEmisionUsuario : entity.getPuntosEmisionUsuario()) {
+                if (puntoEmisionUsuario.getId() == null) {
+                    entityManager.persist(puntoEmisionUsuario);
+                }
+            }
+        }
+
     }
     
     @Deprecated //Todo este metodo ya esta definido en guardar
