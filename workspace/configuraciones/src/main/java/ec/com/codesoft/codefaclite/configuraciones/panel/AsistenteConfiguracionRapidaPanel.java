@@ -125,6 +125,13 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         txtUsuarioRepetirClave = new javax.swing.JPasswordField();
         txtUsuarioClave = new javax.swing.JPasswordField();
         lblEspacio34959 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        txtLicenciaCorreo = new javax.swing.JTextField();
+        txtLicenciaClave = new javax.swing.JPasswordField();
         jToolBar1 = new javax.swing.JToolBar();
         btnAtrasPantalla = new javax.swing.JButton();
         btnAvanzarPantalla = new javax.swing.JButton();
@@ -683,12 +690,12 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal2.setLayout(new java.awt.GridBagLayout());
 
         jLabel27.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel27.setText("Usuario Nuevo");
+        jLabel27.setText("Datos Licencia Codefac");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel27, gridBagConstraints);
 
         jLabel28.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -710,17 +717,17 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal2.add(jLabel30, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         pnlEmpresaSucursal2.add(lblEspacio2, gridBagConstraints);
 
         jLabel37.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel37.setText("*Usuario:");
+        jLabel37.setText("*Correo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel37, gridBagConstraints);
@@ -735,28 +742,29 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal2.add(txtUsuarioNick, gridBagConstraints);
 
-        jLabel48.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
-        jLabel48.setText("Los datos ingresados en este momento son para poder acceder al sistema");
+        jLabel48.setFont(new java.awt.Font("Arial", 3, 13)); // NOI18N
+        jLabel48.setForeground(new java.awt.Color(0, 102, 153));
+        jLabel48.setText("Página Codefac Registro");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel48, gridBagConstraints);
 
         jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel29.setText("<html> \t<body> \t\t<center><h3>Consideraciones Finales</h3></center> \t\t<p>- Los datos Ingresados en este momento serán utilizados para configurar el sistema</p> \t\t<p>- Si algún dato fue ingresado de forma incorrecta despues se puede editar</p> \t\t<p>- Algunas funciones no están disponibles para los usuarios gratuitos</p> \t\t<p>- Si no tiene toda la información requerida el asistente se abriera de nuevo la próxima vez</p> \t\t<p>- Finalmente presione el <b>botón de Terminar</b> y luego tiene que volver a ingresar con el usuario creado</p> \t</body> </html>");
+        jLabel29.setText("<html> \t<body> \t\t<center> \t\t\t<h3>Consideraciones Finales</h3> \t\t</center>\t\t \t\t<p>- Si no tiene toda la información requerida el asistente se abriera de nuevo la próxima vez</p> \t\t<p>- Algunas funciones no están disponibles para los usuarios gratuitos</p> \t\t<p>- Finalmente presione el <b>botón de Terminar</b> y luego tiene que volver a ingresar con el usuario creado</p> \t</body> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel29, gridBagConstraints);
 
-        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/contabilidad.png"))); // NOI18N
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/cliente.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -792,6 +800,71 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.gridy = 2;
         gridBagConstraints.weightx = 0.6;
         pnlEmpresaSucursal2.add(lblEspacio34959, gridBagConstraints);
+
+        jLabel31.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel31.setText("Usuario Nuevo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel31, gridBagConstraints);
+
+        jLabel49.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
+        jLabel49.setText("Los datos ingresados en este momento son para poder acceder al sistema");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel49, gridBagConstraints);
+
+        jLabel50.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
+        jLabel50.setText("Para activar el sistema es necesario tener registrado una cuenta , puede crear la cuenta desde el siguiente link");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel50, gridBagConstraints);
+
+        jLabel38.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel38.setText("*Clave:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel38, gridBagConstraints);
+
+        jLabel39.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel39.setText("*Usuario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel39, gridBagConstraints);
+
+        txtLicenciaCorreo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 155;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(txtLicenciaCorreo, gridBagConstraints);
+
+        txtLicenciaClave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(txtLicenciaClave, gridBagConstraints);
 
         tabVentana.addTab("Usuario", pnlEmpresaSucursal2);
 
@@ -877,9 +950,12 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
@@ -890,7 +966,9 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -924,6 +1002,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JSpinner txtFirmaDuracion;
     private org.jdesktop.swingx.JXDatePicker txtFirmaFechaEmision;
     private javax.swing.JTextField txtFirmaNombre;
+    private javax.swing.JPasswordField txtLicenciaClave;
+    private javax.swing.JTextField txtLicenciaCorreo;
     private javax.swing.JSpinner txtPuntoEmision;
     private javax.swing.JSpinner txtPuntoEmisionSecuencialFactura;
     private javax.swing.JSpinner txtPuntoEmisionSecuencialNC;
