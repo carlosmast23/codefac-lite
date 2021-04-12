@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -139,11 +140,11 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
     }
     
-    public void grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException
+    public Empresa grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        return (Empresa) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public Object transaccion() throws ServicioCodefacException, RemoteException {
                 //System.out.println("Grabado la sucursal"+sucursal);
                 //Grabando primero la EMPRESA
                 empresa.setCodigo("COD");
@@ -169,8 +170,31 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
                 UsuarioServicio usuarioService=new UsuarioServicio();
                 usuarioService.grabarSinTransaccion(usuario);*/
                 
+                //Grabando los PARAMETROS DEL SISTEMA
+                agregarParametroPorDefecto(empresa, parametros);
+                ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
+                parametroCodefacService.editarParametrosSinTransaccion(parametros);
+                
+                //Retorno la empresa grabada por que necesita para un proceso posterior
+                return empresa;
             }
         });
+        
+    }
+    
+    private void agregarParametroPorDefecto(Empresa empresa,List<ParametroCodefac> parametros)
+    {
+        //Creando el directorio por defecto de los recursos
+        String pathPorDefecto = ParametrosSistemaCodefac.DIRECTORIO_RECURSOS_DEFECTO;
+        ParametroCodefac parametroDirectorioRecursos = new ParametroCodefac();
+        parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
+        parametroDirectorioRecursos.setValor(pathPorDefecto);
+        parametroDirectorioRecursos.setEmpresa(empresa);
+        parametros.add(parametroDirectorioRecursos);
+        
+        
+       
+        
     }
     
     private void agregarDatosUsuarioDefecto(Usuario usuario,Empresa empresa,PuntoEmision puntoEmision)

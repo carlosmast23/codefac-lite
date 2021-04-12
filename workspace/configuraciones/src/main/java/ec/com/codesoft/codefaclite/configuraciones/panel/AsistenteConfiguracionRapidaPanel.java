@@ -939,6 +939,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
     
 
+    @ButtonBinding(actionListener = "controlador.listenerBtnBuscarLogoEmpresa")
     public JButton getBtnEmpresaCargarLogo() {
         return btnEmpresaCargarLogo;
     }
@@ -1049,6 +1050,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaNombreComercial = txtEmpresaNombreComercial;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.imagenLogoPath")
     public JTextField getTxtEmpresaNombreLogo() {
         return txtEmpresaNombreLogo;
     }

@@ -355,7 +355,7 @@ public class EmpresaModel extends EmpresaForm
     
     public void cargarDatosArchivos(File archivoEscogido) {
         File archivo = archivoEscogido;
-        String rutaArchivo = archivo.getPath();
+        //String rutaArchivo = archivo.getPath();
         String nombreArchivo = archivo.getName();
         getjTextLogo().setText(nombreArchivo);
         origen=archivoEscogido.toPath();

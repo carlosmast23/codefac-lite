@@ -25,6 +25,9 @@ public abstract class ParametrosSistemaCodefac {
      * El modo de configuracion del sistema
      */
     public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
+    
+    
+    public static final String DIRECTORIO_RECURSOS_DEFECTO=System.getProperty("user.home") + "/codefacRecursos";
 
     /**
      * Puerto por defecto para configurar las conexiones en red no es final porque puedo modificar al momento de leer el archivo de configuraciones

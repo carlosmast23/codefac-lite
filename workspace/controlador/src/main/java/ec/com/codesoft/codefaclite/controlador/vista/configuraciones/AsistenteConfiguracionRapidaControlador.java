@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.configuraciones;
 
+import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
@@ -13,12 +14,19 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -43,11 +51,11 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     private Integer pestañaActivaTab;
 
     private Boolean botonTerminarHabilitar;
+    
+    private File fileEmpresaLogo;
 
-    /**
-     * TODO: Revisar por que no puedo setear los valores , en los metodos
-     * iniciar o limpiar (no funciona) 
-     */
+    private List<ParametroCodefac> listParametroCodefac;
+    
     private Empresa empresa;
     private Sucursal sucursal;
     private PuntoEmision puntoEmision;
@@ -66,11 +74,12 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     private void iniciarVariables() {
         pestañaActivaTab = 0;
         botonTerminarHabilitar = false;
+        
+        listParametroCodefac=new ArrayList<ParametroCodefac>();
 
         empresa=new Empresa();
         empresa.setContribuyenteRegimenMicroempresasBool(true);
-        empresa.setObligadoLlevarContabilidadBool(false);
-        
+        empresa.setObligadoLlevarContabilidadBool(false);        
         sucursal=new Sucursal();
         
 
@@ -167,7 +176,11 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         if (getInterfaz().ejecutarValidadoresVista()) {
             try {
                 sucursal.setEmpresa(empresa);
-                ServiceFactory.getFactory().getEmpresaServiceIf().grabarConfiguracionInicial(empresa, sucursal, puntoEmision, usuario, null);
+                
+                empresa=ServiceFactory.getFactory().getEmpresaServiceIf().grabarConfiguracionInicial(empresa, sucursal, puntoEmision, usuario, listParametroCodefac);
+                //Subo los archivos despues de grabar por que primero necesitaba el path donde van a estar los recursos
+                subirArchivosServidor();
+                
                 mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
 
             } catch (ServicioCodefacException ex) {
@@ -181,6 +194,43 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
             mostrarMensaje(new CodefacMsj("Faltan campos requeridos por llenar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
         }
 
+    }
+    
+    private void subirArchivosServidor()
+    {
+        if(fileEmpresaLogo!=null)
+        {
+            try {
+                SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
+                        new FileInputStream(fileEmpresaLogo));
+                
+                ParametroCodefac parametroEmpresa=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa);
+                String pathServidor=parametroEmpresa.getValor();
+                ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(
+                        pathServidor,
+                        DirectorioCodefac.IMAGENES, 
+                        istream,
+                        fileEmpresaLogo.getName()
+                );
+                                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void listenerBtnBuscarLogoEmpresa()
+    {
+        File file=getInterfaz().buscarFileLogoEmpresa();
+        if(file!=null)
+        {
+            //Grabo el nombre de la imagen
+            empresa.setImagenLogoPath(file.getName());
+            fileEmpresaLogo=file;
+            
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -235,6 +285,8 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         public void activarPestañaActiva(Integer indiceTab);
 
         public Boolean ejecutarValidadoresVista();
+        
+        public File buscarFileLogoEmpresa();
     }
 
     public interface SwingIf extends CommonIf {

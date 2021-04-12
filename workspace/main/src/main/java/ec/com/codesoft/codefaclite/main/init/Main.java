@@ -756,7 +756,9 @@ public class Main {
                         }*/
                         directorioUsuario= UtilidadesDirectorios.buscarDirectorio();
                     }
-                    
+                    /**
+                     * TODO: Unir con un metodo generico en la parte de la guia de configuracion
+                     */
                     parametroDirectorioRecursos = new ParametroCodefac();
                     parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                     parametroDirectorioRecursos.setValor(directorioUsuario);

@@ -19,13 +19,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -130,6 +134,19 @@ public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRa
     @Override
     public ModelControladorAbstract getControladorVista() {
         return controlador;
+    }
+
+    @Override
+    public File buscarFileLogoEmpresa() {
+        String[] filtros={"png", "jpg", "bmp"};
+        JFileChooser jFileChooser=UtilidadesSwing.getJFileChooserPreBuild("Buscar Logo","Logo Imagen",filtros);
+        int seleccion=jFileChooser.showDialog(null,"Abrir");
+        //Si devuelve una respuesta ejecuto el metodo para grabar
+        if(seleccion==JFileChooser.APPROVE_OPTION)
+        {
+            return jFileChooser.getSelectedFile();
+        }    
+        return null;
     }
 
     
