@@ -41,7 +41,7 @@ public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRa
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        controlador=new AsistenteConfiguracionRapidaControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);        
+        controlador=new AsistenteConfiguracionRapidaControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);                
         //listenerBotones();
     }
     

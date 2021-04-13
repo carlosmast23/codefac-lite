@@ -81,6 +81,21 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         empresa.setContribuyenteRegimenMicroempresasBool(true);
         empresa.setObligadoLlevarContabilidadBool(false);        
         sucursal=new Sucursal();
+        sucursal.setCodigoSucursal(1);
+        
+        puntoEmision=new PuntoEmision();
+        puntoEmision.setPuntoEmision(1);
+        puntoEmision.setSecuencialFactura(1);
+        puntoEmision.setSecuencialGuiaRemision(1);
+        puntoEmision.setSecuencialGuiaRemisionInterna(1);
+        puntoEmision.setSecuencialLiquidacionCompra(1);
+        puntoEmision.setSecuencialNotaCredito(1);
+        puntoEmision.setSecuencialNotaDebito(1);
+        puntoEmision.setSecuencialNotaVenta(1);
+        puntoEmision.setSecuencialNotaVentaInterna(1);
+        puntoEmision.setSecuencialRetenciones(1);
+        
+        
         
 
         //sucursal.get
@@ -173,7 +188,8 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
 
     public void listenerBtnTerminar() {
         //TODO: Revisar para mejorar esta parte para que en la parte derecha le aparesca cuales son los campos faltantes
-        if (getInterfaz().ejecutarValidadoresVista()) {
+        if (getInterfaz().ejecutarValidadoresVista()) 
+        {
             try {
                 sucursal.setEmpresa(empresa);
                 
@@ -190,7 +206,9 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
                 Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        } else {
+        } 
+        else 
+        {
             mostrarMensaje(new CodefacMsj("Faltan campos requeridos por llenar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
         }
 
@@ -231,6 +249,11 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
             fileEmpresaLogo=file;
             
         }
+    }
+    
+    public void listenerBtnBuscarLogo()
+    {
+        
     }
 
     ///////////////////////////////////////////////////////////////////////////

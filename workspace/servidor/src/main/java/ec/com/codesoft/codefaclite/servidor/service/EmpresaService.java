@@ -152,15 +152,17 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
                 
                 
                 //Grabar la SUCURSAL
-                /*sucursal.setEmpresa(empresa);
+                agregarDatosDefectoSucursal(sucursal, empresa);
                 SucursalService sucursalService=new SucursalService();
                 sucursalService.grabarSinTransaccion(sucursal);
+                
                 
                 //Grabar el PUNTO DE EMISION completando los datos por DEFECTO que faltaban
                 agregarDatosPuntoEmisionDefecto(puntoEmision, sucursal);
                 PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
                 puntoEmisionService.grabarSinTransaccion(puntoEmision);
                 
+                /*
                 //Grabar los parametros de configuracion para la FACTURACION ELECTRONICA
                 ParametroCodefacService parametroCodefacService =new ParametroCodefacService();
                 parametroCodefacService.editarParametrosSinTransaccion(parametros);
@@ -180,6 +182,16 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
             }
         });
         
+    }
+    
+    
+    private void agregarDatosDefectoSucursal(Sucursal sucursal,Empresa empresa)
+    {
+        sucursal.setNombre("Principal");
+        sucursal.setCodigo("SUC");
+        sucursal.setTipoEnum(Sucursal.TipoSucursalEnum.MATRIZ);
+        sucursal.setEmpresa(empresa);
+        sucursal.setEstadoEnum(GeneralEnumEstado.ACTIVO);        
     }
     
     private void agregarParametroPorDefecto(Empresa empresa,List<ParametroCodefac> parametros)

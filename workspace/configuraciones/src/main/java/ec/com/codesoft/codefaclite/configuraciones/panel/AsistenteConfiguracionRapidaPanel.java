@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
@@ -1192,6 +1193,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtFirmaNombre = txtFirmaNombre;
     }
 
+    @SpinnerBinding(value = "controlador.puntoEmision.puntoEmision")
     public JSpinner getTxtPuntoEmision() {
         return txtPuntoEmision;
     }
@@ -1200,6 +1202,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtPuntoEmision = txtPuntoEmision;
     }
 
+    @SpinnerBinding(value = "controlador.puntoEmision.secuencialFactura")
     public JSpinner getTxtPuntoEmisionSecuencialFactura() {
         return txtPuntoEmisionSecuencialFactura;
     }
@@ -1208,6 +1211,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtPuntoEmisionSecuencialFactura = txtPuntoEmisionSecuencialFactura;
     }
 
+    @SpinnerBinding(value = "controlador.puntoEmision.secuencialNotaCredito")
     public JSpinner getTxtPuntoEmisionSecuencialNC() {
         return txtPuntoEmisionSecuencialNC;
     }
@@ -1216,6 +1220,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtPuntoEmisionSecuencialNC = txtPuntoEmisionSecuencialNC;
     }
 
+    @SpinnerBinding(value = "controlador.puntoEmision.secuencialRetenciones")
     public JSpinner getTxtPuntoEmisionSecuencialRetenciones() {
         return txtPuntoEmisionSecuencialRetenciones;
     }
@@ -1224,6 +1229,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtPuntoEmisionSecuencialRetenciones = txtPuntoEmisionSecuencialRetenciones;
     }
 
+    @SpinnerBinding(value = "controlador.sucursal.codigoSucursal")
     public JSpinner getTxtSucursalCodigo() {
         return txtSucursalCodigo;
     }

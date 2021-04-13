@@ -90,6 +90,15 @@ public class Sucursal implements Serializable{
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+    
+    public TipoSucursalEnum getTipoEnum() {
+        return TipoSucursalEnum.getEnum(tipo);
+    }
+
+    public void setTipoEnum(TipoSucursalEnum tipoSucursalEnum) {
+        this.tipo = tipoSucursalEnum.codigo;
+    }
+
 
     public String getDirecccion() {
         return direcccion;
