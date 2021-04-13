@@ -118,7 +118,10 @@ public abstract class ComponentBindingAbstract<T,A> {
                 Object valorPropiedadControlador = getValorCampoControlador(nombrePropiedad);
                 
                 if(converter!=null)
+                {
+                    //System.out.println("Ejecutando metodo mvc :"+valorPropiedadControlador.toString());
                     valorPropiedadControlador=converter.castPropertyToComponente(valorPropiedadControlador);
+                }
                 
                 //Envia los valores del controlador para setar con una propiedad de los componentes de la vista
                 componentBindingIf.setAccion(valorPropiedadControlador,nombrePropiedad,converter);

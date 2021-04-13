@@ -44,7 +44,7 @@ public class DateComboBindingImp  extends ComponentBindingAbstract<JXDatePicker,
 
         @Override
         public Class getConverterClass(DateComboBinding anotacion) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return anotacion.converter();
         }
             
     };

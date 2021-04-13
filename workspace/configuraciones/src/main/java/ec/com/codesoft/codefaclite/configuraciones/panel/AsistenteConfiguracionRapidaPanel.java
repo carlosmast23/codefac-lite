@@ -6,6 +6,11 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.DateToStringConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.IntegerToStringConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToIntegerConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.DateComboBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
@@ -30,6 +35,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
      */
     public AsistenteConfiguracionRapidaPanel() {
         initComponents();
+        //getTxtFirmaFechaEmision().set
     }
 
     /**
@@ -85,7 +91,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel7 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         lblEspacio1 = new javax.swing.JLabel();
-        txtBtnFirmaBuscar = new javax.swing.JButton();
+        btnFirmaBuscar = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         txtFirmaNombre = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
@@ -465,12 +471,12 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.weighty = 0.1;
         pnlEmpresaSucursal1.add(lblEspacio1, gridBagConstraints);
 
-        txtBtnFirmaBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnFirmaBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal1.add(txtBtnFirmaBuscar, gridBagConstraints);
+        pnlEmpresaSucursal1.add(btnFirmaBuscar, gridBagConstraints);
 
         jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel18.setText("Secuencial Retenciones");
@@ -485,7 +491,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
-        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.ipadx = 150;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtFirmaNombre, gridBagConstraints);
@@ -519,7 +525,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -650,7 +655,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 16;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -924,6 +928,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JButton btnAtrasPantalla;
     private javax.swing.JButton btnAvanzarPantalla;
     private javax.swing.JButton btnEmpresaCargarLogo;
+    private javax.swing.JButton btnFirmaBuscar;
     private javax.swing.JButton btnTerminar;
     private javax.swing.JCheckBox chkEmpresaObligadoContabilidad;
     private javax.swing.JCheckBox chkEmpresaRegimenMicroempresa;
@@ -987,7 +992,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JPanel pnlEmpresaSucursal2;
     private javax.swing.JPanel pnlEmpresaSucursal3;
     private javax.swing.JTabbedPane tabVentana;
-    private javax.swing.JButton txtBtnFirmaBuscar;
     private javax.swing.JPasswordField txtCorreoClave;
     private javax.swing.JSpinner txtCorreoPuerto;
     private javax.swing.JTextField txtCorreoSmtp;
@@ -1055,14 +1059,16 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.tabVentana = tabVentana;
     }
 
-    public JButton getTxtBtnFirmaBuscar() {
-        return txtBtnFirmaBuscar;
+    @ButtonBinding(actionListener = "controlador.listenerBtnBuscarFirma")
+    public JButton getBtnFirmaBuscar() {
+        return btnFirmaBuscar;
     }
 
-    public void setTxtBtnFirmaBuscar(JButton txtBtnFirmaBuscar) {
-        this.txtBtnFirmaBuscar = txtBtnFirmaBuscar;
+    public void setBtnFirmaBuscar(JButton btnFirmaBuscar) {
+        this.btnFirmaBuscar = btnFirmaBuscar;
     }
-
+    
+    
     public JPasswordField getTxtCorreoClave() {
         return txtCorreoClave;
     }
@@ -1161,6 +1167,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaRuc = txtEmpresaRuc;
     }
 
+    
     public JPasswordField getTxtFirmaContraseña() {
         return txtFirmaContraseña;
     }
@@ -1169,6 +1176,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtFirmaContraseña = txtFirmaContraseña;
     }
 
+    @SpinnerBinding(value = "controlador.firmaDuracionParametro.valor",converter = IntegerToStringConverter.class)
     public JSpinner getTxtFirmaDuracion() {
         return txtFirmaDuracion;
     }
@@ -1177,6 +1185,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtFirmaDuracion = txtFirmaDuracion;
     }
 
+    @DateComboBinding(value = "controlador.firmaFechaEmisionParametro.valor",converter =DateToStringConverter.class )
     public JXDatePicker getTxtFirmaFechaEmision() {
         return txtFirmaFechaEmision;
     }
@@ -1185,6 +1194,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtFirmaFechaEmision = txtFirmaFechaEmision;
     }
 
+    @TextFieldBinding(value = "controlador.firmaArchivoParametro.valor")
     public JTextField getTxtFirmaNombre() {
         return txtFirmaNombre;
     }

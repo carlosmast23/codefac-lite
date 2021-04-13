@@ -21,11 +21,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     private Boolean botonTerminarHabilitar;
     
     private File fileEmpresaLogo;
+    private File fileFirmaElectronica;
 
     private List<ParametroCodefac> listParametroCodefac;
     
@@ -60,6 +63,17 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     private Sucursal sucursal;
     private PuntoEmision puntoEmision;
     private Usuario usuario;
+    
+    private ParametroCodefac firmaArchivoParametro;
+    private ParametroCodefac firmaClaveParametro;
+    private ParametroCodefac firmaDuracionParametro;
+    private ParametroCodefac firmaFechaEmisionParametro;
+    
+    private ParametroCodefac correoUsuarioParametro;
+    private ParametroCodefac correoClaveParametro;
+    private ParametroCodefac correoHostSmtpParametro;
+    private ParametroCodefac correoPuertoParametro;
+    
 
     public AsistenteConfiguracionRapidaControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -95,8 +109,16 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         puntoEmision.setSecuencialNotaVentaInterna(1);
         puntoEmision.setSecuencialRetenciones(1);
         
+        //Iniciar Parametros
+        firmaArchivoParametro=new ParametroCodefac(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
+        firmaClaveParametro=new ParametroCodefac(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA);
+        firmaDuracionParametro=new ParametroCodefac(ParametroCodefac.FIRMA_TIEMPO_EXPIRACION_AÑOS,"2");
+        firmaFechaEmisionParametro=new ParametroCodefac(ParametroCodefac.FIRMA_FECHA_EMISION);
         
-        
+        String formatoFecha="dd/MM/yy";
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat(formatoFecha);
+        String fechaStr=simpleDateFormat.format(UtilidadesFecha.getFechaHoy());
+        firmaFechaEmisionParametro.valor=fechaStr;
 
         //sucursal.get
     }
@@ -214,6 +236,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
 
     }
     
+    
     private void subirArchivosServidor()
     {
         if(fileEmpresaLogo!=null)
@@ -238,6 +261,18 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
             }
         }
     }
+
+    public void listenerBtnBuscarFirma() 
+    {
+        File file=getInterfaz().buscarFileFirmaElectronica();
+        if(file!=null)
+        {
+            //Grabo el nombre de la imagen
+            firmaArchivoParametro.valor=file.getName();
+            fileFirmaElectronica=file;
+            
+        }
+    }
     
     public void listenerBtnBuscarLogoEmpresa()
     {
@@ -251,10 +286,6 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         }
     }
     
-    public void listenerBtnBuscarLogo()
-    {
-        
-    }
 
     ///////////////////////////////////////////////////////////////////////////
     //                  METODOS GET AND SET
@@ -299,6 +330,48 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         this.usuario = usuario;
     }
 
+    public File getFileFirmaElectronica() {
+        return fileFirmaElectronica;
+    }
+
+    public void setFileFirmaElectronica(File fileFirmaElectronica) {
+        this.fileFirmaElectronica = fileFirmaElectronica;
+    }
+
+    public ParametroCodefac getFirmaArchivoParametro() {
+        return firmaArchivoParametro;
+    }
+
+    public void setFirmaArchivoParametro(ParametroCodefac firmaArchivoParametro) {
+        this.firmaArchivoParametro = firmaArchivoParametro;
+    }
+
+    public ParametroCodefac getFirmaClaveParametro() {
+        return firmaClaveParametro;
+    }
+
+    public void setFirmaClaveParametro(ParametroCodefac firmaClaveParametro) {
+        this.firmaClaveParametro = firmaClaveParametro;
+    }
+
+    public ParametroCodefac getFirmaDuracionParametro() {
+        return firmaDuracionParametro;
+    }
+
+    public void setFirmaDuracionParametro(ParametroCodefac firmaDuracionParametro) {
+        this.firmaDuracionParametro = firmaDuracionParametro;
+    }
+
+    public ParametroCodefac getFirmaFechaEmisionParametro() {
+        return firmaFechaEmisionParametro;
+    }
+
+    public void setFirmaFechaEmisionParametro(ParametroCodefac firmaFechaEmisionParametro) {
+        this.firmaFechaEmisionParametro = firmaFechaEmisionParametro;
+    }
+    
+    
+
     ///////////////////////////////////////////////////////////////////////////
     //             METODOS QUE CONTIENEN INTERFACES PARA LA IMPLEMTACION
     ///////////////////////////////////////////////////////////////////////////
@@ -310,6 +383,8 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         public Boolean ejecutarValidadoresVista();
         
         public File buscarFileLogoEmpresa();
+        
+        public File buscarFileFirmaElectronica();
     }
 
     public interface SwingIf extends CommonIf {

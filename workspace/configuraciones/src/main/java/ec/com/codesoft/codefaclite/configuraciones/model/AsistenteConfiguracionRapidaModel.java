@@ -149,6 +149,19 @@ public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRa
         return null;
     }
 
+    @Override
+    public File buscarFileFirmaElectronica() {
+        String[] filtros={"p12", "pfx"};
+        JFileChooser jFileChooser=UtilidadesSwing.getJFileChooserPreBuild("Buscar Firma","Firma",filtros);
+        int seleccion=jFileChooser.showDialog(null,"Abrir");
+        //Si devuelve una respuesta ejecuto el metodo para grabar
+        if(seleccion==JFileChooser.APPROVE_OPTION)
+        {
+            return jFileChooser.getSelectedFile();
+        }    
+        return null;
+    }
+
     
     
 }
