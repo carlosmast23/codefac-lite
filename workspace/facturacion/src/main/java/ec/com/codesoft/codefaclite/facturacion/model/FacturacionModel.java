@@ -176,6 +176,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
@@ -3584,7 +3585,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             DialogoCodefac.mensaje("Advertencia", "No exite una sesión de caja activa", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ServicioCodefacException("No exite una sesión de caja activa");
         }
-        Object[] parametros={getPuntoEmisionSeleccionado(),usuario};
+        
+        BigDecimal totalVentas = BigDecimal.ZERO;
+        totalVentas = cajaSession.getValorApertura();
+        if(!cajaSession.getIngresosCaja().isEmpty())
+        {      
+            for(IngresoCaja ingresoCaja: cajaSession.getIngresosCaja())
+            {
+                totalVentas = totalVentas.add(ingresoCaja.getValor());
+            }            
+        }
+        
+        Object[] parametros={cajaSession, usuario, totalVentas};
         panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<ArqueoCaja>() 
         {
             @Override

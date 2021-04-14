@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.pos.model;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.ArqueoCajaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -21,7 +22,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
@@ -41,7 +44,7 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements DialogInterfaceP
     private ArqueoCajaModelControlador controlador = new ArqueoCajaModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -195,16 +198,13 @@ public class ArqueoCajaModel extends ArqueoCajaPanel implements DialogInterfaceP
     @Override
     public void postConstructorExterno(Object[] parametros) 
     {
-        try {
-            CajaSession cajaSession = null;
-            PuntoEmision puntoEmision = (PuntoEmision) parametros[0];
-            cajaSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorPuntoEmisionYUsuario(puntoEmision.getPuntoEmision(), (Usuario) parametros[1]);
-            this.controlador.getArqueoCaja().setCajaSession(cajaSession);
-            this.controlador.getArqueoCaja().setUsuario((Usuario) parametros[1]);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ArqueoCajaModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }    
+        CajaSession cajaSession = (CajaSession)parametros[0];
+        this.controlador.getArqueoCaja().setCajaSession(cajaSession);
+        this.controlador.getArqueoCaja().setUsuario((Usuario) parametros[1]);
+        BigDecimal totalCajas = (BigDecimal) parametros[2];
+        this.controlador.getArqueoCaja().setValorTeorico(totalCajas.toString());
+        getjTextValorTeorico().setText(this.controlador.getArqueoCaja().getValorTeorico());
+    }
     
 }
 

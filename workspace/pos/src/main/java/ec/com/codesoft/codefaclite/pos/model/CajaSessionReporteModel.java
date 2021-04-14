@@ -78,23 +78,24 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
             Usuario usuario = (Usuario) getCmbUsuario().getSelectedItem();
             
             List<CajaSession> cajasSession = (List<CajaSession>) ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorCajaYUsuario(caja, usuario);
-
-            dataReporte = new ArrayList<>();
             
-            cajasSession.forEach(cs -> 
-            {
-                dataReporte.add(
-                        new CajaSessionReporteData(
-                                cs.getCaja().getNombre(),
-                                cs.getUsuario().getNick(),
-                                cs.getCaja().getSucursal().getNombre(),
-                                cs.getCaja().getPuntoEmision().getPuntoEmision().toString(),
-                                cs.getFechaHoraApertura().toString(),
-                                cs.getFechaHoraCierre().toString(),
-                                cs.getValorApertura().toString(),
-                                cs.getValorCierre().toString()
-                        ));
-            });
+            dataReporte = new ArrayList<>();
+            if(cajasSession != null && !cajasSession.isEmpty()){
+                cajasSession.forEach(cs -> 
+                {
+                    dataReporte.add(
+                            new CajaSessionReporteData(
+                                    cs.getCaja().getNombre(),
+                                    cs.getUsuario().getNick(),
+                                    cs.getCaja().getSucursal().getNombre(),
+                                    cs.getCaja().getPuntoEmision().getPuntoEmision().toString(),
+                                    cs.getFechaHoraApertura().toString(),
+                                    cs.getFechaHoraCierre().toString(),
+                                    cs.getValorApertura().toString(),
+                                    cs.getValorCierre().toString()
+                            ));
+                });
+            }
             
         } catch (RemoteException ex) {
             Logger.getLogger(CajaSessionReporteModel.class.getName()).log(Level.SEVERE, null, ex);

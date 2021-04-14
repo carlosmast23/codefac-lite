@@ -38,6 +38,8 @@ public class CerrarCajaModel extends CajaSessionModel
         //super.iniciar(); //To change body of generated methods, choose Tools | Templates.
         //super.cicloVida=false;
         //super.validacionDatosIngresados=false;
+        cajaSessionA = null;
+        limpiar();
         getjTextValorApertura().setEnabled(false);
         getjCmbCajaPermiso().removeAllItems();
         getjComboBoxEstadoCierre().removeAllItems();
@@ -60,11 +62,19 @@ public class CerrarCajaModel extends CajaSessionModel
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        
-        
-    }    
-    
+        }       
+    }
+
+    @Override
+    public void limpiar() {
+        getjTextFechaApertura().setText("");
+        getjTextFechaCierre().setText("");
+        getjTextHoraApertura().setText("");
+        getjTextHoraCierre().setText("");
+        getjTextValorApertura().setText("");
+        getjTextValorCierre().setText("");
+    }
+   
     private void cargarDatos()
     {
         List<Caja> cajas = new ArrayList<>();
