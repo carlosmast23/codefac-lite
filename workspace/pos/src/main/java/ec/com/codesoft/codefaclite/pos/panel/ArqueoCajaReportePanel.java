@@ -36,8 +36,6 @@ public abstract class ArqueoCajaReportePanel extends ControladorCodefacInterface
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        lblBuscar = new javax.swing.JLabel();
-        cmbUsuario = new javax.swing.JComboBox<>();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblArqueosCajas = new javax.swing.JTable();
@@ -49,29 +47,8 @@ public abstract class ArqueoCajaReportePanel extends ControladorCodefacInterface
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Caja Session Reporte");
+        setTitle("Arqueo Caja Reporte");
         getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        lblBuscar.setText("Usuario:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(lblBuscar, gridBagConstraints);
-
-        cmbUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbUsuarioActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(cmbUsuario, gridBagConstraints);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
@@ -128,17 +105,11 @@ public abstract class ArqueoCajaReportePanel extends ControladorCodefacInterface
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbCajaActionPerformed
 
-    private void cmbUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbUsuarioActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JComboBox<Caja> cmbCaja;
-    private javax.swing.JComboBox<Usuario> cmbUsuario;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblperiodo;
     private javax.swing.JTable tblArqueosCajas;
@@ -159,15 +130,7 @@ public abstract class ArqueoCajaReportePanel extends ControladorCodefacInterface
     public void setCmbCaja(JComboBox<Caja> cmbCaja) {
         this.cmbCaja = cmbCaja;
     }
-
-    public JComboBox<Usuario> getCmbUsuario() {
-        return cmbUsuario;
-    }
-
-    public void setCmbUsuario(JComboBox<Usuario> cmbUsuario) {
-        this.cmbUsuario = cmbUsuario;
-    }
-
+    
     public JTable getTblArqueosCajas() {
         return tblArqueosCajas;
     }

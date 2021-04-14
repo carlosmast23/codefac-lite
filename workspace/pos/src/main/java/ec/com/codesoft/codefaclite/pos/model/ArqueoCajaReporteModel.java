@@ -51,7 +51,6 @@ public class ArqueoCajaReporteModel extends ArqueoCajaReportePanel
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarValores();
-        listenerCombos();
         listenerBotones();
     }
 
@@ -78,30 +77,28 @@ public class ArqueoCajaReporteModel extends ArqueoCajaReportePanel
     @Override
     public void imprimir() {
         
-        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporteMatriculados.jrxml");
-        Map parameters = new HashMap();
+        InputStream path = RecursoCodefac.JASPER_POS.getResourceInputStream("reportePlantillaArqueoCaja.jrxml");
         
+        Map parameters = new HashMap();
         Caja caja = (Caja) getCmbCaja().getSelectedItem();
-        Usuario usuario = (Usuario) getCmbUsuario().getSelectedItem();
        
         if (caja != null) {
             parameters.put("caja", caja.getNombre());
         } else {
             parameters.put("caja", "TODOS");
         }
-        if (usuario != null) {
+        /*if (usuario != null) {
             parameters.put("usuario", usuario.getNick());
         } else {
             parameters.put("usuario", "TODOS");
-        }
+        }*/
                
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
             @Override
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    String[] nombreCabeceras = {" Nivel ", " Cédula ", " Apellidos ", " Nombres ", " Email ", " Telefono ", " Representante "};
-                    //List<ReporteAcademicoData> dat = ordenarDetallesEnFuncionDeCliente(data);
+                    String[] nombreCabeceras = {" Supervisor ", " Cajero ", " Caja ", " Punto Emisión ", " Fecha hora ", " Valor Teorico ", "Valor Fisico", "Estado"};
                     excel.gestionarIngresoInformacionExcel(nombreCabeceras, dataReporte);
                     excel.abrirDocumento();
                 } catch (IOException ex) {
@@ -116,7 +113,7 @@ public class ArqueoCajaReporteModel extends ArqueoCajaReportePanel
             @Override
             public void pdf() {
 
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, dataReporte, panelPadre, "Estudiantes Matriculados");
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, dataReporte, panelPadre, "Arqueo Caja");
             }
         });
     }
@@ -172,27 +169,24 @@ public class ArqueoCajaReporteModel extends ArqueoCajaReportePanel
     public void generarConsulta() {
         try {
             Caja caja = (Caja) getCmbCaja().getSelectedItem();
-            Usuario usuario = (Usuario) getCmbUsuario().getSelectedItem();
             
-            List<CajaSession> cajasSession = (List<CajaSession>) ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorCajaYUsuario(caja, usuario);
+            List<ArqueoCaja> arqueoCajas = (List<ArqueoCaja>) ServiceFactory.getFactory().getArqueoCajaServiceIf().obtenerArqueoCajaPorCaja(caja);
 
             dataReporte = new ArrayList<>();
             
-            cajasSession.forEach(cs -> 
+            arqueoCajas.forEach(cs -> 
             {
-                cs.getArqueosCaja().forEach(ar -> {
-                    dataReporte.add(new ArqueoCajaReporteData(
-                            cs.getId().toString(),
-                            ar.getUsuario().getNick(),
-                            cs.getUsuario().getNick(),
-                            cs.getCaja().getNombre(),
-                            cs.getCaja().getPuntoEmision().getPuntoEmision().toString(),
-                            ar.getFechaHora().toString(),
-                            ar.getValorTeorico(),
-                            ar.getValorFisico().toString(),
-                            ar.getEstadoEnum().getNombre()
-                    ));
-                });
+                dataReporte.add(new ArqueoCajaReporteData(
+                    cs.getId().toString(),
+                    cs.getUsuario().getNick(),
+                    cs.getCajaSession().getUsuario().getNick(),
+                    cs.getCajaSession().getCaja().getNombre(),
+                    "" + cs.getCajaSession().getCaja().getPuntoEmision().getPuntoEmision(),
+                    cs.getFechaHora().toString(),
+                    cs.getValorTeorico(),
+                    cs.getValorFisico().toString(),
+                    cs.getEstadoEnum().getNombre()
+                ));
             });
             
         } catch (RemoteException ex) {
@@ -204,10 +198,8 @@ public class ArqueoCajaReporteModel extends ArqueoCajaReportePanel
         try {
            
             List<Caja> cajas = ServiceFactory.getFactory().getCajaServiceIf().buscarCajasPorSucursal(session);
-            List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session, cajas.get(0));
             
             UtilidadesComboBox.llenarComboBox(getCmbCaja(), cajas);
-            UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios);
             
             modeloTablaArqueCaja = new DefaultTableModel();
             getTblArqueosCajas().setModel(modeloTablaArqueCaja);
@@ -217,29 +209,7 @@ public class ArqueoCajaReporteModel extends ArqueoCajaReportePanel
         }
 
     }
-    
-    private void listenerCombos()
-    {
-        getCmbCaja().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                try {
-                    cargarUsuariosPorCajaEnCombo();
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ArqueoCajaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-    }
-    
-    private void cargarUsuariosPorCajaEnCombo() throws RemoteException
-    {
-        Caja caja = (Caja) getCmbCaja().getSelectedItem();
-        List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session, caja);
-        UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios);
-    }
-    
+           
     private void listenerBotones() 
     {
         getBtnBuscar().addActionListener(new ActionListener() {
@@ -248,7 +218,15 @@ public class ArqueoCajaReporteModel extends ArqueoCajaReportePanel
             {
                 
                 Vector<String> titulo = new Vector<>();
-                titulo.add("Arqueo de caja");
+                titulo.add("Id");
+                titulo.add("Supervisor");
+                titulo.add("Cajero");
+                titulo.add("Caja");
+                titulo.add("P. Emisión");
+                titulo.add("Fecha-Hora");
+                titulo.add("V. Teorico");
+                titulo.add("V. Fisico");
+                titulo.add("Estado");
                 
                 modeloTablaArqueCaja = new DefaultTableModel(titulo, 0);
             

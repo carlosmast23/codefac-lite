@@ -6,12 +6,15 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
+import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
  * @author Robert
  */
 public interface ArqueoCajaServiceIf extends ServiceAbstractIf<ArqueoCaja>{
-    
+    public List<ArqueoCaja> obtenerArqueoCajaPorCaja(Caja caja) throws RemoteException;
 }
