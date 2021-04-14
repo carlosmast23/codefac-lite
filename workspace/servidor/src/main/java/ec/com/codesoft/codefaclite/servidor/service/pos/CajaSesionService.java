@@ -154,7 +154,7 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         Map<String, Object> mapParametros = new HashMap<>();
         mapParametros.put("caja", caja);
         mapParametros.put("usuario", usuario);
-        mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
+        mapParametros.put("estadoCierreCaja", CajaSessionEnum.FINALIZADO.getEstado());
         
         List<CajaSession> cajasSession = getFacade().findByMap(mapParametros);
         
