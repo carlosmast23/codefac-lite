@@ -47,11 +47,16 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                validarPuntoEmisionSinTransaccion(entity);
-                entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-                entityManager.persist(entity);
+                grabarSinTransaccion(entity);
             }
         });
+        return entity;
+    }
+    
+    public PuntoEmision grabarSinTransaccion(PuntoEmision entity) throws ServicioCodefacException, RemoteException {
+        validarPuntoEmisionSinTransaccion(entity);
+        entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+        entityManager.persist(entity);
         return entity;
     }
     

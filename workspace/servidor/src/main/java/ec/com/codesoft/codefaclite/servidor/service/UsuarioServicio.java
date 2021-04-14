@@ -8,15 +8,11 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilUsuarioFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
-import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
-import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
-import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
@@ -25,8 +21,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FechaMaximoPagoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
@@ -65,75 +59,99 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         this.usuarioFacade=new UsuarioFacade();
     }    
     
+    /**
+     * Metodo que permite validar si primero existen problemas con la licencia del, cliente
+     */
+    private boolean validacionLicencia(EmpresaLicencia empresaLicencia,LoginRespuesta loginRespuesta) throws RemoteException, ServicioCodefacException
+    {
+                
+        //Si la licencia es distinta de correcta termino el Login y aviso al usuario final
+        loginRespuesta.alertas = empresaLicencia.alertas;
+        //Si la comprobacion de la licencia es incorrecta devuel el ERROR
+        if (!empresaLicencia.estadoEnum.equals(empresaLicencia.estadoEnum.LICENCIA_CORRECTA)) {
+            loginRespuesta.estadoEnum = empresaLicencia.estadoEnum;
+            return false;
+        }
+        return true;
+            
+    }
     
+    /**
+     * 
+     * @return Devuelve verdadero si no tiene deudas o no tienes deudas vencidas
+     */
+    private Boolean validarDeudasSistema(Empresa empresa,EmpresaLicencia empresaLicencia,LoginRespuesta loginRespuesta)
+    {
+        FechaMaximoPagoRespuesta respuestaPago = verificarFechaMaximaPago(empresaLicencia.usuarioLicencia, empresa);
+        if (respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.FECHA_PAGO_SUPERADA)) 
+        {
+            loginRespuesta.estadoEnum = loginRespuesta.estadoEnum.PAGOS_PENDIENTES;
+            //return loginRespuesta;
+            return false;
+        } else if (respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.PROXIMO_PAGO_CERCA)) //Validacion solo para emitir una alerta de la fecha de pago 
+        {
+            if (loginRespuesta.alertas == null) {
+                loginRespuesta.alertas = Arrays.asList(respuestaPago.mensajePagoCerca());
+            } else {
+                loginRespuesta.alertas.addAll(Arrays.asList(respuestaPago.mensajePagoCerca()));
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Metodo que me permite verificar si el usuario puede acceder al sistema tanto por credenciales o por otro motivo
+     * @param nick
+     * @param clave
+     * @param empresa
+     * @return
+     * @throws java.rmi.RemoteException
+     * @throws ServicioCodefacException 
+     */
     public LoginRespuesta login(String nick,String clave,Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException
     {
         LoginRespuesta loginRespuesta=new LoginRespuesta();
         
         /////////==========> VALIDAR LA LICENCIA DE LA EMPRESA PARA VER SI TIENE PERMISO PARA ABRIR EL SISTEMA <==========//////
-        UtilidadesService servicioUtilidades=new UtilidadesService();
-        
+               
         //Solo hago la validación cuando ya tiene creado la empresa porque la primera vez debe dejar ingresar al sistema para que puedan configurar los datos principales
         if(empresa!=null)
         {
-            EmpresaLicencia empresaLicencia=servicioUtilidades.obtenerLicenciaEmpresa(empresa);
-            //Si la licencia es distinta de correcta termino el Login y aviso al usuario final
-            loginRespuesta.alertas=empresaLicencia.alertas;
-            if(!empresaLicencia.estadoEnum.equals(empresaLicencia.estadoEnum.LICENCIA_CORRECTA))
+            UtilidadesService servicioUtilidades=new UtilidadesService();
+            EmpresaLicencia empresaLicencia = servicioUtilidades.obtenerLicenciaEmpresa(empresa);
+            //Si no logro validar la licencia devuelvo la respuesta que fue agregado en el metodo validacionLicencia
+            if(!validacionLicencia(empresaLicencia, loginRespuesta))
             {
-                loginRespuesta.estadoEnum=empresaLicencia.estadoEnum;
                 return loginRespuesta;
             }
-            
-            /////////=========> VALIDAR QUE NO TENGA DEUDAS EN EL SISTEMA PARA SEGUIR USANDO <================================///
-            FechaMaximoPagoRespuesta respuestaPago = verificarFechaMaximaPago(empresaLicencia.usuarioLicencia,empresa);
-            if (respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.FECHA_PAGO_SUPERADA)) {
-                loginRespuesta.estadoEnum = loginRespuesta.estadoEnum.PAGOS_PENDIENTES;
-                return loginRespuesta;
-            } 
-            else if (respuestaPago.estadoEnum.equals(respuestaPago.estadoEnum.PROXIMO_PAGO_CERCA)) //Validacion solo para emitir una alerta de la fecha de pago 
+           
+            //=========> VALIDAR QUE NO TENGA DEUDAS EN EL SISTEMA PARA SEGUIR USANDO <================================///
+            //Si tiene deudas que no permite abrir el sistema devuelvo el ERROR que fue agregado en el metodo loginRespuesta
+            if(!validarDeudasSistema(empresa, empresaLicencia, loginRespuesta))
             {
-                if (loginRespuesta.alertas == null) {
-                    loginRespuesta.alertas = Arrays.asList(respuestaPago.mensajePagoCerca());
-                } else {
-                    loginRespuesta.alertas.addAll(Arrays.asList(respuestaPago.mensajePagoCerca()));
-                }
+                return loginRespuesta;
             }
         }
               
         
-        ////////===========> VALIDACION DE LOS USUARIOS DE LA EMPRESA <=================================================== /////
-        //Usuario usuario=null;        
+        ////////===========> VALIDACION DE LOS USUARIOS DE LA EMPRESA <=================================================== /////            
         if(!nick.equals("") && !clave.equals(""))
         {
-            ////////////////////////////////////////////////////////////////////
-            ///         USUARIO PARA CONFIGURAR LA PRIMERA VEZ EL SISTEMA
-            /// NOTA: Esta validación solo funciona para el usuario Admin
-            ////////////////////////////////////////////////////////////////////
-            if(nick.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION))
-            {
-                //Permite usar el usuario admin mientras no tenga creado ningun otro usuario
-                UsuarioServicio usuarioService=new UsuarioServicio();
-                Integer cantidadUsuariosActivos=usuarioService.obtenerCantidadUsuariosActivosPorEmpresa(empresa);
-                if(cantidadUsuariosActivos==0)
-                {                
-                    if(clave.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION))
-                    {
-                        Map<String, Object> mapParametros = new HashMap<String, Object>();
-                        mapParametros.put("nick", Usuario.SUPER_USUARIO);
-                        List<Usuario> resultados= getFacade().findByMap(mapParametros);
-                        LOG.log(Level.INFO,"Ingresando con usuario de configuracion");
-                        //UsuarioServicio usuarioServicio=new UsuarioServicio();
-                        //Usuario usuarioConfig = usuarioServicio.obtenerUsuarioConfiguracion();//obtiene el usuario root de la base de datos 
-                        //usuarioRoot.isConfig=true;
-                        //loginRespuesta.usuario = usuarioRoot;                    
-                        loginRespuesta.estadoEnum = LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
-                        loginRespuesta.usuario=resultados.get(0);
-                    }
-                }
-                
-            }//Validacion para verificar si no es un usuario root es decir para soporte
-            else if(nick.toLowerCase().indexOf("root")>=0) //Si contiene la palabra root asumo que es de soporte
+            /**
+             * Procedeimiento para buscar usuarios de diferentes tipos configuracion ,root, usuarios del sistema
+             * el proceso en orden de validación es:
+             * 1.- Validar si es un usurio ROOT
+             * 2.- Validar si es un usurio de Configuracio
+             * 3.- Validar cualquier usuario creado en el sistema
+             */
+            
+            //Consultando variable de la cantidad de usuarios para validacion para el usuarios admin de configuracion inicial
+            UsuarioServicio usuarioService = new UsuarioServicio();
+            Integer cantidadUsuariosActivos = usuarioService.obtenerCantidadUsuariosActivosPorEmpresa(empresa);
+
+            
+            //Validacion para verificar si no es un usuario root es decir para soporte
+            if(nick.toLowerCase().indexOf("root")>=0) //Si contiene la palabra root asumo que es de soporte
             {
                 //Consultar el usuario root
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -150,8 +168,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                     Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                
-                if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) //Cuando esta en modo produccion para el root consulto desde los web services
+                //Cuando esta en modo produccion para el root consulto desde los web services
+                if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) 
                 {
                     if(WebServiceCodefac.getVerificarSoporte(nick, clave))
                     {                            
@@ -187,6 +205,26 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 }
                     
             }
+            //Validacion cuando no tiene usuarios para ver si tiene que ingresar con el usuario Admin
+            else if(cantidadUsuariosActivos == 0)
+            {
+                //Validacion para el usuario de configuracion admin
+                if (clave.toLowerCase().equals(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION)) 
+                {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("nick", Usuario.SUPER_USUARIO);
+                    List<Usuario> resultados = getFacade().findByMap(mapParametros);
+                    LOG.log(Level.INFO, "Ingresando con usuario de configuracion");
+                    loginRespuesta.estadoEnum = LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
+                    loginRespuesta.usuario = resultados.get(0);
+                } 
+                else 
+                {
+                    //Cuando el usuario ingresa por primera vez y no sabe las credenciales mando la advertencia
+                    loginRespuesta.estadoEnum = LoginRespuesta.EstadoLoginEnum.ERROR_INGRESO_PRIMERA_VEZ;
+                    return loginRespuesta;
+                }
+            }
             else //Validacion para usuarios normales que no son root
             {            
                 //usuario=usuarioServicio.login(usuarioTxt,clave);
@@ -216,13 +254,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             }
 
         }
-        /*else
-        {
-            //DialogoCodefac.mensaje("Advertencia Login","Ingrese todos los campos",DialogoCodefac.MENSAJE_ADVERTENCIA);
-        }*/
-        
-        return loginRespuesta;
-        
+
+        return loginRespuesta;        
     }
     
     private Usuario verificarCredencialesUsuario(String nick,String clave,Empresa empresa)
@@ -368,38 +401,38 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                
-                if (UtilidadesServidor.mapEmpresasLicencias.get(entity.getEmpresa()).tipoLicencia.equals(TipoLicenciaEnum.GRATIS)) {
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                    mapParametros.put("empresa",entity.getEmpresa());
-                    List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
-                    if (usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) 
-                    {
-                        throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
-                    }
-                }
-
-                entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave())); //Cifrar la clave para que no puede ser legible 
-                entityManager.persist(entity);
-                
-                //Grabar los puntos de emision asigandos al usuario
-                if(entity.getPuntosEmisionUsuario()!=null)
-                {
-                    for (PuntoEmisionUsuario puntoEmisionUsuario : entity.getPuntosEmisionUsuario()) {
-                        if(puntoEmisionUsuario.getId()==null)
-                        {
-                            entityManager.persist(puntoEmisionUsuario);
-                        }
-                    }
-                }
-                
-
+                grabarSinTransaccion(entity);
             }
         });
                 
         return entity;
     
+    }
+    
+    public void grabarSinTransaccion(Usuario entity) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        if (UtilidadesServidor.mapEmpresasLicencias.get(entity.getEmpresa()).tipoLicencia.equals(TipoLicenciaEnum.GRATIS)) {
+            Map<String, Object> mapParametros = new HashMap<String, Object>();
+            mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+            mapParametros.put("empresa", entity.getEmpresa());
+            List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
+            if (usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) {
+                throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
+            }
+        }
+
+        entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave())); //Cifrar la clave para que no puede ser legible 
+        entityManager.persist(entity);
+
+        //Grabar los puntos de emision asigandos al usuario
+        if (entity.getPuntosEmisionUsuario() != null) {
+            for (PuntoEmisionUsuario puntoEmisionUsuario : entity.getPuntosEmisionUsuario()) {
+                if (puntoEmisionUsuario.getId() == null) {
+                    entityManager.persist(puntoEmisionUsuario);
+                }
+            }
+        }
+
     }
     
     @Deprecated //Todo este metodo ya esta definido en guardar

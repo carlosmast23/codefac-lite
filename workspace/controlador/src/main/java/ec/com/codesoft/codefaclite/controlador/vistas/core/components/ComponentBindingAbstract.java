@@ -118,7 +118,10 @@ public abstract class ComponentBindingAbstract<T,A> {
                 Object valorPropiedadControlador = getValorCampoControlador(nombrePropiedad);
                 
                 if(converter!=null)
+                {
+                    //System.out.println("Ejecutando metodo mvc :"+valorPropiedadControlador.toString());
                     valorPropiedadControlador=converter.castPropertyToComponente(valorPropiedadControlador);
+                }
                 
                 //Envia los valores del controlador para setar con una propiedad de los componentes de la vista
                 componentBindingIf.setAccion(valorPropiedadControlador,nombrePropiedad,converter);
@@ -268,7 +271,18 @@ public abstract class ComponentBindingAbstract<T,A> {
         
         String nombreMetodoFinal=metodosRecursivos[metodosRecursivos.length-1];
         Method metodoEjecutar=UtilidadesReflexion.buscarMetodoPorNombre(contexto.getClass(),nombreMetodoFinal);
-        UtilidadesReflexion.ejcutarMetodo(metodoEjecutar,contexto);
+        
+        if (metodoEjecutar == null) 
+        {
+            //TODO: Por el momento solo imprimo el log para saber donde esta el prolema pero deveria devolver la exepcion a un nivel superior
+            String mensajeError="Error de reflexion al ejecutar el metodo null : " +nombreMetodoFinal;
+            System.err.println(mensajeError);
+            Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, null, mensajeError);
+        }   
+        else
+        {        
+            UtilidadesReflexion.ejcutarMetodo(metodoEjecutar,contexto);
+        }
        
     }
     

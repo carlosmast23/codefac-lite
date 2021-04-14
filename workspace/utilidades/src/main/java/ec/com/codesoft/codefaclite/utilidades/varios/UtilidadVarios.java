@@ -119,13 +119,13 @@ public abstract class UtilidadVarios {
         return "localhost";
     }
     
-    public static  String obtenerMacSinInternet(String interfazRed)
+    public static  List<InterfazRed> obtenerMacSinInternet(String interfazRed)
     {
-                
+        List<InterfazRed> resultadoList=new ArrayList<InterfazRed>();
         try {
             /**
              * =================================================================================
-             * Como primera opcion trato de encontrar un mac previamente ingresada con el nombre
+             * Como primera opcion trato de encontrar una mac previamente ingresada con el nombre por defecto
              * =================================================================================
              */
             if(interfazRed!=null && !interfazRed.isEmpty())
@@ -136,24 +136,26 @@ public abstract class UtilidadVarios {
                     InterfazRed resultado=buscarInterfazValida(interfazEncontrada);
                     if(resultado!=null)
                     {
-                        return resultado.mac;
+                        resultadoList.add(resultado);
                     }
                 }
             }
             
             /**
              * =====================================================================================
-             * Si no encuentra nunguna opcion por el nombre busca cualquier interfaz valida de red
+             * Posteriormente agrego otra interfaces validas si por algun motivo cambia el nombre de la interfaz de red por defecto
              * =====================================================================================
              */
              List<InterfazRed> interfacesValidas=obtenerInterfazValidas();
-             for (InterfazRed interfacesValida : interfacesValidas) {
-                return interfacesValida.mac;
+             for (InterfazRed interfacesValida : interfacesValidas) 
+             {
+                 resultadoList.add(interfacesValida);
+                //return interfacesValida.mac;
             }
         } catch (SocketException ex) {
             Logger.getLogger(UtilidadVarios.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "";
+        return resultadoList;
         
     }
     
@@ -185,7 +187,7 @@ public abstract class UtilidadVarios {
             int indiceNet = nombreInterface.indexOf("eth");
             int indiceWlan = nombreInterface.indexOf("wlan");
             if ((indiceNet >= 0 || indiceWlan >= 0) && validarExcepcionesInterfazRed(networkInterface.getDisplayName(),excepcionesMac)) {
-                System.err.println("============= INTERFAZ VALIDA ===================");
+                System.out.println("============= INTERFAZ VALIDA ===================");
                 System.out.println(networkInterface.getDisplayName());
                 System.out.println(networkInterface.getName());
                 System.out.println(sb.toString());

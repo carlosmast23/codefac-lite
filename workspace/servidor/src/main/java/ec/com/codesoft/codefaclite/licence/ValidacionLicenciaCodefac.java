@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.File;
@@ -24,6 +25,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 import org.jfree.util.Log;
 
 
@@ -51,10 +55,13 @@ public class ValidacionLicenciaCodefac{
     private String path;
 
     public ValidacionLicenciaCodefac(String path) {
+        //PropertiesC
+        //licencia.getPropiedades
+        //licencia=new Licencia(new Properties)
         this.path=path;        
-        Properties p = obtenerLicencia();
+        PropertiesConfiguration  p = obtenerLicencia();
         licencia=new Licencia();
-        licencia.cargarLicenciaFisica(p);
+        licencia.cargarPropiedadesLicenciaFisica(p);
     }
 
     public ValidacionLicenciaCodefac() {
@@ -63,7 +70,7 @@ public class ValidacionLicenciaCodefac{
     public boolean validar() throws ValidacionLicenciaExcepcion,NoExisteLicenciaException{
 
         if (verificarExisteLicencia()) {
-            Properties p = obtenerLicencia();//Obtiene todas las propiedades del archivo de licencia
+            PropertiesConfiguration p = obtenerLicencia();//Obtiene todas las propiedades del archivo de licencia
             licencia = new Licencia(p);
 
             if (licencia.validarLicencia()) {
@@ -100,13 +107,13 @@ public class ValidacionLicenciaCodefac{
         }
     }
     
-    public Properties obtenerLicencia() 
+    public PropertiesConfiguration obtenerLicencia() 
     {
         try {
-            Properties p = new Properties();
-            p.load(new FileReader(path+NOMBRE_LICENCIA));
+            PropertiesConfiguration p = new PropertiesConfiguration(path+NOMBRE_LICENCIA);
+            //p.load(new FileReader(path+NOMBRE_LICENCIA));
             return p;
-        } catch (IOException ex) {
+        } catch (ConfigurationException ex) {
             Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -186,53 +193,42 @@ public class ValidacionLicenciaCodefac{
      */
     public Properties crearLicenciaMaquina(Licencia licencia)
     {
-        FileOutputStream fr=null;
-        try {
-
-            //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
-            String modulosStr=licencia.getModulosStr();
-            String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet(licencia.getNombreInterfazRed())+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
-            LOG.log(Level.INFO,"creando="+licenciaStr);
-            licenciaStr=UtilidadesHash.generarHashBcrypt(licenciaStr);
-            Properties prop = new Properties();
-            prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
-            prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licenciaStr);
-            prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());
-            prop.setProperty(Licencia.PROPIEDAD_INTERFAZ_RED,licencia.getNombreInterfazRed());
-                        
-            //setearPropiedadesModulos(prop,licen); //Setea los modulos activos
-            
-            TipoLicenciaEnum enumTipoLicencia=licencia.getTipoLicenciaEnum();
-            prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,enumTipoLicencia.getNombre());
-            
-            //Llea en el properties los datos adicionales del modulo
-            licencia.llenarPropertiesModulo(prop);
-            
-            File file=new File(path+NOMBRE_LICENCIA);
-            
-             //crear toda la ruta si no existe
-            if (!file.exists()) {
-                file.getParentFile().mkdirs();
-                //file.mkdir();
-            }
-            
-            fr = new FileOutputStream(file);
-            prop.store(fr,"Properties");
-            fr.close();
-            return prop;
-            //saveProperties(prop);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fr.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return null;
+        //FileOutputStream fr=null;
+        //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;
+        String modulosStr=licencia.getModulosStr();
+        String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet(licencia.getNombreInterfazRed())+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;
+        LOG.log(Level.INFO,"creando="+licenciaStr);
+        licenciaStr=UtilidadesHash.generarHashBcrypt(licenciaStr);
+        Properties prop = new Properties();
+        prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
+        prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licenciaStr);
+        prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());
+        prop.setProperty(Licencia.PROPIEDAD_INTERFAZ_RED,licencia.getNombreInterfazRed());
+        //setearPropiedadesModulos(prop,licen); //Setea los modulos activos
+        
+        TipoLicenciaEnum enumTipoLicencia=licencia.getTipoLicenciaEnum();
+        prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,enumTipoLicencia.getNombre());
+        //Llea en el properties los datos adicionales del modulo
+        licencia.llenarPropertiesModulo(prop);
+        UtilidadesArchivos.grabarArchivoPropiedadesFile(path+NOMBRE_LICENCIA, prop,"Properties");
+        //File file=new File(path+NOMBRE_LICENCIA);
+        //crear toda la ruta si no existe
+        //if (!file.exists()) {
+        //    file.getParentFile().mkdirs();
+        //file.mkdir();
+        //}
+        
+        //fr = new FileOutputStream(file);
+        //prop.store(fr,"Properties");
+        //fr.close();
+        return prop;
+        //saveProperties(prop);
+        //try {
+        //    fr.close();
+        //} catch (IOException ex) {
+        //    Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        //}
+        //return null;
     }
     
     

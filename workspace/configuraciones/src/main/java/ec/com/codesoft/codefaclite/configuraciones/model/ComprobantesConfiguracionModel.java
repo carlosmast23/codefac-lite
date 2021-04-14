@@ -126,8 +126,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
              */
             this.estadoFormulario = GeneralPanelInterface.ESTADO_GRABAR;
             DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);            
-            //DialogoCodefac.mensaje("Firma", "Datos actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            dispose(); //TODO: En esta parte analizar porque cuando se sale del formulario no se borra de la lita de ventas abiertas del menu
+            
+            dispose(); //TODO: En esta parte analizar porque cuando se sale del formulario no se borra de la lista de ventas abiertas del menu
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -444,27 +444,23 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
      */
     public void moverArchivo(Path origen,String directorio,DirectorioCodefac directorioCodefac,String nombreParametro) {
         try {
-            //Verifica que solo cuando exista un origen y destino exista se copien los datos
-            //if (origen == null || destino == null) {
+            //Verifica que solo cuando exista un origen y destino exista se copien los datos            
             if (origen == null) {
                 return;
             }
             
-            
+            //Servicio para poder copiar los datos
             SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
                     new FileInputStream(origen.toFile()));
             
+            //Obtener el directorio de los recursos
             String directorioServidor=(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS)!=null)?parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor:directorio;
             ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(directorioServidor,directorioCodefac, istream,origen.getFileName().toString());
             
-            //getTxtNombreFirma().setText("" + destino.getFileName());
             getTxtNombreFirma().setText("" + origen.getFileName());
             
             setearParametro(nombreParametro,origen.getFileName().toString());
-            //ParametroCodefac parametro = parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
-            //parametro.setValor(destino.getFileName().toString());            
-            //parametro.setValor(origen.getFileName().toString());            
-            //parametrosEditar.add(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA));
+
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -650,6 +646,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         }
     }
 
+    /**
+     * TODO: Hacer la validacion utilizando el metodo creado en UtilidadesFirmaElectronica
+     */
     private void verificarFirmaElectronica() {
         try {
             String claveFirma = new String(getTxtClaveFirma().getPassword());

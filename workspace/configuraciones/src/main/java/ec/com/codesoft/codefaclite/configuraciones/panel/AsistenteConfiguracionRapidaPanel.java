@@ -6,6 +6,17 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.DateToStringConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.IntegerToStringConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToIntegerConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.DateComboBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.PasswordFieldBinding;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
@@ -25,6 +36,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
      */
     public AsistenteConfiguracionRapidaPanel() {
         initComponents();
+        //getTxtFirmaFechaEmision().set
     }
 
     /**
@@ -80,7 +92,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel7 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         lblEspacio1 = new javax.swing.JLabel();
-        txtBtnFirmaBuscar = new javax.swing.JButton();
+        btnFirmaBuscar = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         txtFirmaNombre = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
@@ -107,22 +119,33 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel47 = new javax.swing.JLabel();
         txtFirmaContraseña = new javax.swing.JPasswordField();
         txtCorreoClave = new javax.swing.JPasswordField();
+        btnVerificarDatosFirma = new javax.swing.JButton();
+        btnVerificarDatosFirma1 = new javax.swing.JButton();
         pnlEmpresaSucursal2 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
-        jTextField29 = new javax.swing.JTextField();
+        txtUsuarioNick = new javax.swing.JTextField();
         jLabel48 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         lblEspacio123 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        txtUsuarioRepetirClave = new javax.swing.JPasswordField();
+        txtUsuarioClave = new javax.swing.JPasswordField();
         lblEspacio34959 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        txtLicenciaCorreo = new javax.swing.JTextField();
+        txtLicenciaClave = new javax.swing.JPasswordField();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnAtrasPantalla = new javax.swing.JButton();
+        btnAvanzarPantalla = new javax.swing.JButton();
         btnTerminar = new javax.swing.JButton();
-        btnAvanzarPantalla1 = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -130,6 +153,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         setResizable(true);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        tabVentana.setEnabled(false);
 
         pnlEmpresaSucursal3.setLayout(new java.awt.GridBagLayout());
 
@@ -170,7 +195,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
         jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel20.setText("<html> \t<body> \t\t<center><h3>Requisitos Previos</h3></center> \t\t<p>- Tener un RUC</p> \t\t<p>- Permisos para facturación electrónica en el Sri</p> \t\t<p>- Firma Electrónica en formato p12</p> \t\t<p>- Correo Electrónico (preferencia GMAIL)</p> \t\t<p>- Cuenta creada en la página de CODEFAC</p> \t</body> </html>");
+        jLabel20.setText("<html> \t<body> \t\t<center> \t\t\t<h3>Requisitos Previos</h3> \t\t</center> \t\t<p>- Tener RUC y Permisos para facturación electrónica en el Sri</p>\t\t \t\t<p>- Firma Electrónica en formato p12</p> \t\t<p>- Correo Electrónico (preferencia GMAIL)</p> \t\t<p>- Cuenta creada en la página de CODEFAC</p> \t</body> </html>");
         jLabel20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -178,7 +203,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal3.add(jLabel20, gridBagConstraints);
 
         tabVentana.addTab("Inicio", pnlEmpresaSucursal3);
@@ -443,18 +468,19 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal1.add(jLabel17, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 19;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         pnlEmpresaSucursal1.add(lblEspacio1, gridBagConstraints);
 
-        txtBtnFirmaBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnFirmaBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal1.add(txtBtnFirmaBuscar, gridBagConstraints);
+        pnlEmpresaSucursal1.add(btnFirmaBuscar, gridBagConstraints);
 
         jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel18.setText("Secuencial Retenciones");
@@ -464,10 +490,12 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel18, gridBagConstraints);
+
+        txtFirmaNombre.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
-        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.ipadx = 150;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtFirmaNombre, gridBagConstraints);
@@ -501,7 +529,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -632,7 +659,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 16;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -655,16 +681,12 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel47, gridBagConstraints);
-
-        txtFirmaContraseña.setText("jPasswordField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtFirmaContraseña, gridBagConstraints);
-
-        txtCorreoClave.setText("jPasswordField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
@@ -672,17 +694,34 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtCorreoClave, gridBagConstraints);
 
+        btnVerificarDatosFirma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnVerificarDatosFirma.setText("Verificar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal1.add(btnVerificarDatosFirma, gridBagConstraints);
+
+        btnVerificarDatosFirma1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnVerificarDatosFirma1.setText("Verificar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal1.add(btnVerificarDatosFirma1, gridBagConstraints);
+
         tabVentana.addTab("Datos Adicionales", pnlEmpresaSucursal1);
 
         pnlEmpresaSucursal2.setLayout(new java.awt.GridBagLayout());
 
         jLabel27.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel27.setText("Usuario Nuevo");
+        jLabel27.setText("Datos Licencia Codefac");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel27, gridBagConstraints);
 
         jLabel28.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -704,22 +743,22 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal2.add(jLabel30, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         pnlEmpresaSucursal2.add(lblEspacio2, gridBagConstraints);
 
         jLabel37.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel37.setText("*Usuario:");
+        jLabel37.setText("*Correo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel37, gridBagConstraints);
 
-        jTextField29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtUsuarioNick.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
@@ -727,28 +766,31 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.ipadx = 155;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal2.add(jTextField29, gridBagConstraints);
+        pnlEmpresaSucursal2.add(txtUsuarioNick, gridBagConstraints);
 
-        jLabel48.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
-        jLabel48.setText("Los datos ingresados en este momento son para poder acceder al sistema");
+        jLabel48.setFont(new java.awt.Font("Arial", 3, 13)); // NOI18N
+        jLabel48.setForeground(new java.awt.Color(0, 102, 153));
+        jLabel48.setText("Página Codefac Registro");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel48, gridBagConstraints);
 
         jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel29.setText("<html> \t<body> \t\t<center><h3>Consideraciones Finales</h3></center> \t\t<p>- Los datos Ingresados en este momento serán utilizados para configurar el sistema</p> \t\t<p>- Si algún dato fue ingresado de forma incorrecta despues se puede editar</p> \t\t<p>- Algunas funciones no están disponibles para los usuarios gratuitos</p> \t\t<p>- Si no tiene toda la información requerida el asistente se abriera de nuevo la próxima vez</p> \t\t<p>- Finalmente presione el <b>botón de Terminar</b> y luego tiene que volver a ingresar con el usuario creado</p> \t</body> </html>");
+        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel29.setText("<html> \t<body> \t\t<center> \t\t\t<h3>Consideraciones Finales</h3> \t\t</center>\t\t \t\t<p>- Si no tiene toda la información requerida el asistente se abriera de nuevo la próxima vez</p> \t\t<p>- Algunas funciones no están disponibles para los usuarios gratuitos</p> \t\t<p>- Finalmente presione el <b>botón de Terminar</b> y luego tiene que volver a ingresar con el usuario creado</p> \t</body> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlEmpresaSucursal2.add(jLabel29, gridBagConstraints);
 
-        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/contabilidad.png"))); // NOI18N
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/cliente.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -760,7 +802,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.weightx = 0.6;
         pnlEmpresaSucursal2.add(lblEspacio123, gridBagConstraints);
 
-        jPasswordField1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtUsuarioRepetirClave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
@@ -768,9 +810,9 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal2.add(jPasswordField1, gridBagConstraints);
+        pnlEmpresaSucursal2.add(txtUsuarioRepetirClave, gridBagConstraints);
 
-        jPasswordField2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtUsuarioClave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
@@ -778,12 +820,77 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal2.add(jPasswordField2, gridBagConstraints);
+        pnlEmpresaSucursal2.add(txtUsuarioClave, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.weightx = 0.6;
         pnlEmpresaSucursal2.add(lblEspacio34959, gridBagConstraints);
+
+        jLabel31.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel31.setText("Usuario Nuevo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel31, gridBagConstraints);
+
+        jLabel49.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
+        jLabel49.setText("Los datos ingresados en este momento son para poder acceder al sistema");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel49, gridBagConstraints);
+
+        jLabel50.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
+        jLabel50.setText("Para activar el sistema es necesario tener registrado una cuenta , puede crear la cuenta desde el siguiente link");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel50, gridBagConstraints);
+
+        jLabel38.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel38.setText("*Clave:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel38, gridBagConstraints);
+
+        jLabel39.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel39.setText("*Usuario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(jLabel39, gridBagConstraints);
+
+        txtLicenciaCorreo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 155;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(txtLicenciaCorreo, gridBagConstraints);
+
+        txtLicenciaClave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(txtLicenciaClave, gridBagConstraints);
 
         tabVentana.addTab("Usuario", pnlEmpresaSucursal2);
 
@@ -796,28 +903,37 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(tabVentana, gridBagConstraints);
 
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        btnAtrasPantalla.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnAtrasPantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/atras.png"))); // NOI18N
+        btnAtrasPantalla.setText("Atras");
+        btnAtrasPantalla.setFocusable(false);
+        btnAtrasPantalla.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAtrasPantalla.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAtrasPantalla);
+
+        btnAvanzarPantalla.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnAvanzarPantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/enviar.png"))); // NOI18N
+        btnAvanzarPantalla.setText("Siguiente");
+        btnAvanzarPantalla.setFocusable(false);
+        btnAvanzarPantalla.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAvanzarPantalla.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAvanzarPantalla);
+
         btnTerminar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnTerminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/visto.png"))); // NOI18N
         btnTerminar.setText("Terminar");
-        btnTerminar.setEnabled(false);
+        btnTerminar.setFocusable(false);
+        btnTerminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTerminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnTerminar);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(btnTerminar, gridBagConstraints);
-
-        btnAvanzarPantalla1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        btnAvanzarPantalla1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/enviar.png"))); // NOI18N
-        btnAvanzarPantalla1.setText("Siguiente");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(btnAvanzarPantalla1, gridBagConstraints);
+        jPanel1.add(jToolBar1, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -830,9 +946,13 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAvanzarPantalla1;
+    private javax.swing.JButton btnAtrasPantalla;
+    private javax.swing.JButton btnAvanzarPantalla;
     private javax.swing.JButton btnEmpresaCargarLogo;
+    private javax.swing.JButton btnFirmaBuscar;
     private javax.swing.JButton btnTerminar;
+    private javax.swing.JButton btnVerificarDatosFirma;
+    private javax.swing.JButton btnVerificarDatosFirma1;
     private javax.swing.JCheckBox chkEmpresaObligadoContabilidad;
     private javax.swing.JCheckBox chkEmpresaRegimenMicroempresa;
     private javax.swing.JLabel jLabel1;
@@ -859,9 +979,12 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
@@ -872,15 +995,15 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JTextField jTextField29;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio123;
@@ -892,7 +1015,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JPanel pnlEmpresaSucursal2;
     private javax.swing.JPanel pnlEmpresaSucursal3;
     private javax.swing.JTabbedPane tabVentana;
-    private javax.swing.JButton txtBtnFirmaBuscar;
     private javax.swing.JPasswordField txtCorreoClave;
     private javax.swing.JSpinner txtCorreoPuerto;
     private javax.swing.JTextField txtCorreoSmtp;
@@ -908,6 +1030,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JSpinner txtFirmaDuracion;
     private org.jdesktop.swingx.JXDatePicker txtFirmaFechaEmision;
     private javax.swing.JTextField txtFirmaNombre;
+    private javax.swing.JPasswordField txtLicenciaClave;
+    private javax.swing.JTextField txtLicenciaCorreo;
     private javax.swing.JSpinner txtPuntoEmision;
     private javax.swing.JSpinner txtPuntoEmisionSecuencialFactura;
     private javax.swing.JSpinner txtPuntoEmisionSecuencialNC;
@@ -915,17 +1039,15 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JSpinner txtSucursalCodigo;
     private javax.swing.JTextField txtSucursalDireccion;
     private javax.swing.JTextField txtSucursalTelefono;
+    private javax.swing.JPasswordField txtUsuarioClave;
+    private javax.swing.JTextField txtUsuarioNick;
+    private javax.swing.JPasswordField txtUsuarioRepetirClave;
     private javax.swing.JTextField txtWhatsapp;
     // End of variables declaration//GEN-END:variables
 
-    public JButton getBtnAvanzarPantalla1() {
-        return btnAvanzarPantalla1;
-    }
+    
 
-    public void setBtnAvanzarPantalla1(JButton btnAvanzarPantalla1) {
-        this.btnAvanzarPantalla1 = btnAvanzarPantalla1;
-    }
-
+    @ButtonBinding(actionListener = "controlador.listenerBtnBuscarLogoEmpresa")
     public JButton getBtnEmpresaCargarLogo() {
         return btnEmpresaCargarLogo;
     }
@@ -934,14 +1056,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.btnEmpresaCargarLogo = btnEmpresaCargarLogo;
     }
 
-    public JButton getBtnTerminar() {
-        return btnTerminar;
-    }
-
-    public void setBtnTerminar(JButton btnTerminar) {
-        this.btnTerminar = btnTerminar;
-    }
-
+    @CheckBoxBinding(value = "controlador.empresa.obligadoLlevarContabilidadBool")
     public JCheckBox getChkEmpresaObligadoContabilidad() {
         return chkEmpresaObligadoContabilidad;
     }
@@ -950,6 +1065,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.chkEmpresaObligadoContabilidad = chkEmpresaObligadoContabilidad;
     }
 
+    @CheckBoxBinding(value = "controlador.empresa.contribuyenteRegimenMicroempresasBool")
     public JCheckBox getChkEmpresaRegimenMicroempresa() {
         return chkEmpresaRegimenMicroempresa;
     }
@@ -966,14 +1082,16 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.tabVentana = tabVentana;
     }
 
-    public JButton getTxtBtnFirmaBuscar() {
-        return txtBtnFirmaBuscar;
+    @ButtonBinding(actionListener = "controlador.listenerBtnBuscarFirma")
+    public JButton getBtnFirmaBuscar() {
+        return btnFirmaBuscar;
     }
 
-    public void setTxtBtnFirmaBuscar(JButton txtBtnFirmaBuscar) {
-        this.txtBtnFirmaBuscar = txtBtnFirmaBuscar;
+    public void setBtnFirmaBuscar(JButton btnFirmaBuscar) {
+        this.btnFirmaBuscar = btnFirmaBuscar;
     }
-
+    
+    
     public JPasswordField getTxtCorreoClave() {
         return txtCorreoClave;
     }
@@ -1006,6 +1124,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtCorreoUsuario = txtCorreoUsuario;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.agenteRetencionResolucion")
     public JTextField getTxtEmpresaAgenteRetencion() {
         return txtEmpresaAgenteRetencion;
     }
@@ -1014,14 +1133,16 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaAgenteRetencion = txtEmpresaAgenteRetencion;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.facebook")
     public JTextField getTxtEmpresaFacebook() {
         return txtEmpresaFacebook;
     }
-
+    
     public void setTxtEmpresaFacebook(JTextField txtEmpresaFacebook) {
         this.txtEmpresaFacebook = txtEmpresaFacebook;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.instagram")
     public JTextField getTxtEmpresaInstagram() {
         return txtEmpresaInstagram;
     }
@@ -1030,6 +1151,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaInstagram = txtEmpresaInstagram;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.nombreLegal")
     public JTextField getTxtEmpresaNombreComercial() {
         return txtEmpresaNombreComercial;
     }
@@ -1038,6 +1160,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaNombreComercial = txtEmpresaNombreComercial;
     }
 
+    @TextFieldBinding(value = "controlador.empresa.imagenLogoPath")
     public JTextField getTxtEmpresaNombreLogo() {
         return txtEmpresaNombreLogo;
     }
@@ -1046,6 +1169,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaNombreLogo = txtEmpresaNombreLogo;
     }
 
+    //@ValidacionCodefacAnotacion(requerido = true)
+    @TextFieldBinding(value = "controlador.empresa.razonSocial")
     public JTextField getTxtEmpresaRazonSocial() {
         return txtEmpresaRazonSocial;
     }
@@ -1054,6 +1179,9 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaRazonSocial = txtEmpresaRazonSocial;
     }
 
+    
+    //@ValidacionCodefacAnotacion(requerido = true)
+    @TextFieldBinding(value = "controlador.empresa.identificacion")
     public JTextField getTxtEmpresaRuc() {
         return txtEmpresaRuc;
     }
@@ -1062,6 +1190,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaRuc = txtEmpresaRuc;
     }
 
+    @PasswordFieldBinding(value = "controlador.firmaClaveParametro.valor")
     public JPasswordField getTxtFirmaContraseña() {
         return txtFirmaContraseña;
     }
@@ -1070,6 +1199,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtFirmaContraseña = txtFirmaContraseña;
     }
 
+    @SpinnerBinding(value = "controlador.firmaDuracionParametro.valor",converter = IntegerToStringConverter.class)
     public JSpinner getTxtFirmaDuracion() {
         return txtFirmaDuracion;
     }
@@ -1078,6 +1208,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtFirmaDuracion = txtFirmaDuracion;
     }
 
+    @DateComboBinding(value = "controlador.firmaFechaEmisionParametro.valor",converter =DateToStringConverter.class )
     public JXDatePicker getTxtFirmaFechaEmision() {
         return txtFirmaFechaEmision;
     }
@@ -1086,6 +1217,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtFirmaFechaEmision = txtFirmaFechaEmision;
     }
 
+    @TextFieldBinding(value = "controlador.firmaArchivoParametro.valor")
     public JTextField getTxtFirmaNombre() {
         return txtFirmaNombre;
     }
@@ -1094,6 +1226,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtFirmaNombre = txtFirmaNombre;
     }
 
+    @SpinnerBinding(value = "controlador.puntoEmision.puntoEmision")
     public JSpinner getTxtPuntoEmision() {
         return txtPuntoEmision;
     }
@@ -1102,6 +1235,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtPuntoEmision = txtPuntoEmision;
     }
 
+    @SpinnerBinding(value = "controlador.puntoEmision.secuencialFactura")
     public JSpinner getTxtPuntoEmisionSecuencialFactura() {
         return txtPuntoEmisionSecuencialFactura;
     }
@@ -1110,6 +1244,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtPuntoEmisionSecuencialFactura = txtPuntoEmisionSecuencialFactura;
     }
 
+    @SpinnerBinding(value = "controlador.puntoEmision.secuencialNotaCredito")
     public JSpinner getTxtPuntoEmisionSecuencialNC() {
         return txtPuntoEmisionSecuencialNC;
     }
@@ -1118,6 +1253,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtPuntoEmisionSecuencialNC = txtPuntoEmisionSecuencialNC;
     }
 
+    @SpinnerBinding(value = "controlador.puntoEmision.secuencialRetenciones")
     public JSpinner getTxtPuntoEmisionSecuencialRetenciones() {
         return txtPuntoEmisionSecuencialRetenciones;
     }
@@ -1126,6 +1262,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtPuntoEmisionSecuencialRetenciones = txtPuntoEmisionSecuencialRetenciones;
     }
 
+    @SpinnerBinding(value = "controlador.sucursal.codigoSucursal")
     public JSpinner getTxtSucursalCodigo() {
         return txtSucursalCodigo;
     }
@@ -1134,6 +1271,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtSucursalCodigo = txtSucursalCodigo;
     }
 
+    @TextFieldBinding(value = "controlador.sucursal.direcccion")
     public JTextField getTxtSucursalDireccion() {
         return txtSucursalDireccion;
     }
@@ -1142,6 +1280,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtSucursalDireccion = txtSucursalDireccion;
     }
 
+    @TextFieldBinding(value = "controlador.sucursal.telefono")
     public JTextField getTxtSucursalTelefono() {
         return txtSucursalTelefono;
     }
@@ -1150,6 +1289,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtSucursalTelefono = txtSucursalTelefono;
     }
 
+    @TextFieldBinding(value = "controlador.sucursal.celular")
     public JTextField getTxtWhatsapp() {
         return txtWhatsapp;
     }
@@ -1158,5 +1298,71 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtWhatsapp = txtWhatsapp;
     }
 
+    @ButtonBinding(actionListener = "controlador.listenerBtnAvanzarPantalla")
+    public JButton getBtnAvanzarPantalla() {
+        return btnAvanzarPantalla;
+    }
+
+    public void setBtnAvanzarPantalla(JButton btnAvanzarPantalla) {
+        this.btnAvanzarPantalla = btnAvanzarPantalla;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerBtnAtrasPantalla")
+    public JButton getBtnAtrasPantalla() {
+        return btnAtrasPantalla;
+    }
+
+    public void setBtnAtrasPantalla(JButton btnAtrasPantalla) {
+        this.btnAtrasPantalla = btnAtrasPantalla;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerBtnTerminar",habilitarBoton = "controlador.botonTerminarHabilitar" )
+    public JButton getBtnTerminar() {
+        return btnTerminar;
+    }
+
+    public void setBtnTerminar(JButton btnTerminar) {
+        this.btnTerminar = btnTerminar;
+    }
+
+    //@ValidacionCodefacAnotacion(requerido = true)
+    @TextFieldBinding(value = "controlador.usuario.nick")
+    public JTextField getTxtUsuarioNick() {
+        return txtUsuarioNick;
+    }
+
+    
+    public void setTxtUsuarioNick(JTextField txtUsuarioNick) {
+        this.txtUsuarioNick = txtUsuarioNick;
+    }
+    
+    @TextFieldBinding(value = "controlador.usuario.clave")
+    public JPasswordField getTxtUsuarioClave() {
+        return txtUsuarioClave;
+    }
+
+    public void setTxtUsuarioClave(JPasswordField txtUsuarioClave) {
+        this.txtUsuarioClave = txtUsuarioClave;
+    }
+
+    @TextFieldBinding(value = "controlador.usuario.repetirClave")
+    public JPasswordField getTxtUsuarioRepetirClave() {
+        return txtUsuarioRepetirClave;
+    }
+
+    public void setTxtUsuarioRepetirClave(JPasswordField txtUsuarioRepetirClave) {
+        this.txtUsuarioRepetirClave = txtUsuarioRepetirClave;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerVerificarDatosFirma")
+    public JButton getBtnVerificarDatosFirma() {
+        return btnVerificarDatosFirma;
+    }
+
+    public void setBtnVerificarDatosFirma(JButton btnVerificarDatosFirma) {
+        this.btnVerificarDatosFirma = btnVerificarDatosFirma;
+    }
+
+    
     
 }

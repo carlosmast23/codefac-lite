@@ -18,4 +18,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SpinnerBinding {
     String value();    
+    Class converter() default ConverterSwingMvvc.Error.class;
 }

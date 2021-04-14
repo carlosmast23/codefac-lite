@@ -214,6 +214,17 @@ public class ParametroCodefac implements Serializable {
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
 
+    public ParametroCodefac(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    public ParametroCodefac(String nombre,String valor) {
+        this.nombre = nombre;
+        this.valor=valor;
+    }
+    
+    
+
     public ParametroCodefac() {
     }
 

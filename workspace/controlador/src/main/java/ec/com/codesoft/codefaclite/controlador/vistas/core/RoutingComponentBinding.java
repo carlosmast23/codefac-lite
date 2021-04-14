@@ -13,6 +13,8 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBi
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.DateComboBindingImp;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.PasswordFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.PasswordFieldBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.SpinnerBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TableBindingImp;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TextFieldBindingImp;
@@ -20,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Lista donde se tienen que agregar todos los binding MVC que van a interactuar con los formularios SWING
  * @author CARLOS_CODESOFT
  */
 public class RoutingComponentBinding {
@@ -35,6 +37,8 @@ public class RoutingComponentBinding {
         routingMap.put(TableBinding.class,TableBindingImp.class);
         routingMap.put(DateComboBinding.class,DateComboBindingImp.class);
         routingMap.put(CheckBoxBinding.class,CheckBoxBindingImp.class);
+        routingMap.put(PasswordFieldBinding.class,PasswordFieldBindingImp.class);
+        
     }
     
 }

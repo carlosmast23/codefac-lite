@@ -686,7 +686,8 @@ public class Main {
             
             //TODO:Analizar que este codigo de activar o desactivar el tema de la publicidad deberia ejecutar el login de manera independiente
             //Agregando Hilo de Publicidad si es usuario Gratuito
-            if (session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) {
+            if (    session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) && 
+                    ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION) ) {
                 HiloPublicidadCodefac hiloPublicidad = new HiloPublicidadCodefac(panel);
                 hiloPublicidad.setPublicidades(obtenerPublicidades());
                 hiloPublicidad.start();
@@ -697,7 +698,7 @@ public class Main {
             //TODO:Aqui esta verificando para ver si podemos poner publicidad
            
             panel.ipServidor=ipServidor;
-            panel.setearEtiquetasPantallaPrincipal();
+            panel.setearEtiquetasPiePaginaPantallaPrincipal();
             
             panel.iniciarComponentesGenerales();
             //frameAplicacion.dispose(); //Libero el recurso de la pantalla que tiene el icono en la barra de tareas
@@ -755,7 +756,9 @@ public class Main {
                         }*/
                         directorioUsuario= UtilidadesDirectorios.buscarDirectorio();
                     }
-                    
+                    /**
+                     * TODO: Unir con un metodo generico en la parte de la guia de configuracion
+                     */
                     parametroDirectorioRecursos = new ParametroCodefac();
                     parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                     parametroDirectorioRecursos.setValor(directorioUsuario);

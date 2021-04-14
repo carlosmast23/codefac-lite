@@ -36,7 +36,10 @@ public class Sucursal implements Serializable{
     
     @Column(name = "TIPO")
     private String tipo;
-    
+    /**
+     * TODO: Cuidado al cambiar de nombre en las vistas MVC SWING
+     * Pantalla inicial de configuracion
+     */
     @Column(name = "DIRECCION")
     private String direcccion;
     
@@ -87,6 +90,15 @@ public class Sucursal implements Serializable{
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+    
+    public TipoSucursalEnum getTipoEnum() {
+        return TipoSucursalEnum.getEnum(tipo);
+    }
+
+    public void setTipoEnum(TipoSucursalEnum tipoSucursalEnum) {
+        this.tipo = tipoSucursalEnum.codigo;
+    }
+
 
     public String getDirecccion() {
         return direcccion;

@@ -89,7 +89,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true , min=1 ,max = 300,expresionRegular = ExpresionRegular.textoSinSaltosLinea,nombre = "Nombre Comercial")
+    @ValidacionCodefacAnotacion(min=1 ,max = 300,expresionRegular = ExpresionRegular.textoSinSaltosLinea,nombre = "Nombre Comercial")
     public JTextField getjTextNombreComercial() {
         return jTextNombreComercial;
     }

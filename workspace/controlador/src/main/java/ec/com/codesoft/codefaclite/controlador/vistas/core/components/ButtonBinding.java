@@ -17,5 +17,6 @@ import java.lang.annotation.Target;
 @Target(value={ElementType.METHOD} )
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ButtonBinding {
-    public String actionListener();
+    public String actionListener() default "";
+    public String habilitarBoton() default "";
 }

@@ -6,6 +6,10 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
@@ -28,4 +32,6 @@ public interface EmpresaServiceIf extends ServiceAbstractIf<Empresa>
     public List<Empresa> buscar() throws java.rmi.RemoteException;
     public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException;
     public List<Empresa> obtenerTodosActivos(OrdenarEnum ordenarEnum) throws RemoteException;
+    
+    public Empresa grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException;
 }

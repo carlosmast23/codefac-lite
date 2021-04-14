@@ -18,7 +18,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.applet.Main;
+//import sun.applet.Main;
 
 /**
  *

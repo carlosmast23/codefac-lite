@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.controlador.vistas.core;
+package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.swing.JPasswordField;
 
 /**
  *
@@ -16,7 +17,6 @@ import java.lang.annotation.Target;
  */
 @Target(value={ElementType.METHOD} )
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DateComboBinding {
-    String value();    
-    Class converter() default ConverterSwingMvvc.Error.class;
+public @interface PasswordFieldBinding {
+    String value();
 }

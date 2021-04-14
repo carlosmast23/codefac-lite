@@ -87,28 +87,37 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         return null;
     }
     
-    
+    /**
+     * TODO: El nombre esta medio confuso , por que en realidad este metodo edita y graba al mismo tiempo
+     * @param parametro
+     * @throws java.rmi.RemoteException 
+     */
     public void editarParametros(List<ParametroCodefac> parametro) throws java.rmi.RemoteException
     {
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
-                    for (ParametroCodefac parametroCodefac : parametro) {
-                        if (parametroCodefac.getId() == null) //Si no existe el dato lo grabo
-                        {
-                            entityManager.persist(parametroCodefac);
-                        } else //Si existe el dato solo lo edito
-                        {
-                            entityManager.merge(parametroCodefac);
-                        }
-                    }
+                    editarParametrosSinTransaccion(parametro);
                 }
             });
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    public void editarParametrosSinTransaccion(List<ParametroCodefac> parametros) throws java.rmi.RemoteException
+    {
+        for (ParametroCodefac parametroCodefac : parametros) {
+            if (parametroCodefac.getId() == null) //Si no existe el dato lo grabo
+            {
+                entityManager.persist(parametroCodefac);
+            } else //Si existe el dato solo lo edito
+            {
+                entityManager.merge(parametroCodefac);
+            }
+        }    
     }
     
     public void grabarOEditar(ParametroCodefac parametro) throws java.rmi.RemoteException,ServicioCodefacException

@@ -112,6 +112,11 @@ public class LoginRespuesta implements Serializable{
         ERROR_DESCONOCIDO("Error desconocido"),
         
         /**
+         * Error para informar al usuario cuando va a ingresar por primera vez al sistema para configurar
+         */
+        ERROR_INGRESO_PRIMERA_VEZ("Error de credenciales, para configurar el sistema puede ingresar con los siguientes datos.\nUsuario:admin\nClave:admin"),
+        
+        /**
          * Error de fechas en la licencia cuando la ultima fecha de revisión es superior a la fecha actual
          */
         LICENCIA_ERROR_FECHA_INCONSISTENTE("Error al comprobar la licencia , La fecha de la última verificación de la licencia es inconsistente ");
