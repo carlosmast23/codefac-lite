@@ -120,6 +120,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         txtFirmaContraseña = new javax.swing.JPasswordField();
         txtCorreoClave = new javax.swing.JPasswordField();
         btnVerificarDatosFirma = new javax.swing.JButton();
+        btnVerificarDatosFirma1 = new javax.swing.JButton();
         pnlEmpresaSucursal2 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -467,7 +468,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal1.add(jLabel17, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 19;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -700,6 +701,15 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.gridy = 11;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(btnVerificarDatosFirma, gridBagConstraints);
+
+        btnVerificarDatosFirma1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnVerificarDatosFirma1.setText("Verificar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal1.add(btnVerificarDatosFirma1, gridBagConstraints);
 
         tabVentana.addTab("Datos Adicionales", pnlEmpresaSucursal1);
 
@@ -942,6 +952,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JButton btnFirmaBuscar;
     private javax.swing.JButton btnTerminar;
     private javax.swing.JButton btnVerificarDatosFirma;
+    private javax.swing.JButton btnVerificarDatosFirma1;
     private javax.swing.JCheckBox chkEmpresaObligadoContabilidad;
     private javax.swing.JCheckBox chkEmpresaRegimenMicroempresa;
     private javax.swing.JLabel jLabel1;
