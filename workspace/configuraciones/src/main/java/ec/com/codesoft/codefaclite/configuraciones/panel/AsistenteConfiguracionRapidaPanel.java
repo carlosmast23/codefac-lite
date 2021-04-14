@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.PasswordFieldBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -118,6 +119,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel47 = new javax.swing.JLabel();
         txtFirmaContraseña = new javax.swing.JPasswordField();
         txtCorreoClave = new javax.swing.JPasswordField();
+        btnVerificarDatosFirma = new javax.swing.JButton();
         pnlEmpresaSucursal2 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -475,6 +477,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(btnFirmaBuscar, gridBagConstraints);
 
@@ -689,6 +692,14 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtCorreoClave, gridBagConstraints);
+
+        btnVerificarDatosFirma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnVerificarDatosFirma.setText("Verificar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal1.add(btnVerificarDatosFirma, gridBagConstraints);
 
         tabVentana.addTab("Datos Adicionales", pnlEmpresaSucursal1);
 
@@ -930,6 +941,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JButton btnEmpresaCargarLogo;
     private javax.swing.JButton btnFirmaBuscar;
     private javax.swing.JButton btnTerminar;
+    private javax.swing.JButton btnVerificarDatosFirma;
     private javax.swing.JCheckBox chkEmpresaObligadoContabilidad;
     private javax.swing.JCheckBox chkEmpresaRegimenMicroempresa;
     private javax.swing.JLabel jLabel1;
@@ -1167,7 +1179,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtEmpresaRuc = txtEmpresaRuc;
     }
 
-    
+    @PasswordFieldBinding(value = "controlador.firmaClaveParametro.valor")
     public JPasswordField getTxtFirmaContraseña() {
         return txtFirmaContraseña;
     }
@@ -1329,6 +1341,15 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
     public void setTxtUsuarioRepetirClave(JPasswordField txtUsuarioRepetirClave) {
         this.txtUsuarioRepetirClave = txtUsuarioRepetirClave;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerVerificarDatosFirma")
+    public JButton getBtnVerificarDatosFirma() {
+        return btnVerificarDatosFirma;
+    }
+
+    public void setBtnVerificarDatosFirma(JButton btnVerificarDatosFirma) {
+        this.btnVerificarDatosFirma = btnVerificarDatosFirma;
     }
 
     

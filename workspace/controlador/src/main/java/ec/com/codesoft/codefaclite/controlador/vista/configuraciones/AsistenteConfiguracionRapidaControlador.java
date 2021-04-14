@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.vista.configuraciones;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesFirmaElectronica;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -20,8 +21,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -207,13 +210,23 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         }
 
     }
+    
+    private void seterDatos()
+    {
+        if(firmaClaveParametro!=null)
+        {
+            //Encriptar la clave antes de enviar a grabar
+            String claveEncriptada=UtilidadesEncriptar.encriptar(firmaArchivoParametro.valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            firmaClaveParametro.valor=claveEncriptada;
+        }
+    }
 
     public void listenerBtnTerminar() {
         //TODO: Revisar para mejorar esta parte para que en la parte derecha le aparesca cuales son los campos faltantes
         if (getInterfaz().ejecutarValidadoresVista()) 
         {
             try {
-                sucursal.setEmpresa(empresa);
+                seterDatos();
                 
                 empresa=ServiceFactory.getFactory().getEmpresaServiceIf().grabarConfiguracionInicial(empresa, sucursal, puntoEmision, usuario, listParametroCodefac);
                 //Subo los archivos despues de grabar por que primero necesitaba el path donde van a estar los recursos
@@ -283,6 +296,28 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
             empresa.setImagenLogoPath(file.getName());
             fileEmpresaLogo=file;
             
+        }
+    }
+    
+    public void listenerVerificarDatosFirma()
+    {
+        if(firmaClaveParametro==null || firmaArchivoParametro==null || fileFirmaElectronica==null)
+        {
+            mostrarMensaje(new CodefacMsj("Por favor ingrese los datos de la firma para validar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return;
+        }
+        
+        try {
+            UtilidadesFirmaElectronica.verificarFirmaElectronica(empresa, firmaClaveParametro.valor, firmaArchivoParametro.valor,fileFirmaElectronica.toPath());
+            mostrarMensaje(new CodefacMsj("Datos de la firma correctos",CodefacMsj.TipoMensajeEnum.CORRECTO));
+        } catch (ServicioCodefacException ex) {
+            mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            //Limpiar la clave si la vaidacion falla
+            if(firmaClaveParametro!=null)
+            {
+                firmaClaveParametro.valor="";
+            }
+            Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

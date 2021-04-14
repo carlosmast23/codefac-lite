@@ -646,6 +646,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         }
     }
 
+    /**
+     * TODO: Hacer la validacion utilizando el metodo creado en UtilidadesFirmaElectronica
+     */
     private void verificarFirmaElectronica() {
         try {
             String claveFirma = new String(getTxtClaveFirma().getPassword());
