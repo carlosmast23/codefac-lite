@@ -247,7 +247,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
             try {
                 seterDatos();
                 
-                empresa=ServiceFactory.getFactory().getEmpresaServiceIf().grabarConfiguracionInicial(empresa, sucursal, puntoEmision, usuario, listParametroCodefac);
+                empresa=ServiceFactory.getFactory().getEmpresaServiceIf().grabarConfiguracionInicial(empresa, sucursal, puntoEmision, usuario,null,null, listParametroCodefac);
                 //Subo los archivos despues de grabar por que primero necesitaba el path donde van a estar los recursos
                 subirArchivosServidor();
                 

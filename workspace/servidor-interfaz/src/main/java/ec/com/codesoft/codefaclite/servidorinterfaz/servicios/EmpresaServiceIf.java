@@ -33,5 +33,5 @@ public interface EmpresaServiceIf extends ServiceAbstractIf<Empresa>
     public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException;
     public List<Empresa> obtenerTodosActivos(OrdenarEnum ordenarEnum) throws RemoteException;
     
-    public Empresa grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException;
+    public Empresa grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,String licenciaCorreo,String licenciaClave,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException;
 }
