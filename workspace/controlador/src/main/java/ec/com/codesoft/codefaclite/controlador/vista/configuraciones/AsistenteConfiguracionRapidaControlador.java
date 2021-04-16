@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.controlador.vista.configuraciones;
 
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
+import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorker;
+import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorkerIf;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesFirmaElectronica;
@@ -23,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.utilidades.email.UtilidadesCorreo;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.io.File;
@@ -118,6 +121,17 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         firmaDuracionParametro=new ParametroCodefac(ParametroCodefac.FIRMA_TIEMPO_EXPIRACION_AÑOS,"2");
         firmaFechaEmisionParametro=new ParametroCodefac(ParametroCodefac.FIRMA_FECHA_EMISION);
         
+        //Iniciar Parametro correo por defecto        
+        try {
+            String claveSinEncriptar=UtilidadesEncriptar.desencriptar(ParametrosSistemaCodefac.CORREO_DEFECTO_CLAVE, ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            correoUsuarioParametro = new ParametroCodefac(ParametroCodefac.CORREO_USUARIO, ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO);
+            correoClaveParametro = new ParametroCodefac(ParametroCodefac.CORREO_CLAVE, claveSinEncriptar);
+            correoHostSmtpParametro = new ParametroCodefac(ParametroCodefac.SMTP_HOST, ParametrosSistemaCodefac.CORREO_DEFECTO_HOST);
+            correoPuertoParametro = new ParametroCodefac(ParametroCodefac.SMTP_PORT, ParametrosSistemaCodefac.CORREO_DEFECTO_PUERTO);
+        } catch (Exception ex) {
+            Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         String formatoFecha="dd/MM/yy";
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat(formatoFecha);
         String fechaStr=simpleDateFormat.format(UtilidadesFecha.getFechaHoy());
@@ -158,6 +172,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
 
     @Override
     public void limpiar() {
+        
         //empresa = new Empresa();
         //empresa.setIdentificacion("1724218951");
         //empresa.setObligadoLlevarContabilidadBool(true);
@@ -321,6 +336,46 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         }
     }
     
+    public void listenerVerificarCorreo()
+    {
+        EsperaSwingWorker esperaDialog=new EsperaSwingWorker("Validando Correo",new EsperaSwingWorkerIf() {
+            @Override
+            public void ejecutarTarea() {
+                validarCorreo();
+            }
+        });
+        
+        esperaDialog.execute();
+        
+    }
+    
+    private void validarCorreo()
+    {
+        if(correoUsuarioParametro.valor!=null &&
+                correoClaveParametro.valor!=null &&
+                correoHostSmtpParametro.valor!=null &&
+                correoPuertoParametro.valor!=null )
+        {
+            try {
+                UtilidadesCorreo.verificarCredencialesCorreoCodefa(
+                        correoUsuarioParametro.valor,
+                        correoClaveParametro.valor,
+                        correoHostSmtpParametro.valor,
+                        Integer.parseInt(correoPuertoParametro.valor));
+                
+                mostrarMensaje(new CodefacMsj("Datos correctos del sistema", CodefacMsj.TipoMensajeEnum.CORRECTO));
+            } catch (Exception ex) {
+                Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
+                mostrarMensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                
+            }
+        }
+        else
+        {
+            mostrarMensaje(new CodefacMsj("Ingrese todos los campos del correo", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+        }
+    }
+    
 
     ///////////////////////////////////////////////////////////////////////////
     //                  METODOS GET AND SET
@@ -404,6 +459,40 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     public void setFirmaFechaEmisionParametro(ParametroCodefac firmaFechaEmisionParametro) {
         this.firmaFechaEmisionParametro = firmaFechaEmisionParametro;
     }
+
+    public ParametroCodefac getCorreoUsuarioParametro() {
+        return correoUsuarioParametro;
+    }
+
+    public void setCorreoUsuarioParametro(ParametroCodefac correoUsuarioParametro) {
+        this.correoUsuarioParametro = correoUsuarioParametro;
+    }
+
+    public ParametroCodefac getCorreoClaveParametro() {
+        return correoClaveParametro;
+    }
+
+    public void setCorreoClaveParametro(ParametroCodefac correoClaveParametro) {
+        this.correoClaveParametro = correoClaveParametro;
+    }
+
+    public ParametroCodefac getCorreoHostSmtpParametro() {
+        return correoHostSmtpParametro;
+    }
+
+    public void setCorreoHostSmtpParametro(ParametroCodefac correoHostSmtpParametro) {
+        this.correoHostSmtpParametro = correoHostSmtpParametro;
+    }
+
+    public ParametroCodefac getCorreoPuertoParametro() {
+        return correoPuertoParametro;
+    }
+
+    public void setCorreoPuertoParametro(ParametroCodefac correoPuertoParametro) {
+        this.correoPuertoParametro = correoPuertoParametro;
+    }
+    
+    
     
     
 

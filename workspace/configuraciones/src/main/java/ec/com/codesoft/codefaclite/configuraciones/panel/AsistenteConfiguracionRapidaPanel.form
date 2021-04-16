@@ -792,7 +792,7 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnVerificarDatosFirma1">
+                <Component class="javax.swing.JButton" name="btnVerificarCorreo">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/img/iconos/FacturaCeleste.png"/>

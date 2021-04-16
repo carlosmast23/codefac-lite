@@ -238,6 +238,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         //notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         //notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
         notaCredito.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
+        notaCredito.setPuntoEmisionId(puntoEmisionSeleccionado.getId());
         notaCredito.setPuntoEstablecimiento(new BigDecimal(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString()));
         
         //notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));

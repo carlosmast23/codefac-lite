@@ -2438,10 +2438,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
         factura.setEmpresa(session.getEmpresa());
         //factura.setEstado(Factura.ESTADO_FACTURADO);
-        factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
+        //factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(getPuntoEmisionSeleccionado().getPuntoEmision());
+        factura.setPuntoEmisionId(getPuntoEmisionSeleccionado().getId());
         factura.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
         
         //Cuando la facturacion es electronica

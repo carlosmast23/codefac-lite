@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBind
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.PasswordFieldBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
@@ -120,7 +121,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         txtFirmaContraseña = new javax.swing.JPasswordField();
         txtCorreoClave = new javax.swing.JPasswordField();
         btnVerificarDatosFirma = new javax.swing.JButton();
-        btnVerificarDatosFirma1 = new javax.swing.JButton();
+        btnVerificarCorreo = new javax.swing.JButton();
         pnlEmpresaSucursal2 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -702,14 +703,14 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(btnVerificarDatosFirma, gridBagConstraints);
 
-        btnVerificarDatosFirma1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
-        btnVerificarDatosFirma1.setText("Verificar");
+        btnVerificarCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnVerificarCorreo.setText("Verificar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal1.add(btnVerificarDatosFirma1, gridBagConstraints);
+        pnlEmpresaSucursal1.add(btnVerificarCorreo, gridBagConstraints);
 
         tabVentana.addTab("Datos Adicionales", pnlEmpresaSucursal1);
 
@@ -951,8 +952,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JButton btnEmpresaCargarLogo;
     private javax.swing.JButton btnFirmaBuscar;
     private javax.swing.JButton btnTerminar;
+    private javax.swing.JButton btnVerificarCorreo;
     private javax.swing.JButton btnVerificarDatosFirma;
-    private javax.swing.JButton btnVerificarDatosFirma1;
     private javax.swing.JCheckBox chkEmpresaObligadoContabilidad;
     private javax.swing.JCheckBox chkEmpresaRegimenMicroempresa;
     private javax.swing.JLabel jLabel1;
@@ -1091,7 +1092,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.btnFirmaBuscar = btnFirmaBuscar;
     }
     
-    
+    @PasswordFieldBinding(value = "controlador.correoClaveParametro.valor")
     public JPasswordField getTxtCorreoClave() {
         return txtCorreoClave;
     }
@@ -1100,6 +1101,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtCorreoClave = txtCorreoClave;
     }
 
+    @SpinnerBinding(value = "controlador.correoPuertoParametro.valor",converter = IntegerToStringConverter.class)
     public JSpinner getTxtCorreoPuerto() {
         return txtCorreoPuerto;
     }
@@ -1108,6 +1110,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtCorreoPuerto = txtCorreoPuerto;
     }
 
+    @TextFieldBinding(value="controlador.correoHostSmtpParametro.valor")
     public JTextField getTxtCorreoSmtp() {
         return txtCorreoSmtp;
     }
@@ -1116,6 +1119,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.txtCorreoSmtp = txtCorreoSmtp;
     }
 
+    @TextFieldBinding(value = "controlador.correoUsuarioParametro.valor")
     public JTextField getTxtCorreoUsuario() {
         return txtCorreoUsuario;
     }
@@ -1361,6 +1365,15 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
     public void setBtnVerificarDatosFirma(JButton btnVerificarDatosFirma) {
         this.btnVerificarDatosFirma = btnVerificarDatosFirma;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerVerificarCorreo")
+    public JButton getBtnVerificarCorreo() {
+        return btnVerificarCorreo;
+    }
+
+    public void setBtnVerificarCorreo(JButton btnVerificarCorreo) {
+        this.btnVerificarCorreo = btnVerificarCorreo;
     }
 
     

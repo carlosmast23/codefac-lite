@@ -20,7 +20,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.2.8.7.4";
+    public static final String VERSION="1.2.8.7.5";
     /**
      * El modo de configuracion del sistema
      */
@@ -148,4 +148,10 @@ public abstract class ParametrosSistemaCodefac {
     public static final Integer MAX_COMPROBANTES_ELECTRONICOS_LOTE=35;
     
     public static final Boolean PROFORMA_MODO_PRUEBA=false;
+    
+    public static final String CORREO_DEFECTO_USUARIO="codefac.test@gmail.com";
+    public static final String CORREO_DEFECTO_CLAVE="26hhdTtckLvAO/VRy7q+dQ==";
+    public static final String CORREO_DEFECTO_HOST="smtp.gmail.com";
+    public static final String CORREO_DEFECTO_PUERTO="587";
+    
 }

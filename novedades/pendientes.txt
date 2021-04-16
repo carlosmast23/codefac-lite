@@ -1,0 +1,1 @@
+En la pantalla de facturacion lote esta de hacer una interfaz no call back para informar a los usuarios remotos

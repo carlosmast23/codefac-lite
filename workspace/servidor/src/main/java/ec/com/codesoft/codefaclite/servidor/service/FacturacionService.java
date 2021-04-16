@@ -248,6 +248,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         setearDatosDistribuidor(venta);
     }
     
+    private void setearDatosPorDefecto(Factura factura)
+    {   
+        //Fecha de cuando estamos generando el documento
+        factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
+        
+        //Valor por defecto para indicar que no esta emitida una guia de remision
+        factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
+        
+        ///Agregar estado de la nota de credito
+        factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
+    }
+    
     /**
      * El prestamos sirve para identificar cuando se genera con el modulo de Crédito
      * @param factura
@@ -257,12 +269,20 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws ServicioCodefacException 
      */
     public Factura grabar(final Factura factura,Prestamo prestamo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() 
+        {
             
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                //Validaciones iniciales de la factura
                 validacionInicialFacturar(factura,CrudEnum.CREAR);
+                
+                //Agrega datos adcional como por ejemplo la fecha de creacion de la factura
+                setearDatosPorDefecto(factura);
                                
+                //Metodo que va a grabar la factura
                 grabarSinTransaccion(factura,carteraParametro);
                 
                 /**
@@ -306,6 +326,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public FacturaLoteRespuesta grabarLote(List<FacturaParametro> facturaList) throws RemoteException,ServicioCodefacException {
         
+        //TODO: Evento que luego me permite realizar una auditoria
+        Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Procesando en lote :"+ facturaList.size()+" documentos");
+        
         FacturaLoteRespuesta respuesta=new FacturaLoteRespuesta();
         
         for (FacturaParametro factura : facturaList) 
@@ -314,12 +337,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             {
                 //´TODO: Por el momento todas las facturas en lote se van a facturar con la fecha actual
                 //factura.factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
-                
+                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Procesando lote proforma :"+factura.factura.getPreimpreso());
                 Factura facturaGrabada=grabar(factura.factura,factura.prestamo,factura.carteraPrestamo);
+                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Factura generada en lote # :"+facturaGrabada.getPreimpreso());
+                //Si la factura se termina de procesar correctamento agrego a la respuesta
                 respuesta.agregarFacturaProcesada(factura.factura);
             }
             catch(ServicioCodefacException e)
             {
+                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Error procesando lote proforma :"+factura.factura.getPreimpreso());
                 //Agrego a la lista las facturas que tienen problemas y no fueron procesadas
                 respuesta.agregarFacturaNoProcesada(new FacturaLoteRespuesta.Error(factura.factura, e.getMessage()));
             }
@@ -392,41 +418,49 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
     }
     
-    public Factura grabarSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
+    private void asignarProformaAFactura(Factura factura)
     {
-        //TODO:Este codigo de documento ya no debo setear porque desde la factura ya mando el documento
-        //factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
-        factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
-
-        //Setear los datos del cliente en la factura para tener un historico y vovler a consultar
-        //Todo: Ver si es necesario corregir este problema tambien en la factura cuando edita
-        //factura.setRazonSocial(factura.getCliente().getRazonSocial());
-        //factura.setIdentificacion(factura.getCliente().getIdentificacion());
-        //factura.setDireccion(factura.getSucursal().getDireccion());
-        //factura.setTelefono(factura.getSucursal().getTelefonoConvencional());
-        setearDatosClienteYDistribuidor(factura);        
-        
-        asignarVendedorAutomatico(factura);
-        
-        //Cambiar el estado si viene de un pedido si fuera el caso
         Factura proforma=factura.getProforma();
         if(proforma!=null)
         {
             if(!ParametrosSistemaCodefac.PROFORMA_MODO_PRUEBA)
             {
+                //Cambio el estado de la proforma a facturado para saber que ya no puedo volver a utilizar
                 proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
                 entityManager.merge(proforma);
             }
         }
-        
-        //Si es nota de venta generar un número de autorización cualquiera
+    }
+    
+    private void asignarClaveAccesoDocumentosNoElectronicos(Factura factura)
+    {
         if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
             factura.setClaveAcceso(factura.getPuntoEstablecimiento()+""+factura.getPuntoEmision()+""+factura.getSecuencial()+"");
         }
+    }
+    
+    public Factura grabarSinTransaccion(Factura factura,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
+    {
+        
+
+        //TODO:Ver si se mueve a la primera parte donde se setean los datos
+        //Parece que no debo mover por que otros metodos recien desde este punto empiezan grabar
+        setearDatosClienteYDistribuidor(factura);        
+        
+        //TODO:Analizar mover a fuera , o pasar los metodos setear a este punto
+        asignarVendedorAutomatico(factura);
+        
+        //Cambiar el estado si viene de un pedido si fuera el caso
+        asignarProformaAFactura(factura);
+        
+        //Si es nota de venta generar un número de autorización cualquiera
+        asignarClaveAccesoDocumentosNoElectronicos(factura);
 
         ComprobantesService servicioComprobante = new ComprobantesService();
-        servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
+        
+        
+        servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);        
         grabarDetallesFacturaSinTransaccion(factura);
         grabarCarteraSinTransaccion(factura,carteraParametro);
         return factura;
@@ -464,8 +498,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     private void grabarDetallesFacturaSinTransaccion(Factura factura) throws RemoteException,PersistenceException,ServicioCodefacException
     {
-       
-        factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
+        //TODO: Ver si es necesario grabar en esta parte
         entityManager.persist(factura);
         entityManager.flush();
 
@@ -856,6 +889,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, empresa,estado);
     }
 
+    /**
+     * @deprecated Parece que nadie usa este metodo
+     */
     public Factura grabar(Factura factura,Empleado empleado) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException
     {
         factura.setVendedor(empleado);
@@ -923,6 +959,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
     }
     
+    /**
+     * @AUTHOR: Robert Tene
+     * @param factura
+     * @throws ServicioCodefacException
+     * @throws RemoteException 
+     */
     private void agregarDatosParaCajaSession(Factura factura) throws ServicioCodefacException, RemoteException
     {
         CajaSession cajaSession = null;

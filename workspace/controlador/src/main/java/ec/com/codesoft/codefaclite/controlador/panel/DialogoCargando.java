@@ -31,6 +31,14 @@ public class DialogoCargando extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
+    public DialogoCargando() {
+        super();
+        initComponents();
+        setLocationRelativeTo(null);
+    }
+    
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -121,6 +129,9 @@ public class DialogoCargando extends javax.swing.JDialog {
         this.lblMensaje = lblMensaje;
     }
     
-    
+    public void agregarTexto(String texto)
+    {
+        getLblMensaje().setText(texto);
+    }
 
 }

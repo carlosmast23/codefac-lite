@@ -47,14 +47,14 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(p);
+                grabarSinTransaccion(p,true);
             }
         });
         
         return p;
     }
     
-    private void grabarSinTransaccion(Empresa p) throws ServicioCodefacException, RemoteException
+    private void grabarSinTransaccion(Empresa p,Boolean crearCorreoDefecto) throws ServicioCodefacException, RemoteException
     {
         //Grabar la empresa        
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
@@ -68,9 +68,12 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         PersonaService personaService = new PersonaService();
         personaService.crearConsumidorFinalSinTransaccion(p);
 
-        //Grabar parametros por defecto
-        ParametroCodefacService parametroService = new ParametroCodefacService();
-        parametroService.crearParametroPorDefectoEmpresaSinTrasaccion(p);
+        //Grabar parametros por defecto}
+        if(crearCorreoDefecto)
+        {
+            ParametroCodefacService parametroService = new ParametroCodefacService();
+            parametroService.crearParametroPorDefectoEmpresaSinTrasaccion(p);
+        }
 
         //TODO: Por el momento no puedo crear una bodega por defecto en este punto por que necesito una sucursal
         //BodegaService bodegaService=new BodegaService();
@@ -140,15 +143,30 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
     }
     
+    private Boolean verificarCrearCorreoDefecto(List<ParametroCodefac> parametros)
+    {
+        for (ParametroCodefac parametro : parametros) {
+            //Si encuentra ingresado datos de cooreo ya no tiene que crear de forma automatica
+            if(parametro.nombre!=null && parametro.nombre.equals(ParametroCodefac.CORREO_USUARIO))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public Empresa grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException
     {
         return (Empresa) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
             public Object transaccion() throws ServicioCodefacException, RemoteException {
+                
+                Boolean crearCorreoDefecto=verificarCrearCorreoDefecto(parametros);
+                
                 //System.out.println("Grabado la sucursal"+sucursal);
                 //Grabando primero la EMPRESA
                 empresa.setCodigo("COD");
-                grabarSinTransaccion(empresa);
+                grabarSinTransaccion(empresa,crearCorreoDefecto);
                 
                 
                 //Grabar la SUCURSAL

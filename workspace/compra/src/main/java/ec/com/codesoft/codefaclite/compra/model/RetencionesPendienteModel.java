@@ -289,6 +289,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
         
         PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
         retencion.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
+        retencion.setPuntoEmisionId(puntoEmisionSeleccionado.getId());
         retencion.setPuntoEstablecimiento(new BigDecimal(puntoEmisionSeleccionado.getSucursal().getCodigoSucursal().toString()));
         retencion.setTipoDocumento(TipoDocumentoEnum.COMPRA.getCodigo()); //TODO: Falta definir exactamente el tipo de documento que se va a usar
         retencion.setFechaEmisionDocumento(retencion.getCompra().getFechaFactura());

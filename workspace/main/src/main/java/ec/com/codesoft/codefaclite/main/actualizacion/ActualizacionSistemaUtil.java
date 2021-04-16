@@ -49,6 +49,7 @@ public class ActualizacionSistemaUtil {
         }
     }
     
+    @Deprecated //TODO:No se esta usando
     public static void actualizaComprobantesElectronicos()
     {
         List<ComprobanteEntity> listaComprobantesActualizar=new ArrayList<ComprobanteEntity>();

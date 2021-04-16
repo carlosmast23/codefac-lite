@@ -120,6 +120,10 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
      */
     @JoinColumn(name = "SUCURSAL_EMPRESA_ID")
     protected Sucursal sucursalEmpresa;
+    
+    //NOTA: Dejo solo como long por que si hago mucho JoinColum cada vez que obtengo el objeto se hace muy pesado
+    @Column(name = "PUNTO_EMISION_ID")
+    protected Long puntoEmisionId;
 
     public ComprobanteEntity() {
     }
@@ -319,6 +323,15 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         this.contribuyenteEspecial = contribuyenteEspecial;
     }
 
+    public Long getPuntoEmisionId() {
+        return puntoEmisionId;
+    }
+
+    public void setPuntoEmisionId(Long puntoEmisionId) {
+        this.puntoEmisionId = puntoEmisionId;
+    }
+
+    
     
     public void addDatoAdicional(T comprobante) {
         if (comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_OTRO)) {

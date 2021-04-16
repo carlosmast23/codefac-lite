@@ -469,6 +469,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         notaCredito.setDireccionEstablecimiento(sessionMb.getSession().getSucursal().getDirecccion());
         notaCredito.setDireccionMatriz(sessionMb.getSession().getMatriz().getDirecccion());
         notaCredito.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
+        notaCredito.setPuntoEmisionId(puntoEmisionSeleccionado.getId());
         notaCredito.setPuntoEstablecimiento(new BigDecimal(sessionMb.getSession().getSucursal().getCodigoSucursal().toString()));
         notaCredito.setUsuario(sessionMb.getSession().getUsuario());
         notaCredito.setSucursalEmpresa(sessionMb.getSession().getSucursal());

@@ -617,6 +617,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         return null;
     }
 
+    /**
+     * TODO: Unir con el metodo general de UtilidadesCorreo
+     */
     private void verificarCredencialesCorreo() {
 
         try {

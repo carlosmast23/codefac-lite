@@ -109,6 +109,7 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
             
             mostrarMensaje(new CodefacMsj("El proceso finalizo correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));
             
+            //Si existen DATOS NO PROCEDOS muestro un mensaje
             if(respuesta.noProcesadosList.size()>0)
             {
                 mostrarMensaje(new CodefacMsj(respuesta.costruirMensajeError(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -120,8 +121,8 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
                 //Verifica si existen comprobantes electrónicos para procesar primero
                 if(comprobantes.size()>0)
                 {
-                    List<List> datosProcesar=UtilidadesLista.dividirLista(ParametrosSistemaCodefac.MAX_COMPROBANTES_ELECTRONICOS_LOTE, comprobantes);
-                    for (List<ComprobanteDataInterface> comprobanteList : datosProcesar) {
+                    //List<List> datosProcesar=UtilidadesLista.dividirLista(ParametrosSistemaCodefac.MAX_COMPROBANTES_ELECTRONICOS_LOTE, comprobantes);
+                    //for (List<ComprobanteDataInterface> comprobanteList : datosProcesar) {
                         ///Procesar las facturas de forma electronica
                         ClienteInterfaceComprobanteLote cic = getInterazEscritorio().getInterfaceCallBack();
                         
@@ -129,19 +130,19 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
                                 ComprobanteElectronicoService.ETAPA_GENERAR,
                                 ComprobanteElectronicoService.ETAPA_AUTORIZAR,
                                 null,
-                                new ArrayList<ComprobanteDataInterface>(comprobanteList),
+                                comprobantes,
                                 session.getEmpresa().getIdentificacion(),
                                 cic,
                                 true,
                                 session.getEmpresa(),
                                 false
                         );
-                    }
+                    //}
                 }
                 
             }
             
-            //imprmir las notas de venta en la misma pantalla
+            //IMPRIMIR las NOTAS DE VENTA INTERNA que no requieren procesar ELECTRONICAMENTE
             List<Factura> notaVentaList=obtenerNotasVentaProcesadas(respuesta);
             if(notaVentaList.size()>0)
             {
@@ -462,13 +463,14 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
     private List<FacturaParametro> construirFacturas() {
         List<FacturaParametro> facturasProcesar=new ArrayList<FacturaParametro>();
         for (FacturaDataTable proformaTmp : ventasSeleccionadasList) {
-            try {
+            try {                
                 Factura proforma=proformaTmp.factura;
                 Factura facturaNueva = (Factura) proforma.clone();
                 facturaNueva.setId(null);
                 facturaNueva.setCodigoDocumentoEnum(proformaTmp.documentoEnum);
                 facturaNueva.setProforma(proforma);
                 facturaNueva.setPuntoEmision(puntoEmisionSeleccionado.getPuntoEmision());
+                facturaNueva.setPuntoEmisionId(puntoEmisionSeleccionado.getId());
                 facturaNueva.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
                 
                 FacturaParametro facturaParametro=new FacturaParametro(facturaNueva, new CarteraParametro(proformaTmp.credito, proformaTmp.dias),null);

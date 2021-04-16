@@ -222,6 +222,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,List<ComprobanteDataInterface> comprobantesProcesos,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa,Boolean sincrono) throws RemoteException
     {
+        Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO, null,"Procesando en lote comprobantes electrónicos : "+comprobantesProcesos.size());
         //Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         comprobanteElectronico.setEnviarCorreos(enviarCorreo);
@@ -2139,87 +2140,75 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
     }
 
+    /**
+     * TODO: Cambiar el nombre del metodo a setear secuencial y otros datos adicionales
+     * @param comprobante
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     public void setearSecuencialComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
     {
         
-        
         PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
-        /**
-         * TODO: Ver si esta parte se puede mejorar guardando la referencia del secuencial
-         */
-        PuntoEmision puntoEmision=puntoEmisionService.obtenerPorCodigo(comprobante.getPuntoEmision(),comprobante.getSucursalEmpresa());
+        
+        PuntoEmision puntoEmision=puntoEmisionService.buscarPorId(comprobante.getPuntoEmisionId());
+        //PuntoEmision puntoEmision=puntoEmisionService.obtenerPorCodigo(comprobante.getPuntoEmision(),comprobante.getSucursalEmpresa());
         
         if(puntoEmision==null)
         {
             throw new ServicioCodefacException("No existe definido un punto de emisión");
         }
         
+        //Setea para saber si es facturacion fisica o electronica el código
         comprobante.setTipoFacturacion(puntoEmision.getTipoFacturacion());
         
-        //Obtiene los secuenciales eletronicos
+        //Obtiene los secuenciales eletrónicos
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
         Integer secuencial=puntoEmision.getSecuencialPorDocumento(documentoEnum);
         validarSecuencial(secuencial);
+        
+        //Aumentaro el código de la númeracion en el punto de emisión
         puntoEmision.setSecuencialPorDocumento(documentoEnum, secuencial+1);        
              
-        /**
-         * Aumentar el código de la numeración en los parametros
-         */
+        //Aumentar el código de la numeración en los parametros
         comprobante.setSecuencial(secuencial);
         
-        /**
-         * Agregar campos ocultos que no se deben mostrar en los detalles de las facturas electronicas
-         */
-        agregarEtiquetaDetallesCamposOcultos(comprobante);
-        
-          /**
-         * Validacion para evitar ingresar comprobantes repetidos
-         */
+        //Validacion para evitar ingresar comprobantes repetidos        
         validarSecuencialRepetidoComprobante(comprobante,puntoEmision,true);
         
-        /**
-         * Agregado datos adicionales de configuracion general
-         */
-        agregarParametrosGenerales(comprobante);
-        
-        
-        /**
-         * Agregado datos adicionales de cada usuario
-         */
-        agregarParametrosPorUsuario(comprobante);
-        
-        
-         /**
-         * Agregado datos adicionales de los vendedores
-         */
-        agregarDatosAdicionalVendedor(comprobante);
-        
-        /**
-         * Por el momento a todas las facturas no procesadas grabo con no facturar
-         * TODO: Analizar este metodo cuando sea fisica porque en ese caso deberia grabar directamente como autorizado
-         */
-        setearEstadoComoprobante(comprobante);
-        
-
-        /**
-         * Grabar la entidad de punto de emision con el secuencial agregado
-         */
+        //GRABAR los datos recien modificados
         entityManager.merge(puntoEmision);
         entityManager.flush();
         
-        
         /**
-         * @DATE 27/01/2020
-         * TODO: Validacion adicional temporal hasta ver porque aveces se descuadra el secuencial del comprobante del punto de emision
+         * ====================================================================
+         *          DATOS ADICIONALES DE LA FACTURA
+         * ====================================================================
          */
         
+        //Agregar campos ocultos que no se deben mostrar en los detalles de las facturas electronicas
+        //TODO: Este cambio se hizo para el señor Centeno que decia que no aparescan algunos detalles en la factura
+        agregarEtiquetaDetallesCamposOcultos(comprobante);        
+                
+        //Agregado parametro generales en datos adicionales
+        agregarParametrosGenerales(comprobante);
         
+        //Agregando parametros adicionales por usuario a datos adicionales
+        agregarParametrosPorUsuario(comprobante);
+        
+        //Agregado datos adicionales de los vendedores
+        agregarDatosAdicionalVendedor(comprobante);
+        
+        //Agregando estado de los documentos dependiendo el tipo
+        setearEstadoComoprobante(comprobante);
+        
+ 
         
     }
     
     private void setearEstadoComoprobante(ComprobanteEntity comprobante)
     {
-        //Si el documento es nota de venta interna se supone que no so autorizados
+        //Si el documento es nota de venta interna se supone que no son documentos autorizados
         //TODO: Esta de generalizar este caso para todos los documentos que no son legales para poner en estado sin autorizar
         if(comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
@@ -2473,7 +2462,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
     }
     
-    
+    @Deprecated //TODO:No se esta usando
     public void actualizarComprobanteDatos(List<ComprobanteEntity> entidades) throws RemoteException, ServicioCodefacException
     {
         //Si no hay ningun dato para procesar no hago nada

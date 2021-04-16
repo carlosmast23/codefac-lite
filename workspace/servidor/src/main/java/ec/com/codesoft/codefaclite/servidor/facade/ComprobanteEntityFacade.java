@@ -55,7 +55,6 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         //TODO: Cambio temporal para ver si resuelve un problema al momento de facturar en el ID de Nacionalidad
         query.setFlushMode(FlushModeType.COMMIT);
         return query.getResultList();
-        //return (Usuario) query.getSingleResult();
         
     }
     

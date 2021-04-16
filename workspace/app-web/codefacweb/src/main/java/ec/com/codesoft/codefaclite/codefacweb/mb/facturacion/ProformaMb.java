@@ -543,6 +543,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         factura.setDireccionEstablecimiento(sessionMb.getSession().getSucursal().getDirecccion());
         factura.setDireccionMatriz(sessionMb.getSession().getMatriz().getDirecccion());
         factura.setPuntoEmision((puntoEmisionSeleccionado!=null)?puntoEmisionSeleccionado.getPuntoEmision():null);
+        factura.setPuntoEmisionId((puntoEmisionSeleccionado!=null)?puntoEmisionSeleccionado.getId():null);
         factura.setPuntoEstablecimiento(new BigDecimal(sessionMb.getSession().getSucursal().getCodigoSucursal().toString()));
         factura.setUsuario(sessionMb.getSession().getUsuario());
         factura.setSucursalEmpresa(sessionMb.getSession().getSucursal());
