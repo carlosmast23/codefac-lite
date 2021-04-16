@@ -211,7 +211,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
 
     public void listenerBtnAvanzarPantalla() {
         //Habilitar el boton de terminar
-        if (pestañaActivaTab == TOTAL_COUNT_TAB - 1) {
+        if (pestañaActivaTab == TOTAL_COUNT_TAB - 2) {
             botonTerminarHabilitar = true;
         }
 
@@ -341,13 +341,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     }
     
     public void listenerVerificarCorreo()
-    {
-        System.out.println("usuario: " + correoUsuarioParametro.valor);
-        System.out.println("clave: " + correoClaveParametro.valor);
-        System.out.println("host: " + correoHostSmtpParametro.valor);
-        System.out.println("puerto: " + correoPuertoParametro.valor);
-        System.out.println("------------------DESPUES-------------------");
-                
+    {                
         Object[] parametros={correoUsuarioParametro.valor,correoClaveParametro.valor,correoHostSmtpParametro.valor,correoPuertoParametro.valor};
         EsperaSwingWorker esperaDialog=new EsperaSwingWorker("Validando Correo",parametros,new EsperaSwingWorkerIf() 
         {

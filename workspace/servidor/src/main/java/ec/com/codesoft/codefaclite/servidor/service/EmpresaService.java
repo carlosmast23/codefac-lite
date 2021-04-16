@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,7 +156,88 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         return false;
     }
     
-    public Empresa grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException
+    private void validarDatosConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,String licenciaCorreo,String licenciaClave,Usuario usuario) throws ServicioCodefacException
+    {
+        // Validaciones de la EMPRESA
+        if(empresa.getIdentificacion()==null || empresa.getIdentificacion().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("El ruc de la empresa no puede ser vacia");
+        }
+        
+        if(empresa.getRazonSocial()==null || empresa.getRazonSocial().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("La razón social de la sucursal no puede ser vacia");
+        }
+        
+        //Validacion de la SUCURSAL
+        if(sucursal.getDirecccion()==null || sucursal.getDirecccion().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("La dirección de la sucursal no puede ser vacia");
+        }
+        
+        if(sucursal.getCodigoSucursal()==null || sucursal.getCodigoSucursal()<=0)
+        {
+            throw new ServicioCodefacException("El código de la sucursal tiene un valor incorrecto");
+        }
+        
+        //Validacion de los SECUENCIALES DE PUNTOS DE EMISION
+        if(puntoEmision.getPuntoEmision()==null || puntoEmision.getPuntoEmision()<=0 )
+        {
+            throw new ServicioCodefacException("El código del punto de emisión tiene un valor incorrecto");
+        }
+        
+        if(puntoEmision.getSecuencialFactura()==null || puntoEmision.getSecuencialFactura()<=0 )
+        {
+            throw new ServicioCodefacException("El secuencial de la factura tiene un valor incorrecto");
+        }
+        
+        if(puntoEmision.getSecuencialNotaCredito()==null || puntoEmision.getSecuencialNotaCredito()<=0 )
+        {
+            throw new ServicioCodefacException("El secuencial de la Nota de Crédito tiene un valor incorrecto");
+        }
+        
+        if(puntoEmision.getSecuencialRetenciones()==null || puntoEmision.getSecuencialRetenciones()<=0 )
+        {
+            throw new ServicioCodefacException("El secuencial de la Retención tiene un valor incorrecto");
+        }
+        
+        //Validacion del USUARIO DEL SISTEMA
+        if(usuario.getNick()==null || usuario.getNick().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("No se puede grabar el usuario vacio para el sistema");
+        }
+        
+        if(usuario.getClave()==null || usuario.getClave().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("No se puede grabar la clave del usuario vacio para el sistema");
+        }
+        
+        if(!usuario.verificarClavesIguales())
+        {
+            throw new ServicioCodefacException("Las claves ingresadas del correo son incorrectas");
+        }
+        
+        //Validacion de los datos de la LICENCIA DEL SISTEMA
+        if(licenciaCorreo==null || licenciaCorreo.trim().isEmpty())
+        {
+            throw new ServicioCodefacException("El correo de la licencia del sistema no puede ser vacio");
+        }
+        
+        //Validacion de los datos de la LICENCIA DEL SISTEMA
+        if(licenciaClave==null || licenciaClave.trim().isEmpty())
+        {
+            throw new ServicioCodefacException("La clave de la licencia del sistema no puede ser vacia");
+        }
+        
+        //Verificar que la licencia sea valida
+        if(!WebServiceCodefac.verificarCredenciales(licenciaCorreo,licenciaClave))
+        {
+            throw new ServicioCodefacException("Los datos de la licencia Codefac son incorrectos");
+        }
+        
+    }
+    
+    public Empresa grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,String licenciaCorreo,String licenciaClave,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException
     {
         return (Empresa) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override

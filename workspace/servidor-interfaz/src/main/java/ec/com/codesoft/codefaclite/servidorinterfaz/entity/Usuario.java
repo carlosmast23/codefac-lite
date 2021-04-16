@@ -360,4 +360,21 @@ public class Usuario implements Serializable{
         }
         return puntoEmisionTxt;
     }    
+    
+    /**
+     * TODO: Este metodo solo se debe usar si la clave aun no esta encriptada
+     * @return 
+     */
+    public Boolean verificarClavesIguales()
+    {        
+        if(clave!=null && repetirClave!=null)
+        {
+            if(clave.equals(repetirClave))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
