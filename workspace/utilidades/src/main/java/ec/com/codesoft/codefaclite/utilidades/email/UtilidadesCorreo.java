@@ -28,6 +28,27 @@ public abstract class UtilidadesCorreo {
      */
     public static void verificarCredencialesCorreoCodefa(String usuario,String password,String smtpHost,Integer puerto)  throws Exception
     {
+        //Validaciones iniciales
+        if(smtpHost==null || smtpHost.trim().isEmpty())
+        {
+            throw new Exception("No se puede validar sin el Host Smtp");
+        }
+        
+        if(password==null || password.trim().isEmpty())
+        {
+            throw new Exception("No se puede validar sin la clave");
+        }
+        
+        if(usuario==null || usuario.trim().isEmpty())
+        {
+            throw new Exception("No se puede validar sin el usaurio");
+        }
+        
+        if(puerto==null)
+        {
+            throw new Exception("No se puede validar sin un puerto");
+        }
+        
         try {
             List<String> correos = new ArrayList<String>();
             correos.add(usuario);

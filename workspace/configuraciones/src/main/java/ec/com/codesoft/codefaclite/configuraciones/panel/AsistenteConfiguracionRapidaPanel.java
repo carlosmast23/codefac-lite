@@ -143,6 +143,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel39 = new javax.swing.JLabel();
         txtLicenciaCorreo = new javax.swing.JTextField();
         txtLicenciaClave = new javax.swing.JPasswordField();
+        btnVerificarLicencia = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         btnAtrasPantalla = new javax.swing.JButton();
         btnAvanzarPantalla = new javax.swing.JButton();
@@ -893,6 +894,15 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal2.add(txtLicenciaClave, gridBagConstraints);
 
+        btnVerificarLicencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnVerificarLicencia.setText("Verificar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal2.add(btnVerificarLicencia, gridBagConstraints);
+
         tabVentana.addTab("Usuario", pnlEmpresaSucursal2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -954,6 +964,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JButton btnTerminar;
     private javax.swing.JButton btnVerificarCorreo;
     private javax.swing.JButton btnVerificarDatosFirma;
+    private javax.swing.JButton btnVerificarLicencia;
     private javax.swing.JCheckBox chkEmpresaObligadoContabilidad;
     private javax.swing.JCheckBox chkEmpresaRegimenMicroempresa;
     private javax.swing.JLabel jLabel1;
@@ -1374,6 +1385,33 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
     public void setBtnVerificarCorreo(JButton btnVerificarCorreo) {
         this.btnVerificarCorreo = btnVerificarCorreo;
+    }
+
+    @PasswordFieldBinding(value = "controlador.licenciaClave")
+    public JPasswordField getTxtLicenciaClave() {
+        return txtLicenciaClave;
+    }
+
+    public void setTxtLicenciaClave(JPasswordField txtLicenciaClave) {
+        this.txtLicenciaClave = txtLicenciaClave;
+    }
+
+    @TextFieldBinding(value = "controlador.licenciaCorreo")
+    public JTextField getTxtLicenciaCorreo() {
+        return txtLicenciaCorreo;
+    }
+
+    public void setTxtLicenciaCorreo(JTextField txtLicenciaCorreo) {
+        this.txtLicenciaCorreo = txtLicenciaCorreo;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerVerificarLicencia")
+    public JButton getBtnVerificarLicencia() {
+        return btnVerificarLicencia;
+    }
+
+    public void setBtnVerificarLicencia(JButton btnVerificarLicencia) {
+        this.btnVerificarLicencia = btnVerificarLicencia;
     }
 
     

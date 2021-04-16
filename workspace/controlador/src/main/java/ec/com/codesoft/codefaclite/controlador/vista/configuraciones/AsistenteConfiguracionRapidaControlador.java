@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.utilidades.email.UtilidadesCorreo;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -79,6 +80,9 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     private ParametroCodefac correoClaveParametro;
     private ParametroCodefac correoHostSmtpParametro;
     private ParametroCodefac correoPuertoParametro;
+    
+    private String licenciaCorreo;
+    private String licenciaClave;
     
 
     public AsistenteConfiguracionRapidaControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
@@ -338,30 +342,49 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     
     public void listenerVerificarCorreo()
     {
-        EsperaSwingWorker esperaDialog=new EsperaSwingWorker("Validando Correo",new EsperaSwingWorkerIf() {
+        System.out.println("usuario: " + correoUsuarioParametro.valor);
+        System.out.println("clave: " + correoClaveParametro.valor);
+        System.out.println("host: " + correoHostSmtpParametro.valor);
+        System.out.println("puerto: " + correoPuertoParametro.valor);
+        System.out.println("------------------DESPUES-------------------");
+                
+        Object[] parametros={correoUsuarioParametro.valor,correoClaveParametro.valor,correoHostSmtpParametro.valor,correoPuertoParametro.valor};
+        EsperaSwingWorker esperaDialog=new EsperaSwingWorker("Validando Correo",parametros,new EsperaSwingWorkerIf() 
+        {
             @Override
-            public void ejecutarTarea() {
-                validarCorreo();
+            public void ejecutarTarea(Object[] parametros) {
+                validarCorreo(
+                        (String) parametros[0],
+                        (String) parametros[1],
+                        (String) parametros[2],
+                        (String) parametros[3]
+                );
             }
         });
         
         esperaDialog.execute();
+        //validarCorreo();
         
     }
     
-    private void validarCorreo()
+    private void validarCorreo(String usuario,String clave,String host,String puertoStr)
     {
-        if(correoUsuarioParametro.valor!=null &&
-                correoClaveParametro.valor!=null &&
-                correoHostSmtpParametro.valor!=null &&
-                correoPuertoParametro.valor!=null )
+        if(usuario!=null &&
+                clave!=null &&
+                host!=null &&
+                puertoStr!=null )
         {
             try {
+                /*System.out.println("usuario: "+correoUsuarioParametro.valor);
+                System.out.println("clave: "+correoClaveParametro.valor);
+                System.out.println("host: "+correoHostSmtpParametro.valor);
+                System.out.println("puerto: "+correoPuertoParametro.valor);*/
+                
                 UtilidadesCorreo.verificarCredencialesCorreoCodefa(
-                        correoUsuarioParametro.valor,
-                        correoClaveParametro.valor,
-                        correoHostSmtpParametro.valor,
-                        Integer.parseInt(correoPuertoParametro.valor));
+                        usuario,
+                        clave,
+                        host,
+                        Integer.parseInt(puertoStr));
                 
                 mostrarMensaje(new CodefacMsj("Datos correctos del sistema", CodefacMsj.TipoMensajeEnum.CORRECTO));
             } catch (Exception ex) {
@@ -374,6 +397,31 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         {
             mostrarMensaje(new CodefacMsj("Ingrese todos los campos del correo", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
         }
+    }
+    
+    public void listenerVerificarLicencia()
+    {
+        if(licenciaCorreo==null || licenciaClave==null )
+        {
+            //Si no tiene los datos ingresados no valida
+            return;
+        }
+        
+        Object[] parametro={licenciaCorreo,licenciaClave};
+        EsperaSwingWorker esperaSwingWorker=new EsperaSwingWorker("Verificando licencia Codefac",parametro,new EsperaSwingWorkerIf() {
+            @Override
+            public void ejecutarTarea(Object[] parametros) {
+                if(WebServiceCodefac.verificarCredenciales((String)parametros[0],(String)parametros[1]))
+                {
+                    mostrarMensaje(new CodefacMsj("Los datos de la licencia son correctos", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                }
+                else
+                {
+                    mostrarMensaje(new CodefacMsj("Los datos de la licencia son incorrectos", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                }
+            }
+        });        
+        esperaSwingWorker.execute();
     }
     
 
@@ -490,6 +538,22 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
 
     public void setCorreoPuertoParametro(ParametroCodefac correoPuertoParametro) {
         this.correoPuertoParametro = correoPuertoParametro;
+    }
+
+    public String getLicenciaCorreo() {
+        return licenciaCorreo;
+    }
+
+    public void setLicenciaCorreo(String licenciaCorreo) {
+        this.licenciaCorreo = licenciaCorreo;
+    }
+
+    public String getLicenciaClave() {
+        return licenciaClave;
+    }
+
+    public void setLicenciaClave(String licenciaClave) {
+        this.licenciaClave = licenciaClave;
     }
     
     

@@ -10,7 +10,8 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 /**
- *
+ *TODO: Tener en cuenta cuando se utilicen varaibles de ambito general de la clase , toca pasar por parametro por que tiene un compartamiento extraño
+ * Preocurar que la clase interna que va a implementar la interfaz EsperaSwingWorkerIf sea lo menos dependiente posible como una funcion
  * @author CARLOS_CODESOFT
  */
 public class EsperaSwingWorker extends SwingWorker<Integer, Integer> {
@@ -18,17 +19,24 @@ public class EsperaSwingWorker extends SwingWorker<Integer, Integer> {
     
     private EsperaSwingWorkerIf interfaz;
     
-    public EsperaSwingWorker(String tituloDialogo,EsperaSwingWorkerIf interfaz) {
+    /**
+     * TODO: Se usa este artificio por que en las clases internas las variables
+     * de un ambito superior se pierden los valores
+     */
+    private Object[] parametros;
+    
+    public EsperaSwingWorker(String tituloDialogo,Object[] parametros,EsperaSwingWorkerIf interfaz) {
         this.dialogo = new DialogoCargando();
         this.dialogo.agregarTexto(tituloDialogo);
         this.interfaz=interfaz;
+        this.parametros=parametros;
     }
     
     @Override
     protected Integer doInBackground() throws Exception {
         //TODO: En esta parte se va a ejecutar el proceso en segundo plano
         dialogo.setVisible(true);
-        interfaz.ejecutarTarea();
+        interfaz.ejecutarTarea(parametros);
         dialogo.setVisible(false);
         return 1000;
     }

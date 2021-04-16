@@ -11,6 +11,11 @@ package ec.com.codesoft.codefaclite.controlador.dialogos;
  */
 public interface EsperaSwingWorkerIf {
     
-    public void ejecutarTarea();
+    /**
+     * TODO: Se usa este artificio por que en las clases internas las variables
+     * de un ambito superior se pierden los valores
+     * @param parametros 
+     */
+    public void ejecutarTarea(Object[] parametros);
         
 }
