@@ -196,7 +196,8 @@ public class ValidacionLicenciaCodefac{
         //FileOutputStream fr=null;
         //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;
         String modulosStr=licencia.getModulosStr();
-        String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet(licencia.getNombreInterfazRed())+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;
+        String mac=UtilidadVarios.obtenerMacSinInternet(licencia.getNombreInterfazRed()).get(0).mac;
+        String licenciaStr=licencia.getUsuario()+":"+mac+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;
         LOG.log(Level.INFO,"creando="+licenciaStr);
         licenciaStr=UtilidadesHash.generarHashBcrypt(licenciaStr);
         Properties prop = new Properties();
