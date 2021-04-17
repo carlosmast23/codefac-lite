@@ -50,7 +50,7 @@ public class LoginModel extends LoginFormDialog{
     private static final Logger LOG = Logger.getLogger(LoginModel.class.getName());
     public boolean salirAplicacion=false;
     
-    private UsuarioServicioIf usuarioServicio;
+    //private UsuarioServicioIf usuarioServicio;
     private Usuario usuario;
     /**
      * Contenedor principal especialmente necesito este dato para poder setear la session despues de cargar el login
@@ -63,7 +63,7 @@ public class LoginModel extends LoginFormDialog{
         initListenerBotones();
         initListenerCombos();
         initListenerPantalla();
-        this.usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
+        //this.usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
         this.panelPrincipal=panelPrincipal;
         
         //Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
@@ -149,6 +149,7 @@ public class LoginModel extends LoginFormDialog{
         if (!usuarioTxt.equals("") && !clave.equals("")) {
             try {
                 //usuario = usuarioServicio.login(usuarioTxt, clave, (Empresa) getCmbEmpresa().getSelectedItem());
+                UsuarioServicioIf usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
                 LoginRespuesta loginRespuesta = usuarioServicio.login(usuarioTxt, clave, empresaSeleccionada);
                 
                 //Mostrar las alertas del sistema 

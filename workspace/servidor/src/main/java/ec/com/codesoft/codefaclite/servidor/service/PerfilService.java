@@ -23,16 +23,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespues
 import java.rmi.RemoteException;
 import java.util.List;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
-import java.awt.Font;
-import java.awt.event.InputEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Session;
 import javax.persistence.EntityTransaction;
 //import javax.swing.JMenu;
 //import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
 
 /**
  *
@@ -97,14 +95,14 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     /**
      * Funcion utilizada para que al momento de crear una empresa ya tenga perfil para que pueda asignar a los usuarios
      */
-    public void crearPerfilPorDefectoSinTransaccion(Empresa empresa) throws ServicioCodefacException
+    public Perfil crearPerfilPorDefectoSinTransaccion(Empresa empresa) throws ServicioCodefacException
     {        
         try {
             Perfil perfilDefecto=new Perfil();
             perfilDefecto.setDescripcion("perfil por defecto");
             perfilDefecto.setEmpresa(empresa);
             perfilDefecto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-            perfilDefecto.setNombre("defecto");
+            perfilDefecto.setNombre(Perfil.PERFIL_DEFECTO);
             
             entityManager.persist(perfilDefecto);
             
@@ -136,11 +134,27 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
 
             perfilDefecto.setVentanasPermisos(ventanas);
             entityManager.merge(perfilDefecto);
+            return perfilDefecto;
             
         } catch (RemoteException ex) {
             Logger.getLogger(PerfilService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
         
+    }
+    
+    public Perfil consultarPerfileDefectoPorEmpresa(Empresa empresa) throws RemoteException, ServicioCodefacException
+    {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("empresa", empresa);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("nombre", Perfil.PERFIL_DEFECTO);
+        List<Perfil> resultadoList=getFacade().findByMap(mapParametros);
+        if(resultadoList.size()>0)
+        {
+            return resultadoList.get(0);
+        }
+        return null;
     }
     
     public MenuCodefacRespuesta construirMenuPermisosUsuario(SessionCodefac sessionCodefac) throws RemoteException, ServicioCodefacException

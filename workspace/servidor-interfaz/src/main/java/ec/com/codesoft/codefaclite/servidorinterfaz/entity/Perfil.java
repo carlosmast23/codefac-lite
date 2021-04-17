@@ -36,6 +36,8 @@ public class Perfil implements Serializable{
     
     public static final String PERFIL_GRATIS="Default";
     
+    public static final String PERFIL_DEFECTO="defecto";
+    
     private static final long serialVersionUID = 1L;
      
     @Id

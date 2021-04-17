@@ -175,6 +175,9 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
             }
         });
         
+        /**
+         * TODO: Unificar esta logica con la clase de UtilidadesLicencia para que quede homologada con el servicio de empresa para el formulario de CONFIGURACION RAPIDA
+         */
         getBtnVerificar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -188,16 +191,14 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     } catch (Exception ex) {
                         Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    //String tipoLicencia=WebServiceCodefac.getTipoLicencia(getTxtUsuarioVerificar().getText());
-                    //Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(getTxtUsuarioVerificar().getText());
-
+                                        
                     Licencia licenciaInternet=new Licencia();
                     try {
                         licenciaInternet.cargarLicenciaOnline(usuarioTexto);
                     } catch (Exception ex) {
                         Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
                     //No hace verificaciones porque esta accion solo es accesible desde la pantalla de menu
                     //y se supone que ya esta validando la licencia anterior
                     if(actualizaLicencia)

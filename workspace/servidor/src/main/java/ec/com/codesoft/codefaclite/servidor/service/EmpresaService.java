@@ -8,17 +8,24 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -43,27 +50,30 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         this.empresaFacade = new EmpresaFacade();
     }
     
-    public Empresa grabar(Empresa p) throws ServicioCodefacException
+    public Empresa grabar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(p,true);
+                grabarSinTransaccion(p,true,true);
             }
         });
         
         return p;
     }
     
-    private void grabarSinTransaccion(Empresa p,Boolean crearCorreoDefecto) throws ServicioCodefacException, RemoteException
+    private void grabarSinTransaccion(Empresa p,Boolean crearCorreoDefecto,Boolean crearPerfilDefecto) throws ServicioCodefacException, RemoteException
     {
         //Grabar la empresa        
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         entityManager.persist(p);
 
         //Grabar un perfil por defecto
-        PerfilService perfilService = new PerfilService();
-        perfilService.crearPerfilPorDefectoSinTransaccion(p);
+        if(crearPerfilDefecto)
+        {
+            PerfilService perfilService = new PerfilService();
+            perfilService.crearPerfilPorDefectoSinTransaccion(p);
+        }
 
         //Grabar el usuario de consumidor final por defecto
         PersonaService personaService = new PersonaService();
@@ -116,7 +126,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         //empresaFacade.remove(p);
     }
     
-    public List<Empresa> buscar()
+    public List<Empresa> buscar() throws java.rmi.RemoteException
     {
         return empresaFacade.findAll();
     } 
@@ -162,6 +172,12 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         if(empresa.getIdentificacion()==null || empresa.getIdentificacion().trim().isEmpty())
         {
             throw new ServicioCodefacException("El ruc de la empresa no puede ser vacia");
+        }
+        
+        //Validacion sencilla para verificar que es RUC
+        if(empresa.getIdentificacion().length()==13)
+        {
+            throw new ServicioCodefacException("El Ruc no tiene la longitud requerida");
         }
         
         if(empresa.getRazonSocial()==null || empresa.getRazonSocial().trim().isEmpty())
@@ -214,7 +230,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
         if(!usuario.verificarClavesIguales())
         {
-            throw new ServicioCodefacException("Las claves ingresadas del correo son incorrectas");
+            throw new ServicioCodefacException("Las claves ingresadas del usuario son incorrectas");
         }
         
         //Validacion de los datos de la LICENCIA DEL SISTEMA
@@ -229,7 +245,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
             throw new ServicioCodefacException("La clave de la licencia del sistema no puede ser vacia");
         }
         
-        //Verificar que la licencia sea valida
+        //Verificar que la licencia que sea valida
         if(!WebServiceCodefac.verificarCredenciales(licenciaCorreo,licenciaClave))
         {
             throw new ServicioCodefacException("Los datos de la licencia Codefac son incorrectos");
@@ -237,18 +253,25 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
     }
     
+    
     public Empresa grabarConfiguracionInicial(Empresa empresa,Sucursal sucursal,PuntoEmision puntoEmision,Usuario usuario,String licenciaCorreo,String licenciaClave,List<ParametroCodefac> parametros) throws RemoteException, ServicioCodefacException
     {
         return (Empresa) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
             public Object transaccion() throws ServicioCodefacException, RemoteException {
                 
+                //Servicios que vamos a utilizar
+                ParametroCodefacService parametroCodefacService =new ParametroCodefacService();
+                
+                //Validaciones de los datos
+                validarDatosConfiguracionInicial(empresa, sucursal, puntoEmision, licenciaCorreo, licenciaClave, usuario);
+                
                 Boolean crearCorreoDefecto=verificarCrearCorreoDefecto(parametros);
                 
                 //System.out.println("Grabado la sucursal"+sucursal);
                 //Grabando primero la EMPRESA
                 empresa.setCodigo("COD");
-                grabarSinTransaccion(empresa,crearCorreoDefecto);
+                grabarSinTransaccion(empresa,crearCorreoDefecto,false);
                 
                 
                 //Grabar la SUCURSAL
@@ -262,20 +285,22 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
                 PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
                 puntoEmisionService.grabarSinTransaccion(puntoEmision);
                 
-                /*
-                //Grabar los parametros de configuracion para la FACTURACION ELECTRONICA
-                ParametroCodefacService parametroCodefacService =new ParametroCodefacService();
-                parametroCodefacService.editarParametrosSinTransaccion(parametros);
                 
                 //Grabar el USUARIO POR DEFECTO para ingresar al sistema
                 agregarDatosUsuarioDefecto(usuario, empresa, puntoEmision);
                 UsuarioServicio usuarioService=new UsuarioServicio();
-                usuarioService.grabarSinTransaccion(usuario);*/
+                usuarioService.grabarSinTransaccion(usuario,false);
                 
                 //Grabando los PARAMETROS DEL SISTEMA
-                agregarParametroPorDefecto(empresa, parametros);
-                ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
+                agregarParametroPorDefecto(empresa, parametros);                
                 parametroCodefacService.editarParametrosSinTransaccion(parametros);
+                                                
+                
+                //Generar la licencia
+                /*if(!crearLicencia(empresa, licenciaCorreo,ParametrosSistemaCodefac.DIRECTORIO_RECURSOS_DEFECTO))
+                {
+                    throw new ServicioCodefacException("Error al crear la licencia en su equipo");
+                }*/
                 
                 //Retorno la empresa grabada por que necesita para un proceso posterior
                 return empresa;
@@ -309,23 +334,32 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
     }
     
-    private void agregarDatosUsuarioDefecto(Usuario usuario,Empresa empresa,PuntoEmision puntoEmision)
+    private void agregarDatosUsuarioDefecto(Usuario usuario,Empresa empresa,PuntoEmision puntoEmision) throws RemoteException, ServicioCodefacException
     {
         usuario.setEmpresa(empresa);
         usuario.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        usuario.setFiltrarFacturaEnum(EnumSiNo.NO);
+        
+        //Agreagar el punto de emision consultando el que fue creado
+        PerfilService perfilService=new PerfilService();
+        Perfil perfilDefecto=perfilService.crearPerfilPorDefectoSinTransaccion(empresa);
+        
+        PerfilUsuario perfilUsuario=new PerfilUsuario();
+        perfilUsuario.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        perfilUsuario.setPerfil(perfilDefecto);
+        perfilUsuario.setUsuario(usuario);
+        usuario.addPerfilUsuario(perfilUsuario);
         
         //Creando el registro para el enlace del punto de emision
+        
         PuntoEmisionUsuario puntoEmisionUsuario=new PuntoEmisionUsuario();
         puntoEmisionUsuario.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         puntoEmisionUsuario.setPuntoEmision(puntoEmision);
         puntoEmisionUsuario.setUsuario(usuario);
         
-        List<PuntoEmisionUsuario> puntosEmisionList=new ArrayList<PuntoEmisionUsuario>()
-        {
-            {
-                add(puntoEmisionUsuario);
-            }
-        };
+        
+        List<PuntoEmisionUsuario> puntosEmisionList=new ArrayList<PuntoEmisionUsuario>();
+        puntosEmisionList.add(puntoEmisionUsuario);
         
         usuario.setPuntosEmisionUsuario(puntosEmisionList);
         
@@ -345,5 +379,48 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         puntoEmision.setTipoFacturacionEnum(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA);
         return puntoEmision;
     }
+    
+    /*public Boolean crearLicencia(Empresa empresa,String usuarioTexto,String directorioRecursos)  throws RemoteException, ServicioCodefacException
+    {
+        //Verificar si existe la licencia para solo descargar
+        String licencia = null;
+        try {
+            licencia = WebServiceCodefac.getLicencia(usuarioTexto);
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //Cargo los datos de la licencia de internet si existe
+        Licencia licenciaInternet = new Licencia();
+        try {
+            licenciaInternet.cargarLicenciaOnline(usuarioTexto);
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //Si la licencia existe
+        if (!licencia.equals("fail")) {
+            //Si existe en el servidor la licencia solo vuelve a descargar
+            Licencia licenciaDescargada = new Licencia();
+            licenciaDescargada.setUsuario(usuarioTexto);
+            licenciaDescargada.setLicencia(licencia);
+            licenciaDescargada.setTipoLicenciaEnum(licenciaInternet.getTipoLicenciaEnum());
+            licenciaDescargada.setCantidadClientes(licenciaInternet.getCantidadClientes());
+            licenciaDescargada.cargarModulosOnline();
+
+            try {
+                ServiceFactory.getFactory().getUtilidadesServiceIf().crearLicenciaDescargada(empresa, licenciaInternet,directorioRecursos);
+                //validacionLicenciaCodefac.crearLicenciaDescargada(licenciaDescargada);
+            } catch (RemoteException ex) {
+                Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                        
+            return true;// Si la licencia se crea correctamente entonces retorno true
+        }
+        return false;
+        
+    }*/
         
 }

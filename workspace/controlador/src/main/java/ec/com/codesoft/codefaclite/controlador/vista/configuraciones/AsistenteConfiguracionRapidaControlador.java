@@ -64,7 +64,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     private File fileEmpresaLogo;
     private File fileFirmaElectronica;
 
-    private List<ParametroCodefac> listParametroCodefac;
+    //private List<ParametroCodefac> listParametroCodefac;
     
     private Empresa empresa;
     private Sucursal sucursal;
@@ -99,8 +99,9 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         pestañaActivaTab = 0;
         botonTerminarHabilitar = false;
         
-        listParametroCodefac=new ArrayList<ParametroCodefac>();
+        //listParametroCodefac=new ArrayList<ParametroCodefac>();
 
+        usuario=new Usuario();
         empresa=new Empresa();
         empresa.setContribuyenteRegimenMicroempresasBool(true);
         empresa.setObligadoLlevarContabilidadBool(false);        
@@ -142,6 +143,20 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         firmaFechaEmisionParametro.valor=fechaStr;
 
         //sucursal.get
+        datosPrueba();
+    }
+    
+    private void datosPrueba()
+    {
+        empresa.setIdentificacion("172421895101");
+        empresa.setRazonSocial("SANCHEZ CARLOS");
+        sucursal.setDirecccion("QUITO");
+        sucursal.setDirecccion("QUITO");
+        usuario.setNick("carlos");
+        usuario.setClave("1234");
+        usuario.setRepetirClave("1234");
+        licenciaCorreo="codesoft_desarrollo@gmail.com";
+        licenciaClave="123456";
     }
 
     @Override
@@ -247,7 +262,14 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
             try {
                 seterDatos();
                 
-                empresa=ServiceFactory.getFactory().getEmpresaServiceIf().grabarConfiguracionInicial(empresa, sucursal, puntoEmision, usuario,null,null, listParametroCodefac);
+                empresa=ServiceFactory.getFactory().getEmpresaServiceIf().grabarConfiguracionInicial(
+                        empresa, 
+                        sucursal, 
+                        puntoEmision, 
+                        usuario,
+                        licenciaCorreo,
+                        licenciaClave, 
+                        generarListaParametros());
                 //Subo los archivos despues de grabar por que primero necesitaba el path donde van a estar los recursos
                 subirArchivosServidor();
                 
@@ -268,6 +290,20 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
 
     }
     
+    private List<ParametroCodefac> generarListaParametros()
+    {
+        List<ParametroCodefac> parametros=new ArrayList();
+        parametros.add(firmaArchivoParametro);
+        parametros.add(firmaClaveParametro);
+        parametros.add(firmaDuracionParametro);
+        parametros.add(firmaFechaEmisionParametro);
+        
+        parametros.add(correoUsuarioParametro);
+        parametros.add(correoClaveParametro);
+        parametros.add(correoHostSmtpParametro);
+        parametros.add(correoPuertoParametro);
+        return parametros;
+    }
     
     private void subirArchivosServidor()
     {

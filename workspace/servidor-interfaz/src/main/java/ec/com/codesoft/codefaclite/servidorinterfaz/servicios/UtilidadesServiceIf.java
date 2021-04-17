@@ -49,6 +49,7 @@ public interface UtilidadesServiceIf extends Remote
     
     public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException;
     
+    public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia,String pathBase) throws RemoteException,ServicioCodefacException;
     
     
 }

@@ -805,7 +805,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.weightx = 0.6;
         pnlEmpresaSucursal2.add(lblEspacio123, gridBagConstraints);
 
-        txtUsuarioRepetirClave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtUsuarioRepetirClave.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;

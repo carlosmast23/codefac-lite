@@ -21,4 +21,6 @@ public interface UsuarioServicioIf extends ServiceAbstractIf<Usuario>
     public LoginRespuesta login(String nick,String clave,Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException;
     public void grabarUsuario(Usuario usuario,String nombrePerfil) throws ServicioCodefacException,java.rmi.RemoteException;
     public Usuario cambiarClave(Usuario usuario,String claveAnterior,String claveNueva) throws java.rmi.RemoteException, ServicioCodefacException;
+    
+    public void grabarSinTransaccion(Usuario entity,Boolean validarConLicencia) throws ServicioCodefacException,java.rmi.RemoteException;
 }

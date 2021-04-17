@@ -401,7 +401,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(entity);
+                grabarSinTransaccion(entity,true);
             }
         });
                 
@@ -409,15 +409,18 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     }
     
-    public void grabarSinTransaccion(Usuario entity) throws ServicioCodefacException,java.rmi.RemoteException
+    public void grabarSinTransaccion(Usuario entity,Boolean validarConLicencia) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        if (UtilidadesServidor.mapEmpresasLicencias.get(entity.getEmpresa()).tipoLicencia.equals(TipoLicenciaEnum.GRATIS)) {
-            Map<String, Object> mapParametros = new HashMap<String, Object>();
-            mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-            mapParametros.put("empresa", entity.getEmpresa());
-            List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
-            if (usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) {
-                throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
+        if(validarConLicencia)
+        {
+            if (UtilidadesServidor.mapEmpresasLicencias.get(entity.getEmpresa()).tipoLicencia.equals(TipoLicenciaEnum.GRATIS)) {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("empresa", entity.getEmpresa());
+                List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
+                if (usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) {
+                    throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
+                }
             }
         }
 
