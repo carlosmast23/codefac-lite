@@ -271,9 +271,9 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
                         licenciaClave, 
                         generarListaParametros());
                 //Subo los archivos despues de grabar por que primero necesitaba el path donde van a estar los recursos
-                subirArchivosServidor();
-                
-                mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                subirArchivosServidor();                
+                mostrarMensaje(new CodefacMsj("Datos creados correctamente. \n- Utilice su nuevo usuario para ingresar al sistema", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                getInterfaz().cerarSession();
 
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -603,6 +603,8 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         public File buscarFileLogoEmpresa();
         
         public File buscarFileFirmaElectronica();
+        
+        public void cerarSession();
     }
 
     public interface SwingIf extends CommonIf {

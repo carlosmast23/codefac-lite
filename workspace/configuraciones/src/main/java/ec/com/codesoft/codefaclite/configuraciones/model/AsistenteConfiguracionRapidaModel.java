@@ -161,7 +161,13 @@ public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRa
         }    
         return null;
     }
-
+    
+    @Override
+    public void cerarSession()
+    {
+        panelPadre.cerrarSession();
+    }
+    
     
     
 }

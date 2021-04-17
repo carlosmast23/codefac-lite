@@ -98,6 +98,8 @@ public interface InterfazComunicacionPanel
      * Interfaz que me permite cambiar el titulo del aplicativo especialmente util para saber si estoy en pruebas o producción
      */
     public void actualizarTituloCodefac();
+    
+    public void cerrarSession();
 
 
 }

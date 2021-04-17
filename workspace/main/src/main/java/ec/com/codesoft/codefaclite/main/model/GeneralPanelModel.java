@@ -391,6 +391,26 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjDesktopPane1().setComponentPopupMenu(popup);
     }
     
+    @Override
+    public void cerrarSession()
+    {
+        cerrarTodasPantallas();
+        setVisible(false);
+        Sucursal sucursalDefecto = ArchivoConfiguracionesCodefac.getInstance().getSucursalPorDefecto();
+        LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario(this, sucursalDefecto);
+        //Main.validacionesEmpresa(datosLogin.empresa, this); //Haciendo verificacion de validacion de la licencia y datos de la empresa
+        sessionCodefac.setUsuario(datosLogin.usuario);
+        sessionCodefac.setSucursal(datosLogin.sucursal);
+        sessionCodefac.setMatriz(datosLogin.matriz);
+        sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(datosLogin.usuario));
+        sessionCodefac.setEmpresa(datosLogin.empresa);
+        setVentanasMenuList(null);
+        actualizarNotificacionesCodefac();
+        MonitorComprobanteModel.getInstance().eliminarTodosDatos();
+        setearEtiquetasPiePaginaPantallaPrincipal();
+        setVisible(true);
+    }
+    
     private void eventoCerrarSistema()
     {
         String[] opciones = {"Salir", "Cambiar usuario", "Cancelar"};
@@ -409,21 +429,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 break;
 
             case 1: //opcion cambiar de usuario
-                cerrarTodasPantallas();
-                setVisible(false);
-                Sucursal sucursalDefecto=ArchivoConfiguracionesCodefac.getInstance().getSucursalPorDefecto();
-                LoginModel.DatosLogin datosLogin = Main.cargarLoginUsuario(this,sucursalDefecto);
-                //Main.validacionesEmpresa(datosLogin.empresa, this); //Haciendo verificacion de validacion de la licencia y datos de la empresa
-                sessionCodefac.setUsuario(datosLogin.usuario);
-                sessionCodefac.setSucursal(datosLogin.sucursal);
-                sessionCodefac.setMatriz(datosLogin.matriz);
-                sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(datosLogin.usuario));
-                sessionCodefac.setEmpresa(datosLogin.empresa);
-                setVentanasMenuList(null);
-                actualizarNotificacionesCodefac();
-                MonitorComprobanteModel.getInstance().eliminarTodosDatos();
-                setearEtiquetasPiePaginaPantallaPrincipal();
-                setVisible(true);
+                cerrarSession();
                 break;
 
             case 2:
