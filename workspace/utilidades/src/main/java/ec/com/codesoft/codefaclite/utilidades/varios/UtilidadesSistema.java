@@ -8,6 +8,10 @@ package ec.com.codesoft.codefaclite.utilidades.varios;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -58,8 +62,17 @@ public abstract class UtilidadesSistema {
 
     }
     
-    public static void abrirDocumento(File path) throws IOException
+    public static void abrirUrlNavegador(String url) 
     {
-        Desktop.getDesktop().open(path);
+        try {
+            Desktop dk = Desktop.getDesktop();
+            dk.browse(new URI(url));
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(UtilidadesSistema.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesSistema.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    
+    
 }

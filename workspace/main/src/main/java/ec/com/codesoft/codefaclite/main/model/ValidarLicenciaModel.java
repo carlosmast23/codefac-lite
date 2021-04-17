@@ -21,11 +21,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.varios.InterfazRed;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Desktop;
@@ -292,14 +294,9 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getLblRegistro().addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                try {
-                    Desktop dk = Desktop.getDesktop();
-                    dk.browse(new URI("http://www.cf.codesoft-ec.com/index.php/general/registro"));
-                } catch (IOException ex) {
-                    Logger.getLogger(HiloPublicidadCodefac.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(HiloPublicidadCodefac.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                UtilidadesSistema.abrirUrlNavegador(ParametrosSistemaCodefac.LINK_REGISTRO_CODEFAC);
+                //Desktop dk = Desktop.getDesktop("");
+                //dk.browse(new URI("http://www.cf.codesoft-ec.com/index.php/general/registro"));
             }
 
             @Override

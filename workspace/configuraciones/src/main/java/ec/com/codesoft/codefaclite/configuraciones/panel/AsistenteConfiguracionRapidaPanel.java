@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
@@ -58,7 +59,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel16 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
+        lblRequisitosPrevios = new javax.swing.JLabel();
         pnlEmpresaSucursal = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -122,6 +123,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         txtCorreoClave = new javax.swing.JPasswordField();
         btnVerificarDatosFirma = new javax.swing.JButton();
         btnVerificarCorreo = new javax.swing.JButton();
+        lblAyudaCorreo = new javax.swing.JLabel();
+        lblAyudaFirmaElectrónica = new javax.swing.JLabel();
         pnlEmpresaSucursal2 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -129,7 +132,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         lblEspacio2 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
         txtUsuarioNick = new javax.swing.JTextField();
-        jLabel48 = new javax.swing.JLabel();
+        lblLinkRegistro = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         lblEspacio123 = new javax.swing.JLabel();
@@ -195,10 +198,10 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.gridwidth = 11;
         pnlEmpresaSucursal3.add(jLabel19, gridBagConstraints);
 
-        jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel20.setText("<html> \t<body> \t\t<center> \t\t\t<h3>Requisitos Previos</h3> \t\t</center> \t\t<p>- Tener RUC y Permisos para facturación electrónica en el Sri</p>\t\t \t\t<p>- Firma Electrónica en formato p12</p> \t\t<p>- Correo Electrónico (preferencia GMAIL)</p> \t\t<p>- Cuenta creada en la página de CODEFAC</p> \t</body> </html>");
-        jLabel20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblRequisitosPrevios.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblRequisitosPrevios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblRequisitosPrevios.setText("<html> \t<body> \t\t<center> \t\t\t<a href=\"www.google.com\"> \t\t\t\t<h3>Requisitos Previos</h3> \t\t\t</a> \t\t</center> \t\t<p>- Tener RUC y Permisos para facturación electrónica en el Sri</p> \t\t<p>- Firma Electrónica en formato p12</p> \t\t<p>- Correo Electrónico (preferencia GMAIL)</p> \t\t<p>- Cuenta creada en la página de CODEFAC</p> \t</body> </html>");
+        lblRequisitosPrevios.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -206,7 +209,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal3.add(jLabel20, gridBagConstraints);
+        pnlEmpresaSucursal3.add(lblRequisitosPrevios, gridBagConstraints);
 
         tabVentana.addTab("Inicio", pnlEmpresaSucursal3);
 
@@ -676,7 +679,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal1.add(txtPuntoEmisionSecuencialRetenciones, gridBagConstraints);
 
         jLabel47.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
-        jLabel47.setText("Los datos ingresados son para realizar prueba , se recomiendo cambiar por un corre de su empresa de preferencia gmail");
+        jLabel47.setText("Los datos ingresados son de prueba , se recomiendo cambiar por un correo de su empresa de preferencia GMAIL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 13;
@@ -713,6 +716,24 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(btnVerificarCorreo, gridBagConstraints);
+
+        lblAyudaCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/help-ico.png"))); // NOI18N
+        lblAyudaCorreo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(15, 0, 0, 0);
+        pnlEmpresaSucursal1.add(lblAyudaCorreo, gridBagConstraints);
+
+        lblAyudaFirmaElectrónica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/help-ico.png"))); // NOI18N
+        lblAyudaFirmaElectrónica.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(15, 0, 0, 0);
+        pnlEmpresaSucursal1.add(lblAyudaFirmaElectrónica, gridBagConstraints);
 
         tabVentana.addTab("Datos Adicionales", pnlEmpresaSucursal1);
 
@@ -771,15 +792,15 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal2.add(txtUsuarioNick, gridBagConstraints);
 
-        jLabel48.setFont(new java.awt.Font("Arial", 3, 13)); // NOI18N
-        jLabel48.setForeground(new java.awt.Color(0, 102, 153));
-        jLabel48.setText("Página Codefac Registro");
+        lblLinkRegistro.setFont(new java.awt.Font("Arial", 3, 13)); // NOI18N
+        lblLinkRegistro.setForeground(new java.awt.Color(0, 102, 153));
+        lblLinkRegistro.setText("Página Codefac Registro");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlEmpresaSucursal2.add(jLabel48, gridBagConstraints);
+        pnlEmpresaSucursal2.add(lblLinkRegistro, gridBagConstraints);
 
         jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -980,7 +1001,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -1007,7 +1027,6 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
-    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
@@ -1017,12 +1036,16 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lblAyudaCorreo;
+    private javax.swing.JLabel lblAyudaFirmaElectrónica;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio123;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio34959;
+    private javax.swing.JLabel lblLinkRegistro;
+    private javax.swing.JLabel lblRequisitosPrevios;
     private javax.swing.JPanel pnlEmpresaSucursal;
     private javax.swing.JPanel pnlEmpresaSucursal1;
     private javax.swing.JPanel pnlEmpresaSucursal2;
@@ -1415,6 +1438,40 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         this.btnVerificarLicencia = btnVerificarLicencia;
     }
 
+    public JLabel getLblAyudaCorreo() {
+        return lblAyudaCorreo;
+    }
+
+    public void setLblAyudaCorreo(JLabel lblAyudaCorreo) {
+        this.lblAyudaCorreo = lblAyudaCorreo;
+    }
+
+    public JLabel getLblLinkRegistro() {
+        return lblLinkRegistro;
+    }
+
+    public void setLblLinkRegistro(JLabel lblLinkRegistro) {
+        this.lblLinkRegistro = lblLinkRegistro;
+    }
+
+    public JLabel getLblAyudaFirmaElectrónica() {
+        return lblAyudaFirmaElectrónica;
+    }
+
+    public void setLblAyudaFirmaElectrónica(JLabel lblAyudaFirmaElectrónica) {
+        this.lblAyudaFirmaElectrónica = lblAyudaFirmaElectrónica;
+    }
+
+    public JLabel getLblRequisitosPrevios() {
+        return lblRequisitosPrevios;
+    }
+
+    public void setLblRequisitosPrevios(JLabel lblRequisitosPrevios) {
+        this.lblRequisitosPrevios = lblRequisitosPrevios;
+    }
+
+    
+    
     
     
 }

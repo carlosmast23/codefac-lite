@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.awt.event.ActionEvent;
@@ -43,8 +44,17 @@ public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRa
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         controlador=new AsistenteConfiguracionRapidaControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);                
         //listenerBotones();
+        agregarListenerLblAyudas();
     }
     
+    public void agregarListenerLblAyudas()
+    {
+        UtilidadesSwing.agregarLinkLabel(getLblAyudaCorreo(), ParametrosSistemaCodefac.LINK_PERMISOS_CORREO_CODEFAC);
+        UtilidadesSwing.agregarLinkLabel(getLblLinkRegistro(), ParametrosSistemaCodefac.LINK_REGISTRO_CODEFAC);
+        UtilidadesSwing.agregarLinkLabel(getLblAyudaFirmaElectrónica(),ParametrosSistemaCodefac.LINK_FIMA_ELECTRONICA_CODEFAC);
+        UtilidadesSwing.agregarLinkLabel(getLblRequisitosPrevios(),ParametrosSistemaCodefac.LINK_REQUISITOS_PREVIOS);
+        
+    }
        
 
     @Override
@@ -167,6 +177,7 @@ public class AsistenteConfiguracionRapidaModel  extends AsistenteConfiguracionRa
     {
         panelPadre.cerrarSession();
     }
+    
     
     
     

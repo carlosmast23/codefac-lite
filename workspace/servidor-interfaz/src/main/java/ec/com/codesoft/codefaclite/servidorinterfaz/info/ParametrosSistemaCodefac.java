@@ -125,6 +125,12 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final String LINK_PUBLICIDAD_CODEDAC="http://www.cf.codesoft-ec.com/index.php/general/publicidad2";
     
+    public static final String LINK_REGISTRO_CODEFAC="http://www.cf.codesoft-ec.com/index.php/general/registro";
+    
+    public static final String LINK_PERMISOS_CORREO_CODEFAC="https://docs.google.com/document/d/1AJGbwPOj4rw0uiSMUv0FJQRMlNoYNRbl2TcoE_24ivk/edit#heading=h.qyz6sq2ltuij";
+    public static final String LINK_FIMA_ELECTRONICA_CODEFAC="https://docs.google.com/document/d/1AJGbwPOj4rw0uiSMUv0FJQRMlNoYNRbl2TcoE_24ivk/edit#heading=h.vckvdakikwdv";
+    public static final String LINK_REQUISITOS_PREVIOS="https://docs.google.com/document/d/1AJGbwPOj4rw0uiSMUv0FJQRMlNoYNRbl2TcoE_24ivk/edit#heading=h.birn2dqy78e";
+    
     public static String IP_SERVIDOR_PRUEBA="codesoft-ec.com";
     
     /**
