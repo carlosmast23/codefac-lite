@@ -407,7 +407,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         setVentanasMenuList(null);
         actualizarNotificacionesCodefac();
         MonitorComprobanteModel.getInstance().eliminarTodosDatos();
-        setearEtiquetasPiePaginaPantallaPrincipal();
+        setearEtiquetasPiePaginaPantallaPrincipal();        
+        abrirAsistenteConfiguracion();
         setVisible(true);
     }
     
