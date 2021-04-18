@@ -149,7 +149,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         modoFacturacionList.add(ComprobanteElectronicoService.MODO_PRUEBAS);
         modoFacturacionList.add(ComprobanteElectronicoService.MODO_PRODUCCION);
         
-        String formatoFecha="dd/MM/yy";
+        String formatoFecha="dd/MM/yyyy";
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat(formatoFecha);
         String fechaStr=simpleDateFormat.format(UtilidadesFecha.getFechaHoy());
         firmaFechaEmisionParametro.valor=fechaStr;

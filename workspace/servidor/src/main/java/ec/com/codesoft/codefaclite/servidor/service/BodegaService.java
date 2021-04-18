@@ -58,27 +58,32 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                //Esta sucursal solo sirve de guia para grabar null
-                if(entity.getSucursal().equals(Sucursal.getSucursalPermitirTodos()))
-                {
-                    entity.setSucursal(null);
-                    entity.setEmpresa(null);
-                }
-                
-                //grabar los detalles de las bodegas con permiso 
-                if(entity.getBodegasPermisoTransfereciaList()!=null)
-                {
-                    for (BodegaPermisoTransferencia bodegaPermiso : entity.getBodegasPermisoTransfereciaList()) 
-                    {
-                        entityManager.persist(bodegaPermiso);
-                    }
-                }
-                
-                entity.setEstadoEnum(GeneralEnumEstado.ACTIVO); //Por Defecto grabo con estado activo
-                entityManager.persist(entity);
+                grabarSinTransaccion(entity);
             }
         });
         return entity;
+    }
+    
+    public void grabarSinTransaccion(Bodega entity) throws ServicioCodefacException, RemoteException
+    {
+        //Esta sucursal solo sirve de guia para grabar null
+        if (entity.getSucursal().equals(Sucursal.getSucursalPermitirTodos())) 
+        {
+            entity.setSucursal(null);
+            entity.setEmpresa(null);
+        }
+
+        //grabar los detalles de las bodegas con permiso 
+        if (entity.getBodegasPermisoTransfereciaList() != null) 
+        {
+            for (BodegaPermisoTransferencia bodegaPermiso : entity.getBodegasPermisoTransfereciaList()) 
+            {
+                entityManager.persist(bodegaPermiso);
+            }
+        }
+
+        entity.setEstadoEnum(GeneralEnumEstado.ACTIVO); //Por Defecto grabo con estado activo
+        entityManager.persist(entity);
     }
     
 

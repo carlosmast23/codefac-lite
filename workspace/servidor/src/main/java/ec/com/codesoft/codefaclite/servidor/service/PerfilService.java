@@ -108,28 +108,46 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
             
             PermisoVentanaService permisoService=new PermisoVentanaService();
             List<PermisoVentana> ventanas=new ArrayList<PermisoVentana>();
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CATEGORIA_PRODUCTO.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CATALOGO_PRODUCTO.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.COMPROBANTE_CONFIGURACION.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURA_DISENIO.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.NOTA_CREDITO.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURA_REPORTE.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.UTILIDAD_COMPROBANTE.getCodigo()));
+            
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CLIENTE.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PROVEEDOR.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PRODUCTO.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CLIENTE_REPORTE.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PRODUCTO_REPORTE.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.EMPRESA.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.RESPALDAR_INFORMACION.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PERFILES.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURACION.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.USUARIOS.getCodigo()));
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PROVEEDOR_REPORTE.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.ASISTENTE_CONFIGURACION.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.SUCURSAL.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PUNTO_EMISION.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PROVEEDOR.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PRODUCTO.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.IMPRIMIR_CODIGO_BARRAS.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURACION.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURACION_PEDIDO_LOTE.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.EMPRESA.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.COMPROBANTE_CONFIGURACION.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.UTILIDAD_COMPROBANTE.getCodigo()));            
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.NOTA_CREDITO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURA_REPORTE.getCodigo()));   
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CLIENTE_REPORTE.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PROVEEDOR_REPORTE.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PRODUCTO_REPORTE.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.FACTURA_DISENIO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.COMPRA.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.COMPRA_REPORTE.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.COMPRA_REPORTE_PRODUCTO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.BODEGA.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CATEGORIA_PRODUCTO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.KARDEX.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PERFILES.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.SQL_CONSOLA.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.USUARIOS.getCodigo()));            
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.RESPALDAR_INFORMACION.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.CONFIGURACION_DEFECTO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.DEPARTAMENTO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.EMPLEADO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PROFORMA_VENTA.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PROFORMA_REPORTE.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.GESTION_INVENTARIO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.STOCK_MINIMO.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.STOCK_REPORTE.getCodigo()));
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.REFERIDO_REPORTE.getCodigo())); 
+            
+            
             //ventanas.add(e)
 
             perfilDefecto.setVentanasPermisos(ventanas);

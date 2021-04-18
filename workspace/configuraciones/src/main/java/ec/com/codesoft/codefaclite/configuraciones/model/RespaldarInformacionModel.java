@@ -61,7 +61,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     private String nombreCarpetaRelpaldo;
     private ParametroCodefacServiceIf parametroCodefacServiceIf;
     private Map<String, ParametroCodefac> parametro;
-    private Boolean b = false;
+    private Boolean existeDirectorio = false;
            
     @Override
     public void iniciar() throws ExcepcionCodefacLite 
@@ -93,7 +93,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                 {
                     ParametroCodefac p = this.parametro.get(ParametroCodefac.DIRECTORIO_RESPALDO);
                     p.setValor(this.ubicacionRespaldo+"");
-                    if(b){
+                    if(existeDirectorio){
                         respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea cambiar el lugar de respaldos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         if (!respuesta) {
                             throw new ExcepcionCodefacLite("Cancelacion usuario");
@@ -288,13 +288,14 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     public void obtenerUbicacionCarpetaRespaldo()
     {
         try {
-            this.parametro = this.parametroCodefacServiceIf.getParametrosMap(session.getEmpresa());
-            ParametroCodefac p = this.parametro.get(ParametroCodefac.DIRECTORIO_RESPALDO);
-            if(p.getValor() != null)
+            ParametroCodefac parametroDirectorioRespaldo= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RESPALDO, session.getEmpresa());
+            //this.parametro = this.parametroCodefacServiceIf.getParametrosMap(session.getEmpresa());
+            //ParametroCodefac p = this.parametro.get(ParametroCodefac.DIRECTORIO_RESPALDO);
+            if(parametroDirectorioRespaldo!=null && parametroDirectorioRespaldo.getValor() != null)
             {
-                this.ubicacionRespaldo = p.getValor();
-                getTxtUbicacionRespaldo().setText(p.getValor());
-                this.b = true;
+                this.ubicacionRespaldo = parametroDirectorioRespaldo.getValor();
+                getTxtUbicacionRespaldo().setText(parametroDirectorioRespaldo.getValor());
+                this.existeDirectorio = true;
             }
             else
             {

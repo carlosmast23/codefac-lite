@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
@@ -332,6 +333,9 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
                 //Grabar un producto por defecto para luego hacer pruebas
                 crearProductoDefectoSinTransaccion(empresa,Integer.parseInt(ParametrosSistemaCodefac.IVA_DEFECTO));
                 
+                //Grabar una bodega por defecto
+                crearBodegaPorDefecto(sucursal);
+                
                 //Generar la licencia
                 if(!crearLicencia(empresa, licenciaCorreo,ParametrosSistemaCodefac.DIRECTORIO_RECURSOS_DEFECTO))
                 {
@@ -343,6 +347,13 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
             }
         });
         
+    }
+    
+    private void crearBodegaPorDefecto(Sucursal sucursal) throws RemoteException, ServicioCodefacException
+    {
+        BodegaService bodegaService=new BodegaService();
+        Bodega bodegaDefecto=bodegaService.crearBodegaDefectoSinTransaccion(sucursal);
+        bodegaService.grabarSinTransaccion(bodegaDefecto);
     }
     
     private void crearProductoDefectoSinTransaccion(Empresa empresa,Integer ivaDefecto) throws RemoteException, ServicioCodefacException

@@ -10,6 +10,9 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -89,16 +92,16 @@ public class UtilidadesFecha {
  */
     public static int obtenerDistanciaDias(java.util.Date fechaMenor, java.util.Date fechaMayor) {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); //todo: Ver si estos dates format se hace un formato global
-        try {
-            //Formatear sin tiempo la fecha para evitar problemas en los calculos por las horas
-            fechaMenor=formato.parse(formato.format(fechaMenor)); //Revisar si no hay problema porque estoy quitando 
-            fechaMayor=formato.parse(formato.format(fechaMayor)); //Revisar si no hay problema porque estoy quitando 
-        } catch (ParseException ex) {
-            Logger.getLogger(UtilidadesFecha.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //Formatear sin tiempo la fecha para evitar problemas en los calculos por las horas
+        //fechaMenor=formato.parse(formato.format(fechaMenor)); //Revisar si no hay problema porque estoy quitando
+        //fechaMayor=formato.parse(formato.format(fechaMayor)); //Revisar si no hay problema porque estoy quitando
+        LocalDate fechaMenorLocalDate = LocalDate.parse(formato.format(fechaMenor), DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate fechaMayorLocalDate = LocalDate.parse(formato.format(fechaMayor), DateTimeFormatter.ISO_LOCAL_DATE);
+        
+        Long dias=ChronoUnit.DAYS.between(fechaMenorLocalDate, fechaMayorLocalDate);
                 
-        int dias = (int) ((fechaMayor.getTime() - fechaMenor.getTime()) / 86400000);
-        return dias;
+        //int dias = (int) ((fechaMayor.getTime() - fechaMenor.getTime()) / 86400000);
+        return dias.intValue();
     }
     
     public static int obtenerDistanciaConLaFechaActual(java.util.Date fecha)
