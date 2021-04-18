@@ -15,11 +15,13 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.PasswordFieldBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
@@ -125,6 +127,9 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         btnVerificarCorreo = new javax.swing.JButton();
         lblAyudaCorreo = new javax.swing.JLabel();
         lblAyudaFirmaElectrónica = new javax.swing.JLabel();
+        jLabel48 = new javax.swing.JLabel();
+        cmbModoFacturacion = new javax.swing.JComboBox<>();
+        jLabel51 = new javax.swing.JLabel();
         pnlEmpresaSucursal2 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -457,8 +462,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Secuencial Nota Crédito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel7, gridBagConstraints);
@@ -473,7 +478,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal1.add(jLabel17, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -482,7 +487,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         btnFirmaBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(btnFirmaBuscar, gridBagConstraints);
@@ -490,8 +495,8 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel18.setText("Secuencial Retenciones");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel18, gridBagConstraints);
@@ -499,7 +504,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         txtFirmaNombre.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 150;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -510,16 +515,16 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel22.setText("Correo Electrónico:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel22, gridBagConstraints);
 
         jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel23.setText("Fecha de Emisión de la firma");
+        jLabel23.setText("Fecha de Emisión de la firma:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel23, gridBagConstraints);
@@ -534,7 +539,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal1.add(jLabel24, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -545,7 +550,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel25.setText("Firma Archivo (P12):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel25, gridBagConstraints);
@@ -561,13 +566,13 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel40.setText("Duración Firma (Años):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel40, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtFirmaFechaEmision, gridBagConstraints);
@@ -576,7 +581,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel26.setText("Facturación Electrónica Firma");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel26, gridBagConstraints);
@@ -588,22 +593,22 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtPuntoEmisionSecuencialFactura, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtPuntoEmisionSecuencialNC, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtCorreoPuerto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -613,7 +618,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel41.setText("Correo para enviar notificaciones");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel41, gridBagConstraints);
 
@@ -631,7 +636,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel43.setText("Contraseña Correo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel43, gridBagConstraints);
@@ -640,16 +645,17 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel44.setText("Host (Smtp):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel44, gridBagConstraints);
 
-        jLabel45.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel45.setText("Puerto (Smtp):");
+        jLabel45.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel45.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel45.setText("Modo Facturación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel45, gridBagConstraints);
@@ -658,44 +664,44 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         jLabel46.setText("Contraseña Firma:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel46, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtCorreoSmtp, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtPuntoEmisionSecuencialRetenciones, gridBagConstraints);
 
         jLabel47.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
-        jLabel47.setText("Los datos ingresados son de prueba , se recomiendo cambiar por un correo de su empresa de preferencia GMAIL");
+        jLabel47.setText("El modo de facturación por defecto es PRUEBAS para que puedan realizar ajustes en el sistema");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(jLabel47, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtFirmaContraseña, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(txtCorreoClave, gridBagConstraints);
@@ -704,7 +710,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         btnVerificarDatosFirma.setText("Verificar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(btnVerificarDatosFirma, gridBagConstraints);
 
@@ -712,7 +718,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         btnVerificarCorreo.setText("Verificar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlEmpresaSucursal1.add(btnVerificarCorreo, gridBagConstraints);
@@ -721,7 +727,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         lblAyudaCorreo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(15, 0, 0, 0);
         pnlEmpresaSucursal1.add(lblAyudaCorreo, gridBagConstraints);
@@ -730,10 +736,36 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         lblAyudaFirmaElectrónica.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(15, 0, 0, 0);
         pnlEmpresaSucursal1.add(lblAyudaFirmaElectrónica, gridBagConstraints);
+
+        jLabel48.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel48.setText("Puerto (Smtp):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal1.add(jLabel48, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal1.add(cmbModoFacturacion, gridBagConstraints);
+
+        jLabel51.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        jLabel51.setText("Los datos ingresados son de prueba , se recomiendo cambiar por un correo de su empresa de preferencia GMAIL");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlEmpresaSucursal1.add(jLabel51, gridBagConstraints);
 
         tabVentana.addTab("Datos Adicionales", pnlEmpresaSucursal1);
 
@@ -989,6 +1021,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JButton btnVerificarLicencia;
     private javax.swing.JCheckBox chkEmpresaObligadoContabilidad;
     private javax.swing.JCheckBox chkEmpresaRegimenMicroempresa;
+    private javax.swing.JComboBox<String> cmbModoFacturacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1027,9 +1060,11 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1433,10 +1468,22 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
     public JButton getBtnVerificarLicencia() {
         return btnVerificarLicencia;
     }
+    
 
     public void setBtnVerificarLicencia(JButton btnVerificarLicencia) {
         this.btnVerificarLicencia = btnVerificarLicencia;
     }
+
+    @ComboBoxBinding(source = "controlador.modoFacturacionList" ,valueSelect = "controlador.modoFacturacionParametro.valor")
+    public JComboBox<String> getCmbModoFacturacion() {
+        return cmbModoFacturacion;
+    }
+
+    public void setCmbModoFacturacion(JComboBox<String> cmbModoFacturacion) {
+        this.cmbModoFacturacion = cmbModoFacturacion;
+    }
+    
+    
 
     public JLabel getLblAyudaCorreo() {
         return lblAyudaCorreo;

@@ -165,7 +165,7 @@ public class Empresa implements Serializable {
     }
 
     public void setObligadoLlevarContabilidadBool(Boolean obligadoLlevarContabilidadBool) {
-        this.obligadoLlevarContabilidad = EnumSiNo.getEnumByBoolean(obligadoLlevarContabilidadBool).getNombre();
+        this.obligadoLlevarContabilidad = EnumSiNo.getEnumByBoolean(obligadoLlevarContabilidadBool).getNombre().toUpperCase();
     }
 
 

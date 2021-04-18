@@ -26,7 +26,7 @@ public abstract class UtilidadesSistema {
     public static int compareVersion(String version1,String version2)
     {
         String[] componentesVersion=version1.split("\\.");
-        String[] componentesVersion2=version2.split("\\.");
+        String[] componentesVersion2=version2.split("\\."); 
         
         int i=0;
         while(true)
@@ -72,6 +72,11 @@ public abstract class UtilidadesSistema {
         } catch (IOException ex) {
             Logger.getLogger(UtilidadesSistema.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static void abrirDocumento(File path) throws IOException 
+    {
+            Desktop.getDesktop().open(path);
     }
     
     

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
+import ec.com.codesoft.codefaclite.utilidades.varios.InterfazRed;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -196,7 +197,8 @@ public class ValidacionLicenciaCodefac{
         //FileOutputStream fr=null;
         //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;
         String modulosStr=licencia.getModulosStr();
-        String mac=UtilidadVarios.obtenerMacSinInternet(licencia.getNombreInterfazRed()).get(0).mac;
+        InterfazRed interfazRed=UtilidadVarios.obtenerMacSinInternet(licencia.getNombreInterfazRed()).get(0);
+        String mac=interfazRed.mac;
         String licenciaStr=licencia.getUsuario()+":"+mac+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;
         LOG.log(Level.INFO,"creando="+licenciaStr);
         licenciaStr=UtilidadesHash.generarHashBcrypt(licenciaStr);
@@ -204,7 +206,7 @@ public class ValidacionLicenciaCodefac{
         prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
         prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licenciaStr);
         prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());
-        prop.setProperty(Licencia.PROPIEDAD_INTERFAZ_RED,licencia.getNombreInterfazRed());
+        prop.setProperty(Licencia.PROPIEDAD_INTERFAZ_RED,interfazRed.nombre);
         //setearPropiedadesModulos(prop,licen); //Setea los modulos activos
         
         TipoLicenciaEnum enumTipoLicencia=licencia.getTipoLicenciaEnum();

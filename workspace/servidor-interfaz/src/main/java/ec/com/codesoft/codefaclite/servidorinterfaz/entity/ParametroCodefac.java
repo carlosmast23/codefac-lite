@@ -31,6 +31,11 @@ public class ParametroCodefac implements Serializable {
     public static final String DIRECTORIO_RECURSOS= "directorio_recursos";
     public static final String LOGO_EMPRESA= "logo_empresa";
     public static final String MODO_FACTURACION= "modo_facturacion";
+    /**
+     * Este paramtro me sirve para elegir cuando existe varios ivas vigentes con cual el sistema debe trabajar por defecto
+     * No confundir con el IVA_DEFECTO de parametro del sistema que solo es un valor referencial para saber el iva actual
+     * En este caso se puede SELECCIONAR IVA 12 O IVA CERO
+     */
     public static final String IVA_DEFECTO= "iva_defecto";
     
     public static final String EDITAR_DESCRIPCION_FACTURA= "edit_descripcion_factura";
@@ -58,6 +63,7 @@ public class ParametroCodefac implements Serializable {
     public static final String CELULAR_VIRTUAL_MALL="celular_virtual_mall";
     public static final String IMAGEN_FONDO="imagen_fondo";
     public static final String ULTIMA_FECHA_VALIDACION="ultima_fecha_validacion";
+    @Deprecated
     public static final String TIPO_FACTURACION="tipo_facturacion";
 
     public static final String DIRECTORIO_RESPALDO = "directorio_respaldo";

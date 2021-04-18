@@ -196,6 +196,10 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         }
     }
     
+    /**
+     * TODO: ver si esta parte se puede unificar con un serivico
+     * ademas la pantalla de configuracion inicial esta usando una logica similar para unir
+     */
     private void cargarDatosIva()
     {        
         try {

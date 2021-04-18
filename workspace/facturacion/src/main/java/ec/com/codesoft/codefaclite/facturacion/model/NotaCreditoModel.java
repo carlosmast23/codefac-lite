@@ -952,7 +952,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         if(!validado)
         {
             //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
-            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion+"\nPofavor complete estos datos en configuración para usar esta pantalla",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion+"\nPor favor complete estos datos en configuración para usar esta pantalla",DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
         
         

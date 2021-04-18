@@ -10,11 +10,13 @@ import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorker;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorkerIf;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesCodefacArchivos;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesFirmaElectronica;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -81,6 +83,9 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     private ParametroCodefac correoHostSmtpParametro;
     private ParametroCodefac correoPuertoParametro;
     
+    private ParametroCodefac modoFacturacionParametro;
+    private List<String> modoFacturacionList;
+    
     private String licenciaCorreo;
     private String licenciaClave;
     
@@ -137,6 +142,13 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
             Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        modoFacturacionParametro=new ParametroCodefac(ParametroCodefac.MODO_FACTURACION, ComprobanteElectronicoService.MODO_PRUEBAS);
+        
+        //Datos de la lista del modo de facturacion
+        modoFacturacionList=new ArrayList<String>();
+        modoFacturacionList.add(ComprobanteElectronicoService.MODO_PRUEBAS);
+        modoFacturacionList.add(ComprobanteElectronicoService.MODO_PRODUCCION);
+        
         String formatoFecha="dd/MM/yy";
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat(formatoFecha);
         String fechaStr=simpleDateFormat.format(UtilidadesFecha.getFechaHoy());
@@ -148,7 +160,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
     
     private void datosPrueba()
     {
-        empresa.setIdentificacion("172421895101");
+        empresa.setIdentificacion("1724218951001");
         empresa.setRazonSocial("SANCHEZ CARLOS");
         sucursal.setDirecccion("QUITO");
         sucursal.setDirecccion("QUITO");
@@ -250,7 +262,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         if(firmaClaveParametro!=null)
         {
             //Encriptar la clave antes de enviar a grabar
-            String claveEncriptada=UtilidadesEncriptar.encriptar(firmaArchivoParametro.valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            String claveEncriptada=UtilidadesEncriptar.encriptar(firmaClaveParametro.valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             firmaClaveParametro.valor=claveEncriptada;
         }
     }
@@ -302,33 +314,21 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         parametros.add(correoClaveParametro);
         parametros.add(correoHostSmtpParametro);
         parametros.add(correoPuertoParametro);
+        
+        parametros.add(modoFacturacionParametro);
+        
         return parametros;
     }
     
     private void subirArchivosServidor()
     {
-        if(fileEmpresaLogo!=null)
-        {
-            try {
-                SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
-                        new FileInputStream(fileEmpresaLogo));
+        UtilidadesCodefacArchivos.subirArchivoServidor(empresa, fileEmpresaLogo, DirectorioCodefac.IMAGENES);
+        
+        UtilidadesCodefacArchivos.subirArchivoServidor(empresa, fileFirmaElectronica, DirectorioCodefac.CONFIGURACION);
                 
-                ParametroCodefac parametroEmpresa=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,empresa);
-                String pathServidor=parametroEmpresa.getValor();
-                ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(
-                        pathServidor,
-                        DirectorioCodefac.IMAGENES, 
-                        istream,
-                        fileEmpresaLogo.getName()
-                );
-                                
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
-                Logger.getLogger(AsistenteConfiguracionRapidaControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
+    
+    
 
     public void listenerBtnBuscarFirma() 
     {
@@ -584,6 +584,22 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
 
     public void setLicenciaClave(String licenciaClave) {
         this.licenciaClave = licenciaClave;
+    }
+
+    public ParametroCodefac getModoFacturacionParametro() {
+        return modoFacturacionParametro;
+    }
+
+    public void setModoFacturacionParametro(ParametroCodefac modoFacturacionParametro) {
+        this.modoFacturacionParametro = modoFacturacionParametro;
+    }
+
+    public List<String> getModoFacturacionList() {
+        return modoFacturacionList;
+    }
+
+    public void setModoFacturacionList(List<String> modoFacturacionList) {
+        this.modoFacturacionList = modoFacturacionList;
     }
     
     

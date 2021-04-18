@@ -79,6 +79,14 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         return validacion.crearLicenciaMaquina(licencia);
     }
     
+    public Properties crearLicencia(Empresa empresa,Licencia licencia,String pathBase) throws RemoteException,ServicioCodefacException
+    {
+        //ParametroCodefacService servicio=new ParametroCodefacService();
+        //String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa).getValor();
+        ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
+        return validacion.crearLicenciaMaquina(licencia);
+    }
+    
     public Properties crearLicenciaDescargada(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException
     {
         ParametroCodefacService servicio=new ParametroCodefacService();

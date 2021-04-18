@@ -13,12 +13,15 @@ import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
@@ -58,7 +61,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return p;
     }
     
-    private void grabarSinTransaccion(Producto p) throws java.rmi.RemoteException,ServicioCodefacException{
+    public void grabarSinTransaccion(Producto p) throws java.rmi.RemoteException,ServicioCodefacException{
+        
+        p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         validarGrabarProducto(p,CrudEnum.CREAR);
         
         //Si el catalogo producto no esta creado primero crea la entidad
@@ -269,6 +274,56 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             return resultado.get(0);
         }
         return null;
+    }
+    
+    public Producto crearProductoPorDefectoSinTransaccion(Empresa empresa,Integer ivaDefecto) throws RemoteException, ServicioCodefacException
+    {
+        Producto producto=new Producto();
+        producto.setCodigoPersonalizado("001");
+        producto.setNombre("libre");
+        producto.setValorUnitario(new BigDecimal("1"));
+        producto.setManejarInventarioEnum(EnumSiNo.NO);
+        producto.setGenerarCodigoBarrasEnum(EnumSiNo.NO);
+        producto.setTipoProductoEnum(TipoProductoEnum.PRODUCTO);
+        producto.setEmpresa(empresa);
+        CatalogoProducto catalogoProducto=crearCatalogoProductoDefectoSinTransaccion(empresa,producto.getNombre(),ivaDefecto);
+        producto.setCatalogoProducto(catalogoProducto);
+        return producto;        
+    }
+    
+    private CatalogoProducto crearCatalogoProductoDefectoSinTransaccion(Empresa empresa,String nombre,Integer ivaDefecto) throws RemoteException, ServicioCodefacException
+    {
+        CatalogoProducto catalogoProducto=new CatalogoProducto();
+        
+        //TODO: Unir codigo
+       // CategoriaProducto categoriaProducto=categoriaSeleccionada;
+        //catalogoProducto.setCategoriaProducto(categoriaProducto);
+        
+        /*if(this.getIceSeleccionado()!=null && !this.getIceSeleccionado().getClass().equals(String.class))
+        {
+            ImpuestoDetalle ice= this.getIceSeleccionado();
+            catalogoProducto.setIce(ice);
+        }
+        
+        if( this.getIrbpnrSeleccionado()!=null && !this.getIrbpnrSeleccionado().getClass().equals(String.class))
+        {
+            ImpuestoDetalle ibpnr=this.getIrbpnrSeleccionado();
+            catalogoProducto.setIrbpnr(ibpnr);
+        }*/
+        //ParametroCodefacService parametroService=new ParametroCodefacService();
+        //TODO: Ver si para temnas recurentes creo metodos especificos para que devuelvan el valor convertido
+        //ParametroCodefac parametroIvaDefecto=parametroService.getParametroByNombre(ParametroCodefac.IVA_DEFECTO, empresa);
+        
+        ImpuestoDetalleService ivaImpuestoService=new ImpuestoDetalleService();
+        ImpuestoDetalle impuestoDetalle=ivaImpuestoService.buscarPorTarifa(ivaDefecto);
+       
+        catalogoProducto.setIva(impuestoDetalle);
+        
+        catalogoProducto.setNombre(nombre);
+        
+        TipoProductoEnum tipoProductoEnum=TipoProductoEnum.PRODUCTO;
+        catalogoProducto.setModuloCod(ModuloCodefacEnum.INVENTARIO.getCodigo());
+        return catalogoProducto;
     }
     
     public void grabarConInventario(Producto p,KardexDetalle kardexDetalle) throws ServicioCodefacException,java.rmi.RemoteException

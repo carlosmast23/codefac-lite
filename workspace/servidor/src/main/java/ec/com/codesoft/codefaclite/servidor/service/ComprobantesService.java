@@ -1708,7 +1708,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 String imagenLogo = empresa.getImagenLogoPath();      
                 
                 //Si no existe imagen grabada en la base de datos ,muestra la imagen por defecto
-                if(imagenLogo.equals(""))
+                if(imagenLogo==null || imagenLogo.trim().isEmpty())
                 {
                     inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
                 }

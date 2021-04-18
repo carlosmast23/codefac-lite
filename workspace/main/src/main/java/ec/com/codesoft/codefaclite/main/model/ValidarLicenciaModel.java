@@ -79,6 +79,9 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         addListenerChecks();
     }
     
+    /**
+     * TODO: Unificar esta parte con la de la pantalla de configuracion rapida
+     */
     private void crearLicencia()
     {
 

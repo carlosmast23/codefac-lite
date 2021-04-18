@@ -2628,8 +2628,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         String mensajeValidacion = "Esta pantalla requiere : \n";
         boolean validado = true;
         
+        //TODO: Terminar de hacer la validacion cuando no tiene configurado un punto de emision
         //Validacion cuando solo sea facturacion manual
-        ParametroCodefac tipoFacturacionParam=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION);
+        /*ParametroCodefac tipoFacturacionParam=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION);
         
         if (tipoFacturacionParam == null) 
         {
@@ -2643,6 +2644,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 mensajeValidacion += " - Información de Empresa \n";
                 validado = false;
             }
+        }*/
+        if (session.getEmpresa() == null) 
+        {
+            mensajeValidacion += " - Información de Empresa \n";
+            validado = false;
         }
         else         
         {        
@@ -2684,7 +2690,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         if (!validado) {
             //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
-            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion + "\nPofavor complete estos datos en configuración para usar esta pantalla", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion + "\nPor favor complete estos datos en configuración para usar esta pantalla", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
 
         return validado;
