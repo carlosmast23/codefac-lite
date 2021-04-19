@@ -265,6 +265,12 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
             String claveEncriptada=UtilidadesEncriptar.encriptar(firmaClaveParametro.valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             firmaClaveParametro.valor=claveEncriptada;
         }
+        
+        if(correoClaveParametro!=null)
+        {
+            String claveEncriptada=UtilidadesEncriptar.encriptar(correoClaveParametro.valor, ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            correoClaveParametro.valor=claveEncriptada;
+        }
     }
 
     public void listenerBtnTerminar() {

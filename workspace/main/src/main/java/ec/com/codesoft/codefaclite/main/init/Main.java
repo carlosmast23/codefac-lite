@@ -1053,7 +1053,7 @@ public class Main {
         String tema=archivo.obtenerValor(ArchivoConfiguracionesCodefac.CAMPO_TEMA);
         if(tema==null)
         {
-            EstiloCodefacEnum estiloDefecto=EstiloCodefacEnum.GLASS;
+            EstiloCodefacEnum estiloDefecto=ParametrosSistemaCodefac.TEMA_DEFECTO_CODEFAC;
             ArchivoConfiguracionesCodefac.getInstance().agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_TEMA,estiloDefecto.getNombre());
             setearEstiloSistema(estiloDefecto);
         }

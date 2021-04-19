@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.info;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import java.awt.Image;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -159,5 +160,7 @@ public abstract class ParametrosSistemaCodefac {
     public static final String CORREO_DEFECTO_CLAVE="26hhdTtckLvAO/VRy7q+dQ==";
     public static final String CORREO_DEFECTO_HOST="smtp.gmail.com";
     public static final String CORREO_DEFECTO_PUERTO="587";
+    
+    public static final EstiloCodefacEnum TEMA_DEFECTO_CODEFAC=EstiloCodefacEnum.MCWIN;
     
 }

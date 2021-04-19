@@ -178,6 +178,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
@@ -1308,6 +1309,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 else                
                 {
                     factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro);
+                    if(session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+                    {
+                        DialogoCodefac.mensaje(new CodefacMsj("Gracias por utilizar la versión GRATUITA de CODEFAC para facturar, si te gusto nuestro sistema puedes contratar planes de pago con SOPORTE y MÁS CARACTERISTICAS. \n Presione aceptar para continuar con el proceso.", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                    }
                 }
             }
             

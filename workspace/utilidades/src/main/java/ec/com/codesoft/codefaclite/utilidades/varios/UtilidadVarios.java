@@ -219,7 +219,7 @@ public abstract class UtilidadVarios {
     public static String getStringHtmltoUrl(InputStream input)
     {
         try {
-            InputStreamReader reader = new InputStreamReader(input);
+            InputStreamReader reader = new InputStreamReader(input,"UTF-8");
             BufferedReader br = new BufferedReader(reader);
             String line = null;
             String htmlText = "";

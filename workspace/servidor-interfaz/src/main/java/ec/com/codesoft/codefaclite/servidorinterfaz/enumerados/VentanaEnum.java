@@ -125,7 +125,7 @@ public enum VentanaEnum implements Serializable{
     FLUJO_EFECTIVO("ec.com.codesoft.codefaclite.contabilidad.model.FlujoEfectivoModel", "ESRM", "Flujo de Efectivo", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.REPORTES,null),
     REPORTE_INVENTARIO_STOCK("ec.com.codesoft.codefaclite.inventario.model.ReporteInventarioStockModel", "RIST", "Reporte Inventario", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,true,null,TipoLicenciaEnum.PRO,null,"reporte_inventario_stock"),
     TRANSFERENCIA_BODEGA("ec.com.codesoft.codefaclite.inventario.model.TransferenciaBodegasModel", "TRBG", "Transferencia de Bodegas", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,null),
-    STOCK_MINIMO("ec.com.codesoft.codefaclite.inventario.model.StockMinimoModel", "STMN", "Stock minimo", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.GRATIS,null),
+    STOCK_MINIMO("ec.com.codesoft.codefaclite.inventario.model.StockMinimoModel", "STMN", "Stock minimo", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.PRO,null),
     STOCK_REPORTE("ec.com.codesoft.codefaclite.inventario.model.StockReporteModel", "STRE", "Stock reporte", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.GRATIS,null),
     ROTACION_INVENTARIO("ec.com.codesoft.codefaclite.inventario.model.RotacionInventarioModel", "RTIN", "Rotación Inventario", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES,null),
     REFERIDO_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.ReferidosReporteModel", "RERM", "Referido Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.PRO,null),

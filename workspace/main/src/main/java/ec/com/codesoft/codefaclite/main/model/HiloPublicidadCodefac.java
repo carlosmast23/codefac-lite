@@ -31,7 +31,7 @@ public class HiloPublicidadCodefac extends Thread{
      * Valor en segundos que especifica el tiempo de espera
      * antes de mandar la siguiente publicidad
      */
-    private static final Long DELEY_PUBLICIDAD=4l*60;
+    private static Long DELEY_PUBLICIDAD=4l*60;
     private List<Publicidad> publicidades;
     
     /**
@@ -69,6 +69,11 @@ public class HiloPublicidadCodefac extends Thread{
                 else
                 {
                     contadorTiempo=0l;
+                    if(DELEY_PUBLICIDAD>90) //El limite maximo para disminuir el tiempo que se muestra la publicidad es de 1 minuto y medio
+                    {
+                        DELEY_PUBLICIDAD=DELEY_PUBLICIDAD-15; //Restar 20 segundos cada vez que sale la publicidad para que aparesca más rapido la publicidad la siguiente vez
+                    }
+                    
                     abrirPublicidad();
                 }
                 

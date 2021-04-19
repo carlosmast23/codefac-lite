@@ -5,6 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.controlador.excel;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Desktop;
@@ -13,11 +19,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
@@ -45,7 +54,7 @@ public class Excel<T>
     private List <Integer> posicionesColumnas;
     private String archivo;
     private String nombreArchivExcel;
-    
+            
     public Excel()
     {
         this.libro = new XSSFWorkbook(); //H para xls y X para xlsx
@@ -219,12 +228,32 @@ public class Excel<T>
     {
         try 
         {
-            File path = new File (archivo);
-            Desktop.getDesktop().open(path);
+            //TODO: Por el momento asumo que cualquier empresa que tenga una liencia gratuita desactivo para todos
+            //Organizar de mejor manera por que esta solucion ocupa muchos recursos por que tiene que ahcer consultas al servidorr
+            //SOLUCION: Poner que el parametro que necesito venga por el constructo , pero algunas clases por ejemplo de contralador no tiene ese dato y esta demoroso
+            List<Empresa> empresasList=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos(OrdenarEnum.ASCEDENTE);
+            Empresa empresaDefecto=empresasList.get(0);
+            TipoLicenciaEnum tipoLicenciaEnum=ServiceFactory.getFactory().getUtilidadesServiceIf().getTipoLicencia(empresaDefecto);            
+            //Verificar que los usuarios gratuitos no puedan sacar reportes gratuitos
+            if (tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
+            {
+                DialogoCodefac.mensaje(new CodefacMsj("La versión GRATUITA no soporta reportes en excel", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                return;
+            }
+            
+            try
+            {
+                File path = new File (archivo);
+                Desktop.getDesktop().open(path);
+            }
+            catch (IOException ex)
+            {
+                ex.printStackTrace();
+            }
         }
-        catch (IOException ex) 
+        catch (RemoteException ex) 
         {
-            ex.printStackTrace();
+            Logger.getLogger(Excel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }   
     

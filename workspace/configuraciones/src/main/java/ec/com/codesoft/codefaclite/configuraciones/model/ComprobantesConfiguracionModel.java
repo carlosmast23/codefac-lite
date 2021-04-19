@@ -262,7 +262,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             
             
             getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
-            getTxtPasswordCorreo().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
+            
+            String claveEncriptada=parametros.get(ParametroCodefac.CORREO_CLAVE).getValor();
+            String claveDesencriptada=UtilidadesEncriptar.desencriptar(claveEncriptada, ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            
+            getTxtPasswordCorreo().setText(claveDesencriptada);
+            //getTxtPasswordCorreo().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             
             parametroCodefac=parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
             if(parametroCodefac!=null)
