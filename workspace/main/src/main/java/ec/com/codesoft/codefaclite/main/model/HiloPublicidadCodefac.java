@@ -71,7 +71,7 @@ public class HiloPublicidadCodefac extends Thread{
                     contadorTiempo=0l;
                     if(DELEY_PUBLICIDAD>90) //El limite maximo para disminuir el tiempo que se muestra la publicidad es de 1 minuto y medio
                     {
-                        DELEY_PUBLICIDAD=DELEY_PUBLICIDAD-15; //Restar 20 segundos cada vez que sale la publicidad para que aparesca más rapido la publicidad la siguiente vez
+                        DELEY_PUBLICIDAD=DELEY_PUBLICIDAD-15; //Restar 15 segundos cada vez que sale la publicidad para que aparesca más rapido la publicidad la siguiente vez
                     }
                     
                     abrirPublicidad();

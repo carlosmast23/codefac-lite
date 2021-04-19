@@ -155,7 +155,7 @@ public class AsistenteConfiguracionRapidaControlador extends ModelControladorAbs
         firmaFechaEmisionParametro.valor=fechaStr;
 
         //sucursal.get
-        datosPrueba();
+        //datosPrueba();
     }
     
     private void datosPrueba()

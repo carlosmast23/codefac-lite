@@ -22,7 +22,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={%USERPROFILE}\{#MyAppName}
 DisableDirPage=yes
 DisableProgramGroupPage=yes
-OutputBaseFilename=codefac_setup_64bits
+OutputBaseFilename=codefac_setup_32bits
 Compression=lzma
 SolidCompression=yes
 
@@ -33,7 +33,7 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "prerequisitos/jre-8u251-windows-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "prerequisitos/jre-8u281-windows-i586.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 Source: "recursos/codefac.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "recursos/icono_codefac.ico"; DestDir: "{app}"; Flags: ignoreversion
