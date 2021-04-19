@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Codefac"
-#define MyAppVersion "1.2.6.9"
+#define MyAppVersion "1.2.8.7.5"
 #define MyAppPublisher "Codesoft"
 #define MyAppURL "http://www.cf.codesoft-ec.com/"
 #define MyAppExeName "codefac.bat"
@@ -22,7 +22,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={%USERPROFILE}\{#MyAppName}
 DisableDirPage=yes
 DisableProgramGroupPage=yes
-OutputBaseFilename=codefac_setup_64bits
+OutputBaseFilename=codefac_setup
 Compression=lzma
 SolidCompression=yes
 
