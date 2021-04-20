@@ -107,10 +107,10 @@ import java.util.Arrays;
 @ViewScoped 
 public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterface, Serializable {
 
-    private static final String ID_COMPONENTE_MONITOR="monitor";
+    private static final String ID_COMPONENTE_MONITOR="monitor";  
     
         
-    private Factura factura;   
+    private Factura factura;    
 
     /**
      * Esta referencia me permite saber cual factura esta seleccionada para editar 
@@ -486,10 +486,16 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     }
 
+    /**
+     * TODO: Unificar este metodo con el de FActuracionModel para tener una unica logica
+     * @param detalle 
+     */
     public void eliminarFilaProducto(FacturaDetalle detalle) {
         System.out.println("verificar si se ejecuta el parametro");
         factura.getDetalles().remove(detalle);
         factura.calcularTotalesDesdeDetalles();
+        //Actualizar las forma de pago
+        controlador.cargarFormaPago();
 
     }
 
@@ -822,6 +828,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.err.println("Ejecutando metodo de nuevo");
     }
 
+    /**
+     * TODO: Unificar este metodo con el de FacturacionModel para tener una sola logica 
+     * @param event 
+     */
     public void filaEditaTablaEvent(RowEditEvent event) {
         FacturaDetalle detalleEditado = (FacturaDetalle) event.getObject();
         /*detalleEditado.calcularTotalDetalle();
@@ -840,6 +850,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
          */
         controlador.calcularTotalesDetalles(detalleEditado);
         controlador.cargarTotales();
+        controlador.cargarFormaPago();
         
         //PrimeFaces.current().ajax().update(":formulario:tblProductoDetalles");
     }

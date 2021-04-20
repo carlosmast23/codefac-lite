@@ -111,6 +111,7 @@
 
 
             <p:remoteCommand name="updateDataTable" update=":formulario:tblProductoDetalles"/>
+            <p:remoteCommand name="updateTblFormaPago" update=":formulario:tabDatosFactura:tblDetalleFormaPago"/>
 
             <p:panel id="pnlDatosFactura">
                 <p:tabView id="tabDatosFactura">
@@ -210,7 +211,8 @@
                                                  cmbIncluyeIvaDetalle,
                                                  :formulario:totalesTabla,
                                                  :formulario:tblProductoDetalles,
-                                                 :formulario:messages"  
+                                                 :formulario:messages,
+                                                 :formulario:tabDatosFactura:tblDetalleFormaPago"
                                                  icon="fa fa-plus"   
                                                  styleClass="white-button" 
                                                  action="#{proformaMb.agregarProducto()}" />
@@ -232,7 +234,8 @@
                                     <p:commandButton process="@this"   id="btnAgregarFormaPago"  icon="fa fa-plus" value="Agregar" style="margin: 0 auto" />
                                 </div>
 
-                                <p:dataTable                                     
+                                <p:dataTable   
+                                    id="tblDetalleFormaPago"
                                     var="detalleFormaPago" 
                                     value="#{proformaMb.factura.formaPagos}">
 
@@ -314,7 +317,7 @@
                         Detalles Factura
                     </f:facet>
 
-                    <p:ajax event="rowEdit" oncomplete="updateDataTable()" update=":formulario:totalesTabla" listener="#{proformaMb.filaEditaTablaEvent}"  />
+                    <p:ajax event="rowEdit" oncomplete="updateDataTable()" update=":formulario:totalesTabla,:formulario:tabDatosFactura:tblDetalleFormaPago" listener="#{proformaMb.filaEditaTablaEvent}"  />
 
                     <p:column headerText="Descripción" style="width: 50%">
                         <p:cellEditor>
@@ -358,7 +361,14 @@
                     </p:column>
 
                     <p:column style="width:35px">
-                        <p:commandButton ajax="true" icon=" fa fa-close" label="Eliminar item" action="#{proformaMb.eliminarFilaProducto(detalle)}" update="tblProductoDetalles,:formulario:totalesTabla" />
+                        <p:commandButton 
+                            ajax="true" 
+                            icon=" fa fa-close" 
+                            label="Eliminar item" 
+                            action="#{proformaMb.eliminarFilaProducto(detalle)}" 
+                            update="tblProductoDetalles,:formulario:totalesTabla,formulario:tabDatosFactura:tblDetalleFormaPago" 
+                            oncomplete="updateTblFormaPago()"
+                            />
                     </p:column>
 
                 </p:dataTable>

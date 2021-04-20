@@ -609,12 +609,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
     }
     
-    
+    /**
+     * TODO: Cambiar el nombre de la funcion , por que es confuso por que este metodo permite MODIFICAR LA FORMA DE PAGO
+     */
     public void cargarFormaPago()
     {
         Factura factura=interfaz.obtenerFactura();
                 
-        //TODO: Caso cuando no exista ningun valor por pagar lipio las formas de pago
+        //Si no existe NINGUN VALOR limpio todas las formas de pago
         if(factura.getTotal().compareTo(BigDecimal.ZERO)==0)
         {
             if(factura.getFormaPagos()!=null)
@@ -624,44 +626,41 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return;
         }
         
+        //EDITA o CREA la forma de pago
         if(factura.getFormaPagos()==null || factura.getFormaPagos().size()==0)
         {
-            if(factura.getCliente()!=null)
-            {
-                FormaPago formaPago=new FormaPago();
-                formaPago.setPlazo(0);
-                
-                if(factura.getCliente().getSriFormaPago()==null)
-                    formaPago.setSriFormaPago(formaPagoDefecto);
-                else
-                    formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
-                    
-                formaPago.setTotal(factura.getTotal());
-                formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
+            
+            FormaPago formaPago = new FormaPago();
+            formaPago.setPlazo(0);
+            formaPago.setTotal(factura.getTotal());
+            formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
 
-                factura.addFormaPago(formaPago);
-                agregarFormaPagoConCartera();                
-                interfaz.cargarFormasPagoTabla();
+            //Si no existe una forma de cliente asignada , agregao la FORMA DE PAGO DEFECTO del sistema
+            if (factura.getCliente()==null || factura.getCliente().getSriFormaPago() == null) 
+            {
+                formaPago.setSriFormaPago(formaPagoDefecto);
+            } 
+            else 
+            {
+                formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
             }
+            
+            factura.addFormaPago(formaPago);
+            agregarFormaPagoConCartera();
+            //Actualizar la forma de pago en las vistas
+            interfaz.cargarFormasPagoTabla();            
         }
         else
         {
-            //TODO: Si exsiten varias formas de pago transformo en una sola forma de pago 
-            //TODO: buscar una manera que esto luego funcione cuando tengo varias formas de pago asignado y tomar en cuenta la cartera
-            if(factura.getFormaPagos().size()>1)
-            {
-                FormaPago formPagoDefecto=factura.buscarFormaPagoDistintaDeCartera();
-                factura.getFormaPagos().clear();
-                factura.addFormaPago(formPagoDefecto);
-            }
-            
-            //Si ya existe un dato ingresado solo edita el dato si se cambia de representante
+            //Caso cuando tiene una sola forma de pago
             if (factura.getFormaPagos().size() == 1)
             {
                 FormaPago formaPago = factura.getFormaPagos().get(0);
+                formaPago.setTotal(factura.getTotal());
                 //TODO: Optimizar para que se cambie la forma de pago solo si es un cliente distinto
-                if (factura.getCliente().getSriFormaPago() != null) 
+                if (factura.getCliente()!=null && factura.getCliente().getSriFormaPago() != null) 
                 {
+                    //Cambia de forma de pago si cambia de cliente
                     formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
                 } 
                 else //Si no esta grabado una forma de pago en el cliente asigno a forma de pago por defecto de las configuraciones
@@ -671,10 +670,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         formaPago.setSriFormaPago(formaPagoDefecto);
                     }
                 }
-                formaPago.setTotal(factura.getTotal());
+                
                 agregarFormaPagoConCartera();
                 interfaz.cargarFormasPagoTabla();
             }
+            else if(factura.getFormaPagos().size()>1)
+            {
+                //TODO: Si exsiten varias formas de pago transformo en una sola forma de pago 
+                //TODO: buscar una manera que esto luego funcione cuando tengo varias formas de pago asignado y tomar en cuenta la cartera
+                FormaPago formPagoDefecto=factura.buscarFormaPagoDistintaDeCartera();
+                factura.getFormaPagos().clear();
+                factura.addFormaPago(formPagoDefecto);
+            }
+            
+            
         }
     }
     
