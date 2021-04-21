@@ -160,17 +160,17 @@ public class CompraFacade extends AbstractFacade<Compra>{
         //c.getCodigoDocumento();
         //c.getSecuencial()
         
-        String queryString="SELECT max(c.secuencial) FROM Compra c WHERE c.puntoEmision=?1 AND c.puntoEstablecimiento=?2 AND c.codigoDocumento=?3 AND c.empresa=?4 ";
+        String queryString="SELECT MAX( CAST (c.secuencial AS BIGINT )) FROM Compra c WHERE c.puntoEmision=?1 AND c.puntoEstablecimiento=?2 AND c.codigoDocumento=?3 AND c.empresa=?4 ";
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1,puntoEmision);
         query.setParameter(2,puntoEstablecimiento);
         query.setParameter(3,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
         query.setParameter(4,empresa);
         
-        Integer secuencialMaximo=(Integer) query.getSingleResult();
+        Long secuencialMaximo=(Long) query.getSingleResult();
         if(secuencialMaximo!=null)
         {
-            return secuencialMaximo+1;
+            return secuencialMaximo.intValue()+1;
         }        
         return 1;        
     }

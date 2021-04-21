@@ -110,7 +110,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         DocumentoEnum documentoEnum=compra.getCodigoDocumentoEnum();
         if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
-            if(compra.getAutorizacion()==null)
+            if(compra.getAutorizacion()==null || compra.getAutorizacion().trim().isEmpty())
             {
                 compra.setAutorizacion("000000");
             }
@@ -120,12 +120,12 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 compra.setPuntoEstablecimiento(new BigDecimal("999"));
             }
             
-            if(compra.getPuntoEmision()==null)
+            if(compra.getPuntoEmision()==null )
             {
                 compra.setPuntoEmision(999);
             }
             
-            if(compra.getSecuencial()==null)
+            if(compra.getSecuencial()==null )
             {
                 Integer secuencial=getFacade().obtenerMaximoCodigoNotaVentaInterna(compra.getPuntoEmision(),compra.getPuntoEstablecimiento(),compra.getEmpresa());
                 compra.setSecuencial(secuencial);
