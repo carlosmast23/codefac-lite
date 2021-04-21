@@ -836,7 +836,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
 
         jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel29.setText("<html> \t<body> \t\t<center> \t\t\t<h3>Consideraciones Finales</h3> \t\t</center>\t\t \t\t<p>- Si no tiene toda la información requerida el asistente se abriera de nuevo la próxima vez</p> \t\t<p>- Algunas funciones no están disponibles para los usuarios gratuitos</p> \t\t<p>- Finalmente presione el <b>botón de Terminar</b> y luego tiene que volver a ingresar con el usuario creado</p> \t</body> </html>");
+        jLabel29.setText("<html> \t<body> \t\t<center> \t\t\t<h3>Consideraciones Finales</h3> \t\t</center> \t\t<p>- Si no cuentas con toda la información puede cerrar el asistente y volver a acceder</p> \t\t<p>- Algunas funciones no están disponibles para los usuarios gratuitos</p> \t\t<p>- Finalmente presione el <b>botón de Terminar</b> y luego tiene que volver a ingresar con el usuario creado</p> \t</body> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
@@ -902,7 +902,7 @@ public abstract class AsistenteConfiguracionRapidaPanel extends ControladorCodef
         pnlEmpresaSucursal2.add(jLabel49, gridBagConstraints);
 
         jLabel50.setFont(new java.awt.Font("Arial", 2, 13)); // NOI18N
-        jLabel50.setText("Para activar el sistema es necesario tener registrado una cuenta , puede crear la cuenta desde el siguiente link");
+        jLabel50.setText("Para activar el sistema debes tener registrada una cuenta en nuestra página web, o puedes hacerlo desde el siguiente link");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
