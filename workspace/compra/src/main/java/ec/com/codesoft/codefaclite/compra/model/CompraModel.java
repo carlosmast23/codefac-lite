@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
@@ -722,10 +723,8 @@ public class CompraModel extends CompraPanel{
                 ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                productoSeleccionado = (Producto) buscarDialogo.getResultado();
-                verificarExistenciadeProductoProveedor();
-                bloquearDesbloquearBotones(true);
-                getTxtCantidadItem().requestFocus();
+                Producto productoTmp = (Producto) buscarDialogo.getResultado();
+                agregarProductoVista(productoTmp);
             }
         });
         
@@ -825,6 +824,14 @@ public class CompraModel extends CompraPanel{
             }
         });
                 
+    }
+    
+    private void agregarProductoVista(Producto producto)
+    {
+        productoSeleccionado = producto;
+        verificarExistenciadeProductoProveedor();
+        bloquearDesbloquearBotones(true);
+        getTxtCantidadItem().requestFocus();
     }
     
     private void calcularDescuentoConImpuestosVista()
@@ -1287,6 +1294,35 @@ public class CompraModel extends CompraPanel{
 
     private void agregarListenerTextoBox() {
         
+        getTxtProductoItem().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) 
+                {
+                    try {
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(getTxtProductoItem().getText(),session.getEmpresa());
+                        
+                        if (producto != null) 
+                        { 
+                            agregarProductoVista(producto);
+                        }
+                        
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
+        
         getTxtCantidadItem().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -1302,41 +1338,7 @@ public class CompraModel extends CompraPanel{
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-        
-        getTxtProductoItem().addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {}
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                 if (e.getKeyCode() == KeyEvent.VK_ENTER) 
-                 {
-                     try {
-                         //Solo validar si existe datos ingresados en el combo
-                         if (getTxtProductoItem().getText().trim().equals("")) {
-                             return;
-                         }
-                         
-                         ProductoServiceIf productoServiceIf=ServiceFactory.getFactory().getProductoServiceIf();
-                         Producto productoSeleccionadoTmp=productoServiceIf.buscarProductoActivoPorCodigo(getTxtProductoItem().getText(),session.getEmpresa());
-                         if(productoSeleccionadoTmp!=null)
-                         {
-                            productoSeleccionado=productoSeleccionadoTmp;
-                            verificarExistenciadeProductoProveedor();
-                            bloquearDesbloquearBotones(true);
-                            getTxtCantidadItem().requestFocus();
-                         }
-                     } catch (RemoteException ex) {
-                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
-                     } catch (ServicioCodefacException ex) {
-                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
-                     }
-                 }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {}
-        });
+                
         
         getTxtDescuentoImpuestos().addKeyListener(new  KeyListener() {
             @Override
