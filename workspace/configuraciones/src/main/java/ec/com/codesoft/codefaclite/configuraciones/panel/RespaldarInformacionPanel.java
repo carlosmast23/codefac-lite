@@ -46,6 +46,14 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
     public void setTxtUbicacionRespaldo(JTextField txtUbicacionRespaldo) {
         this.txtUbicacionRespaldo = txtUbicacionRespaldo;
     }
+
+    public JButton getBtnRespaldarCorreo() {
+        return btnRespaldarCorreo;
+    }
+
+    public void setBtnRespaldarCorreo(JButton btnRespaldarCorreo) {
+        this.btnRespaldarCorreo = btnRespaldarCorreo;
+    }
     
     
     /**
@@ -64,6 +72,7 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         txtUbicacionRespaldo = new javax.swing.JTextField();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
+        btnRespaldarCorreo = new javax.swing.JButton();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -74,9 +83,9 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         btnRespaldar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/guardar.png"))); // NOI18N
-        btnRespaldar.setText("Respaldar");
+        btnRespaldar.setText("Respaldar en mi PC");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -120,11 +129,21 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(lblEspacio2, gridBagConstraints);
 
+        btnRespaldarCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
+        btnRespaldarCorreo.setText("Respaldo Correo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnRespaldarCorreo, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarLocalizacion;
     private javax.swing.JButton btnRespaldar;
+    private javax.swing.JButton btnRespaldarCorreo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;

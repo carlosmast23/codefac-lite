@@ -12,13 +12,16 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -39,6 +42,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -180,13 +185,8 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-     private void copiarDirectorio(InputStream origen, File destino) throws IOException 
+    private void copiarDirectorio(InputStream origen, File destino) throws IOException 
     {
-        //if (!destino.exists()) 
-        //{
-        //    destino.mkdir();
-        //}
-        
         FileUtils.copyInputStreamToFile(origen,destino);        
     }
     
@@ -226,34 +226,18 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     
     public void agregarListener()
     {
+        getBtnRespaldarCorreo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarRespaldoUbicacion(true);
+            }
+        });
+        
         getBtnRespaldar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                try
-                {
-                    if(!ubicacionRespaldo.equals(""))
-                    {
-                        crearNombreCarpetaRespaldo();
-                        
-                        RecursosServiceIf service=ServiceFactory.getFactory().getRecursosServiceIf();                        
-                        InputStream inputDb = RemoteInputStreamClient.wrap(service.getDataBaseResources());                        
-                        
-                        //origenPath = FileSystems.getDefault().getPath(ParametrosSistemaCodefac.NOMBRE_BASE_DATOS);
-                        destinoPath = FileSystems.getDefault().getPath(ubicacionRespaldo+"\\"+nombreCarpetaRelpaldo+".zip");
-                        //File recursosDirectorio = origenPath.toFile();
-                        File destinoDirectorio = destinoPath.toFile();
-                        copiarDirectorio(inputDb, destinoDirectorio);
-                        DialogoCodefac.mensaje("Correcto","El respaldo fue generado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-                    }
-                    else
-                    {
-                        DialogoCodefac.mensaje("Advertencia", "Debe seleccionar una ubicación para los respaldos", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    }
-                }catch(Exception exc)
-                {
-                    System.out.println("Error al respaldar información: " + exc);
-                }
+                generarRespaldoUbicacion(false);
             }    
         });
         
@@ -276,6 +260,67 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                 }
             }
         });
+    }
+    
+    /**
+     * Envia un respaldo al correo de la misma empresa con el archivo adjunto
+     */
+    public void enviarRespaldoCorreoEmpresa(File fileRespaldo)
+    {
+        try {
+            String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(UtilidadesFecha.getFechaHoy());
+            CorreoCodefac correoCodefac = new CorreoCodefac();
+            String tituloCorreo="Respaldo BaseDatos "+fechaStr;
+            String mensajeCorreo="El respaldo de la base de datos de Codefac de la fecha "+fechaStr+" lo puede descargar como archivo adjunto";
+            String correoEmpresa=session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).valor;
+            List correosList=Arrays.asList(correoEmpresa);
+            Map<String,String> mapArchivosAdjuntos=Collections.singletonMap(fileRespaldo.getName(),fileRespaldo.getPath());
+            
+            correoCodefac.enviarCorreo(session.getEmpresa(),mensajeCorreo,tituloCorreo,correosList,mapArchivosAdjuntos);
+        } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
+            Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+        }
+    }
+    
+    /**
+     * Genera el respaldo en una ubicación del disco previamente seleccionado
+     */
+    public void generarRespaldoUbicacion(Boolean enviarCorreo)
+    {
+        try
+                {
+                    if(!ubicacionRespaldo.equals(""))
+                    {
+                        crearNombreCarpetaRespaldo();
+                        
+                        RecursosServiceIf service=ServiceFactory.getFactory().getRecursosServiceIf();                        
+                        InputStream inputDb = RemoteInputStreamClient.wrap(service.getDataBaseResources());                        
+                        
+                        
+                        destinoPath = FileSystems.getDefault().getPath(ubicacionRespaldo+"\\"+nombreCarpetaRelpaldo+".zip");
+                        //File recursosDirectorio = origenPath.toFile();
+                        File destinoDirectorio = destinoPath.toFile();
+                        //Utilizar una funciona estandar en utilidades
+                        copiarDirectorio(inputDb, destinoDirectorio);
+                        
+                        if(enviarCorreo)
+                        {
+                            enviarRespaldoCorreoEmpresa(destinoDirectorio);
+                        }
+                        
+                        DialogoCodefac.mensaje("Correcto","El proceso termino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje("Advertencia", "Debe seleccionar una ubicación para los respaldos", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    }
+                }catch(Exception exc)
+                {
+                    DialogoCodefac.mensaje(new CodefacMsj(exc.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    exc.printStackTrace();                    
+                    System.out.println("Error al respaldar información: " + exc);
+                }
     }
     
     public void crearNombreCarpetaRespaldo()
