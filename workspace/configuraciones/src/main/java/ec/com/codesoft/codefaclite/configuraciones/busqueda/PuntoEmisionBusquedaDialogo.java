@@ -31,6 +31,7 @@ public class PuntoEmisionBusquedaDialogo implements InterfaceModelFind<PuntoEmis
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
         titulo.add(new ColumnaDialogo("Nombre", 100));
         titulo.add(new ColumnaDialogo("Secuencial", 100));
+        titulo.add(new ColumnaDialogo("Sucursal", 100));
         //titulo.add(new ColumnaDialogo("Empresa", 100));
         return titulo;
     }
@@ -57,6 +58,7 @@ public class PuntoEmisionBusquedaDialogo implements InterfaceModelFind<PuntoEmis
     public void agregarObjeto(PuntoEmision t, Vector dato) {
         dato.add(t.getDescripcion());
         dato.add(t.getPuntoEmision());
+        dato.add(t.getSucursal());
         //dato.add(t.getPuntoEmision());
     }
 
