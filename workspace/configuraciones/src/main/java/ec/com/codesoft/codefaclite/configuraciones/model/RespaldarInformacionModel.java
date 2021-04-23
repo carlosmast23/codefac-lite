@@ -65,7 +65,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     private String ubicacionRespaldo;
     private String nombreCarpetaRelpaldo;
     private ParametroCodefacServiceIf parametroCodefacServiceIf;
-    private Map<String, ParametroCodefac> parametro;
+    //private Map<String, ParametroCodefac> parametro;
     private Boolean existeDirectorio = false;
            
     @Override
@@ -92,27 +92,27 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             /**
              * Grabar la ubicación de respaldos de la información
              */
-            Boolean respuesta = null;
+            //Boolean respuesta = null;
             try{
                 if(!getTxtUbicacionRespaldo().getText().equals(""))
                 {
-                    ParametroCodefac p = this.parametro.get(ParametroCodefac.DIRECTORIO_RESPALDO);
+                    ParametroCodefac p = this.session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RESPALDO);
+                    if(p==null)
+                    {
+                        p=new ParametroCodefac(ParametroCodefac.DIRECTORIO_RESPALDO);
+                    }
+                    
                     p.setValor(this.ubicacionRespaldo+"");
-                    if(existeDirectorio){
+                    /*if(existeDirectorio)
+                    {
                         respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea cambiar el lugar de respaldos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         if (!respuesta) {
                             throw new ExcepcionCodefacLite("Cancelacion usuario");
                         }
-                    }
-                    else
-                    {
-                        this.parametroCodefacServiceIf.editar(p); //Solo editar el parametro
-                    }
-                    if(respuesta)
-                    {
-                        this.parametroCodefacServiceIf.editar(p); //Solo editar el parametro
-                    }
+                    }*/
                     
+                    this.parametroCodefacServiceIf.editar(p); //Solo editar el parametro
+                                        
                         
                     
                     DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);

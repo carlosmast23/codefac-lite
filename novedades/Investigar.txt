@@ -1,0 +1,3 @@
+Seleniun + phyton 
+enviar mensajes por whatsapp
+https://dev.to/maxwizardth/chat-on-whatsapp-using-python-5e9l

@@ -63,6 +63,11 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     
     private void validacion(NotaCredito notaCredito,CrudEnum tipo) throws ServicioCodefacException,  RemoteException
     {
+        if(notaCredito.getFechaEmision()==null)
+        {
+            throw new ServicioCodefacException("La fecha de emisión no puede estar vacia");
+        }
+        
         if (notaCredito.getCliente().isClienteFinal()) {
             throw new ServicioCodefacException("No se puede emitir Notas de Crédito al Consumidor Final , Anule la factura en el Portal del Sri");
         }
