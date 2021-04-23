@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.PersonaEstablecimientoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
@@ -64,11 +65,11 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
     
     public Persona grabar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
-        return grabar(p,true);
+        return grabarConValidacion(p,true);
     }
     
 
-    public Persona grabar(Persona p,Boolean validarCedula) throws ServicioCodefacException, java.rmi.RemoteException {
+    public Persona grabarConValidacion(Persona p,Boolean validarCedula) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -91,7 +92,9 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
                 }*/
 
                 p.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-                for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
+                //Grabar los nuevos establecimientos
+                for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) 
+                {
                     entityManager.persist(establecimiento);
                 }
                 entityManager.persist(p);
@@ -152,8 +155,16 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     public void eliminar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
         //personaFacade.remove(p);
-        p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        editar(p);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                entityManager.merge(p);
+                
+                PersonaEstablecimiento personaEstablecimiento;
+            }
+        });
+        
     }
 
     public List<Persona> buscar() {
@@ -180,19 +191,36 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return getFacade().buscarPorTipoFacade(tipoEnum, estado,empresa);
     }
 
+    /**
+     * TODO: Editado para partir buscando desde un establecimiento por que si solo busco del cliente puede que no tenga establecimientos
+     * @param identificacion
+     * @param empresa
+     * @return
+     * @throws java.rmi.RemoteException 
+     */
     @Override
     public Persona buscarPorIdentificacion(String identificacion,Empresa empresa) throws java.rmi.RemoteException {
+        PersonaEstablecimientoFacade personaEstablecimientoFacade=new PersonaEstablecimientoFacade();
+        PersonaEstablecimiento personaEstablecimiento;        
         //Persona p;
         //p.getIdentificacion();
         Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("identificacion", identificacion);
-        mapParametros.put("empresa",empresa);
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("persona.identificacion", identificacion);
+        mapParametros.put("persona.empresa",empresa);
+        mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
         
-        List<Persona> personas = getFacade().findByMap(mapParametros);
-        if (personas.size() > 0) {
-            return personas.get(0);
+        List<PersonaEstablecimiento> establecimientos=personaEstablecimientoFacade.findByMap(mapParametros);
+        
+        //List<Persona> personas = getFacade().findByMap(mapParametros);
+        if (establecimientos.size() > 0) 
+        {
+            if(establecimientos.get(0).getPersona()!=null)
+            {
+                return establecimientos.get(0).getPersona();
+            }
         }
+        
+        
 
         return null;
 

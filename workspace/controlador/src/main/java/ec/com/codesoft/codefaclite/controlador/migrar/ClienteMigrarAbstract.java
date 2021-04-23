@@ -124,7 +124,7 @@ public abstract class ClienteMigrarAbstract extends MigrarModel {
                     cliente.setEstablecimientos(Arrays.asList(personaEstablecimiento));
                     cliente.setEmpresa(session.getEmpresa());
                     System.out.println(cliente.getRazonSocial());
-                    ServiceFactory.getFactory().getPersonaServiceIf().grabar(cliente,chkValidarCedula.isSelected());
+                    ServiceFactory.getFactory().getPersonaServiceIf().grabarConValidacion(cliente,chkValidarCedula.isSelected());
                     
                     
                     //ServiceFactory.getFactory().getEstudianteServiceIf().grabar(cliente);

@@ -775,7 +775,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 }
 
                 
-                if (persona.getTipoEnum().equals(operadorNegocioDefault) || persona.getTipoEnum().equals(OperadorNegocioEnum.AMBOS)) {
+                if (persona.getTipoEnum().equals(operadorNegocioDefault) || persona.getTipoEnum().equals(OperadorNegocioEnum.AMBOS)) 
+                {
                     DialogoCodefac.mensaje("Advertencia", "Ya existe ingresado un dato con esa identificación", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return;
                 }
