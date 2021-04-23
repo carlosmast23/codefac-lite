@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import java.lang.reflect.InvocationTargetException;
@@ -259,6 +260,36 @@ public abstract class AbstractFacade<T>
         }
     }
     
+    /**
+     * 
+     * @param nombreTabla
+     * @param nombrePK
+     * @return RETORNA VERDADERO SI ENCUENTRA CLAVES REPETIDAS
+     */
+    public static Boolean buscarClavesRepetidasBaseDatos(String nombreTabla,String nombrePK)
+    {
+        //SELECT ID,COUNT (ID) FROM FACTURA GROUP BY ID HAVING COUNT(ID)>1;
+        String queryString=" SELECT ?ID FROM ?NOMBRE_TABLA GROUP BY ID HAVING COUNT(?ID)>1";
+        queryString=queryString.replace("?ID",nombrePK);
+        queryString=queryString.replace("?NOMBRE_TABLA",nombreTabla);
+                
+        Query query = entityManager.createNativeQuery(queryString);
+        
+        List resultados=query.getResultList();
+        
+        if(resultados.size()==0)
+        {
+            return false;
+        }
+        
+        for (Object resultado : resultados) 
+        {            
+            Long idPk=(Long) resultado;
+            Logger.getLogger(AbstractFacade.class.getName()).log(Level.WARNING,"ERROR CLAVES DUPLICADOS EN TABLA: "+nombreTabla+" ,ID="+idPk);
+        }
+        return true;
+    }
+    
     
     public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo) {
         System.out.println("[Dialog]"+queryStr);
@@ -274,6 +305,7 @@ public abstract class AbstractFacade<T>
         query.setFirstResult(limiteMinimo);
         return query.getResultList();
     }
+    
     
     public static Long findCountStaticDialog(String queryStr,Map<Integer,Object> map) {
         Query query = entityManager.createQuery(queryStr);

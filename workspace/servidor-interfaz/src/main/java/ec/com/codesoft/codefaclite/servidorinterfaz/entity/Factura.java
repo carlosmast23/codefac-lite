@@ -42,16 +42,19 @@ import javax.persistence.Transient;
  * @author Carlos
  */
 @Entity
-@Table(name = "FACTURA")
+@Table(name = Factura.NOMBRE_TABLA)
 public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> implements Cloneable {
 
+    public static final String NOMBRE_TABLA="FACTURA";
+    public static final String NOMBRE_PK="ID";
+    
     private static final long serialVersionUID = -1238278914412853684L;
 
     //public static final String ESTADO_FACTURADO="F";
     //public static final String ESTADO_ANULADO="A";
     //public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
     @Id
-    @Column(name = "ID")
+    @Column(name = Factura.NOMBRE_PK)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
