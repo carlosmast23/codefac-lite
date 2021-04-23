@@ -69,6 +69,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return alertas;        
     }
     
+        
     public List<AlertaResponse> actualizarNotificacionesCargaLenta(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
