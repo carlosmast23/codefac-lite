@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA_FORMA_PAGO")
-public class FormaPago implements Serializable {
+public class FormaPago implements Serializable ,Cloneable{
     
     @Id
     @Column(name = "ID")
@@ -128,6 +128,11 @@ public class FormaPago implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -53,5 +53,6 @@ public interface UtilidadesServiceIf extends Remote
     
     public Properties crearLicencia(Empresa empresa,Licencia licencia,String pathBase) throws RemoteException,ServicioCodefacException;
     
+    public void verficarConsistenciaTabla(String nombreTabla) throws RemoteException,ServicioCodefacException;
     
 }

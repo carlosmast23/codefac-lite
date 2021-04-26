@@ -5,12 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -266,28 +266,19 @@ public abstract class AbstractFacade<T>
      * @param nombrePK
      * @return RETORNA VERDADERO SI ENCUENTRA CLAVES REPETIDAS
      */
-    public static Boolean buscarClavesRepetidasBaseDatos(String nombreTabla,String nombrePK)
+        
+    /**
+     * TODO: Ver como parametrizar el nombre del esquema que parece que siempre es el mismo nombre del usuario al momento de crear la base de datos
+     * @param nombreTabla 
+     */
+    public static void consultarConsistenciaTabla(String nombreTabla)
     {
-        //SELECT ID,COUNT (ID) FROM FACTURA GROUP BY ID HAVING COUNT(ID)>1;
-        String queryString=" SELECT ?ID FROM ?NOMBRE_TABLA GROUP BY ID HAVING COUNT(?ID)>1";
-        queryString=queryString.replace("?ID",nombrePK);
-        queryString=queryString.replace("?NOMBRE_TABLA",nombreTabla);
-                
+        String queryString="VALUES SYSCS_UTIL.SYSCS_CHECK_TABLE ('LAGOS' ,'?1')";
+        queryString=queryString.replace("?1",nombreTabla);
+               
         Query query = entityManager.createNativeQuery(queryString);
-        
-        List resultados=query.getResultList();
-        
-        if(resultados.size()==0)
-        {
-            return false;
-        }
-        
-        for (Object resultado : resultados) 
-        {            
-            Long idPk=(Long) resultado;
-            Logger.getLogger(AbstractFacade.class.getName()).log(Level.WARNING,"ERROR CLAVES DUPLICADOS EN TABLA: "+nombreTabla+" ,ID="+idPk);
-        }
-        return true;
+        List resultado=query.getResultList();        
+        System.out.println("resultado:"+resultado);
     }
     
     
@@ -358,6 +349,43 @@ public abstract class AbstractFacade<T>
             }
         }
     }
+    
+    public static Boolean buscarClavesRepetidasBaseDatos(String nombreTabla,String nombrePK)
+    {
+        //SELECT ID,COUNT (ID) FROM FACTURA GROUP BY ID HAVING COUNT(ID)>1;
+        List resultado=buscarClavesRepetidasBaseDatosLista(nombreTabla, nombrePK);
+        if(resultado.size()>0)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+        public static List buscarClavesRepetidasBaseDatosLista(String nombreTabla,String nombrePK)
+    {
+        //SELECT ID,COUNT (ID) FROM FACTURA GROUP BY ID HAVING COUNT(ID)>1;
+        String queryString=" SELECT ?ID FROM ?NOMBRE_TABLA GROUP BY ID HAVING COUNT(?ID)>1";
+        queryString=queryString.replace("?ID",nombrePK);
+        queryString=queryString.replace("?NOMBRE_TABLA",nombreTabla);
+                
+        Query query = entityManager.createNativeQuery(queryString);
+        
+        List resultados=query.getResultList();
+        
+        //if(resultados.size()==0)
+        //{
+        //    return new ArrayList();
+        //}
+        
+        for (Object resultado : resultados) 
+        {            
+            Long idPk=(Long) resultado;
+            Logger.getLogger(AbstractFacade.class.getName()).log(Level.WARNING,"ERROR CLAVES DUPLICADOS EN TABLA: "+nombreTabla+" ,ID="+idPk);
+        }
+        return resultados;
+    }
+
+
     
     public static EntityTransaction crearTransaccion()
     {

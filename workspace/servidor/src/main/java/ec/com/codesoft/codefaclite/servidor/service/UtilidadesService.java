@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.UtilidadFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -520,7 +521,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         
     }
     
+    public void verficarConsistenciaTabla(String nombreTabla) throws RemoteException,ServicioCodefacException
+    {
+        AbstractFacade.consultarConsistenciaTabla(nombreTabla);
+    }
     
+        
 
 
 }

@@ -35,9 +35,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Carlos
  */
 @Entity
-@Table(name = "CLIENTE")
+@Table(name =Persona.NOMBRE_TABLA)
 @XmlRootElement
 public class Persona implements Serializable, Comparable<Persona> {
+    
+    public static final String NOMBRE_TABLA="CLIENTE";
 
     public static final String IDENTIFICACION_CONSUMIDOR_FINAL = "9999999999999";
 

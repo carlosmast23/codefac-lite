@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.HerramientasCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
@@ -220,6 +221,7 @@ public abstract class ServiceFactory {
     public TipoEstablecimientoServiceIf getTipoEstablecimientoServiceIf(){return (TipoEstablecimientoServiceIf) getRecursosRMI(TipoEstablecimientoServiceIf.class);};
     public RutaServiceIf getRutaServiceIf(){return (RutaServiceIf) getRecursosRMI(RutaServiceIf.class);};
     public RutaDetalleServiceIf getRutaDetalleServiceIf(){return (RutaDetalleServiceIf) getRecursosRMI(RutaDetalleServiceIf.class);};
+    public HerramientasCodefacServiceIf getHerramientasCodefacServiceIf(){return (HerramientasCodefacServiceIf) getRecursosRMI(HerramientasCodefacServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

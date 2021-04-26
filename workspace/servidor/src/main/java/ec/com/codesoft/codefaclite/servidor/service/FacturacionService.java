@@ -418,8 +418,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
         }
         
+        //TODO: Por el momento dejo desctivado por que consume muchos recursos
         //validacion especial cuanod tiene problemas en la base de datos
-        validacionBaseDatosFacturas();
+        //validacionBaseDatosFacturas();
                 
     }
     

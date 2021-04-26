@@ -39,6 +39,7 @@ public enum VentanaEnum implements Serializable{
     FACTURACION_PEDIDO_LOTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaPedidoLoteModel", "FALP", "Facturación Lote Pedido", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null,""),
     EMPRESA("ec.com.codesoft.codefaclite.crm.model.EmpresaModel", "EMPR", "Empresa", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,KeyEvent.VK_E,null),
     COMPROBANTE_CONFIGURACION("ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel", "CONF", "Configuración Comprobantes", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.GRATIS,null),
+    MANTENIMIENTO_CODEFAC("ec.com.codesoft.codefaclite.configuraciones.model.MantenimientoCodefacModel", "MACO", "Mantenimiento Codefac", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.UTILIDADES,TipoLicenciaEnum.GRATIS,null),
     //TODO: Esa pantalla no tiene nada , verificar si se va a continuar desarrollando o se tiene que eliminar
     REENVIO_COMPROBANTES("ec.com.codesoft.codefaclite.facturacion.model.ReenviarComprobanteModel", "RECO", "Reenviar Comprobantes", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.UTILIDADES,TipoLicenciaEnum.GRATIS,null,"reenviar_comprobante"),
     UTILIDAD_COMPROBANTE("ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteSimpleModel", "UTIL", "Utilidad Comprobante", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.UTILIDADES,TipoLicenciaEnum.GRATIS,null),
