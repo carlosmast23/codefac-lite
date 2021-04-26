@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional.
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
@@ -772,6 +773,15 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         }
 
         return cantidadTotal;
+    }
+    
+    public String getFechaEmisionFormat()
+    {
+        if(fechaEmision!=null)
+        {
+            return ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaEmision);
+        }
+        return "";
     }
 
 }

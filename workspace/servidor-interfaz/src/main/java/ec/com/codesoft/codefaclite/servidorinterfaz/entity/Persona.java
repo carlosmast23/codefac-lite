@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -124,6 +125,9 @@ public class Persona implements Serializable, Comparable<Persona> {
     
     @Column(name = "OBSERVACIONES")
     private String observaciones;
+    
+    @Column(name = "FECHA_CREACION")
+    protected Timestamp fechaCreacion;
 
     /**
      * Este variable solo es informativa para saber el nombre de la persona que
@@ -455,6 +459,15 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
+    public Timestamp getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+    
     
     
     
