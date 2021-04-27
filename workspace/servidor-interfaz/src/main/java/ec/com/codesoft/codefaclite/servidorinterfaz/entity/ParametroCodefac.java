@@ -361,6 +361,10 @@ public class ParametroCodefac implements Serializable {
         return false;
     }
     
-    
+    public static class ParametrosRespaldoDB
+    {
+        public static String DB_RESPALDO_AUTOMATICO_SALIR="DB_RESPALDO_AUTOMATICO_SALIR";
+        public static String DB_RESPALDO_HORA_PROGRAMADA="DB_RESPALDO_HORA_PROGRAMADA";
+    }
     
 }

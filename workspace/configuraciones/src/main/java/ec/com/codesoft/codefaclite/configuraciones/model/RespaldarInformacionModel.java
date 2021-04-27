@@ -13,15 +13,18 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -59,6 +62,15 @@ import org.apache.commons.io.FileUtils;
  */
 public class RespaldarInformacionModel extends RespaldarInformacionPanel
 {
+    //private EnumSiNo enumSeleccionado;
+    private List<EnumSiNo> listEnumSiNo;    
+    //private Integer horaProgramada;
+    
+    private ParametroCodefac parametroHoraProgramada;
+    private ParametroCodefac parametroRespaldarSalir;
+    
+    
+    
     //private Path origenPath;
     private Path destinoPath;
     private JFileChooser jFileChooser;
@@ -79,7 +91,17 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
         agregarListener();
         obtenerUbicacionCarpetaRespaldo();
         validacionDatosIngresados=false;
+        
+        iniciarValores();
 
+    }
+    
+    private void iniciarValores()
+    {
+        listEnumSiNo=Arrays.asList(EnumSiNo.NO,EnumSiNo.SI);
+        parametroHoraProgramada=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_HORA_PROGRAMADA,"");
+        
+        
     }
 
     @Override
@@ -225,19 +247,12 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     }
     
     public void agregarListener()
-    {
-        getBtnRespaldarCorreo().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                generarRespaldoUbicacion(true);
-            }
-        });
-        
+    {   
         getBtnRespaldar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                generarRespaldoUbicacion(false);
+                generarRespaldoUbicacion(getChkEnviarCorreo().isSelected());
             }    
         });
         
@@ -360,4 +375,40 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
+    /**
+     * =========================================================================
+     *                              GET AND SET
+     * =========================================================================
+     */
+
+
+    public List<EnumSiNo> getListEnumSiNo() {
+        return listEnumSiNo;
+    }
+
+    public void setListEnumSiNo(List<EnumSiNo> listEnumSiNo) {
+        this.listEnumSiNo = listEnumSiNo;
+    }
+
+    public ParametroCodefac getParametroHoraProgramada() {
+        return parametroHoraProgramada;
+    }
+
+    public void setParametroHoraProgramada(ParametroCodefac parametroHoraProgramada) {
+        this.parametroHoraProgramada = parametroHoraProgramada;
+    }
+
+    public ParametroCodefac getParametroRespaldarSalir() {
+        return parametroRespaldarSalir;
+    }
+
+    public void setParametroRespaldarSalir(ParametroCodefac parametroRespaldarSalir) {
+        this.parametroRespaldarSalir = parametroRespaldarSalir;
+    }
+
+    
+    
+    
 }
