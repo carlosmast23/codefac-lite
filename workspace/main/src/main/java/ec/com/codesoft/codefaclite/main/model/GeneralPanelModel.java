@@ -53,6 +53,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
+import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorker;
+import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorkerIf;
+import ec.com.codesoft.codefaclite.controlador.vista.configuraciones.RespaldosModelUtilidades;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
@@ -412,22 +416,53 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         setVisible(true);
     }
     
+    private void generarRespaldoBaseDatosPorCorreo()
+    {
+        try {
+            //Enviar al correo y generar el respaldo de la base de datos
+            RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Evento que se ejecuta cuando cierran el sistema
+     */
     private void eventoCerrarSistema()
     {
         String[] opciones = {"Salir", "Cambiar usuario", "Cancelar"};
         int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Por favor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
         switch (opcionSeleccionada) {
             case 0: //opcion de salir
-                grabarDatosSalir();
+                
+                DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
+                    @Override
+                    public void procesar() {
+                        //Grabar las posiciones de los widgets al momento de salir
+                        grabarDatosPosicionesWidgetSalir();                
+                        //generarRespaldoBaseDatosPorCorreo();
+                        
+                        //Solo detener la publicidad cuando exista
+                        if (hiloPublicidadCodefac != null) {
+                            hiloPublicidadCodefac.hiloPublicidad = false;
+                        }
+                        UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web 
+                    }
 
-                //Solo detener la publicidad cuando exista
-                if (hiloPublicidadCodefac != null) {
-                    hiloPublicidadCodefac.hiloPublicidad = false;
-                }
-                UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web 
+                    @Override
+                    public String getMensaje() {
+                        return "Cerrando el Sistema, Por favor espere un momento ...";
+                    }
+                    
+                });
+                
+                                            
+                
                 dispose();
                 System.exit(0);
                 break;
+
 
             case 1: //opcion cambiar de usuario
                 cerrarSession();
@@ -448,7 +483,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-    private void grabarDatosSalir()
+    private void grabarDatosPosicionesWidgetSalir()
     {
         ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
         //Grabar el celular si es distinto de vacio

@@ -1,0 +1,1 @@
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null, 'FACTURA', 'C:\temp\myfile.del', null,null, null);

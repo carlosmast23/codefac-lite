@@ -265,7 +265,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnArqueoCaja.setFocusable(false);
         btnArqueoCaja.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnArqueoCaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnArqueoCaja.getAccessibleContext().setAccessibleName("");
 
         setClosable(true);
         setIconifiable(true);
@@ -273,6 +272,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         setResizable(true);
         setTitle("Factura");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        setPreferredSize(new java.awt.Dimension(1200, 800));
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 

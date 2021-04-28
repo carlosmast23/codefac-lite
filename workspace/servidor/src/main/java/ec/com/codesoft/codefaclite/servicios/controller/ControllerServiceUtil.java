@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidor.service.EmpleadoService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturaDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
+import ec.com.codesoft.codefaclite.servidor.service.HerramientasCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
@@ -94,6 +95,7 @@ import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionAdici
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.HerramientasCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
@@ -296,6 +298,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(TurnoAsignadoService.class, TurnoAsignadoServiceIf.class);
             mapRecursos.put(TurnoService.class, TurnoServiceIf.class);
             mapRecursos.put(VentaService.class, VentaServiceIf.class);
+            mapRecursos.put(HerramientasCodefacService .class, HerramientasCodefacServiceIf.class);
             
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);

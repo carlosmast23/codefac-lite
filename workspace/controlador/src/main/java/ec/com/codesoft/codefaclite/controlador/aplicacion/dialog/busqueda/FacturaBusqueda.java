@@ -168,7 +168,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         
         dato.add((t.getEstadoEnum()!=null)?t.getEstadoEnum().getNombre():"Sin estado");
         
-        dato.add(t.getFechaEmision());
+        dato.add(t.getFechaEmisionFormat());
         dato.add(t.getTotal());
     }
 
@@ -185,7 +185,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         propiedades.add("cliente.razonSocial");
         propiedades.add("");//TODO: Ver como puedo hacer para establecer una propiedad personalizada
         propiedades.add("estado");
-        propiedades.add("fechaEmision");
+        propiedades.add("fechaEmision"); //TODO: Probar cambiando por el metodo fechaEmisionFormat
         propiedades.add("total");
         return propiedades;
     }

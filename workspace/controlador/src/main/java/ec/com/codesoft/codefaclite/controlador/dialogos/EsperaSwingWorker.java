@@ -26,7 +26,7 @@ public class EsperaSwingWorker extends SwingWorker<Integer, Integer> {
     private Object[] parametros;
     
     public EsperaSwingWorker(String tituloDialogo,Object[] parametros,EsperaSwingWorkerIf interfaz) {
-        this.dialogo = new DialogoCargando();
+        this.dialogo = new DialogoCargando(null);
         this.dialogo.agregarTexto(tituloDialogo);
         this.interfaz=interfaz;
         this.parametros=parametros;

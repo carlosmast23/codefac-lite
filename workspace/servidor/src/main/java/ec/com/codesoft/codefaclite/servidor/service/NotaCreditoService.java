@@ -252,7 +252,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         facturaDetalle.getFactura().getPuntoEmision().toString(),
                         facturaDetalle.getFactura().getPuntoEstablecimiento().toString(),
                         facturaDetalle.getFactura().getSecuencial(),
-                        facturaDetalle.getFactura().getFechaEmision());
+                        UtilidadesFecha.castDateUtilToSql(facturaDetalle.getFactura().getFechaEmision()));
                 
                 break;
         }
@@ -300,7 +300,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         notaDetalle.getNotaCredito().getPuntoEmision().toString(),
                         notaDetalle.getNotaCredito().getPuntoEstablecimiento().toString(),
                         notaDetalle.getNotaCredito().getSecuencial(),
-                        notaDetalle.getNotaCredito().getFechaEmision());
+                        UtilidadesFecha.castDateUtilToSql(notaDetalle.getNotaCredito().getFechaEmision()));
                 
                 break;
         }

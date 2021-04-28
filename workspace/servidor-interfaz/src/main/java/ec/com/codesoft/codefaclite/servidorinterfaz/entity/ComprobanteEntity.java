@@ -10,14 +10,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -54,6 +54,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     protected Timestamp fechaCreacion;
 
     @Column(name = "FECHA_EMISION")
+    @Temporal(TemporalType.DATE)
     protected Date fechaEmision;
 
     @Column(name = "RAZON_SOCIAL")

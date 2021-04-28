@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -92,6 +93,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
                 }*/
 
                 p.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                p.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
                 //Grabar los nuevos establecimientos
                 for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) 
                 {

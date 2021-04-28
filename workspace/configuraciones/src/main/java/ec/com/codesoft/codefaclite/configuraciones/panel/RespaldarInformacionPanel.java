@@ -6,7 +6,15 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.EnumSiNoToStringConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.IntegerToStringConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 /**
@@ -47,13 +55,43 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         this.txtUbicacionRespaldo = txtUbicacionRespaldo;
     }
 
-    public JButton getBtnRespaldarCorreo() {
+    /*public JButton getBtnRespaldarCorreo() {
         return btnRespaldarCorreo;
     }
 
     public void setBtnRespaldarCorreo(JButton btnRespaldarCorreo) {
         this.btnRespaldarCorreo = btnRespaldarCorreo;
+    }*/
+
+    public JCheckBox getChkEnviarCorreo() {
+        return chkEnviarCorreo;
     }
+
+    public void setChkEnviarCorreo(JCheckBox chkEnviarCorreo) {
+        this.chkEnviarCorreo = chkEnviarCorreo;
+    }
+
+    @ComboBoxBinding(source ="listEnumSiNo" ,valueSelect = "parametroRespaldarSalir.valor",converter = EnumSiNoToStringConverter.class)
+    public JComboBox<EnumSiNo> getCmbRespaldarAlSalir() {
+        return cmbRespaldarAlSalir;
+    }
+
+    public void setCmbRespaldarAlSalir(JComboBox<EnumSiNo> cmbRespaldarAlSalir) {
+        this.cmbRespaldarAlSalir = cmbRespaldarAlSalir;
+    }
+
+    
+    @SpinnerBinding(value = "parametroHoraProgramada.valor",converter = IntegerToStringConverter.class)
+    public JSpinner getSpnHoraProgramada() {
+        return spnHoraProgramada;
+    }
+
+    public void setSpnHoraProgramada(JSpinner spnHoraProgramada) {
+        this.spnHoraProgramada = spnHoraProgramada;
+    }
+    
+     
+
     
     
     /**
@@ -71,8 +109,12 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         btnGuardarLocalizacion = new javax.swing.JButton();
         txtUbicacionRespaldo = new javax.swing.JTextField();
         lblEspacio1 = new javax.swing.JLabel();
-        lblEspacio2 = new javax.swing.JLabel();
-        btnRespaldarCorreo = new javax.swing.JButton();
+        chkEnviarCorreo = new javax.swing.JCheckBox();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cmbRespaldarAlSalir = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        spnHoraProgramada = new javax.swing.JSpinner();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -83,70 +125,108 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         btnRespaldar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/guardar.png"))); // NOI18N
-        btnRespaldar.setText("Respaldar en mi PC");
+        btnRespaldar.setText("Respaldar Base de Datos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnRespaldar, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Seleccionar ubicación para respaldos:");
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setText("Configuración Respaldos Automáticos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel1, gridBagConstraints);
 
         btnGuardarLocalizacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/buscar-ico.png"))); // NOI18N
         btnGuardarLocalizacion.setText("Guardar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         getContentPane().add(btnGuardarLocalizacion, gridBagConstraints);
 
         txtUbicacionRespaldo.setEditable(false);
         txtUbicacionRespaldo.setText("                                   ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtUbicacionRespaldo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.4;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
         getContentPane().add(lblEspacio1, gridBagConstraints);
+
+        chkEnviarCorreo.setText("Enviar al Correo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        getContentPane().add(chkEnviarCorreo, gridBagConstraints);
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setText("Respaldo Hora Programada:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel2, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText("Seleccionar ubicación para respaldos:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbRespaldarAlSalir, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Respaldar al Salir:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        getContentPane().add(lblEspacio2, gridBagConstraints);
-
-        btnRespaldarCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
-        btnRespaldarCorreo.setText("Respaldo Correo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(btnRespaldarCorreo, gridBagConstraints);
+        getContentPane().add(jLabel4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(spnHoraProgramada, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarLocalizacion;
     private javax.swing.JButton btnRespaldar;
-    private javax.swing.JButton btnRespaldarCorreo;
+    private javax.swing.JCheckBox chkEnviarCorreo;
+    private javax.swing.JComboBox<EnumSiNo> cmbRespaldarAlSalir;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblEspacio1;
-    private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JSpinner spnHoraProgramada;
     private javax.swing.JTextField txtUbicacionRespaldo;
     // End of variables declaration//GEN-END:variables
 }

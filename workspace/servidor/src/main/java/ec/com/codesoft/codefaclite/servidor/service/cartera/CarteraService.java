@@ -406,7 +406,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
         //CarteraRe
         //comprobante.getFechaEmision()
-        Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), comprobante.getFechaEmision(), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial());
+        Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), UtilidadesFecha.castDateUtilToSql(comprobante.getFechaEmision()), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial());
         
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
         

@@ -13,15 +13,19 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.controlador.vista.configuraciones.RespaldosModelUtilidades;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -59,27 +63,48 @@ import org.apache.commons.io.FileUtils;
  */
 public class RespaldarInformacionModel extends RespaldarInformacionPanel
 {
+    //private EnumSiNo enumSeleccionado;
+    private List<EnumSiNo> listEnumSiNo;    
+    //private Integer horaProgramada;
+    
+    private ParametroCodefac parametroHoraProgramada;
+    private ParametroCodefac parametroRespaldarSalir;
+    
+    
+    
     //private Path origenPath;
-    private Path destinoPath;
+    //private Path destinoPath;
     private JFileChooser jFileChooser;
-    private String ubicacionRespaldo;
-    private String nombreCarpetaRelpaldo;
+    //private String ubicacionRespaldo;
+    //private String nombreCarpetaRelpaldo;
     private ParametroCodefacServiceIf parametroCodefacServiceIf;
     //private Map<String, ParametroCodefac> parametro;
-    private Boolean existeDirectorio = false;
+    //private Boolean existeDirectorio = false;
            
     @Override
     public void iniciar() throws ExcepcionCodefacLite 
     {
         this.parametroCodefacServiceIf = ServiceFactory.getFactory().getParametroCodefacServiceIf();
-        this.ubicacionRespaldo = "";
+        //this.ubicacionRespaldo = "";
         this.jFileChooser = new JFileChooser();
         this.jFileChooser.setDialogTitle("Elegir ubicación para respaldar información");
         this.jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
         agregarListener();
-        obtenerUbicacionCarpetaRespaldo();
+        //obtenerUbicacionCarpetaRespaldo();
+        String ubicacionRespaldo=RespaldosModelUtilidades.obtenerUbicacionCarpetaRespaldo(session.getEmpresa());
+        getTxtUbicacionRespaldo().setText(ubicacionRespaldo);
         validacionDatosIngresados=false;
+        
+        iniciarValores();
 
+    }
+    
+    private void iniciarValores()
+    {
+        listEnumSiNo=Arrays.asList(EnumSiNo.NO,EnumSiNo.SI);
+        parametroHoraProgramada=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_HORA_PROGRAMADA,"");
+        
+        
     }
 
     @Override
@@ -96,24 +121,17 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             try{
                 if(!getTxtUbicacionRespaldo().getText().equals(""))
                 {
-                    ParametroCodefac p = this.session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RESPALDO);
-                    if(p==null)
+                    ParametroCodefac parametroDirectorio = this.session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RESPALDO);
+                    //Si no existe el parametro entonces creo uno nuevo
+                    if(parametroDirectorio==null)
                     {
-                        p=new ParametroCodefac(ParametroCodefac.DIRECTORIO_RESPALDO);
+                        parametroDirectorio=new ParametroCodefac(ParametroCodefac.DIRECTORIO_RESPALDO);
+                        parametroDirectorio.setEmpresa(session.getEmpresa());
                     }
                     
-                    p.setValor(this.ubicacionRespaldo+"");
-                    /*if(existeDirectorio)
-                    {
-                        respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea cambiar el lugar de respaldos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        if (!respuesta) {
-                            throw new ExcepcionCodefacLite("Cancelacion usuario");
-                        }
-                    }*/
-                    
-                    this.parametroCodefacServiceIf.editar(p); //Solo editar el parametro
+                    parametroDirectorio.setValor(getTxtUbicacionRespaldo().getText());
                                         
-                        
+                    this.parametroCodefacServiceIf.grabarOEditar(parametroDirectorio);                        
                     
                     DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);
                     dispose();
@@ -225,19 +243,19 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     }
     
     public void agregarListener()
-    {
-        getBtnRespaldarCorreo().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                generarRespaldoUbicacion(true);
-            }
-        });
-        
+    {   
         getBtnRespaldar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                generarRespaldoUbicacion(false);
+                try {
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(getChkEnviarCorreo().isSelected(),session.getEmpresa());
+                    DialogoCodefac.mensaje("Correcto","El proceso termino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                    //generarRespaldoUbicacion(getChkEnviarCorreo().isSelected());
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                }
             }    
         });
         
@@ -247,7 +265,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                 int seleccion = jFileChooser.showDialog(null, "Seleccionar");
                 switch (seleccion) {
                     case JFileChooser.APPROVE_OPTION:
-                        ubicacionRespaldo = "" + jFileChooser.getSelectedFile();
+                        String ubicacionRespaldo = "" + jFileChooser.getSelectedFile();
                         getTxtUbicacionRespaldo().setText(""+ubicacionRespaldo);
                         DialogoCodefac.mensaje("Advertencia", "Debe guardar la nueva ubicación para que se actualice el lugar de respaldo", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         break;
@@ -286,10 +304,11 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     /**
      * Genera el respaldo en una ubicación del disco previamente seleccionado
      */
-    public void generarRespaldoUbicacion(Boolean enviarCorreo)
+    /*public void generarRespaldoUbicacion(Boolean enviarCorreo)
     {
         try
                 {
+                    
                     if(!ubicacionRespaldo.equals(""))
                     {
                         crearNombreCarpetaRespaldo();
@@ -321,16 +340,16 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     exc.printStackTrace();                    
                     System.out.println("Error al respaldar información: " + exc);
                 }
-    }
+    }*/
     
-    public void crearNombreCarpetaRespaldo()
+    /*public void crearNombreCarpetaRespaldo()
     {
         this.nombreCarpetaRelpaldo = "" + new Date();
         this.nombreCarpetaRelpaldo = this.nombreCarpetaRelpaldo.replaceAll(" ","");
         this.nombreCarpetaRelpaldo = this.nombreCarpetaRelpaldo.replaceAll(":","");
-    }
+    }*/
     
-    public void obtenerUbicacionCarpetaRespaldo()
+    /*public void obtenerUbicacionCarpetaRespaldo()
     {
         try {
             ParametroCodefac parametroDirectorioRespaldo= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RESPALDO, session.getEmpresa());
@@ -340,7 +359,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             {
                 this.ubicacionRespaldo = parametroDirectorioRespaldo.getValor();
                 getTxtUbicacionRespaldo().setText(parametroDirectorioRespaldo.getValor());
-                this.existeDirectorio = true;
+                
             }
             else
             {
@@ -349,7 +368,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
         } catch (RemoteException ex) {
             Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
@@ -360,4 +379,40 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
+    /**
+     * =========================================================================
+     *                              GET AND SET
+     * =========================================================================
+     */
+
+
+    public List<EnumSiNo> getListEnumSiNo() {
+        return listEnumSiNo;
+    }
+
+    public void setListEnumSiNo(List<EnumSiNo> listEnumSiNo) {
+        this.listEnumSiNo = listEnumSiNo;
+    }
+
+    public ParametroCodefac getParametroHoraProgramada() {
+        return parametroHoraProgramada;
+    }
+
+    public void setParametroHoraProgramada(ParametroCodefac parametroHoraProgramada) {
+        this.parametroHoraProgramada = parametroHoraProgramada;
+    }
+
+    public ParametroCodefac getParametroRespaldarSalir() {
+        return parametroRespaldarSalir;
+    }
+
+    public void setParametroRespaldarSalir(ParametroCodefac parametroRespaldarSalir) {
+        this.parametroRespaldarSalir = parametroRespaldarSalir;
+    }
+
+    
+    
+    
 }

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
@@ -194,7 +195,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             if(venta.getVendedor()!=null)
             {
                 RutaService rutaService=new RutaService();
-                Integer dia=UtilidadesFecha.obtenerDiaSemana(venta.getFechaEmision()); //Por el momento busca la ruta segun el día que esta generando la proforma o factura
+                Integer dia=UtilidadesFecha.obtenerDiaSemana(UtilidadesFecha.castDateUtilToSql(venta.getFechaEmision())); //Por el momento busca la ruta segun el día que esta generando la proforma o factura
                 DiaEnum diaEnum=DiaEnum.buscarPorNumero(dia);
                 Ruta ruta=rutaService.consultarRutaActivaPorVendedorYCliente(venta.getVendedor(),venta.getSucursal(),diaEnum);
                 if(ruta!=null)
@@ -415,6 +416,22 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
             }
             
+        }
+        
+        //TODO: Por el momento dejo desctivado por que consume muchos recursos
+        //validacion especial cuanod tiene problemas en la base de datos
+        //validacionBaseDatosFacturas();
+                
+    }
+    
+    /**
+     * Metodo que hacer verificaciones de problemas de incoherencias con la base de datos
+     */
+    public void validacionBaseDatosFacturas() throws ServicioCodefacException, RemoteException
+    {
+        if(AbstractFacade.buscarClavesRepetidasBaseDatos(Factura.NOMBRE_TABLA, Factura.NOMBRE_PK))
+        {
+            throw new ServicioCodefacException("Error con Datos repetido de PK "+Factura.NOMBRE_TABLA);
         }
     }
     
@@ -706,7 +723,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
         kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
         kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
-        kardexDetalle.setFechaDocumento(detalle.getFactura().getFechaEmision());
+        kardexDetalle.setFechaDocumento(UtilidadesFecha.castDateUtilToSql(detalle.getFactura().getFechaEmision()));
 
         //Actualizar los valores del kardex
         kardexService.recalcularValoresKardex(kardex, kardexDetalle);

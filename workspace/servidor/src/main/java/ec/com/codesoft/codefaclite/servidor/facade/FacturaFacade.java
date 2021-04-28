@@ -190,7 +190,8 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         } else if (fi == null && ff == null) {
             fecha = "";
         } else {
-            fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
+            //fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
+            fecha = " AND (u.fechaEmision >= ?2 AND u.fechaEmision<= ?3)";
         }
         
         if (estadoEnum!= null) {

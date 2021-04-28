@@ -21,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA_ADICIONAL")
-public class FacturaAdicional extends ComprobanteAdicional implements Serializable {
+public class FacturaAdicional extends ComprobanteAdicional implements Serializable,Cloneable {
     
     /**
      * Nombre de los campos para grabar correos
@@ -64,6 +64,11 @@ public class FacturaAdicional extends ComprobanteAdicional implements Serializab
         this.factura = factura;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
 
     
+        
 }

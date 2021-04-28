@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional.
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
@@ -42,16 +43,19 @@ import javax.persistence.Transient;
  * @author Carlos
  */
 @Entity
-@Table(name = "FACTURA")
+@Table(name = Factura.NOMBRE_TABLA)
 public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> implements Cloneable {
 
+    public static final String NOMBRE_TABLA="FACTURA";
+    public static final String NOMBRE_PK="ID";
+    
     private static final long serialVersionUID = -1238278914412853684L;
 
     //public static final String ESTADO_FACTURADO="F";
     //public static final String ESTADO_ANULADO="A";
     //public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
     @Id
-    @Column(name = "ID")
+    @Column(name = Factura.NOMBRE_PK)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -769,6 +773,15 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         }
 
         return cantidadTotal;
+    }
+    
+    public String getFechaEmisionFormat()
+    {
+        if(fechaEmision!=null)
+        {
+            return ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaEmision);
+        }
+        return "";
     }
 
 }

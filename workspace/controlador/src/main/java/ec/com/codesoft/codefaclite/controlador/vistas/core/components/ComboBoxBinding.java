@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 
+import ec.com.codesoft.codefaclite.controlador.vistas.core.ConverterSwingMvvc;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,4 +24,5 @@ public @interface ComboBoxBinding {
      */
     public String source();
     public String valueSelect();
+    Class converter() default ConverterSwingMvvc.Error.class;
 }
