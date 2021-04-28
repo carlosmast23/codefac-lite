@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.pos.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 
 /**
@@ -44,6 +46,12 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         lblperiodo = new javax.swing.JLabel();
         cmbCaja = new javax.swing.JComboBox<>();
         lblEspacio2 = new javax.swing.JLabel();
+        lblFechaInicio = new javax.swing.JLabel();
+        dateFechaInicio = new com.toedter.calendar.JDateChooser();
+        btnLimpiarFechaInicio = new javax.swing.JButton();
+        lblFechaFin = new javax.swing.JLabel();
+        dateFechaFin = new com.toedter.calendar.JDateChooser();
+        btnLimpiarFechaFin = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -52,11 +60,13 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         setTitle("Caja Session Reporte");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        lblBuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblBuscar.setText("Usuario:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblBuscar, gridBagConstraints);
 
@@ -76,8 +86,9 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
@@ -85,8 +96,8 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
@@ -94,10 +105,12 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
+        lblperiodo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblperiodo.setText("Caja:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblperiodo, gridBagConstraints);
 
@@ -115,11 +128,65 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbCaja, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(lblEspacio2, gridBagConstraints);
+
+        lblFechaInicio.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblFechaInicio.setText("Fecha incial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblFechaInicio, gridBagConstraints);
+
+        dateFechaInicio.setDateFormatString("yyyy-MM-dd");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(dateFechaInicio, gridBagConstraints);
+
+        btnLimpiarFechaInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnLimpiarFechaInicio, gridBagConstraints);
+
+        lblFechaFin.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblFechaFin.setText("Fecha final:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblFechaFin, gridBagConstraints);
+
+        dateFechaFin.setDateFormatString("yyyy-MM-dd");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(dateFechaFin, gridBagConstraints);
+
+        btnLimpiarFechaFin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnLimpiarFechaFin, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -135,11 +202,17 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLimpiarFechaFin;
+    private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JComboBox<Caja> cmbCaja;
     private javax.swing.JComboBox<Usuario> cmbUsuario;
+    private com.toedter.calendar.JDateChooser dateFechaFin;
+    private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JLabel lblFechaFin;
+    private javax.swing.JLabel lblFechaInicio;
     private javax.swing.JLabel lblperiodo;
     private javax.swing.JTable tblCajasSession;
     // End of variables declaration//GEN-END:variables
@@ -175,5 +248,55 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
     public void setTblCajasSession(JTable tblCajasSession) {
         this.tblCajasSession = tblCajasSession;
     }
+
+    public JButton getBtnLimpiarFechaFin() {
+        return btnLimpiarFechaFin;
+    }
+
+    public void setBtnLimpiarFechaFin(JButton btnLimpiarFechaFin) {
+        this.btnLimpiarFechaFin = btnLimpiarFechaFin;
+    }
+
+    public JButton getBtnLimpiarFechaInicio() {
+        return btnLimpiarFechaInicio;
+    }
+
+    public void setBtnLimpiarFechaInicio(JButton btnLimpiarFechaInicio) {
+        this.btnLimpiarFechaInicio = btnLimpiarFechaInicio;
+    }
+
+    public JDateChooser getDateFechaFin() {
+        return dateFechaFin;
+    }
+
+    public void setDateFechaFin(JDateChooser dateFechaFin) {
+        this.dateFechaFin = dateFechaFin;
+    }
+
+    public JDateChooser getDateFechaInicio() {
+        return dateFechaInicio;
+    }
+
+    public void setDateFechaInicio(JDateChooser dateFechaInicio) {
+        this.dateFechaInicio = dateFechaInicio;
+    }
+
+    public JLabel getLblFechaFin() {
+        return lblFechaFin;
+    }
+
+    public void setLblFechaFin(JLabel lblFechaFin) {
+        this.lblFechaFin = lblFechaFin;
+    }
+
+    public JLabel getLblFechaInicio() {
+        return lblFechaInicio;
+    }
+
+    public void setLblFechaInicio(JLabel lblFechaInicio) {
+        this.lblFechaInicio = lblFechaInicio;
+    }
+    
+    
    
 }

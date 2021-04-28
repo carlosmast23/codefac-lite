@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -23,5 +24,6 @@ public interface CajaSesionServiceIf extends ServiceAbstractIf<CajaSession>
     public CajaSession obtenerUltimaCajaSession(Caja caja) throws RemoteException;
     public CajaSession obtenerCajaSessionPorPuntoEmisionYUsuario(Integer puntoEmision, Usuario usuario) throws RemoteException;
     public List<CajaSession> obtenerCajaSessionPorCajaYUsuario(Caja caja, Usuario usuario) throws RemoteException;
+    public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio,Date fechaFin) throws RemoteException;
     public List<CajaSession> obtenerCajaSessionPorUsuarioYSucursal(Usuario usuario, Sucursal sucursal) throws RemoteException;
 }

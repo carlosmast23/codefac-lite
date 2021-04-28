@@ -19,6 +19,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
+import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -76,8 +78,10 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
         try {
             Caja caja = (Caja) getCmbCaja().getSelectedItem();
             Usuario usuario = (Usuario) getCmbUsuario().getSelectedItem();
+            java.sql.Date fechaInicial = (getDateFechaInicio().getDate() != null) ? new java.sql.Date(getDateFechaInicio().getDate().getTime()) : null;
+            java.sql.Date fechaFinal = (getDateFechaFin().getDate() != null) ? new java.sql.Date(getDateFechaFin().getDate().getTime()) : null;
             
-            List<CajaSession> cajasSession = (List<CajaSession>) ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorCajaYUsuario(caja, usuario);
+            List<CajaSession> cajasSession = (List<CajaSession>) ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicial, fechaFinal);
             
             dataReporte = new ArrayList<>();
             if(cajasSession != null && !cajasSession.isEmpty()){
@@ -195,6 +199,9 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
             modeloTablaCajasSession = new DefaultTableModel();
             getTblCajasSession().setModel(modeloTablaCajasSession);
             
+            getDateFechaInicio().setDate(fechaInicioMes(hoy()));
+            getDateFechaFin().setDate(hoy());
+            
         } catch (RemoteException ex) {
             Logger.getLogger(CajaSessionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -213,7 +220,7 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                     Logger.getLogger(CajaSessionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        });
+        });        
     }
     
     private void cargarUsuariosPorCajaEnCombo() throws RemoteException
@@ -241,7 +248,7 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                 titulo.add("Valor Cierre");
                 
                 modeloTablaCajasSession = new DefaultTableModel(titulo, 0);
-            
+                
                 generarConsulta();
                 
                 dataReporte.forEach(csrd -> 
@@ -262,6 +269,20 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                 
                 getTblCajasSession().setModel(modeloTablaCajasSession);
 
+            }
+        });
+        
+        getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaInicio().setDate(null);
+            }
+        });
+
+        getBtnLimpiarFechaFin().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaFin().setDate(null);
             }
         });
     }

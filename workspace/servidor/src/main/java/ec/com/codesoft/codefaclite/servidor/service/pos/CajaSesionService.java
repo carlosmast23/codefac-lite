@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaSesionServ
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,6 +183,17 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
             return cajasSession;
         }
         
+        return null;
+    }
+
+    @Override
+    public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin) throws RemoteException {
+        
+        List<CajaSession> cajasSession = cajaSesionFacade.obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicio, fechaFin);
+        if(cajasSession.size() > 0)
+        {
+            return cajasSession;
+        }        
         return null;
     }
 
