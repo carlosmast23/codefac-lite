@@ -18,8 +18,8 @@ public class EsperaSwingWorker extends SwingWorker<Integer, Integer>{
     private DialogoCargando dialogo;
 
     public EsperaSwingWorker(String texto) {
-        this.dialogo = new DialogoCargando();
-        this.dialogo.agregarTexto(texto);
+        //this.dialogo = new DialogoCargando();
+        //this.dialogo.agregarTexto(texto);
     }
     
 

@@ -31,8 +31,8 @@ public class DialogoCargando extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
-    public DialogoCargando() {
-        super();
+    public DialogoCargando(java.awt.Frame parent) {
+        super(parent,false);
         initComponents();
         setLocationRelativeTo(null);
     }
