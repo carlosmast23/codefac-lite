@@ -34,7 +34,6 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.BindingFactoryCompone
 import ec.com.codesoft.codefaclite.controlador.vistas.core.ControladorCampoTextoAnot;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.RoutingComponentBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
-import ec.com.codesoft.codefaclite.controlador.vistas.core.UtilidadesControladorVistaGeneral;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
@@ -56,6 +55,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPa
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorker;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorkerIf;
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.vista.configuraciones.RespaldosModelUtilidades;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
@@ -419,9 +419,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void generarRespaldoBaseDatosPorCorreo()
     {
         try {
-            //Enviar al correo y generar el respaldo de la base de datos
-            RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa());
-        } catch (ServicioCodefacException ex) {
+            //Respaldar solo cuando tiene configurado el parametro de grabar la base de datos
+            if(ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,EnumSiNo.SI))
+            {
+                try {
+                    //Enviar al correo y generar el respaldo de la base de datos
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa());
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.dialogoPregunta(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                }
+            }
+        } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -441,7 +450,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     public void procesar() {
                         //Grabar las posiciones de los widgets al momento de salir
                         grabarDatosPosicionesWidgetSalir();                
-                        //generarRespaldoBaseDatosPorCorreo();
+                        generarRespaldoBaseDatosPorCorreo();
                         
                         //Solo detener la publicidad cuando exista
                         if (hiloPublicidadCodefac != null) {
@@ -452,7 +461,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                     @Override
                     public String getMensaje() {
-                        return "Cerrando el Sistema, Por favor espere un momento ...";
+                        return "Cerrando el Sistema ...";
                     }
                     
                 });

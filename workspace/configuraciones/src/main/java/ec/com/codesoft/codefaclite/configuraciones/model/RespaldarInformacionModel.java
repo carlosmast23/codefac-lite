@@ -77,34 +77,55 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     private JFileChooser jFileChooser;
     //private String ubicacionRespaldo;
     //private String nombreCarpetaRelpaldo;
-    private ParametroCodefacServiceIf parametroCodefacServiceIf;
+    //private ParametroCodefacServiceIf parametroCodefacServiceIf;
     //private Map<String, ParametroCodefac> parametro;
     //private Boolean existeDirectorio = false;
            
     @Override
     public void iniciar() throws ExcepcionCodefacLite 
     {
-        this.parametroCodefacServiceIf = ServiceFactory.getFactory().getParametroCodefacServiceIf();
+        //this.parametroCodefacServiceIf = ServiceFactory.getFactory().getParametroCodefacServiceIf();
         //this.ubicacionRespaldo = "";
         this.jFileChooser = new JFileChooser();
         this.jFileChooser.setDialogTitle("Elegir ubicación para respaldar información");
         this.jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
         agregarListener();
-        //obtenerUbicacionCarpetaRespaldo();
-        String ubicacionRespaldo=RespaldosModelUtilidades.obtenerUbicacionCarpetaRespaldo(session.getEmpresa());
-        getTxtUbicacionRespaldo().setText(ubicacionRespaldo);
-        validacionDatosIngresados=false;
-        
         iniciarValores();
-
+        //obtenerUbicacionCarpetaRespaldo();
+        cargarValoresGrabados();
+    }
+    
+    private void cargarValoresGrabados()
+    {
+        String ubicacionRespaldo=RespaldosModelUtilidades.obtenerUbicacionCarpetaRespaldo(session.getEmpresa());
+        getTxtUbicacionRespaldo().setText(ubicacionRespaldo);        
+        
+        ParametroCodefacServiceIf service=ServiceFactory.getFactory().getParametroCodefacServiceIf();
+        try {
+            parametroHoraProgramada=service.getParametroByNombre(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_HORA_PROGRAMADA, session.getEmpresa());
+            parametroRespaldarSalir=service.getParametroByNombre(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR, session.getEmpresa());
+            
+            //Si los valores son nulos entonces creo las variables en balnco
+            if(parametroHoraProgramada==null)
+            {
+                parametroHoraProgramada=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_HORA_PROGRAMADA,"");
+                parametroHoraProgramada.setEmpresa(session.getEmpresa());
+            }
+            
+            if(parametroRespaldarSalir==null)
+            {
+                parametroRespaldarSalir=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,"");
+                parametroRespaldarSalir.setEmpresa(session.getEmpresa());
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void iniciarValores()
     {
         listEnumSiNo=Arrays.asList(EnumSiNo.NO,EnumSiNo.SI);
-        parametroHoraProgramada=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_HORA_PROGRAMADA,"");
-        
-        
     }
 
     @Override
@@ -131,7 +152,9 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     
                     parametroDirectorio.setValor(getTxtUbicacionRespaldo().getText());
                                         
-                    this.parametroCodefacServiceIf.grabarOEditar(parametroDirectorio);                        
+                    ParametroCodefacServiceIf parametroCodefacServiceIf= ServiceFactory.getFactory().getParametroCodefacServiceIf();
+                    List<ParametroCodefac> parametrosList=Arrays.asList(parametroDirectorio,parametroHoraProgramada,parametroRespaldarSalir);
+                    parametroCodefacServiceIf.editarParametros(parametrosList);                        
                     
                     DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);
                     dispose();
@@ -144,9 +167,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             catch(RemoteException exc)
             {
                 System.out.println("Error guardando parametro de path respaldo");
-            } catch (ServicioCodefacException ex) {
-            Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            }
     } 
     
 

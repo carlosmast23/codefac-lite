@@ -25,7 +25,11 @@ public class EnumSiNoToStringConverter extends ConverterSwingMvvc<String,EnumSiN
 
     @Override
     public String castComponentToProperty(EnumSiNo value) {
-        return value.getLetra();
+        if(value!=null)
+        {
+            return value.getLetra();
+        }
+        return null;
     }
     
 }
