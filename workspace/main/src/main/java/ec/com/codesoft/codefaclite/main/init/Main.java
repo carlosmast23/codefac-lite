@@ -55,6 +55,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.GestorTareasProgramadas;
+import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.RespaldoProgramadoTarea;
 //import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 
@@ -107,6 +109,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -517,7 +520,15 @@ public class Main {
      * Cargar Recursos servicios protocolo RMI
      */
     public static void cargarRecursosServidor(String ipServidor) {
+        //Iniciar el Protocolo RMI para activar el servidor en modo REMOTO para recibir peticiones por la red
         ControllerServiceUtil.cargarRecursosServidor(ipServidor);
+        
+        //Iniciar lass tareas programadas que se deben ejecutar en el servidor        
+        GestorTareasProgramadas gestorTareas=GestorTareasProgramadas.getInstance();
+        //gestorTareas.agregarTareaProgramadaPorDia(new RespaldoProgramadoTarea(), 13, 04);
+        gestorTareas.agregarTareaProgramada(new RespaldoProgramadoTarea(), 10l,60l, TimeUnit.SECONDS);
+        Logger.getLogger(Main.class.getName()).log(Level.INFO,"Iniciando gestor de TAREAS PROGRAMADAS ");
+        
     }
 
     public static void cargarRecursosCliente(String ipServidor) {
@@ -564,7 +575,7 @@ public class Main {
             else
             {
                 /**
-                 * Componentes iniciales que utilizo tanto para modo servidor y modo cliente-servidor
+                 * Componentes iniciales que utilizo tanto para modo SERVIDOR y modo CLIENTE-SERVIDOR
                  */
                 componentesBaseDatos(false);
                 

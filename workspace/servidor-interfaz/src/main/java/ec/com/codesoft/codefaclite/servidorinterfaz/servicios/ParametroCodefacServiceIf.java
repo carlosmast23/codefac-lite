@@ -45,4 +45,6 @@ public interface ParametroCodefacServiceIf extends ServiceAbstractIf<ParametroCo
     public void crearParametroPorDefectoEmpresaSinTrasaccion(Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException;
     
     public List ejecutarConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException;
+    
+    public ParametroCodefac getParametroByNombreSinEmpresa(String nombre) throws java.rmi.RemoteException;
 }

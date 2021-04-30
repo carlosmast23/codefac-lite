@@ -56,7 +56,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorker;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorkerIf;
 import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
-import ec.com.codesoft.codefaclite.controlador.vista.configuraciones.RespaldosModelUtilidades;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.RespaldosModelUtilidades;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;

@@ -87,6 +87,27 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         return null;
     }
     
+    public ParametroCodefac getParametroByNombreSinEmpresa(String nombre) throws java.rmi.RemoteException
+    {
+        try {
+            return (ParametroCodefac) ejecutarConsulta(new MetodoInterfaceConsulta() {
+                @Override
+                public Object consulta() throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("nombre", nombre);
+                    List<ParametroCodefac> parametroCodefacList = getFacade().findByMap(map);
+                    if (parametroCodefacList != null && parametroCodefacList.size() > 0)
+                        return parametroCodefacList.get(0);
+                    else
+                        return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     /**
      * TODO: El nombre esta medio confuso , por que en realidad este metodo edita y graba al mismo tiempo
      * @param parametro

@@ -57,6 +57,23 @@ public abstract class ParametroUtilidades {
         return false; 
     }
     
+    public static <T extends ComparadorInterface> Boolean compararSinEmpresa(String nombreParametro,T valorComparar) throws RemoteException
+    {
+        String valorParametro=obtenerValorParametroSinEmpresa(nombreParametro);
+        if(valorParametro!=null)
+        {
+            T resultadoValor=(T) valorComparar.
+                    consultarParametro(valorParametro);
+            
+            if(resultadoValor!=null && resultadoValor.equals(valorComparar))
+            {
+                return true;
+            }        
+        }
+        return false; 
+    }
+
+    
     /**
      * 
      * @param empresa
@@ -68,6 +85,25 @@ public abstract class ParametroUtilidades {
     {
         try {
             ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(nombreParametro,empresa);
+            if (parametroCodefac != null) {
+                //Solo si tiene parametro positivo intento construir el ensamble
+                if(parametroCodefac.getValor()!=null)
+                {
+                    return parametroCodefac.getValor();
+                }
+                
+            }
+               
+        } catch (RemoteException ex) {
+            Logger.getLogger(ParametroUtilidades.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static String obtenerValorParametroSinEmpresa(String nombreParametro) 
+    {
+        try {
+            ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombreSinEmpresa(nombreParametro);
             if (parametroCodefac != null) {
                 //Solo si tiene parametro positivo intento construir el ensamble
                 if(parametroCodefac.getValor()!=null)
