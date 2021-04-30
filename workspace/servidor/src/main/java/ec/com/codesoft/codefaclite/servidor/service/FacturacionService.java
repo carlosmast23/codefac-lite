@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.PrestamoService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.CajaPermisoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -298,7 +299,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
                 
                  //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
-                if(factura.getUsuario().getCajasPermisoUsuario() != null && !factura.getUsuario().getCajasPermisoUsuario().isEmpty())
+                 List<CajaPermiso> cajasPermisosList=factura.getUsuario().buscarPermisosCajasActivosService();
+                if(cajasPermisosList != null && !cajasPermisosList.isEmpty())
                 {
                     agregarDatosParaCajaSession(factura);
                 }
@@ -988,15 +990,19 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         CajaPermiso cajaPermisoParaUsuario = null;
         
         Usuario usuario = factura.getUsuario();
+        List<CajaPermiso> cajaPermisoList= usuario.buscarPermisosCajasActivosService();
         
         //Verifico si el usuario tiene cajas con permisos para el método POS
-        if(usuario.getCajasPermisoUsuario().isEmpty())
+        if(cajaPermisoList.isEmpty())
         {
             throw new ServicioCodefacException("No tiene permisos asignados en cajas");
         }
         
         //Busco la caja, dentro de la cajas que tiene permiso el usuario con el respectivo punto de emision que eligio en la factura       
-        for(CajaPermiso cajaPermiso : usuario.getCajasPermisoUsuario()) 
+        //CajaPermisoService cajaPermisoService=new CajaPermisoService();
+        //cajaPermisoService.buscarUsuariosPorSucursalYLigadosACaja(session, caja)
+        
+        for(CajaPermiso cajaPermiso : cajaPermisoList) 
         {
             if(cajaPermiso.getCaja().getPuntoEmision().getPuntoEmision().equals(factura.getPuntoEmision()))
             {
@@ -1017,7 +1023,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         if(cajaPermisoParaUsuario == null)
         {
-            throw new ServicioCodefacException("No tiene permisos asignos en el punto de emision para este horario");
+            throw new ServicioCodefacException("No tiene permisos asignados en el punto de emisión para este horario");
         }
         
         if(usuario.getCajasSessionUsuario().isEmpty())

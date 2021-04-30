@@ -191,7 +191,7 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
         try {
            
             List<Caja> cajas = ServiceFactory.getFactory().getCajaServiceIf().buscarCajasPorSucursal(session);
-            List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session, cajas.get(0));
+            List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session.getSucursal(), cajas.get(0));
             
             UtilidadesComboBox.llenarComboBox(getCmbCaja(), cajas);
             UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios);
@@ -226,7 +226,7 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
     private void cargarUsuariosPorCajaEnCombo() throws RemoteException
     {
         Caja caja = (Caja) getCmbCaja().getSelectedItem();
-        List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session, caja);
+        List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session.getSucursal(), caja);
         UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios);
     }
     

@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
@@ -20,6 +22,7 @@ import java.util.List;
  */
 public interface CajaPermisoServiceIf extends ServiceAbstractIf<CajaPermiso>
 {
-    public List<Usuario> buscarUsuariosPorSucursalYLigadosACaja(SessionCodefacInterface session, Caja caja) throws RemoteException;
+    public List<Usuario> buscarUsuariosPorSucursalYLigadosACaja(Sucursal sucursal, Caja caja) throws RemoteException;
     public List<CajaPermiso> obtenerTodasCajasPorUsuario(Usuario usuario, PuntoEmision puntoEmision) throws RemoteException;
+    public List<CajaPermiso> buscarPermisosCajasActivos(Usuario usuario) throws ServicioCodefacException,java.rmi.RemoteException;
 }

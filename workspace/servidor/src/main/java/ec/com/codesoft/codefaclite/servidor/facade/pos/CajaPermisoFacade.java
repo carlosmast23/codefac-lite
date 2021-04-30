@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade.pos;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
@@ -27,7 +28,7 @@ public class CajaPermisoFacade extends AbstractFacade<CajaPermiso>
         super(CajaPermiso.class);
     }
     
-    public List<Usuario> buscarUsuariosPorSucursalYLigadosAUnaCaja(SessionCodefacInterface session, Caja caja)
+    public List<Usuario> buscarUsuariosPorSucursalYLigadosAUnaCaja(Sucursal sucursal, Caja caja)
     {
         try
         {
@@ -35,7 +36,7 @@ public class CajaPermisoFacade extends AbstractFacade<CajaPermiso>
 
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(1, caja);
-            query.setParameter(2, session.getSucursal());
+            query.setParameter(2, sucursal);
             query.setParameter(3, GeneralEnumEstado.ACTIVO.getEstado());
             
             return query.getResultList();

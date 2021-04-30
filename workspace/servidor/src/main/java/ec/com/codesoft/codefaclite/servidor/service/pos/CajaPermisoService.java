@@ -8,7 +8,9 @@ package ec.com.codesoft.codefaclite.servidor.service.pos;
 import ec.com.codesoft.codefaclite.servidor.facade.pos.CajaPermisoFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
@@ -34,10 +36,27 @@ public class CajaPermisoService extends ServiceAbstract<CajaPermiso, CajaPermiso
         cajaPermisoFacade = new CajaPermisoFacade();
     }
     
-    @Override
-    public List<Usuario> buscarUsuariosPorSucursalYLigadosACaja(SessionCodefacInterface session, Caja caja)
+    public List<CajaPermiso> buscarPermisosCajasActivos(Usuario usuario) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        return cajaPermisoFacade.buscarUsuariosPorSucursalYLigadosAUnaCaja(session, caja);
+        //CajaPermiso cajaPermiso;
+        //cajaPermiso.getUsuario();
+        //cajaPermiso.getEstado();
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("usuario", usuario);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
+    
+    /**
+     * 
+     * @param session
+     * @param caja
+     * @return 
+     */
+    @Override
+    public List<Usuario> buscarUsuariosPorSucursalYLigadosACaja(Sucursal sucursal, Caja caja)
+    {
+        return cajaPermisoFacade.buscarUsuariosPorSucursalYLigadosAUnaCaja(sucursal, caja);
         
     }
 
