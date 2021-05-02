@@ -125,12 +125,27 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             throw new ServicioCodefacException("No se puede crear el registro sin establecimientos");
         }
         
+        //TODO: Mejorar para tambien hacer la validacion con datos GUARDADOS para evitar problemas , actualmente solo queda con los datos que supuestamente vienen desde la vista pero esto no es seguro
+        //Validar que los detalles no puedan tener el mismo cópdigo de la sucursal
+        for (int i = 0; i < p.getEstablecimientos().size(); i++) {
+            PersonaEstablecimiento establecimiento=p.getEstablecimientos().get(i);
+            for (int j = i+1; j < p.getEstablecimientos().size(); j++) 
+            {
+                PersonaEstablecimiento establecimientoTmp=p.getEstablecimientos().get(j);
+                if(establecimientoTmp.getCodigoSucursal().equals(establecimiento.getCodigoSucursal()))
+                {
+                    throw new ServicioCodefacException("No se puede grabar el CLIENTE con 2 establecimientos que tienen el mismo CÓDIGO");
+                }
+            }
+        }
+        
         //Si se esta grabando e editando un consumidor final no se puede editar el consumidor final
         if(p.getIdentificacion().equals("9999999999999"))
         {
             //Si cambian este dato el sistema por defecto lo deja como el original
             p.setRazonSocial(Usuario.CONSUMIDOR_FINAL_NOMBRE);            
         }
+                
         
         //NOTA: Esta validacion siempre debe ir al ultimo de este metodo
         //Si es un crud verifico sin los datos editados y consultados son los mismos

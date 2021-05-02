@@ -526,7 +526,7 @@ public class Main {
         //Iniciar lass tareas programadas que se deben ejecutar en el servidor        
         GestorTareasProgramadas gestorTareas=GestorTareasProgramadas.getInstance();
         //gestorTareas.agregarTareaProgramadaPorDia(new RespaldoProgramadoTarea(), 13, 04);
-        gestorTareas.agregarTareaProgramada(new RespaldoProgramadoTarea(), 10l,60l, TimeUnit.SECONDS);
+        //gestorTareas.agregarTareaProgramada(new RespaldoProgramadoTarea(), 10l,60l, TimeUnit.SECONDS);
         Logger.getLogger(Main.class.getName()).log(Level.INFO,"Iniciando gestor de TAREAS PROGRAMADAS ");
         
     }

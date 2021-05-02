@@ -144,6 +144,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             throw new ExcepcionCodefacLite("Error al prevalidar");
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite("Error de conexion");
         }
 
     }
@@ -159,6 +160,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","Error de comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Cancelado por error");
