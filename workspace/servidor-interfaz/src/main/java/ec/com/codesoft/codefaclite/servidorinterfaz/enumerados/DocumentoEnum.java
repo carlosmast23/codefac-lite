@@ -67,7 +67,11 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
             DocumentoCategoriaEnum.COMPROBANTES_VENTA,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},
             false,
-            false),
+            false,
+            "00",
+            false
+    
+    ),
     /**
      * Nota de Venta para los contribuyentes que estan en modalidad RIDE 
      * TODO: Analizar si este documento tiene o no validez tributarioa o ver si creo otro documento
