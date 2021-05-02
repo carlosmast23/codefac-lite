@@ -420,6 +420,19 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
         }
         
+        //validar que si tiene un documento de tipo de IDENTIFICACION SIN DEFINIR solo permita realizar procesos INTERNOS
+        
+        if(factura.getCliente().getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.SIN_DEFINIR))
+        {
+            Boolean isDocumentoLegal=factura.getCodigoDocumentoEnum().getDocumentoLegal();
+            
+            if(isDocumentoLegal)
+            {
+                throw new ServicioCodefacException("No se puede emitir DOCUMENTOS LEGALES al cliente con el tipo de IDENTIFICACIÓN SIN DEFINIR");
+            }
+        }
+
+        
         //TODO: Por el momento dejo desctivado por que consume muchos recursos
         //validacion especial cuanod tiene problemas en la base de datos
         //validacionBaseDatosFacturas();

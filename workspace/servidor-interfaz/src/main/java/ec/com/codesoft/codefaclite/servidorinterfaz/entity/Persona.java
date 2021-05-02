@@ -502,6 +502,7 @@ public class Persona implements Serializable, Comparable<Persona> {
                 verificador = UtilidadesJuridicas.validarCedula(identificacion);
                 break;
             case PASAPORTE:
+            case SIN_DEFINIR:
                 verificador = true;
                 break;
             case CLIENTE_FINAL:
@@ -548,8 +549,8 @@ public class Persona implements Serializable, Comparable<Persona> {
             return ValidacionCedulaEnum.DATO_VACIO;
         }
 
-        //Hacer validaciones de tamanio y texto cuando es diferente de pasaporte
-        if (!getTipoIdentificacionEnum().equals(TipoIdentificacionEnum.PASAPORTE)) {
+        //Hacer validaciones de tamanio y texto cuando es diferente de pasaporte y sin definir
+        if (!getTipoIdentificacionEnum().equals(TipoIdentificacionEnum.PASAPORTE) && !getTipoIdentificacionEnum().equals(TipoIdentificacionEnum.SIN_DEFINIR)) {
             if (identificacion.length() != 10 && identificacion.length() != 13) {
                 return ValidacionCedulaEnum.TAMANIO_INCORRECTO;
             }
@@ -669,6 +670,11 @@ public class Persona implements Serializable, Comparable<Persona> {
         RUC("R", "Ruc", "04", "01"),
         CEDULA("C", "Cédula", "05", "02"),
         PASAPORTE("P", "Pasaporte", "06", "03"),
+        /**
+         * Este tipo de DATO INTERNO me va a servir por ejemplo cuando NO TENGO LOS DATOS de un cliente pero igual necesito registrar
+         * por ejemplo para manejar modulos de CRM
+         */
+        SIN_DEFINIR("S", "Sin Definir", "00", "00"),
         CLIENTE_FINAL("F", "Consumidor Final", "9999999999999", new BigDecimal("200"), "07", "");
 
         private String letra;

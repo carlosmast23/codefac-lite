@@ -317,6 +317,10 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
     */
 
+    /**
+     * TODO: Ver si se puede utilizar la misma forma de validar que esta en la entidad de Persona en el metodo validar
+     * @return 
+     */
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
     public boolean validarIdentificacionSegunOpcionEstablecida() {
         /**
@@ -336,6 +340,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 verificador = UtilidadesJuridicas.validarCedula(getjTextIdentificacion().getText());
                 break;
             case PASAPORTE:
+            case SIN_DEFINIR:
                 verificador = true;
                 break;
             case CLIENTE_FINAL:
@@ -618,9 +623,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 if (!getjTextIdentificacion().getText().equals("")) {
                     panelPadre.validarPorGrupo(ValidacionCodefacAnotacion.GRUPO_FORMULARIO, NOMBRE_VALIDADOR_IDENTIFICACION);
                 }
-                
-                //Habilitar o deshabilitar razon social y nombre legal dependiendo si elige cedula o ruc
-                //SriIdentificacion sriIdentificacion=(SriIdentificacion) getjComboIdentificacion().getSelectedItem();
                 
                 // Verifico que si el codigo es igual a la cedula desahabilito esos 2 datos
                 if(tipoIdentificacionEnum!=null && tipoIdentificacionEnum.equals(tipoIdentificacionEnum.CEDULA))
