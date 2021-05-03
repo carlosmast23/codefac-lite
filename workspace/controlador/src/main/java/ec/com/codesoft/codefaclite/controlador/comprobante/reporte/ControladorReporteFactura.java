@@ -9,7 +9,10 @@ import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
-import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
+import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
+import ec.com.codesoft.codefaclite.controlador.reportes.CampoAgruparIf;
+import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
+import ec.com.codesoft.codefaclite.controlador.reportes.UtilidadReporteJasper;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -23,13 +26,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -39,13 +38,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -671,12 +668,13 @@ public class ControladorReporteFactura {
     {
         String titulo = "Ventas "+tipoReporteEnum.getNombre();
         InputStream path=getReporteAgrupado();
-        List<AgrupadoReporteIf> datosProcesar=(ArrayList<AgrupadoReporteIf>)(ArrayList<?>)data;
+        //List<AgrupadoReporteIf> datosProcesar=(ArrayList<AgrupadoReporteIf>)(ArrayList<?>)data;
         
-        tipoReporteEnum.procesarDatosReporte(datosProcesar);
+        //tipoReporteEnum.procesarDatosReporte(datosProcesar);
+        UtilidadReporteJasper.obtenerDatosReporteAgrupado(tipoReporteEnum, data);
         
         //ordenarListaPorPrecio(data);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), datosProcesar, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
     
@@ -1097,62 +1095,70 @@ public class ControladorReporteFactura {
     }
     
     
-    public enum TipoReporteEnum
+    public enum TipoReporteEnum implements EnumReporteAgruparIf
     {
         NORMAL("Normal",null),
         AGRUPADO_POR_VENDEDOR("Agrupado por vendedor",new CampoAgruparIf() {
             @Override
-            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
-                return dato.getVendedor();
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_VENDEDOR).toString();
+                //return dato.getVendedor();
             }
         }),
         
         AGRUPADO_POR_PUNTO_EMISION("Agrupado por punto de emisión",new CampoAgruparIf() {
             @Override
-            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
-                return dato.getPuntoEmision();
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_PUNTO_EMISION).toString();
+                //return dato.getPuntoEmision();
             }
         }),
         
         AGRUPADO_POR_PRODUCTO("Agrupado por producto",new CampoAgruparIf() {
             @Override
-            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
-                return dato.getNombreProducto();
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_PRODUCTO).toString();
+                //return dato.getNombreProducto();
             }
         }),
         
         AGRUPADO_POR_CATEGORIA("Agrupado por categoria",new CampoAgruparIf() {
             @Override
-            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
-                return dato.getCategoria();
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_CATEGORIA).toString();
+                //return dato.getCategoria();
             }
         }),
         
         AGRUPADO_POR_FORMA_PAGO("Agrupado por forma de pago",new CampoAgruparIf() {
             @Override
-            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
-                return dato.getFormaPago();
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_FORMA_PAGO).toString();
+                //return dato.getFormaPago();
             }
         }),
         
         AGRUPADO_POR_VALOR("Agrupado por valores",new CampoAgruparIf() {
             @Override
-            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
-                return dato.getPrecioUnitarioReporte();
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_VALOR).toString();
+                //return dato.getPrecioUnitarioReporte();
             }
         }),
         
         AGRUPADO_POR_RUTA("Agrupado por ruta",new CampoAgruparIf() {
             @Override
-            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
-                return dato.getRuta();
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_RUTA).toString();
+                //return dato.getRuta();
             }
         }),
         
         AGRUPADO_POR_ZONA("Agrupado por zonas",new CampoAgruparIf() {
             @Override
-            public String obtenerCampoAgrupar(ReporteFacturaData dato) {
-                return dato.getZona();
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_ZONA).toString();
+                //return dato.getZona();
             }
         });
         
@@ -1176,6 +1182,11 @@ public class ControladorReporteFactura {
         public void setNombre(String nombre) {
             this.nombre = nombre;
         }
+        
+        @Override
+        public CampoAgruparIf getCampoAgrupar() {
+            return campoAgruparIf;
+        }
        
         @Override
         public String toString() {
@@ -1196,19 +1207,19 @@ public class ControladorReporteFactura {
          * Metodo principal que me permite llenar el dato de FILTRO
          * y tambien ordenar los datos de acuerdo al parametro para AGRUPAR
          */
-        public void procesarDatosReporte(List<AgrupadoReporteIf> reporteData)
+        /*public void procesarDatosReporte(List<AgrupadoReporteIf> reporteData)
         {
             llenarDatoAgrupacion(reporteData);
             ordenarAgrupar(reporteData);
             
-        }
+        }*/
         
         
         /**
          * Metodo que me permite agrupar los datos antes de poder procesar para el reporte
          * @param reporteData 
          */
-        public void ordenarAgrupar(List<AgrupadoReporteIf> reporteData)
+        /*public void ordenarAgrupar(List<AgrupadoReporteIf> reporteData)
         {            
             Collections.sort(reporteData,new Comparator<AgrupadoReporteIf>(){
                 public int compare(AgrupadoReporteIf obj1, AgrupadoReporteIf obj2) 
@@ -1225,23 +1236,11 @@ public class ControladorReporteFactura {
                 String datoAgrupar=campoAgruparIf.obtenerCampoAgrupar((ReporteFacturaData) reporteFacturaData);
                 reporteFacturaData.setCampoAgrupado(datoAgrupar);
             }
-        }
-                
+        }*/
+                        
     }
     
-    /**
-     * Interfaz que me permite establecer la forma de ordenar cuando son datos agrupados
-     */
-    public interface CampoAgruparIf
-    {
-        public String obtenerCampoAgrupar(ReporteFacturaData dato);
-    };
-    
-    public interface AgrupadoReporteIf
-    {
-        public void setCampoAgrupado(String campoAgrupado);
-        public String getCampoAgrupado();
-    };
+
     
     
 }

@@ -5,12 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
-import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura.AgrupadoReporteIf;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
-import java.math.BigDecimal;
-import java.sql.Date;
+import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
+import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
+import ec.com.codesoft.codefaclite.controlador.reportes.NombreCampoAgrupadoIf;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -471,8 +472,71 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
 
         return tiposDatos;
     }
+
+    @Override
+    public String getValorCampoAgrupar(EnumReporteAgruparIf enumReporteAgruparIf) {
+        
+        TipoReporteEnum tipoRepoteEnum=(TipoReporteEnum) enumReporteAgruparIf; 
+                
+        switch(tipoRepoteEnum)
+        {
+            case AGRUPADO_POR_VENDEDOR:return vendedor;
+            case AGRUPADO_POR_PUNTO_EMISION:return puntoEmision;
+            case AGRUPADO_POR_PRODUCTO:return nombreProducto;
+            case AGRUPADO_POR_CATEGORIA:return categoria;
+            case AGRUPADO_POR_FORMA_PAGO:return formaPago;
+            case AGRUPADO_POR_VALOR:return precioUnitarioReporte;
+            case AGRUPADO_POR_RUTA:return ruta;
+            case AGRUPADO_POR_ZONA:return zona;
+        }
+        
+        /*String nombreCampo=nombreCampoAgrupadoIf.getNombreCampoAgrupado();
+        
+        if(ValoresAgrupar.VENDEDOR.nombre.equals(nombreCampo))
+        {
+            return nombreCampo;
+        }
+        else if(ValoresAgrupar.PUNTO_EMISION.nombre.equals(nombreCampo))
+        {
+            return puntoEmision;
+        }
+        else if(ValoresAgrupar.VENDEDOR.nombre.equals(nombreCampo))
+        {
+            return puntoEmision;
+        }
+        
+        TipoReporteEnum tipo;
+        tipo.
+        
+        return "";*/
+        return null;
+    }
     
-   
+    
+
+    /*public static class ValoresAgrupar implements NombreCampoAgrupadoIf
+    {
+        public static ValoresAgrupar VENDEDOR=new ValoresAgrupar("vendedor");
+        public static ValoresAgrupar PUNTO_EMISION=new ValoresAgrupar("punto_emision");
+        public static ValoresAgrupar PRODUCTO=new ValoresAgrupar("punto_emision");
+        public static ValoresAgrupar CATEGORIA=new ValoresAgrupar("punto_emision");
+        public static ValoresAgrupar FORMA_PAGO=new ValoresAgrupar("punto_emision");
+        public static ValoresAgrupar VALOR=new ValoresAgrupar("punto_emision");
+        public static ValoresAgrupar PUNTO_EMISION=new ValoresAgrupar("punto_emision");
+        public static ValoresAgrupar PUNTO_EMISION=new ValoresAgrupar("punto_emision");
+        
+
+        public ValoresAgrupar(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        public String nombre;
+
+        @Override
+        public String getNombreCampoAgrupado() {
+            return nombre;
+        }
+    }*/
     
 
 }

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.reportes.UtilidadReporteJasper;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -27,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -57,17 +59,25 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
     private boolean banderaTodos;
     private List<Cartera> carteraResultado;
     
+    private TipoReporteJasperEnum tipoReporteJasperSeleccionado;
+    private List<TipoReporteJasperEnum> tipoReporteJasperList;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         addListenerBotones();
         addListenerCheck();
-        initDatosTabla();
+        iniciarDatosVariables();
+        initDatosTabla();        
         getDateFechaInicio().setDate(new java.util.Date());
         getDateFechaFin().setDate(new java.util.Date());
         UtilidadesComboBox.llenarComboBox(getCmbTipoReporteCartera(),CarteraEstadoReporteEnum.values());
     }
     
-    
+    private void iniciarDatosVariables()
+    {        
+        tipoReporteJasperList=UtilidadesLista.arrayToList(TipoReporteJasperEnum.values());;
+        tipoReporteJasperSeleccionado=TipoReporteJasperEnum.NORMAL;
+    }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
@@ -110,7 +120,6 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
         InputStream path=RecursoCodefac.JASPER_INVENTARIO.JASPER_CARTERA.getResourceInputStream("cuentas_por_cobrar.jrxml");
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         
-        
         if(carteraResultado!=null)
         {
             List<CuentasPorCobrarData> resultadoReporte=CuentasPorCobrarData.castCuentasPorCobrar(carteraResultado);
@@ -133,7 +142,12 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoReporte, panelPadre,obtenerTituloReporte(),OrientacionReporteEnum.HORIZONTAL);
+                    
+                    
+                    String tituloSecundario=tipoReporteJasperSeleccionado.getNombreReporte();
+                    UtilidadReporteJasper.obtenerDatosReporteAgrupado(tipoReporteJasperSeleccionado,resultadoReporte);
+                    
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, resultadoReporte, panelPadre,obtenerTituloReporte()+" "+tituloSecundario,OrientacionReporteEnum.HORIZONTAL);
                     //dispose();
                     //setVisible(false);
                 }
@@ -240,6 +254,26 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
     {
         return Cartera.TipoCarteraEnum.CLIENTE;
     }
+
+    public TipoReporteJasperEnum getTipoReporteJasperSeleccionado() {
+        return tipoReporteJasperSeleccionado;
+    }
+
+    public void setTipoReporteJasperSeleccionado(TipoReporteJasperEnum tipoReporteJasperSeleccionado) {
+        this.tipoReporteJasperSeleccionado = tipoReporteJasperSeleccionado;
+    }
+
+    public List<TipoReporteJasperEnum> getTipoReporteJasperList() {
+        return tipoReporteJasperList;
+    }
+
+    public void setTipoReporteJasperList(List<TipoReporteJasperEnum> tipoReporteJasperList) {
+        this.tipoReporteJasperList = tipoReporteJasperList;
+    }
+
+    
+    
+    
     
     public void addListenerCheck()
     {

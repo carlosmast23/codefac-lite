@@ -5,9 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.cartera.reportdata;
 
+import ec.com.codesoft.codefaclite.cartera.panel.CuentasPorCobarReportePanel.TipoReporteJasperEnum;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
+import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +19,7 @@ import java.util.List;
  *
  * @author Carlos
  */
-public class CuentasPorCobrarData implements ExcelDatosInterface {
+public class CuentasPorCobrarData implements ExcelDatosInterface,AgrupadoReporteIf {
     private String codigo;
     private String documento;
     private String preimpreso;
@@ -30,7 +33,7 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
     
     private String diasCredito;
     private String diasFaltantesVencerCartera;
-    
+    private String campoAgrupado;
 
     public CuentasPorCobrarData() {
     }
@@ -130,6 +133,15 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
     public void setDiasFaltantesVencerCartera(String diasFaltantesVencerCartera) {
         this.diasFaltantesVencerCartera = diasFaltantesVencerCartera;
     }
+
+    public String getCampoAgrupado() {
+        return campoAgrupado;
+    }
+
+    public void setCampoAgrupado(String campoAgrupado) {
+        this.campoAgrupado = campoAgrupado;
+    }
+    
     
     
 
@@ -188,6 +200,18 @@ public class CuentasPorCobrarData implements ExcelDatosInterface {
             
         }
         return dataReport;
+    }
+
+    @Override
+    public String getValorCampoAgrupar(EnumReporteAgruparIf enumReporteAgruparIf) {
+        TipoReporteJasperEnum tipoReporte=(TipoReporteJasperEnum) enumReporteAgruparIf;
+        switch(tipoReporte)
+        {            
+            case AGRUPADO_POR_CLIENTE: return razonSocial;
+            case AGRUPADO_POR_DOCUMENTO: return documento;
+        };
+        
+        return null;
     }
     
     

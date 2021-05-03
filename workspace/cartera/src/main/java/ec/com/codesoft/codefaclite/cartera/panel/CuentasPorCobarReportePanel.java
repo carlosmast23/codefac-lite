@@ -7,6 +7,11 @@ package ec.com.codesoft.codefaclite.cartera.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
+import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
+import ec.com.codesoft.codefaclite.controlador.reportes.CampoAgruparIf;
+import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -123,6 +128,8 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         lblEspaciosBlancos12 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cmbTipoReporteCartera = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        cmbTipoReporte = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -266,10 +273,10 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(lblEspaciosBlancos12, gridBagConstraints);
 
-        jLabel6.setText("Fecha Inicio:");
+        jLabel6.setText("Tipo de Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel6, gridBagConstraints);
@@ -277,9 +284,26 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbTipoReporteCartera, gridBagConstraints);
+
+        jLabel7.setText("Fecha Inicio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel7, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbTipoReporte, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -288,6 +312,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JCheckBox checkTodos;
+    private javax.swing.JComboBox<TipoReporteJasperEnum> cmbTipoReporte;
     private javax.swing.JComboBox<CarteraEstadoReporteEnum> cmbTipoReporteCartera;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
@@ -297,6 +322,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
@@ -314,5 +340,64 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         this.cmbTipoReporteCartera = cmbTipoReporteCartera;
     }
 
+    @ComboBoxBinding(source ="tipoReporteJasperList" ,valueSelect = "tipoReporteJasperSeleccionado")
+    public JComboBox<TipoReporteJasperEnum> getCmbTipoReporte() {
+        return cmbTipoReporte;
+    }
+
+    public void setCmbTipoReporte(JComboBox<TipoReporteJasperEnum> cmbTipoReporte) {
+        this.cmbTipoReporte = cmbTipoReporte;
+    }
     
+    
+
+    /**
+     * TODO: Luego si sa va a usar en la parte WEB trasladar al proyecto controlador
+     * Clases de los Enum para el tema de los reportes
+     */
+    public enum TipoReporteJasperEnum implements EnumReporteAgruparIf
+    {
+        NORMAL("Normal",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return "Reporte General";
+            }
+        }),
+        AGRUPADO_POR_CLIENTE("Agrupado por cliente",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(AGRUPADO_POR_CLIENTE);
+            }
+        }),
+        
+        AGRUPADO_POR_DOCUMENTO("Agrupado por documento",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(AGRUPADO_POR_DOCUMENTO);
+            }
+        })
+        ;
+        
+        private TipoReporteJasperEnum(String nombre,CampoAgruparIf campoAgruparIf) 
+        {
+            this.nombreReporte=nombre;
+            this.campoAgruparIf=campoAgruparIf;
+        }
+        
+        private String nombreReporte;
+        private CampoAgruparIf campoAgruparIf;
+
+        public String getNombreReporte() {
+            return nombreReporte;
+        }
+
+        @Override
+        public CampoAgruparIf getCampoAgrupar() {
+            return campoAgruparIf;
+        }
+        
+        
+        
+        
+    }
 }
