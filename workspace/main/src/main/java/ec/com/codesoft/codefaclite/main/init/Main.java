@@ -43,6 +43,7 @@ import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
 import ec.com.codesoft.codefaclite.main.other.ArchivoDescarga;
 import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
+import ec.com.codesoft.codefaclite.main.other.TareasProgramadasCodefac;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
@@ -519,19 +520,15 @@ public class Main {
     /**
      * Cargar Recursos servicios protocolo RMI
      */
-    public static void cargarRecursosServidor(String ipServidor) {
+    public static void cargarRecursosRmiServidor(String ipServidor) {
         //Iniciar el Protocolo RMI para activar el servidor en modo REMOTO para recibir peticiones por la red
-        ControllerServiceUtil.cargarRecursosServidor(ipServidor);
-        
-        //Iniciar lass tareas programadas que se deben ejecutar en el servidor        
-        GestorTareasProgramadas gestorTareas=GestorTareasProgramadas.getInstance();
-        //gestorTareas.agregarTareaProgramadaPorDia(new RespaldoProgramadoTarea(), 13, 04);
-        //gestorTareas.agregarTareaProgramada(new RespaldoProgramadoTarea(), 10l,60l, TimeUnit.SECONDS);
-        Logger.getLogger(Main.class.getName()).log(Level.INFO,"Iniciando gestor de TAREAS PROGRAMADAS ");
+        ControllerServiceUtil.cargarRecursosServidor(ipServidor);        
         
     }
+    
+    
 
-    public static void cargarRecursosCliente(String ipServidor) {
+    public static void cargarRecursosRmiCliente(String ipServidor) {
             ServiceFactory.newController(ipServidor);
     }
 
@@ -561,7 +558,7 @@ public class Main {
                     IngresarDatosClienteModel dialogDatosCliente= new IngresarDatosClienteModel(ipServidorDefecto,ParametrosClienteEscritorio.TipoClienteSwingEnum.buscarPorNombre(tipoCliente));
                     dialogDatosCliente.setVisible(true);
                     IngresarDatosClienteModel.Respuesta respuesta= dialogDatosCliente.obtenerDatosIngresados();
-                    cargarRecursosCliente(respuesta.ipPublica);
+                    cargarRecursosRmiCliente(respuesta.ipPublica);
                     ParametrosClienteEscritorio.tipoClienteEnum=respuesta.tipoClienteEnum;
                     //verificarConexionesPermitidas();
                     
@@ -580,6 +577,7 @@ public class Main {
                 componentesBaseDatos(false);
                 
                 /**
+                 * TODO: Al archivo de propiedades hacer el patron SINGLETON por que solo se debe cargar una sola vez para consultar desde cualquier lugar
                  * Buscar si tiene configurado una ip en el archivo de configuracion para iniciar el servidor con ese numero de ip
                  */
                 Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
@@ -594,20 +592,14 @@ public class Main {
                     ipServidor=ipServidorDefecto;
                 }
                 
-                
-                String ipPublica=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_PUBLICA_SERVIDOR);
-                //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience , literalmente esto sirve para decir que se procesen todas las peticiones que viene desde la ip publica
-                if(ipPublica!=null && !ipPublica.isEmpty())
-                {
-                    System.setProperty("java.rmi.server.hostname",ipPublica); 
-                    System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
-                    ParametrosClienteEscritorio.puertoCallBack=ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED;
-                    
-                }
-                
-                cargarRecursosServidor(ipServidor); 
+                cargarConfiguracionIpPublica(propiedadesIniciales);
                                 
-                cargarRecursosCliente(ipServidor);
+                cargarRecursosRmiServidor(ipServidor); 
+                                
+                cargarRecursosRmiCliente(ipServidor);
+                
+                //Iniciar proceso de tareas programadas
+                TareasProgramadasCodefac.getInstance().iniciar();
                 
                
                 //Cargar el servidor de mensajeria
@@ -726,23 +718,20 @@ public class Main {
 
     }
     
-    /*public static SessionCodefac construirSession(LoginModel.DatosLogin  datosLogin)
+    
+    
+    private static void cargarConfiguracionIpPublica(Properties propiedadesIniciales)
     {
-        try {
-            SessionCodefac session = ServiceFactory.getFactory().getUtilidadesServiceIf().getSessionPreConstruido(datosLogin.empresa);
-            //panel.setSessionCodefac(session);
-            
-            session.setUsuario(datosLogin.usuario);
-            session.setPerfiles(obtenerPerfilesUsuario(datosLogin.usuario));
-            session.setSucursal(datosLogin.sucursal);
-            session.setMatriz(datosLogin.matriz);
-            session.setEmpresa(datosLogin.empresa);
-            return session;
-        } catch (RemoteException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        String ipPublica = propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_PUBLICA_SERVIDOR);
+        //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience , literalmente esto sirve para decir que se procesen todas las peticiones que viene desde la ip publica
+        if (ipPublica != null && !ipPublica.isEmpty()) {
+            System.setProperty("java.rmi.server.hostname", ipPublica);
+            System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
+            ParametrosClienteEscritorio.puertoCallBack = ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED;
+
         }
-        return null;
-    }*/
+    }
+    
     
     /**
      * Validacion que me permite verificar las licencias de la empresa y el tema de los pagos

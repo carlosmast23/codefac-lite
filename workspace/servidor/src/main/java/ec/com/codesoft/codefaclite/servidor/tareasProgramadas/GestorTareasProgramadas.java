@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class GestorTareasProgramadas 
 {
     
-    public static GestorTareasProgramadas instance;
+    private static GestorTareasProgramadas instance;
     /**
      * Gestor principal que permite ejecutar tareas programadas
      */

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.tareasProgramadas;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.RespaldosModelUtilidades;
@@ -38,7 +39,7 @@ public class RespaldoProgramadoTarea implements Runnable
      */
     private void generarRespaldoBaseDatosPorCorreo()
     {
-        try {
+        try {                        
             //Buscar cualquier empresa por defecto por el momento
             Empresa empresaSeleccionada=null;
             List<Empresa> empresaList=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos(OrdenarEnum.ASCEDENTE);
