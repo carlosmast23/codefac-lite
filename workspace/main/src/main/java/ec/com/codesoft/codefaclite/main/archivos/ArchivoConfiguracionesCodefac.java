@@ -16,9 +16,13 @@ import java.rmi.RemoteException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
- *
+ * TODO: Optimizar el problema que esta clase no deberia interactuar directamente con el atributo de las propiedades
+ * por que se supone que esta clase funciona como una clase de envoltorio y debe comunciarse por metodos de put y set
+ * por que si algun rato se cambia de implementacion solo se modifica en esta clase y no en todos los lugares que usen el atributo property
  * @author Carlos
  */
 public class ArchivoConfiguracionesCodefac {
@@ -83,7 +87,12 @@ public class ArchivoConfiguracionesCodefac {
      */
     public static final String CAMPO_SUCURSAL_INICIAL_ID="sucursal_inicial_id";
     
-    private Properties propiedadesIniciales;
+    /**
+     * Este campo me va a permitir actualizar de forma forzada cuando por ejemplo tenga un error en la actualizacion por temas de conectividad y tenga que actualziar de nuevo
+     */
+    public static final String CAMPO_FORZAR_ACTUALIZACION="forzar_actualizar";
+    
+    private PropertiesConfiguration propiedadesIniciales;
     
     private static ArchivoConfiguracionesCodefac instance;
     
@@ -100,39 +109,41 @@ public class ArchivoConfiguracionesCodefac {
     }
     
     public void agregarCampo(String nombreCampo,String valor)
-    {
-        propiedadesIniciales.put(nombreCampo, valor);
+    {        
+        propiedadesIniciales.addProperty(nombreCampo, valor);
         
     }
     
     public String obtenerValor(String nombreCampo)
     {
-        
-        return (propiedadesIniciales.get(nombreCampo)!=null)?propiedadesIniciales.get(nombreCampo).toString():null;
+        return (propiedadesIniciales.getString(nombreCampo)!=null)?propiedadesIniciales.getString(nombreCampo).toString():null;
+        //return (propiedadesIniciales.get(nombreCampo)!=null)?propiedadesIniciales.get(nombreCampo).toString():null;
     }
     
     public void cargarConfiguracionesIniciales()
     {
     
          try {
-            propiedadesIniciales = new Properties();
-            propiedadesIniciales.load(new FileReader(NOMBRE_ARCHIVO_CONFIGURACION));
+            propiedadesIniciales = new PropertiesConfiguration(NOMBRE_ARCHIVO_CONFIGURACION);
+            //propiedadesIniciales.load(new FileReader(NOMBRE_ARCHIVO_CONFIGURACION));
+            //propiedadesIniciales.load(new FileReader(NOMBRE_ARCHIVO_CONFIGURACION));
 
-        } catch (FileNotFoundException ex) {
-            //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            LOG.log(Level.INFO,"Archivo de configuracion inicial no existe");
-
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ConfigurationException ex) {
+            Logger.getLogger(ArchivoConfiguracionesCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void guardar() throws IOException
     {
-        propiedadesIniciales.store(new FileWriter(ArchivoConfiguracionesCodefac.NOMBRE_ARCHIVO_CONFIGURACION), "");
+        try {
+            propiedadesIniciales.save();
+            //propiedadesIniciales.store(new FileWriter(ArchivoConfiguracionesCodefac.NOMBRE_ARCHIVO_CONFIGURACION), "");
+        } catch (ConfigurationException ex) {
+            Logger.getLogger(ArchivoConfiguracionesCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public Properties getPropiedadesIniciales() {
+    public PropertiesConfiguration getPropiedadesIniciales() {
         return propiedadesIniciales;
     }
     

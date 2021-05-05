@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.model.DescargaModel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
  *
@@ -37,8 +39,8 @@ public class ActualizarVersionCodefac {
         ////////////////////////////////////////////////////////////////////
         ///  BUSCAR EL REPOSITORIO PARA ACTUALIZAR EN DESARROLLO O ESTABLE
         ////////////////////////////////////////////////////////////////////
-        Properties propiedadesArchivo=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
-        String modoActualizacion = propiedadesArchivo.getProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_ACTUALIZACION);
+        PropertiesConfiguration propiedadesArchivo=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        String modoActualizacion = propiedadesArchivo.getString(ArchivoConfiguracionesCodefac.CAMPO_MODO_ACTUALIZACION);
         String path = ParametrosSistemaCodefac.REPOSITORIO_ACTUALIZACION_ESTABLE; //Por defecto el repositorio para actualizar siempre es el estable
 
         if (modoActualizacion != null && modoActualizacion.equals(ArchivoConfiguracionesCodefac.ModoActualizacionEnum.DESARROLLO.getNombre())) {
@@ -61,8 +63,11 @@ public class ActualizarVersionCodefac {
                 propiedadesIniciales.load(new FileReader(carpetaDescarga+"/"+nameVersionPropiedades));
                 String ultimaVersion=propiedadesIniciales.getProperty("version"); //TODO: Parametrizar estos datos
                 
-                //Solo actualizar si la version instalada es menor a la disponible en internet
-                if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1)
+                //Verificar si el MODO FORZAR ACTUALIZAR ESTA ACTIVO
+                Boolean forzarActualizacion=verificarForzarActualizacionPropiedadesInit();
+                
+                //Solo actualizar si la VERSION instalada es MENOR a la disponible en internet o esta activado la propiedad de FORZAR ACTUALIZAR
+                if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1 || forzarActualizacion)
                 //if(true)
                 {
                     if(!DialogoCodefac.dialogoPregunta("Actualizar Codefac","Existe una nueva versión disponible , desea actualizar ahora?", DialogoCodefac.MENSAJE_CORRECTO))
@@ -130,6 +135,20 @@ public class ActualizarVersionCodefac {
             Logger.getLogger(Main.class.getName()).log(Level.WARNING,"No se puede descargar el archivo que contiene el numero de version");            
         }
         
+    }
+    
+    private static Boolean verificarForzarActualizacionPropiedadesInit()
+    {
+        String campoForzarActualizacion=ArchivoConfiguracionesCodefac.getInstance().obtenerValor(ArchivoConfiguracionesCodefac.CAMPO_FORZAR_ACTUALIZACION);
+        EnumSiNo enumForzarActualizacion=EnumSiNo.getEnumByLetra(campoForzarActualizacion);
+        if(enumForzarActualizacion!=null)
+        {
+            if(enumForzarActualizacion.equals(EnumSiNo.SI))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     
     private static String obtenerPIDProcesoActual()

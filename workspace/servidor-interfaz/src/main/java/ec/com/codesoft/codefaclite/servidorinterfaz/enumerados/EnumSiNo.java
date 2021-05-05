@@ -52,6 +52,12 @@ public enum EnumSiNo implements ParametroUtilidades.ComparadorInterface<EnumSiNo
         {
             return null;
         }
+        
+        //Si la letra tiene mas de un caracteres por ejemplo si y no , solo cojo la primera letra
+        if(letra.length()>1)
+        {
+            letra=String.valueOf(letra.charAt(0));
+        }
 
         for (EnumSiNo enumerador : EnumSiNo.values())
         {

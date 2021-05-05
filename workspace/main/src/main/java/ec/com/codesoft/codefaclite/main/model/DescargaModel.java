@@ -151,8 +151,7 @@ public class DescargaModel extends DescargaDialog implements Runnable{
                     if (b != -1) {
                         size = out.getChannel().size();
                         out.write(b);                        
-                    }
-                    
+                    }                    
                     //Cuando no recibe nada
                     /*if( b==0) 
                     {
@@ -182,14 +181,15 @@ public class DescargaModel extends DescargaDialog implements Runnable{
                         BigDecimal tamanio = new BigDecimal((float) size / (float) (1024));
                         //System.out.println(tamanio.setScale(3, RoundingMode.HALF_UP) + " kb");
                         int porcentaje = (int) ((float) size * 100 / (float) tamanioTotal);
-                        getBarraProgreso().setValue(porcentaje);
-                        //throw new IOException();
+                        getBarraProgreso().setValue(porcentaje);                        
                     }
                 }
                 
                 out.close();
                 in.close();
                 UtilidadesArchivos.renombrarArchivo(file, name); //Nombre final sin la extension tmp
+                
+                //TODO: Agregar una validacion para al final verificar que el tamaño final del archivo es igual al archivo que esta en internet
                 
                 //Si termina correctamente quitamos de lista de archivos a descargar
                 modeloLista.removeElement(name);

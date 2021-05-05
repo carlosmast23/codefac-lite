@@ -115,6 +115,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
  *
@@ -191,7 +192,8 @@ public class Main {
 
     //Lee el archivo de configuraciones de cada computador como por ejemplo
     //para saber la modalidad por defecto que se debe ejcutar el aplicativo
-    private static void cargarConfiguracionesIniciales() {
+    private static void cargarConfiguracionesIniciales() 
+    {
         ArchivoConfiguracionesCodefac.getInstance().cargarConfiguracionesIniciales();
     }
     
@@ -206,9 +208,9 @@ public class Main {
      */
     public static void iniciarModoAplicativo(Boolean configuracionesDefecto) {
         //Si existen configuraciones iniciales solo las carga
-        Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
         if (propiedadesIniciales != null && configuracionesDefecto) {
-            String modoAplicativoStr = propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
+            String modoAplicativoStr = propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
             if (modoAplicativoStr != null) {
                 modoAplicativo = Integer.parseInt(modoAplicativoStr);
                 return; //sio existe no continua buscando el modo de aplicativo
@@ -229,11 +231,11 @@ public class Main {
         } else {
             try {
                 modoAplicativo = dialogAplicativo.getModo();
-                propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO, modoAplicativo + "");
+                propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO, modoAplicativo + "");
                 if(dialogAplicativo.versionPrueba)
                 {
-                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR,ParametrosSistemaCodefac.IP_SERVIDOR_PRUEBA);
-                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE,TipoClienteSwingEnum.REMOTO.getNombre());
+                    propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR,ParametrosSistemaCodefac.IP_SERVIDOR_PRUEBA);
+                    propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE,TipoClienteSwingEnum.REMOTO.getNombre());
                 }   
                 
                 ArchivoConfiguracionesCodefac.getInstance().guardar();
@@ -248,8 +250,8 @@ public class Main {
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
     private static void verificarActualizacionBaseDatosVersion()
     {        
-        Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
-        String versionGrabada=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
+        PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        String versionGrabada=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
         
         if(versionGrabada!=null)
         {
@@ -262,7 +264,7 @@ public class Main {
                     try {
                         
                         //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
-                        String modoAplicativo = propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
+                        String modoAplicativo = propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
                         
                         //Solo actualizar si es un modo servidor , o cliente servidor
                         if (modoAplicativo!=null && !modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE.toString())) 
@@ -288,7 +290,7 @@ public class Main {
                             if(UtilidadesServidor.actualizarBaseDatos(versionGrabada))
                             {
                                 //Solo actualizo el archivo de la versión si efectivamente se realizo las modificaciones en la base de datos
-                                propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
+                                propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
                                 ArchivoConfiguracionesCodefac.getInstance().guardar();
                             }
                         }                        
@@ -306,7 +308,7 @@ public class Main {
         {
             try {
                 //Si no hay dato no se actualiza porque asumo que es la primera vez que se usa el sistema
-                propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
+                propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
                 ArchivoConfiguracionesCodefac.getInstance().guardar();
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -348,9 +350,9 @@ public class Main {
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
                     //System.setProperty("java.rmi.server.hostname","192.168.100.2"); 
                     //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
-                    Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
-                    String ipServidorDefecto=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
-                    String tipoCliente=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE);
+                    PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+                    String ipServidorDefecto=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
+                    String tipoCliente=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE);
                     //Cargar los recursos para funcionar en modo cliente
                     //ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ",(ipServidorDefecto==null)?"":ipServidorDefecto);
                     IngresarDatosClienteModel dialogDatosCliente= new IngresarDatosClienteModel(ipServidorDefecto,ParametrosClienteEscritorio.TipoClienteSwingEnum.buscarPorNombre(tipoCliente));
@@ -361,8 +363,8 @@ public class Main {
                     //verificarConexionesPermitidas();
                     
                     //Grabar la ip del ultimo servidor accedido para no ingresar nuevamente el dato
-                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, respuesta.ipPublica + "");
-                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE, respuesta.tipoClienteEnum.getNombre() + "");
+                    propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, respuesta.ipPublica + "");
+                    propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE, respuesta.tipoClienteEnum.getNombre() + "");
                     ArchivoConfiguracionesCodefac.getInstance().guardar();
                     
                     LOG.log(Level.INFO, "Modo Cliente Activado");
@@ -378,8 +380,8 @@ public class Main {
                  * TODO: Al archivo de propiedades hacer el patron SINGLETON por que solo se debe cargar una sola vez para consultar desde cualquier lugar
                  * Buscar si tiene configurado una ip en el archivo de configuracion para iniciar el servidor con ese numero de ip
                  */
-                Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
-                String ipServidorDefecto=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_SERVIDOR);
+                PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+                String ipServidorDefecto=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_IP_SERVIDOR);
                 
                 if(ipServidorDefecto==null || ipServidorDefecto.isEmpty())
                 {
@@ -518,9 +520,9 @@ public class Main {
     
     
     
-    private static void cargarConfiguracionIpPublica(Properties propiedadesIniciales)
+    private static void cargarConfiguracionIpPublica(PropertiesConfiguration propiedadesIniciales)
     {
-        String ipPublica = propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_PUBLICA_SERVIDOR);
+        String ipPublica = propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_IP_PUBLICA_SERVIDOR);
         //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience , literalmente esto sirve para decir que se procesen todas las peticiones que viene desde la ip publica
         if (ipPublica != null && !ipPublica.isEmpty()) {
             System.setProperty("java.rmi.server.hostname", ipPublica);
