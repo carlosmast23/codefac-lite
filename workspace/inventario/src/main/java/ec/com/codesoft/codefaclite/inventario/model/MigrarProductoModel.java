@@ -262,7 +262,7 @@ public class MigrarProductoModel extends MigrarModel {
                         //producto.setPrecioTarjeta(BigDecimal.ZERO);
                         producto.setGarantia(EnumSiNo.NO.getLetra());
                         producto.setTipoProductoCodigo(TipoProductoEnum.PRODUCTO.getLetra());
-                        producto.setManejarInventario(manejaInventarioEnumSiNo.getLetra()); //TODO:Cambiar para setear un enum
+                        producto.setManejarInventarioEnum(manejaInventarioEnumSiNo); //TODO:Cambiar para setear un enum
                         producto.setEmpresa(session.getEmpresa());
                         producto.setUbicacion((String) fila.getByEnum(ExcelMigrarProductos.Enum.UBICACION).valor);
                     }

@@ -105,8 +105,8 @@ public class DescargaModel extends DescargaDialog implements Runnable{
                 
                 URLConnection conn = new URL(url).openConnection();
                 conn.connect();
-                int tamanioTotal = conn.getContentLength();
                 
+                int tamanioTotal = conn.getContentLength();                
                 File archivoActual = new File("lib/" + name.replace(".new","") );
                 int tamanioArchivoActual=(int) archivoActual.length();
                 
