@@ -390,7 +390,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     {
         if(saldo.compareTo(BigDecimal.ZERO)<0)
         {
-            throw new ServicioCodefacException("Error al procesar la cartera .Motivo: saldo negativo [ "+saldo+" ]");
+            throw new ServicioCodefacException("Error al procesar la cartera por que el movimiento va a generar saldos negativos . Saldo negativo [ "+saldo+" ]");
         }
     }
     
