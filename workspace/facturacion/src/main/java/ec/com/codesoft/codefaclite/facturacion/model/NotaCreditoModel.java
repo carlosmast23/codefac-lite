@@ -904,14 +904,15 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         String mensajeValidacion="Esta pantalla requiere : \n";
         boolean validado=true;
         
-               //Validacion cuando solo sea facturacion manual
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
-        {
-            DialogoCodefac.mensaje("Advertencia","Pantalla solo dispinible para facturación electronica",DialogoCodefac.MENSAJE_ADVERTENCIA);
-            return false;
-        }
-        else
-        {
+        //Validacion cuando solo sea facturacion manual
+        //TODO: Por el momento esta validacion no sirve por que el tipo de facturacion depende de cada punto de emision        
+        //if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
+        //{
+        //    DialogoCodefac.mensaje("Advertencia","Pantalla solo dispinible para facturación electronica",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        //    return false;
+        //}
+        //else
+        //{
         
             try {
                 if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
@@ -947,7 +948,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             } catch (Exception ex) {
                 Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        //}
         
         if(!validado)
         {

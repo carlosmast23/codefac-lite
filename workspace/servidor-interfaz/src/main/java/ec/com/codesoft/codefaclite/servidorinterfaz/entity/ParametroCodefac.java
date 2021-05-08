@@ -63,8 +63,8 @@ public class ParametroCodefac implements Serializable {
     public static final String CELULAR_VIRTUAL_MALL="celular_virtual_mall";
     public static final String IMAGEN_FONDO="imagen_fondo";
     public static final String ULTIMA_FECHA_VALIDACION="ultima_fecha_validacion";
-    @Deprecated
-    public static final String TIPO_FACTURACION="tipo_facturacion";
+    //@Deprecated
+    //public static final String TIPO_FACTURACION="tipo_facturacion";
 
     public static final String DIRECTORIO_RESPALDO = "directorio_respaldo";
     public static final String DEFECTO_TIPO_DOCUMENTO_FACTURA = "defecto_tipo_documento_factura";

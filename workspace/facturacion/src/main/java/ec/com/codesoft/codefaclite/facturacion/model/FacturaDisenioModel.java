@@ -99,7 +99,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        validarPermisosIniciales();
+        //validarPermisosIniciales();
         
         cargarDocumentoGrafico((ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem());
         seleccionarComponenteActual();
@@ -698,14 +698,15 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         });
     }
 
-    private void validarPermisosIniciales() throws ExcepcionCodefacLite{
+    //TODO: Ya no puedo hacer la validacion con una variable general por que puedo tener los 2 modos funcionado al mismo tiempo
+    /*private void validarPermisosIniciales() throws ExcepcionCodefacLite{
         if (!session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra())) {
             DialogoCodefac.mensaje("Acceso no pemitido","Esta ventana solo esta disponible en modo Factuación manual",DialogoCodefac.MENSAJE_ADVERTENCIA);
             dispose();
             throw new ExcepcionCodefacLite("No cumple validacion inicial");
 
         }
-    }
+    }*/
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {

@@ -203,7 +203,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         
         setearParametro(ParametroCodefac.MODO_FACTURACION,getCmbModoFacturacion().getSelectedItem().toString());
         
-        setearParametro(ParametroCodefac.TIPO_FACTURACION,((ComprobanteEntity.TipoEmisionEnum)getCmbTipoFacturacion().getSelectedItem()).getLetra());
+        //setearParametro(ParametroCodefac.TIPO_FACTURACION,((ComprobanteEntity.TipoEmisionEnum)getCmbTipoFacturacion().getSelectedItem()).getLetra());
         
         setearParametro(ParametroCodefac.SMTP_HOST,getTxtSmtpHost().getText());
         
@@ -311,14 +311,14 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             /**
              * Cargar el tipo de facturacion
              */
-            parametroCodefac=parametros.get(ParametroCodefac.TIPO_FACTURACION);
+            /*parametroCodefac=parametros.get(ParametroCodefac.TIPO_FACTURACION);
             if(parametroCodefac!=null)
             {
                 String letra=parametroCodefac.getValor();
                 getCmbTipoFacturacion().setSelectedItem(ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(letra));
             }
             
-            listenerCmbTipoFacturacion(); //modifica las acciones para esta accion
+            listenerCmbTipoFacturacion(); //modifica las acciones para esta accion*/
             
             getTxtSmtpHost().setText(parametros.get(ParametroCodefac.SMTP_HOST).getValor());
             getTxtSmtpPuerto().setValue(new Integer(parametros.get(ParametroCodefac.SMTP_PORT).getValor()));
@@ -401,14 +401,14 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         }
     }
     
-    private void cargarTipoFactura()
+    /*private void cargarTipoFactura()
     {
         getCmbTipoFacturacion().removeAllItems();
         ComprobanteEntity.TipoEmisionEnum[] tipos= ComprobanteEntity.TipoEmisionEnum.values();
         for (ComprobanteEntity.TipoEmisionEnum tipo : tipos) {
             getCmbTipoFacturacion().addItem(tipo);
         }
-    }
+    }*/
 
     private void cargarModosFacturacion() {
         getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRUEBAS);
@@ -574,15 +574,15 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             }
         });
         
-        getCmbTipoFacturacion().addActionListener(new ActionListener() {
+        /*getCmbTipoFacturacion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 listenerCmbTipoFacturacion();
             }
-        });
+        });*/
     }
     
-    private void listenerCmbTipoFacturacion()
+    /*private void listenerCmbTipoFacturacion()
     {
         ComprobanteEntity.TipoEmisionEnum tipo = (ComprobanteEntity.TipoEmisionEnum) getCmbTipoFacturacion().getSelectedItem();
         if (tipo.equals(ComprobanteEntity.TipoEmisionEnum.NORMAL)) {
@@ -590,7 +590,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         } else {
             activarOpcionesFacturarElectronica(true);
         }
-    }
+    }*/
     
     private void activarOpcionesFacturarElectronica(boolean opcion)
     {
@@ -699,7 +699,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
         this.parametroCodefacService = ServiceFactory.getFactory().getParametroCodefacServiceIf();
         cargarDatosIva();
-        cargarTipoFactura();
+        //cargarTipoFactura();
         cargarModosFacturacion();
         cargarDatosConfiguraciones();
         jFileChooser = new JFileChooser();
