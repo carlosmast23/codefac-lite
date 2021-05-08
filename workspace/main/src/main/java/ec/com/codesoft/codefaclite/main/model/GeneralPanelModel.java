@@ -66,6 +66,7 @@ import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
+import static ec.com.codesoft.codefaclite.main.init.Main.modoAplicativo;
 import static ec.com.codesoft.codefaclite.main.init.Main.obtenerPerfilesUsuario;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.VentanaManualUsuario;
@@ -422,12 +423,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Respaldar solo cuando tiene configurado el parametro de grabar la base de datos
             if(ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,EnumSiNo.SI))
             {
+                //Validar que solo se ejectute en el SERVIDOR o en CLIENTE-SERVIDOR
+                if(modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE))
+                {
+                    return;
+                }                
+                
                 try {
                     //Enviar al correo y generar el respaldo de la base de datos
                     RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa());
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    DialogoCodefac.dialogoPregunta(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                 }
             }
         } catch (RemoteException ex) {

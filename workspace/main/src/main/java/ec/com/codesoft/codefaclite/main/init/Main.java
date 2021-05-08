@@ -130,6 +130,7 @@ public class Main {
     
     
     /**
+     * TODO: Ver si mejor se usa un enum
      * Variable para saber el modo que inicia el aplicativo
      */
     public static Integer modoAplicativo;
