@@ -68,7 +68,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
         addListenerCheck();
         iniciarDatosVariables();
         initDatosTabla();        
-        getDateFechaInicio().setDate(new java.util.Date());
+        getDateFechaInicio().setDate(null);
         getDateFechaFin().setDate(new java.util.Date());
         UtilidadesComboBox.llenarComboBox(getCmbTipoReporteCartera(),CarteraEstadoReporteEnum.values());
     }
@@ -227,9 +227,23 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                     }else{
                         List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, new Date(getDateFechaInicio().getDate().getTime()), new Date(getDateFechaFin().getDate().getTime()));
                     }*/
+                    java.sql.Date fechaInicio=null;
+                    if(getDateFechaInicio().getDate()!=null)
+                    {
+                        fechaInicio=new Date(getDateFechaInicio().getDate().getTime());
+                    }
+                    
+                    
+                    java.sql.Date fechaFin=null;
+                    if(getDateFechaFin().getDate()!=null)
+                    {
+                        fechaFin=new Date(getDateFechaFin().getDate().getTime());
+                    }
+                    
+                    
                     List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, 
-                            new Date(getDateFechaInicio().getDate().getTime()), 
-                            new Date(getDateFechaFin().getDate().getTime()),
+                            fechaInicio, 
+                            fechaFin,
                             DocumentoCategoriaEnum.COMPROBANTES_VENTA,
                             getTipoCarteraEnum(),
                             Cartera.TipoSaldoCarteraEnum.CON_SALDO,
