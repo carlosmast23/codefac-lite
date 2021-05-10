@@ -80,7 +80,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Pro
         
         String queryString = "SELECT u FROM Producto u where 1=1 "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario;      
         
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR u.codigoPersonalizado like ?2 ) ORDER BY u.codigoPersonalizado";
+        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 ) ORDER BY u.codigoPersonalizado";
         
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
