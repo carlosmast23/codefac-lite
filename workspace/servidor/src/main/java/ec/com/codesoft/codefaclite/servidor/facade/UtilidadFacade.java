@@ -19,6 +19,13 @@ public class UtilidadFacade extends AbstractFacade<Object>
         super(Object.class);
     }
     
+    /**
+     * Atencion: Este codigo solo funciona cuando previamente tiene un sufijo por empresa , o todos los datos se pueden mesclar entre empresas
+     * y solo funciona para tablas que tenga un campo llamado CODIGO
+     * @param prefijo
+     * @param nombreTabla
+     * @return 
+     */
     public Integer obtenerCodigoMaximo(String prefijo,String nombreTabla)
     {
         //String query=" Select ";
@@ -48,5 +55,46 @@ public class UtilidadFacade extends AbstractFacade<Object>
         }
         
         return resultado;
+    }
+    
+    
+    /**
+     * TODO:Optimizar para luego optener el código teniendo en cuenta la empresa
+     * Solucion.- tener un where por defecto en el query , pero que permita enviar un map con el dato de remplazo para casos especiales
+     * @param nombreTabla
+     * @return 
+     */
+    public Integer obtenerCodigoMaximoPorId(String nombreTabla,String nombreCampoPk)
+    {
+        //String query=" Select ";
+        String queryString = "SELECT MAX(u.:nombreCampo) FROM :nombreTabla u ";
+        queryString=queryString.replace(":nombreCampo",nombreCampoPk);
+        queryString=queryString.replace(":nombreTabla",nombreTabla);
+        
+        Query query = getEntityManager().createNativeQuery(queryString);
+        
+        Object resultado=null;
+        try
+        {
+            resultado=query.getSingleResult();
+        }catch(NoResultException nre)
+        {
+            nre.printStackTrace();
+        }catch(NullPointerException e)
+        {
+            e.printStackTrace();
+        }
+        
+        //Integer resultado=1;
+        if(resultado==null)
+        {
+            return 0;
+        }
+        else
+        {
+            return Integer.parseInt(resultado+"");
+        }
+        
+        
     }
 }

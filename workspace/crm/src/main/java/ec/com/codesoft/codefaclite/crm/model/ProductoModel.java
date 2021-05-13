@@ -308,12 +308,12 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         catProdService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
         iniciarCombosBox();
         
-        getBtnTemporal().addActionListener(new ActionListener() {
+        /*getBtnTemporal().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DialogoCodefac.mensaje(new CodefacMsj("Enum:"+controlador.getProducto().getManejarInventarioEnum(), CodefacMsj.TipoMensajeEnum.CORRECTO));
             }
-        });
+        });*/
     }
 
     @Override

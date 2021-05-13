@@ -496,6 +496,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         }
     }
     
+    public Integer obtenerCodigoMaximoPorId(String nombreTabla,String nombreCampoPk) throws RemoteException,ServicioCodefacException
+    {
+        UtilidadFacade utilidadFacade=new UtilidadFacade();
+        return utilidadFacade.obtenerCodigoMaximoPorId(nombreTabla, nombreCampoPk);
+    }
+    
     public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigoDocumento,String nombreTabla) throws RemoteException,ServicioCodefacException
     {
        // final String SEPARADOR_CODIGO="-";

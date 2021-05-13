@@ -55,4 +55,6 @@ public interface UtilidadesServiceIf extends Remote
     
     public void verficarConsistenciaTabla(String nombreTabla) throws RemoteException,ServicioCodefacException;
     
+    public Integer obtenerCodigoMaximoPorId(String nombreTabla,String nombreCampoPk) throws RemoteException,ServicioCodefacException;
+    
 }

@@ -378,7 +378,15 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             query.setParameter(1, DocumentoEnum.PROFORMA.getCodigo());
             query.setParameter(2,empresa.getId());
             System.out.println("QueryStringNative:"+queryString);
-            return (Long) query.getSingleResult();
+            
+            Object resultado=query.getSingleResult();
+            if(resultado==null)
+            {
+                //Si no existe ningun valor devuelve el primero
+                return 1l;
+            }
+            
+            return (Long) resultado;
         } catch (NoResultException e) {
             return null;
         }

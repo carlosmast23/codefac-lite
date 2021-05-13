@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.IvaOpcionEnum;
 import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -104,7 +105,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel29 = new javax.swing.JLabel();
         cmbGenerarCodigoBarras = new javax.swing.JComboBox<>();
         lblEspacioBlanco = new javax.swing.JLabel();
-        btnTemporal = new javax.swing.JButton();
+        chkGenerarCodigoAutomatico = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         txtMarca = new javax.swing.JTextField();
@@ -203,6 +204,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -409,8 +411,17 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacioBlanco, gridBagConstraints);
 
-        btnTemporal.setText("Verificar");
-        jPanel1.add(btnTemporal, new java.awt.GridBagConstraints());
+        chkGenerarCodigoAutomatico.setText("Generar automático");
+        chkGenerarCodigoAutomatico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkGenerarCodigoAutomaticoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(chkGenerarCodigoAutomatico, gridBagConstraints);
 
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -914,13 +925,17 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoPersonalizadoActionPerformed
 
+    private void chkGenerarCodigoAutomaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGenerarCodigoAutomaticoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkGenerarCodigoAutomaticoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEnsamble;
     private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnBuscarProductoEnsamble;
     private javax.swing.JButton btnEditarEnsamble;
     private javax.swing.JButton btnEliminarEnsamble;
-    private javax.swing.JButton btnTemporal;
+    private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
     private javax.swing.JCheckBox chkTransportarGuiaRemision;
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
@@ -1021,7 +1036,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true,max = 25,min=1, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(max = 25,min=1, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
     @TextFieldBinding(value = "controlador.producto.codigoPersonalizado")
     public JTextField getTxtCodigoPersonalizado() {
         return txtCodigoPersonalizado;
@@ -1316,10 +1331,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.txtPrecio1SinSubsidio = txtPrecio1SinSubsidio;
     }
 
-    public JButton getBtnTemporal() {
-        return btnTemporal;
-    }
-
+    
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "PVP4", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
     public JTextField getTxtPV4() {
@@ -1346,6 +1358,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setTxtPV6(JTextField txtPV6) {
         this.txtPV6 = txtPV6;
+    }
+
+    @CheckBoxBinding(value = "controlador.generarCodigoAutomatico")
+    public JCheckBox getChkGenerarCodigoAutomatico() {
+        return chkGenerarCodigoAutomatico;
+    }
+
+    public void setChkGenerarCodigoAutomatico(JCheckBox chkGenerarCodigoAutomatico) {
+        this.chkGenerarCodigoAutomatico = chkGenerarCodigoAutomatico;
     }
 
     

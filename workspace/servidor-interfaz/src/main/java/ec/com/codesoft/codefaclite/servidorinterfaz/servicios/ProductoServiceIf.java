@@ -22,7 +22,7 @@ import java.util.List;
 public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
 
        
-    public Producto grabar(Producto p) throws ServicioCodefacException, java.rmi.RemoteException;
+    public Producto grabar(Producto p,Boolean generarCodigo) throws RemoteException, ServicioCodefacException;
     
     public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException;
     

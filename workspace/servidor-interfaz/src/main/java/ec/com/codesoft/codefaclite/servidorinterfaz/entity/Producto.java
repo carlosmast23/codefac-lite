@@ -31,15 +31,19 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name = "PRODUCTO")
+@Table(name = Producto.NOMBRE_TABLA)
 @XmlRootElement
 public class Producto implements Serializable, Comparable<Producto> {
+    
+    public static final String NOMBRE_TABLA="PRODUCTO";
+    public static final String NOMBRE_CAMPO_ID="ID_PRODUCTO";
+    
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID_PRODUCTO")
+    @Column(name = NOMBRE_CAMPO_ID)
     private Long idProducto;
     @Column(name = "CODIGO_PERSONALIZADO")
     private String codigoPersonalizado;

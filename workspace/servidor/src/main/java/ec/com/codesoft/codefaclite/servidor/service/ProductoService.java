@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.UtilidadFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -51,19 +52,30 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         this.productoFacade = new ProductoFacade();
     }
     
+    private void generarCodigoProducto(Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        UtilidadesService utilidadService=new UtilidadesService();
+        Integer ultimoId=utilidadService.obtenerCodigoMaximoPorId(Producto.NOMBRE_TABLA,Producto.NOMBRE_CAMPO_ID);
+        producto.setCodigoPersonalizado(ultimoId+"");
+    }
       
-    public Producto grabar(Producto p) throws ServicioCodefacException
+    public Producto grabar(Producto p,Boolean generarCodigo) throws RemoteException, ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(p);
+                grabarSinTransaccion(p,generarCodigo);
             }
         });        
         return p;
     }
     
-    public void grabarSinTransaccion(Producto p) throws java.rmi.RemoteException,ServicioCodefacException{
+    public void grabarSinTransaccion(Producto p,Boolean generarCodigo) throws java.rmi.RemoteException,ServicioCodefacException{
+        
+        if(generarCodigo)
+        {
+            generarCodigoProducto(p);
+        }
         
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         validarGrabarProducto(p,CrudEnum.CREAR);
@@ -94,6 +106,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
     {
+        if(p.getCodigoPersonalizado()==null || p.getCodigoPersonalizado().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("El Código principal del producto no puede estar vacio ");
+        }
+        
         //TODO: Analizar porque el Sri supuestamente si deja mandar productos con valor 0 , por el momento solo pongo los menores que 0
         if(p.getValorUnitario().compareTo(BigDecimal.ZERO)<0)
         {
@@ -348,7 +365,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //Solo grabo el producto cuando no esta creado previamente
                 if(p.getIdProducto()==null)
                 {
-                    grabarSinTransaccion(p); //graba el producto                
+                    grabarSinTransaccion(p,false); //graba el producto                
                 }
                                 
                 KardexService kardexService=new KardexService();

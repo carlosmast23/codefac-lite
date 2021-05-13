@@ -37,6 +37,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -64,6 +65,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private ImpuestoDetalle iceSeleccionado;
     private ImpuestoDetalle irbpnrSeleccionado;
     private IvaOpcionEnum ivaOpcionSeleccionado;
+    private Boolean generarCodigoAutomatico;
     
     public Producto producto;
 
@@ -105,16 +107,17 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         this.producto = producto;
     }
 
+    /**
+     * TODO: Cambiar la forma de crear las listas por usando clases internas sabe generar problemas cuando mando por rmi al servidor con error de Serializacion
+     * @throws ExcepcionCodefacLite
+     * @throws RemoteException 
+     */
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         
-        System.out.println("Producto Modelo Controlador init ...");
-        imprimirCodigoBarrasList=new ArrayList<EnumSiNo>(){
-            {
-                add(EnumSiNo.NO);
-                add(EnumSiNo.SI);
-            }
-        };
+        generarCodigoAutomatico=false;
+        
+        imprimirCodigoBarrasList=Arrays.asList(EnumSiNo.NO,EnumSiNo.SI);
         
         
         //Agregar las opcoiones segun los modulos habilitados
@@ -236,7 +239,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         try {           
             setearValoresProducto(producto);
             validar(producto);
-            producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto);
+            producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto,generarCodigoAutomatico);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             //DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
@@ -463,6 +466,16 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     public void setGarantiaList(List<EnumSiNo> garantiaList) {
         this.garantiaList = garantiaList;
     }
+
+    public Boolean getGenerarCodigoAutomatico() {
+        return generarCodigoAutomatico;
+    }
+
+    public void setGenerarCodigoAutomatico(Boolean generarCodigoAutomatico) {
+        this.generarCodigoAutomatico = generarCodigoAutomatico;
+    }
+    
+    
 
     private void setearValoresProducto(Producto producto) {
         
