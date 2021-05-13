@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="0.9075000000000168"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.2078825000000244"/>
+	<property name="ireport.x" value="75"/>
+	<property name="ireport.y" value="15"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -47,6 +47,18 @@
 		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
 	</variable>
 	<variable name="cobradoFinal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{cobrado})]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="totalGrupo" class="java.math.BigDecimal" resetType="Group" resetGroup="campo_agrupado" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{total})]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="saldoGrupo" class="java.math.BigDecimal" resetType="Group" resetGroup="campo_agrupado" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{saldo})]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="cobradoGrupo" class="java.math.BigDecimal" resetType="Group" resetGroup="campo_agrupado" calculation="Sum">
 		<variableExpression><![CDATA[new BigDecimal($F{cobrado})]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
 	</variable>
@@ -240,7 +252,92 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="23"/>
+			<band height="56">
+				<staticText>
+					<reportElement x="712" y="25" width="40" height="12" uuid="bd32e3c9-9933-4ee5-ba6a-2479f7d39c0e"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6" isBold="true"/>
+						<paragraph leftIndent="3" rightIndent="3"/>
+					</textElement>
+					<text><![CDATA[Cobrado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="712" y="13" width="40" height="12" uuid="1861d537-aaeb-4d7a-a6f9-7bfb5322a6ab"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+						<paragraph leftIndent="3" rightIndent="3"/>
+					</textElement>
+					<text><![CDATA[Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="712" y="37" width="40" height="12" uuid="9dcb2f8f-768e-4f40-bddf-c063bbd840f9"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+						<paragraph leftIndent="3" rightIndent="3"/>
+					</textElement>
+					<text><![CDATA[Saldo]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="752" y="13" width="50" height="12" uuid="1d812aa3-f4e1-4a52-b94e-6c2a9423ea01"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+						<paragraph leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalGrupo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="752" y="25" width="50" height="12" uuid="a6944328-99e5-41fc-9989-c7d314113f68"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+						<paragraph leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{saldoGrupo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="752" y="37" width="50" height="12" uuid="edb15b4b-ba72-4afd-a0a8-458fd55e32e0"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+						<paragraph leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{cobradoGrupo}]]></textFieldExpression>
+				</textField>
+			</band>
 		</groupFooter>
 	</group>
 	<background>
