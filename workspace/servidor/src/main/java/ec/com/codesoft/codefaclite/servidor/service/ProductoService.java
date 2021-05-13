@@ -24,6 +24,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         this.productoFacade = new ProductoFacade();
     }
     
-       
+      
     public Producto grabar(Producto p) throws ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -106,6 +108,17 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         if(p.getCatalogoProducto().getIva()==null)
         {
             throw new ServicioCodefacException("No se puede grabar el producto sin especificar un porcentaje de Iva");
+        }
+        
+        //Validar que cuando requiera imprimir el código tenga un formato correcto
+        if(p.getGenerarCodigoBarrasEnum().equals(EnumSiNo.SI))
+        {
+            //TODO: Validar para caracteres generales 
+            //Link: https://es.wikipedia.org/wiki/Code_39
+            if(!UtilidadesExpresionesRegulares.validar(p.getCodigoPersonalizado(),ExpresionRegular.soloNumeros))
+            {
+                throw new ServicioCodefacException("El Código solo puede ser numérico cuando se selecciona la opción de generar código de barras");
+            }
         }
         
         
