@@ -19,6 +19,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
@@ -155,7 +157,7 @@ public class LoginModel extends LoginFormDialog{
                 //Mostrar las alertas del sistema 
                 if(loginRespuesta.alertas!=null)
                 {
-                    DialogoCodefac.mensaje("Alertas",loginRespuesta.obtenerAlertasConFormato(),DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    DialogoCodefac.mensaje("Alertas",loginRespuesta.obtenerAlertasConFormato(),MENSAJE_ADVERTENCIA);
                 }
                 
                 switch(loginRespuesta.estadoEnum)
@@ -168,20 +170,20 @@ public class LoginModel extends LoginFormDialog{
                         break;
                     case INCORRECTO_USUARIO:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
-                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje(), MENSAJE_INCORRECTO);
                         break;
                     case NO_EXISTE_DIRECTORIO_LICENCIA:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
-                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.NO_EXISTE_DIRECTORIO_LICENCIA.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.NO_EXISTE_DIRECTORIO_LICENCIA.getMensaje(), MENSAJE_INCORRECTO);
                         Main.seleccionarDirectorioRecursos(empresaSeleccionada);
                         //validacionesEmpresa
                         break;
                     
                     case LICENCIA_DESACTUALIZADA:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
-                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.LICENCIA_DESACTUALIZADA.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.LICENCIA_DESACTUALIZADA.getMensaje(), MENSAJE_INCORRECTO);
                         String[] opciones = {"Ingresar Datos licencia","Cambiar directorio licencia", "Cancelar"};
-                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Seleccione una opción para solucionar el problema", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Seleccione una opción para solucionar el problema", MENSAJE_ADVERTENCIA, opciones);
                         switch(opcionSeleccionada)
                         {
                             case 0:
@@ -197,19 +199,19 @@ public class LoginModel extends LoginFormDialog{
                         
                     case PAGOS_PENDIENTES:
                         LOG.log(Level.WARNING, "Error con las fechas de pago excedidas " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
-                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.PAGOS_PENDIENTES.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);                        
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.PAGOS_PENDIENTES.getMensaje(), MENSAJE_INCORRECTO);                        
                         break;
 
                     default:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
-                        DialogoCodefac.mensaje("Error Login",loginRespuesta.estadoEnum.getMensaje(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        DialogoCodefac.mensaje("Error Login",loginRespuesta.estadoEnum.getMensaje(), MENSAJE_INCORRECTO);
                         break;
                 }
                 
                
             } catch (RemoteException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
-                DialogoCodefac.mensaje("Error Login", "Datos Incorrectos", DialogoCodefac.MENSAJE_INCORRECTO);
+                DialogoCodefac.mensaje("Error Login", "Datos Incorrectos", MENSAJE_INCORRECTO);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
             }

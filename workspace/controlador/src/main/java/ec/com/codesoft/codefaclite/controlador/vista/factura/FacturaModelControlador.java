@@ -5,11 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+//import ec.com.codesoft.codefaclite.facturacion.model.ProformaModel;
+//import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
@@ -41,11 +44,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -62,8 +67,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -1084,6 +1092,69 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
     }
     
+    private static List<InformacionAdicionalData> obtenerDatosAdicionales(Factura factura)
+    {
+        
+        List<InformacionAdicionalData> datosAdicionalesData=new ArrayList<InformacionAdicionalData>();
+        if(factura.getDatosAdicionales()!=null)
+        {          
+            for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) 
+            {
+                InformacionAdicionalData data=new InformacionAdicionalData();
+                data.setNombre(datoAdicional.getCampo());
+                data.setValor(datoAdicional.getValor());
+                datosAdicionalesData.add(data);
+            }
+        }
+        return datosAdicionalesData;
+    }
+    
+    public static Map<String, Object> getMapParametrosReporteProforma(Factura facturaProcesando) 
+    {
+        Map<String, Object> mapParametros= FacturaModelControlador.getMapParametrosReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
+        //mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());        
+        mapParametros.put("estado",facturaProcesando.getEnumEstadoProforma().getNombre());        
+        //subtotal_cero
+        //Datos adicionales para las proformas
+        mapParametros.put("secuencial", facturaProcesando.getSecuencial().toString());
+        mapParametros.put("cliente_nombres", facturaProcesando.getRazonSocial());
+        mapParametros.put("cliente_identificacion", facturaProcesando.getIdentificacion());
+        mapParametros.put("fecha_emision", facturaProcesando.getFechaEmision().toString());
+        mapParametros.put("subtotal_cero",facturaProcesando.getSubtotalSinImpuestos().toString());
+        mapParametros.put("descuento",facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos()).toString());
+        String porcentajeIva="";
+        if(facturaProcesando.getIvaSriId()!=null)
+        {
+            porcentajeIva=facturaProcesando.getIvaSriId().getPorcentaje().setScale(2).toString();
+        }
+        
+        mapParametros.put("iva_porcentaje",porcentajeIva);
+        //mapParametros.put("iva_porcentaje",session.obtenerIvaActual().toString());        
+        mapParametros.put("informacionAdicionalList",obtenerDatosAdicionales(facturaProcesando));
+
+        try {
+            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            InputStream inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml"));
+            JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
+            mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
+            
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml"));
+            reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
+            mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //SUBREPORT_INFO_ADICIONAL
+        
+        // mapParametros.put("estado",facturaProcesando.getEstadoEnum());
+        return mapParametros;
+    }
+    
     public static Integer obtenerDecimalesRedondeo(Empresa empresa)
     {
         try {
@@ -1132,6 +1203,28 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             dataReporte.add(data);
         }
         return dataReporte;
+    }
+    
+    public static JasperPrint getReporteJasperProforma(Factura proforma)
+    {
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(proforma);
+
+        //map de los parametros faltantes
+        Map<String, Object> mapParametros = getMapParametrosReporteProforma(proforma);
+        
+        //ReporteCodefac.generarReporteInternalFramePlantillaReturn(RecursoCodefac.JASPER_COMPRA, nombre, mapParametros, dataReporte, panelPadre, tituloReporte, OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.TICKET, ConfiguracionImpresoraEnum.SELECCIONAR_IMPRESORA)        
+        return ReporteCodefac.generarReporteInternalFramePlantillaReturn(
+                proforma.getSucursalEmpresa(),
+                proforma.getUsuario(),
+                RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,
+                "proforma.jrxml",
+                mapParametros, 
+                dataReporte,
+                "Proforma", 
+                OrientacionReporteEnum.VERTICAL, 
+                FormatoHojaEnum.A4,
+                ConfiguracionImpresoraEnum.NINGUNA
+                );
     }
 
     ////////////////////////////////////////////////////////////////////////////

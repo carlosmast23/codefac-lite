@@ -7,8 +7,8 @@ package ec.com.codesoft.codefaclite.prestamos.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.PrestamoTablaInteresDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
-import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+//import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+//import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.prestamos.panel.TablaInteresPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoTablaInteres;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.HashMap;

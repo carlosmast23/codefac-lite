@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import java.io.Serializable;
 
 /**

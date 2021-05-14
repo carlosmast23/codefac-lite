@@ -7,11 +7,13 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -385,6 +387,32 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         }
         return null;
     }
+    
+    public List<ComprobanteAdicional> obtenerCorreos()
+    {
+        List<ComprobanteAdicional> resultado=new ArrayList<ComprobanteAdicional>();
+        if(getDatosAdicionalesComprobante()!=null)
+        {
+            for (ComprobanteAdicional comprobanteAdicional : getDatosAdicionalesComprobante()) {
+                if(comprobanteAdicional.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_CORREO))
+                {
+                    resultado.add(comprobanteAdicional);
+                }
+            }
+        }
+        return resultado;
+    }
+    
+    public String obtenerCorreosStr()
+    {
+        List<ComprobanteAdicional> resultado=obtenerCorreos();
+        return  UtilidadesLista.castListToString(resultado,",",new UtilidadesLista.CastListInterface<ComprobanteAdicional>() {
+                @Override
+                public String getString(ComprobanteAdicional dato) {
+                    return dato.getValor();
+                }
+            });
+    }
 
     /**
      * Elimina datos adicionales de la factura como correos o codigos de enlace
@@ -629,21 +657,5 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
 
     }
     
-    /**
-     * Metodo que me permite hacer correciones cuando tenga un error con los datos
-     * adicionales
-     */
-    /*public void validarDatosAdicionales()
-    {
-        //Validar que no tenga más de 15 datos adicionales o si no lo borro por que el Sri no autoriza
-        List datosAdicionales=getDatosAdicionalesComprobante();
-        if (datosAdicionales != null) 
-        {
-            while (datosAdicionales.size() > 15) 
-            {
-                datosAdicionales.remove(datosAdicionales.size()-1);
-            }
-        }
-    }*/
-
+    
 }

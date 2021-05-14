@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.vista.crm;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador.CommonIf;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador.SwingIf;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.EjemploModelControlador.WebIf;

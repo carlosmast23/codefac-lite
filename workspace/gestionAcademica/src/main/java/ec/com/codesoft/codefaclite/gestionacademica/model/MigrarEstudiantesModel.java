@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
 import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarEstudiantes;
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.model.MigrarModel;
 import ec.com.codesoft.codefaclite.controlador.panel.MigrarPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;

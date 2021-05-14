@@ -8,18 +8,24 @@ package ec.com.codesoft.codefaclite.controlador.core.swing;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
-import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -170,8 +176,15 @@ public class ReporteCodefac {
         generarReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte,configuracionImpresora);
     }
     
+    @Deprecated
     public static JasperPrint generarReporteInternalFramePlantillaReturn(RecursoCodefac recursoCodefac,String nombre, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora) {
         return construirReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum, formatoReporte);
+    }
+    
+    public static JasperPrint generarReporteInternalFramePlantillaReturn(Sucursal sucursal,Usuario usuario,RecursoCodefac recursoCodefac,String nombre, Map<String, Object> parametros, Collection datos, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora) {
+        
+        //mapReportePlantilla(sucursal, usuario, orientacionEnum, formatoReporte);
+        return construirReporte(sucursal, usuario, recursoCodefac, nombre, parametros, datos, tituloReporte, orientacionEnum, formatoReporte);
     }
     
     public static void generarReporteInternalFramePlantillaArchivo(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,String path) {
@@ -229,23 +242,33 @@ public class ReporteCodefac {
         return null;
     }
     
-    /**
-     * Metodo creado para ver si se compila el reporte y puedo tener un proxy de los reportes y acceder mas rapidos a los mismos
-     * @Date 17/09/2019     
-     */
-    private static JasperPrint construirReporte(RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
+    private static JasperPrint construirReporte(Sucursal sucursal,Usuario usuario,RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
+    {
+        Map<String,Object> mapCompleto=mapReportePlantilla(sucursal, usuario, orientacionEnum, formatoReporte);
+        //TODO: Optimizar la forma de unir las utilidadesMap
+        for (Map.Entry<String, Object> entry : parametros.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            mapCompleto.put(key, value);
+        }
+        //mapCompleto.putAll(parametros);
+        return construirReporte(recursoCodefac, nombre, mapCompleto, datos, tituloReporte, orientacionEnum, formatoReporte);
+    }
+    
+    private static JasperPrint construirReporte(RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
     {
         try {
-            Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(orientacionEnum,formatoReporte));
+            //mapReportePlantilla(sucursal, usuario, orientacionEnum, formatoReporte)
+            //Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(orientacionEnum,formatoReporte));
             
             //Agregado parametros adicionales
-            for (Map.Entry<String, Object> entry : parametros.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                mapCompleto.put(key, value);
-            }
+            //for (Map.Entry<String, Object> entry : parametros.entrySet()) {
+            //    String key = entry.getKey();
+            //    Object value = entry.getValue();
+            //    mapCompleto.put(key, value);
+            //}
             
-            mapCompleto.put("pl_titulo",tituloReporte);
+            parametros.put("pl_titulo",tituloReporte);
             
             /**
              * Agregado reporte para tener un proxy de objetos
@@ -260,12 +283,63 @@ public class ReporteCodefac {
             }
             
             JRBeanCollectionDataSource dataReport= new JRBeanCollectionDataSource(datos);
-            JasperPrint print =JasperFillManager.fillReport(report, mapCompleto,dataReport);
+            JasperPrint print =JasperFillManager.fillReport(report, parametros,dataReport);
             return print;
         } catch (JRException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    /**
+     * TODO: Revisar el tema del parametro de InterfazComunicacionPanel por que parece que tiene un error en el diseño para llenar esos datos
+     * Metodo creado para ver si se compila el reporte y puedo tener un proxy de los reportes y acceder mas rapidos a los mismos
+     * @Date 17/09/2019     
+     */
+    @Deprecated // TODO: Ya no debo usar el InterfazComunication por que causa una dependencia a otro proyecto inecesaria
+    private static JasperPrint construirReporte(RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
+    {
+        Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(orientacionEnum,formatoReporte));
+        //mapCompleto.putAll(parametros); //Agregar parametros que faltaban
+        //TODO: Optimizar la forma de unir las utilidadesMap
+        for (Map.Entry<String, Object> entry : parametros.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            mapCompleto.put(key, value);
+        }
+        return construirReporte(recursoCodefac, nombre, mapCompleto, datos, tituloReporte, orientacionEnum, formatoReporte);
+        
+//        try {
+//            Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(orientacionEnum,formatoReporte));
+//            
+//            //Agregado parametros adicionales
+//            for (Map.Entry<String, Object> entry : parametros.entrySet()) {
+//                String key = entry.getKey();
+//                Object value = entry.getValue();
+//                mapCompleto.put(key, value);
+//            }
+//            
+//            mapCompleto.put("pl_titulo",tituloReporte);
+//            
+//            /**
+//             * Agregado reporte para tener un proxy de objetos
+//             */
+//            JasperReport report=ReporteProxy.buscar(recursoCodefac, nombre);
+//            if(report==null)
+//            {
+//                InputStream inputStream= recursoCodefac.getResourceInputStream(nombre);
+//                report =JasperCompileManager.compileReport(inputStream);
+//                ReporteProxy.agregar(recursoCodefac,nombre,report);
+//                
+//            }
+//            
+//            JRBeanCollectionDataSource dataReport= new JRBeanCollectionDataSource(datos);
+//            JasperPrint print =JasperFillManager.fillReport(report, mapCompleto,dataReport);
+//            return print;
+//        } catch (JRException ex) {
+//            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
     }
     
     /**
@@ -431,6 +505,176 @@ public class ReporteCodefac {
         } catch (JRException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return parametros;
+    }
+    
+    public static Map<String, Object> mapReportePlantilla(Sucursal sucursal,Usuario usuario,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
+        
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        try {
+        
+            InputStream inputStream = null;
+
+            SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
+            
+            parametros.put("pl_fecha_hora", formateador.format(new Date()));
+            parametros.put("pl_usuario", usuario.getNick());
+            parametros.put("pl_direccion", sucursal.getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
+            parametros.put("pl_razon_social",sucursal.getEmpresa().getRazonSocial());
+
+            String contribuyenteMicroempresas=EnumSiNo.NO.getLetra();
+            if(sucursal.getEmpresa().getContribuyenteRegimenMicroempresasEnum()!=null)
+            {
+                if(sucursal.getEmpresa().getContribuyenteRegimenMicroempresasEnum().equals(EnumSiNo.SI))
+                {
+                    contribuyenteMicroempresas=EnumSiNo.SI.getLetra();
+                }
+            }
+
+            parametros.put("pl_contribuyenteRegimenMicroempresas", contribuyenteMicroempresas);
+
+            String nombreComercial=sucursal.getEmpresa().getNombreLegal();
+            if(nombreComercial==null || nombreComercial.trim().isEmpty())
+            {
+                nombreComercial=sucursal.getEmpresa().getRazonSocial();
+            }
+            else
+            {
+                parametros.put("pl_razon_social",sucursal.getEmpresa().getRazonSocial());
+            }
+
+            //Consultar la matriz de la empresa
+            Sucursal matriz=ServiceFactory.getFactory().getSucursalServiceIf().obtenerMatrizPorSucursal(sucursal.getEmpresa());
+
+            parametros.put("pl_nombre_empresa", nombreComercial);
+            parametros.put("pl_telefonos", matriz.getTelefono());
+            parametros.put("pl_celular", matriz.getCelular());
+            parametros.put("pl_facebook", sucursal.getEmpresa().getFacebook());                
+            parametros.put("pl_instagram",(sucursal.getEmpresa().getInstagram()!=null)?sucursal.getEmpresa().getInstagram():"");
+            parametros.put("pl_ruc", sucursal.getEmpresa().getIdentificacion());        
+
+            /**
+             * Agregado valdación cuando no llenen ningun dato que salgo información del sistema cuando el usuario tiene una licencia gratuita
+             * @author Carlos Sanchez
+             * @fecha 03/11/2018
+             */
+            UtilidadesServiceIf utilidadesService = ServiceFactory.getFactory().getUtilidadesServiceIf();
+            TipoLicenciaEnum tipoLicenciaEnum = utilidadesService.getTipoLicencia(sucursal.getEmpresa());
+
+            if(tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
+            {
+                parametros.put("pl_adicional", ParametrosSistemaCodefac.MensajesSistemaCodefac.MENSAJE_PIE_PAGINA_GRATIS);
+            }
+            else
+            {
+                parametros.put("pl_adicional", sucursal.getEmpresa().getAdicional());
+            }        
+
+            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            String nombreImagen=sucursal.getEmpresa().getImagenLogoPath();
+            //service.getResourceInputStream(RecursoCodefac.AYUDA, file);
+            
+           if(tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
+            {
+                inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+            }
+            else
+            {
+                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sucursal.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
+                //verifica que existe una imagen
+                if (remoteInputStream != null) {
+                    inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
+                } 
+                else //Si no existe 
+                {
+                    inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                }            
+            }
+
+            parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "instagram.png"));
+            parametros.put("pl_img_instagram",UtilidadImagen.castInputStreamToImage(inputStream));
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
+            parametros.put("pl_img_facebook",UtilidadImagen.castInputStreamToImage(inputStream));
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
+            parametros.put("pl_img_whatsapp",UtilidadImagen.castInputStreamToImage(inputStream));
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
+            parametros.put("pl_img_telefono",UtilidadImagen.castInputStreamToImage(inputStream));
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
+            //parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
+            parametros.put("pl_img_logo_pie",null);
+            
+            String nombreReporteEncabezado="";
+            String nombreReportePiePagina="";
+            
+            switch(formatoReporte)
+            {
+                case TICKET:
+                        nombreReporteEncabezado = "encabezadoTicket.jrxml";
+                        nombreReportePiePagina = "pie_paginaTicket.jrxml";
+                        break;
+                
+                case A5:
+                    switch (orientacionEnum) {
+                        case HORIZONTAL:
+                            break;
+
+                        case VERTICAL:
+                            nombreReporteEncabezado = "encabezadoA5.jrxml";
+                            nombreReportePiePagina = "pie_paginaA5.jrxml";
+                            break;
+                    }
+                    break;
+                    
+                case A4:
+                    switch (orientacionEnum) {
+                        case HORIZONTAL:
+                            nombreReporteEncabezado = "encabezado_horizontal.jrxml";
+                            nombreReportePiePagina = "pie_pagina_horizontal.jrxml";
+                            break;
+
+                        case VERTICAL:
+                            nombreReporteEncabezado = "encabezado.jrxml";
+                            nombreReportePiePagina = "pie_pagina.jrxml";
+                            break;
+                    }
+                    break;
+                
+            }
+            
+            JasperReport reportCabecera=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReporteEncabezado);
+            if(reportCabecera==null)
+            {
+                inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
+                reportCabecera = JasperCompileManager.compileReport(inputStream);
+                ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReporteEncabezado,reportCabecera);
+            }
+            
+            parametros.put("pl_url_cabecera",reportCabecera);
+            
+            JasperReport reportPiePagina=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReportePiePagina);
+            if(reportPiePagina==null)
+            {
+                inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReportePiePagina));
+                reportPiePagina = JasperCompileManager.compileReport(inputStream);
+                ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReportePiePagina,reportPiePagina);
+            }            
+            parametros.put("pl_url_piepagina",reportPiePagina);
+            //System.out.println(parametros.get("SUBREPORT_DIR"));            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
         return parametros;

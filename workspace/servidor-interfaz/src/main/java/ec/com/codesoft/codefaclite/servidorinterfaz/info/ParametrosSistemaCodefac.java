@@ -76,10 +76,7 @@ public abstract class ParametrosSistemaCodefac {
      * Variable que sirve para establecer el redondeo por defecto de todo el sistam
      */
     public static final RoundingMode REDONDEO_POR_DEFECTO=RoundingMode.HALF_UP;
-    public abstract class MensajesSistemaCodefac
-    {
-        public static final String MENSAJE_PIE_PAGINA_GRATIS="Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com";
-    }
+        
     
     /**
      * Enlaces de los Web Service del Sri
@@ -162,5 +159,10 @@ public abstract class ParametrosSistemaCodefac {
     public static final String CORREO_DEFECTO_PUERTO="587";
     
     public static final EstiloCodefacEnum TEMA_DEFECTO_CODEFAC=EstiloCodefacEnum.MCWIN;
+    
+    public abstract class MensajesSistemaCodefac
+    {
+        public static final String MENSAJE_PIE_PAGINA_GRATIS="Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com";
+    }
     
 }

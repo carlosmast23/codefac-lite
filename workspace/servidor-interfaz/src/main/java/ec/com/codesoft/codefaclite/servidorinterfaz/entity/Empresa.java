@@ -299,6 +299,25 @@ public class Empresa implements Serializable {
         this.instagram = instagram;
     }
     
+    /**
+     * Metodo que permite obtener por defecto el nombre comercial pero si no tiene devuelve la razon social
+     * @return 
+     */
+    
+    public String obtenerNombreEmpresa()
+    {
+        String nombreEmpresa="";
+        if(nombreLegal!=null && !nombreLegal.trim().isEmpty())
+        {
+            nombreEmpresa=nombreLegal;
+        }
+        else if(razonSocial!=null && !razonSocial.trim().isEmpty() )
+        {
+            nombreEmpresa=razonSocial;
+        }
+        
+        return nombreEmpresa;
+    }
     
 
     @Override

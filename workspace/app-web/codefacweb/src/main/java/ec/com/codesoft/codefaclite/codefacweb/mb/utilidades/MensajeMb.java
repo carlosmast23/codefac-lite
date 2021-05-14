@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.utilidades;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import java.io.Serializable;
 import java.util.HashMap;

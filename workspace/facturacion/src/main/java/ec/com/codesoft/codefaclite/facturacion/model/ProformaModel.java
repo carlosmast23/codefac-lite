@@ -9,14 +9,14 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
-import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
-import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ProformaDetalleData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -49,7 +49,11 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -122,7 +126,7 @@ public class ProformaModel extends FacturacionModel{
             setearValoresDefaultFactura();
             //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
             factura = servicio.grabarProforma(factura);
-            DialogoCodefac.mensaje("Correcto","Proforma generada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje("Correcto","Proforma generada correctamente", MENSAJE_CORRECTO);
             imprimirProforma();
         
         } catch (RemoteException ex) {
@@ -130,7 +134,7 @@ public class ProformaModel extends FacturacionModel{
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),MENSAJE_INCORRECTO);
         }        
 
     }
@@ -159,14 +163,15 @@ public class ProformaModel extends FacturacionModel{
     
     public void imprimirProforma()
     {
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
+        /*List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
 
         //map de los parametros faltantes
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
         
-        //InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
-
-        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"proforma.jrxml",mapParametros, dataReporte, this.panelPadre, "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"proforma.jrxml",mapParametros, dataReporte, this.panelPadre, "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);*/
+        JasperPrint jasperReporte=FacturaModelControlador.getReporteJasperProforma(factura);
+        ReporteCodefac.generarReporteInternalFrame(jasperReporte, panelPadre, "Proforma "+factura.getSecuencial(), ConfiguracionImpresoraEnum.NINGUNA);
+        
 
     }
     
@@ -179,7 +184,7 @@ public class ProformaModel extends FacturacionModel{
     
 
     //@Override
-    public Map<String, Object> getMapParametrosReporte(Factura facturaProcesando) {
+    /*public Map<String, Object> getMapParametrosReporte(Factura facturaProcesando) {
         Map<String, Object> mapParametros= FacturaModelControlador.getMapParametrosReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
         mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());        
         //subtotal_cero
@@ -214,9 +219,9 @@ public class ProformaModel extends FacturacionModel{
         
         // mapParametros.put("estado",facturaProcesando.getEstadoEnum());
         return mapParametros;
-    }
+    }*/
     
-    private List<InformacionAdicionalData> obtenerDatosAdicionales()
+    /*private List<InformacionAdicionalData> obtenerDatosAdicionales()
     {
         List<InformacionAdicionalData> datosAdicionalesData=new ArrayList<InformacionAdicionalData>();
         if(factura.getDatosAdicionales()!=null)
@@ -230,7 +235,7 @@ public class ProformaModel extends FacturacionModel{
             }
         }
         return datosAdicionalesData;
-    }
+    }*/
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
@@ -253,7 +258,7 @@ public class ProformaModel extends FacturacionModel{
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),MENSAJE_INCORRECTO);
             new ExcepcionCodefacLite("Error Eliminar");
         }
         MesEnum.obtenerPorNumero(ERROR).getNombre();

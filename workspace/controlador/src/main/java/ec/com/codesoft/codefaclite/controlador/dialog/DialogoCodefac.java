@@ -5,11 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.controlador.dialog;
 
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogModel;
 import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
-import ec.com.codesoft.codefaclite.controlador.panel.PanelCargando;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import javax.swing.ImageIcon;
@@ -33,58 +32,71 @@ public abstract class DialogoCodefac {
 
     };
     
+    @Deprecated
     public static final Integer MENSAJE_CORRECTO=1;
+    @Deprecated
     public static final Integer MENSAJE_INCORRECTO=2;
+    @Deprecated
     public static final Integer MENSAJE_ADVERTENCIA=3;
     
+        
     public static final String ETIQUETA_MENSAJE_CORRECTO="Correcto";
     public static final String  ETIQUETA_MENSAJE_INCORRECTO="Incorrecto";
     public static final String  ETIQUETA_MENSAJE_ADVERTENCIA="Advertencia";
     
     public static void mensaje(CodefacMsj codefacMsj) 
     {
-        mensaje(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje);
+        mensaje(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje.getCodigo());
     }
     
+    @Deprecated
     public static void mensaje(String mensaje,Integer tipoMensaje)
     {
-        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        
+        if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO.getCodigo()))
         {
             mensaje(ETIQUETA_MENSAJE_CORRECTO, mensaje, tipoMensaje);
         }
         else
         {
-            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO.getCodigo()))
             {
                 mensaje(ETIQUETA_MENSAJE_INCORRECTO, mensaje, tipoMensaje);
             }
             else
             {
-                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                if (tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA.getCodigo())) {
                     mensaje(ETIQUETA_MENSAJE_ADVERTENCIA, mensaje, tipoMensaje);
                 }
             }
         }
     }
     
+    public static void mensaje(String titulo,String mensaje,CodefacMsj.ModoMensajeEnum tipoMensaje)
+    {
+        //TODO: Modificar para que no dependa del codigo
+        mensaje(titulo, mensaje, tipoMensaje.getCodigo());
+    }
     
+    @Deprecated
     public static void mensaje(String titulo,String mensaje,Integer tipoMensaje)
     {
         ImageIcon icono=null;
+        //CodefacMsj.ModoMensajeEnum modoMensajeEnum=CodefacMsj.ModoMensajeEnum.buscarPorCodigo(tipoMensaje);
        
-        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO.getCodigo()))
         {
             icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-correcto.png"));
         }
         else
         {
-            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO.getCodigo()))
             {
                 icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-error.png"));
             }
             else
             {
-                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                if (tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA.getCodigo())) {
                     icono = new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-informacion.png"));
                 }
             }
@@ -111,7 +123,7 @@ public abstract class DialogoCodefac {
     }
     
     public static boolean dialogoPregunta(CodefacMsj codefacMsj) {
-        return dialogoPregunta(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje);
+        return dialogoPregunta(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje.getCodigo());
     }
     
     /**
@@ -120,20 +132,21 @@ public abstract class DialogoCodefac {
      * @param tipoMensaje
      * @return 
      */
+    @Deprecated
     public static Boolean dialogoPregunta(String mensaje, Integer tipoMensaje) {
-        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO.getCodigo()))
         {
             return dialogoPregunta(ETIQUETA_MENSAJE_CORRECTO, mensaje, tipoMensaje);
         }
         else
         {
-            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO.getCodigo()))
             {
                 return dialogoPregunta(ETIQUETA_MENSAJE_INCORRECTO, mensaje, tipoMensaje);
             }
             else
             {
-                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                if (tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA.getCodigo())) {
                     return dialogoPregunta(ETIQUETA_MENSAJE_ADVERTENCIA, mensaje, tipoMensaje);
                 }
             }
@@ -141,22 +154,23 @@ public abstract class DialogoCodefac {
         return null;
     }
     
+    @Deprecated
     public static boolean dialogoPregunta(String titulo, String mensaje, Integer tipoMensaje) {
         ImageIcon icono=null;
        
-        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO.getCodigo()))
         {
             icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-correcto.png"));
         }
         else
         {
-            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO.getCodigo()))
             {
                 icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-error.png"));
             }
             else
             {
-                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                if (tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA.getCodigo())) {
                     icono = new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-informacion.png"));
                 }
             }
@@ -177,22 +191,27 @@ public abstract class DialogoCodefac {
         dialog.setVisible(true);
     }
     
+    public static int dialogoPreguntaPersonalizada(String titulo, String mensaje, CodefacMsj.ModoMensajeEnum tipoMensaje,String[] opciones) {
+        return dialogoPreguntaPersonalizada(titulo, mensaje, tipoMensaje.getCodigo(), opciones);
+    }
+    
+    @Deprecated
     public static int dialogoPreguntaPersonalizada(String titulo, String mensaje, Integer tipoMensaje,String[] opciones) {
         ImageIcon icono=null;
        
-        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO.getCodigo()))
         {
             icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-correcto.png"));
         }
         else
         {
-            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO.getCodigo()))
             {
                 icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-error.png"));
             }
             else
             {
-                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                if (tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA.getCodigo())) {
                     icono = new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-informacion.png"));
                 }
             }

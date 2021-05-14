@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import static ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac.dialogoPregunta;
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.ControladorCampoTextoAnot;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion;

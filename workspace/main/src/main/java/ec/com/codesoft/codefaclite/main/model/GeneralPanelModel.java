@@ -52,10 +52,11 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorker;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorkerIf;
-import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.RespaldosModelUtilidades;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
@@ -2900,164 +2901,166 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }*/
 
     @Override
+    @Deprecated //No tener dependencia con las pantallas para que se puedan generar los reportes de forma independiente desde el modulo del Servidor
     public Map<String, Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
-        InputStream inputStream = null;
-
-        SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
-        Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("pl_fecha_hora", formateador.format(new Date()));
-        parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
-        parametros.put("pl_direccion", sessionCodefac.getSucursal().getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
-        parametros.put("pl_razon_social", sessionCodefac.getEmpresa().getRazonSocial());
-        
-        String contribuyenteMicroempresas=EnumSiNo.NO.getLetra();
-        if(sessionCodefac.getEmpresa().getContribuyenteRegimenMicroempresasEnum()!=null)
-        {
-            if(sessionCodefac.getEmpresa().getContribuyenteRegimenMicroempresasEnum().equals(EnumSiNo.SI))
-            {
-                contribuyenteMicroempresas=EnumSiNo.SI.getLetra();
-            }
-        }
-        
-        parametros.put("pl_contribuyenteRegimenMicroempresas", contribuyenteMicroempresas);
-        
-        String nombreComercial=sessionCodefac.getEmpresa().getNombreLegal();
-        if(nombreComercial==null || nombreComercial.trim().isEmpty())
-        {
-            nombreComercial=sessionCodefac.getEmpresa().getRazonSocial();
-        }
-        else
-        {
-            parametros.put("pl_razon_social", sessionCodefac.getEmpresa().getRazonSocial());
-        }
-        
-        parametros.put("pl_nombre_empresa", nombreComercial);
-        parametros.put("pl_telefonos", sessionCodefac.getMatriz().getTelefono());
-        parametros.put("pl_celular", sessionCodefac.getMatriz().getCelular());
-        parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
-        parametros.put("pl_instagram",(sessionCodefac.getEmpresa().getInstagram()!=null)?sessionCodefac.getEmpresa().getInstagram():"");
-        parametros.put("pl_ruc", sessionCodefac.getEmpresa().getIdentificacion());        
-        
-        /**
-         * Agregado valdación cuando no llenen ningun dato que salgo información del sistema cuando el usuario tiene una licencia gratuita
-         * @author Carlos Sanchez
-         * @fecha 03/11/2018
-         */
-        if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
-        {
-            parametros.put("pl_adicional", ParametrosSistemaCodefac.MensajesSistemaCodefac.MENSAJE_PIE_PAGINA_GRATIS);
-        }
-        else
-        {
-            parametros.put("pl_adicional", sessionCodefac.getEmpresa().getAdicional());
-        }        
-        
-        
-        try {    
-            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
-            String nombreImagen=sessionCodefac.getEmpresa().getImagenLogoPath();
-            //service.getResourceInputStream(RecursoCodefac.AYUDA, file);
-            
-           if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
-            {
-                inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
-            }
-            else
-            {
-                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sessionCodefac.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
-                //verifica que existe una imagen
-                if (remoteInputStream != null) {
-                    inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
-                } 
-                else //Si no existe 
-                {
-                    inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
-                }            
-            }
-
-            parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "instagram.png"));
-            parametros.put("pl_img_instagram",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
-            parametros.put("pl_img_facebook",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
-            parametros.put("pl_img_whatsapp",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
-            parametros.put("pl_img_telefono",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
-            //parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
-            parametros.put("pl_img_logo_pie",null);
-            
-            String nombreReporteEncabezado="";
-            String nombreReportePiePagina="";
-            
-            switch(formatoReporte)
-            {
-                case TICKET:
-                        nombreReporteEncabezado = "encabezadoTicket.jrxml";
-                        nombreReportePiePagina = "pie_paginaTicket.jrxml";
-                        break;
-                
-                case A5:
-                    switch (orientacionEnum) {
-                        case HORIZONTAL:
-                            break;
-
-                        case VERTICAL:
-                            nombreReporteEncabezado = "encabezadoA5.jrxml";
-                            nombreReportePiePagina = "pie_paginaA5.jrxml";
-                            break;
-                    }
-                    break;
-                    
-                case A4:
-                    switch (orientacionEnum) {
-                        case HORIZONTAL:
-                            nombreReporteEncabezado = "encabezado_horizontal.jrxml";
-                            nombreReportePiePagina = "pie_pagina_horizontal.jrxml";
-                            break;
-
-                        case VERTICAL:
-                            nombreReporteEncabezado = "encabezado.jrxml";
-                            nombreReportePiePagina = "pie_pagina.jrxml";
-                            break;
-                    }
-                    break;
-                
-            }
-            
-            JasperReport reportCabecera=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReporteEncabezado);
-            if(reportCabecera==null)
-            {
-                inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
-                reportCabecera = JasperCompileManager.compileReport(inputStream);
-                ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReporteEncabezado,reportCabecera);
-            }
-            
-            parametros.put("pl_url_cabecera",reportCabecera);
-            
-            JasperReport reportPiePagina=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReportePiePagina);
-            if(reportPiePagina==null)
-            {
-                inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReportePiePagina));
-                reportPiePagina = JasperCompileManager.compileReport(inputStream);
-                ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReportePiePagina,reportPiePagina);
-            }            
-            parametros.put("pl_url_piepagina",reportPiePagina);
-            //System.out.println(parametros.get("SUBREPORT_DIR"));            
-        } catch (RemoteException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return parametros;
+        return ReporteCodefac.mapReportePlantilla(sessionCodefac.getSucursal(), sessionCodefac.getUsuario(), orientacionEnum, formatoReporte);
+//        InputStream inputStream = null;
+//
+//        SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
+//        Map<String, Object> parametros = new HashMap<String, Object>();
+//        parametros.put("pl_fecha_hora", formateador.format(new Date()));
+//        parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
+//        parametros.put("pl_direccion", sessionCodefac.getSucursal().getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
+//        parametros.put("pl_razon_social", sessionCodefac.getEmpresa().getRazonSocial());
+//        
+//        String contribuyenteMicroempresas=EnumSiNo.NO.getLetra();
+//        if(sessionCodefac.getEmpresa().getContribuyenteRegimenMicroempresasEnum()!=null)
+//        {
+//            if(sessionCodefac.getEmpresa().getContribuyenteRegimenMicroempresasEnum().equals(EnumSiNo.SI))
+//            {
+//                contribuyenteMicroempresas=EnumSiNo.SI.getLetra();
+//            }
+//        }
+//        
+//        parametros.put("pl_contribuyenteRegimenMicroempresas", contribuyenteMicroempresas);
+//        
+//        String nombreComercial=sessionCodefac.getEmpresa().getNombreLegal();
+//        if(nombreComercial==null || nombreComercial.trim().isEmpty())
+//        {
+//            nombreComercial=sessionCodefac.getEmpresa().getRazonSocial();
+//        }
+//        else
+//        {
+//            parametros.put("pl_razon_social", sessionCodefac.getEmpresa().getRazonSocial());
+//        }
+//        
+//        parametros.put("pl_nombre_empresa", nombreComercial);
+//        parametros.put("pl_telefonos", sessionCodefac.getMatriz().getTelefono());
+//        parametros.put("pl_celular", sessionCodefac.getMatriz().getCelular());
+//        parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
+//        parametros.put("pl_instagram",(sessionCodefac.getEmpresa().getInstagram()!=null)?sessionCodefac.getEmpresa().getInstagram():"");
+//        parametros.put("pl_ruc", sessionCodefac.getEmpresa().getIdentificacion());        
+//        
+//        /**
+//         * Agregado valdación cuando no llenen ningun dato que salgo información del sistema cuando el usuario tiene una licencia gratuita
+//         * @author Carlos Sanchez
+//         * @fecha 03/11/2018
+//         */
+//        if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+//        {
+//            parametros.put("pl_adicional", ParametrosSistemaCodefac.MensajesSistemaCodefac.MENSAJE_PIE_PAGINA_GRATIS);
+//        }
+//        else
+//        {
+//            parametros.put("pl_adicional", sessionCodefac.getEmpresa().getAdicional());
+//        }        
+//        
+//        
+//        try {    
+//            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+//            String nombreImagen=sessionCodefac.getEmpresa().getImagenLogoPath();
+//            //service.getResourceInputStream(RecursoCodefac.AYUDA, file);
+//            
+//           if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+//            {
+//                inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+//            }
+//            else
+//            {
+//                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sessionCodefac.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
+//                //verifica que existe una imagen
+//                if (remoteInputStream != null) {
+//                    inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
+//                } 
+//                else //Si no existe 
+//                {
+//                    inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+//                }            
+//            }
+//
+//            parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
+//            
+//            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "instagram.png"));
+//            parametros.put("pl_img_instagram",UtilidadImagen.castInputStreamToImage(inputStream));
+//            
+//            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
+//            parametros.put("pl_img_facebook",UtilidadImagen.castInputStreamToImage(inputStream));
+//            
+//            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
+//            parametros.put("pl_img_whatsapp",UtilidadImagen.castInputStreamToImage(inputStream));
+//            
+//            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
+//            parametros.put("pl_img_telefono",UtilidadImagen.castInputStreamToImage(inputStream));
+//            
+//            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
+//            //parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
+//            parametros.put("pl_img_logo_pie",null);
+//            
+//            String nombreReporteEncabezado="";
+//            String nombreReportePiePagina="";
+//            
+//            switch(formatoReporte)
+//            {
+//                case TICKET:
+//                        nombreReporteEncabezado = "encabezadoTicket.jrxml";
+//                        nombreReportePiePagina = "pie_paginaTicket.jrxml";
+//                        break;
+//                
+//                case A5:
+//                    switch (orientacionEnum) {
+//                        case HORIZONTAL:
+//                            break;
+//
+//                        case VERTICAL:
+//                            nombreReporteEncabezado = "encabezadoA5.jrxml";
+//                            nombreReportePiePagina = "pie_paginaA5.jrxml";
+//                            break;
+//                    }
+//                    break;
+//                    
+//                case A4:
+//                    switch (orientacionEnum) {
+//                        case HORIZONTAL:
+//                            nombreReporteEncabezado = "encabezado_horizontal.jrxml";
+//                            nombreReportePiePagina = "pie_pagina_horizontal.jrxml";
+//                            break;
+//
+//                        case VERTICAL:
+//                            nombreReporteEncabezado = "encabezado.jrxml";
+//                            nombreReportePiePagina = "pie_pagina.jrxml";
+//                            break;
+//                    }
+//                    break;
+//                
+//            }
+//            
+//            JasperReport reportCabecera=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReporteEncabezado);
+//            if(reportCabecera==null)
+//            {
+//                inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
+//                reportCabecera = JasperCompileManager.compileReport(inputStream);
+//                ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReporteEncabezado,reportCabecera);
+//            }
+//            
+//            parametros.put("pl_url_cabecera",reportCabecera);
+//            
+//            JasperReport reportPiePagina=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReportePiePagina);
+//            if(reportPiePagina==null)
+//            {
+//                inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReportePiePagina));
+//                reportPiePagina = JasperCompileManager.compileReport(inputStream);
+//                ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReportePiePagina,reportPiePagina);
+//            }            
+//            parametros.put("pl_url_piepagina",reportPiePagina);
+//            //System.out.println(parametros.get("SUBREPORT_DIR"));            
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (JRException ex) {
+//            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return parametros;
     }
 
     public SessionCodefac getSessionCodefac() {

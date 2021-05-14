@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.PrestamoService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaPermisoService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -55,6 +56,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
@@ -72,6 +75,7 @@ import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,6 +174,30 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                      
                }
             });
+            
+            /**
+             * Informar por CORREO que la proforma fue enviada correctamente
+             */
+            Map<String,String> mapParametro=new HashMap<String,String>();
+            mapParametro.put("numeroProforma", proforma.getSecuencial()+"");
+            mapParametro.put("nombreCliente", proforma.getRazonSocial());
+            mapParametro.put("empresa", proforma.getEmpresa().obtenerNombreEmpresa());
+            //mapParametro
+            CodefacMsj mensaje=MensajeCodefacSistema.ProformasMensajes.PROFORMA_ENVIADA_CORREO.agregarParametros(mapParametro);
+            //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
+            List<String> destinatarios=Arrays.asList(proforma.obtenerCorreosStr());
+            //Controlador
+            
+            /*CorreoCodefac correoCodefac=new CorreoCodefac();
+            correoCodefac.enviarCorreo(
+                    proforma.getEmpresa(), 
+                    mensaje.getTitulo(), 
+                    mensaje.getMensaje(), 
+                    destinatarios, 
+                    pathFiles);*/
+            
+            
+            
         
         
         return proforma;

@@ -48,6 +48,24 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
         return entity;
     }
     
+    /*public Sucursal consultarMatrizPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        //Sucursal sucursal;
+        //sucursal.getEstadoEnum()        
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("tipo",Sucursal.TipoSucursalEnum.MATRIZ.getCodigo());
+        mapParametros.put("empresa",empresa);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        List<Sucursal> sucursalList=getFacade().findByMap(mapParametros);
+        if(sucursalList.size()>0)
+        {
+            return sucursalList.get(0);
+        }
+        
+        return null;
+        
+    }*/
+    
     @Override
     public List<Sucursal> consultarActivosPorEmpresa(Empresa empresa)  throws ServicioCodefacException, RemoteException
     {
@@ -90,11 +108,13 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
        return null;
     }
     
+    //TODO: Cambiar nombre por busca por empresa no por sucursal
     public Sucursal obtenerMatrizPorSucursal(Empresa empresa) throws ServicioCodefacException, RemoteException
     {
        Map<String,Object> mapParametros=new HashMap<String,Object>();
        //Sucursal sucursal;
        //sucursal.getT
+       mapParametros.put("empresa",empresa);
        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
        mapParametros.put("tipo",Sucursal.TipoSucursalEnum.MATRIZ.getCodigo());
        List<Sucursal> sucursales=getFacade().findByMap(mapParametros);
