@@ -160,6 +160,11 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final EstiloCodefacEnum TEMA_DEFECTO_CODEFAC=EstiloCodefacEnum.MCWIN;
     
+    public abstract class ComprobantesElectronicos
+    {
+        public static final String LOGO_SIN_FOTO="sin_imagen.jpg";
+    }
+    
     public abstract class MensajesSistemaCodefac
     {
         public static final String MENSAJE_PIE_PAGINA_GRATIS="Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com";

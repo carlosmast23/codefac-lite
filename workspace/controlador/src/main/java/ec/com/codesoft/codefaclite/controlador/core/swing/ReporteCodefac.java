@@ -422,7 +422,7 @@ public class ReporteCodefac {
             
            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
             {
-                inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
             }
             else
             {
@@ -433,7 +433,7 @@ public class ReporteCodefac {
                 } 
                 else //Si no existe 
                 {
-                    inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                    inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
                 }            
             }
 
@@ -578,7 +578,7 @@ public class ReporteCodefac {
             
            if(tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
             {
-                inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
             }
             else
             {
@@ -589,7 +589,7 @@ public class ReporteCodefac {
                 } 
                 else //Si no existe 
                 {
-                    inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                    inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
                 }            
             }
 

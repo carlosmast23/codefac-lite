@@ -1699,7 +1699,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         servicio.setMapAdicionalReporte(mapReportePlantilla(empresa)); //Todo: revisar si esto esta biena
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
         //Segun el tipo de licencia cargar los recursos
-        servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
+        
+        servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO));
         if (UtilidadesServidor.mapEmpresasLicencias.get(empresa).tipoLicencia.equals(TipoLicenciaEnum.PRO)) {
 
             InputStream inputStream = null;
@@ -1710,7 +1711,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 //Si no existe imagen grabada en la base de datos ,muestra la imagen por defecto
                 if(imagenLogo==null || imagenLogo.trim().isEmpty())
                 {
-                    inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                    inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
                 }
                 else
                 {                    
@@ -1718,7 +1719,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     inputStream = new FileInputStream(pathImagen);
                     //Si no existe imagen en la version de pago setea un imagen por defecto
                     if (inputStream == null) {
-                        inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                        inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
                     }
                     
                 }
@@ -1727,7 +1728,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 servicio.pathLogoImagen =UtilidadImagen.castInputStreamToImage(inputStream);
                 //servicio.pathLogoImagen = new File(pathImagen.get;
             } catch (FileNotFoundException ex) {
-                servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
+                servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO));
                 LOG.log(Level.WARNING,"No esta definido el logo de la empresa");
                 //Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -1788,7 +1789,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //Si la licencia es gratis entonces cargar por defecto una imagen por defecto
         if(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa.equals(TipoLicenciaEnum.GRATIS))
         {
-            input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+            input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
         }
         else //Si la licencia es de pago entonces carga la imagen de la empresa
         {
@@ -1802,16 +1803,16 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                         input = RemoteInputStreamClient.wrap(remoteInputStream);
                     } catch (IOException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                        input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                        input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
                     }
                 } else //Si no existe imagen cargar por defecto una imagen en blanco
                 {
-                    input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                    input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
                 }
             }
             else
             {
-                input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
             }           
             
         }
