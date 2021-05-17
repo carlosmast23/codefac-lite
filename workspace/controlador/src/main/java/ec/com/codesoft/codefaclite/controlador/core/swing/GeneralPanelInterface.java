@@ -127,7 +127,14 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
     /**
      * Map para saber que componentes deben estar visibles y cuales no
      */
+    @Deprecated //TODO: Ver aluna forma de usar solo el el mapComponentesLaterales , por que este map solo se usa para identificar una propiedad del map y se vuelve dificil de entender el codigo
     private Map<String,Boolean> mapComponentesLateralesVisibles;
+    /**
+     * El siguiente map me permite grabar las instancias de cada componente de grupo que contiene el panel lateral secuandario para poder manipular desde los formularios
+     * key = titulo pantall
+     * value= instancia del panel de las categorias
+     */
+    private Map<String,JXTaskPane> mapPanelesSecundariosBuild;
 
     public GeneralPanelInterface() {
         this.formularioActual=this;
@@ -328,16 +335,16 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
          panelVertical.setBackground(new Color(99, 130, 191));
          
 
-        for (Map.Entry<String, List<Component>> entry : mapComponentesLaterales.entrySet()) {
-            String key = entry.getKey();
+        this.mapPanelesSecundariosBuild=new HashMap<String,JXTaskPane>(); 
+        for (Map.Entry<String, List<Component>> entry : mapComponentesLaterales.entrySet()) 
+        {
+            String tituloPanel = entry.getKey();
             List<Component> componentes = entry.getValue();
             
-           
-            JXTaskPane taskpane = new JXTaskPane();
-            taskpane.setTitle(key);
-            taskpane.setCollapsed(!mapComponentesLateralesVisibles.get(key));
-           
-            
+            JXTaskPane taskpanel = new JXTaskPane();
+            taskpanel.setTitle(tituloPanel);
+            taskpanel.setCollapsed(!mapComponentesLateralesVisibles.get(tituloPanel));
+                        
             //LLenar con todos los componentes enviados
             for (Component componente : componentes) {
                 
@@ -347,11 +354,13 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
                     ((JButton)componente).setHorizontalAlignment(SwingConstants.LEFT);
                 }
                 
-                taskpane.add(componente);
+                taskpanel.add(componente);
+                this.mapPanelesSecundariosBuild.put(tituloPanel,taskpanel);
+                mapPanelesSecundariosBuild.put(tituloPanel,taskpanel);
                 //panelVerticalAgrupador.add(componente);
             }
             
-            panelVertical.add(taskpane);            
+            panelVertical.add(taskpanel);            
             
         }
 
@@ -360,13 +369,32 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
         
         
         //Ubico todos los demas componentes en la parte central
-        for (Component componente : componentesPantalla) {
+        for (Component componente : componentesPantalla) 
+        {
             getContentPane().add(componente,BorderLayout.CENTER);
         }
         
         
     }
     
+    
+    public JXTaskPane buscarPanelCategoriaLateral(String tituloCategoria)
+    {
+        if(mapPanelesSecundariosBuild!=null)
+        {
+            for (Map.Entry<String, JXTaskPane> entry : mapPanelesSecundariosBuild.entrySet()) {
+                String titulo = entry.getKey();
+                JXTaskPane jxTaskPane = entry.getValue();
+                
+                if(titulo.equals(tituloCategoria))
+                {
+                    return jxTaskPane;
+                }
+            }
+        }
+        
+        return null;
+    }
     
     private void buscarComponentesSecundarios()
     {

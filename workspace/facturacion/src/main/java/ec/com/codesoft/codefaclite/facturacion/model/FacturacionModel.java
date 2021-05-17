@@ -277,6 +277,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA).setVisible(false);
     }
 
     public Factura getFactura() {

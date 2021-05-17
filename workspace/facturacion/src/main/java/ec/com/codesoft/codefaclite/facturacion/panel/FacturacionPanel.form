@@ -55,6 +55,14 @@
         <Property name="verticalTextPosition" type="int" value="3"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JButton" name="btnEnviarCorreoProforma">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/iconos/32Pixeles/email.png"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Reenviar Proforma Correos"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="closable" type="boolean" value="true"/>

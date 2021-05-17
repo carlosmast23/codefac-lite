@@ -49,6 +49,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO;
@@ -72,6 +73,10 @@ public class ProformaModel extends FacturacionModel{
         getBtnCargarProforma().setEnabled(false);
         getCmbPuntoEmision().setVisible(false);
         getLblEstablecimiento().setVisible(false);
+        
+        //Deshabilitiar componentes de comprobantes electronicos
+        super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_COMP_ELECTRONICOS).setVisible(false);
+        super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA).setVisible(true);
     }
     
     

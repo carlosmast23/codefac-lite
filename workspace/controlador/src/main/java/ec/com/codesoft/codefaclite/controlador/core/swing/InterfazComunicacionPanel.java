@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.jdesktop.swingx.JXTaskPane;
 
 /**
  *
@@ -100,6 +101,7 @@ public interface InterfazComunicacionPanel
     public void actualizarTituloCodefac();
     
     public void cerrarSession();
-
+    
+    //public JXTaskPane buscarPanelCategoriaLateral(String tituloCategoria);
 
 }

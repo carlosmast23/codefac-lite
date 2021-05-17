@@ -36,6 +36,9 @@ import org.jdesktop.swingx.JXDatePicker;
  * @author Carlos
  */
 public abstract class FacturacionPanel extends ControladorCodefacInterface {
+    
+    public static final String NOMBRE_PANEL_LATERAL_COMP_ELECTRONICOS="Datos";
+    public static final String NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA="Proformas";
 
     private ComponenteDatosComprobanteElectronicosPanel pnlDatosAdicionales=new ComponenteDatosComprobanteElectronicosPanel();
     
@@ -96,6 +99,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnCargarProforma = new javax.swing.JButton();
         btnGenerarCartera = new javax.swing.JButton();
         btnArqueoCaja = new javax.swing.JButton();
+        btnEnviarCorreoProforma = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -265,6 +269,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnArqueoCaja.setFocusable(false);
         btnArqueoCaja.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnArqueoCaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        btnEnviarCorreoProforma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
+        btnEnviarCorreoProforma.setToolTipText("Reenviar Proforma Correos");
 
         setClosable(true);
         setIconifiable(true);
@@ -1516,6 +1523,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnCargarProforma;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarDetalle;
+    private javax.swing.JButton btnEnviarCorreoProforma;
     private javax.swing.JButton btnGenerarCartera;
     private javax.swing.JButton btnLimpiarVendedor;
     private javax.swing.JCheckBox checkPorcentaje;
@@ -2025,7 +2033,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     
 
 
-    @ComponenteSecundarioAnotacion(nombreCategoria = "Datos",visible = true)
+    @ComponenteSecundarioAnotacion(nombreCategoria = FacturacionPanel.NOMBRE_PANEL_LATERAL_COMP_ELECTRONICOS,visible = true)
     public ComponenteDatosComprobanteElectronicosPanel getPnlDatosAdicionales() {
         return pnlDatosAdicionales;
     }
@@ -2121,6 +2129,18 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setChkHabilitarCredito(JCheckBox chkHabilitarCredito) {
         this.chkHabilitarCredito = chkHabilitarCredito;
     }
+
+    
+    @ComponenteSecundarioAnotacion(nombreCategoria = FacturacionPanel.NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA,visible = true)
+    public JButton getBtnEnviarCorreoProforma() {
+        return btnEnviarCorreoProforma;
+    }
+
+    public void setBtnEnviarCorreoProforma(JButton btnEnviarCorreoProforma) {
+        this.btnEnviarCorreoProforma = btnEnviarCorreoProforma;
+    }
+    
+    
     
     
     
