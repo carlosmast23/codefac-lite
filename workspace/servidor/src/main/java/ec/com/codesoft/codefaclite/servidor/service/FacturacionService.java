@@ -5,6 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -67,6 +70,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
+import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
@@ -83,6 +87,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.internal.sessions.factories.SessionsFactory;
 
@@ -178,29 +183,41 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             /**
              * Informar por CORREO que la proforma fue enviada correctamente
              */
-            Map<String,String> mapParametro=new HashMap<String,String>();
-            mapParametro.put("numeroProforma", proforma.getSecuencial()+"");
+            enviarCorreoProforma(proforma);
+            
+        
+        return proforma;
+    }
+    
+    private void enviarCorreoProforma(Factura proforma)
+    {
+        //TODO: Agregar para poner un validacion previa para evitar construir un reporte cuando no tenga correos a donde enviar
+        try {
+            String secuencialStr=proforma.getSecuencial()+"";
+            Map<String, String> mapParametro = new HashMap<String, String>();
+            mapParametro.put("numeroProforma",secuencialStr);
             mapParametro.put("nombreCliente", proforma.getRazonSocial());
             mapParametro.put("empresa", proforma.getEmpresa().obtenerNombreEmpresa());
             //mapParametro
-            CodefacMsj mensaje=MensajeCodefacSistema.ProformasMensajes.PROFORMA_ENVIADA_CORREO.agregarParametros(mapParametro);
+            CodefacMsj mensaje = MensajeCodefacSistema.ProformasMensajes.PROFORMA_ENVIADA_CORREO.agregarParametros(mapParametro);
             //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
-            List<String> destinatarios=Arrays.asList(proforma.obtenerCorreosStr());
+            List<String> destinatarios = Arrays.asList(proforma.obtenerCorreosStr());
             //Controlador
+            JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma);
+            String pathReporte = UtilidadReportes.grabarArchivoJasperTemporal(jasperReporte);
+            Map<String, String> mapPathFiles = new HashMap<String, String>();
+            mapPathFiles.put("proforma #" + secuencialStr+".pdf", pathReporte);
             
-            /*CorreoCodefac correoCodefac=new CorreoCodefac();
+            CorreoCodefac correoCodefac = new CorreoCodefac();
             correoCodefac.enviarCorreo(
-                    proforma.getEmpresa(), 
-                    mensaje.getTitulo(), 
-                    mensaje.getMensaje(), 
-                    destinatarios, 
-                    pathFiles);*/
-            
-            
-            
-        
-        
-        return proforma;
+                    proforma.getEmpresa(),
+                    mensaje.getMensaje(),
+                    mensaje.getTitulo(),
+                    destinatarios,
+                    mapPathFiles);
+        } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**

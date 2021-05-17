@@ -6,10 +6,10 @@
 package ec.com.codesoft.codefaclite.utilidades.reporte;
 
 /**
- *
+ * TODO: Falta las referencias de Jasper para poder implentar en este proyecto
  * @author CARLOS_CODESOFT
  */
-public class UtilidadesJasper {
+public abstract class UtilidadesJasper {
     
 
 }

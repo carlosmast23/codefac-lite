@@ -11,13 +11,15 @@ import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.M
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  *
  * @author Carlos
  */
-public class CodefacMsj {
+public class CodefacMsj implements Cloneable{
     
     /*public static final Integer MENSAJE_CORRECTO=1;
     public static final Integer MENSAJE_INCORRECTO=2;
@@ -77,6 +79,11 @@ public class CodefacMsj {
     public void setModoMensaje(ModoMensajeEnum modoMensaje) {
         this.modoMensaje = modoMensaje;
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     
@@ -86,15 +93,21 @@ public class CodefacMsj {
      */
     public CodefacMsj agregarParametros(Map<String,String> mapParametros)
     {
-        for (Map.Entry<String, String> map : mapParametros.entrySet()) {
-            String clave = map.getKey();
-            String valor = map.getValue();
-            
-            this.titulo=this.titulo.replace("?"+clave,valor);
-            this.mensaje=this.mensaje.replace("?"+clave,valor);
-            
+        try {
+            CodefacMsj codefacMsjClone=(CodefacMsj) this.clone();
+            for (Map.Entry<String, String> map : mapParametros.entrySet()) {
+                String clave = map.getKey();
+                String valor = map.getValue();
+                
+                codefacMsjClone.titulo=codefacMsjClone.titulo.replace("?"+clave,valor);
+                codefacMsjClone.mensaje=codefacMsjClone.mensaje.replace("?"+clave,valor);
+                
+            }
+            return codefacMsjClone;
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(CodefacMsj.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return this;
+        return null;
     }
         
     public enum TipoMensajeEnum

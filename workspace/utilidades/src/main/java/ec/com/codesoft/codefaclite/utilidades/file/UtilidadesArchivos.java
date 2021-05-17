@@ -110,6 +110,14 @@ public class UtilidadesArchivos {
         outputStream.close();
     }
     
+    
+    /**
+     * TODO:Modificar por que existe una libreria que genera nombres aleatorios para archivos , revisar en proyecto escuela del aire
+     * @param nombrePrincipal
+     * @param formato
+     * @return 
+     */
+    @Deprecated
     public static String generarNombreArchivoUnico(String nombrePrincipal,String formato)
     {
         String pattern = "MMddyyyyHHmmssSSSSSSSS";

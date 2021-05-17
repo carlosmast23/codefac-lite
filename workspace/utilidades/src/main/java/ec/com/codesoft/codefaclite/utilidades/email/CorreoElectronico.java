@@ -201,6 +201,18 @@ public class CorreoElectronico {
 
     @Deprecated
     public void sendMail() throws AuthenticationFailedException, MessagingException, SmtpNoExisteException {
+        
+        //Validacion que exista un destinatario antes de enviar un correo
+        if(to==null || to.size()==0)
+        {
+            return;
+        }
+        
+        if(to.get(0).trim().isEmpty())
+        {
+            return;
+        }
+        
         try {
             Boolean crearNuevaConexionEmail=true;
             

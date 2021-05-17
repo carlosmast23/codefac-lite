@@ -46,6 +46,15 @@ public class CorreoCodefac {
         
     //}
     
+    /**
+     * 
+     * @param empresa
+     * @param mensaje
+     * @param titulo
+     * @param destinatorios
+     * @param pathFiles key=alias_nombre , value=path archivo
+     * @throws ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac.ExcepcionCorreoCodefac 
+     */
     public void enviarCorreo(Empresa empresa,String mensaje, String titulo, List<String> destinatorios, Map<String, String> pathFiles) throws ExcepcionCorreoCodefac
     {
         try
