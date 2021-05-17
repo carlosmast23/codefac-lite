@@ -218,7 +218,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             }
         }
         
-        PersonaEstablecimiento.buildFromPersona(establecimiento, 
+        establecimiento=PersonaEstablecimiento.buildFromPersona(establecimiento, 
                 getTxtCodigoPersonalizado().getText(),
                 getTxtNombreLegal().getText(), 
                 getjTextAreaDireccion().getText(), 
@@ -233,7 +233,11 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         if(estadoFormulario.equals(ESTADO_GRABAR))
         {
-            establecimiento.setCodigoSucursal("1");
+            final String codigoDefecto="1";
+            //Si existe construida y agregada previamente una version a la persona , primero limpio para luego agregar
+            persona.quitarEstablecimientoPorCodigo(codigoDefecto);
+                    
+            establecimiento.setCodigoSucursal(codigoDefecto);
             persona.addEstablecimiento(establecimiento);        
         }
         

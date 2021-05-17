@@ -349,6 +349,21 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+    
+    public Boolean quitarEstablecimientoPorCodigo(String codigoSucursal)
+    {
+        if(this.establecimientos!=null)
+        {
+            for (PersonaEstablecimiento establecimiento : this.establecimientos) {
+                if(establecimiento.getCodigoSucursal().equals(codigoSucursal))
+                {
+                    this.establecimientos.remove(establecimiento);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public void addEstablecimiento(PersonaEstablecimiento establecimiento) {
         if (this.establecimientos == null) {
