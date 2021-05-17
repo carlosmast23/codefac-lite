@@ -232,11 +232,11 @@ public class Main {
         } else {
             try {
                 modoAplicativo = dialogAplicativo.getModo();
-                propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO, modoAplicativo + "");
+                propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO, modoAplicativo + "");
                 if(dialogAplicativo.versionPrueba)
                 {
-                    propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR,ParametrosSistemaCodefac.IP_SERVIDOR_PRUEBA);
-                    propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE,TipoClienteSwingEnum.REMOTO.getNombre());
+                    propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR,ParametrosSistemaCodefac.IP_SERVIDOR_PRUEBA);
+                    propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE,TipoClienteSwingEnum.REMOTO.getNombre());
                 }   
                 
                 ArchivoConfiguracionesCodefac.getInstance().guardar();
@@ -291,7 +291,7 @@ public class Main {
                             if(UtilidadesServidor.actualizarBaseDatos(versionGrabada))
                             {
                                 //Solo actualizo el archivo de la versión si efectivamente se realizo las modificaciones en la base de datos
-                                propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
+                                propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
                                 ArchivoConfiguracionesCodefac.getInstance().guardar();
                             }
                         }                        
@@ -309,7 +309,7 @@ public class Main {
         {
             try {
                 //Si no hay dato no se actualiza porque asumo que es la primera vez que se usa el sistema
-                propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
+                propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
                 ArchivoConfiguracionesCodefac.getInstance().guardar();
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -364,8 +364,8 @@ public class Main {
                     //verificarConexionesPermitidas();
                     
                     //Grabar la ip del ultimo servidor accedido para no ingresar nuevamente el dato
-                    propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, respuesta.ipPublica + "");
-                    propiedadesIniciales.addProperty(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE, respuesta.tipoClienteEnum.getNombre() + "");
+                    propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, respuesta.ipPublica + "");
+                    propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_TIPO_CLIENTE, respuesta.tipoClienteEnum.getNombre() + "");
                     ArchivoConfiguracionesCodefac.getInstance().guardar();
                     
                     LOG.log(Level.INFO, "Modo Cliente Activado");

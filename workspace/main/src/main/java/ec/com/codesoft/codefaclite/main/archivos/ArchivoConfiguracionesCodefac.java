@@ -110,7 +110,7 @@ public class ArchivoConfiguracionesCodefac {
     
     public void agregarCampo(String nombreCampo,String valor)
     {        
-        propiedadesIniciales.addProperty(nombreCampo, valor);
+        propiedadesIniciales.setProperty(nombreCampo, valor);
         
     }
     
