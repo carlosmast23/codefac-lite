@@ -28,8 +28,8 @@ create table PRODUCTO
     STOCK_INICIAL bigint,
     MARCA varchar(50),
     IMAGEN varchar(100),
-    CARACTERISTICAS varchar(100),
-    OBSERVACIONES varchar(100),  
+    CARACTERISTICAS varchar(1024),
+    OBSERVACIONES varchar(1024),  
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.3)*/
     MANEJAR_INVENTARIO  varchar(1),  
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.8.1)*/
