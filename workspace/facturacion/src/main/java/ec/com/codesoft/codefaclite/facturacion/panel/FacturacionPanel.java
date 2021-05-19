@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosPanel;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
@@ -2132,6 +2133,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     
     @ComponenteSecundarioAnotacion(nombreCategoria = FacturacionPanel.NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA,visible = true)
+    @ButtonBinding(actionListener = "listenerBtnEnviarCorreoProforma")
     public JButton getBtnEnviarCorreoProforma() {
         return btnEnviarCorreoProforma;
     }

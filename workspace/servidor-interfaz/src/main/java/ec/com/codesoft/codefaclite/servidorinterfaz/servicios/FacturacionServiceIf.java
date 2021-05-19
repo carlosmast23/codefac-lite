@@ -70,4 +70,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public Factura obtenerPedidoVentaDiariaActivo(Sucursal sucursal) throws RemoteException,ServicioCodefacException;
     
+    public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
+    
 }

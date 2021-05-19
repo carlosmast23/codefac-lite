@@ -3620,6 +3620,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         },VentanaEnum.ARQUEO_CAJA, false,parametros,this);
     }
+    
+    
 
     private void listenerComponentes() {
         getPnlDatosAdicionales().setComprobante(this);

@@ -189,7 +189,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return proforma;
     }
     
-    private void enviarCorreoProforma(Factura proforma)
+    public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
         //TODO: Agregar para poner un validacion previa para evitar construir un reporte cuando no tenga correos a donde enviar
         try {

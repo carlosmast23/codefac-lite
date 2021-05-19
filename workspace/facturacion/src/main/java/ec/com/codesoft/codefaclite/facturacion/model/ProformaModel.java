@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.InformacionAdicionalData;
@@ -52,6 +53,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -117,30 +119,70 @@ public class ProformaModel extends FacturacionModel{
         super.setearValoresDefaultFactura(); //To change body of generated methods, choose Tools | Templates.
         factura.setSecuencial(Integer.parseInt(getLblSecuencial().getText())); //TODO: Revisar que este de tema de setar el secuencial ya lo estoy haciendo desde el servicio
         
-        
     }
     
-    
-    
+    public void listenerBtnEnviarCorreoProforma()
+    {
+        if(super.estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ACCION_PERMITIDA_MODULO_EDITAR);
+            return;
+        }
+        
+        DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
+            @Override
+            public void procesar() {
+                try {
+                    ServiceFactory.getFactory().getFacturacionServiceIf().enviarCorreoProforma(factura);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                }
+            }
+
+            @Override
+            public String getMensaje() {
+                return "enviando correo ...";
+            }
+        });
+        
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        try {
-            validacionesGrabar(); //Metodo que realiza validaciones previas antes de grabar
-            FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-            setearValoresDefaultFactura();
-            //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-            factura = servicio.grabarProforma(factura);
-            DialogoCodefac.mensaje("Correcto","Proforma generada correctamente", MENSAJE_CORRECTO);
-            imprimirProforma();
         
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
-            
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error",ex.getMessage(),MENSAJE_INCORRECTO);
-        }        
+        DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
+            @Override
+            public void procesar() {
+                try {
+                    validacionesGrabar(); //Metodo que realiza validaciones previas antes de grabar
+                    FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
+                    setearValoresDefaultFactura();
+                    //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+
+                    factura = servicio.grabarProforma(factura);
+                    DialogoCodefac.mensaje("Correcto", "Proforma generada correctamente", MENSAJE_CORRECTO);
+                    imprimirProforma();
+
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje("Error", ex.getMessage(), MENSAJE_INCORRECTO);
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public String getMensaje() {
+                return "Procesando proforma";
+            }
+        });
 
     }
 
