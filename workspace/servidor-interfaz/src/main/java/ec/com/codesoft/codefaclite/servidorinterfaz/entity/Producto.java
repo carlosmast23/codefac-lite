@@ -35,6 +35,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Producto implements Serializable, Comparable<Producto> {
     
+    /**
+     * Variable global que me permite saber cual es el código maximo de los productos que acepta la facturación electrónica
+     */
+    public static final Integer TAMANIO_MAX_CODIGO=25;
+    
     public static final String NOMBRE_TABLA="PRODUCTO";
     public static final String NOMBRE_CAMPO_ID="ID_PRODUCTO";
     

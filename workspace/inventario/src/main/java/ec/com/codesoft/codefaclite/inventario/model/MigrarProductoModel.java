@@ -50,6 +50,21 @@ public class MigrarProductoModel extends MigrarModel {
         super.iniciar(); //To change body of generated methods, choose Tools | Templates.
         setTitle("Migrar Productos");
     }
+    
+    private void validarProducto(Producto producto) throws ExcelMigrar.ExcepcionExcel
+    {
+        if(producto.getCodigoPersonalizado()==null || producto.getCodigoPersonalizado().trim().isEmpty())
+        {
+            throw new ExcelMigrar.ExcepcionExcel("El código no puede ser vacio");
+        }
+        
+        if(producto.getCodigoPersonalizado().length()>Producto.TAMANIO_MAX_CODIGO)
+        {
+            throw new ExcelMigrar.ExcepcionExcel("El código debe tener un tamaño maximo de "+Producto.TAMANIO_MAX_CODIGO+" caracteres ");
+        }
+        
+        //throw new ExcelMigrar.ExcepcionExcel("La bodega no existe");
+    }
 
     @Override
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
@@ -65,6 +80,7 @@ public class MigrarProductoModel extends MigrarModel {
                     
                     Double precioVentaPublico = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
                     
+                    validarProducto(producto);
                                         
                     /*Object precioVentaPromedioObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
                     if(precioVentaPromedioObj!=null && !precioVentaPromedioObj.toString().isEmpty())
