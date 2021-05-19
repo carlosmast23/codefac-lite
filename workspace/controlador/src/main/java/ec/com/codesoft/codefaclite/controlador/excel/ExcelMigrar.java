@@ -109,6 +109,7 @@ public abstract class ExcelMigrar {
             
             
             System.out.println(celda.getCellTypeEnum().toString());
+            
             switch (celda.getCellTypeEnum()) {
                 case STRING:
                     //System.out.println(celda.getStringCellValue());
@@ -124,13 +125,13 @@ public abstract class ExcelMigrar {
                     {
                         if(!tiposDatosCabecera.get(i).equals(Date.class))
                         {
-                            throw new ExcepcionMigrar("Se esperaba un tipo Date pero la columna con valor <"+celda.getStringCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
+                            throw new ExcepcionMigrar("Se esperaba un tipo Date pero la columna con valor <"+celda.getDateCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                         }
                     }else
                     {
                         if(!tiposDatosCabecera.get(i).equals(Double.class))
                         {
-                           throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna con valor <" +celda.getStringCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
+                           throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna con valor <" +celda.getNumericCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                         }
                     }
                     break;

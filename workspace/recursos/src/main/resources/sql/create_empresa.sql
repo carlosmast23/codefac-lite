@@ -21,7 +21,7 @@ create table EMPRESA
     CONTRIBUYENTE_ESPECIAL varchar(50),
     CELULAR varchar(10),
     FACEBOOK varchar(50),
-    TEXTO1 varchar(100),
+    TEXTO1 varchar(1024),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.1)*/
     CODIGO varchar(3),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.6)*/
