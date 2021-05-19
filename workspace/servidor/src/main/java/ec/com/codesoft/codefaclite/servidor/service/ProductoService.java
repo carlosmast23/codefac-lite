@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
@@ -109,6 +110,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         if(p.getCodigoPersonalizado()==null || p.getCodigoPersonalizado().trim().isEmpty())
         {
             throw new ServicioCodefacException("El Código principal del producto no puede estar vacio ");
+        }
+        
+        if(p.getCodigoPersonalizado().length()>Producto.TAMANIO_MAX_CODIGO)
+        {
+            throw new ServicioCodefacException("El código debe tener un tamaño maximo de "+Producto.TAMANIO_MAX_CODIGO+" caracteres ");
         }
         
         //TODO: Analizar porque el Sri supuestamente si deja mandar productos con valor 0 , por el momento solo pongo los menores que 0
