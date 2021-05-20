@@ -2043,7 +2043,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         {            
             agregarParametroComprobante(comprobante, parametroCodefac.getValor());
             
-            parametroCodefac.getValor();
+            //parametroCodefac.getValor();
         }
         //agregarParametrosConfiguracionEmpresa(comprobante);
     }
@@ -2090,6 +2090,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
             switch (documentoEnum) {
+                
+                case NOTA_VENTA_INTERNA:
                 case FACTURA:
                     Factura factura = (Factura) comprobante;
                     FacturaAdicional datoAdicional = new FacturaAdicional();
