@@ -178,6 +178,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
@@ -1254,7 +1256,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo.
             
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-            setearValoresDefaultFactura();
+            setearValoresDefaultFactura(CrudEnum.CREAR);
             
             //TODO: Por el momento dejo seteado para grabar distinto para la las liquidaciones de compra porque en verdad en el mismo procedimiento
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
@@ -1655,7 +1657,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         try {
-            setearValoresDefaultFactura();
+            setearValoresDefaultFactura(CrudEnum.EDITAR);
             ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             
@@ -2436,7 +2438,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     
 
-    protected void setearValoresDefaultFactura() {
+    protected void setearValoresDefaultFactura(CrudEnum crudEnum) {
         /**
          * Todo: Carlos 
          */
@@ -2464,8 +2466,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setSubtotalImpuestos(new BigDecimal(getLblSubtotal12().getText()));
         factura.setIva(new BigDecimal(getLblIva12().getText()));
         
-        DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-        factura.setCodigoDocumento(documentoEnum.getCodigo());
+        //Solo debe modificar el documento de la factura cuando esta creando por primera vez
+        if(crudEnum.equals(CrudEnum.CREAR))
+        {
+            DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+            factura.setCodigoDocumento(documentoEnum.getCodigo());
+        }
                 
         factura.setContribuyenteEspecial(session.getEmpresa().getContribuyenteEspecial());
         
