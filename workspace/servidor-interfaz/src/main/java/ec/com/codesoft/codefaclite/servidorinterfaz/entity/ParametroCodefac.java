@@ -196,6 +196,11 @@ public class ParametroCodefac implements Serializable {
     public static final String MOSTRAR_TITULO_FACT_FISICA="mostrar_titulo_fact_fisica";
     
     /**
+     * Variable que me permite contralar si la nota de venta interna debe incluir el iva al momento de realziar el calculo
+     */
+    public static final String NOTA_VENTA_INTERNA_IVA="NOTA_VENTA_INTERNA_IVA";
+    
+    /**
      * Parametros para la firma de la factura
      */
     public static final String LEYENDA_FIRMA_FACTURA_1 = "leyenda_firma_factura_1";

@@ -124,6 +124,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtLeyendaFirmaFactura2 = new javax.swing.JTextField();
         jLabel47 = new javax.swing.JLabel();
         txtNumeroDecimalesRide = new javax.swing.JSpinner();
+        jLabel49 = new javax.swing.JLabel();
+        cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -348,10 +350,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbActivarComprobanteVenta, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Configuración impresora:");
+        jLabel7.setText("Nota de Venta Interna con iva:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel7, gridBagConstraints);
@@ -767,6 +769,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(txtNumeroDecimalesRide, gridBagConstraints);
 
+        jLabel49.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel49.setText("Configuración impresora:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel49, gridBagConstraints);
+
+        cmbNotaVentaInternaIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbNotaVentaInternaIva, gridBagConstraints);
+
         jTabbedPane1.addTab("Facturas", jPanel4);
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
@@ -1116,6 +1135,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbModoFacturasGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
+    private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -1166,6 +1186,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1516,6 +1537,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbDocumentoGuiaRemisionDefecto(JComboBox<DocumentoEnum> cmbDocumentoGuiaRemisionDefecto) {
         this.cmbDocumentoGuiaRemisionDefecto = cmbDocumentoGuiaRemisionDefecto;
+    }
+
+    public JComboBox<EnumSiNo> getCmbNotaVentaInternaIva() {
+        return cmbNotaVentaInternaIva;
+    }
+
+    public void setCmbNotaVentaInternaIva(JComboBox<EnumSiNo> cmbNotaVentaInternaIva) {
+        this.cmbNotaVentaInternaIva = cmbNotaVentaInternaIva;
     }
 
     

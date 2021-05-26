@@ -728,7 +728,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
             for (FacturaDetalle detalleTmp : detallesTmp) {
                 //detalleTmp.setFactura(facturaNueva);
-                facturaNueva.addDetalle(detalleTmp);
+                //Genero una copia del detalle original para agregar a mi nueva factura
+                FacturaDetalle facturaDetalleCopia=(FacturaDetalle) detalleTmp.clone();
+                facturaNueva.addDetalle(facturaDetalleCopia);
             }
 
             ///////////////////////////////////////////////////

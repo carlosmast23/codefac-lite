@@ -143,6 +143,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbHabilitarRetencionesEnCompras(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbCreditoDefectoFacturas(), EnumSiNo.values());
+        
+        UtilidadesComboBox.llenarComboBox(getCmbNotaVentaInternaIva(), EnumSiNo.values());
 
         //Agregar los tipos de documentos disponibles
         UtilidadesComboBox.llenarComboBox(getCmbTipoDocumento(), TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION));
@@ -327,7 +329,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             
             ParametroCodefac parametroMostrarTituloFactFisica = parametrosTodos.get(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarTituloFactFisica != null) ? parametroMostrarTituloFactFisica.getValor() : null);
-            
+                        
             //Si el valor es null entonces por defecto queda seleccionado en no
             if(enumSiNo==null)
             {
@@ -335,6 +337,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             }
             getCmbMostrarTituloFactFisica().setSelectedItem(enumSiNo);
             
+            ParametroCodefac notaVentaInternaIva = parametrosTodos.get(ParametroCodefac.NOTA_VENTA_INTERNA_IVA);
+            enumSiNo = EnumSiNo.getEnumByLetra((notaVentaInternaIva != null) ? notaVentaInternaIva.getValor() : null);
+            getCmbNotaVentaInternaIva().setSelectedItem(enumSiNo);
             
             
             //getTxtOrdenTrabajoReporte().setText((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():"");
@@ -619,6 +624,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbHabilitarRetencionesEnCompras().getSelectedItem();
         agregarParametro(ParametroCodefac.HABILITAR_RETENCION_COMPRAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.HABILITAR_RETENCION_COMPRAS);
+        
+        enumSiNo = (EnumSiNo) getCmbNotaVentaInternaIva().getSelectedItem();
+        agregarParametro(ParametroCodefac.NOTA_VENTA_INTERNA_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA);
         
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)

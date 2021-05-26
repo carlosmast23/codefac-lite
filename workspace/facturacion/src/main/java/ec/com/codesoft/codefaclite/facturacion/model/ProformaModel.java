@@ -52,6 +52,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO;
@@ -115,8 +116,8 @@ public class ProformaModel extends FacturacionModel{
     }
 
     @Override
-    protected void setearValoresDefaultFactura() {
-        super.setearValoresDefaultFactura(); //To change body of generated methods, choose Tools | Templates.
+    protected void setearValoresDefaultFactura(CrudEnum crudEnum) {
+        super.setearValoresDefaultFactura(crudEnum); //To change body of generated methods, choose Tools | Templates.
         factura.setSecuencial(Integer.parseInt(getLblSecuencial().getText())); //TODO: Revisar que este de tema de setar el secuencial ya lo estoy haciendo desde el servicio
         
     }
@@ -160,7 +161,7 @@ public class ProformaModel extends FacturacionModel{
                 try {
                     validacionesGrabar(); //Metodo que realiza validaciones previas antes de grabar
                     FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-                    setearValoresDefaultFactura();
+                    setearValoresDefaultFactura(CrudEnum.CREAR);
                     //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
 
                     factura = servicio.grabarProforma(factura);

@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -26,6 +27,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -510,6 +514,14 @@ public class ReporteCodefac {
         return parametros;
     }
     
+    /**
+     * TODO: Este metodo asume que todos los recursos estan en el mismo proyecto
+     * @param sucursal
+     * @param usuario
+     * @param orientacionEnum
+     * @param formatoReporte
+     * @return 
+     */
     public static Map<String, Object> mapReportePlantilla(Sucursal sucursal,Usuario usuario,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
         
         Map<String, Object> parametros = new HashMap<String, Object>();
@@ -582,33 +594,54 @@ public class ReporteCodefac {
             }
             else
             {
-                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sucursal.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
+                //TODO: Asumo que estoy consultado desde el servidor por que desde el cliente no va a funcionar
+                
+                //RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sucursal.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
+                ParametroCodefac parametroDirectorio=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,sucursal.getEmpresa());
+                String pathEmpresa=parametroDirectorio.valor;
+                File file=new File(pathEmpresa+"/"+DirectorioCodefac.IMAGENES+"/"+nombreImagen);
+                
+                try
+                {
+                    inputStream=null;
+                    inputStream= new  FileInputStream(file);
+                }catch(FileNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
                 //verifica que existe una imagen
-                if (remoteInputStream != null) {
-                    inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
-                } 
-                else //Si no existe 
+                //if (remoteInputStream != null) {
+                //    inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
+                //} 
+                //else //Si no existe 
+                //{
+                if(inputStream==null)
                 {
                     inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
-                }            
+                }
+                //}            
             }
 
             parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "instagram.png"));
+            inputStream=RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("instagram.png");
+            //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "instagram.png"));
             parametros.put("pl_img_instagram",UtilidadImagen.castInputStreamToImage(inputStream));
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
+            inputStream=RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png");
+            //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
             parametros.put("pl_img_facebook",UtilidadImagen.castInputStreamToImage(inputStream));
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
+            inputStream=RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png");
+            //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
             parametros.put("pl_img_whatsapp",UtilidadImagen.castInputStreamToImage(inputStream));
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
+            inputStream=RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png");
+            //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
             parametros.put("pl_img_telefono",UtilidadImagen.castInputStreamToImage(inputStream));
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
-            //parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
+            inputStream=RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("codefac-logotipo.png");
+            //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));            
             parametros.put("pl_img_logo_pie",null);
             
             String nombreReporteEncabezado="";
@@ -652,7 +685,9 @@ public class ReporteCodefac {
             JasperReport reportCabecera=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReporteEncabezado);
             if(reportCabecera==null)
             {
-                inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
+                //RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
+                //inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
+                inputStream=RecursoCodefac.JASPER.getResourceInputStream(nombreReporteEncabezado);
                 reportCabecera = JasperCompileManager.compileReport(inputStream);
                 ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReporteEncabezado,reportCabecera);
             }
@@ -662,7 +697,8 @@ public class ReporteCodefac {
             JasperReport reportPiePagina=ReporteProxy.buscar(RecursoCodefac.JASPER, nombreReportePiePagina);
             if(reportPiePagina==null)
             {
-                inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReportePiePagina));
+                //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReportePiePagina));
+                inputStream=RecursoCodefac.JASPER.getResourceInputStream(nombreReportePiePagina);
                 reportPiePagina = JasperCompileManager.compileReport(inputStream);
                 ReporteProxy.agregar(RecursoCodefac.JASPER, nombreReportePiePagina,reportPiePagina);
             }            

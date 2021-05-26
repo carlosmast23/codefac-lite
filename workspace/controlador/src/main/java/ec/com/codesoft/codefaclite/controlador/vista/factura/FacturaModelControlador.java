@@ -255,7 +255,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     {
         DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
         BigDecimal valorUnitario=producto.getValorUnitario();
-        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        
+        Boolean agregarIva=false;
+        EnumSiNo agregarIvaSiNo=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.NOTA_VENTA_INTERNA_IVA, EnumSiNo.SI);
+        if(agregarIvaSiNo!=null)
+        {
+            agregarIva=agregarIvaSiNo.getBool();
+        }
+        
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && !agregarIva)        
         {
             /**
              * Si el producto tiene ice calculo el nuevo subtotal
