@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
@@ -102,6 +103,15 @@ public class ActualizarVersionCodefac {
                     }
                     else
                     {
+                        //Quitar las etiquetas de MODO DE ACTUALIZACION y MODO FORZADO por que puede causar conflicto si el sistema se sigue actualizando sin realizar pruebas                                                
+                        try {
+                            propiedadesArchivo.clearProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_ACTUALIZACION);
+                            propiedadesArchivo.clearProperty(ArchivoConfiguracionesCodefac.CAMPO_FORZAR_ACTUALIZACION);
+                            propiedadesArchivo.save();
+                        } catch (ConfigurationException ex) {
+                            Logger.getLogger(ActualizarVersionCodefac.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
                         //Ejecutar el updater para que se encargue de hacer la actualicacion de la nueva version
                         try {
                             //String carpeta = "";
