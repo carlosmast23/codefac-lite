@@ -398,6 +398,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if(escucha!=null)escucha.termino();
         } catch (ComprobanteElectronicoException cee) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE,cee.getMessage());
             if(escucha!=null)escucha.error(cee);
         }
 

@@ -222,7 +222,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,List<ComprobanteDataInterface> comprobantesProcesos,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa,Boolean sincrono) throws RemoteException
     {
-        Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO, null,"Procesando en lote comprobantes electrónicos : "+comprobantesProcesos.size());
+        //Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO, null,"Procesando en lote comprobantes electrónicos : "+comprobantesProcesos.size());
         //Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         comprobanteElectronico.setEnviarCorreos(enviarCorreo);

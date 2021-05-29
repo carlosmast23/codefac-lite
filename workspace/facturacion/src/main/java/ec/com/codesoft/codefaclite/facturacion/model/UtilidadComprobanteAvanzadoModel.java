@@ -499,9 +499,12 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 ComprobanteElectronico comprobante = comprobantes.get(indice);
                 listaModel = new DefaultListModel();
                 List<InformacionAdicional> infoAdicional = comprobante.getInformacionAdicional();
-                for (InformacionAdicional informacionAdicional : infoAdicional) {
-                    if (informacionAdicional.getNombre().indexOf(ComprobanteAdicional.CampoDefectoEnum.CORREO.getNombre()) >= 0) {
-                        listaModel.addElement(informacionAdicional.getValor());
+                if(infoAdicional!=null)
+                {
+                    for (InformacionAdicional informacionAdicional : infoAdicional) {
+                        if (informacionAdicional.getNombre().indexOf(ComprobanteAdicional.CampoDefectoEnum.CORREO.getNombre()) >= 0) {
+                            listaModel.addElement(informacionAdicional.getValor());
+                        }
                     }
                 }
                 getjListCorreos().setModel(listaModel);

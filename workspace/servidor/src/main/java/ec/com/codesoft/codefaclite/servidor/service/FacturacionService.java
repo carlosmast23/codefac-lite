@@ -436,6 +436,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 {
                     throw new ServicioCodefacException("Error con el descuento que tiene más de 2 decimales en el producto "+detalle.getDescripcion()+" ");
                 }
+                
+                //Verificar que los decimales de la cantidades con tengan mas de 6
+                int numeroDecimalesCantidades=UtilidadesNumeros.numeroDecimales(detalle.getCantidad()+"");
+                if(numeroDecimalesCantidades>6)
+                {
+                    throw new ServicioCodefacException("Error con las cantidades que tiene más de 6 decimales en el producto "+detalle.getDescripcion()+" ");
+                }
             }
         }
         

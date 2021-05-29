@@ -13,11 +13,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+//import org.apache.commons.io.FileUtils;
 
 /**
  * Clase que contrala la logica de copiar la logica de mover el archivo  nuevo codefac.java que esta descargado en la carpeta tmp 
@@ -31,8 +33,10 @@ public class Main {
     private static final  String VERSION_ACTUAL_NAME="codefac.jar";
     
     private static final String VERSION_NUEVA_WAR="lib/codefac.war.new";
-    private static final  String DIRECTORIO_DEPLOY_TOMCAT="tomcat9/webapps/";
-    private static final  String VERSION_ACTUAL_WAR="tomcat9/webapps/codefac.war";
+    private static final String DIRECTORIO_DEPLOY_TOMCAT="tomcat9/webapps/";
+    private static final String VERSION_ACTUAL_WAR="tomcat9/webapps/codefac.war";
+    private static final String CARPETA_PROYECTO_CACHE_TOMCAT="tomcat9/webapps/codefac";
+    
     
     public static String PID_PROCESO_CODEFAC="";
     public static Boolean FORZAR_ACTUALIZAR=false;
@@ -99,6 +103,9 @@ public class Main {
             {
                 System.out.println("War actualizado en el servidor tomcat 9 ...");
                 Files.move(aplicacionWarActualizada.toPath(), aplicacionWarNueva.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                //Eliminar la carpeta de codefac del tomact para limpiar la cache por que sabe generar problemas la primera vez                
+                deleteDir(Paths.get(CARPETA_PROYECTO_CACHE_TOMCAT).toFile());
+                //FileUtils.deleteDirectory(Paths.get(CARPETA_PROYECTO_CACHE_TOMCAT).toFile());
             }
 
            
@@ -207,4 +214,16 @@ public class Main {
             }
         }
     }   
+    
+    public static void deleteDir(File file) {
+        File[] contents = file.listFiles();
+        if (contents != null) {
+            for (File f : contents) {
+                if (!Files.isSymbolicLink(f.toPath())) {
+                    deleteDir(f);
+                }
+            }
+        }
+        file.delete();
+    }
 }

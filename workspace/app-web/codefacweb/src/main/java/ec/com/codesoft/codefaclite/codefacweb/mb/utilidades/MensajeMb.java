@@ -51,7 +51,7 @@ public class MensajeMb implements Serializable{
     
     public static void mensaje(CodefacMsj codefacMensaje) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(homologarAlertasMap.get(codefacMensaje.modoMensaje),codefacMensaje.titulo,codefacMensaje.mensaje));        
+        context.addMessage(null, new FacesMessage(homologarAlertasMap.get(codefacMensaje.modoMensaje.getCodigo()),codefacMensaje.titulo,codefacMensaje.mensaje));        
     }
     
     

@@ -418,7 +418,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
 
     }
 
-    public void eliminarFilaProducto(FacturaDetalle detalle) {
+    public void eliminarFilaProducto(NotaCreditoDetalle detalle) {
         System.out.println("verificar si se ejecuta el parametro");
         notaCredito.getDetalles().remove(detalle);
         notaCredito.calcularTotalesDesdeDetalles();

@@ -7,8 +7,10 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -86,6 +88,25 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         } catch (NoResultException e) {
             return null;
         }
+    }
+    
+    public BigDecimal buscarsSaldoAfectaNotasCredito(Factura factura)
+    {
+        /*NotaCredito nc;
+        nc.getFactura();
+        nc.getEstado();
+        nc.getTotal();*/
+        
+        String queryString="SELECT sum(nc.total) FROM NotaCredito nc WHERE nc.factura=?1 and ( nc.estado=?2 or nc.estado=?3 )";
+        Query query=entityManager.createQuery(queryString);
+        query.setParameter(1,factura);
+        query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+        query.setParameter(3,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
+        if(query.getSingleResult()==null)
+        {
+            return BigDecimal.ZERO;
+        }
+        return (BigDecimal) query.getSingleResult();
     }
 
 }
