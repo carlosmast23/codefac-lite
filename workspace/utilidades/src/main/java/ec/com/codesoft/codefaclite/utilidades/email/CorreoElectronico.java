@@ -121,6 +121,7 @@ public class CorreoElectronico {
         }
         else
         {
+            props.put("mail.smtp.ssl.trust", "*");
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.host",propiedadCorreo.getHost());
