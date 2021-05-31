@@ -20,8 +20,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -68,10 +72,27 @@ public class ProductoReporte extends ControladorCodefacInterface{
                 productoData.setNombre(producto.getNombre());
                 productoData.setTipoProducto(producto.getTipoProductoEnum().getNombre());
                 if(producto.getValorUnitario()!=null){
-                    productoData.setValorUnitario(producto.getValorUnitario().toString());
+                    Integer decimalesRedondear = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.NUMERO_DECIMALES_RIDE, new ParametroUtilidades.ComparadorInterface() {
+                        @Override
+                        public Object consultarParametro(String nombreParametro) {
+                            return Integer.parseInt(nombreParametro);
+                        }
+                    });
+                    
+                    if(decimalesRedondear==null)
+                    {
+                        decimalesRedondear=ParametrosSistemaCodefac.PresentacionDecimales.DECIMALES_DEFECTO_PRODUCTO;
+                    }
+
+                    productoData.setValorUnitario(producto.getValorUnitario().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
+                    productoData.setIva(producto.obtenerIvaValorUnitario().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
+                    productoData.setTotal(producto.obtenerValorUnitarioConIva().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
                 }else{
                     productoData.setValorUnitario("0.00");
+                    productoData.setIva("0.00");
+                    productoData.setTotal("0.00");
                 }
+                
                 
                 data.add(productoData);
             }
@@ -88,7 +109,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
                 public void excel() {
                     try {
                         Excel excel = new Excel();
-                        String[] nombreCabeceras = {"Codigo", "Tipo", "Nombre","Valor Unit","IVA"};
+                        String[] nombreCabeceras = {"Codigo", "Tipo", "Nombre","Valor Unit","Iva","Total"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();
                     } catch (IOException ex) {

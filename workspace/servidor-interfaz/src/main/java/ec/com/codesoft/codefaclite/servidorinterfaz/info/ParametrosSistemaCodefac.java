@@ -170,4 +170,9 @@ public abstract class ParametrosSistemaCodefac {
         public static final String MENSAJE_PIE_PAGINA_GRATIS="Reporte generado con Codefac versión gratuita, descargada en www.cf.codesoft-ec.com";
     }
     
+    public abstract class PresentacionDecimales
+    {
+        public static final int DECIMALES_DEFECTO_PRODUCTO=4;
+    }
+    
 }

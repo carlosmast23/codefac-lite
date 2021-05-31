@@ -9,8 +9,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -404,10 +406,11 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.precioSinSubsidio = precioSinSubsidio;
     }
     
-    
-    
-    
-    
+    /**
+     *=========================================================================
+     *                      METODOS PERSONALIZADOS
+     *=========================================================================
+     */
     
     public List<PrecioVenta> obtenerPreciosVenta()
     {
@@ -574,6 +577,17 @@ public class Producto implements Serializable, Comparable<Producto> {
 
     public void setCantidadMinima(Double stockMinimo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public BigDecimal obtenerValorUnitarioConIva()
+    {
+        BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        return UtilidadesImpuestos.agregarValorIva(tarifa, valorUnitario);
+    }
+    
+    public BigDecimal obtenerIvaValorUnitario()
+    {
+        return obtenerValorUnitarioConIva().subtract(valorUnitario);
     }
     
     public static class PrecioVenta implements Serializable{

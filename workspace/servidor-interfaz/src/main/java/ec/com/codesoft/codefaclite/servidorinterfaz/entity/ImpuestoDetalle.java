@@ -39,9 +39,15 @@ public class ImpuestoDetalle implements Serializable
     @Column (name= "NOMBRE")
     private String nombre;
     
+    /**
+     * El porcentaje esta guardado en decimales ejemplo 12% (0,12)
+     */
     @Column (name= "PORCENTAJE")
     private BigDecimal porcentaje;
     
+    /**
+     * La tarifa es el mismo valor del porcentaje pero expresado en un número entero
+     */
     @Column (name = "TARIFA")
     private Integer tarifa;
     
