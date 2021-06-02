@@ -14,6 +14,8 @@ import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 
 /**
  *
@@ -36,6 +38,7 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>, In
         titulo.add(new ColumnaDialogo("cliente", 0.3d));
         titulo.add(new ColumnaDialogo("fecha", 0.2d));
         titulo.add(new ColumnaDialogo("total", 0.1d));        
+        titulo.add(new ColumnaDialogo("estado", 0.1d));     
         return titulo;
     }
 
@@ -63,8 +66,9 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>, In
         dato.add(t.getId());
         dato.add(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
-        dato.add(t.getFechaEmision());
+        dato.add(ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(t.getFechaEmision()));
         dato.add(t.getTotal());
+        dato.add(t.getEstadoEnum()+"");
     }
     
     @Override

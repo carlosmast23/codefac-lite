@@ -856,7 +856,7 @@ public class ComprobanteElectronicoService implements Runnable {
         generarRideIndividual(comprobante, null,null);
     }
     
-    public void generarRideIndividual( ComprobanteElectronico comprobante,String carpetaOrigenXml,ClaveAcceso claveAcceso)
+    public  void generarRideIndividual( ComprobanteElectronico comprobante,String carpetaOrigenXml,ClaveAcceso claveAcceso)
     {
         //ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
 
@@ -909,42 +909,7 @@ public class ComprobanteElectronicoService implements Runnable {
                         
             ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
             generarRideIndividual(comprobante, carpetaOrigenXml, claveAcceso);
-            
-//
-//            ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
-//            
-//            String fechaHoraAutorizacion="";
-//            String estado="";
-//            
-//            //Si la carpeta que se quiere obtene es desde la autorizada consulto los otros datos que faltan
-//            if(carpetaOrigenXml.equals(CARPETA_AUTORIZADOS))
-//            {
-//                ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
-//                comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso.clave));
-//                fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
-//                estado=comprobanteAutorizado.getEstado();
-//            }
-//            
-//            List<Object> informacionAdiciona = reporte.getDetalles();
-//            Map<String, Object> datosMap = reporte.getMapReporte();
-//            datosMap.put("SUBREPORT_DIR", pathParentJasper);
-//            datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
-//            datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
-//            datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
-//            datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
-//            datosMap.put("estado",estado);
-//            
-//            /**
-//             * Agregar datos adicionales como por ejemplo los datos del pide de
-//             * pagina
-//             */
-//            //datosMap.putAll(mapAdicionalReporte);
-//            datosMap.putAll(getMapCopyAdicionalReporte());
-//
-//            datosMap.put("imagen_logo",pathLogoImagen);
-//            
-//            UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));            
-            
+                        
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
@@ -1040,6 +1005,11 @@ public class ComprobanteElectronicoService implements Runnable {
     
     public JasperPrint getPrintJasperComprobante(ComprobanteElectronico comprobante,ClaveAcceso claveAcceso)
     {
+        return getPrintJasperComprobante(comprobante, claveAcceso.clave,null);
+    }   
+    
+    public JasperPrint getPrintJasperComprobante(ComprobanteElectronico comprobante,String claveAcceso,String fechaAutorizacion)
+    {
             //ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
             ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
 
@@ -1058,9 +1028,13 @@ public class ComprobanteElectronicoService implements Runnable {
             //Intenta verificar si existe el dato de la fecha y hora de autorizacion
             if(claveAcceso!=null)
             {
-                ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
-                comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso.clave));
-                fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
+                //TODO: Verificar que esta parte no genere error cuando la fecha es null y no existe el archivo para leer
+                if(fechaAutorizacion!=null)
+                {
+                    ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
+                    comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso));
+                    fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
+                }
             }
                 //estado=comprobanteAutorizado.getEstado();
             //}

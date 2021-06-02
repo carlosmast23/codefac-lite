@@ -19554,6 +19554,14 @@
 										"$ref": "AAAAAAF5ZQDKxZ/8eXA="
 									},
 									"name": "caja"
+								},
+								{
+									"_type": "ERDEntity",
+									"_id": "AAAAAAF5x1eV3GKqWyc=",
+									"_parent": {
+										"$ref": "AAAAAAF5ZQDKxZ/8eXA="
+									},
+									"name": "Entity2"
 								}
 							]
 						}

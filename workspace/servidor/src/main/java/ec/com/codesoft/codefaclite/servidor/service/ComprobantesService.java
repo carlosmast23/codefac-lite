@@ -63,6 +63,10 @@ import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
@@ -736,11 +740,76 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             //mapReportePlantilla(empresa);
             cargarConfiguraciones(comprobanteElectronico,empresa);
             comprobanteElectronico.setClaveAcceso(claveAcceso);
+            //JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
+            ComprobanteEntity comprobanteEntity=obtenerComprobantePorClaveAcceso(claveAccesoObj);
+            ComprobanteDataInterface comprobanteDataIf=convertirComprobanteEntityToDataFacturacionElectronica(comprobanteEntity);
+            ComprobanteElectronico comprobanteElectronicoData=convertirComprobanteDatoToComprobateElectronico(comprobanteDataIf);
+            
+            String fechaAutorizacionStr=(comprobanteEntity.getFechaAutorizacionSri()!=null)?comprobanteEntity.getFechaAutorizacionSri()+"":null;
+            
+            //JasperPrint jasperPrint=comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronicoData, claveAcceso, fechaAutorizacionStr);
             JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
+            
             return UtilidadesRmi.serializar(jasperPrint);
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
+    }
+    
+    
+    
+    /**
+     * TODO: Remplazar este metodo por uno similar que actualmente esta en ControladorFacturacion
+     * @return 
+     */
+    public ComprobanteDataInterface convertirComprobanteEntityToDataFacturacionElectronica(ComprobanteEntity comprobanteEntity)
+    {
+        if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        {
+            Factura factura=(Factura) comprobanteEntity;
+            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            return comprobanteData;
+        } 
+        else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
+        {
+            Factura factura=(Factura) comprobanteEntity;
+            ComprobanteDataLiquidacionCompra comprobanteData=new ComprobanteDataLiquidacionCompra(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            return comprobanteData;
+        } 
+        else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            Factura factura=(Factura) comprobanteEntity;
+            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+            return comprobanteData;
+        }   
+        else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
+        {
+            NotaCredito notaCredito=(NotaCredito) comprobanteEntity;             
+            ComprobanteDataNotaCredito comprobanteData = new ComprobanteDataNotaCredito(notaCredito);
+            //comprobanteData.setMapInfoAdicional(notaCredito.get);
+            return comprobanteData;
+        }
+        else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.RETENCIONES))
+        {
+            Retencion retencion=(Retencion) comprobanteEntity;             
+            ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
+            //comprobanteData.setMapInfoAdicional(retencion.getmap);
+            return comprobanteData;
+        }
+        else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION))
+        {
+            GuiaRemision guiaRemision=(GuiaRemision) comprobanteEntity;             
+            ComprobanteDataGuiaRemision comprobanteData = new ComprobanteDataGuiaRemision(guiaRemision);
+            //comprobanteData.setMapInfoAdicional(guiaRemision.);
+            return comprobanteData;
+        }
+        
+        
+        
         return null;
     }
     
