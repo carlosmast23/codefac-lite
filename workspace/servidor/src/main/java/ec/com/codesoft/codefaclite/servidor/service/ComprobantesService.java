@@ -745,10 +745,16 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             ComprobanteDataInterface comprobanteDataIf=convertirComprobanteEntityToDataFacturacionElectronica(comprobanteEntity);
             ComprobanteElectronico comprobanteElectronicoData=convertirComprobanteDatoToComprobateElectronico(comprobanteDataIf);
             
-            String fechaAutorizacionStr=(comprobanteEntity.getFechaAutorizacionSri()!=null)?comprobanteEntity.getFechaAutorizacionSri()+"":null;
+            String fechaAutorizacionStr="";
+            if(comprobanteEntity.getFechaAutorizacionSri()!=null)
+            {
+                fechaAutorizacionStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA.format(comprobanteEntity.getFechaAutorizacionSri());
+            }
             
-            //JasperPrint jasperPrint=comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronicoData, claveAcceso, fechaAutorizacionStr);
-            JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
+            //TODO: Optimizar para ver si se puede setear este dato desde una etapa previa para tener mejor organizado el codigo
+            comprobanteElectronicoData.getInformacionTributaria().setClaveAcceso(claveAcceso);            
+            JasperPrint jasperPrint=comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronicoData, claveAcceso, fechaAutorizacionStr);
+            //JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
             
             return UtilidadesRmi.serializar(jasperPrint);
         } catch (IOException ex) {
@@ -790,21 +796,21 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         {
             NotaCredito notaCredito=(NotaCredito) comprobanteEntity;             
             ComprobanteDataNotaCredito comprobanteData = new ComprobanteDataNotaCredito(notaCredito);
-            //comprobanteData.setMapInfoAdicional(notaCredito.get);
+            comprobanteData.setMapInfoAdicional(notaCredito.getMapAdicional());
             return comprobanteData;
         }
         else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.RETENCIONES))
         {
             Retencion retencion=(Retencion) comprobanteEntity;             
             ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
-            //comprobanteData.setMapInfoAdicional(retencion.getmap);
+            comprobanteData.setMapInfoAdicional(retencion.getMapAdicional());
             return comprobanteData;
         }
         else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION))
         {
             GuiaRemision guiaRemision=(GuiaRemision) comprobanteEntity;             
             ComprobanteDataGuiaRemision comprobanteData = new ComprobanteDataGuiaRemision(guiaRemision);
-            //comprobanteData.setMapInfoAdicional(guiaRemision.);
+            comprobanteData.setMapInfoAdicional(guiaRemision.getMapAdicional());
             return comprobanteData;
         }
         
@@ -1535,7 +1541,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             infoTributaria.setAmbiente(ComprobanteElectronicoService.CODIGO_SRI_MODO_PRUEBAS + "");
         }
 
-        infoTributaria.setClaveAcceso("");
+        infoTributaria.setClaveAcceso("");                
         infoTributaria.setCodigoDocumento(comprobanteData.getCodigoComprobante());
         
         /**

@@ -102,6 +102,8 @@ public abstract class ParametrosSistemaCodefac {
      */
     public static final SimpleDateFormat FORMATO_ESTANDAR_FECHA = new SimpleDateFormat("dd/MM/yyyy");  
     
+    public static final SimpleDateFormat FORMATO_ESTANDAR_FECHA_HORA = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+    
     /**
      * Variable para configurar los intentos maximos para verificar conexion con el Sri
      */
@@ -174,5 +176,6 @@ public abstract class ParametrosSistemaCodefac {
     {
         public static final int DECIMALES_DEFECTO_PRODUCTO=4;
     }
+    
     
 }

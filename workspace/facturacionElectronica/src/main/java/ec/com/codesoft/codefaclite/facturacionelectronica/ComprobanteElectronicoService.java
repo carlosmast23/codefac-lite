@@ -1029,11 +1029,15 @@ public class ComprobanteElectronicoService implements Runnable {
             if(claveAcceso!=null)
             {
                 //TODO: Verificar que esta parte no genere error cuando la fecha es null y no existe el archivo para leer
-                if(fechaAutorizacion!=null)
+                if(fechaAutorizacion==null)
                 {
                     ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
                     comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso));
                     fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
+                }
+                else
+                {
+                    fechaHoraAutorizacion=fechaAutorizacion;
                 }
             }
                 //estado=comprobanteAutorizado.getEstado();

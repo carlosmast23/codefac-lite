@@ -60,10 +60,13 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
 
     @Override
     public Map<String, String> getMapAdicional() {
-        for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
-            String key = entry.getKey();
-            String value = UtilidadValidador.normalizarTextoCorreo(entry.getValue());
-            mapInfoAdicional.put(key, value);
+        if(mapInfoAdicional!=null)
+        {
+            for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
+                String key = entry.getKey();
+                String value = UtilidadValidador.normalizarTextoCorreo(entry.getValue());
+                mapInfoAdicional.put(key, value);
+            }
         }
         return mapInfoAdicional;
     }

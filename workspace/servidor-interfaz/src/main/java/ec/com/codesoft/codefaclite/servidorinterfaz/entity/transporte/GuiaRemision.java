@@ -13,7 +13,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -308,5 +310,19 @@ public class GuiaRemision extends ComprobanteEntity<GuiaRemisionAdicional> imple
         }
         datoAdicional.setGuiaRemision(this);
         this.datosAdicionales.add(datoAdicional);
+    }
+    
+    /**
+     * TODO: Ver si puedo unificar este metodo con el resto de los comprobantes electronicos
+     * @return 
+     */
+    public Map<String, String> getMapAdicional() {
+        Map<String, String> parametroMap = new LinkedHashMap<String, String>();
+        if (getDatosAdicionales() != null) {
+            for (GuiaRemisionAdicional datoAdicional : getDatosAdicionales()) {
+                parametroMap.put(datoAdicional.getCampo(), datoAdicional.getValor());
+            }
+        }
+        return parametroMap;
     }
 } 
