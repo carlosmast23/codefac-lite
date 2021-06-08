@@ -210,6 +210,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String DOCUMENTO_GUIA_REMISION_DEFECTO = "documento_guia_remision_defecto";
     
+    public static final String PROFORMA_FACTURAR_VARIAS_VECES="proforma_facturar_varias_veces";
+    
 
     @Id
     @Column(name = "ID")

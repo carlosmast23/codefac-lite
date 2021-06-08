@@ -49,7 +49,7 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> ,
         //f.getSecuencial();
         //f.getEstadoNotaCredito()
         
-        String queryString = "SELECT u FROM Factura u WHERE u.empresa=?5 and ( u.estado<>?1 and u.estadoNotaCredito<>?2 and u.estado<>?3 and u.estado<>?6 ) AND ";
+        String queryString = "SELECT u FROM Factura u WHERE u.empresa=?5 and ( u.estado<>?1 and ( u.estadoNotaCredito<>?2 OR u.estadoNotaCredito IS NULL ) and u.estado<>?3 and u.estado<>?6 ) AND ";
         queryString+=" ( LOWER(u.cliente.razonSocial) like ?4 OR CONCAT(u.secuencial,'') like ?4 ) order by CAST(u.secuencial AS BIGINT) desc";
         Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.INFO, null, queryString);
         

@@ -145,6 +145,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbCreditoDefectoFacturas(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbNotaVentaInternaIva(), EnumSiNo.values());
+        
+        UtilidadesComboBox.llenarComboBox(getCmbProformaFacturarVariasVeces(), EnumSiNo.values());
 
         //Agregar los tipos de documentos disponibles
         UtilidadesComboBox.llenarComboBox(getCmbTipoDocumento(), TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION));
@@ -493,6 +495,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDato != null) ? parametroDato.getValor() : null);
             getCmbHabilitarRetencionesEnCompras().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            parametroDato= parametrosTodos.get(ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDato != null) ? parametroDato.getValor() : null);
+            getCmbProformaFacturarVariasVeces().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             parametroDato= parametrosTodos.get(ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA);
             DocumentoEnum documentoEnumVistaFactura = DocumentoEnum.obtenerDocumentoPorCodigo((parametroDato != null) ? parametroDato.getValor() : null);
             getCmbDocumentoDefectoVistaFactura().setSelectedItem((documentoEnumVistaFactura!=null)?documentoEnumVistaFactura:null);
@@ -628,6 +634,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbNotaVentaInternaIva().getSelectedItem();
         agregarParametro(ParametroCodefac.NOTA_VENTA_INTERNA_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA);
+        
+        enumSiNo = (EnumSiNo) getCmbProformaFacturarVariasVeces().getSelectedItem();
+        agregarParametro(ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES);
         
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)

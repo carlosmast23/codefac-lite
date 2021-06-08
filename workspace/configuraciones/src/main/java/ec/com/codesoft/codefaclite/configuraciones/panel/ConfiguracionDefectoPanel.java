@@ -126,6 +126,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtNumeroDecimalesRide = new javax.swing.JSpinner();
         jLabel49 = new javax.swing.JLabel();
         cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel51 = new javax.swing.JLabel();
+        cmbProformaFacturarVariasVeces = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -427,7 +430,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 17;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel18, gridBagConstraints);
 
@@ -483,10 +486,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(jLabel22, gridBagConstraints);
 
         jLabel23.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel23.setText("Editar Precio Unitario:");
+        jLabel23.setText("Permitir facturar varias veces la misma proforma:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -692,10 +695,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbMostrarTituloFactFisica, gridBagConstraints);
 
         jLabel43.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel43.setText("Habilitar Campos Facturación");
+        jLabel43.setText("Proformas");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -785,6 +788,34 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbNotaVentaInternaIva, gridBagConstraints);
+
+        jLabel50.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel50.setText("Habilitar Campos Facturación");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel50, gridBagConstraints);
+
+        jLabel51.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel51.setText("Editar Precio Unitario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel51, gridBagConstraints);
+
+        cmbProformaFacturarVariasVeces.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbProformaFacturarVariasVeces, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -1136,6 +1167,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbModoFacturasGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
+    private javax.swing.JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -1188,6 +1220,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1545,6 +1579,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbNotaVentaInternaIva(JComboBox<EnumSiNo> cmbNotaVentaInternaIva) {
         this.cmbNotaVentaInternaIva = cmbNotaVentaInternaIva;
+    }
+
+    public JComboBox<EnumSiNo> getCmbProformaFacturarVariasVeces() {
+        return cmbProformaFacturarVariasVeces;
+    }
+
+    public void setCmbProformaFacturarVariasVeces(JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces) {
+        this.cmbProformaFacturarVariasVeces = cmbProformaFacturarVariasVeces;
     }
 
     

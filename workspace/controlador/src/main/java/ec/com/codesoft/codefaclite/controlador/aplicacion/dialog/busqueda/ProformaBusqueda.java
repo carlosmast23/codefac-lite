@@ -17,6 +17,12 @@ import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,7 +37,8 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
 
     public ProformaBusqueda(Empresa empresa) {
         this.empresa = empresa;
-        this.mostrarFacturados=false;
+        //this.mostrarFacturados=false;
+        cargarConfiguracionesGenerales();
     }
     
     public ProformaBusqueda(Empresa empresa,Boolean mostrarFacturados) {
@@ -39,7 +46,20 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         this.mostrarFacturados=mostrarFacturados;
     }
     
-    
+    private void cargarConfiguracionesGenerales()
+    {
+        try {
+            this.mostrarFacturados=false;
+            
+            if(ParametroUtilidades.comparar(empresa, ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES, EnumSiNo.SI))
+            {
+                this.mostrarFacturados=true;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaBusqueda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -57,10 +77,10 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
     public QueryDialog getConsulta(String filter) {
         
         String mostrarFacturadosStr="";
-        //if(mostrarFacturados)
-        //{
+        if(mostrarFacturados)
+        {
             mostrarFacturadosStr=" or u.estado=?5 ";
-        //}
+        }
         //Factura factura;
         //factura.getEmpresa();
         String queryString = "SELECT u FROM Factura u WHERE u.empresa=?4 and ( u.estado=?1 "+mostrarFacturadosStr+" ) ";
@@ -73,10 +93,10 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, ComprobanteEnumEstado.AUTORIZADO.getEstado());
         
-        //if(mostrarFacturados)
-        //{
+        if(mostrarFacturados)
+        {
             queryDialog.agregarParametro(5, ComprobanteEnumEstado.FACTURADO_PROFORMA.getEstado());
-        //}
+        }
         
         queryDialog.agregarParametro(2, filter);
         queryDialog.agregarParametro(3, DocumentoEnum.PROFORMA.getCodigo());
