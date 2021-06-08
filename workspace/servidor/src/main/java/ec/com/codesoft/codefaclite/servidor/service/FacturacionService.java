@@ -304,7 +304,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         factura.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.NO);
         
         ///Agregar estado de la nota de credito
-        factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
+        //factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
+        factura.setEstadoNotaCreditoEnum(Factura.EstadoNotaCreditoEnum.SIN_ANULAR);
     }
     
     /**
@@ -358,9 +359,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return factura;
     }
 
-    public Factura grabar(Factura factura) throws ServicioCodefacException {
+    //TODO: Tomar en cuenta que este metodo no toma en cuenta la cartera y luego puede generar problemas
+    @Deprecated
+    public Factura grabar(Factura factura) throws RemoteException, ServicioCodefacException {
         
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        return grabar(factura, null, null);
+        /*ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 validacionInicialFacturar(factura,CrudEnum.CREAR);
@@ -368,7 +372,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
             }
         });
-        return factura;
+        return factura;*/
         
     }
     

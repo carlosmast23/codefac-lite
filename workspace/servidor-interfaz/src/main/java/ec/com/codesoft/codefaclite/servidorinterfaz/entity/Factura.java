@@ -261,6 +261,11 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public EstadoNotaCreditoEnum getEstadoNotaCreditoEnum() {
         return EstadoNotaCreditoEnum.getEnum(estadoNotaCredito);
     }
+    
+    public void setEstadoNotaCreditoEnum(EstadoNotaCreditoEnum estadoNotaCreditoEnum) 
+    {
+        this.estadoNotaCredito=estadoNotaCreditoEnum.getEstado();
+    }
 
     public void addDetalle(FacturaDetalle detalle) {
         if (this.detalles == null) {
