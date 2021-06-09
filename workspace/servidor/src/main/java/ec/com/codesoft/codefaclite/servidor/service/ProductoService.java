@@ -133,16 +133,17 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             throw new ServicioCodefacException("No se puede grabar el producto sin especificar un porcentaje de Iva");
         }
         
+        //TODO: Esta validacion por el momento queda comentada por que siempre se esta grabando con ese dato en No
         //Validar que cuando requiera imprimir el código tenga un formato correcto
-        if(p.getGenerarCodigoBarrasEnum().equals(EnumSiNo.SI))
-        {
+        //if(p.getGenerarCodigoBarrasEnum().equals(EnumSiNo.SI))
+        //{
             //TODO: Validar para caracteres generales 
             //Link: https://es.wikipedia.org/wiki/Code_39
-            if(!UtilidadesExpresionesRegulares.validar(p.getCodigoPersonalizado(),ExpresionRegular.soloNumeros))
-            {
-                throw new ServicioCodefacException("El Código solo puede ser numérico cuando se selecciona la opción de generar código de barras");
-            }
-        }
+            //if(!UtilidadesExpresionesRegulares.validar(p.getCodigoPersonalizado(),ExpresionRegular.soloNumeros))
+            //{
+            //    throw new ServicioCodefacException("El Código solo puede ser numérico cuando se selecciona la opción de generar código de barras");
+            //}
+        //}
         
         
         /**
