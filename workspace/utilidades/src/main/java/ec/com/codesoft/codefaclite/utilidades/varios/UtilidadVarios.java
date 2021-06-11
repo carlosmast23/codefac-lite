@@ -186,7 +186,8 @@ public abstract class UtilidadVarios {
             String nombreInterface = networkInterface.getName().toLowerCase();
             int indiceNet = nombreInterface.indexOf("eth");
             int indiceWlan = nombreInterface.indexOf("wlan");
-            if ((indiceNet >= 0 || indiceWlan >= 0) && validarExcepcionesInterfazRed(networkInterface.getDisplayName(),excepcionesMac)) {
+            int indiceEn = nombreInterface.indexOf("en");
+            if ((indiceNet >= 0 || indiceWlan >= 0 || indiceEn>=0 ) && validarExcepcionesInterfazRed(networkInterface.getDisplayName(),excepcionesMac)) {
                 System.out.println("============= INTERFAZ VALIDA ===================");
                 System.out.println(networkInterface.getDisplayName());
                 System.out.println(networkInterface.getName());

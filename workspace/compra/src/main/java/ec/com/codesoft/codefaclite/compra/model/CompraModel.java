@@ -5,12 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.compra.model;
 
+import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusquedaDialogo;
 import ec.com.codesoft.codefaclite.compra.panel.CompraPanel;
 import java.awt.Color;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
@@ -18,9 +18,7 @@ import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -35,7 +33,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
@@ -49,27 +46,25 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
-import es.mityc.firmaJava.libreria.utilidades.Utilidades;
-import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -81,9 +76,9 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.Document;
 
 /**
  *
@@ -823,7 +818,38 @@ public class CompraModel extends CompraPanel{
                 }
             }
         });
+        
+        getBtnCargarXml().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerBtnCargarCompraXml();
+            }
+        });
                 
+    }
+    
+    private void listenerBtnCargarCompraXml()
+    {
+        String[] filtros={"xml", "XML"};
+        JFileChooser jFileChooser=UtilidadesSwing.getJFileChooserPreBuild("Elegir Compra Xml", "Compra Xml", filtros);
+        int seleccion=jFileChooser.showDialog(null,"Abrir");
+        //Si devuelve una respuesta ejecuto el metodo para grabar
+        if(seleccion==JFileChooser.APPROVE_OPTION)
+        {
+            try {
+                File archivoSeleccionado=jFileChooser.getSelectedFile();
+                SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
+                        new FileInputStream(archivoSeleccionado));
+                ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeXml(istream,session.getEmpresa());
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     private void agregarProductoVista(Producto producto)

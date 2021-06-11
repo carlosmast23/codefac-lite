@@ -5,12 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -18,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
@@ -27,16 +31,28 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.sri.ComprobantesElectronicosParametros;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -52,6 +68,48 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         super(CompraFacade.class);
         this.compraFacade = new CompraFacade();
         this.compraDetalleFacade = new CompraDetalleFacade();
+    }
+    
+    /**
+     * TODO: Separar la logica solo de subir un archivo para tener independiente para copiar en los directorios
+     * TODO: Y revisar que el codigo es bastante similar con el que esta en UtilidadesCodefacArchivos.java y 
+     * @param archivoCompraXml
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
+    public Compra obtenerCompraDesdeXml(RemoteInputStream archivoCompraXml,Empresa empresa) throws RemoteException,ServicioCodefacException
+    {        
+        InputStream inputStream=null;
+        try {            
+            ParametroCodefac parametroEmpresa = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa);
+            String pathServidor = parametroEmpresa.getValor();
+            
+            Path pathDirectorioTmp=Paths.get(pathServidor+"/"+DirectorioCodefac.TEMP.getNombre());
+            
+            UtilidadesArchivos.crearRutaDirectorio(pathDirectorioTmp.toString());
+            
+            Path fileTmp=Files.createTempFile(pathDirectorioTmp, "compra", ".xml");
+            //Path file = Files.createTempFile(pathServidor+"/"+DirectorioCodefac.TEMP, "compra",".xml");
+            
+            //File fileDestino=new File(pathServidor+"/"+DirectorioCodefac.TEMP+"/"+archivoCompraXml.);
+            OutputStream outputStream = new FileOutputStream(fileTmp.toFile());            
+            inputStream = RemoteInputStreamClient.wrap(archivoCompraXml);
+                        
+            //Grabar en el disco de forma temporal para procesar el archivo xml
+            UtilidadesArchivos.grabarInputStreamEnArchivo(inputStream, outputStream);
+            
+            return new Compra();
+        } catch (IOException ex) {
+            Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException ex) {
+                Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
     }
     
     @Override

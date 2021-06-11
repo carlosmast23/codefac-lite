@@ -38,6 +38,16 @@ public class UtilidadesArchivos {
         }
     }
     
+    public static void crearRutaDirectorio(String path)
+    {
+        File file = new File(path);
+        //crear toda la ruta si no existe
+        if (!file.exists()) {
+            file.mkdirs();
+            //file.mkdir();
+        }
+    }
+    
     public static boolean verificarExiteArchivo(String path)
     {
         File fichero = new File(path);
