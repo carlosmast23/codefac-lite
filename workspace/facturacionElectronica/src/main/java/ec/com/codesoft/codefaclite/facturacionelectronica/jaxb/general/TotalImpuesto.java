@@ -14,13 +14,14 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType(propOrder = {"codigo","codigoPorcentaje","descuentoAdicional","baseImponible","valor"})
+@XmlType(propOrder = {"codigo","codigoPorcentaje","descuentoAdicional","baseImponible","tarifa","valor"})
 public class TotalImpuesto implements Serializable{
     
     private String codigo;
     private String codigoPorcentaje;
     private String descuentoAdicional;
     private BigDecimal baseImponible;
+    private BigDecimal tarifa;
     private BigDecimal valor;
 
     public TotalImpuesto() {
@@ -50,7 +51,12 @@ public class TotalImpuesto implements Serializable{
     public String getDescuentoAdicional() {
         return descuentoAdicional;
     }
-    
+
+    @XmlElement(name = "tarifa")
+    public BigDecimal getTarifa() {
+        return tarifa;
+    }
+        
     
     public void setCodigo(String codigo) {
         this.codigo = codigo;
@@ -70,6 +76,10 @@ public class TotalImpuesto implements Serializable{
 
     public void setDescuentoAdicional(String descuentoAdicional) {
         this.descuentoAdicional = descuentoAdicional;
+    }
+
+    public void setTarifa(BigDecimal tarifa) {
+        this.tarifa = tarifa;
     }
     
     

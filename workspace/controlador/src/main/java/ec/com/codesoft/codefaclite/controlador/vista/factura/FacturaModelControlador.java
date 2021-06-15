@@ -226,6 +226,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setDescuento(descuento);
         facturaDetalle.setPrecioUnitario(valorUnitario);
         facturaDetalle.setReferenciaId(referenciaId);
+        facturaDetalle.setCatalogoProducto(catalogoProducto);
         facturaDetalle.setCodigoPrincipal(codigo);
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoReferencia);
         facturaDetalle.setPrecioSinSubsidio(valorSinSubsidio);

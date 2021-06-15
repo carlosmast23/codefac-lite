@@ -217,7 +217,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         /**
          * Total con impuestos la clave es el codigo del impuesto
          */
-        Map<Integer, TotalImpuesto> mapTotalImpuestos = new HashMap<Integer, TotalImpuesto>();
+        //Map<Integer, TotalImpuesto> mapTotalImpuestos = new HashMap<Integer, TotalImpuesto>();
 
         /**
          * Informacion de los detalles
@@ -268,7 +268,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 //List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
 
                 //calcularImpuestos(mapTotalImpuestos, facturaDetalle);                
-                detalle.setImpuestos(calcularImpuestos(mapTotalImpuestos, facturaDetalle));
+                detalle.setImpuestos(calcularImpuestos(facturaDetalle));
                 
                 /**
                  * Agregar valor del subsidio si existe o es mayor que cero
@@ -303,8 +303,9 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
          * Crear los impuestos totales
          */
        
-        comprobante.getInformacionComprobante().setTotalImpuestos(crearImpuestosTotales(mapTotalImpuestos));
+        //comprobante.getInformacionComprobante().setTotalImpuestos(crearImpuestosTotales(mapTotalImpuestos));
         //comprobante.getInformacionFactura().setTotalImpuestos(totalImpuestos);
+        comprobante.getInformacionComprobante().setTotalImpuestos(crearImpuestosTotales(factura));
 
         /**
          * Informacion adicional

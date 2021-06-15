@@ -2461,10 +2461,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
          * TODO: Seteado los valores temporales pero toca cambiar esta parte y setear
          * los valores directamente en la factura
          */
-        factura.setTotal(new BigDecimal(getTxtValorTotal().getText()));
-        factura.setSubtotalSinImpuestos(new BigDecimal(getLblSubtotal0().getText()));
-        factura.setSubtotalImpuestos(new BigDecimal(getLblSubtotal12().getText()));
-        factura.setIva(new BigDecimal(getLblIva12().getText()));
+        //factura.setTotal(new BigDecimal(getTxtValorTotal().getText()));
+        //factura.setSubtotalSinImpuestos(new BigDecimal(getLblSubtotal0().getText()));
+        //factura.setSubtotalImpuestos(new BigDecimal(getLblSubtotal12().getText()));
+        //factura.setIva(new BigDecimal(getLblIva12().getText()));
+        //factura.setSubtotalSinImpuestos(factura.getSubtotalSinImpuestos().add(factura.getSubtotalImpuestos()));
+       
         
         //Solo debe modificar el documento de la factura cuando esta creando por primera vez
         if(crudEnum.equals(CrudEnum.CREAR))
@@ -2780,7 +2782,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         break;
                 }
                 
-                
+                facturaDetalle.setCatalogoProducto(catalogoProducto);
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
                 
                 if (!descuentoPorcentaje) {

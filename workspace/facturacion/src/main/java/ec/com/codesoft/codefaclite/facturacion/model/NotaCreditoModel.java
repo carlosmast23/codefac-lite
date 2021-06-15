@@ -455,9 +455,10 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             //TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
             
             facturaDetalle.setTipoDocumento(TipoDocumentoEnum.LIBRE.getCodigo());
-            facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+            facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());            
             try {
                 catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                facturaDetalle.setCatalogoProducto(catalogoProducto);
             } catch (RemoteException ex) {
                 Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             }

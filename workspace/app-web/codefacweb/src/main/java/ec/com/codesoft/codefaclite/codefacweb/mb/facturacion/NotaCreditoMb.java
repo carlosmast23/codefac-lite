@@ -395,6 +395,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         }
         //notaCreditoDetale.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);//TODO: Por el momento solo dejo como documento por defecto libre
         notaCreditoDetale.setReferenciaId(productoSeleccionado.getIdProducto());
+        notaCreditoDetale.setCatalogoProducto(productoSeleccionado.getCatalogoProducto());
 
     }
 

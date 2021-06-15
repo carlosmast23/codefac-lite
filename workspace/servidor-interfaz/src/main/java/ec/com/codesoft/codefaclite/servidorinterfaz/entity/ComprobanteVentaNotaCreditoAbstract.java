@@ -5,8 +5,19 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -178,10 +189,13 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
             ice = ice.add(detalle.getValorIce());
             //Sumar los subtotales
             //TODO: Ver si estos calculos los puede hacer internamente en la clase FacturaDetalle
-            if (detalle.getIvaPorcentaje().equals(0)) {
+            if (detalle.getIvaPorcentaje().equals(0)) 
+            {
                 subTotalSinImpuestos = subTotalSinImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
                 descuentoSinImpuestos = descuentoSinImpuestos.add((detalle.getDescuento()!=null)?detalle.getDescuento():BigDecimal.ZERO);
-            } else {
+            } 
+            else 
+            {
                 subTotalConImpuestos = subTotalConImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
                 descuentoConImpuestos = descuentoConImpuestos.add((detalle.getDescuento()!=null)?detalle.getDescuento():BigDecimal.ZERO);
 
@@ -269,6 +283,49 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         this.iva = totalConImpuestos.subtract(subtotalMenosImpuestosConIce);
         //this.iva=this.iva.setScale(2,BigDecimal.ROUND_HALF_UP);        
 
+    }
+    
+    public Map<ImpuestoDetalle,List<DetalleFacturaNotaCeditoAbstract>> obtenerIceMap()
+    {
+        Map<ImpuestoDetalle,List<DetalleFacturaNotaCeditoAbstract>> mapResultado=new HashMap<ImpuestoDetalle,List<DetalleFacturaNotaCeditoAbstract>>();
+        try {
+            for (DetalleFacturaNotaCeditoAbstract detalle : this.getDetallesComprobante()) {
+                CatalogoProducto catalogoProducto = detalle.getCatalogoProducto();
+                
+                //TODO: Solucion Temporal cuando no tengo grabado ese dato para hacer retrocompatible el nuevo codigo
+                if (detalle.getCatalogoProducto() == null) 
+                {
+                    ReferenciaDetalleFacturaRespuesta detalleData=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(detalle.getTipoDocumentoEnum(), detalle.getReferenciaId());
+                    catalogoProducto=detalleData.catalogoProducto;
+                }
+                
+                
+                //Obtener una lista de map con el TIPO DE IMPUESTO
+                if(catalogoProducto.getIce()!=null)
+                {                    
+                    if(catalogoProducto.getIce().getImpuesto().getDetalleImpuestos().size()>0)
+                    {
+                        ImpuestoDetalle impuestoDetalle=catalogoProducto.getIce().getImpuesto().getDetalleImpuestos().get(0);                                
+                        
+                        List<DetalleFacturaNotaCeditoAbstract> listTmp=mapResultado.get(impuestoDetalle);                        
+                        if(listTmp==null)
+                        {
+                            listTmp=new ArrayList<DetalleFacturaNotaCeditoAbstract>();
+                        }
+                        
+                        listTmp.add(detalle);
+                        mapResultado.put(impuestoDetalle, listTmp);
+                    }
+                }
+                
+            }
+            //return mapResultado;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteVentaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobanteVentaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return mapResultado;
     }
 
 }

@@ -225,7 +225,7 @@ public class ComprobanteDataNotaCredito extends ComprobanteDataFacturaNotaCredit
                 //-------------> FIN <----------------
                 //listaComprobantes.add(impuesto);
                 
-                detalle.setImpuestos(calcularImpuestos(mapTotalImpuestos, detalleNotaCredito));
+                detalle.setImpuestos(calcularImpuestos(detalleNotaCredito));
                 
                 detallesComprobante.add(detalle);
             } catch (RemoteException ex) {
@@ -242,7 +242,8 @@ public class ComprobanteDataNotaCredito extends ComprobanteDataFacturaNotaCredit
          * Crear los impuestos totales
          */
         
-        notaCreditoComprobante.getInfoNotaCredito().setTotalImpuestos(crearImpuestosTotales(mapTotalImpuestos));
+        //notaCreditoComprobante.getInfoNotaCredito().setTotalImpuestos(crearImpuestosTotales(mapTotalImpuestos));
+        notaCreditoComprobante.getInfoNotaCredito().setTotalImpuestos(crearImpuestosTotales(notaCredito));
         
         //Todo: Ver si se elimina el correo porque esta opcion no se esta usando para generar el comprobante
         notaCreditoComprobante.setCorreos(getCorreos());

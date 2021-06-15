@@ -46,6 +46,7 @@ public class Impuesto implements Serializable
     @Column(name = "DESCRIPCION")
     private String descripcion;
     
+    //TODO: Esta relacion esta mal por que se supone que un impuesto solo puede tener un impuestoDetalle
     //@OneToMany(cascade= CascadeType.ALL)
     //@JoinColumn(name="ID_IMPUESTO")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "impuesto", fetch = FetchType.EAGER)

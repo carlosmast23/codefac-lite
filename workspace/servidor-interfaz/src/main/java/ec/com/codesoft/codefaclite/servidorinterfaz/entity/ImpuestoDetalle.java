@@ -28,6 +28,8 @@ import javax.persistence.ManyToOne;
 @XmlRootElement
 public class ImpuestoDetalle implements Serializable
 {
+    public static final Integer CODIGO_IVA_DOCE=2;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "ID_IMPUESTO_DETALLE")

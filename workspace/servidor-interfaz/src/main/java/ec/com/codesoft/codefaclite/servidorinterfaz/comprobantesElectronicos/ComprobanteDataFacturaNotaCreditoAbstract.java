@@ -20,15 +20,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -78,12 +82,19 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         
     }
     
-    public List<ImpuestoComprobante> calcularImpuestos(Map<Integer, TotalImpuesto> mapTotalImpuestos, DetalleFacturaNotaCeditoAbstract comprobanteDetalle) {
+    /**
+     * Calcular los impuestos por cada detalle de la factura y por el total
+     * @param mapTotalImpuestos
+     * @param comprobanteDetalle
+     * @return 
+     */
+    public List<ImpuestoComprobante> calcularImpuestos(DetalleFacturaNotaCeditoAbstract comprobanteDetalle) {
         ReferenciaDetalleFacturaRespuesta respuesta;
         try {
+            //Busco la FACTURA O NOTA DE CREDITO
+            //TODO: Corregir esta parte por que cuando modifico un producto el iva , se va a modificar los reportes de la factura y eso debe ser datos fijos
             respuesta = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(comprobanteDetalle.getTipoDocumentoEnum(), comprobanteDetalle.getReferenciaId());
-            CatalogoProducto catalogoProducto = respuesta.catalogoProducto;
-
+            CatalogoProducto catalogoProducto = respuesta.catalogoProducto;            
             List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
             ImpuestoComprobante impuesto = new ImpuestoComprobante();
             impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
@@ -92,15 +103,17 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             impuesto.setBaseImponible(comprobanteDetalle.totalSinImpuestosConIce());
             
             //Obtengo nuevamente el iva calculado por que necesito todos los decimales para tener el valor exacto y en la base de datos esta grabado solo con 2 decimales y eso puede generar problemas
+            //TODO: Analizar si tengo que mandar este dato del valor redondeado o del valor origina
             impuesto.setValor(comprobanteDetalle.recalcularIva());
+            System.out.println("valor: "+impuesto.getValor());
             
             /**
              * Verificar valores para el total de impuesto
              */
-            sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIva(), impuesto);
+            //sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIva(), impuesto);
             
             /**
-             * Redondedo los impuestos despues de hacer los calculos para tener un valor exacto de los impuestos totales
+             * Redondedo los impuestos despues de hacer los calculos por que el Sri solo acepta con 2 decimales
              */
             impuesto.setValor(impuesto.getValor().setScale(2, RoundingMode.HALF_UP));
             impuesto.setBaseImponible(impuesto.getBaseImponible().setScale(2, RoundingMode.HALF_UP));
@@ -118,7 +131,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 impuestoIce.setTarifa(new BigDecimal(catalogoProducto.getIce().getPorcentaje() + ""));
                 impuestoIce.setBaseImponible(comprobanteDetalle.getTotal().setScale(2, RoundingMode.HALF_UP));
                 impuestoIce.setValor(comprobanteDetalle.getValorIce().setScale(2, RoundingMode.HALF_UP));
-                sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIce(), impuestoIce);
+                //sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIce(), impuestoIce);
                 listaComprobantes.add(impuestoIce);
 
             }
@@ -131,30 +144,39 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         return null;
     }
     
-    private void sumarizarTotalesImpuestos(Map<Integer, TotalImpuesto> mapTotalImpuestos, ImpuestoDetalle impuestoDetalle, ImpuestoComprobante impuesto) {
-        /**
-         * Verificar valores para el total de impuesto
-         */
+    /*
+    private void sumarizarTotalesImpuestos(Map<Integer, TotalImpuesto> mapTotalImpuestos, ImpuestoDetalle impuestoDetalle, ImpuestoComprobante impuesto) 
+    {
+        
+        //Verificar valores para el total de impuesto
+        
                 
-        if (mapTotalImpuestos.get(impuestoDetalle.getCodigo()) == null ) {
+        if (mapTotalImpuestos.get(impuestoDetalle.getCodigo()) == null ) 
+        {
             TotalImpuesto totalImpuesto = new TotalImpuesto();
             totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
             totalImpuesto.setCodigo(impuesto.getCodigo());
             totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
+            totalImpuesto.setTarifa(impuesto.getTarifa());
             totalImpuesto.setValor(impuesto.getValor());
             //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
             mapTotalImpuestos.put(impuestoDetalle.getCodigo(), totalImpuesto);
-        } else {
+        } 
+        else 
+        {
             TotalImpuesto totalImpuesto = mapTotalImpuestos.get(impuestoDetalle.getCodigo());
             totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
             totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
+            
+            System.out.println("totalImpuesto Valor:"+totalImpuesto.getValor());
+            
             //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
             mapTotalImpuestos.put(impuestoDetalle.getCodigo(), totalImpuesto);
-
         }
-    }
+        
+    }*/
     
-    public List<TotalImpuesto> crearImpuestosTotales(Map<Integer, TotalImpuesto> mapTotalImpuestos)
+    /*public List<TotalImpuesto> crearImpuestosTotales(Map<Integer, TotalImpuesto> mapTotalImpuestos)
     {
         //Primero redondeo los valores totales
         redondearMapImpuestos(mapTotalImpuestos);
@@ -166,7 +188,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             totalImpuestos.add(value);
         }
         return totalImpuestos;
-    }
+    }*/
     
     public SriIdentificacion getSriIdentificacion(ComprobanteVentaNotaCreditoAbstract comprobante)
     {
@@ -181,15 +203,81 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         return null;
     }
     
-    protected void redondearMapImpuestos(Map<Integer, TotalImpuesto> mapImpuestos)
+    protected void redondearImpuestosTotales(List<TotalImpuesto> totalesList)
     {
-        for (Map.Entry<Integer, TotalImpuesto> entry : mapImpuestos.entrySet()) {
-            Integer codigoImpuesto = entry.getKey();
-            TotalImpuesto totalImpuesto = entry.getValue();
-            
+        for (TotalImpuesto totalImpuesto : totalesList) {
             totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().setScale(2,BigDecimal.ROUND_HALF_UP));
             totalImpuesto.setValor(totalImpuesto.getValor().setScale(2,BigDecimal.ROUND_HALF_UP));
+            
         }
+        
+    }
+    
+    public List<TotalImpuesto> crearImpuestosTotales(ComprobanteVentaNotaCreditoAbstract comprobante)
+    {
+        List<TotalImpuesto> totalImpuestos = new ArrayList<TotalImpuesto>();
+        try {
+            //Consultar una lista de todos los impuestos disponibles
+            Map<Integer,ImpuestoDetalle> mapImpuestoDetalle=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().obtenerTodosMap();
+            
+            //Crear el IMPUESTO DEL IVA cuando exista
+            if(comprobante.getIva().compareTo(BigDecimal.ZERO)>0)
+            {                
+                ImpuestoDetalle impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE);
+                TotalImpuesto totalImpuestoIva=new TotalImpuesto();
+                totalImpuestoIva.setBaseImponible(comprobante.getSubtotalImpuestos());
+                totalImpuestoIva.setCodigo(impuestoDetalleIva.getImpuesto().getCodigoSri());
+                totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIva.getCodigo()+"");
+                //totalImpuestoIva.setDescuentoAdicional(descuentoAdicional);
+                totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIva.getTarifa()+""));
+                totalImpuestoIva.setValor(comprobante.getIva());
+                totalImpuestos.add(totalImpuestoIva);
+            }
+            
+            //Crear el IMPUESTO DEL ICE cuando exista
+            if(comprobante.getIce().compareTo(BigDecimal.ZERO)>0)
+            {
+                Map<ImpuestoDetalle,List<DetalleFacturaNotaCeditoAbstract>> mapResultado=comprobante.obtenerIceMap();
+                
+                for (Map.Entry<ImpuestoDetalle, List<DetalleFacturaNotaCeditoAbstract>> entry : mapResultado.entrySet()) {
+                    ImpuestoDetalle impuestoDetalle = entry.getKey();
+                    List<DetalleFacturaNotaCeditoAbstract> detalleList = entry.getValue();
+                    
+                    TotalImpuesto totalImpuesto=generarTotalImpuestoIce(impuestoDetalle, detalleList);
+                    totalImpuestos.add(totalImpuesto);
+                    
+                }                
+            }
+            
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        redondearImpuestosTotales(totalImpuestos);
+        return totalImpuestos;
+    } 
+    
+    private TotalImpuesto generarTotalImpuestoIce(ImpuestoDetalle impuestoDetalle,List<DetalleFacturaNotaCeditoAbstract> detalleList)
+    {
+        BigDecimal valorTotal=BigDecimal.ZERO;
+        //TODO: Verificar que no necesariamente puede ser la base imponible el subtotal , parece que el subtotal es incluido el iva
+        BigDecimal baseImponible=BigDecimal.ZERO;
+        for (DetalleFacturaNotaCeditoAbstract detalle : detalleList) 
+        {
+            valorTotal=valorTotal.add(detalle.getValorIce());
+            baseImponible=baseImponible.add(detalle.getCalcularTotalDetalleConTodosDecimales());
+        }
+        
+        TotalImpuesto totalImpuestoIva = new TotalImpuesto();
+        totalImpuestoIva.setBaseImponible(baseImponible);
+        totalImpuestoIva.setCodigo(impuestoDetalle.getImpuesto().getCodigoSri());
+        totalImpuestoIva.setCodigoPorcentaje(impuestoDetalle.getCodigo()+"");
+        //totalImpuestoIva.setDescuentoAdicional(descuentoAdicional);
+        totalImpuestoIva.setTarifa(impuestoDetalle.getPorcentaje());
+        totalImpuestoIva.setValor(valorTotal);
+        return totalImpuestoIva;
     }
     
     public interface InfoComprobanteInterface

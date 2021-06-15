@@ -952,6 +952,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         }
         facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);
         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+        facturaDetalle.setCatalogoProducto(catologoProducto);
     }
 
     public void habilitarComboIva(Boolean opcion) {

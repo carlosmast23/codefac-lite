@@ -23,4 +23,5 @@ public interface ImpuestoDetalleServiceIf extends ServiceAbstractIf<ImpuestoDeta
     public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map) throws java.rmi.RemoteException;
     public List<ImpuestoDetalle> obtenerIvaVigente()throws java.rmi.RemoteException;
     public ImpuestoDetalle buscarPorTarifa(Integer tarifa) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Map<Integer,ImpuestoDetalle> obtenerTodosMap() throws java.rmi.RemoteException,ServicioCodefacException;
 }

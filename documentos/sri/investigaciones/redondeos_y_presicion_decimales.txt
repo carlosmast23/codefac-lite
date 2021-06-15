@@ -1,0 +1,29 @@
+==========================================================
+CONSIDERACIONES PARA EL TEMA DE REDONDEOS EN LA FACTURA
+==========================================================
+CONSIDERACIONES A TOMAR EN CUENTA
+	- Solo el VALOR UNITARIO puede grabarse con 6 decimales
+	- Todos los campos que no son VALOR UNITARIO se graban con 2 decimales
+	- En el XML tien una seccion de TOTALES GENERALES y TOTALES POR DETALLE
+
+PROCEDIMIENTO RECOMENDADO
+	1.- En los detalles el subtotal y el iva se debe primero calcular con todos los decimales para no perder tanta presión en el resultado final y luego redondear a 2 decimales (este proceso no garantiza que los totales descuadre por ctvs pero evita que la diferencia sea mayor)
+	2.- Obtener el TOTAL FINAL con todos los decimales y redondear a 2 decimales
+	3.- Para obtener el resto de valores de SUBTOTAL , IVA, ICE tengo que partir desde el VALOR FINAL y el resto de valores anteriores PUEDE O NO CUADRAR como el iva y subtotal por que el hecho que el Sri no me permite manejar con más de 2 decimales y es una de las consecuencias.
+	
+	NOTA: Se recomienda en la BD grabar con el mismo número de presión de decimales en especial en los totales porque son los valores finales que se cobra al cliente y ya no se puede modificar por ningun motivo
+
+CONCLUSIONES
+	- La mayoria de campos en la factura trabaja con 2 decimales por que en la practica es como funciona la fracción monetario del DOLAR
+	- Nunca se va a poder tener un calculo exacto en los totales finales del SUBTOTAL , IVA Y TOTAL por el motivo que los resultados se deben mostrar en con 2 decimales , pero todos los calculos iniciales pueden tener más decimales como en los siguientes casos
+		- Los precios unitarios pueden tener más de 2 decimales en la vida real como en Ferreterias
+		- En los sistemas se graban el precio antes de impuesto , y muchas veces el cliente sabe el valor final con IVA y para obtener el valor antes de impuesto se necesita hacer una división y el número puede dar como resultado un valor fraccionario con una cantidad indeterminada de decimales para cada caso , y necesito grabar la mayoria de decimales para tener la misma presión para llegar al mismo resultado , por que solo con 2 decimales en los subtotales no se puede llegar a las cantidades exactas
+	- El VALOR UNITARIO es el unico dato que se graba con tanta presión para tener garantia de que los totales son los correctos, eso no muestra en la factura pero en caso de controversias es una forma exacta de comprobar los totales.
+	- El Sri esta consiente de estos problemas y es por ese motivo que en los resultados finales permiten uan tolerancia de hasta 2 cts en los calculos
+	- Cualquier calculo que se realice primero se debe obtener el VALOR FINAL con Impuestos de toda la factura y en función de ese valor recalcular valores anteriores por que es la unica forma de garantizar que se puede cobrar un valor exacto al cliente lo cual es lo más importante.
+	- Existe un punto que no queda claro cual debe ser la mejor opcion si hacer coincidir el SUBTOTAL o el IVA pero en los dos casos se tiene 2 problemas
+		-> Lo primero a tomar en cuenta es que el SRI cualquiera de las 2 opciones lo va a tomar como valido
+		-> Coincidir el Subtotal.- Parece que es lo más claro desde lo practico por que el CLIENTE lo primero que ve es la sumataria de los subtotales y hacer entender que es un valor que puede o no cuadrar por tecnisimos si esta complicado
+		-> Coincidir el IVA.- Esta solución tecnicamente seria la más optima por que a nivel de declaraciones este dato siempre tiene que ser lo más preciso, pero vuelvo al problema del punto anterior
+		-> SOLUCION A FUTURO.- En este punto analizado no se puede elegir una única solución y por ese motivo se debe parametrizar al sistema para poder manejar los 2 flujos , tomando en cuenta que por defecto debo hacer coincidir primero el subtotal por que es el que menos problemas me resulta a nivel practico por que la personas se fijan mas en el calculo del subtotal que en el calculo del IVA
+ 

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -57,6 +59,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
 
     @Column(name = "ICE_PORCENTAJE")
     private BigDecimal icePorcentaje;
+    
+    @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
+    private CatalogoProducto catalogoProducto;
 
     public DetalleFacturaNotaCeditoAbstract() {
         this.valorIce = BigDecimal.ZERO;
@@ -188,7 +193,15 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         this.tipoDocumento = tipoDocumentoEnum.getCodigo();
     }
 
+    public CatalogoProducto getCatalogoProducto() {
+        return catalogoProducto;
+    }
 
+    public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
+        this.catalogoProducto = catalogoProducto;
+    }
+    
+    
     
     /**
      * Metodos personalizados
@@ -249,7 +262,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         }
 
         BigDecimal valorIvaDecimal = new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-        BigDecimal iva = getTotal().add(valorIce).multiply(valorIvaDecimal);
+        BigDecimal iva = getCalcularTotalDetalleConTodosDecimales().add(valorIce).multiply(valorIvaDecimal);
         return iva;
     }
 
@@ -259,6 +272,12 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
 
     public void calcularTotalDetalle() {        
         total = getCalcularTotalDetalle();
+    }
+    
+    public BigDecimal getCalcularTotalDetalleConTodosDecimales() {
+        BigDecimal setTotal = getCantidad().multiply(getPrecioUnitario()).subtract(getDescuento());
+        return setTotal;
+        //return setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     
     public BigDecimal getCalcularTotalDetalle() {

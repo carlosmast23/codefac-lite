@@ -371,6 +371,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 case LIBRE:
                     facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                     catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                    facturaDetalle.setCatalogoProducto(catalogoProducto);
                     break;
             }
             if(catalogoProducto==null)

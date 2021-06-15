@@ -97,6 +97,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
             notaDetalle.setIva(facturaDetalle.getIva());
             notaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
             notaDetalle.setReferenciaId(facturaDetalle.getReferenciaId());
+            notaDetalle.setCatalogoProducto(facturaDetalle.getCatalogoProducto());
             notaDetalle.setTipoDocumento(facturaDetalle.getTipoDocumento());
             notaDetalle.setTotal(facturaDetalle.getTotal());
             notaDetalle.setValorIce(facturaDetalle.getValorIce());

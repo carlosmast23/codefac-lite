@@ -16,7 +16,11 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(propOrder = {"codigo","codigoPorcentaje","tarifa","baseImponible","valor"})
 public class ImpuestoComprobante implements Serializable{
+    
+    //Este codigo esta relacionado con IMPUESTO GENERAL (IVA,ICE...)
     private String codigo;
+    
+    //Este codigo esta relacionado con IMPUESTO_DETALLE (IVA 0, IVA 12 , IVA 14)
     private String codigoPorcentaje;
     private BigDecimal tarifa;
     private BigDecimal baseImponible;
