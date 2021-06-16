@@ -227,7 +227,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         
         if(quitarVentasAnuladasNCTotal)
         {            
-            afectaNotaCreditoTotalStr=" AND u.estadoNotaCredito<>?17 ";
+            afectaNotaCreditoTotalStr=" AND ( u.estadoNotaCredito IS NULL OR u.estadoNotaCredito<>?17 ) ";
         }
         
         String filtroPuntoEmision="";
