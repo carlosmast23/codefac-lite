@@ -220,6 +220,20 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             //Consultar una lista de todos los impuestos disponibles
             Map<Integer,ImpuestoDetalle> mapImpuestoDetalle=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().obtenerTodosMap();
             
+            //Crear el IMPUESTO DEL IVA_CERO cuando exista esa clasificacion
+            if(comprobante.getSubtotalSinImpuestos().compareTo(BigDecimal.ZERO)>0)
+            {
+                ImpuestoDetalle impuestoDetalleIvaCero=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_CERO);
+                TotalImpuesto totalImpuestoIva=new TotalImpuesto();
+                totalImpuestoIva.setBaseImponible(comprobante.getSubtotalSinImpuestos());
+                totalImpuestoIva.setCodigo(impuestoDetalleIvaCero.getImpuesto().getCodigoSri());
+                totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIvaCero.getCodigo()+"");
+                //totalImpuestoIva.setDescuentoAdicional(descuentoAdicional);
+                totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIvaCero.getTarifa()+""));
+                totalImpuestoIva.setValor(BigDecimal.ZERO);
+                totalImpuestos.add(totalImpuestoIva);
+            }
+            
             //Crear el IMPUESTO DEL IVA cuando exista
             if(comprobante.getIva().compareTo(BigDecimal.ZERO)>0)
             {                

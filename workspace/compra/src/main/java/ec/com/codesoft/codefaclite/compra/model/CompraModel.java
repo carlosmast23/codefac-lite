@@ -188,7 +188,7 @@ public class CompraModel extends CompraPanel{
         DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         compra.setEmpresa(session.getEmpresa());
         compra.setCodigoDocumento(documentoEnum.getCodigo());      
-        compra.setEstado(GeneralEnumEstado.ACTIVO.getEstado()); //TODO: cambiar el estado de las ordenes de compra
+        compra.setEstado(GeneralEnumEstado.ACTIVO.getEstado()); //TODO: cambiar el estado de las ordenes de compra; El estado deberia ponerse por defecto en el servicio
         compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         compra.setFechaFactura(new Date(getCmbFechaCompra().getDate().getTime()));
         

@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -104,7 +105,29 @@ public class DescargaModel extends DescargaDialog implements Runnable{
                 File file = new File(folder + name + ".tmp");//Cuando empiece la descarga esta con punto tmp si se cancela y no termina de descargar
                 
                 URLConnection conn = new URL(url).openConnection();
-                conn.connect();
+                //Con este codigo espera unos 7 segundos antes de desconectar la session
+                
+                int intentosMaximos=8;
+                //int numero de intentos maximos
+                for (int i = 0; i < intentosMaximos;) {                
+                    try
+                    {
+                        conn.setConnectTimeout(7000);
+                        conn.connect();
+                        break;
+                    }catch(SocketTimeoutException stoe)
+                    {
+                        stoe.printStackTrace();
+                        i++;
+                    }
+                    
+                    //Si no se logra terminar de conectar despues de algunos intentos temino el aplicativo
+                    if(i==(intentosMaximos-1))
+                    {
+                        return;
+                    }                    
+                }
+                
                 
                 int tamanioTotal = conn.getContentLength();                
                 File archivoActual = new File("lib/" + name.replace(".new","") );

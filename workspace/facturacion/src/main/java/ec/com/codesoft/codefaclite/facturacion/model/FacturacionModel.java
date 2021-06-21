@@ -1693,6 +1693,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 //todo:verificar si tengo que poner el estado o eso se lo hace automaticamente
                 if(DialogoCodefac.dialogoPregunta("Advertencia","Está seguro que quiere eliminar el registro ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                 {
+                    //todo:el estado del documento se deberia cambiar dentro del servicio
                     factura.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
                     try {
                         ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura(factura);

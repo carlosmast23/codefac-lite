@@ -68,7 +68,7 @@ public interface ComprobanteServiceIf extends Remote {
      * @param callbackClientObject
      * @throws RemoteException 
      */
-    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
+    //public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
     
     public boolean verificarDisponibilidadSri(Empresa empresa) throws RemoteException;
     
@@ -109,4 +109,6 @@ public interface ComprobanteServiceIf extends Remote {
     public void generarRideComprobanteNoLegal(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante,ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException;
     
     public byte[] getReporteComprobanteComprobante(ComprobanteDataInterface comprobanteData,Usuario usuario,String claveAccesoPersonalizada) throws RemoteException;
+    
+    
 }

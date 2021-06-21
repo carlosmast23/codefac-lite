@@ -371,7 +371,8 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
 
                     ClienteInterfaceComprobanteLote cic = new ClienteFacturaLoteImplComprobante(instancia);
 
-                    ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobanteLote(comprobantes, session.getUsuario(),session.getEmpresa().getIdentificacion(),cic);
+                    //TODO: Terminar de autorizar pero con un metodo valido para autorizar en lote
+                    //ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobanteLote(comprobantes, session.getUsuario(),session.getEmpresa().getIdentificacion(),cic);
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);

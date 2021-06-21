@@ -534,7 +534,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
         //TODO:Ver si se mueve a la primera parte donde se setean los datos
         //Parece que no debo mover por que otros metodos recien desde este punto empiezan grabar
-        setearDatosClienteYDistribuidor(factura);        
+        setearDatosClienteYDistribuidor(factura);    
         
         //TODO:Analizar mover a fuera , o pasar los metodos setear a este punto
         asignarVendedorAutomatico(factura);
@@ -548,7 +548,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ComprobantesService servicioComprobante = new ComprobantesService();
         
         
-        servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);        
+        servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
         grabarDetallesFacturaSinTransaccion(factura);
         grabarCarteraSinTransaccion(factura,carteraParametro);
         return factura;
@@ -966,7 +966,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                factura.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                factura.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
                 entityManager.merge(factura);
             }
         });

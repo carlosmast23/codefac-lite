@@ -151,9 +151,9 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException,ServicioCodefacException
     {
         if (comprobante.getEstadoEnum().equals(ComprobanteEnumEstado.AUTORIZADO)) {
-            comprobante.setEstado(ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+            comprobante.setEstadoEnum(ComprobanteEnumEstado.ELIMINADO_SRI);
         } else {
-            comprobante.setEstado(ComprobanteEnumEstado.ELIMINADO.getEstado());
+            comprobante.setEstadoEnum(ComprobanteEnumEstado.ELIMINADO);
         }
 
         entityManager.merge(comprobante);
@@ -164,7 +164,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                comprobanteElectronica.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                comprobanteElectronica.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                 entityManager.merge(comprobanteElectronica);
             }
         });        
@@ -872,7 +872,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * Metodo que permite procesar varios comprobante en Lote
      * @param comprobanteData 
      */
-    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException
+    /*public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException
     {
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantesLote(comprobantesData, usuario);
         
@@ -942,7 +942,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
     
         comprobanteElectronico.procesar(true);
-    }
+    }*/
     
         /**
      * Setear los valores del las claves de acceso con su comprobante en la base de datos
@@ -1008,7 +1008,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                         Long id=comprobanteDataInterface.getComprobanteId();
                         FacturacionService servicio=new FacturacionService();
                         Factura factura=servicio.buscarPorId(id);
-                        factura.setEstado(estado.getEstado());
+                        factura.setEstadoEnum(estado);
                         servicio.editar(factura);
                 }
             } catch (RemoteException ex) {
@@ -1032,7 +1032,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     if(facturas.size()>0)
                     {
                         Factura facturaEditar=facturas.get(0);
-                        facturaEditar.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                        facturaEditar.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                         servicio.editar(facturaEditar);
                         
                         //Crear cartera de los comprobantes autorizados
@@ -1141,7 +1141,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     FacturacionService facturacionService=new FacturacionService();
                    
                     factura.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
-                    factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
+                    factura.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
                     
                     try {
                         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -1253,7 +1253,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,ClienteInterfaceComprobante callbackClientObject)
     {
         //comprobanteOriginal.validarDatosAdicionales();
-        comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
+        comprobanteOriginal.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
         
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -1364,7 +1364,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                             //comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                             //setearDatosAutorizacionComprobante(comprobanteOriginal,documentoAutorizado);               
                             //entityManager.merge(comprobanteOriginal);
-                            comprobanteEditar.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                            comprobanteEditar.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                             LOG.log(Level.INFO,"Cambiando el estado Autorizado del comprobante ");
                             setearDatosAutorizacionComprobante(comprobanteEditar,documentoAutorizado);               
                             LOG.log(Level.INFO,"Cambiando el resto de datos del comprobante autorizado");
@@ -2580,7 +2580,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 //Cambiar el estado si el anterior es eliminado a elminado desde el Sri
                 if(entidad.getEstadoEnum().equals(ComprobanteEnumEstado.ELIMINADO))
                 {
-                    entidad.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+                    entidad.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI);
                 }
 
                 ejecutarTransaccion(new MetodoInterfaceTransaccion() {

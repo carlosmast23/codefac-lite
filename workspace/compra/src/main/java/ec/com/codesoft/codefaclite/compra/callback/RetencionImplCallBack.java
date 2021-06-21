@@ -108,6 +108,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
         
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             monitorData.getBarraProgreso().setValue(65);
+            //todo: no deberia cambiar el estado en esta clase , se lo debe hacer en una clase superior como una servicio
             retencion.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                         
             //En esta etapa ya se habilita la opcion de imprimir el ride porque ya esta generado
@@ -123,6 +124,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
         
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(80);
+            //todo: no deberia cambiar el estado en esta clase , se lo debe hacer en una clase superior como una servicio
             retencion.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());            
         }
 
@@ -132,6 +134,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
 
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
             monitorData.getBarraProgreso().setValue(100);
+            //todo: no deberia cambiar el estado en esta clase , se lo debe hacer en una clase superior como una servicio
             retencion.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
         
