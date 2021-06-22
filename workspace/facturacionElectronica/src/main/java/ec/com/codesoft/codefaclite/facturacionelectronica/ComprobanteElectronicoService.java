@@ -1005,7 +1005,8 @@ public class ComprobanteElectronicoService implements Runnable {
     
     public JasperPrint getPrintJasperComprobante(ComprobanteElectronico comprobante,ClaveAcceso claveAcceso)
     {
-        return getPrintJasperComprobante(comprobante, claveAcceso.clave,null);
+        String clave=(claveAcceso!=null)?claveAcceso.clave:null;
+        return getPrintJasperComprobante(comprobante, clave,null);
     }   
     
     public JasperPrint getPrintJasperComprobante(ComprobanteElectronico comprobante,String claveAcceso,String fechaAutorizacion)
