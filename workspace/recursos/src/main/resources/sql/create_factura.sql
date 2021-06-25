@@ -137,4 +137,4 @@ create table FACTURA_ADICIONAL
     TIPO varchar(1),
     NUMERO integer ,
     primary key (ID)
-)
+);

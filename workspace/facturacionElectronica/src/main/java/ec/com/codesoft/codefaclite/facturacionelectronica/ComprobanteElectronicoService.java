@@ -48,9 +48,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.file.Files;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -893,6 +895,44 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.put("imagen_logo",pathLogoImagen);
             
             UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));            
+    }
+    
+    //TODO: Tratar de unificar con el metodo generarRideIndividual por que son muy similares
+    public static ComprobanteElectronico obtenerComprobanteDataDesdeXml(File archivoXml)
+    {
+        try {
+            
+            //VERIFICAR si existe un XML AUTORIZADO primero obtengo el formato normal del XML FIRMADO
+            String xmlStr=new String(Files.readAllBytes(archivoXml.toPath()));
+            final String etiquetaAperturaFirmado="[CDATA[";
+            final String etiquetaCierreFirmado="]]>";
+            if(xmlStr.indexOf(etiquetaAperturaFirmado)>=0)
+            {
+                int etiquetaPosicionInicialFirmado=xmlStr.indexOf(etiquetaAperturaFirmado)+etiquetaAperturaFirmado.length();
+                int etiquetaPosicionFinalFirmado=xmlStr.indexOf(etiquetaCierreFirmado);
+                xmlStr=xmlStr.substring(etiquetaPosicionInicialFirmado,etiquetaPosicionFinalFirmado);                
+            }
+            //Obtener la CLAVE DE ACCESO directamente desde el ARCHIVO XML            
+            int etiquetaPosicionInicial=xmlStr.indexOf("<claveAcceso>");
+            int etiquetaPosicionFinal=xmlStr.indexOf("</claveAcceso>");
+            
+            etiquetaPosicionInicial=etiquetaPosicionInicial+13;//Me posiciono en la parte final de la etiqueta para poder cortar
+            String claveAccesoStr=xmlStr.substring(etiquetaPosicionInicial, etiquetaPosicionFinal);
+            ClaveAcceso claveAcceso=new ClaveAcceso(claveAccesoStr);
+            
+            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            //ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(archivoXml);
+            Reader reader=new StringReader(xmlStr);
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
+            
+            return comprobante;
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JAXBException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     private void generarRideIndividual(String claveAccesoTemp,String carpetaOrigenXml) throws ComprobanteElectronicoException

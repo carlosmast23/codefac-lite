@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
@@ -99,6 +101,9 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             //Grabar en el disco de forma temporal para procesar el archivo xml
             UtilidadesArchivos.grabarInputStreamEnArchivo(inputStream, outputStream);
             
+            //Obtener el comprobante desde el xml
+            ComprobanteElectronico comprobanteElectronico=ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(fileTmp.toFile());
+                        
             return new Compra();
         } catch (IOException ex) {
             Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
