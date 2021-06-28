@@ -428,7 +428,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //Validacion de MONTOS SUPERIORES A $200 PARA CONSUMIDORES FINALES EN DOCUMENTOS LEGALES
         if(factura.getCliente().isClienteFinal() && factura.getCodigoDocumentoEnum().getDocumentoLegal())        
         {
-            throw new ServicioCodefacException("El Monto no puede ser superior a 200$ para el CLIENTES FINALES");
+            if(factura.getTotal().compareTo(ParametrosSistemaCodefac.MONTO_MAXIMO_VENTAS_CONSUMIDOR_FINAL)>0)
+            {
+                throw new ServicioCodefacException("El Monto no puede ser superior a $200 para el CLIENTES FINALES");
+            }
         }
         
         //Validacion para los detalles

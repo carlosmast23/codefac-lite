@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
@@ -229,7 +230,11 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 totalImpuestoIva.setCodigo(impuestoDetalleIvaCero.getImpuesto().getCodigoSri());
                 totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIvaCero.getCodigo()+"");
                 //totalImpuestoIva.setDescuentoAdicional(descuentoAdicional);
-                totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIvaCero.getTarifa()+""));
+                if(!comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
+                {
+                    totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIvaCero.getTarifa()+""));
+                }
+                
                 totalImpuestoIva.setValor(BigDecimal.ZERO);
                 totalImpuestos.add(totalImpuestoIva);
             }
@@ -243,7 +248,11 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 totalImpuestoIva.setCodigo(impuestoDetalleIva.getImpuesto().getCodigoSri());
                 totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIva.getCodigo()+"");
                 //totalImpuestoIva.setDescuentoAdicional(descuentoAdicional);
-                totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIva.getTarifa()+""));
+                if(!comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
+                {
+                    totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIva.getTarifa()+""));
+                }
+                
                 totalImpuestoIva.setValor(comprobante.getIva());
                 totalImpuestos.add(totalImpuestoIva);
             }

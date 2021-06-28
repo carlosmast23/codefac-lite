@@ -162,6 +162,8 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final EstiloCodefacEnum TEMA_DEFECTO_CODEFAC=EstiloCodefacEnum.MCWIN;
     
+    public static final BigDecimal MONTO_MAXIMO_VENTAS_CONSUMIDOR_FINAL=new BigDecimal("200");
+    
     public abstract class ComprobantesElectronicos
     {
         public static final String LOGO_SIN_FOTO="sin_imagen.jpg";
