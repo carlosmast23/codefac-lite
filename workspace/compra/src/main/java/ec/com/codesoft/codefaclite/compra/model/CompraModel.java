@@ -303,9 +303,8 @@ public class CompraModel extends CompraPanel{
         buscarDialogoModel.setVisible(true);
         Compra compra = (Compra)buscarDialogoModel.getResultado();
         if(compra != null)
-        {
-            this.compra=compra;
-            cargarDatosCompra();
+        {            
+            cargarDatosCompra(compra);
         }else{
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar compra vacio");
         }
@@ -313,8 +312,9 @@ public class CompraModel extends CompraPanel{
         
     }
     
-    private void cargarDatosCompra()
+    private void cargarDatosCompra(Compra compra)
     {
+        this.compra=compra;
         //this.compra = compra;
         String identificacion = this.compra.getProveedor().getIdentificacion();
         String nombre = this.compra.getProveedor().getRazonSocial();
@@ -620,7 +620,7 @@ public class CompraModel extends CompraPanel{
         }
         
         //Cargar los datos en la vista
-        cargarDatosCompra();
+        cargarDatosCompra(this.compra);
         
     }
 
@@ -840,7 +840,8 @@ public class CompraModel extends CompraPanel{
                 File archivoSeleccionado=jFileChooser.getSelectedFile();
                 SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
                         new FileInputStream(archivoSeleccionado));
-                ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeXml(istream,session.getEmpresa());
+                Compra compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeXml(istream,session.getEmpresa());
+                cargarDatosCompra(compra);
                 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);

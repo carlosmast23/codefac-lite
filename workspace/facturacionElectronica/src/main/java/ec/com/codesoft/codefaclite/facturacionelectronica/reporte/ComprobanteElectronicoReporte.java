@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.reporte;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
@@ -39,8 +40,8 @@ public abstract class ComprobanteElectronicoReporte
     }
     
     
-    
-    protected Map<String,Object> getMapInfoTributaria()
+    //TODO: Ver si se puede optimizar el parametro para poner como propiedad
+    protected Map<String,Object> getMapInfoTributaria(Map<ComprobanteEnum, String> aliasNombreDocumentosMap)
     {
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("ruc",comprobante.getInformacionTributaria().getRuc());
@@ -50,7 +51,19 @@ public abstract class ComprobanteElectronicoReporte
         map.put("autorizacion",comprobante.getInformacionTributaria().getClaveAcceso());
         //map.put("estado","");
         map.put("fecha_hora_autorizacion","");
-        map.put("nombre_documento",comprobante.getInformacionTributaria().getCodigoDocumentoEnum().getNombre());
+        
+        //Buscar si tiene un alias para el nombre del documento
+        String nombreDocumento=comprobante.getInformacionTributaria().getCodigoDocumentoEnum().getNombre();
+        if(aliasNombreDocumentosMap!=null)
+        {
+            String nombreDocumentoTmp=aliasNombreDocumentosMap.get(comprobante.getInformacionTributaria().getCodigoDocumentoEnum());
+            if(nombreDocumentoTmp!=null)
+            {
+                nombreDocumento=nombreDocumentoTmp;
+            }
+        }
+        
+        map.put("nombre_documento",nombreDocumento);
         String codAmbiente=comprobante.getInformacionTributaria().getAmbiente();
         if(codAmbiente.equals(ComprobanteElectronicoService.CODIGO_SRI_MODO_PRODUCCION.toString()))
         {
@@ -86,11 +99,11 @@ public abstract class ComprobanteElectronicoReporte
     }
     
 
-    public Map<String,Object> getMapReporte()
+    public Map<String,Object> getMapReporte(Map<ComprobanteEnum, String> aliasNombreDocumentosMap)
     {
         //try {
             Map<String,Object> map=new HashMap<String,Object>();
-            map.putAll(getMapInfoTributaria());
+            map.putAll(getMapInfoTributaria(aliasNombreDocumentosMap));
             map.putAll(getMapInfoEmpresa());
             map.putAll(getMapTotales());
             map.putAll(getMapInfoCliente());

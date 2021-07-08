@@ -225,6 +225,11 @@ public class ComprobanteElectronicoService implements Runnable {
      * Variables para saber si se deben enviar correos por defecto pongo verdadero
      */
     private Boolean enviarCorreos;
+    
+    /**
+     * Map que me permite establecer nombres alternos para documentos internos, especialmente util cuando no quiere que se llame nota de venta interna
+     */
+    private Map<ComprobanteEnum,String> aliasNombreDocumentosMap;
 
     public ComprobanteElectronicoService() {
         this.etapaLimiteProcesar = 100;
@@ -233,6 +238,7 @@ public class ComprobanteElectronicoService implements Runnable {
         this.enviarSoloCorreosAdjuntos=false;
         this.enviarCorreoComprobanteAutorizado=false;
         this.enviarCorreos=true;
+        this.aliasNombreDocumentosMap=new HashMap<ComprobanteEnum,String>();
     }
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
@@ -247,6 +253,7 @@ public class ComprobanteElectronicoService implements Runnable {
         enviarSoloCorreosAdjuntos=false;
         this.enviarCorreoComprobanteAutorizado=false;
         this.enviarCorreos=true;
+        this.aliasNombreDocumentosMap=new HashMap<ComprobanteEnum,String>();
     }
 
     public void procesar(Boolean enviarPorLotes) {
@@ -877,7 +884,7 @@ public class ComprobanteElectronicoService implements Runnable {
             }
             
             List<Object> informacionAdiciona = reporte.getDetalles();
-            Map<String, Object> datosMap = reporte.getMapReporte();
+            Map<String, Object> datosMap = reporte.getMapReporte(aliasNombreDocumentosMap);
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
             datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
@@ -1084,7 +1091,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 //estado=comprobanteAutorizado.getEstado();
             //}
 
-            Map<String, Object> datosMap = reporte.getMapReporte();
+            Map<String, Object> datosMap = reporte.getMapReporte(aliasNombreDocumentosMap);
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
             datosMap.put("estado","");
@@ -2116,6 +2123,14 @@ public class ComprobanteElectronicoService implements Runnable {
 
     public void setReporteInfoOtroAdicional(JasperReport reporteInfoOtroAdicional) {
         this.reporteInfoOtroAdicional = reporteInfoOtroAdicional;
+    }
+
+    public Map<ComprobanteEnum, String> getAliasNombreDocumentosMap() {
+        return aliasNombreDocumentosMap;
+    }
+
+    public void setAliasNombreDocumentosMap(Map<ComprobanteEnum, String> aliasNombreDocumentosMap) {
+        this.aliasNombreDocumentosMap = aliasNombreDocumentosMap;
     }
     
     

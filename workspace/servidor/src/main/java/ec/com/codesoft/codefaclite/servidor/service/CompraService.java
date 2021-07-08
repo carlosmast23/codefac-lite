@@ -9,6 +9,7 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
@@ -32,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
@@ -103,8 +105,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             
             //Obtener el comprobante desde el xml
             ComprobanteElectronico comprobanteElectronico=ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(fileTmp.toFile());
+            Compra compra=generarCompraDesdeXml(comprobanteElectronico, empresa);
+            
                         
-            return new Compra();
+            return compra;
         } catch (IOException ex) {
             Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -115,6 +119,69 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             }
         }
         return null;
+    }
+    
+    
+    //TODO: Ver si se puede abstraer para tener un metodo generico que se encargue de llenar los datos principales y luego se pueda llenar el resto
+    private Compra generarCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException
+    {
+        Compra compraNueva=new Compra();
+        
+        compraNueva.setEmpresa(empresa);
+        
+        //obtener los datos del PROVEEDOR
+        Persona proveedor=cargarProveedorCompraDesdeXml(comprobanteElectronico,empresa);
+        compraNueva.setProveedor(proveedor);
+        
+        //obtener los datos de la CLAVE DE ACCESO
+        String claveAcceso=comprobanteElectronico.getInformacionTributaria().getClaveAcceso();
+        compraNueva.setAutorizacion(claveAcceso);        
+        compraNueva.setClaveAcceso(claveAcceso);
+        
+        //obtener el ESTABLECIMIENTO
+        BigDecimal establecimientoNumero=new BigDecimal(comprobanteElectronico.getInformacionTributaria().getEstablecimiento());
+        compraNueva.setPuntoEstablecimiento(establecimientoNumero);
+        
+        //obtener el PUNTO_EMISION
+        Integer puntoEmision=Integer.parseInt(comprobanteElectronico.getInformacionTributaria().getPuntoEmision());
+        compraNueva.setPuntoEmision(puntoEmision);
+        
+        //obtener el SECUENCIAL
+        Integer secuencial=Integer.parseInt(comprobanteElectronico.getInformacionTributaria().getSecuencial());
+        compraNueva.setSecuencial(secuencial);
+        
+        //obtener la FECHA DE EMISION
+        java.util.Date fechaEmision=ComprobantesElectronicosUtil.stringToDate(comprobanteElectronico.getFechaEmision());
+        compraNueva.setFechaEmision(fechaEmision);
+        
+        
+        return compraNueva;
+    }
+    
+    private Persona cargarProveedorCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        String rucProveedor=comprobanteElectronico.getInformacionTributaria().getRuc();
+        Persona proveedor=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(rucProveedor, GeneralEnumEstado.ACTIVO);
+        //Si no existe el proveedor entonces creo un nuevo proveedor
+        if(proveedor==null)
+        {
+            String razonSocial=comprobanteElectronico.getRazonSocialComprador();
+            String direccion=comprobanteElectronico.getDireccionEstablecimiento();
+            //String tipoIdentificacion=comprobanteElectronico.getTipoDocumento()
+            
+            ServiceFactory.getFactory().getPersonaServiceIf().crearPlantillaPersona(
+                    empresa, 
+                    rucProveedor, 
+                    Persona.TipoIdentificacionEnum.CEDULA,  //Todo: Cambiar por el tipo de identificacion correcta
+                    razonSocial, 
+                    direccion, 
+                    OperadorNegocioEnum.PROVEEDOR
+            );
+            
+            proveedor= ServiceFactory.getFactory().getPersonaServiceIf().grabarConValidacion(proveedor, Boolean.TRUE);
+        }
+        
+        return proveedor;
     }
     
     @Override

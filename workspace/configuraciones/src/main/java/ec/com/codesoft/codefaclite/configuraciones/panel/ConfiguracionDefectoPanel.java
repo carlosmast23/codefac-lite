@@ -53,10 +53,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel1 = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox<>();
         lblEspacio1 = new javax.swing.JLabel();
-        lblEspacio2 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         cmbTipoDocumentoCompra = new javax.swing.JComboBox<>();
         lblEspacio3 = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
+        txtNotaVentaInternaAlias = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -200,19 +201,12 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         jPanel1.add(lblEspacio1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblEspacio2, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Tipo Documento:");
+        jLabel12.setText("Nota de Venta Interna (Alias):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel12, gridBagConstraints);
@@ -225,11 +219,27 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoDocumentoCompra, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio3, gridBagConstraints);
+
+        jLabel52.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel52.setText("Tipo Documento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel52, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtNotaVentaInternaAlias, gridBagConstraints);
 
         jTabbedPane1.addTab("Documentos", jPanel1);
 
@@ -1222,6 +1232,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1242,7 +1253,6 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio12;
-    private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio42;
     private javax.swing.JLabel lblEspacio6;
@@ -1259,6 +1269,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JTextField txtLeyendaFirmaFactura2;
     private javax.swing.JTextField txtLeyendaFirmaFactura3;
     private javax.swing.JTextField txtMotivoTrasladoGuiaRemision;
+    private javax.swing.JTextField txtNotaVentaInternaAlias;
     private javax.swing.JSpinner txtNumeroDecimalesRide;
     private javax.swing.JTextField txtNumeroMaximoDetalleFactura;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
@@ -1587,6 +1598,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbProformaFacturarVariasVeces(JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces) {
         this.cmbProformaFacturarVariasVeces = cmbProformaFacturarVariasVeces;
+    }
+
+    public JTextField getTxtNotaVentaInternaAlias() {
+        return txtNotaVentaInternaAlias;
+    }
+
+    public void setTxtNotaVentaInternaAlias(JTextField txtNotaVentaInternaAlias) {
+        this.txtNotaVentaInternaAlias = txtNotaVentaInternaAlias;
     }
 
     

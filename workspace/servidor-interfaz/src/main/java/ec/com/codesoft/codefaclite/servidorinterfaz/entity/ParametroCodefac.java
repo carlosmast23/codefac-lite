@@ -374,4 +374,9 @@ public class ParametroCodefac implements Serializable {
         public static String DB_RESPALDO_HORA_PROGRAMADA="DB_RESPALDO_HORA_PROGRAMADA";
     }
     
+    public static class AliasNombresDocumentos
+    {
+        public static String NOTA_VENTA_INTERNA_ALIAS="NOTA_VENTA_INTERNA_ALIAS";
+    }
+    
 }

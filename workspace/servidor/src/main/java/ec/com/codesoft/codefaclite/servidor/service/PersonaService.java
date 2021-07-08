@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona.TipoIdentificacionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -261,6 +262,31 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return null;
     }
     
+    public Persona crearPlantillaPersona(Empresa empresa,String identificacion,TipoIdentificacionEnum tipoIdentificacionEnum,String razonSocial,String direccion,OperadorNegocioEnum operadorNegocioEnum) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        //Crear la plantilla de la persona
+        Persona persona=new Persona();
+        persona.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        persona.setIdentificacion(identificacion);
+        persona.setRazonSocial(razonSocial);
+        persona.setTipClienteEnum(Persona.TipoClienteEnum.CLIENTE); //Todo: este campo toca analizar
+        persona.setTipoEnum(operadorNegocioEnum);
+        persona.setTipoIdentificacionEnum(tipoIdentificacionEnum);
+        persona.setEmpresa(empresa);
+        
+        //Crear un establecimiento por defecto
+        PersonaEstablecimiento establecimiento=new PersonaEstablecimiento();
+        establecimiento.setCodigoSucursal("1");
+        establecimiento.setNombreComercial(razonSocial);
+        establecimiento.setDireccion(direccion);
+        establecimiento.setPersona(persona);
+        establecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
+        
+        persona.setEstablecimientos(Arrays.asList(establecimiento));
+        return persona;
+    }
+    
+    //TODO: Unir con el metodo de crearPlantillaPersona
     public Persona crearConsumidorFinalSinTransaccion(Empresa empresa)
     {
         Persona persona=new Persona();

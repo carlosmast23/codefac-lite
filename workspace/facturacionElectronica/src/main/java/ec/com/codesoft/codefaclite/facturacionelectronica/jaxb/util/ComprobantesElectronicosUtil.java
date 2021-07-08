@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,8 @@ import org.w3c.dom.Document;
  * @author Carlos
  */
 public abstract class ComprobantesElectronicosUtil {
+    
+    public static final String DATE_FORMAT_MASK="dd/MM/yyyy";
 
     public static File generarArchivoXml(StringWriter xml, String path) {
         File file = new File(path);
@@ -263,9 +266,20 @@ public abstract class ComprobantesElectronicosUtil {
             }
         }
     }
+    
+    public static java.util.Date stringToDate(String fechaStr)
+    {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_MASK);
+            return format.parse(fechaStr);
+        } catch (ParseException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public static String dateToString(Date fecha) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_MASK);
         return format.format(fecha);
     }
 
@@ -275,7 +289,7 @@ public abstract class ComprobantesElectronicosUtil {
     }
 
     public static String dateToString(Timestamp fecha) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_MASK);
         return format.format(fecha);
     }
 

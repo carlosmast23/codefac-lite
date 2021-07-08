@@ -1650,6 +1650,22 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
 
     }
+    
+    //Metodo que me permite establecer un alias a los nombres de los documentos
+    private void cargarNombresAliasDocumentos(ComprobanteElectronicoService servicio,Empresa empresa)
+    {
+        Map<ComprobanteEnum, String> aliasNombreDocumentosMap=new HashMap<ComprobanteEnum,String>();
+        //Buscar el nombre de alias para las notas de venta interna
+        String aliasNotaVentaInterna=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
+        if(aliasNotaVentaInterna!=null)
+        {
+            //Si tiene asignado un nombre le pongo al map para configurar
+            aliasNombreDocumentosMap.put(ComprobanteEnum.NOTA_VENTA_INTERNA, aliasNotaVentaInterna);
+            
+        }        
+        servicio.setAliasNombreDocumentosMap(aliasNombreDocumentosMap);
+        
+    }
 
     private void cargarConfiguraciones(ComprobanteElectronicoService servicio,Empresa empresa) {
         try {
@@ -1663,6 +1679,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             servicio.setModoFacturacion(modoFacturacion);
 
             cargarDatosRecursos(servicio,empresa);
+            
+            cargarNombresAliasDocumentos(servicio, empresa);
 
             /**
              * Cargar los web services dependiendo el modo de facturacion

@@ -288,6 +288,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
             else                
                 fila.add(reporteFacturaData.getNombreLegalCliente());
             
+            fila.add(reporteFacturaData.getRuta());
+            fila.add(reporteFacturaData.getZona());
             
             fila.add(reporteFacturaData.getDocumento()); //Aqui debe ir el tipo de documento
             fila.add(reporteFacturaData.getEstadoFactura());
@@ -307,8 +309,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
         UtilidadesTablas.definirTamanioColumnasPorMap(getTblDocumentos(), mapTamanios);
         
         ControladorReporteFactura.TotalSumatoria total=controladorReporte.totalSinNotaCredito();
-        getLblSubtotal0().setText(total.getSubtotalConImpuestoMenosDescuento().toString());
-        getLblSubtotal12().setText(total.getSubtotalSinImpuestoMenosDescuento().toString());
+        getLblSubtotal0().setText(total.getSubtotalSinImpuestoMenosDescuento().toString());
+        getLblSubtotal12().setText(total.getSubtotalConImpuestoMenosDescuento().toString());
         getLblSubtotalSinImpuesto().setText(total.obtenerSubtotal().toString());
         getLblTotalDescuento().setText(total.obtenerTotalDescuentos().toString());
         getLblIva12().setText(total.getValorImpuesto().toString());

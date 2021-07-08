@@ -177,7 +177,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         NotaCreditoService notaCreditoService=new NotaCreditoService();
         List<NotaCredito> notasCredito=notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,empresa);
         
-        for (NotaCredito notaCredito : notasCredito) {
+        for (NotaCredito notaCredito : notasCredito) 
+        {
             AnuladoAts anuladoAts=new AnuladoAts();
             
             anuladoAts.setTipoComprobante("18"); //Todo: por defecto solo anulo el tipo 18 que supuestamente corresponde documentos autorizados electronicamente
