@@ -9,6 +9,8 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
@@ -26,6 +28,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
@@ -38,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.sri.ComprobantesElectronicosParametros;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -52,6 +57,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,7 +111,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             
             //Obtener el comprobante desde el xml
             ComprobanteElectronico comprobanteElectronico=ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(fileTmp.toFile());
-            Compra compra=generarCompraDesdeXml(comprobanteElectronico, empresa);
+            Compra compra=generarCompraDesdeXml((FacturaComprobante) comprobanteElectronico, empresa);
             
                         
             return compra;
@@ -123,7 +129,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     
     //TODO: Ver si se puede abstraer para tener un metodo generico que se encargue de llenar los datos principales y luego se pueda llenar el resto
-    private Compra generarCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException
+    private Compra generarCompraDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException
     {
         Compra compraNueva=new Compra();
         
@@ -153,12 +159,65 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //obtener la FECHA DE EMISION
         java.util.Date fechaEmision=ComprobantesElectronicosUtil.stringToDate(comprobanteElectronico.getFechaEmision());
         compraNueva.setFechaEmision(fechaEmision);
+        compraNueva.setFechaFactura(UtilidadesFecha.castDateUtilToSql(fechaEmision));
+        
+        //Datos por DEFECTO
+        compraNueva.setObservacion("Compra Electrónica");
+        compraNueva.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA);
+        
+        //Cargar los DETALLES DE LA COMPRA
         
         
         return compraNueva;
     }
     
-    private Persona cargarProveedorCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws ServicioCodefacException, RemoteException
+    private List<CompraDetalle> cargarProductoCompraDetalleDesdeXml(FacturaComprobante comprobanteElectronico,Compra compra) throws ServicioCodefacException, RemoteException
+    {
+        List<CompraDetalle> detalles=new ArrayList<CompraDetalle>();        
+        for (DetalleFacturaComprobante detalleXml : comprobanteElectronico.getDetalles()) 
+        {       
+            CompraDetalle compraDetalle=new CompraDetalle();
+            //Buscar si existe el producto cargado con el Código principal
+            String codigoPrincipal=detalleXml.getCodigoPrincipal();
+            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoPrincipal,compra.getEmpresa());
+            
+            if(producto!=null)
+            {
+                List<ProductoProveedor> productoProveedorList=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(producto, compra.getProveedor());
+                if(productoProveedorList.size()>0)
+                {
+                    compraDetalle.setProductoProveedor(productoProveedorList.get(0));
+                }                
+            }
+            else
+            {
+                //TODO: Si no existe el producto falta programar esta parte
+            }
+            
+            //Agregar la CANTIDAD del detalle
+            BigDecimal cantidad = detalleXml.getCantidad();
+            compraDetalle.setCantidad(cantidad);
+
+            //Agregar la DESCRIPCION del detalle
+            String descripcion = detalleXml.getDescripcion();
+            compraDetalle.setDescripcion(descripcion);      
+            
+            //Agregar el PRECIO UNITARIO
+            BigDecimal precioUnitario=detalleXml.getPrecioUnitario();
+            compraDetalle.setPrecioUnitario(precioUnitario);
+            
+            //Agregar el DESCUENTO
+            BigDecimal descuento= detalleXml.getDescuento();
+            compraDetalle.setDescuento(descuento);
+            
+            detalles.add(compraDetalle);
+            
+        }
+        return detalles;
+    }
+   
+    
+    private Persona cargarProveedorCompraDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
         String rucProveedor=comprobanteElectronico.getInformacionTributaria().getRuc();
         Persona proveedor=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(rucProveedor, GeneralEnumEstado.ACTIVO);

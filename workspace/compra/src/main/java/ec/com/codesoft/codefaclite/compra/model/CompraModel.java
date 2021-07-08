@@ -1056,6 +1056,7 @@ public class CompraModel extends CompraPanel{
         getBtnEliminarItem().setEnabled(!b);
     }
    
+    //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
     private void agregarDetallesCompra(CompraDetalle compraDetalle)
     {
         Boolean agregar = true;
