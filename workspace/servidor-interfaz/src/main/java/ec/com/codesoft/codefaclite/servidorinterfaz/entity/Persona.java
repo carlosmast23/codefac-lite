@@ -426,11 +426,21 @@ public class Persona implements Serializable, Comparable<Persona> {
     
     ///Metodo que devuelve solo los establecimientos activos
     public List<PersonaEstablecimiento> getEstablecimientosActivos() {
+        List<PersonaEstablecimiento> establecimientosList=new ArrayList<PersonaEstablecimiento>();
+        
         if(establecimientos!=null)
         {
-            return establecimientos.stream().filter(e -> e.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO)).collect(Collectors.toList());
+            //TODO: Remplazar esto por alguna funcion en las utilidades de listas
+            for (PersonaEstablecimiento establecimiento : establecimientos) 
+            {
+                if(establecimiento.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                {
+                    establecimientosList.add(establecimiento);
+                }
+            }
+            //return establecimientos.stream().filter(e -> e.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO)).collect(Collectors.toList());
         }
-        return new ArrayList<PersonaEstablecimiento>();
+        return establecimientosList;
     }
 
     public void setEstablecimientos(List<PersonaEstablecimiento> establecimientos) {

@@ -257,7 +257,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 getjTextTelefono().getText(),
                 TipoSucursalEnum.MATRIZ, 
                 (Zona) getCmbZona().getSelectedItem(),
-                (TipoEstablecimiento)getCmbTipoCliente().getSelectedItem());
+                (TipoEstablecimiento)getCmbTipoCliente().getSelectedItem(),
+                GeneralEnumEstado.ACTIVO
+                );
         
         
         if(estadoFormulario.equals(ESTADO_GRABAR))
@@ -939,7 +941,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         if(personaEstablecimiento==null)
         {
             personaEstablecimiento = new PersonaEstablecimiento();
-        }
+            personaEstablecimiento.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        }        
         
         //personaEstablecimiento.setCodigoPersonalizado(gettxtco);
         personaEstablecimiento.setCodigoPersonalizado(getTxtCodigoPersonalizadoOficina().getText());
@@ -982,8 +985,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                     establecimiento.getTipoSucursalEnum().getNombre()});
             }
         }
-        
+                
         getTblEstablecimientos().setModel(modeloTabla);
+        UtilidadesTablas.ocultarColumna(getTblEstablecimientos(),0);
     }
 
     //Lista de componentes que se deben excluir de las validaciona automaticas

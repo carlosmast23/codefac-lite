@@ -94,7 +94,7 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<PersonaEstab
             queryFiltroEmpresa = "";
         }
         
-        queryString += " u.persona.estado=?7 "+queryFiltroEmpresa+" and ( (LOWER(u.nombreComercial) like ?3 or u.persona.identificacion like ?5 or  LOWER(u.persona.razonSocial) like ?2 ) and (u.persona.tipo = ?1 or u.persona.tipo = ?4 ) )";
+        queryString += " u.estado='A' AND u.persona.estado=?7 "+queryFiltroEmpresa+" and ( (LOWER(u.nombreComercial) like ?3 or u.persona.identificacion like ?5 or  LOWER(u.persona.razonSocial) like ?2 ) and (u.persona.tipo = ?1 or u.persona.tipo = ?4 ) )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, OperadorNegocioEnum.PROVEEDOR.getLetra());
         queryDialog.agregarParametro(4, OperadorNegocioEnum.AMBOS.getLetra());

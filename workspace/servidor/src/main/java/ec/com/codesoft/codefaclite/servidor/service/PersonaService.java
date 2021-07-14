@@ -107,44 +107,48 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     }
     
-    private void validarCliente(Persona p,Boolean validarCedula,CrudEnum crudEnum) throws ServicioCodefacException, java.rmi.RemoteException
+    private void validarCliente(Persona persona,Boolean validarCedula,CrudEnum crudEnum) throws ServicioCodefacException, java.rmi.RemoteException
     {
         /**
          * Validaciones previas de los datos
          */
         if (validarCedula) {
-            if (!p.validarCedula()) {
+            if (!persona.validarCedula()) {
                 throw new ServicioCodefacException("Error al validar la identificación");
             }
         }
 
-        if (p.getRazonSocial() == null || p.getRazonSocial().trim().isEmpty()) {
+        if (persona.getRazonSocial() == null || persona.getRazonSocial().trim().isEmpty()) {
             throw new ServicioCodefacException("La razón social no puede ser vacia");
         }
 
-        if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
+        if (persona.getEstablecimientos() == null || persona.getEstablecimientos().size() == 0) {
             throw new ServicioCodefacException("No se puede crear el registro sin establecimientos");
         }
         
+        //TODO: Separar en otra funcion esta logica para tener un codigo más modular
         //TODO: Mejorar para tambien hacer la validacion con datos GUARDADOS para evitar problemas , actualmente solo queda con los datos que supuestamente vienen desde la vista pero esto no es seguro
         //Validar que los detalles no puedan tener el mismo cópdigo de la sucursal
-        for (int i = 0; i < p.getEstablecimientos().size(); i++) {
-            PersonaEstablecimiento establecimiento=p.getEstablecimientos().get(i);
-            for (int j = i+1; j < p.getEstablecimientos().size(); j++) 
+        for (int i = 0; i < persona.getEstablecimientos().size(); i++) {
+            PersonaEstablecimiento establecimiento=persona.getEstablecimientos().get(i);
+            for (int j = i+1; j < persona.getEstablecimientos().size(); j++) 
             {
-                PersonaEstablecimiento establecimientoTmp=p.getEstablecimientos().get(j);
-                if(establecimientoTmp.getCodigoSucursal().equals(establecimiento.getCodigoSucursal()))
+                if(establecimiento.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
                 {
-                    throw new ServicioCodefacException("No se puede grabar el CLIENTE con 2 establecimientos que tienen el mismo CÓDIGO");
+                    PersonaEstablecimiento establecimientoTmp=persona.getEstablecimientos().get(j);                
+                    if(establecimientoTmp.getCodigoSucursal().equals(establecimiento.getCodigoSucursal()))
+                    {
+                        throw new ServicioCodefacException("No se puede grabar el CLIENTE con 2 establecimientos que tienen el mismo CÓDIGO");
+                    }
                 }
             }
         }
         
         //Si se esta grabando e editando un consumidor final no se puede editar el consumidor final
-        if(p.getIdentificacion().equals("9999999999999"))
+        if(persona.getIdentificacion().equals("9999999999999"))
         {
             //Si cambian este dato el sistema por defecto lo deja como el original
-            p.setRazonSocial(Usuario.CONSUMIDOR_FINAL_NOMBRE);            
+            persona.setRazonSocial(Usuario.CONSUMIDOR_FINAL_NOMBRE);            
         }
                 
         
@@ -152,14 +156,14 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         //Si es un crud verifico sin los datos editados y consultados son los mismos
         if(crudEnum.equals(CrudEnum.EDITAR))
         {
-            Persona personaTmp=getFacade().find(p.getIdCliente());
-            if(personaTmp.getIdentificacion().equals(p.getIdentificacion()))
+            Persona personaTmp=getFacade().find(persona.getIdCliente());
+            if(personaTmp.getIdentificacion().equals(persona.getIdentificacion()))
             {
                 return;
             }
         }
         
-        if(buscarPorIdentificacion(p.getIdentificacion(),p.getEmpresa())!=null)
+        if(buscarPorIdentificacion(persona.getIdentificacion(),persona.getEmpresa())!=null)
         {
             throw new ServicioCodefacException("Ya existe ingresado un cliente con la misma identificación");
         }

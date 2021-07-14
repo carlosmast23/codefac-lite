@@ -249,6 +249,7 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         
         if(!editar) //Cuando se va a grabar
         {
+            establecimientoDefecto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
             establecimientoDefecto.setCodigoSucursal("1");
             establecimientoDefecto.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
             cliente.addEstablecimiento(establecimientoDefecto);      

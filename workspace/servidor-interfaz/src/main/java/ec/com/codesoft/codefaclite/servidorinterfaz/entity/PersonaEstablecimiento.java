@@ -283,7 +283,7 @@ public class PersonaEstablecimiento implements  Serializable{
     
     
     
-    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String referenciadireccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento)
+    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String referenciadireccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento,GeneralEnumEstado estadoEnum)
     {
         //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
         establecimiento.setCodigoPersonalizado(codigo);
@@ -297,6 +297,7 @@ public class PersonaEstablecimiento implements  Serializable{
         establecimiento.setTipoSucursalEnum(tipoEnum);
         establecimiento.setZona(zona);
         establecimiento.setTipoEstablecimiento(tipoEstablecimiento);
+        establecimiento.setEstadoEnum(estadoEnum);
         return establecimiento;
     }
     
