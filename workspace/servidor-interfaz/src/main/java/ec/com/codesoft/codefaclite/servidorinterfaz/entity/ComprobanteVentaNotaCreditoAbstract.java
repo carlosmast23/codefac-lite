@@ -159,6 +159,15 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
      * METODOS MERSONALIZADOS
      * ==========================================================================
      */
+    
+    public BigDecimal getSubtotalImpuestosMenosDescuento() {
+        return subtotalImpuestos.subtract(descuentoImpuestos);
+    }
+    
+    public BigDecimal getSubtotalSinImpuestosMenosDescuento() {
+        return subtotalSinImpuestos.subtract(descuentoSinImpuestos);
+    }
+    
     public void calcularTotalesDesdeDetalles() {
         List<DetalleFacturaNotaCeditoAbstract> detalles=(List<DetalleFacturaNotaCeditoAbstract>) getDetallesComprobante();
         //Solo calcular si la variables de detalles fue creada

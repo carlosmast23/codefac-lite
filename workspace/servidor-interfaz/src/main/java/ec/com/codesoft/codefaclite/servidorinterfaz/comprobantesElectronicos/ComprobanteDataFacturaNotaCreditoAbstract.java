@@ -144,52 +144,8 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         }
         return null;
     }
-    
-    /*
-    private void sumarizarTotalesImpuestos(Map<Integer, TotalImpuesto> mapTotalImpuestos, ImpuestoDetalle impuestoDetalle, ImpuestoComprobante impuesto) 
-    {
-        
-        //Verificar valores para el total de impuesto
-        
-                
-        if (mapTotalImpuestos.get(impuestoDetalle.getCodigo()) == null ) 
-        {
-            TotalImpuesto totalImpuesto = new TotalImpuesto();
-            totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
-            totalImpuesto.setCodigo(impuesto.getCodigo());
-            totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
-            totalImpuesto.setTarifa(impuesto.getTarifa());
-            totalImpuesto.setValor(impuesto.getValor());
-            //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
-            mapTotalImpuestos.put(impuestoDetalle.getCodigo(), totalImpuesto);
-        } 
-        else 
-        {
-            TotalImpuesto totalImpuesto = mapTotalImpuestos.get(impuestoDetalle.getCodigo());
-            totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
-            totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
-            
-            System.out.println("totalImpuesto Valor:"+totalImpuesto.getValor());
-            
-            //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
-            mapTotalImpuestos.put(impuestoDetalle.getCodigo(), totalImpuesto);
-        }
-        
-    }*/
-    
-    /*public List<TotalImpuesto> crearImpuestosTotales(Map<Integer, TotalImpuesto> mapTotalImpuestos)
-    {
-        //Primero redondeo los valores totales
-        redondearMapImpuestos(mapTotalImpuestos);
-        
-        List<TotalImpuesto> totalImpuestos = new ArrayList<TotalImpuesto>();
-        for (Map.Entry<Integer, TotalImpuesto> entry : mapTotalImpuestos.entrySet()) {
-            Integer key = entry.getKey();
-            TotalImpuesto value = entry.getValue();
-            totalImpuestos.add(value);
-        }
-        return totalImpuestos;
-    }*/
+   
+   
     
     public SriIdentificacion getSriIdentificacion(ComprobanteVentaNotaCreditoAbstract comprobante)
     {
@@ -226,7 +182,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             {
                 ImpuestoDetalle impuestoDetalleIvaCero=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_CERO);
                 TotalImpuesto totalImpuestoIva=new TotalImpuesto();
-                totalImpuestoIva.setBaseImponible(comprobante.getSubtotalSinImpuestos());
+                totalImpuestoIva.setBaseImponible(comprobante.getSubtotalSinImpuestosMenosDescuento());
                 totalImpuestoIva.setCodigo(impuestoDetalleIvaCero.getImpuesto().getCodigoSri());
                 totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIvaCero.getCodigo()+"");
                 //totalImpuestoIva.setDescuentoAdicional(descuentoAdicional);
@@ -244,7 +200,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             {                
                 ImpuestoDetalle impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE);
                 TotalImpuesto totalImpuestoIva=new TotalImpuesto();
-                totalImpuestoIva.setBaseImponible(comprobante.getSubtotalImpuestos());
+                totalImpuestoIva.setBaseImponible(comprobante.getSubtotalImpuestosMenosDescuento());
                 totalImpuestoIva.setCodigo(impuestoDetalleIva.getImpuesto().getCodigoSri());
                 totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIva.getCodigo()+"");
                 //totalImpuestoIva.setDescuentoAdicional(descuentoAdicional);

@@ -75,6 +75,8 @@ create table PERSONA_ESTABLECIMIENTO(
     CODIGO_PERSONALIZADO varchar(100), 
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.4.5)*/
     REFERENCIA_DIRECCION varchar(100), 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.9.2)*/
+    ESTADO varchar(1),
 
     primary key (ID)
 );

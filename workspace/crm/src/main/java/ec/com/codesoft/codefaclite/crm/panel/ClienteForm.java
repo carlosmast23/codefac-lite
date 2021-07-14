@@ -144,13 +144,11 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jTextAreaDireccionEstablecimiento = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEstablecimientos = new javax.swing.JTable();
-        btnAgregarEstablecimiento = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
         txtCodigoEstablecimiento = new javax.swing.JSpinner();
         jLabel27 = new javax.swing.JLabel();
         cmbTipoEstablecimiento = new javax.swing.JComboBox<>();
-        btnEditarEstablecimiento = new javax.swing.JButton();
         jLabel31 = new javax.swing.JLabel();
         txtCodigoPersonalizadoOficina = new javax.swing.JTextField();
         jLabel32 = new javax.swing.JLabel();
@@ -163,6 +161,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         cmbTipoClienteOficina = new javax.swing.JComboBox<>();
         jLabel39 = new javax.swing.JLabel();
         jTextReferenciaDireccionEstablecimiento = new javax.swing.JTextField();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnAgregarEstablecimiento = new javax.swing.JButton();
+        btnEditarEstablecimiento = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -757,14 +758,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales1.add(jScrollPane1, gridBagConstraints);
-
-        btnAgregarEstablecimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanelCaracteristicasGenerales1.add(btnAgregarEstablecimiento, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -799,15 +792,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanelCaracteristicasGenerales1.add(cmbTipoEstablecimiento, gridBagConstraints);
-
-        btnEditarEstablecimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
-        btnEditarEstablecimiento.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanelCaracteristicasGenerales1.add(btnEditarEstablecimiento, gridBagConstraints);
 
         jLabel31.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel31.setText("Nombre Establecimiento:");
@@ -904,6 +888,26 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanelCaracteristicasGenerales1.add(jTextReferenciaDireccionEstablecimiento, gridBagConstraints);
 
+        jToolBar1.setRollover(true);
+
+        btnAgregarEstablecimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarEstablecimiento.setFocusable(false);
+        btnAgregarEstablecimiento.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarEstablecimiento.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAgregarEstablecimiento);
+
+        btnEditarEstablecimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
+        btnEditarEstablecimiento.setEnabled(false);
+        btnEditarEstablecimiento.setFocusable(false);
+        btnEditarEstablecimiento.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEditarEstablecimiento.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnEditarEstablecimiento);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 13;
+        jPanelCaracteristicasGenerales1.add(jToolBar1, gridBagConstraints);
+
         jTabbedPane1.addTab("Establecimientos", jPanelCaracteristicasGenerales1);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
@@ -995,6 +999,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextReferenciaDireccionEstablecimiento;
     private javax.swing.JTextField jTextTelefono;
     private javax.swing.JTextField jTextTelefonoEstablecimiento;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio11;
     private javax.swing.JLabel lblEspacio4;

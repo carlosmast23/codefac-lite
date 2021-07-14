@@ -122,7 +122,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     
 
     public NotaCreditoModel() {
-        
+        iniciarComponentesVista();
     }
     
     public PuntoEmision obtenerPuntoEmisionSeleccionado()
@@ -130,8 +130,11 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         return (PuntoEmision)getCmbPuntoEmision().getSelectedItem();
     }
     
-        
-    
+    protected void iniciarComponentesVista()
+    {
+        getToolBarSecuencialNCVenta().setVisible(true);
+        getPnlSecuencialNCCompra().setVisible(false);
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
@@ -574,34 +577,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
     
     private void limpiarDetalleFactura() {
-        /*
-        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-        
-        //TODO: REVISAR PORQUE ME TOCA HACER ESTA VALIDACION
-        if(tipoDocumentoEnum==null)
-        {
-            tipoDocumentoEnum=tipoDocumentoEnum.LIBRE;
-        }
-        
-        //Limpio las variables
-        switch(tipoDocumentoEnum)
-        {
-            case LIBRE:
-            case INVENTARIO:
-                productoSeleccionado=null;
-                break;
-                
-            case PRESUPUESTOS:
-                presupuestoSeleccionado=null;
-                break;
-                
-            case ACADEMICO:
-                rubroSeleccionado=null;
-                break;
-        
-        }
-        */    
-        
+       
         //Limpio los datos en la pantalla
         getTxtCantidad().setText("");
         getTxtDescripcion().setText("");
@@ -1061,25 +1037,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 
                 Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
                 productoSeleccionado = producto;
-                /*
-                switch (tipoDocumentoEnum) {
-                    case LIBRE:
-                    case INVENTARIO:
-                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                        productoSeleccionado = producto;
-                        break;
-                        
-                    case PRESUPUESTOS:
-                        Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                        presupuestoSeleccionado = presupuesto;
-                        break;
-                        
-                    case ACADEMICO:
-                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                        rubroSeleccionado = rubroEstudiante;
-                        break;
-                        
-                }*/
+
                 if(agregarDetallesFactura(facturaDetalle))
                 {
                     habilitarModoIngresoDatos();

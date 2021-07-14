@@ -18,9 +18,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 
 /**
  *
@@ -55,7 +57,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         jDateFechaEmision = new com.toedter.calendar.JDateChooser();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
-        lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblRuc = new javax.swing.JLabel();
@@ -67,10 +68,16 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         lblTelefonos = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox<>();
-        jToolBar3 = new javax.swing.JToolBar();
+        toolBarSecuencialNCVenta = new javax.swing.JToolBar();
         lblEstablecimiento = new javax.swing.JLabel();
         cmbPuntoEmision = new javax.swing.JComboBox<>();
         lblSecuencial = new javax.swing.JLabel();
+        pnlSecuencialNCCompra = new javax.swing.JPanel();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         PanelDatosNotaCredito = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -174,14 +181,14 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         jLabel36.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel36.setText("Fecha Emision:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(jLabel36, gridBagConstraints);
 
         jDateFechaEmision.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.03;
@@ -196,19 +203,14 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
 
         jLabel39.setText("             ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         panelDatosGenerales.add(jLabel39, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.weightx = 0.1;
-        panelDatosGenerales.add(lblEspacio1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 0.1;
         panelDatosGenerales.add(lblEspacio2, gridBagConstraints);
@@ -228,6 +230,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
@@ -236,7 +239,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Direccion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
@@ -246,7 +249,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         lblDireccion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblDireccion.setText("jLabel7");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
@@ -267,6 +270,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
@@ -275,7 +279,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setText("Telefonos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
@@ -285,7 +289,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         lblTelefonos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblTelefonos.setText("jLabel8");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -295,7 +299,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         jLabel28.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel28.setText("Tipo Documento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -303,32 +307,81 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
 
         cmbTipoDocumento.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(cmbTipoDocumento, gridBagConstraints);
 
-        jToolBar3.setBorder(null);
-        jToolBar3.setRollover(true);
+        toolBarSecuencialNCVenta.setBorder(null);
+        toolBarSecuencialNCVenta.setRollover(true);
 
         lblEstablecimiento.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         lblEstablecimiento.setText("001-");
-        jToolBar3.add(lblEstablecimiento);
+        toolBarSecuencialNCVenta.add(lblEstablecimiento);
 
         cmbPuntoEmision.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
-        jToolBar3.add(cmbPuntoEmision);
+        toolBarSecuencialNCVenta.add(cmbPuntoEmision);
 
         lblSecuencial.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         lblSecuencial.setText("-000000009");
-        jToolBar3.add(lblSecuencial);
+        toolBarSecuencialNCVenta.add(lblSecuencial);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
-        panelDatosGenerales.add(jToolBar3, gridBagConstraints);
+        panelDatosGenerales.add(toolBarSecuencialNCVenta, gridBagConstraints);
+
+        pnlSecuencialNCCompra.setLayout(new java.awt.GridBagLayout());
+
+        jTextField2.setText("123456789");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 20;
+        pnlSecuencialNCCompra.add(jTextField2, gridBagConstraints);
+
+        jTextField3.setText("001");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 15;
+        pnlSecuencialNCCompra.add(jTextField3, gridBagConstraints);
+
+        jTextField4.setText("001");
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 15;
+        pnlSecuencialNCCompra.add(jTextField4, gridBagConstraints);
+
+        jLabel26.setText("-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        pnlSecuencialNCCompra.add(jLabel26, gridBagConstraints);
+
+        jLabel27.setText("-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        pnlSecuencialNCCompra.add(jLabel27, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosGenerales.add(pnlSecuencialNCCompra, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1038,6 +1091,10 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarProveedorActionPerformed
 
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDatosAdicionales;
@@ -1075,6 +1132,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel31;
@@ -1099,10 +1158,11 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JToolBar jToolBar3;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
-    private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
@@ -1125,9 +1185,11 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblValorIce;
     private javax.swing.JLabel lblValorTotal;
     private javax.swing.JPanel panelDatosGenerales;
+    private javax.swing.JPanel pnlSecuencialNCCompra;
     private javax.swing.JTabbedPane tabTipoDocumentos;
     private javax.swing.JTable tblDatosAdicionales;
     private javax.swing.JTable tblDetalleNotaCredito;
+    private javax.swing.JToolBar toolBarSecuencialNCVenta;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigoDetalle;
     private javax.swing.JTextField txtDescripcion;
@@ -1411,6 +1473,23 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     public ComponenteDatosComprobanteElectronicosPanel getPnlDatosAdicionales() {
         return pnlDatosAdicionales;
     }
+
+    public JPanel getPnlSecuencialNCCompra() {
+        return pnlSecuencialNCCompra;
+    }
+
+    public void setPnlSecuencialNCCompra(JPanel pnlSecuencialNCCompra) {
+        this.pnlSecuencialNCCompra = pnlSecuencialNCCompra;
+    }
+
+    public JToolBar getToolBarSecuencialNCVenta() {
+        return toolBarSecuencialNCVenta;
+    }
+
+    public void setToolBarSecuencialNCVenta(JToolBar toolBarSecuencialNCVenta) {
+        this.toolBarSecuencialNCVenta = toolBarSecuencialNCVenta;
+    }
+    
     
 
 }

@@ -53,6 +53,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -80,7 +81,9 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -98,6 +101,7 @@ import net.sf.jasperreports.view.JasperViewer;
 public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>, InterfazPostConstructPanel ,ComponenteEnvioSmsInterface,ComponenteCorreoInterface{
 
     private static final Logger LOG = Logger.getLogger(ClienteModel.class.getName());
+    private static final Integer INDICE_TABLA_OBJETO=0;
 
     
     /**
@@ -126,7 +130,32 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         addListenerTexts();
         addListenerCombos();
         addListenerTablas();
+        addListenerPopUps();
         super.mapDatosIngresadosDefault.put(getjTextExtension(),"0");
+    }
+    
+    private void addListenerPopUps()
+    {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem jMenuItemEliminar = new JMenuItem("Eliminar");
+        
+        jMenuItemEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada = getTblEstablecimientos().getSelectedRow();
+                if (filaSeleccionada >= 0) {
+                    PersonaEstablecimiento establecimiento=(PersonaEstablecimiento) getTblEstablecimientos().getValueAt(filaSeleccionada,INDICE_TABLA_OBJETO);
+                    establecimiento.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                    //Construir de nuevo la lista con los datos actualizados
+                    construirVistaEstablecimientos();
+               }
+                
+            }
+        });
+        
+       jPopupMenu.add(jMenuItemEliminar);
+       getTblEstablecimientos().setComponentPopupMenu(jPopupMenu);
+        
     }
 
     @Override
@@ -937,14 +966,16 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     
     private void construirVistaEstablecimientos()
     {
-        String[] titulos={"Nombre Establecimiento","dirección","cod Sucursal","tipo"};
+        String[] titulos={"","Nombre Establecimiento","dirección","cod Sucursal","tipo"};
+        UtilidadesTablas.crearModeloTabla(titulos,new Class[]{Object.class,String.class,String.class,String.class,String.class});
         DefaultTableModel modeloTabla=new DefaultTableModel(titulos,0);
         
         if(persona.getEstablecimientos()!=null)
         {
-            for (PersonaEstablecimiento establecimiento : persona.getEstablecimientos()) {
+            for (PersonaEstablecimiento establecimiento : persona.getEstablecimientosActivos()) {
                 
-                modeloTabla.addRow(new String[]{
+                modeloTabla.addRow(new Object[]{
+                    establecimiento,
                     establecimiento.getNombreComercial(),
                     establecimiento.getDireccion(),
                     establecimiento.getCodigoSucursal(),

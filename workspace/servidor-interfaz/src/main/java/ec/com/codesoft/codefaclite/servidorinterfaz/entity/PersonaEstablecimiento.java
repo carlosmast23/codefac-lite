@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal.TipoSucursalEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -68,6 +69,9 @@ public class PersonaEstablecimiento implements  Serializable{
     
     @Column(name = "LONGITUD")
     private BigDecimal longitud;
+    
+    @Column(name = "ESTADO")
+    private String estado;
     
     @JoinColumn(name ="PERSONA_ID")
     private Persona persona;
@@ -218,7 +222,22 @@ public class PersonaEstablecimiento implements  Serializable{
     {
         return UtilidadesWeb.construirUrlGoogleMaps(latitud, longitud);
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
     
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
 
     @Override
     public int hashCode() {

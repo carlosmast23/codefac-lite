@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -421,6 +422,15 @@ public class Persona implements Serializable, Comparable<Persona> {
     }*/
     public List<PersonaEstablecimiento> getEstablecimientos() {
         return establecimientos;
+    }
+    
+    ///Metodo que devuelve solo los establecimientos activos
+    public List<PersonaEstablecimiento> getEstablecimientosActivos() {
+        if(establecimientos!=null)
+        {
+            return establecimientos.stream().filter(e -> e.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO)).collect(Collectors.toList());
+        }
+        return new ArrayList<PersonaEstablecimiento>();
     }
 
     public void setEstablecimientos(List<PersonaEstablecimiento> establecimientos) {

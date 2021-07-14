@@ -149,7 +149,7 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
         }
         else
         {
-            queryString = "SELECT DISTINCT  u FROM PersonaEstablecimiento u "+leftJoinEstudiante+"  WHERE ";
+            queryString = "SELECT DISTINCT  u FROM PersonaEstablecimiento u "+leftJoinEstudiante+"  WHERE u.estado='A' AND ";
         }
         
         queryString+=" u.persona.estado=?3 "+queryFiltroEmpresa+" AND ( LOWER(u.persona.razonSocial) like ?1 OR u.persona.identificacion like ?1 OR LOWER(u.nombreComercial) like ?1 ";

@@ -224,11 +224,11 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //Si no existe el proveedor entonces creo un nuevo proveedor
         if(proveedor==null)
         {
-            String razonSocial=comprobanteElectronico.getRazonSocialComprador();
+            String razonSocial=comprobanteElectronico.getInformacionTributaria().getRazonSocial();
             String direccion=comprobanteElectronico.getDireccionEstablecimiento();
             //String tipoIdentificacion=comprobanteElectronico.getTipoDocumento()
             
-            ServiceFactory.getFactory().getPersonaServiceIf().crearPlantillaPersona(
+            proveedor=ServiceFactory.getFactory().getPersonaServiceIf().crearPlantillaPersona(
                     empresa, 
                     rucProveedor, 
                     Persona.TipoIdentificacionEnum.CEDULA,  //Todo: Cambiar por el tipo de identificacion correcta
