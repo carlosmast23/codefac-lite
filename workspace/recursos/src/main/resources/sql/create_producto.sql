@@ -60,3 +60,13 @@ create table PRODUCTO_ENSAMBLE
     CANTIDAD integer, 
     primary key (ID)
 );
+
+create table MARCA_PRODUCTO
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    NOMBRE varchar(100),
+    DESCRIPCION varchar(100),
+    FECHA_CREACION TIMESTAMP,
+    FECHA_ULTIMA_MODIFICACION TIMESTAMP,
+    primary key (ID)
+);
