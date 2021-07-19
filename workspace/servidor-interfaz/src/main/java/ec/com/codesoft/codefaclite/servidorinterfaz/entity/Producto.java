@@ -84,8 +84,8 @@ public class Producto implements Serializable, Comparable<Producto> {
     @Column(name = "STOCK_INICIAL")
     private Long stockInicial;
 
-    @Column(name = "MARCA")
-    private String marca;
+    //@Column(name = "MARCA")
+    //private String marca;
 
     @Column(name = "IMAGEN")
     private String imagen;
@@ -116,6 +116,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
+    
+    @JoinColumn(name = "MARCA_PRODUCTO_ID")
+    private MarcaProducto marcaProducto;
     
     @Column(name = "PVP_4")
     private BigDecimal pvp4;
@@ -255,13 +258,13 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.stockInicial = stockInicial;
     }
 
-    public String getMarca() {
+    /*public String getMarca() {
         return marca;
     }
 
     public void setMarca(String marca) {
         this.marca = marca;
-    }
+    }*/
 
     public String getImagen() {
         return imagen;
@@ -405,6 +408,16 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setPrecioSinSubsidio(BigDecimal precioSinSubsidio) {
         this.precioSinSubsidio = precioSinSubsidio;
     }
+
+    public MarcaProducto getMarcaProducto() {
+        return marcaProducto;
+    }
+
+    public void setMarcaProducto(MarcaProducto marcaProducto) {
+        this.marcaProducto = marcaProducto;
+    }
+    
+    
     
     /**
      *=========================================================================

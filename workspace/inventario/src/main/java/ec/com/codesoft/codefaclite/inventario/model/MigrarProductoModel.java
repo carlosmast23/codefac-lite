@@ -273,7 +273,8 @@ public class MigrarProductoModel extends MigrarModel {
                          */
                         producto.setCantidadMinima(stockMinimo.intValue());
                         producto.setStockInicial(0l);
-                        producto.setMarca(marca);
+                        //Todo Migrar la marca queda temporalmente descativada por que ahora es una tabla aparte
+                        //producto.setMarca(marca);
                         //producto.setPrecioDistribuidor(BigDecimal.ZERO);
                         //producto.setPrecioTarjeta(BigDecimal.ZERO);
                         producto.setGarantia(EnumSiNo.NO.getLetra());

@@ -146,7 +146,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setPvp6(new BigDecimal(getTxtPV6().getText()));
         
         //producto.setStockInicial(Long.parseLong(getTxtStockInicial().getText()));
-        producto.setMarca(getTxtMarca().getText());
+        //producto.setMarca(getTxtMarca().getText());
         producto.setImagen(getTxtImagenProducto().getText());
 
         //catProducto= (CategoriaProducto) getCmbCategoriaProducto().getSelectedItem();
@@ -458,7 +458,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtPrecioDistribuidor().setText((controlador.producto.getPrecioDistribuidor() != null) ? controlador.producto.getPrecioDistribuidor() + "" : "");
         getTxtPrecioTarjeta().setText((controlador.producto.getPrecioTarjeta() != null) ? controlador.producto.getPrecioTarjeta() + "" : "");
         //getTxtStockInicial().setText((producto.getStockInicial() != null) ? producto.getStockInicial() + "" : "");
-        getTxtMarca().setText((controlador.producto.getMarca() != null) ? controlador.producto.getMarca() + "" : "");
+        //getTxtMarca().setText((controlador.producto.getMarca() != null) ? controlador.producto.getMarca() + "" : "");
         getTxtImagenProducto().setText((controlador.producto.getImagen() != null) ? controlador.producto.getImagen() + "" : "");
         //getCmbCategoriaProducto().setSelectedItem(producto.getCatalogoProducto().getCategoriaProducto());
         getTxtCaracteristica().setText((controlador.producto.getCaracteristicas() != null) ? controlador.producto.getCaracteristicas() + "" : "");

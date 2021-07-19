@@ -24,7 +24,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa>
         super(Empresa.class);
     }
     
-        public List<Empresa> obtenerTodosActivosFacade(OrdenarEnum ordenarEnum)
+    public List<Empresa> obtenerTodosActivosFacade(OrdenarEnum ordenarEnum)
     {
         try
         {   

@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -58,6 +59,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private List<ImpuestoDetalle> iceList;
     private List<ImpuestoDetalle> irbpnrList;
     private List<IvaOpcionEnum> ivaOpcionList;
+    private List<MarcaProducto> marcaProductoList;
     
     //private Interfaz interfaz;
     private CategoriaProducto categoriaSeleccionada;
@@ -66,6 +68,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private ImpuestoDetalle irbpnrSeleccionado;
     private IvaOpcionEnum ivaOpcionSeleccionado;
     private Boolean generarCodigoAutomatico;
+    //private MarcaProducto marcaProductoSeleccionado;
     
     public Producto producto;
 
@@ -162,6 +165,12 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         
         CategoriaProductoServiceIf catProdService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
         categoriaProductosList = catProdService.obtenerTodosPorEmpresa(session.getEmpresa());     
+        
+        try {
+            marcaProductoList=marcaProductoList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         cargarDatosIva();
         cargarDatosIce();
@@ -474,6 +483,16 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     public void setGenerarCodigoAutomatico(Boolean generarCodigoAutomatico) {
         this.generarCodigoAutomatico = generarCodigoAutomatico;
     }
+
+    public List<MarcaProducto> getMarcaProductoList() {
+        return marcaProductoList;
+    }
+
+    public void setMarcaProductoList(List<MarcaProducto> marcaProductoList) {
+        this.marcaProductoList = marcaProductoList;
+    }
+    
+    
     
     
 

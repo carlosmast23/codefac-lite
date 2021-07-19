@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -63,7 +64,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
      * Creates new form ProductoForm
      */
     public ProductoForm() {
-        initComponents();
+        initComponents();        
     }
 
     /**
@@ -108,7 +109,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         chkGenerarCodigoAutomatico = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
-        txtMarca = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtCaracteristica = new javax.swing.JTextArea();
@@ -136,6 +136,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         txtPV5 = new javax.swing.JTextField();
         txtPV6 = new javax.swing.JTextField();
         txtPV4 = new javax.swing.JTextField();
+        cmbMarca = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatosEnsamble = new javax.swing.JTable();
@@ -437,14 +438,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel16, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel5.add(txtMarca, gridBagConstraints);
 
         jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel17.setText("Caracteristicas:");
@@ -663,6 +656,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(txtPV4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbMarca, gridBagConstraints);
 
         tabMenu.addTab("Info Adicional", jPanel5);
 
@@ -943,6 +943,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<EnumSiNo> cmbGenerarCodigoBarras;
     private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPublico;
     private javax.swing.JComboBox<EnumSiNo> cmbManejaInventario;
+    private javax.swing.JComboBox<MarcaProducto> cmbMarca;
     private javax.swing.JComboBox<TipoProductoEnum> cmbTipoProducto;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIrbpnr;
@@ -1013,7 +1014,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCodigoPersonalizado;
     private javax.swing.JTextField txtCodigoUPC;
     private javax.swing.JTextField txtImagenProducto;
-    private javax.swing.JTextField txtMarca;
     private javax.swing.JTextArea txtObservaciones;
     private javax.swing.JTextField txtPV4;
     private javax.swing.JTextField txtPV5;
@@ -1102,7 +1102,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.txtImagenProducto = txtImagenProducto;
     }
 
-    @LimpiarAnotacion
+    /*@LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Marca", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtMarca() {
         return txtMarca;
@@ -1110,7 +1110,17 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setTxtMarca(JTextField txtMarca) {
         this.txtMarca = txtMarca;
+    }*/
+
+    @ComboBoxBinding(source ="controlador.marcaProductoList" , valueSelect ="controlador.producto.marcaProducto" )
+    public JComboBox<MarcaProducto> getCmbMarca() {
+        return cmbMarca;
     }
+
+    public void setCmbMarca(JComboBox<MarcaProducto> cmbMarca) {
+        this.cmbMarca = cmbMarca;
+    }
+    
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = false,max =100 , expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Observaciones", expresionRegularMensaje = "No se permiten caracteres especiales")
