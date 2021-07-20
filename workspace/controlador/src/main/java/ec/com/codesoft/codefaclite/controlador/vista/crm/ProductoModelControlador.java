@@ -320,6 +320,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         producto.setTipoProductoEnum(TipoProductoEnum.PRODUCTO);
         producto.setGarantiaEnum(EnumSiNo.NO);
         producto.setValorUnitario(BigDecimal.ZERO);
+        producto.setMarcaProducto(null);
         
         ivaOpcionSeleccionado=IvaOpcionEnum.SIN_IVA;
         categoriaSeleccionada=null;
