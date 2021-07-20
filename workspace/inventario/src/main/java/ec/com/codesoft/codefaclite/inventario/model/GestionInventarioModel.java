@@ -200,7 +200,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         //Fecha de ingreso 
         
         java.util.Date fechaUtil=getCmbFechaIngreso().getDate();
-        kardexDetalle.setFechaIngreso(UtilidadesFecha.castDateToTimeStamp(fechaUtil));
+        kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
         kardexDetalle.setFechaDocumento(new java.sql.Date(fechaUtil.getTime()));
         
         
