@@ -32,6 +32,11 @@ public abstract class UtilidadesRmi {
     
     
     public static Object deserializar(byte[] objSerializado) throws IOException, ClassNotFoundException {
+        
+        if(objSerializado==null)
+        {
+            return null;
+        }        
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(objSerializado);
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
         return objectInputStream.readObject();

@@ -743,20 +743,24 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             //JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
             ComprobanteEntity comprobanteEntity=obtenerComprobantePorClaveAcceso(claveAccesoObj);
             ComprobanteDataInterface comprobanteDataIf=convertirComprobanteEntityToDataFacturacionElectronica(comprobanteEntity);
-            ComprobanteElectronico comprobanteElectronicoData=convertirComprobanteDatoToComprobateElectronico(comprobanteDataIf);
-            
-            String fechaAutorizacionStr="";
-            if(comprobanteEntity.getFechaAutorizacionSri()!=null)
+            if(comprobanteDataIf!=null)
             {
-                fechaAutorizacionStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA.format(comprobanteEntity.getFechaAutorizacionSri());
+                ComprobanteElectronico comprobanteElectronicoData=convertirComprobanteDatoToComprobateElectronico(comprobanteDataIf);
+
+                String fechaAutorizacionStr="";
+                if(comprobanteEntity.getFechaAutorizacionSri()!=null)
+                {
+                    fechaAutorizacionStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA.format(comprobanteEntity.getFechaAutorizacionSri());
+                }
+
+                //TODO: Optimizar para ver si se puede setear este dato desde una etapa previa para tener mejor organizado el codigo
+                comprobanteElectronicoData.getInformacionTributaria().setClaveAcceso(claveAcceso);            
+                JasperPrint jasperPrint=comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronicoData, claveAcceso, fechaAutorizacionStr);
+                return UtilidadesRmi.serializar(jasperPrint);
             }
-            
-            //TODO: Optimizar para ver si se puede setear este dato desde una etapa previa para tener mejor organizado el codigo
-            comprobanteElectronicoData.getInformacionTributaria().setClaveAcceso(claveAcceso);            
-            JasperPrint jasperPrint=comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronicoData, claveAcceso, fechaAutorizacionStr);
             //JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
             
-            return UtilidadesRmi.serializar(jasperPrint);
+            
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -771,6 +775,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      */
     public ComprobanteDataInterface convertirComprobanteEntityToDataFacturacionElectronica(ComprobanteEntity comprobanteEntity)
     {
+        if(comprobanteEntity==null)
+        {
+            return null;
+        }
+        
         if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
         {
             Factura factura=(Factura) comprobanteEntity;

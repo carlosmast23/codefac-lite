@@ -255,14 +255,20 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     public void error(ComprobanteElectronicoException cee,String claveAcceso) throws RemoteException {
         try {
             byte[] resporteSerializado = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,facturaProcesando.getEmpresa());
-            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(resporteSerializado);
+                        
             monitorData.getBtnReporte().setEnabled(true);
             monitorData.getBtnCerrar().setEnabled(true);
+            
+            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(resporteSerializado);
+            
             monitorData.getBtnReporte().addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(ActionEvent e) 
+                {
                     JOptionPane.showMessageDialog(null,cee.obtenerErrorFormato());
-                    monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                    
+                    monitorData.getBtnAbrir().addActionListener(new ActionListener() 
+                    {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if(verificarImprimirComprobanteVenta())

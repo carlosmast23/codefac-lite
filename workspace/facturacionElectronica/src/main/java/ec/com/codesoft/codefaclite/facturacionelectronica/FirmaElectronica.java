@@ -269,7 +269,7 @@ public class FirmaElectronica {
         return null;
     }*/
     
-    private IPKStoreManager obtenerAlmacenFirma(String rutaAlmacenCertificado,String passwordAlmacenCertificado)
+    private IPKStoreManager obtenerAlmacenFirma(String rutaAlmacenCertificado,String passwordAlmacenCertificado) throws ComprobanteElectronicoException
     {
         try {
             IPKStoreManager storeManager = null;
@@ -285,6 +285,7 @@ public class FirmaElectronica {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ComprobanteElectronicoException("No se puede encontrar el archivo de la firma","Firma",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         } catch (IOException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchAlgorithmException ex) {
