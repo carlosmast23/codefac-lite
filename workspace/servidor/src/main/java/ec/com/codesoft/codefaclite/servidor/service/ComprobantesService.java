@@ -159,6 +159,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         entityManager.merge(comprobante);
     }
     
+    //INFO: Metodo que me sirve para cambiar el Estado a Autorizado en especial para coorregir problemas que toca cambiar el estado manualmente desde los clientes
     public void autorizarComprobante(ComprobanteEntity comprobanteElectronica) throws RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -584,13 +585,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             ComprobanteEntity comprobante = obtenerComprobantePorClaveAcceso(clave);
             if (comprobante != null) {
                 //comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                setearDatosAutorizacionComprobante(comprobante, documentoAutorizado);
-                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                setearDatosAutorizacionComprobanteConTransaccion(comprobante, documentoAutorizado);
+                /*ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                     @Override
                     public void transaccion() throws ServicioCodefacException, RemoteException {
                         entityManager.merge(comprobante);
                     }
-                });
+                });*/
 
             } else {
                 LOG.log(Level.SEVERE, "Error se autorizo el comprobante pero no se encuentra el registro; " + documentoAutorizado.getNumeroAutorizacion());
@@ -1028,7 +1029,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
     }
     
-    protected void cambiarAutorizadoLotes(List<Autorizacion> autorizaciones)
+    /*protected void cambiarAutorizadoLotes(List<Autorizacion> autorizaciones)
     {
         for (Autorizacion autorizacion : autorizaciones) {
             if (autorizacion.getEstado().equals("AUTORIZADO")) 
@@ -1056,7 +1057,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 }
             }            
         }
-    }
+    }*/
     
     private Cartera crearCarteraFactura(Factura factura)
     {
@@ -1363,27 +1364,39 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             public void autorizado(Autorizacion documentoAutorizado) {
                 
                 try {
+                    ComprobanteEntity comprobanteEditar=entityManager.merge(comprobanteOriginal);
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"Procesando Autorizar Preimpreso: "+comprobanteEditar.getPreimpreso()+" | documento: "+comprobanteEditar.getCodigoDocumentoEnum().getNombre());
+                    setearDatosAutorizacionComprobanteConTransaccion(comprobanteEditar,documentoAutorizado);
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"Documento AUTORIZADO Correctamente: "+comprobanteEditar.getPreimpreso()+" | documento: "+comprobanteEditar.getCodigoDocumentoEnum().getNombre());                    
+                    
+                    
+                    //setearDatosAutorizac (comprobanteEditar,documentoAutorizado);
+                    
+                    /*try {
                     ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                        @Override
-                        public void transaccion() {
-                            //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
-                            //ComprobanteEntity comprobanteOriginal=buscarPorId(comprobanteOriginal.getId)                            
-                            ComprobanteEntity comprobanteEditar=entityManager.merge(comprobanteOriginal); 
-                            LOG.log(Level.INFO,"Actualizando la informacion del comprobante ");
-                            //comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                            //setearDatosAutorizacionComprobante(comprobanteOriginal,documentoAutorizado);               
-                            //entityManager.merge(comprobanteOriginal);
-                            comprobanteEditar.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
-                            LOG.log(Level.INFO,"Cambiando el estado Autorizado del comprobante ");
-                            setearDatosAutorizacionComprobante(comprobanteEditar,documentoAutorizado);               
-                            LOG.log(Level.INFO,"Cambiando el resto de datos del comprobante autorizado");
-                            entityManager.merge(comprobanteEditar);
-                            LOG.log(Level.INFO,"Guardando cambios del comprobante autorizado");
-                        }
+                    @Override
+                    public void transaccion() {
+                    //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
+                    //ComprobanteEntity comprobanteOriginal=buscarPorId(comprobanteOriginal.getId)
+                    ComprobanteEntity comprobanteEditar=entityManager.merge(comprobanteOriginal);
+                    LOG.log(Level.INFO,"Actualizando la informacion del comprobante ");
+                    //comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                    //setearDatosAutorizacionComprobante(comprobanteOriginal,documentoAutorizado);
+                    //entityManager.merge(comprobanteOriginal);
+                    //comprobanteEditar.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+                    LOG.log(Level.INFO,"Cambiando el estado Autorizado del comprobante ");
+                    setearDatosAutorizacionComprobanteConTransaccion(comprobanteEditar,documentoAutorizado);
+                    LOG.log(Level.INFO,"Cambiando el resto de datos del comprobante autorizado");
+                    //entityManager.merge(comprobanteEditar);
+                    LOG.log(Level.INFO,"Guardando cambios del comprobante autorizado");
+                    }
                     });
 
                     //Enviar mensaje
                     //ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
+                    } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }*/
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -1396,21 +1409,29 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     }
     
-    private void setearDatosAutorizacionComprobante(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,Autorizacion documentoAutorizado)
+    private void setearDatosAutorizacionComprobanteConTransaccion(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,Autorizacion documentoAutorizado) throws ServicioCodefacException
     {
-        if(documentoAutorizado.getEstado().equals("AUTORIZADO"))
-        {
-            comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
-            XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
-            java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());
-            comprobanteOriginal.setFechaAutorizacionSri(fechaAutorizacion);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                if(documentoAutorizado.getEstado().equals("AUTORIZADO"))
+                {
+                    comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
+                    XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
+                    java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());
+                    comprobanteOriginal.setFechaAutorizacionSri(fechaAutorizacion);
 
-            ComprobanteEntity.TipoAmbienteEnum enumAmbiente = ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(documentoAutorizado.getAmbiente());
-            if (enumAmbiente != null) {
-                comprobanteOriginal.setTipoAmbiente(enumAmbiente.getLetra());
+                    ComprobanteEntity.TipoAmbienteEnum enumAmbiente = ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(documentoAutorizado.getAmbiente());
+                    if (enumAmbiente != null) {
+                        comprobanteOriginal.setTipoAmbiente(enumAmbiente.getLetra());
+                    }
+                    
+                     entityManager.merge(comprobanteOriginal);
+                }
+
             }
-        }
-        
+        });        
+                
     }
     
     
