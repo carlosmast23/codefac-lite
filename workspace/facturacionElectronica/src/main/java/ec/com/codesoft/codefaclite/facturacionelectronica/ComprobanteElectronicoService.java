@@ -52,6 +52,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -910,7 +911,8 @@ public class ComprobanteElectronicoService implements Runnable {
         try {
             
             //VERIFICAR si existe un XML AUTORIZADO primero obtengo el formato normal del XML FIRMADO
-            String xmlStr=new String(Files.readAllBytes(archivoXml.toPath()));
+            String xmlStr=new String(Files.readAllBytes(archivoXml.toPath()),StandardCharsets.UTF_8);
+            
             final String etiquetaAperturaFirmado="[CDATA[";
             final String etiquetaCierreFirmado="]]>";
             if(xmlStr.indexOf(etiquetaAperturaFirmado)>=0)

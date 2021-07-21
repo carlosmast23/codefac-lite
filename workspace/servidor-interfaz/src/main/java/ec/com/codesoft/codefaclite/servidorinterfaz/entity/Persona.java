@@ -767,6 +767,8 @@ public class Persona implements Serializable, Comparable<Persona> {
             }
             return null;
         }
+        
+        
 
         @Override
         public String toString() {

@@ -219,19 +219,21 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     private Persona cargarProveedorCompraDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
+        ///TODO: Revisar el problema para grabar en Utf porque algunos datos estan viniendo con tildes
         String rucProveedor=comprobanteElectronico.getInformacionTributaria().getRuc();
         Persona proveedor=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(rucProveedor, GeneralEnumEstado.ACTIVO);
         //Si no existe el proveedor entonces creo un nuevo proveedor
         if(proveedor==null)
         {
             String razonSocial=comprobanteElectronico.getInformacionTributaria().getRazonSocial();
-            String direccion=comprobanteElectronico.getDireccionEstablecimiento();
+            String direccion=comprobanteElectronico.getInformacionTributaria().getDirecionMatriz();
             //String tipoIdentificacion=comprobanteElectronico.getTipoDocumento()
             
+                        
             proveedor=ServiceFactory.getFactory().getPersonaServiceIf().crearPlantillaPersona(
                     empresa, 
                     rucProveedor, 
-                    Persona.TipoIdentificacionEnum.CEDULA,  //Todo: Cambiar por el tipo de identificacion correcta
+                    Persona.TipoIdentificacionEnum.RUC,  //Todo: Por el momento siempre dejo RUC, por que si me mandan factura electronica tiene que ser ruc
                     razonSocial, 
                     direccion, 
                     OperadorNegocioEnum.PROVEEDOR

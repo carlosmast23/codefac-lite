@@ -266,6 +266,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return null;
     }
     
+    //TODO: Ver si este metodo se mueve a la propia clase de PERSONA
     public Persona crearPlantillaPersona(Empresa empresa,String identificacion,TipoIdentificacionEnum tipoIdentificacionEnum,String razonSocial,String direccion,OperadorNegocioEnum operadorNegocioEnum) throws ServicioCodefacException, java.rmi.RemoteException
     {
         //Crear la plantilla de la persona
@@ -285,6 +286,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         establecimiento.setDireccion(direccion);
         establecimiento.setPersona(persona);
         establecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
+        establecimiento.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         
         persona.setEstablecimientos(Arrays.asList(establecimiento));
         return persona;

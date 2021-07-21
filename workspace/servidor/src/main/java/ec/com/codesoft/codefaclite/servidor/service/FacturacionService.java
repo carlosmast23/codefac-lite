@@ -354,6 +354,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();
+                
+                //Genero un LOG DE LAS VENTAS para tener un registro en los logs por algun caso si la base de datos falla
+                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Procesando factura # :"+ factura.getPreimpreso()+" | fecha de emisión: "+factura.getFechaEmision()+" | cliente: "+factura.getRazonSocial()+" | documento: "+factura.getCodigoDocumentoEnum().getNombre()+" | iva: "+factura.getIva()+" | total: "+factura.getTotal());
+                
             }
         });
         return factura;
@@ -388,10 +392,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             try
             {
                 //´TODO: Por el momento todas las facturas en lote se van a facturar con la fecha actual
-                //factura.factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
-                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Procesando lote proforma :"+factura.factura.getPreimpreso());
+                //factura.factura.setFechaEmision(UtilidadesFecha.getFechaHoy());                
                 Factura facturaGrabada=grabar(factura.factura,factura.prestamo,factura.carteraPrestamo);
-                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Factura generada en lote # :"+facturaGrabada.getPreimpreso());
                 //Si la factura se termina de procesar correctamento agrego a la respuesta
                 respuesta.agregarFacturaProcesada(factura.factura);
             }
