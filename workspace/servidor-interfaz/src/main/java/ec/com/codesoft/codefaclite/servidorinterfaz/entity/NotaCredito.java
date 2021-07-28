@@ -28,7 +28,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- *
+ * TODO: Corregir que existen propiedades duplicadas tanto en NotaCredito como en ComprobanteVentaNotaCreditoAbstract
  * @author Carlos
  */
 @Entity
@@ -603,6 +603,18 @@ public class NotaCredito extends ComprobanteVentaNotaCreditoAbstract<NotaCredito
  
     
     }
+
+    @Override
+    public BigDecimal getSubtotalImpuestosMenosDescuento() {
+        return subtotalImpuestos.subtract(descuentoImpuestos);
+    }
+
+    @Override
+    public BigDecimal getSubtotalSinImpuestosMenosDescuento() {
+        return subtotalSinImpuestos.subtract(descuentoSinImpuestos);
+    }
+    
+    
 
     @Override
     public List<NotaCreditoAdicional> getDatosAdicionalesComprobante() {

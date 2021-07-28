@@ -32,6 +32,8 @@ import javax.persistence.Table;
 @Table(name = "CARTERA_DETALLE")
 public class CarteraDetalle implements Serializable,Cloneable {
     
+    private static Long idTemporal=1l;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -202,7 +204,12 @@ public class CarteraDetalle implements Serializable,Cloneable {
         return obj;
     }
     
-    
+    //TODO: Optimizar solucion por que como son id que genera por cada instancia de los clientes se pueden chocar por algun motivo
+    //SOLUCION: Parece que los ids deberia generar el servidor
+    public Long generarIdTemporal()
+    {
+        return idTemporal++;
+    }
     
     
     

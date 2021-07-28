@@ -745,7 +745,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 carteraDetalle.setDescripcion(detalle.getDescripcion());
                 carteraDetalle.setSaldo(detalle.getTotal());
                 carteraDetalle.setTotal(detalle.getTotal());
-                carteraDetalle.setId(carteraDetalle.hashCode() * -1l);
+                carteraDetalle.setId(carteraDetalle.generarIdTemporal() * -1l);
                 cartera.addDetalle(carteraDetalle);
                 
                 /**
@@ -802,7 +802,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 carteraDetalle.setDescripcion(detalle.getDescripcion());
                 carteraDetalle.setSaldo(detalle.getTotal());
                 carteraDetalle.setTotal(detalle.getTotal());
-                carteraDetalle.setId(carteraDetalle.hashCode() * -1l);
+                carteraDetalle.setId(carteraDetalle.generarIdTemporal() * -1l);
                 cartera.addDetalle(carteraDetalle);
                 
                 /**
