@@ -418,14 +418,21 @@ public class ComprobanteElectronicoService implements Runnable {
     {
         try {
             
-            if(escuchaLote!=null)escuchaLote.iniciado();
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService iniciando lote  ... ");
+            if(escuchaLote!=null)escuchaLote.iniciado();            
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService posiniciando lote  ... ");
             
             if (etapaActual.equals(ETAPA_GENERAR)){
-                List<ClaveAcceso> listaClaves=generarLote();
-                if(escuchaLote!=null)escuchaLote.clavesGeneradas(listaClaves);
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_GENERAR  ... ");
+                List<ClaveAcceso> listaClaves=generarLote();                
                 
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService PRE escuchaLote.clavesGeneradas  ... ");
+                if(escuchaLote!=null)escuchaLote.clavesGeneradas(listaClaves);
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService POST escuchaLote.clavesGeneradas  ... ");
+                
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService PRE escuchaLote.procesando ... ");
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
-                System.out.println("generar lote()");
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService POST escuchaLote.procesando ... ");
 
                 if (etapaLimiteProcesar<=ETAPA_GENERAR) {
                     if(escuchaLote!=null)escuchaLote.termino(null);
@@ -434,8 +441,11 @@ public class ComprobanteElectronicoService implements Runnable {
 
                 etapaActual++;
             }
+            
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_PRE_VALIDAR PRE ... ");
 
             if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_PRE_VALIDAR  ... ");
                 preValidacion();
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("preValidacion lote()");
@@ -449,6 +459,7 @@ public class ComprobanteElectronicoService implements Runnable {
             
             
             if (etapaActual.equals(ETAPA_FIRMAR)) {
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_FIRMAR  ... ");
                 claveAcceso = obtenerClaveAccesoLote();
                 firmarLote();
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
@@ -485,6 +496,7 @@ public class ComprobanteElectronicoService implements Runnable {
             
             
             if (etapaActual.equals(ETAPA_RIDE)) {
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_FIRMAR  ... ");
                 if (enviarCorreoComprobanteAutorizado == false)
                 {
                     generarRideLote(CARPETA_FIRMADOS);
@@ -506,7 +518,7 @@ public class ComprobanteElectronicoService implements Runnable {
             
             
             if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
-                
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_ENVIO_COMPROBANTE  ... ");
                 if(enviarCorreoComprobanteAutorizado==false && enviarCorreos==true)
                 {
                     enviarComprobanteLoteCorreo(CARPETA_FIRMADOS);
@@ -525,6 +537,7 @@ public class ComprobanteElectronicoService implements Runnable {
             
             List<Comprobante> comprobanteConProblemasEnviar=new ArrayList<Comprobante>(); //Nota: Esta variable la pongo fuera por si el usuario solo manda a verificar desde la etapa final
             if (etapaActual.equals(ETAPA_ENVIAR)) {
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_ENVIAR  ... ");
                 comprobanteConProblemasEnviar= enviarSriLote();
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("enviarSri lote()");
@@ -537,6 +550,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             
             if (etapaActual.equals(ETAPA_AUTORIZAR)) {
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_AUTORIZAR  ... ");
                 autorizarSriLote();
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 if(escuchaLote!=null)escuchaLote.datosAutorizados(listaLotesAutorizados(servicioSri.getAutorizacion(),comprobanteConProblemasEnviar));
@@ -551,6 +565,7 @@ public class ComprobanteElectronicoService implements Runnable {
             
             if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE_AUTORIZADO)) {
 
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_ENVIO_COMPROBANTE_AUTORIZADO  ... ");
                 if(enviarCorreoComprobanteAutorizado)
                 {
                     generarRideLote(CARPETA_AUTORIZADOS);
@@ -569,6 +584,7 @@ public class ComprobanteElectronicoService implements Runnable {
                     escuchaLote.procesando(etapaActual);
                 }
                 if (etapaLimiteProcesar <= ETAPA_ENVIO_COMPROBANTE_AUTORIZADO) {
+                    Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_ENVIO_COMPROBANTE_AUTORIZADO  ... ");
                     if (escuchaLote != null) {
                         escuchaLote.termino(servicioSri.getAutorizacion());
                     }

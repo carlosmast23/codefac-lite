@@ -926,7 +926,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws java.rmi.RemoteException,ServicioCodefacException {
-                    
+                        
+                        factura.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
                         ComprobantesService comprobanteService=new ComprobantesService();
                         comprobanteService.eliminarComprobanteSinTransaccion(factura);
                         

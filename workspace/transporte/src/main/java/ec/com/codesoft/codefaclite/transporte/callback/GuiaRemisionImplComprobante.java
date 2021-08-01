@@ -109,6 +109,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
                 monitorData.getBarraProgreso().setValue(65);
             }
             
+            //TODO: Esta etapa de autorizar no se debe realizar en el cliente, debe estar en el servidor
             guiaRemision.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
             
             monitorData.getBtnAbrir().setEnabled(true);
@@ -122,6 +123,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(80);
+            //TODO: No se debe cambiar el estado en el el cliente, debe ser en el servidor
             guiaRemision.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 
@@ -131,6 +133,7 @@ public class GuiaRemisionImplComprobante extends UnicastRemoteObject implements 
 
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
             monitorData.getBarraProgreso().setValue(100);
+            //TODO: No se debe cambiar el estado en el el cliente, debe ser en el servidor
             guiaRemision.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 

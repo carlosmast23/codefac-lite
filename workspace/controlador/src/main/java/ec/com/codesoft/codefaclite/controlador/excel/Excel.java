@@ -232,14 +232,14 @@ public class Excel<T>
             //Organizar de mejor manera por que esta solucion ocupa muchos recursos por que tiene que ahcer consultas al servidorr
             //SOLUCION: Poner que el parametro que necesito venga por el constructo , pero algunas clases por ejemplo de contralador no tiene ese dato y esta demoroso
             List<Empresa> empresasList=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos(OrdenarEnum.ASCEDENTE);
-            Empresa empresaDefecto=empresasList.get(0);
-            TipoLicenciaEnum tipoLicenciaEnum=ServiceFactory.getFactory().getUtilidadesServiceIf().getTipoLicencia(empresaDefecto);            
+            //Empresa empresaDefecto=empresasList.get(0);
+            //TipoLicenciaEnum tipoLicenciaEnum=ServiceFactory.getFactory().getUtilidadesServiceIf().getTipoLicencia(empresaDefecto);            
             //Verificar que los usuarios gratuitos no puedan sacar reportes gratuitos
-            if (tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
-            {
-                DialogoCodefac.mensaje(new CodefacMsj("La versión GRATUITA no soporta reportes en excel", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                return;
-            }
+            //if (tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
+            //{
+            //    DialogoCodefac.mensaje(new CodefacMsj("La versión GRATUITA no soporta reportes en excel", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            //    return;
+            //}
             
             try
             {

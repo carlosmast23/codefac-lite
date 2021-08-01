@@ -234,10 +234,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 {
                     etapaLimite=100;
                 }
-                else
-                {
-                    //etapaLimite++;
-                }
+                
                 
                 switch (etapa) {
 
@@ -366,7 +363,10 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                     procesoSincronico=true;
                 }
                 
+                Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.INFO,"Preparando comprobantes en el cliente para mandar al servidor para procesar");
                 ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso,null, session.getEmpresa().getIdentificacion(),cic,getChkEnvioCorreo().isSelected(),session.getEmpresa(),procesoSincronico);
+                Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.INFO,"Terminado proceso de enviar los comprobantes al servidor");
+                
                 if(ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO))
                 {
                     estadoNormal();
@@ -380,6 +380,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
             }
         } catch (RemoteException ex) {
             Logger.getLogger(UtilidadComprobanteAvanzadoModel.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         
     }

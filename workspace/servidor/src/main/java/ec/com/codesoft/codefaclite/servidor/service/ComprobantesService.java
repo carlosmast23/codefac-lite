@@ -164,9 +164,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException, RemoteException {                
                 comprobanteElectronica.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                 entityManager.merge(comprobanteElectronica);
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"El comprobante "+comprobanteElectronica.getPreimpreso()+" fue autorizado desde el metodo autorizarComprobante() en la clase ComprobantesService, para cambiar de estado manualmente");
             }
         });        
     }
@@ -227,8 +228,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,List<ComprobanteDataInterface> comprobantesProcesos,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa,Boolean sincrono) throws RemoteException
     {
-        //Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO, null,"Procesando en lote comprobantes electrónicos : "+comprobantesProcesos.size());
-        //Empresa empresa=obtenerEmpresaPorClaveAcceso(clavesAcceso.get(0));
+        Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"Ejecutando procesarComprobantesLotePendiente en el SERVIDOR ... ");
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         comprobanteElectronico.setEnviarCorreos(enviarCorreo);
         cargarConfiguraciones(comprobanteElectronico,empresa);
@@ -240,7 +240,6 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //comprobanteElectronico.setComprobantesLote(comprobantesProcesos);
         comprobanteElectronico.setRuc(ruc);
         
-        
         Integer secuencialLote=null;
         try {
             secuencialLote = obtenerSecuencialLote(empresa); //Verificar que solo debe dar un secuencial si la etapa es superior a enviar comprobante
@@ -250,18 +249,24 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         comprobanteElectronico.setSecuencialLote(secuencialLote);
         
+        Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"Cargando configuraciones procesarComprobantesLotePendiente en el SERVIDOR ... ");
+        
         comprobanteElectronico.addActionListerComprobanteElectronicoLote(new ListenerComprobanteElectronicoLote() {
             private boolean existeConexionRemota=true;
             @Override
             public void iniciado() {
                 try {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"metodo iniciado() en procesarComprobantesLotePendiente en el SERVIDOR ... ");
                     if(callbackClientObject==null)// Si se envia nulo el objeto que tampoco ejecute el callback con el cliente
                     {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"callbackClientObject=NULL en procesarComprobantesLotePendiente en el SERVIDOR ... ");
                         existeConexionRemota=false;
                     }
                     else
                     {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"callbackClientObject=TRUE antes de llamar callback en procesarComprobantesLotePendiente en el SERVIDOR ... ");
                         callbackClientObject.iniciado();
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"callbackClientObject=TRUE despues de llamar callback en procesarComprobantesLotePendiente en el SERVIDOR ... ");
                     }
                 } catch (RemoteException ex) {
                     existeConexionRemota=false;
@@ -271,6 +276,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             @Override
             public void clavesGeneradas(List<ClaveAcceso> listaClaves) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"metodo clavesGeneradas() en procesarComprobantesLotePendiente en el SERVIDOR ... ");
                 //TODO: Metodo que devuelve las claves generadas
                 //try {
                     if(existeConexionRemota)
@@ -301,6 +307,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void datosAutorizados(List<Autorizacion> autorizaciones) {
                 //TODOS: Lista de los documentos autorizados
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"metodo datosAutorizados() en procesarComprobantesLotePendiente en el SERVIDOR ... ");
                 
                 for (Autorizacion autorizacion: autorizaciones) {
                     try {                                        
@@ -316,6 +323,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             @Override
             public void procesando(int etapa) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"metodo procesando() en procesarComprobantesLotePendiente en el SERVIDOR ... etapa= "+etapa);
                 try {
                     if(existeConexionRemota)
                     {
@@ -328,6 +336,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             @Override
             public void error(ComprobanteElectronicoException cee) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"metodo error() en procesarComprobantesLotePendiente en el SERVIDOR ... ");
                 try {
                     if(existeConexionRemota)
                     {
@@ -341,6 +350,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void termino(List<Autorizacion> autorizaciones) {
                 try {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"metodo termino() en procesarComprobantesLotePendiente en el SERVIDOR ... ");
                     //Cambiar el estado de los comprabantes que si fueron autorizados
                     //cambiarEstadoLoteAutorizaciones(autorizaciones,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                     if(existeConexionRemota)
@@ -356,24 +366,18 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //TODO: Este artificio se usa para esperar que se procesen los comprobantes cuando es remoto un cliente
         if(sincrono)
         {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"Ejcutando metodo Sincrono en procesarComprobantesLotePendiente en el SERVIDOR ... ");
             comprobanteElectronico.procesarSincronico(true);
         }
         else
         {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"Ejcutando metodo Asincrono en procesarComprobantesLotePendiente en el SERVIDOR ... ");
             comprobanteElectronico.procesar(true);
         }
         return true;
     }
     
-    
-    /*private Empresa obtenerEmpresaPorClaveAcceso(String claveAcceso) throws RemoteException
-    {
-        ClaveAcceso claveAccesoObj=new ClaveAcceso(claveAcceso);
-        EmpresaService empresaService=new EmpresaService();
-        Empresa empresa=empresaService.buscarPorIdentificacion(claveAccesoObj.identificacion);
-        return empresa;
-    }*/
-    
+   
     public List<AlertaComprobanteElectronico> procesarComprobantesPendienteSinCallBack(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,Empresa empresa) throws RemoteException,ServicioCodefacException
     {
         //Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
@@ -1005,7 +1009,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return null;
     }
     
-    protected void cambiarEstadoLotes(List<ComprobanteDataInterface> comprobantesData,ComprobanteEntity.ComprobanteEnumEstado estado)
+    /*protected void cambiarEstadoLotes(List<ComprobanteDataInterface> comprobantesData,ComprobanteEntity.ComprobanteEnumEstado estado)
     {
         for (ComprobanteDataInterface comprobanteDataInterface : comprobantesData) {
             try {
@@ -1027,7 +1031,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
+    }*/
     
     /*protected void cambiarAutorizadoLotes(List<Autorizacion> autorizaciones)
     {
@@ -1415,7 +1419,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 if(documentoAutorizado.getEstado().equals("AUTORIZADO"))
-                {
+                {                    
                     comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
                     XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
                     java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());
@@ -1427,6 +1431,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     }
                     
                      entityManager.merge(comprobanteOriginal);
+                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"El comprobante "+comprobanteOriginal.getPreimpreso()+" fue autorizado desde el metodo setearDatosAutorizacionComprobanteConTransaccion() en la clase ComprobantesService");
                 }
 
             }
