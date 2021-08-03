@@ -375,6 +375,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             {
                 //Recalcular los saldo de cada detalle
                 BigDecimal valorCruzadoDetalle=getFacade().obtenerValorCruceCarteraDetalle(cruce.getCarteraDetalle());
+                System.out.println("Cartera Detalle Total: "+cruce.getCarteraDetalle().getTotal());
                 BigDecimal saldoCarteraDetalle=cruce.getCarteraDetalle().getTotal().subtract(valorCruzadoDetalle);
                 validarSaldoNegativo(saldoCarteraDetalle);
                 cruce.getCarteraDetalle().setSaldo(saldoCarteraDetalle);
@@ -743,8 +744,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
                 CarteraDetalle carteraDetalle = new CarteraDetalle();
                 carteraDetalle.setDescripcion(detalle.getDescripcion());
-                carteraDetalle.setSaldo(detalle.getTotal());
-                carteraDetalle.setTotal(detalle.getTotal());
+                //Todo: Tener en cuenta que este codigo se daño pero no se el por que
+                //carteraDetalle.setSaldo(detalle.getTotal());
+                //carteraDetalle.setTotal(detalle.getTotal());
+                carteraDetalle.setSaldo(detalle.calcularTotalFinal());
+                carteraDetalle.setTotal(detalle.calcularTotalFinal());
                 carteraDetalle.setId(carteraDetalle.generarIdTemporal() * -1l);
                 cartera.addDetalle(carteraDetalle);
                 
