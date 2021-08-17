@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -56,8 +57,22 @@ public class ApplicationCodefacMb  implements Serializable{
             //InputStreamReader input = new InputStreamReader(FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/ejemplo.prop"));
             Properties propiedades=new Properties();
             propiedades.load(stream);
-            System.out.println("Ip servidor archivo init: "+propiedades.get("servicio_web_ip_servidor").toString());
-            ipServidor=propiedades.get("servicio_web_ip_servidor").toString();
+            
+            Object ipServidorProperty=propiedades.get("servicio_web_ip_servidor");
+            //String ipServidorTxt="";
+            if(ipServidorProperty==null)
+            {
+                ipServidor=UtilidadVarios.obtenerIpServidor();
+            }
+            else
+            {
+                ipServidor=ipServidorProperty.toString();
+            }
+            
+            
+            
+            System.out.println("Ip servidor archivo init: "+ipServidor);
+            //ipServidor=propiedades.get("servicio_web_ip_servidor").toString();
             ServiceFactory.newController(ipServidor);   
             System.out.println("=====> CONEXION CON EL SERVIDOR EXITOSA ========>");
         } catch (FileNotFoundException ex) {
