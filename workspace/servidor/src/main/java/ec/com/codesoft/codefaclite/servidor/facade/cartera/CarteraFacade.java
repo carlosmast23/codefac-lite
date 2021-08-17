@@ -38,13 +38,14 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum)
+    public List<Cartera> getCarteraSaldoCero(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum)
     {
         String cliente = "";
         String fecha = "";
         String saldo = "";
         String whereTipoCarteraVencida="";
         String whereDocumento="";
+        
         
         if (persona != null) {
             cliente = "c.persona=?1";
@@ -62,9 +63,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         }
         
         Cartera cartera;
-        //DocumentoCategoriaEnum doc;
-        //cartera.getFechaEmision();
-        //cartera.getFechaFinCredito();
+        
         
         if(tipoSaldoEnum.equals(Cartera.TipoSaldoCarteraEnum.SIN_SALDO))
         {
@@ -93,6 +92,15 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             whereDocumento=" AND c.codigoDocumento=?7 ";
         }
         
+        //Verificar si requiere realizar un filtro por la SEGUNDA REFERENCIA de la CARTERA
+        //TODO: Mejorar por que tambien depende del TIPO DE LA SEGUNDA REFERENCIA por que puede obtener resultos equivocados, por el momento funciona por que solo exist eun tipo de ABONO CARTERA
+        String whereSegundaReferencia="";
+        if(segundaReferenciaId!=null)
+        {
+            whereSegundaReferencia=" AND c.segundaReferenciaId=?8 ";
+        }
+        
+        
         String orderBy="";
         if(tipoOrdenamientoEnum.equals(tipoOrdenamientoEnum.POR_PREIMPRESO))
         {
@@ -113,7 +121,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         c.getPersona().getRazonSocial();*/
         
         try {
-            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+whereDocumento+" AND ("+whereDocumentos+") AND c.sucursal =?6 AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
+            String queryString = "SELECT c FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+whereDocumento+whereSegundaReferencia+ " AND ("+whereDocumentos+") AND c.sucursal =?6 AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
             //System.out.println("QUERY==> "+queryString);
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {
@@ -137,6 +145,11 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             if(documentoEnum!=null)
             {
                 query.setParameter(7, documentoEnum.getCodigo());
+            }
+            
+            if(segundaReferenciaId!=null)
+            {
+                query.setParameter(8,segundaReferenciaId);
             }
             
             return query.getResultList();

@@ -2486,6 +2486,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         factura.setVentaCreditoEnum(EnumSiNo.getEnumByBoolean(getChkHabilitarCredito().isSelected()));
         factura.setDiasCredito((Integer) getTxtDiasCredito().getValue());
+        
+        factura.setCodigoOrigenTransaccionEnum(Factura.OrigenTransaccionEnum.ESCRITORIO);
         //factura.setVendedor(vendedor);
         
         //factura.setIvaSriId(session.get;

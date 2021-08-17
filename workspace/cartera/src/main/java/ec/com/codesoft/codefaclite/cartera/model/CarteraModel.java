@@ -134,6 +134,11 @@ public class CarteraModel extends CarteraPanel{
             throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(ExcepcionCodefacLite ecl) 
+        {
+            DialogoCodefac.mensaje(new CodefacMsj(ecl.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+            Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ecl);
+            throw new ExcepcionCodefacLite(ecl.getMessage());
         }
     }
 

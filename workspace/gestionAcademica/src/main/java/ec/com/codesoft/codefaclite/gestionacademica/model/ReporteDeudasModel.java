@@ -26,13 +26,18 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -203,23 +208,53 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
 
                 if (getChkTodosRubros().isSelected() == false) {
-                    //if (banderaRubros == false) {
                     dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
                 } else {
                     dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, mesesSeleccionados);
                 }
 
                 // comparamos si el estudiante tiene rubros
-                if (!dataRubro.isEmpty()) {
-                    for (RubroEstudiante re : dataRubro) {
+                if (!dataRubro.isEmpty()) 
+                {
+                    for (RubroEstudiante re : dataRubro) 
+                    {
                         data.add(new ReporteDeudasData(
                                 estudiante.getNivelAcademico().getNombre(),
                                 estudiante.getEstudiante().getCedula(),
                                 estudiante.getEstudiante().getNombreCompleto(),
                                 re.getRubroNivel().getNombre(),
-                                re.getSaldo().toString()
+                                re.getSaldo().toString(),
+                                ReporteDeudasData.TipoRubroEnum.DEUDA
                         ));
                     }
+                }
+                
+                //consultar los abonos
+                List<Cartera> abonosCarteraList= ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCero(
+                        null, 
+                        estudiante.getEstudiante().getIdEstudiante(), 
+                        null, 
+                        null, 
+                        DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS, 
+                        Cartera.TipoCarteraEnum.CLIENTE, 
+                        Cartera.TipoSaldoCarteraEnum.CON_SALDO, 
+                        Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO, 
+                        CarteraEstadoReporteEnum.TODO, 
+                        session.getSucursal(), 
+                        DocumentoEnum.ABONOS_ACADEMICO
+                );
+                
+                for (Cartera cartera : abonosCarteraList) 
+                {
+                    data.add(new ReporteDeudasData(
+                                estudiante.getNivelAcademico().getNombre(),
+                                estudiante.getEstudiante().getCedula(),
+                                estudiante.getEstudiante().getNombreCompleto(),
+                                cartera.getCarteraDocumentoEnum().getNombre()+" ["+cartera.getCodigo()+"]",
+                                cartera.getSaldo().toString(), //El abono voy a mandar como número negativo
+                                ReporteDeudasData.TipoRubroEnum.ABONO
+                        ));
+                    System.out.println("Abonos pendientes: "+cartera.getSaldo());
                 }
 
             }
@@ -294,12 +329,28 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             ReporteDeudasData dataNueva=mapResultadoTemp.get(dataOriginal.getEstudiante());
             if(dataNueva==null)
             {
-                dataNueva=new ReporteDeudasData(dataOriginal.getNivelAcademicoEstudiante(), dataOriginal.getCedulaEstudiante(),dataOriginal.getEstudiante(),dataOriginal.getRubro());                
+                dataNueva=new ReporteDeudasData(
+                        dataOriginal.getNivelAcademicoEstudiante(), 
+                        dataOriginal.getCedulaEstudiante(),
+                        dataOriginal.getEstudiante(),
+                        dataOriginal.getRubro(),
+                        ReporteDeudasData.TipoRubroEnum.DEUDA
+                        
+                );                
+                
                 mapResultadoTemp.put(dataOriginal.getEstudiante(), dataNueva);
             }
             
-            //sumar el valor del total
-            dataNueva.sumarValor(dataOriginal.getValor());
+            //Verificar si el detalle es un abono o una Deuda para sumar
+            if(dataOriginal.getTipoEnum().equals(ReporteDeudasData.TipoRubroEnum.ABONO))
+            {
+                dataNueva.sumarAbono(dataOriginal.getValor());
+            }else if(dataOriginal.getTipoEnum().equals(ReporteDeudasData.TipoRubroEnum.DEUDA))
+            {
+                //sumar el valor del total
+                dataNueva.sumarValor(dataOriginal.getValor());
+            }                    
+            
         }
         
         //devolver el valor como una lista
@@ -441,6 +492,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                     fila.add(reporteDeudasData.getNivelAcademicoEstudiante());
                     fila.add(reporteDeudasData.getRubro());
                     fila.add(reporteDeudasData.getValor());
+                    
                     modeloTablaDeudas.addRow(fila);
                 }
                 getTblDeudas().setModel(modeloTablaDeudas);

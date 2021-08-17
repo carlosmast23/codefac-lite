@@ -22,23 +22,31 @@ public class ReporteDeudasData implements ExcelDatosInterface , Cloneable {
     private String cedulaEstudiante;
     private String estudiante;
     private String rubro;
+    private String tipo;
     private String valor;
     private Integer nivel;
+    
+    //Variable que me va a seguir exclusivamente para el REPORTE AGRUPADO
+    private String abono;
 
-    public ReporteDeudasData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro, String valor) {
+    public ReporteDeudasData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro, String valor,TipoRubroEnum tipoRubroEnum) {
         this.nivelAcademicoEstudiante = nivelAcademicoEstudiante;
         this.cedulaEstudiante = cedulaEstudiante;
         this.estudiante = estudiante;
         this.rubro = rubro;
         this.valor = valor;
+        this.tipo=tipoRubroEnum.nombre;
+        this.abono="0";
     }
     
-    public ReporteDeudasData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro) {
+    public ReporteDeudasData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro,TipoRubroEnum tipoRubroEnum) {
         this.nivelAcademicoEstudiante = nivelAcademicoEstudiante;
         this.cedulaEstudiante = cedulaEstudiante;
         this.estudiante = estudiante;
         this.rubro = rubro;
         this.valor = "0";
+        this.tipo=tipoRubroEnum.nombre;
+        this.abono="0";
     }
 
     
@@ -83,17 +91,48 @@ public class ReporteDeudasData implements ExcelDatosInterface , Cloneable {
         this.valor = valor;
     }
     
-    public void sumarValor(String valorStr)
-    {
-        this.valor=new BigDecimal(this.valor).add(new BigDecimal(valorStr)).toString();
-    }
-    
     public Integer getNivel() {
         return nivel;
     }
 
     public void setNivel(Integer nivel) {
         this.nivel = nivel;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    public TipoRubroEnum getTipoEnum() {
+        return TipoRubroEnum.findByNombre(tipo);
+    }
+
+    public void setTipoEnum(TipoRubroEnum tipoEnum) {
+        this.tipo = tipoEnum.nombre;
+    }
+
+    public String getAbono() {
+        return abono;
+    }
+
+    public void setAbono(String abono) {
+        this.abono = abono;
+    }
+    
+    
+        
+    public void sumarValor(String valorStr)
+    {
+        this.valor=new BigDecimal(this.valor).add(new BigDecimal(valorStr)).toString();
+    }
+    
+    public void sumarAbono(String abono)
+    {
+        this.abono=new BigDecimal(this.abono).add(new BigDecimal(abono)).toString();
     }
 
 
@@ -131,6 +170,30 @@ public class ReporteDeudasData implements ExcelDatosInterface , Cloneable {
         return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public enum TipoRubroEnum
+    {
+        DEUDA("Deuda"),
+        ABONO("Abono"),
+        ;
+        
+        private String nombre;
+
+        private TipoRubroEnum(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        public static TipoRubroEnum findByNombre(String nombre)
+        {
+            for (TipoRubroEnum value : TipoRubroEnum.values()) {
+                if(value.nombre.equals(nombre))
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
+        
+    }
    
     
     

@@ -21,7 +21,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcadem
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
@@ -117,6 +121,10 @@ public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
             } else {
                 parameters.put("periodo", "TODOS");
             }
+            
+            //Obtener el total de todos los abonos
+            BigDecimal totalAbonos=obtenerTotalAbonos();
+            parameters.put("totalAbonos",totalAbonos);
 
             DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                 @Override
@@ -142,6 +150,39 @@ public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
             Logger.getLogger(DeudasAgrupadasPorCursoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    //todo: metodo temporal
+    @Deprecated
+    private BigDecimal obtenerTotalAbonos()
+    {
+        BigDecimal totalAbonos=BigDecimal.ZERO;
+        try {
+            List<Cartera> abonosCarteraList= ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCero(
+                    null,
+                    null,
+                    null,
+                    null,
+                    DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,
+                    Cartera.TipoCarteraEnum.CLIENTE,
+                    Cartera.TipoSaldoCarteraEnum.CON_SALDO,
+                    Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO,
+                    CarteraEstadoReporteEnum.TODO,
+                    session.getSucursal(),
+                    DocumentoEnum.ABONOS_ACADEMICO);
+            
+            for (Cartera cartera : abonosCarteraList) 
+            {
+                totalAbonos=totalAbonos.add(cartera.getSaldo());
+            }
+            
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(DeudasAgrupadasPorCursoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(DeudasAgrupadasPorCursoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return totalAbonos;
     }
 
     @Override

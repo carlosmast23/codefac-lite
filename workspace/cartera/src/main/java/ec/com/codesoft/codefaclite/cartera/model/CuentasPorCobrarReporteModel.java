@@ -241,7 +241,9 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                     }
                     
                     
-                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(persona, 
+                    List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(
+                            persona, 
+                            null,
                             fechaInicio, 
                             fechaFin,
                             DocumentoCategoriaEnum.COMPROBANTES_VENTA,

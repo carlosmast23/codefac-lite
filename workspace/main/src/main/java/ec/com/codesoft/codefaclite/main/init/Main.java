@@ -173,7 +173,7 @@ public class Main {
 
         /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
-         * le permite acceder a los siguiente funcionalidad
+         * le permite acceder a los siguiente funcionalidad, que pueden ser CLIENTE , CLIENTE-SERVIDOR, SERVIDOR
          */
         iniciarModoAplicativo(true);
 
@@ -348,7 +348,8 @@ public class Main {
             
             String ipServidor ="";
             
-            if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
+            if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) 
+            {
                     //System.setProperty("java.rmi.server.hostname","192.168.100.2"); 
                     //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
                     PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
@@ -384,6 +385,7 @@ public class Main {
                 PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
                 String ipServidorDefecto=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_IP_SERVIDOR);
                 
+                //Si no encuentra una ip fija ,el sistema busca una ip por defecto
                 if(ipServidorDefecto==null || ipServidorDefecto.isEmpty())
                 {
                     ipServidor=UtilidadVarios.obtenerIpServidor();

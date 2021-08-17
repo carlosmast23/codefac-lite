@@ -553,6 +553,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         factura.setPuntoEstablecimiento(new BigDecimal(sessionMb.getSession().getSucursal().getCodigoSucursal().toString()));
         factura.setUsuario(sessionMb.getSession().getUsuario());
         factura.setSucursalEmpresa(sessionMb.getSession().getSucursal());
+        factura.setCodigoOrigenTransaccionEnum(Factura.OrigenTransaccionEnum.APLICACION_WEB);
         
         if(tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA))
         {

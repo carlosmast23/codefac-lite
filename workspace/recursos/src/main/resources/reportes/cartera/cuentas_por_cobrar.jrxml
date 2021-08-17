@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.2078825000000244"/>
-	<property name="ireport.x" value="75"/>
-	<property name="ireport.y" value="15"/>
+	<property name="ireport.zoom" value="4.169937985119266"/>
+	<property name="ireport.x" value="2898"/>
+	<property name="ireport.y" value="681"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -310,7 +310,7 @@
 					<textFieldExpression><![CDATA[$V{totalGrupo}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="752" y="25" width="50" height="12" uuid="a6944328-99e5-41fc-9989-c7d314113f68"/>
+					<reportElement x="752" y="37" width="50" height="12" uuid="a6944328-99e5-41fc-9989-c7d314113f68"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -324,7 +324,7 @@
 					<textFieldExpression><![CDATA[$V{saldoGrupo}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="752" y="37" width="50" height="12" uuid="edb15b4b-ba72-4afd-a0a8-458fd55e32e0"/>
+					<reportElement x="752" y="25" width="50" height="12" uuid="edb15b4b-ba72-4afd-a0a8-458fd55e32e0"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>

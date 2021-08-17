@@ -362,6 +362,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                 try {
                     List<Cartera> resultado = ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCero(
                             personaBusqueda,
+                            null,
                             fechaInicio,
                             fechaFin,
                             carteraCategoriaEnum.getDocumentoCategoriaEnum(),

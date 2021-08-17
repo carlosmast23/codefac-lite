@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -115,7 +116,7 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         dato.add(documentoEnum.getNombre()); //TODO: Veri si para cosnultar por documento sea una propiedad intrinsica de la factura        
         dato.add((t.getEstadoEnum() != null) ? t.getEstadoEnum().getNombre() : "Sin estado");
 
-        dato.add(t.getFechaEmision());
+        dato.add(ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(t.getFechaEmision()));
         dato.add(t.getTotal());
     }
 
