@@ -37,6 +37,7 @@ public interface InterfazComunicacionPanel
      * @param namePanel nombre del panel que se quiere abrir para obtener el dato
      * @param maximizado opcion para saber si quieres que se abra maximizado o mimimizado
      */
+    @Deprecated //Ya no usar por que como no tiene un dominio exacto para los parametros del nombre de la ventana puede fallar
     public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel,boolean maximizado,GeneralPanelInterface panelPadre);
     
     /**

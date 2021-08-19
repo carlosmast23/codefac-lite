@@ -166,6 +166,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         compraNueva.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA);
         
         //Cargar los DETALLES DE LA COMPRA
+        List<CompraDetalle> detallesCompra=cargarProductoCompraDetalleDesdeXml(comprobanteElectronico, compraNueva);
+        compraNueva.setDetalles(detallesCompra);
         
         
         return compraNueva;

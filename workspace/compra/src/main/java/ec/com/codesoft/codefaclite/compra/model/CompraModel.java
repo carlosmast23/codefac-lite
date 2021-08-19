@@ -841,6 +841,10 @@ public class CompraModel extends CompraPanel{
                 SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
                         new FileInputStream(archivoSeleccionado));
                 Compra compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeXml(istream,session.getEmpresa());
+                
+                Object[] parametros={compra};
+                panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
+                        
                 cargarDatosCompra(compra);
                 
             } catch (FileNotFoundException ex) {
@@ -852,6 +856,17 @@ public class CompraModel extends CompraPanel{
             }
         }
     }
+    
+    private ObserverUpdateInterface observerCompraXml=new ObserverUpdateInterface() {
+        @Override
+        public void updateInterface(Object entity) {
+            if(entity!=null)
+            {
+                compra=(Compra) entity;
+                cargarDatosCompra(compra);
+            }
+        }
+    };
     
     private void agregarProductoVista(Producto producto)
     {
