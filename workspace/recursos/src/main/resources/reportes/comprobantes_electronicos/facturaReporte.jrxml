@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.610510000000054"/>
-	<property name="ireport.x" value="314"/>
-	<property name="ireport.y" value="513"/>
+	<property name="ireport.zoom" value="1.46410000000005"/>
+	<property name="ireport.x" value="24"/>
+	<property name="ireport.y" value="346"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -94,6 +94,7 @@
 	<field name="precio_total" class="java.lang.String"/>
 	<field name="cantidad" class="java.lang.String"/>
 	<field name="subsidio" class="java.lang.String"/>
+	<field name="porcentajeIva" class="java.lang.String"/>
 	<filterExpression><![CDATA[new Boolean($F{descripcion}.toString().indexOf("[Hidden]")<0)]]></filterExpression>
 	<background>
 		<band splitType="Stretch"/>
@@ -356,7 +357,7 @@
 	<columnHeader>
 		<band height="16" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="1" width="71" height="15" uuid="b9fc8cd1-b8d2-43f7-a73c-ffa567fa0552"/>
+				<reportElement x="0" y="1" width="54" height="15" uuid="b9fc8cd1-b8d2-43f7-a73c-ffa567fa0552"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -369,7 +370,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="71" y="1" width="204" height="15" uuid="e2e445cc-53d4-4f16-bbf4-8aa1de7fd349"/>
+				<reportElement x="54" y="1" width="205" height="15" uuid="e2e445cc-53d4-4f16-bbf4-8aa1de7fd349"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -382,7 +383,7 @@
 				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="375" y="1" width="60" height="15" uuid="ded570a6-d87a-4359-81bf-c90066375d55"/>
+				<reportElement x="389" y="1" width="55" height="15" uuid="ded570a6-d87a-4359-81bf-c90066375d55"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -395,7 +396,7 @@
 				<text><![CDATA[Subsidio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="435" y="1" width="60" height="15" uuid="b80621a6-801a-4d71-a947-2029175ab4a1"/>
+				<reportElement x="444" y="1" width="55" height="15" uuid="b80621a6-801a-4d71-a947-2029175ab4a1"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -408,7 +409,7 @@
 				<text><![CDATA[Descuento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="495" y="1" width="60" height="15" uuid="8aebd3e8-8268-46af-a1c9-8f7a19514cdf"/>
+				<reportElement x="499" y="1" width="55" height="15" uuid="8aebd3e8-8268-46af-a1c9-8f7a19514cdf"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -421,7 +422,7 @@
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="275" y="1" width="40" height="15" uuid="eb9ec666-cb14-47c4-b340-108dc1b564bc"/>
+				<reportElement x="259" y="1" width="40" height="15" uuid="eb9ec666-cb14-47c4-b340-108dc1b564bc"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -434,7 +435,7 @@
 				<text><![CDATA[Cant]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="315" y="1" width="60" height="15" uuid="5e097742-4bb8-44df-a219-2b6bcc8fba74"/>
+				<reportElement x="299" y="1" width="60" height="15" uuid="5e097742-4bb8-44df-a219-2b6bcc8fba74"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -446,12 +447,25 @@
 				</textElement>
 				<text><![CDATA[P.unitario]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="359" y="1" width="30" height="15" uuid="4ceddada-a3ca-4582-b400-51e6b02bb9f5"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[% IVA]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="14" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="71" height="14" uuid="96aacd30-59f9-4ce5-9542-5691ac80b57c"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="54" height="14" uuid="96aacd30-59f9-4ce5-9542-5691ac80b57c"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -465,7 +479,7 @@
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="71" y="0" width="204" height="14" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="54" y="0" width="205" height="14" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -479,7 +493,7 @@
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="315" y="0" width="60" height="14" uuid="b9027efb-483c-46a3-b02e-f93b08a69209"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="299" y="0" width="60" height="14" uuid="b9027efb-483c-46a3-b02e-f93b08a69209"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -493,7 +507,7 @@
 				<textFieldExpression><![CDATA[$F{precio_unitario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="435" y="0" width="60" height="14" uuid="28c3899a-a321-4517-924f-f8862eae2ada"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="444" y="0" width="55" height="14" uuid="28c3899a-a321-4517-924f-f8862eae2ada"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -507,7 +521,7 @@
 				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="375" y="0" width="60" height="14" uuid="09237f92-36cc-4925-9ba3-a76b73d31c4d"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="389" y="0" width="55" height="14" uuid="09237f92-36cc-4925-9ba3-a76b73d31c4d"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -521,7 +535,7 @@
 				<textFieldExpression><![CDATA[$F{subsidio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="275" y="0" width="40" height="14" uuid="cfc15e5e-ab7b-4e72-ae28-10cd519ff378"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="259" y="0" width="40" height="14" uuid="cfc15e5e-ab7b-4e72-ae28-10cd519ff378"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -535,7 +549,7 @@
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="495" y="0" width="60" height="14" uuid="32520322-fa84-4e83-be32-85abfc7658e8"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="499" y="0" width="55" height="14" uuid="32520322-fa84-4e83-be32-85abfc7658e8"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -547,6 +561,20 @@
 					<paragraph firstLineIndent="3" leftIndent="3" rightIndent="3" spacingBefore="3" spacingAfter="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{precio_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="359" y="0" width="30" height="14" uuid="eaa180e8-e71b-45e2-97c2-78c39d66a734"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph firstLineIndent="3" leftIndent="3" rightIndent="3" spacingBefore="3" spacingAfter="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{porcentajeIva}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

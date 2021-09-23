@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFa
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FormaPagoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +101,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
             data.setCantidad(detalleFacturaComprobante.getCantidad()+"");
             data.setCodigo(detalleFacturaComprobante.getCodigoPrincipal());
             data.setDescripcion(detalleFacturaComprobante.getDescripcion());
+            data.setPorcentajeIva(detalleFacturaComprobante.getImpuestos().get(0).getTarifa().setScale(0, RoundingMode.HALF_UP)+"");
             data.setDescuento(detalleFacturaComprobante.getDescuento()+"");
             data.setPrecio_total(detalleFacturaComprobante.getPrecioTotalSinImpuesto()+"");
             data.setPrecio_unitario(detalleFacturaComprobante.getPrecioUnitario()+"");

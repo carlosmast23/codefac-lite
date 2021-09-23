@@ -101,9 +101,11 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             dataReporte=new ArrayList<ReporteAcademicoData>();
             for (EstudianteInscrito est : dataEstudiantes) {
                 String nombreRepresentante = "s/n";
+                String cedulaRepresentate="";
 
                 if (est.getEstudiante().getRepresentante() != null) {
                     nombreRepresentante = est.getEstudiante().getRepresentante().getNombresCompletos();
+                    cedulaRepresentate=est.getEstudiante().getRepresentante().getIdentificacion();
                 }
 
                 String telefono = (est.getEstudiante().getRepresentante() != null) ? est.getEstudiante().getRepresentante().obtenerTodosTelefonos() : "";
@@ -118,6 +120,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                         est.getEstudiante().getApellidos(),
                         email,
                         telefono,
+                        cedulaRepresentate,
                         nombreRepresentante,
                         est.getNivelAcademico().getNombre()
                 ));
@@ -154,7 +157,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    String[] nombreCabeceras = {" Nivel ", " Cédula ", " Apellidos ", " Nombres ", " Email ", " Telefono ", " Representante "};
+                    String[] nombreCabeceras = {" Nivel ", " Cédula ", " Apellidos ", " Nombres ", " Email ", " Telefono ","CI Repr", " Representante "};
                     //List<ReporteAcademicoData> dat = ordenarDetallesEnFuncionDeCliente(data);
                     excel.gestionarIngresoInformacionExcel(nombreCabeceras, dataReporte);
                     excel.abrirDocumento();
@@ -260,6 +263,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                 titulo.add("Nombres");
                 titulo.add("Email");
                 titulo.add("Telefono");
+                titulo.add("CI Repr");
                 titulo.add("Representante");
                 titulo.add("Nivel Academico");
                 modeloTablaEstudiantes = new DefaultTableModel(titulo, 0);
@@ -272,6 +276,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                     fila.add(est.getNombresEstudiante());
                     fila.add(est.getEmailEstudiante());
                     fila.add(est.getTelefonoEstudiante());
+                    fila.add(est.getRepresentanteCI());
                     fila.add(est.getRepresentanteEstudiante());
                     fila.add(est.getNivelAcademicoEstudiante());
                     

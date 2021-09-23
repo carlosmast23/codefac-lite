@@ -11,6 +11,26 @@ package ec.com.codesoft.codefaclite.utilidades.validadores;
  */
 public abstract class UtilidadValidador {
     
+    public static String normalizarTextoFacturacionElectronica(String s) {
+        
+        //Si la variable es nula devolver en blanco
+        if(s==null)
+            return "";
+        
+        // Cadena de caracteres original a sustituir.
+        String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ[]{}";
+        // Cadena de caracteres ASCII que reemplazarán los originales.
+        String ascii =    "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC()()";
+        String output = s;
+        for (int i = 0; i < original.length(); i++) {
+            // Reemplazamos los caracteres especiales.
+            output = output.replace(original.charAt(i), ascii.charAt(i));
+        }
+
+        output = output.replaceAll("\r\n", " ").replaceAll("\r", " ").replaceAll("\n", " ");
+        //String regex = "[^0-9A-Za-z.,;:_()&= ]";
+        return output;
+    }
     
     public static String normalizarTexto(String s) {
         

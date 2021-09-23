@@ -23,15 +23,17 @@ public class ReporteAcademicoData implements ExcelDatosInterface
     private String apellidosEstudiante;
     private String emailEstudiante;
     private String telefonoEstudiante;
+    private String representanteCI;
     private String representanteEstudiante;
     private String nivelAcademicoEstudiante;
 
-       public ReporteAcademicoData(String cedulaEstudiante, String nombresEstudiante, String apellidosEstudiante, String emailEstudiante, String telefonoEstudiante, String representanteEstudiante, String nivelAcademicoEstudiante) {
+       public ReporteAcademicoData(String cedulaEstudiante, String nombresEstudiante, String apellidosEstudiante, String emailEstudiante, String telefonoEstudiante,String representanteCI, String representanteEstudiante, String nivelAcademicoEstudiante) {
         this.cedulaEstudiante = cedulaEstudiante;
         this.nombresEstudiante = nombresEstudiante;
         this.apellidosEstudiante = apellidosEstudiante;
         this.emailEstudiante = emailEstudiante;
         this.telefonoEstudiante = telefonoEstudiante;
+        this.representanteCI=representanteCI;
         this.representanteEstudiante = representanteEstudiante;
         this.nivelAcademicoEstudiante = nivelAcademicoEstudiante;
     }
@@ -92,6 +94,16 @@ public class ReporteAcademicoData implements ExcelDatosInterface
         this.nivelAcademicoEstudiante = nivelAcademicoEstudiante;
     }
 
+    public String getRepresentanteCI() {
+        return representanteCI;
+    }
+
+    public void setRepresentanteCI(String representanteCI) {
+        this.representanteCI = representanteCI;
+    }
+    
+    
+
     @Override
     public List<TipoDato> getDatos() {
         List<TipoDato> datos = new ArrayList<>();
@@ -101,6 +113,7 @@ public class ReporteAcademicoData implements ExcelDatosInterface
         datos.add(new TipoDato(this.nombresEstudiante, Excel.TipoDataEnum.TEXTO));        
         datos.add(new TipoDato(this.emailEstudiante, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.telefonoEstudiante, Excel.TipoDataEnum.TEXTO));
+        datos.add(new TipoDato(this.representanteCI, Excel.TipoDataEnum.TEXTO));
         datos.add(new TipoDato(this.representanteEstudiante, Excel.TipoDataEnum.TEXTO));
         
         return datos;

@@ -180,7 +180,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         }
  
         //Falta manejar este campo al momento de guardar
-        informacionComprobante.setRazonSocial(UtilidadValidador.normalizarTexto(factura.getCliente().getRazonSocial()));
+        informacionComprobante.setRazonSocial(UtilidadValidador.normalizarTextoFacturacionElectronica(factura.getCliente().getRazonSocial()));
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
         //informacionComprobante.setTipoIdentificacion(getSriIdentificacion(factura).getCodigo());
         

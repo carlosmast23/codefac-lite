@@ -256,6 +256,16 @@ public class Excel<T>
             Logger.getLogger(Excel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }   
+
+    public Workbook getLibro() {
+        return libro;
+    }
+
+    public void setLibro(Workbook libro) {
+        this.libro = libro;
+    }
+    
+    
     
     public void eliminarDocumento()
     {
