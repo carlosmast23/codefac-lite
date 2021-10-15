@@ -252,7 +252,7 @@ public class UtilidadEnvioReportesModel extends UtilidadEnvioReportesPanel {
 
                 try {
                     //correoCodefac.enviarCorreo(empresa, title, title, correos, archivosAdjuntos);
-                    correoCodefac.enviarCorreo(session.getEmpresa(),"Los archivos de los reportes estan adjuntos en el mensaje.","Reportes Generados Codefac",correos,null);
+                    correoCodefac.enviarCorreo(session.getEmpresa(),"Los archivos de los reportes estan adjuntos en el mensaje.","Reportes Generados Codefac",correos,archivosAdjuntos);
                     panelPadre.cambiarCursorNormal();
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
                 } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
