@@ -147,7 +147,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
 
         InformacionComprobanteAbstract informacionComprobante = null;
         if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
-        {
+        {  
             informacionComprobante = new InformacionFactura();
             comprobante=new FacturaComprobante();
         }else
@@ -158,32 +158,32 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         
         llenarInformacionComprobante(new InfoComprobante(informacionComprobante) , factura);
         
-        //informacionComprobante.setDirEstablecimiento(UtilidadValidador.normalizarTexto(factura.getDireccionEstablecimiento()));
-        
-        /*SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
-        SriIdentificacion sriIdentificacion = null;
-        try {
-            sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(factura.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (sriIdentificacion != null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION)) {
-            informacionComprobante.setIdentificacion(factura.getCliente().getIdentificacion());
-        } else {
-            informacionComprobante.setIdentificacion(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
-        }*/
-        
-        if(factura.getSucursal().getDireccion()!=null && !factura.getSucursal().getDireccion().equals(""))
+        //Esta Direccion se refiere a la direccion del comprador
+        String direccionComprador=factura.getDireccion();
+        if(direccionComprador==null)
         {
-            informacionComprobante.setDireccion(factura.getSucursal().getDireccion());
+            if(factura.getSucursal().getDireccion()!=null && !factura.getSucursal().getDireccion().equals(""))
+            {
+                direccionComprador=factura.getSucursal().getDireccion();                
+            }
         }
+        informacionComprobante.setDireccion(direccionComprador);
+        
  
         //Falta manejar este campo al momento de guardar
-        informacionComprobante.setRazonSocial(UtilidadValidador.normalizarTextoFacturacionElectronica(factura.getCliente().getRazonSocial()));
-        //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
-        //informacionComprobante.setTipoIdentificacion(getSriIdentificacion(factura).getCodigo());
+        String razonSocial=factura.getRazonSocial();
         
+        if(razonSocial==null)
+        {
+            if(factura.getCliente()!=null)
+            {
+                razonSocial=factura.getCliente().getRazonSocial();
+            }
+        }
+        
+        informacionComprobante.setRazonSocial(UtilidadValidador.normalizarTextoFacturacionElectronica(razonSocial));
+        
+       
         informacionComprobante.setImporteTotal(factura.getTotal());
 
         BigDecimal descuentoTotal = factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos());
