@@ -1,0 +1,5 @@
+1.- Herramientas para instalar
+	1.1 JDK 8
+	1.2 JasperSoft
+	1.3 Netbeans 12
+	1.4 Github
