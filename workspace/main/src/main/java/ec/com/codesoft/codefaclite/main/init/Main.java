@@ -529,7 +529,9 @@ public class Main {
         //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience , literalmente esto sirve para decir que se procesen todas las peticiones que viene desde la ip publica
         if (ipPublica != null && !ipPublica.isEmpty()) {
             System.setProperty("java.rmi.server.hostname", ipPublica);
-            System.setProperty("com.healthmarketscience.rmiio.exporter.port", "1099");
+            //Este parametro es muy importante para funcionar con la libreria healthmarketscience que sirve para enviar archivos por rmi y configurar el puerto
+            String puertStr=ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"";
+            System.setProperty("com.healthmarketscience.rmiio.exporter.port", puertStr);
             ParametrosClienteEscritorio.puertoCallBack = ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED;
 
         }
