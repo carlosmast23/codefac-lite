@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
@@ -18,6 +19,8 @@ import java.math.RoundingMode;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -789,6 +792,27 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
             return ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaEmision);
         }
         return "";
+    }
+    
+    public List<FacturaDetalle> getDetallesOrdenados()
+    {
+        List<FacturaDetalle> facturaDetalleList=detalles;
+        UtilidadesLista.ordenarLista(facturaDetalleList, new Comparator<FacturaDetalle>() {
+            @Override
+            public int compare(FacturaDetalle facturaDetalle1, FacturaDetalle facturaDetalle2) 
+            {
+                if(facturaDetalle1.getId()!=null && facturaDetalle2.getId()!=null)
+                {
+                    return facturaDetalle1.getId().compareTo(facturaDetalle2.getId());
+                }
+                else
+                {
+                    return 0; //Si no tienen un id se asume que son iguales
+                }
+                
+            }
+        });
+        return facturaDetalleList;
     }
 
 }

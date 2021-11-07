@@ -223,7 +223,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
          * Informacion de los detalles
          */
         List<DetalleFacturaComprobante> detallesComprobante = new ArrayList<DetalleFacturaComprobante>();
-        List<FacturaDetalle> detallesFactura = factura.getDetalles();
+        List<FacturaDetalle> detallesFactura = factura.getDetallesOrdenados();
 
         for (FacturaDetalle facturaDetalle : detallesFactura) {
             try {

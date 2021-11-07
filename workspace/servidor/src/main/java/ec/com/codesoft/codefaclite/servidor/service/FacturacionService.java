@@ -598,13 +598,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     private void grabarDetallesFacturaSinTransaccion(Factura factura) throws RemoteException,PersistenceException,ServicioCodefacException
     {
         //TODO: Ver si es necesario grabar en esta parte
+        List<FacturaDetalle> facturaDetalleList=factura.getDetalles();
+        factura.setDetalles(null);
         entityManager.persist(factura);
         entityManager.flush();
 
         /**
          * Actualizar valores del inventario con el kardex
          */
-        for (FacturaDetalle detalle : factura.getDetalles()) {
+        for (FacturaDetalle detalle : facturaDetalleList) {            
             //Verificar a que modulo debe afectar los detalles
             switch (detalle.getTipoDocumentoEnum()) {
                 case ACADEMICO:
@@ -636,10 +638,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //Hacer persistir los detalles porque sucedio un caso que por algun motivo no se grabaron
             entityManager.flush();
             detalle.setFactura(factura); //Hago este seteo por que si viene de una referencia anterior como una proforma puede generar errores
-            entityManager.merge(detalle);
+            entityManager.persist(detalle);
+            entityManager.flush();
             
         }
 
+        //Volver a setear la lista a la factura despues de grabar de forma individual los detalles
+        factura.setDetalles(facturaDetalleList);
             
     }
     

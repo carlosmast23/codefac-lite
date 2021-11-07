@@ -2159,7 +2159,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         "Valor Total",
         ""}; //Columna para el boton de eliminar
 
-        List<FacturaDetalle> detalles = factura.getDetalles();
+        List<FacturaDetalle> detalles = factura.getDetallesOrdenados();
 
         //this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         this.modeloTablaDetallesProductos=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{
