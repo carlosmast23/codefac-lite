@@ -1058,7 +1058,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Producto",grupo = "detalles")
+    //TODO: Ver que validacion tiene los codigos en las facturas para usar la misma
+    //@ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Producto",grupo = "detalles")
     public JTextField getTxtProductoItem() {
         return txtProductoItem;
     }

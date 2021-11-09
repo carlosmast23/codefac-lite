@@ -66,6 +66,8 @@ public class MigrarProductoModel extends MigrarModel {
         //throw new ExcelMigrar.ExcepcionExcel("La bodega no existe");
     }
 
+    //TODO: Revisar que cuando migro nuevamente se estan creando varios kardex repetidos
+    @Deprecated
     @Override
     public ExcelMigrar.MigrarInterface getInterfaceMigrar() {
         return new ExcelMigrar.MigrarInterface() {
@@ -246,10 +248,12 @@ public class MigrarProductoModel extends MigrarModel {
                     ///========================> VALIDAR QUE NO EXISTA UN PRODUCTO SIMILAR YA INGRESADO POR CODIGO <======================//
                     //TODO: Esta parte esta de tener muy en cuenta porque aveces como se genera un codigo esta parte puede ser dificil de encontrar por el codigo y mas facil por el nombre
                     //Producto productoTmp =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(),session.getEmpresa());
+                    //TODO: Esta de tener presente esta parte cuando ya existe un producto no debe crear otro kardex solo debe actualizar al mismo producto
                     Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
                     
                     if(productoTmp != null) 
                     {
+                        Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.WARNING,"Producto actualizado : "+productoTmp.getNombre());
                         //Si maneja inventario y el producto existe entonces solo consulto el producto anterior
                         if(manejaInventarioEnumSiNo.equals(EnumSiNo.SI))
                         {
