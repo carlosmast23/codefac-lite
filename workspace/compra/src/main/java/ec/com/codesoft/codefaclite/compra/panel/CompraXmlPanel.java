@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.compra.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -37,13 +38,15 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtProveedor = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalles = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
+        btnEditarDetalle = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
+        btnCrearProducto = new javax.swing.JButton();
+        btnBuscarProductoProveedor = new javax.swing.JButton();
+        txtProductoSeleccionado = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -57,18 +60,13 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.ipadx = 150;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(txtProveedor, gridBagConstraints);
 
         jScrollPane1.setViewportView(tblDetalles);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -76,11 +74,11 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
 
         jToolBar1.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
+        btnEditarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
+        btnEditarDetalle.setFocusable(false);
+        btnEditarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEditarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnEditarDetalle);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/mas-ico.png"))); // NOI18N
         jButton2.setFocusable(false);
@@ -89,41 +87,78 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
         jToolBar1.add(jButton2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jToolBar1, gridBagConstraints);
 
         btnActualizar.setText("Actualizar");
-        jPanel1.add(btnActualizar, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        jPanel1.add(btnActualizar, gridBagConstraints);
+
+        btnCrearProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/mas-ico.png"))); // NOI18N
+        btnCrearProducto.setToolTipText("Crear un nuevo producto");
+        btnCrearProducto.setFocusable(false);
+        btnCrearProducto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCrearProducto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(btnCrearProducto, gridBagConstraints);
+
+        btnBuscarProductoProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/icon1.png"))); // NOI18N
+        btnBuscarProductoProveedor.setToolTipText("Buscar Producto");
+        btnBuscarProductoProveedor.setFocusable(false);
+        btnBuscarProductoProveedor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBuscarProductoProveedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBuscarProductoProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarProductoProveedorActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(btnBuscarProductoProveedor, gridBagConstraints);
+
+        txtProductoSeleccionado.setColumns(12);
+        txtProductoSeleccionado.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(txtProductoSeleccionado, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBuscarProductoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoProveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarProductoProveedorActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnBuscarProductoProveedor;
+    private javax.swing.JButton btnCrearProducto;
+    private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTable tblDetalles;
-    private javax.swing.JTextField txtProveedor;
+    private javax.swing.JTextField txtProductoSeleccionado;
     // End of variables declaration//GEN-END:variables
 
-    @TextFieldBinding(value = "compra.proveedor.razonSocial")
-    public JTextField getTxtProveedor() {
-        return txtProveedor;
-    }
 
-    public void setTxtProveedor(JTextField txtProveedor) {
-        this.txtProveedor = txtProveedor;
-    }
 
     public JButton getBtnActualizar() {
         return btnActualizar;
@@ -142,6 +177,34 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
         this.tblDetalles = tblDetalles;
     }
 
+    @ButtonBinding(actionListener = "listenerBtnBuscarProveedorDialogo")
+    public JButton getBtnBuscarProductoProveedor() {
+        return btnBuscarProductoProveedor;
+    }
+
+    public void setBtnBuscarProductoProveedor(JButton btnBuscarProductoProveedor) {
+        this.btnBuscarProductoProveedor = btnBuscarProductoProveedor;
+    }
+
+    @TextFieldBinding(value = "productoSeleccionado.codigoPersonalizado")
+    public JTextField getTxtProductoSeleccionado() {
+        return txtProductoSeleccionado;
+    }
+
+    public void setTxtProductoSeleccionado(JTextField txtProductoSeleccionado) {
+        this.txtProductoSeleccionado = txtProductoSeleccionado;
+    }
+
+    @ButtonBinding(actionListener = "listenerBtnEditarDetalle")
+    public JButton getBtnEditarDetalle() {
+        return btnEditarDetalle;
+    }
+
+    public void setBtnEditarDetalle(JButton btnEditarDetalle) {
+        this.btnEditarDetalle = btnEditarDetalle;
+    }
+
+    
     
     
     
