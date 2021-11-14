@@ -34,11 +34,22 @@ public class ProductoProveedor implements Serializable{
     @Column (name = "DESCRIPCION")
     private String descripcion;
     
-    //@Column (name = "CON_IVA")
-    //private String conIva;
-    
+
+    /**
+     * Este campo me permite tener guardado en el ultimo costo del producto por
+     * cada proveedor especialmente util si requiero sacar un listado de precios
+     * por cada proveedor
+     */
     @Column (name = "COSTO_ACTUAL")
     private BigDecimal costo;
+    
+    /**
+     * Este campo nos va a permitir enlazar los codigos de proveedores con los
+     * codigos internos de los productos especialmente util para pantalla como
+     * el de cargar XML directo para poder cargar directamente los productos
+     */
+    @Column (name = "CODIGO_PROVEEDOR")
+    private String codigoProveedor;
     
     @JoinColumn(name = "PRODUCTO_ID")
     private Producto producto;
@@ -101,6 +112,14 @@ public class ProductoProveedor implements Serializable{
 
     public void setProveedor(Persona proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public String getCodigoProveedor() {
+        return codigoProveedor;
+    }
+
+    public void setCodigoProveedor(String codigoProveedor) {
+        this.codigoProveedor = codigoProveedor;
     }
      
     

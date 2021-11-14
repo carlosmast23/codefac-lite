@@ -450,6 +450,10 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     public void setEstadoRetencion(String estadoRetencion) {
         this.estadoRetencion = estadoRetencion;
     }
+    public void setEstadoRetencionEnum(RetencionEnumCompras estadoRetencionEnum) {
+        this.estadoRetencion = estadoRetencionEnum.getEstado();
+    }
+    
 
     public OrdenCompra getOrdenCompra() {
         return ordenCompra;
@@ -667,6 +671,7 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
          */
         NO_EMITIDO("N", "No emitido"), 
         /**
+         * TODO: Parece que este nombre esta confuso por que parece que no enviar retenciones no significa que que no lleve contabilidad, revisar
          * Estado que me permite identificar que esta compra no se tiene que hacer retencion
          */
         SIN_CONTABILIDAD("S","Sin contabilidad");
