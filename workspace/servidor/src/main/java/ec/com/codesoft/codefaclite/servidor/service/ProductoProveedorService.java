@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoProveedorFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -16,6 +17,8 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -61,6 +64,36 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
         mapParametros.put("producto", producto);
         //mapParametros.put("proveedor", proveedor);
         return getFacade().findByMap(mapParametros);
+    }
+    
+    public ProductoProveedor construirSinTransaccion(Producto productoSeleccionado,Persona proveedor) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        ProductoProveedor productoProveedor=null;
+        try {
+            
+            ProductoProveedorServiceIf serviceProductoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf();
+            
+            List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoProveedorActivo(productoSeleccionado,proveedor);
+            
+            if (resultados != null && resultados.size() > 0) {
+                productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
+                
+            } else {//Cuando no existe crea un nuevo producto proveedor
+                productoProveedor = new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
+                productoProveedor.setDescripcion("");
+                productoProveedor.setEstado("a");
+                productoProveedor.setProducto(productoSeleccionado);
+                productoProveedor.setProveedor(proveedor);
+                
+            }
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoProveedorService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoProveedorService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return productoProveedor;
+    
     }
     
 }

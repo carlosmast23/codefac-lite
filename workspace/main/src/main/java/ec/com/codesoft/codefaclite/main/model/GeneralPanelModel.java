@@ -416,6 +416,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         setearEtiquetasPiePaginaPantallaPrincipal();        
         abrirAsistenteConfiguracion();
         setVisible(true);
+        
+        //Runtime garbage = Runtime.getRuntime();
+        //garbage.gc();
+        
+        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.INFO, "Liberando memoria GC...");
     }
     
     private void generarRespaldoBaseDatosPorCorreo()

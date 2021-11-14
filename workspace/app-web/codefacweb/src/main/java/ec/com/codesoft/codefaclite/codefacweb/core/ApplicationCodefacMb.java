@@ -53,13 +53,14 @@ public class ApplicationCodefacMb  implements Serializable{
             String propertyHome = System.getenv("CATALINA_HOME");
             String pathProperty=propertyHome+"/../codefac.ini";
             stream = new FileInputStream(pathProperty);
-            //try {
-            //InputStreamReader input = new InputStreamReader(FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/ejemplo.prop"));
+            
             Properties propiedades=new Properties();
             propiedades.load(stream);
             
+            //Obtener la propiedad que me permite
+            
             Object ipServidorProperty=propiedades.get("servicio_web_ip_servidor");
-            //String ipServidorTxt="";
+            
             if(ipServidorProperty==null)
             {
                 ipServidor=UtilidadVarios.obtenerIpServidor();

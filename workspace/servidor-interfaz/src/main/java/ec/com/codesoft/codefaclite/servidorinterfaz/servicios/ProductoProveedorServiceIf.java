@@ -27,4 +27,6 @@ public interface ProductoProveedorServiceIf extends ServiceAbstractIf<ProductoPr
     public List<ProductoProveedor> buscarPorProveedorActivo(Persona proveedor) throws ServicioCodefacException,java.rmi.RemoteException;
     
     public List<ProductoProveedor> buscarPorProductoActivo(Producto producto) throws ServicioCodefacException,java.rmi.RemoteException;
+    
+    public ProductoProveedor construirSinTransaccion(Producto productoSeleccionado,Persona proveedor) throws ServicioCodefacException,java.rmi.RemoteException;
 }

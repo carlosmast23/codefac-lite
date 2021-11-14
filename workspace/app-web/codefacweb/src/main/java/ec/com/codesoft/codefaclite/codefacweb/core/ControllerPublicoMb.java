@@ -6,9 +6,12 @@
 package ec.com.codesoft.codefaclite.codefacweb.core;
 
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -43,6 +46,12 @@ public class ControllerPublicoMb implements Serializable {
         System.out.println("init ControllerPublicoMb ... ");
         buscarEmpresaSeleccionada();
     }
+    
+    /*private void cargarImagenEmpresa()
+    {
+        InputStream inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);{
+        
+    }*/
 
     private void buscarEmpresaSeleccionada() {
         String idEmpresaStr = UtilidadesWeb.buscarParametroPeticion(GET_ID_EMPRESA);

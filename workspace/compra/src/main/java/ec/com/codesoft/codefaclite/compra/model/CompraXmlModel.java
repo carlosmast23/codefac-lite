@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -45,7 +47,59 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         crearModeloTabla();
         listenerBotones();
+        addListenerPopUps();
     }
+    
+    private void addListenerPopUps()
+    {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem jMenuItemEnlazarProveedor = new JMenuItem("Enlazar proveedor");
+        
+        jMenuItemEnlazarProveedor.addActionListener(listenerEnlazarProveedor);
+        
+        jPopupMenu.add(jMenuItemEnlazarProveedor);
+        getTblDetalles().setComponentPopupMenu(jPopupMenu);
+        
+    }
+    
+    private ActionListener listenerEnlazarProveedor=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            int indice=getTblDetalles().getSelectedRow();
+            if(indice<0)
+            {
+                return ;
+            }
+            
+            Producto productoSeleccionado= enlazarProveedor();
+            if(productoSeleccionado!=null)
+            {
+                try {
+                    //Enlazarel producto con la columna de la compra
+                    CompraDetalle compraDetalle= (CompraDetalle) getTblDetalles().getValueAt(indice,COLUMNA_OBJETO);
+                    ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(productoSeleccionado, compra.getProveedor());
+                    compraDetalle.setProductoProveedor(productoProveedor);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
+        }
+    };
+    
+    public Producto enlazarProveedor() {
+        ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+        BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+        buscarDialogo.setVisible(true);
+        Producto productoTmp = (Producto) buscarDialogo.getResultado();
+        //this.productoSeleccionado = productoTmp;
+        return productoTmp;
+    }
+    
 
     private void listenerBotones() {
         getBtnActualizar().addActionListener(new ActionListener() {
@@ -160,6 +214,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
 
     }
 
+    @Deprecated
     public void listenerBtnBuscarProveedorDialogo() {
         ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
         BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
@@ -172,45 +227,17 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
         Integer filaSeleccionada = getTblDetalles().getSelectedRow();
         if (filaSeleccionada > 0) {
             if (this.productoSeleccionado != null) {
-                CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(filaSeleccionada, COLUMNA_OBJETO);
-                ProductoProveedor productoProveedor= buscarProductoProveedor(productoSeleccionado, compra.getProveedor());
-                compraDetalle.setProductoProveedor(productoProveedor);                
+                //CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(filaSeleccionada, COLUMNA_OBJETO);
+                //ProductoProveedor productoProveedor= buscarProductoProveedor(productoSeleccionado, compra.getProveedor());
+                //compraDetalle.setProductoProveedor(productoProveedor);                
             }
         } else {
             //MensajeCodefacSistema
         }
 
     }
-
-    public ProductoProveedor buscarProductoProveedor(Producto productoSeleccionado,Persona proveedor) {
-        
-        ProductoProveedor productoProveedor=null;
-        try {
-            
-            ProductoProveedorServiceIf serviceProductoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-            
-            List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoProveedorActivo(productoSeleccionado,proveedor);
-            
-            if (resultados != null && resultados.size() > 0) {
-                productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
-                
-            } else {//Cuando no existe crea un nuevo producto proveedor
-                productoProveedor = new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
-                productoProveedor.setDescripcion("");
-                productoProveedor.setEstado("a");
-                productoProveedor.setProducto(productoSeleccionado);
-                productoProveedor.setProveedor(compra.getProveedor());
-                
-            }
-            
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return productoProveedor;
-    }
-
+    
+    
     @Override
     public void postConstructorExterno(Object[] parametros) {
         Compra compraXml = (Compra) parametros[0];
