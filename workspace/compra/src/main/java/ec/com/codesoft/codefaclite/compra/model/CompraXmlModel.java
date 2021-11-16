@@ -79,7 +79,19 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     //Enlazarel producto con la columna de la compra
                     CompraDetalle compraDetalle= (CompraDetalle) getTblDetalles().getValueAt(indice,COLUMNA_OBJETO);
                     //TODO: NO debe construir siempre, primero toca verificar si existe y luego edtar el codigo de enlazar con el proveedor
-                    ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(productoSeleccionado, compra.getProveedor());
+                    List<ProductoProveedor> productoProveedorList=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(productoSeleccionado, compra.getProveedor());
+                    
+                    ProductoProveedor productoProveedor=null;
+                    if(productoProveedorList.size()>0)
+                    {
+                        //Si existe el enlace solo consulto el smimo para editar el CODIGO_PROVEEDOR
+                        productoProveedor=productoProveedorList.get(0);
+                    }
+                    else
+                    {
+                        productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(productoSeleccionado, compra.getProveedor());
+                    }
+                   
                     productoProveedor.setCodigoProveedor(compraDetalle.getCodigoProveedor());
                     compraDetalle.setProductoProveedor(productoProveedor);                    
                     actualizarBindingCompontValues();

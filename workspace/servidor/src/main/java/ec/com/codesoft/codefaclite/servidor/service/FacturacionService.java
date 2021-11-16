@@ -427,6 +427,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             throw new ServicioCodefacException("Error con la identificacion del cliente seleccionado");
         }
         
+        //Fecha:15/11/2021 agregada validacion de la direccion por que el sri no permite
+        if(factura.getSucursal().getDireccion()==null || factura.getSucursal().getDireccion().trim().isEmpty())
+        {
+            throw new ServicioCodefacException("No se puede emitir una factura sin dirección");
+        }
+        
         //Validacion de MONTOS SUPERIORES A $200 PARA CONSUMIDORES FINALES EN DOCUMENTOS LEGALES
         if(factura.getCliente().isClienteFinal() && factura.getCodigoDocumentoEnum().getDocumentoLegal())        
         {
