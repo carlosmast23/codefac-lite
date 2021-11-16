@@ -53,7 +53,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     private void addListenerPopUps()
     {
         JPopupMenu jPopupMenu = new JPopupMenu();
-        JMenuItem jMenuItemEnlazarProveedor = new JMenuItem("Enlazar proveedor");
+        JMenuItem jMenuItemEnlazarProveedor = new JMenuItem("Enlazar producto");
         
         jMenuItemEnlazarProveedor.addActionListener(listenerEnlazarProveedor);
         
@@ -78,8 +78,11 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                 try {
                     //Enlazarel producto con la columna de la compra
                     CompraDetalle compraDetalle= (CompraDetalle) getTblDetalles().getValueAt(indice,COLUMNA_OBJETO);
+                    //TODO: NO debe construir siempre, primero toca verificar si existe y luego edtar el codigo de enlazar con el proveedor
                     ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(productoSeleccionado, compra.getProveedor());
-                    compraDetalle.setProductoProveedor(productoProveedor);
+                    productoProveedor.setCodigoProveedor(compraDetalle.getCodigoProveedor());
+                    compraDetalle.setProductoProveedor(productoProveedor);                    
+                    actualizarBindingCompontValues();
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {
@@ -118,7 +121,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -174,12 +177,12 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     @Override
     public Compra getResult() throws ExcepcionCodefacLite {
 
-        return null;
+        return compra;
     }
 
     public void crearModeloTabla() {
-        String titulo[] = new String[]{"Objeto", "Cod Sistema", "Cod Xml", "Descripción compra", "Cantidad", "Precio"};
-        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class, String.class, String.class, String.class});
+        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema", "Cod Xml", "Descripción compra", "Cantidad", "Precio"};
+        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class, String.class, String.class, String.class});
         getTblDetalles().setModel(modelo);
         UtilidadesTablas.definirTamanioColumnas(getTblDetalles(), new Integer[]{0});
     }
@@ -191,15 +194,22 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
             public Object[] addData(CompraDetalle value) {
 
                 String codigoSistema="";
+                String nombreProductoSistema="";
+                String codigoProveedor="";
                 if(value.getProductoProveedor()!=null)
                 {
                     codigoSistema=value.getProductoProveedor().getProducto().getCodigoPersonalizado();
+                    nombreProductoSistema=value.getProductoProveedor().getProducto().getNombre();
                 }
+                
+                
+                
                 //if(value.get)
                 return new Object[]{
                     value,
                     codigoSistema,
-                    "",
+                    nombreProductoSistema,
+                    value.getCodigoProveedor(),
                     value.getDescripcion(),
                     value.getCantidad(),
                     value.getPrecioUnitario() + "",};

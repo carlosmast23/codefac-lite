@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
@@ -29,4 +30,6 @@ public interface ProductoProveedorServiceIf extends ServiceAbstractIf<ProductoPr
     public List<ProductoProveedor> buscarPorProductoActivo(Producto producto) throws ServicioCodefacException,java.rmi.RemoteException;
     
     public ProductoProveedor construirSinTransaccion(Producto productoSeleccionado,Persona proveedor) throws ServicioCodefacException,java.rmi.RemoteException;
+    
+    public ProductoProveedor buscarActivoPorCodigoProveedor(String codigoProveedor,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;
 }

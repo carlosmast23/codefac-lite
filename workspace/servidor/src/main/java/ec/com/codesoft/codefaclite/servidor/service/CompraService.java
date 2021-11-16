@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.CompraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra.RetencionEnumCompras;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -165,6 +166,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         compraNueva.setObservacion("Compra Electrónica");
         compraNueva.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA);
         
+        //Por defecto en estado emitir retencion le selecciono en NO
+        RetencionEnumCompras estadoRetencion=Compra.RetencionEnumCompras.SIN_CONTABILIDAD;
+        compraNueva.setEstadoRetencionEnum(estadoRetencion);
+        
         //Cargar los DETALLES DE LA COMPRA
         List<CompraDetalle> detallesCompra=cargarProductoCompraDetalleDesdeXml(comprobanteElectronico, compraNueva);
         compraNueva.setDetalles(detallesCompra);
@@ -181,15 +186,16 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             CompraDetalle compraDetalle=new CompraDetalle();
             //Buscar si existe el producto cargado con el Código principal
             String codigoPrincipal=detalleXml.getCodigoPrincipal();
-            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoPrincipal,compra.getEmpresa());
+            ProductoProveedor productoProveedor=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarActivoPorCodigoProveedor(codigoPrincipal,compra.getEmpresa());
+            //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoPrincipal,compra.getEmpresa());
             
-            if(producto!=null)
+            if(productoProveedor!=null)
             {
-                List<ProductoProveedor> productoProveedorList=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(producto, compra.getProveedor());
-                if(productoProveedorList.size()>0)
-                {
-                    compraDetalle.setProductoProveedor(productoProveedorList.get(0));
-                }                
+                //List<ProductoProveedor> productoProveedorList=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(producto, compra.getProveedor());
+                //if(productoProveedorList.size()>0)
+                //{
+                compraDetalle.setProductoProveedor(productoProveedor);
+                //}                
             }
             else
             {
@@ -206,11 +212,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             
             //Agregar el PRECIO UNITARIO
             BigDecimal precioUnitario=detalleXml.getPrecioUnitario();
-            compraDetalle.setPrecioUnitario(precioUnitario);
+            compraDetalle.setPrecioUnitario(precioUnitario);            
             
             //Agregar el DESCUENTO
             BigDecimal descuento= detalleXml.getDescuento();
             compraDetalle.setDescuento(descuento);
+            
+            //Agregar el CODIGO DEL PROVEEDOR ORIGINAL DE LA COMPRA
+            compraDetalle.setCodigoProveedor(codigoPrincipal);
             
             detalles.add(compraDetalle);
             
@@ -281,10 +290,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                
                 compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo para poder ingresar al inventario
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
-                for (CompraDetalle compraDetalle : compra.getDetalles()) {
-                    if (compraDetalle.getProductoProveedor().getId() == null) {
+                for (CompraDetalle compraDetalle : compra.getDetalles()) 
+                {
+                    if (compraDetalle.getProductoProveedor().getId() == null) 
+                    {
                         entityManager.persist(compraDetalle.getProductoProveedor());
-                    } else {
+                    } 
+                    else 
+                    {
                         entityManager.merge(compraDetalle.getProductoProveedor());
                     }
                 }

@@ -729,7 +729,7 @@ public class CompraModel extends CompraPanel{
                 /**
                  * Seteo el valor que se ingresa en el costo para actualizar el valor del producto para ese proveedor
                  */
-                agregarDetallesCompra(null);
+                agregarDetalleCompraConDatosVista(null);
 
             }
         });
@@ -799,7 +799,7 @@ public class CompraModel extends CompraPanel{
                     bandera = false;
                     filaDP = getTblDetalleProductos().getSelectedRow();
                     CompraDetalle compraDetalle = compra.getDetalles().get(filaDP);
-                    agregarDetallesCompra(compraDetalle);
+                    agregarDetalleCompraConDatosVista(compraDetalle);
                     calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
                     calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
                 }
@@ -828,6 +828,27 @@ public class CompraModel extends CompraPanel{
                 
     }
     
+    private void agregarDetalleCompraConDatosVista(CompraDetalle compraDetalle)
+    {
+
+        BigDecimal costo = new BigDecimal(getTxtPrecionUnitarioItem().getText());
+        BigDecimal cantidad = new BigDecimal(getTxtCantidadItem().getText());
+        BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText());
+        compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
+        
+        //validar el ingreso en la vista
+        if (!panelPadre.validarPorGrupo("detalles")) {
+            return;
+        }
+        
+        //TODO:Verificar por que existen 2 validaciones para la vista
+        if(verificarCamposValidados())
+        {
+            agregarDetallesCompra(compraDetalle,productoProveedor ,costo, cantidad, precioUnitario, getTxtDescripcionItem().getText());
+        }
+        
+    }
+    
     private void listenerBtnCargarCompraXml()
     {
         String[] filtros={"xml", "XML"};
@@ -845,7 +866,7 @@ public class CompraModel extends CompraPanel{
                 Object[] parametros={compra};
                 panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
                         
-                cargarDatosCompra(compra);
+                //cargarDatosCompra(compra);
                 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -863,6 +884,17 @@ public class CompraModel extends CompraPanel{
             if(entity!=null)
             {
                 compra=(Compra) entity;
+                //Agregar todos los detalles de la forma estandar en la compra para ir haciendo los calculos necesarios de la pantalla de COMPRA
+                List<CompraDetalle> detallesTemporal=compra.getDetalles();
+                //compra.setDetalles(null);
+                for (CompraDetalle compraDetalle : detallesTemporal) 
+                {
+                    //TODO:Mejorar esta parte para no pasar los mismos datos
+                    agregarDetallesCompra(compraDetalle,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(), compraDetalle.getDescripcion());
+                    
+                }
+                
+                compra.calcularTotales(session.obtenerIvaActualDecimal());
                 cargarDatosCompra(compra);
             }
         }
@@ -980,14 +1012,19 @@ public class CompraModel extends CompraPanel{
         String[] titulo={"Cantidad","Descripción","Valor Unitario","Valor Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
-        for (CompraDetalle detalle : detalles) {
-            Vector<String> fila=new Vector<String>();
-            fila.add(detalle.getCantidad()+"");
-            fila.add(detalle.getDescripcion()+"");
-            fila.add(detalle.getPrecioUnitario()+"");
-            fila.add(detalle.getSubtotal()+"");
-            this.modeloTablaDetallesCompra.addRow(fila);
+        
+        if(detalles!=null)
+        {
+            for (CompraDetalle detalle : detalles) {
+                Vector<String> fila=new Vector<String>();
+                fila.add(detalle.getCantidad()+"");
+                fila.add(detalle.getDescripcion()+"");
+                fila.add(detalle.getPrecioUnitario()+"");
+                fila.add(detalle.getSubtotal()+"");
+                this.modeloTablaDetallesCompra.addRow(fila);
+            }
         }
+        
         
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
     }
@@ -1072,7 +1109,7 @@ public class CompraModel extends CompraPanel{
     }
    
     //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
-    private void agregarDetallesCompra(CompraDetalle compraDetalle)
+    private void agregarDetallesCompra(CompraDetalle compraDetalle,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,String descripcion)
     {
         Boolean agregar = true;
         
@@ -1083,24 +1120,22 @@ public class CompraModel extends CompraPanel{
             compraDetalle = new CompraDetalle();
         }
         
-        if (!panelPadre.validarPorGrupo("detalles")) {
-            return;
-        }
         
-        if(verificarCamposValidados())
-        {
-            BigDecimal costo=new BigDecimal(getTxtPrecionUnitarioItem().getText());
+            //BigDecimal costo=new BigDecimal(getTxtPrecionUnitarioItem().getText());
             productoProveedor.setCosto(costo);
             //EnumSiNo enumSiNo= (EnumSiNo) getCmbCobraIva().getSelectedItem();
             //productoProveedor.setConIva(enumSiNo.getLetra());
             
             //Seteo los valores de los detalles e la compra
-            compraDetalle.setCantidad(new BigDecimal(getTxtCantidadItem().getText()));
-            BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
+            //compraDetalle.setCantidad(new BigDecimal(getTxtCantidadItem().getText()));
+            compraDetalle.setCantidad(cantidadItem);
+            
+            //BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
             //compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
             compraDetalle.setPrecioUnitario(precioUnitario ); //TODO: Ver si es necesario escalar los valores o este proceso lo debe hacer el usuario
             compraDetalle.setCompra(compra);
-            compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
+            compraDetalle.setDescripcion(descripcion);
+            //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
             compraDetalle.setDescuento(BigDecimal.ZERO);
             if(productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
             {
@@ -1144,7 +1179,7 @@ public class CompraModel extends CompraPanel{
             getTxtProductoItem().requestFocus(); //Despues de agregar setear nuevamente en el campo para ingresar otro codigo
             actualizarDatosMostrarVentana();
             getCmbSustentoComprobante().setSelectedIndex(0); //Selecionar el primer sustento despues de agregar
-        }
+        
      
     }
     
@@ -1374,7 +1409,7 @@ public class CompraModel extends CompraPanel{
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) 
                 {
-                    agregarDetallesCompra(null);
+                    agregarDetalleCompraConDatosVista(null);
                 }
             }
 

@@ -7,6 +7,8 @@ create table PRODUCTO_PROVEEDOR
     DESCRIPCION varchar(128),
     CON_IVA varchar(1),
     COSTO_ACTUAL decimal(13,3),    
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.9.6)*/
+    CODIGO_PROVEEDOR varchar(70),
     primary key (ID)
 );
 

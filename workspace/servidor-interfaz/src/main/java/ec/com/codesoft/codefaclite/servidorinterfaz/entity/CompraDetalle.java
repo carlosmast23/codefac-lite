@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -73,6 +74,14 @@ public class CompraDetalle implements Serializable {
     
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
+        
+    /**
+     * Este campo me permite guardar cual fue el codigo original del proveedor cuando exista un codigo
+     * por el momento no lo hago persistente y solo lo uso para poder enviar informacion a la pantalla de COMPRA XML
+     */
+    //@Column (name = "CODIGO_PROVEEDOR")
+    @Transient
+    private String codigoProveedor;
     
     public CompraDetalle() {
     }
@@ -252,6 +261,14 @@ public class CompraDetalle implements Serializable {
     
     public SriSustentoComprobanteEnum getCodigoSustentoSriEnum() {
         return SriSustentoComprobanteEnum.obtenerPorCodigo(codigoSustentoSri);        
+    }
+
+    public String getCodigoProveedor() {
+        return codigoProveedor;
+    }
+
+    public void setCodigoProveedor(String codigoProveedor) {
+        this.codigoProveedor = codigoProveedor;
     }
             
     
