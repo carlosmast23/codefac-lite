@@ -116,7 +116,15 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         dato.add(documentoEnum.getNombre()); //TODO: Veri si para cosnultar por documento sea una propiedad intrinsica de la factura        
         dato.add((t.getEstadoEnum() != null) ? t.getEstadoEnum().getNombre() : "Sin estado");
 
-        dato.add(ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(t.getFechaEmision()));
+        if(t.getFechaEmision()!=null)
+        {
+            dato.add(ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(t.getFechaEmision()));
+        }
+        else
+        {
+            dato.add("");
+            Logger.getLogger(ProformaBusqueda.class.getName()).log(Level.WARNING,"Proforma grabada sin fecha de emision: id=>"+t.getId());
+        }
         dato.add(t.getTotal());
     }
 
