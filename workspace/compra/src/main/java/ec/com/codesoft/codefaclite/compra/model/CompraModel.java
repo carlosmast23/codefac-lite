@@ -834,7 +834,7 @@ public class CompraModel extends CompraPanel{
         BigDecimal costo = new BigDecimal(getTxtPrecionUnitarioItem().getText());
         BigDecimal cantidad = new BigDecimal(getTxtCantidadItem().getText());
         BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText());
-        compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
+        //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
         
         //validar el ingreso en la vista
         if (!panelPadre.validarPorGrupo("detalles")) {
