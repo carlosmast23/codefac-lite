@@ -44,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
@@ -1314,6 +1315,19 @@ public class CompraModel extends CompraPanel{
             DialogoCodefac.mensaje("Error Validación","Ingrese detalles para poder grabar",DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
         }
+        
+        if(getCmbDocumento().getSelectedItem()==null)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("No se puede grabar sin seleccionar un documento", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return false;
+        }
+        
+        if(getCmbTipoDocumento().getSelectedItem()==null)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("No se puede grabar sin seleccionar un tipo de documento", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return false;
+        }
+        
         
         //La validacion de los secuenciales solo debe funcionar cuando no es un documento interno por que puede ser que no tenga datos de secuenciales
         /*DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();

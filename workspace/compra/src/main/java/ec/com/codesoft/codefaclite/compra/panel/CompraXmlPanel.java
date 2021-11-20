@@ -37,16 +37,9 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalles = new javax.swing.JTable();
-        jToolBar1 = new javax.swing.JToolBar();
-        btnEditarDetalle = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        btnActualizar = new javax.swing.JButton();
-        btnCrearProducto = new javax.swing.JButton();
-        btnBuscarProductoProveedor = new javax.swing.JButton();
-        txtProductoSeleccionado = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -54,12 +47,6 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
         setResizable(true);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Proveedor:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel1, gridBagConstraints);
 
         jScrollPane1.setViewportView(tblDetalles);
 
@@ -72,101 +59,29 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
-        jToolBar1.setRollover(true);
-
-        btnEditarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
-        btnEditarDetalle.setFocusable(false);
-        btnEditarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnEditarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(btnEditarDetalle);
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/mas-ico.png"))); // NOI18N
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        gridBagConstraints.weightx = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jToolBar1, gridBagConstraints);
-
-        btnActualizar.setText("Actualizar");
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setText("Nota: En esta tabla se tiene que enlazar los productos de la compra xml con los productos del sistema ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        jPanel1.add(btnActualizar, gridBagConstraints);
-
-        btnCrearProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/mas-ico.png"))); // NOI18N
-        btnCrearProducto.setToolTipText("Crear un nuevo producto");
-        btnCrearProducto.setFocusable(false);
-        btnCrearProducto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCrearProducto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        jPanel1.add(btnCrearProducto, gridBagConstraints);
-
-        btnBuscarProductoProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/icon1.png"))); // NOI18N
-        btnBuscarProductoProveedor.setToolTipText("Buscar Producto");
-        btnBuscarProductoProveedor.setFocusable(false);
-        btnBuscarProductoProveedor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnBuscarProductoProveedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnBuscarProductoProveedor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarProductoProveedorActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        jPanel1.add(btnBuscarProductoProveedor, gridBagConstraints);
-
-        txtProductoSeleccionado.setColumns(12);
-        txtProductoSeleccionado.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanel1.add(txtProductoSeleccionado, gridBagConstraints);
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel2, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBuscarProductoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoProveedorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscarProductoProveedorActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActualizar;
-    private javax.swing.JButton btnBuscarProductoProveedor;
-    private javax.swing.JButton btnCrearProducto;
-    private javax.swing.JButton btnEditarDetalle;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTable tblDetalles;
-    private javax.swing.JTextField txtProductoSeleccionado;
     // End of variables declaration//GEN-END:variables
 
-
-
-    public JButton getBtnActualizar() {
-        return btnActualizar;
-    }
-
-    public void setBtnActualizar(JButton btnActualizar) {
-        this.btnActualizar = btnActualizar;
-    }
 
     @TableBinding(source = "compra.detalles",tableAddDataInterface = "tableBindingAddData",selectValue = "")
     public JTable getTblDetalles() {
@@ -177,33 +92,7 @@ public abstract class CompraXmlPanel extends ControladorCodefacInterface {
         this.tblDetalles = tblDetalles;
     }
 
-    @ButtonBinding(actionListener = "listenerBtnBuscarProveedorDialogo")
-    public JButton getBtnBuscarProductoProveedor() {
-        return btnBuscarProductoProveedor;
-    }
-
-    public void setBtnBuscarProductoProveedor(JButton btnBuscarProductoProveedor) {
-        this.btnBuscarProductoProveedor = btnBuscarProductoProveedor;
-    }
-
-    @TextFieldBinding(value = "productoSeleccionado.codigoPersonalizado")
-    public JTextField getTxtProductoSeleccionado() {
-        return txtProductoSeleccionado;
-    }
-
-    public void setTxtProductoSeleccionado(JTextField txtProductoSeleccionado) {
-        this.txtProductoSeleccionado = txtProductoSeleccionado;
-    }
-
-    @ButtonBinding(actionListener = "listenerBtnEditarDetalle")
-    public JButton getBtnEditarDetalle() {
-        return btnEditarDetalle;
-    }
-
-    public void setBtnEditarDetalle(JButton btnEditarDetalle) {
-        this.btnEditarDetalle = btnEditarDetalle;
-    }
-
+ 
     
     
     

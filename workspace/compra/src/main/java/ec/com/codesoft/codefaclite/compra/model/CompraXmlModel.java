@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBind
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -20,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -53,12 +55,20 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     private void addListenerPopUps()
     {
         JPopupMenu jPopupMenu = new JPopupMenu();
+        
+        //MENU PARA ENLAZAR DE UN PRODUCTO EXISTENTE
         JMenuItem jMenuItemEnlazarProveedor = new JMenuItem("Enlazar producto");
-        
         jMenuItemEnlazarProveedor.addActionListener(listenerEnlazarProveedor);
-        
         jPopupMenu.add(jMenuItemEnlazarProveedor);
+        
+        //MENU PARA CREAR UN PRODUCTO NUEVO        
+        JMenuItem jMenuItemNuevoProveedor = new JMenuItem("Crear Producto");
+        jMenuItemNuevoProveedor.addActionListener(listenerCrearProducto);
+        jPopupMenu.add(jMenuItemNuevoProveedor);
+        
         getTblDetalles().setComponentPopupMenu(jPopupMenu);
+        
+        
         
     }
     
@@ -73,38 +83,74 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
             }
             
             Producto productoSeleccionado= enlazarProveedor();
-            if(productoSeleccionado!=null)
-            {
-                try {
-                    //Enlazarel producto con la columna de la compra
-                    CompraDetalle compraDetalle= (CompraDetalle) getTblDetalles().getValueAt(indice,COLUMNA_OBJETO);
-                    //TODO: NO debe construir siempre, primero toca verificar si existe y luego edtar el codigo de enlazar con el proveedor
-                    List<ProductoProveedor> productoProveedorList=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(productoSeleccionado, compra.getProveedor());
-                    
-                    ProductoProveedor productoProveedor=null;
-                    if(productoProveedorList.size()>0)
-                    {
-                        //Si existe el enlace solo consulto el smimo para editar el CODIGO_PROVEEDOR
-                        productoProveedor=productoProveedorList.get(0);
-                    }
-                    else
-                    {
-                        productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(productoSeleccionado, compra.getProveedor());
-                    }
-                   
-                    productoProveedor.setCodigoProveedor(compraDetalle.getCodigoProveedor());
-                    compraDetalle.setProductoProveedor(productoProveedor);                    
-                    actualizarBindingCompontValues();
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            }
+            enlazarProductoTabla(productoSeleccionado, indice);
             
         }
     };
+    
+    private void enlazarProductoTabla(Producto productoSeleccionado,int fila)
+    {
+        if (productoSeleccionado != null) {
+            try {
+                //Enlazarel producto con la columna de la compra
+                CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(fila, COLUMNA_OBJETO);
+                //TODO: NO debe construir siempre, primero toca verificar si existe y luego edtar el codigo de enlazar con el proveedor
+                List<ProductoProveedor> productoProveedorList = ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(productoSeleccionado, compra.getProveedor());
+
+                ProductoProveedor productoProveedor = null;
+                if (productoProveedorList.size() > 0) {
+                    //Si existe el enlace solo consulto el smimo para editar el CODIGO_PROVEEDOR
+                    productoProveedor = productoProveedorList.get(0);
+                } else {
+                    productoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(productoSeleccionado, compra.getProveedor());
+                }
+
+                productoProveedor.setCodigoProveedor(compraDetalle.getCodigoProveedor());
+                compraDetalle.setProductoProveedor(productoProveedor);
+                actualizarBindingCompontValues();
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+    
+    private ActionListener listenerCrearProducto=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int fila=getTblDetalles().getSelectedRow();
+            if(fila<0)
+            {
+                return ;
+            }
+            
+            CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(fila, COLUMNA_OBJETO);
+            
+            ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
+                    @Override
+                    public void updateInterface(Producto entity) {
+                        if (entity != null) {
+                            System.out.println("Agregado producto nuevo que fue creado");
+                            enlazarProductoTabla(entity, fila);
+                            //actualizarBindingCompontValues();
+                        }
+                    }
+                };
+
+                Object[] parametros={
+                    null,
+                    compraDetalle.getCodigoProveedor(),
+                    compraDetalle.getDescripcion(),
+                    compraDetalle.getPrecioUnitario()
+                };
+                
+                panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false,parametros,formularioActual);
+            
+        }
+    };
+    
     
     public Producto enlazarProveedor() {
         ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
@@ -117,13 +163,13 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     
 
     private void listenerBotones() {
-        getBtnActualizar().addActionListener(new ActionListener() {
+        /*getBtnActualizar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Compra:" + compra.getRazonSocial());
                 actualizarBindingCompontValues();
             }
-        });
+        });*/
     }
 
     @Override
@@ -188,8 +234,19 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
 
     @Override
     public Compra getResult() throws ExcepcionCodefacLite {
-
+        
+        validacionGrabar();
         return compra;
+    }
+    
+    private void validacionGrabar() throws ExcepcionCodefacLite
+    {
+        for (CompraDetalle detalle : compra.getDetalles()) {
+            if(detalle.getProductoProveedor()==null)
+            {
+                throw new ExcepcionCodefacLite("El producto con código: "+detalle.getCodigoProveedor()+" no tiene un ENLACE con un PRODUCTO INTERNO ");
+            }
+        }
     }
 
     public void crearModeloTabla() {

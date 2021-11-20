@@ -494,15 +494,38 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         actualizarTablaEnsamble();
     }
 
+    /**
+     * LOS datos del constructor externo son
+     * [0] EnumSiNO
+     * [1] Codigo producto
+     * [2] Nombre producto
+     * [3] Pvp sin iva
+     * @param parametros 
+     */
     @Override
     public void postConstructorExterno(Object[] parametros) {
       
-        EnumSiNo enumSiNo=(EnumSiNo) parametros[0];
+        //EnumSiNo enumSiNo=(EnumSiNo) parametros[0];
         //getCmbManejaInventario().setSelectedItem(enumSiNo);
         
         //TODO: Mejorar esta parte porque solo va a funcionar para el codigo personalizado y si quieren manejar algunos codigos no funciona
-        String codigoProducto=(String) parametros[1];
-        getTxtCodigoPersonalizado().setText(codigoProducto);
+        if(parametros[1]!=null)
+        {
+            String codigoProducto=(String) parametros[1];
+            getTxtCodigoPersonalizado().setText(codigoProducto);
+        }
+        
+        if(parametros[2]!=null)
+        {
+            String nombreProducto=(String) parametros[2];
+            getTextNombre().setText(nombreProducto);
+        }
+        
+        if(parametros[3]!=null)
+        {
+            BigDecimal pvpPrecio=(BigDecimal) parametros[3];
+            getTextValorUnitario().setText(pvpPrecio+"");
+        }
     }
 
    

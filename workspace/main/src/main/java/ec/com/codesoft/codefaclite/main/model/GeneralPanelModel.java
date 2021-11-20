@@ -1069,7 +1069,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frameInterface.formOwner.updateInterface(resultado);
 
                 } catch (ExcepcionCodefacLite ex) {
-                    System.out.println("Error al grabar en modo dialogo");
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));                    
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (PropertyVetoException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -2329,6 +2329,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
         ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
         
+        //Primero verificar si la pantalla es DIALOGO, en tal motivo solo activo el boton de guardar
+        if(frameInterface.modoDialogo)
+        {
+            getBtnGuardar().setEnabled(true);
+            return;
+        }
+        
+        //Si no es du dialogo continuo con las validaciones normales
         try
         {
             Map<Integer, Boolean> mapPermisos = frameInterface.permisosFormulario();
