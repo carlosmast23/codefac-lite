@@ -135,7 +135,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -770,8 +769,65 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             }
         });
+        
+        getBtnAplicarDescuentoGlobal().addActionListener(listenerDescuentoGlobal);
 
     }
+    
+    //TODO: Unificar esta parte en el controlador para luego poder usar en la interfaz web    
+    private ActionListener listenerDescuentoGlobal=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            String descuentoStr=getTxtDescuentoGlobal().getText();
+            
+            BigDecimal descuentoLeido=new BigDecimal(descuentoStr);
+            
+            //Esta variable va a almacenar siempre el descuento antes de impuestos
+            //y cuando el usuario quiera poner un descuento incluido iva primero hago la conversion interna            
+            
+            for (FacturaDetalle detalle : factura.getDetalles()) {
+                
+                
+                BigDecimal descuentoValor = BigDecimal.ZERO;
+
+                if (getChkPorcentajeDescuentoGlobal().isSelected()) {
+
+                    descuentoValor = descuentoLeido.divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP).multiply(detalle.getSubtotalSinDescuentos());
+
+                } else {
+                    BigDecimal descuentoValorGlobal=BigDecimal.ZERO;
+                    if (getCmbIvaDescuento().getSelectedItem().equals(EnumSiNo.NO)) {
+                        //Cuando ingresa el valor que no incluye el iva, lo agrego directamente
+                        descuentoValorGlobal = descuentoLeido;
+                    } else if (getCmbIvaDescuento().getSelectedItem().equals(EnumSiNo.SI)) {
+                        BigDecimal ivaDefecto = new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+                        descuentoValorGlobal = UtilidadesImpuestos.quitarValorIva(ivaDefecto, descuentoLeido, 6);
+                    }
+                    
+                    //Calcular el descuento individual por cada producto
+                    BigDecimal subtotalFactura=factura.getSubtotalImpuestos().add(factura.getDescuentoSinImpuestos());
+                    BigDecimal porcentajeDecimalDescuentoGeneral=descuentoValorGlobal.divide(subtotalFactura,6,BigDecimal.ROUND_HALF_UP);
+                    
+                    descuentoValor = porcentajeDecimalDescuentoGeneral.multiply(detalle.getSubtotalSinDescuentos());
+
+                }
+
+                //Solo grabar con 2 decimales por que el Sri no permite más en los descuentos
+                detalle.setDescuento(descuentoValor.setScale(2, BigDecimal.ROUND_HALF_UP));                         
+            }
+            
+            for (FacturaDetalle detalle : factura.getDetalles()) {
+                //Solo grabar con 2 decimales por que el Sri no permite más en los descuentos
+                detalle.calcularTotalesDetallesFactura();
+            }            
+            
+            cargarDatosDetalles();            
+            controlador.cargarTotales();
+            
+        }
+    };
+    
     
     private void agregarItemFacturaListener()
     {
@@ -1969,6 +2025,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbPreciosVenta().removeAllItems();
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
         getTxtDiasCredito().setValue(0);
+        getTxtDescuentoGlobal().setText("0");
         
         
         
@@ -2919,6 +2976,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbIva().removeAllItems();
         getCmbIva().addItem(EnumSiNo.SI);
         getCmbIva().addItem(EnumSiNo.NO);
+        
+        getCmbIvaDescuento().removeAllItems();
+        getCmbIvaDescuento().addItem(EnumSiNo.SI);
+        getCmbIvaDescuento().addItem(EnumSiNo.NO);
         
         
         cargarComboPuntosVenta();

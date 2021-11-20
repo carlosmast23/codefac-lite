@@ -133,4 +133,22 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         return getCantidad().multiply(getPrecioUnitario()).add(getDescuento());
     }*/
     
+    public void calcularTotalesDetallesFactura()
+    {
+        //Calular el total despues del descuento porque necesito esa valor para grabar
+        
+        calcularTotalDetalle();
+        /**
+         * Revisar este calculo del iva para no calcular 2 veces al mostrar
+         */
+        setIvaPorcentaje(getIvaPorcentaje());
+        if(getIcePorcentaje()!=null)
+        {
+            calcularValorIce(getIcePorcentaje());
+        }
+        
+             
+        calculaIva();
+    }
+    
 }

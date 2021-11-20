@@ -543,7 +543,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return false;
         }
         
-        calcularTotalesDetalles(facturaDetalle);
+        //calcularTotalesDetalles(facturaDetalle);
+        facturaDetalle.calcularTotalesDetallesFactura();
         /**
          * ========> VALIDACION QUE EL VALOR UNITARIO MENOS DESCUENTO NO SEA NEGATIVO <=============
          * TODO: Ver si este codigo es correcto poner al final o se debe agrupar todos las validaciones en un bloque
@@ -574,23 +575,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
     }
     
-    public void calcularTotalesDetalles(FacturaDetalle facturaDetalle)
-    {
-        //Calular el total despues del descuento porque necesito esa valor para grabar
-        
-        facturaDetalle.calcularTotalDetalle();
-        /**
-         * Revisar este calculo del iva para no calcular 2 veces al mostrar
-         */
-        facturaDetalle.setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
-        if(facturaDetalle.getIcePorcentaje()!=null)
-        {
-            facturaDetalle.calcularValorIce(facturaDetalle.getIcePorcentaje());
-        }
-        
-             
-        facturaDetalle.calculaIva();
-    }
+    
     
     public void cargarTotales() {
         Factura factura=interfaz.obtenerFactura();

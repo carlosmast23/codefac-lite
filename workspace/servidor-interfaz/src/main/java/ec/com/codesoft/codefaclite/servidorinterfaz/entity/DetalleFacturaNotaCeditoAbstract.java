@@ -204,7 +204,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     
     
     /**
-     * Metodos personalizados
+     * PrecioUnitario*cantidad
      *
      * @return
      */
