@@ -12,8 +12,8 @@ create table EMPRESA
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     TELEFONOS varchar(10),
-    RAZON_SOCIAL varchar(50),
-    NOMBRE_LEGAL varchar(50),
+    RAZON_SOCIAL varchar(300),
+    NOMBRE_LEGAL varchar(300),
     DIRECCION varchar(100),
     IDENTIFICACION varchar(50),
     LOGO_IMAGEN_PATH varchar(512),

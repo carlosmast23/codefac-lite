@@ -56,6 +56,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        btnGenerarCodigosAutomaticos = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -191,7 +192,6 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         getContentPane().add(jLabel5, gridBagConstraints);
@@ -204,12 +204,23 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints.insets = new java.awt.Insets(25, 5, 5, 5);
         getContentPane().add(jSeparator1, gridBagConstraints);
 
+        btnGenerarCodigosAutomaticos.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        btnGenerarCodigosAutomaticos.setText("Generar Códigos Automaticos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        getContentPane().add(btnGenerarCodigosAutomaticos, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCompraPendiente;
+    private javax.swing.JButton btnGenerarCodigosAutomaticos;
     private javax.swing.JComboBox<Bodega> cmbBodega;
     private org.jdesktop.swingx.JXDatePicker cmbFechaIngreso;
     private javax.swing.JLabel jLabel1;
@@ -275,6 +286,14 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
 
     public void setTblGarantiaProductos(JTable tblGarantiaProductos) {
         this.tblGarantiaProductos = tblGarantiaProductos;
+    }
+
+    public JButton getBtnGenerarCodigosAutomaticos() {
+        return btnGenerarCodigosAutomaticos;
+    }
+
+    public void setBtnGenerarCodigosAutomaticos(JButton btnGenerarCodigosAutomaticos) {
+        this.btnGenerarCodigosAutomaticos = btnGenerarCodigosAutomaticos;
     }
 
     

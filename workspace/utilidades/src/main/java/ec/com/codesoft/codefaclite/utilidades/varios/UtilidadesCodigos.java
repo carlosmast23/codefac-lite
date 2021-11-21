@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.util.UUID;
 
 /**
  *
@@ -29,5 +30,10 @@ public abstract class UtilidadesCodigos {
     public static String generarPrefijo(String codigoEmpresa,String codigoSucursal,String codigoDocumento,String separador)
     {
         return codigoEmpresa+separador+codigoSucursal+separador+codigoDocumento+separador;
+    }
+    
+    public static String generarCodigoUnicoUUID()
+    {
+        return UUID.randomUUID().toString().replace("-","");
     }
 }

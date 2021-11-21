@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -231,7 +232,30 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 }
             }
         });
+        
+        getBtnGenerarCodigosAutomaticos().addActionListener(listenerGenerarCodigosAutomaticos);
     }
+    
+    
+    private ActionListener listenerGenerarCodigosAutomaticos=new ActionListener() 
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            int filaModificada=getTblCompra().getSelectedRow();
+            DefaultTableModel tablaModelo=(DefaultTableModel) getTblCompra().getModel();
+            KardexDetalleTmp kardexDetalle=(KardexDetalleTmp)tablaModelo.getValueAt(filaModificada,ColumnaDetalleCompraEnum.COLUMNA_KARDEX.numero);
+            
+            for (KardexItemEspecifico detallesEspecifico : kardexDetalle.getDetallesEspecificos()) 
+            {
+                String codigoUnico=UtilidadesCodigos.generarCodigoUnicoUUID();
+                detallesEspecifico.setCodigoEspecifico(codigoUnico);
+            }
+            
+            construirTablaProductosConGarantia(kardexDetalle);
+            
+        }
+    };
     
     /**
      * Crear los detalles de los kardex individuales 
