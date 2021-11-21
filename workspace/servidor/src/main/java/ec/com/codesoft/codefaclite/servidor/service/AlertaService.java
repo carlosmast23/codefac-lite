@@ -64,11 +64,25 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         alertas.add(obtenerNotificacionComprobantesElectronicos(empresa));
         //alertas.add(obtenerNotificacionComprobantesElectronicosBaseDatos(empresa));
         alertas.add(obtenerNotificacionFechaLimiteFirma(empresa));
+        alertas.add(obtenerCantidadInventarioMinimo(empresa));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
         return alertas;        
     }
     
+    
+    private AlertaResponse obtenerCantidadInventarioMinimo(Empresa empresa) throws RemoteException,ServicioCodefacException 
+    {
+        Integer cantidadStockMinimo=ServiceFactory.getFactory().getKardexServiceIf().consultarCantidadStockMinimo(empresa);
+        if(cantidadStockMinimo>0)
+        {
+            AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,cantidadStockMinimo+" productos con STOCK BAJO","Realizar Pedido");
+            return alertaRespuesta;
+        }
+        
+        return null;
+         
+    }
         
     public List<AlertaResponse> actualizarNotificacionesCargaLenta(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
     {

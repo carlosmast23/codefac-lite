@@ -99,6 +99,17 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             return null;
         }
     }
+    
+    public Long consultarStockMinimoCantidadFacade(Empresa empresa)  throws java.rmi.RemoteException
+    {
+        //Producto producto;
+        //producto.getCantidadMinima()
+        //Kardex kardex;
+        String queryString = " SELECT COUNT(k) FROM Kardex k WHERE (k.producto.estado<>?4 ) AND k.stock<k.producto.cantidadMinima ";               
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
+        return (Long) query.getSingleResult();
+    }
 
     public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException {
 
