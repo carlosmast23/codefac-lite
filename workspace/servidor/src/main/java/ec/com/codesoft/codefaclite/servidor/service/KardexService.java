@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
@@ -741,6 +742,26 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         if(detalle.getFechaIngreso()==null)
         {
             throw new ServicioCodefacException("No se puede grabar sin fecha de ingreso");
+        }
+        
+        if(detalle.getKardex().getProducto().getGarantiaEnum().equals(EnumSiNo.SI))
+        {
+            if(detalle.getDetallesEspecificos()==null || detalle.getDetallesEspecificos().size()<=0)
+            {
+                throw new ServicioCodefacException("Los productos con inventario tiene que tener productos unicos");
+            }
+            
+            for (KardexItemEspecifico detallesEspecifico : detalle.getDetallesEspecificos()) 
+            {
+                //Verifico solo los productos especificos que aun no han sido grabados con id null
+                if(detallesEspecifico.getId()==null)
+                {
+                    if(detallesEspecifico.getCodigoEspecifico()==null || detallesEspecifico.getCodigoEspecifico().trim().isEmpty())
+                    {
+                        throw new ServicioCodefacException("No se puede grabar un item unico con CÓDIGO VACIO");
+                    }
+                }
+            }
         }
         
         

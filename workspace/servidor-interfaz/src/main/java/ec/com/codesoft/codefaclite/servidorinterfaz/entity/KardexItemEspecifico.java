@@ -76,6 +76,14 @@ public class KardexItemEspecifico implements Serializable {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+    
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
+    }
+
+    public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
+        this.estado = estadoEnum.getEstado();
+    }
 
     public KardexDetalle getKardexDetalle() {
         return kardexDetalle;
@@ -85,10 +93,7 @@ public class KardexItemEspecifico implements Serializable {
         this.kardexDetalle = kardexDetalle;
     }
 
-    public GeneralEnumEstado getEstadoEnum()
-    {
-        return GeneralEnumEstado.getEnum(estado);
-    }
+
     
 
 }

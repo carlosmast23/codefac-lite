@@ -16,9 +16,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -104,6 +107,8 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         getCmbFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
         getCmbBodega().setSelectedIndex(0);
         getCmbTipoDocumento().setSelectedIndex(0);
+        getTxtDescripcion().setText("");
+        getTxtCantidad().setText("1");
     }
 
     @Override
@@ -165,24 +170,37 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         
     }
 
-    private void listenerBotones() {
-        getBtnBuscarProducto().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
-                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
-                buscarDialogo.setVisible(true);
-                
-                if(buscarDialogo.getResultado()!=null)
-                {
-                    productoSeleccionado=(Producto) buscarDialogo.getResultado();
-                    getTxtProducto().setText(productoSeleccionado.toString());
-                    
-                }
-                
-            }
-        });
+    private void listenerBotones() 
+    {
+        getBtnBuscarProducto().addActionListener(listenerBuscarProducto);        
     }
+    
+    private ActionListener listenerBuscarProducto=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+            BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);            
+            buscarDialogo.setVisible(true);
+
+            if (buscarDialogo.getResultado() != null) 
+            {
+                limpiar();
+                productoSeleccionado = (Producto) buscarDialogo.getResultado();                
+                getTxtProducto().setText(productoSeleccionado.toString());
+                
+                getTxtCodigoUnico().setEnabled(false);
+                getTxtCantidad().setEnabled(true);                
+                if(productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI))
+                {
+                    getTxtCodigoUnico().setEnabled(true);
+                    getTxtCantidad().setText("1");
+                    getTxtCantidad().setEnabled(false);
+                }
+
+            }
+
+        }
+    };
     
     private void setearVariables()
     {
@@ -211,6 +229,16 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         kardex.setProducto(productoSeleccionado);
     
         kardexDetalle.setKardex(kardex);
+        
+        //Agregar un detalle personalizado si el prodicto maneja GARANTIA
+        if(productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI))
+        {
+            KardexItemEspecifico kardexItemEspecifico=new KardexItemEspecifico();
+            kardexItemEspecifico.setCodigoEspecifico(getTxtCodigoUnico().getText());
+            kardexItemEspecifico.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+            kardexItemEspecifico.setObservaciones(getTxtDescripcion().getText());
+            kardexDetalle.addDetalle(kardexItemEspecifico);
+        }
         
     }
 
