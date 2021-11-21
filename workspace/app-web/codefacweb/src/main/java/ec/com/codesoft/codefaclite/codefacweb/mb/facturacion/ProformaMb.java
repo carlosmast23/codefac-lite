@@ -849,7 +849,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
          * TODO: Lo correcto sera en vez de usar la logica de abajo unir con  controlador.agregarDetallesFactura(detalleEditado)
          * que tiene logica adicional de validaciones y otras cosas mas
          */
-        controlador.calcularTotalesDetalles(detalleEditado);
+        detalleEditado.calcularTotalesDetallesFactura();
+        //controlador.calcularTotalesDetalles(detalleEditado);
         controlador.cargarTotales();
         controlador.cargarFormaPago();
         

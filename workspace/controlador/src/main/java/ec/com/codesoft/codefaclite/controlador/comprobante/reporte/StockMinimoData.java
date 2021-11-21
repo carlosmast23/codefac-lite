@@ -24,8 +24,11 @@ public class StockMinimoData implements ExcelDatosInterface{
     private String ubicacion;
     private String costo;
     private String bodega;
+    
+    private List<StockUnicoData> detalles;
 
     public StockMinimoData() {
+        detalles=new ArrayList<StockUnicoData>();
     }
 
     public String getCodigo() {
@@ -91,8 +94,24 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setBodega(String bodega) {
         this.bodega = bodega;
     }
+
+    public List<StockUnicoData> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<StockUnicoData> detalles) {
+        this.detalles = detalles;
+    }
     
-    
+    public void agregarDetalle(StockUnicoData stockUnicoData)
+    {
+        if(this.detalles==null)
+        {
+            this.detalles=new ArrayList<StockUnicoData>();
+        }
+        
+        this.detalles.add(stockUnicoData);
+    }
     
     
 
