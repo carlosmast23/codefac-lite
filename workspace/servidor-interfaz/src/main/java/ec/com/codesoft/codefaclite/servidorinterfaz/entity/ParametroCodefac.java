@@ -212,6 +212,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String PROFORMA_FACTURAR_VARIAS_VECES="proforma_facturar_varias_veces";
     
+    public static final String NUMERO_DECIMAL_PRODUCTO = "numero_decimal_producto";
+    
 
     @Id
     @Column(name = "ID")

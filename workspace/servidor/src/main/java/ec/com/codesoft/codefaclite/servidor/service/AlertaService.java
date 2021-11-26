@@ -65,9 +65,24 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         //alertas.add(obtenerNotificacionComprobantesElectronicosBaseDatos(empresa));
         alertas.add(obtenerNotificacionFechaLimiteFirma(empresa));
         alertas.add(obtenerCantidadInventarioMinimo(empresa));
+        alertas.add(obtenerAlertaDirectorioRespaldo(empresa));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
+        
         return alertas;        
+    }
+    
+    private AlertaResponse obtenerAlertaDirectorioRespaldo(Empresa empresa) throws RemoteException,ServicioCodefacException 
+    {
+        String directorioEmpresa=ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.DIRECTORIO_RESPALDO);
+        
+        if(directorioEmpresa==null || directorioEmpresa.trim().isEmpty())
+        {
+            AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,"Respaldos sin configurar","No se encuentra configurado los respaldos");
+            return alertaRespuesta;
+        }
+        return null;
+         
     }
     
     
