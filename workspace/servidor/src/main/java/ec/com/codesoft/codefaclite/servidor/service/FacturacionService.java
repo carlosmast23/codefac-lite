@@ -476,7 +476,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
             if(diferencia.compareTo(new BigDecimal("0.01"))>0)
             {
-                throw new ServicioCodefacException("Error de inconsistencia en los valores de los detalles");
+                //Verificar cual es el item o los items que tiene problemas 
+                
+                throw new ServicioCodefacException("Error de inconsistencia en el detalle, existe una diferencia de "+diferencia+" en el producto "+ detalle.getDescripcion()+"\nPosibles Causas:\n - El producto fue editado el precio\n - El producto requiere más decimales para el calculo exacto\n ");
             }
         }
         

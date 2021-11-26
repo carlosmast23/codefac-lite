@@ -70,4 +70,6 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public void afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento) throws RemoteException,ServicioCodefacException;
     
+    public Integer consultarCantidadStockMinimo(Empresa empresa) throws java.rmi.RemoteException;
+    
 }

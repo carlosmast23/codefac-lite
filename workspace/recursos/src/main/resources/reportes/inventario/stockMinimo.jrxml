@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.9453068450750086"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.4615378250000064"/>
+	<property name="ireport.x" value="40"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
@@ -24,6 +24,7 @@
 	<parameter name="pl_facebook" class="java.lang.String"/>
 	<parameter name="pl_instagram" class="java.lang.String"/>
 	<parameter name="pl_img_instagram" class="java.lang.Object"/>
+	<parameter name="pl_detalle_item" class="java.lang.Object"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -35,6 +36,7 @@
 	<field name="ubicacion" class="java.lang.String"/>
 	<field name="costo" class="java.lang.String"/>
 	<field name="bodega" class="java.lang.String"/>
+	<field name="detalles" class="java.util.Collection"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -182,7 +184,7 @@
 	<detail>
 		<band height="15" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="44" height="15" uuid="fbbacd57-c811-4907-881a-a6625dc3a2df"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="44" height="15" uuid="fbbacd57-c811-4907-881a-a6625dc3a2df"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -210,7 +212,7 @@
 				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="483" y="0" width="33" height="15" uuid="987d00c0-794d-43d4-874c-ccc20a928534"/>
+				<reportElement stretchType="RelativeToBandHeight" x="483" y="0" width="33" height="15" uuid="987d00c0-794d-43d4-874c-ccc20a928534"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -224,7 +226,7 @@
 				<textFieldExpression><![CDATA[$F{cantidadMinima}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="444" y="0" width="39" height="15" uuid="086ce8d9-5df6-456d-a820-f05251accdf5"/>
+				<reportElement stretchType="RelativeToBandHeight" x="444" y="0" width="39" height="15" uuid="086ce8d9-5df6-456d-a820-f05251accdf5"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -238,7 +240,7 @@
 				<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="297" y="0" width="83" height="15" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
+				<reportElement stretchType="RelativeToBandHeight" x="297" y="0" width="83" height="15" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -252,7 +254,7 @@
 				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="380" y="0" width="64" height="15" uuid="e3de61be-2943-4765-a88b-77a347eb80c7"/>
+				<reportElement stretchType="RelativeToBandHeight" x="380" y="0" width="64" height="15" uuid="e3de61be-2943-4765-a88b-77a347eb80c7"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -266,7 +268,7 @@
 				<textFieldExpression><![CDATA[$F{ubicacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="516" y="0" width="39" height="15" uuid="e1bd5e98-2097-411e-abd9-8ddf8e2bd6ef"/>
+				<reportElement stretchType="RelativeToBandHeight" x="516" y="0" width="39" height="15" uuid="e1bd5e98-2097-411e-abd9-8ddf8e2bd6ef"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -280,7 +282,7 @@
 				<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="44" y="0" width="96" height="15" uuid="86480613-120b-4da3-a9e1-87849e20c0e4"/>
+				<reportElement stretchType="RelativeToBandHeight" x="44" y="0" width="96" height="15" uuid="86480613-120b-4da3-a9e1-87849e20c0e4"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -293,6 +295,13 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bodega}]]></textFieldExpression>
 			</textField>
+			<subreport>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="140" y="15" width="157" height="0" uuid="19aebd5c-bb04-4c4c-a2dc-86f778c4e5d8">
+					<printWhenExpression><![CDATA[$F{detalles}!=null]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalles})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{pl_detalle_item}]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<columnFooter>
