@@ -49,7 +49,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public boolean obtenerSiNoExisteStockProducto(Bodega bodega, Producto producto, BigDecimal cantidad) throws java.rmi.RemoteException;
     
     public List<Kardex> getKardexModificados(Producto productoEnsamble,BigDecimal cantidadEnsamble,Bodega bodega,ProductoEnsamble.EnsambleAccionEnum accion) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,BigDecimal cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException;
+    public Kardex ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,BigDecimal cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException;
     
     public Kardex construirKardexVacioSinPersistencia() throws java.rmi.RemoteException,ServicioCodefacException;
     

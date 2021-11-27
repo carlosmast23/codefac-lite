@@ -150,8 +150,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     //Este paso lo hago porque cuando seteo un valor a una entidad cuando esta asociado automaticamente se refleja en la base de datos
                     //ServiceAbstract.desasociarEntidadRecursivo(kardexComponente);
                     
-                    if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.AGREGAR) 
-                            || accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA))
+                    if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.AGREGAR)  || accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA))
                     {
                         kardexComponente.setReserva(new BigDecimal(kardexComponente.getReserva()).add(cantidadTotal).intValue());
                         kardexComponente.setStock(kardexComponente.getStock().subtract(cantidadTotal));
@@ -232,38 +231,37 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
-    public void ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,BigDecimal cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
+    public Kardex ingresoEgresoInventarioEnsambleSinTransaccion(Bodega bodega, Producto productoEnsamble,BigDecimal cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        /**
-         * ===============> Buscar el Ensamble de producto o crear
-         * <============//
-         */
-        Map<String, Object> parametrosMap = new HashMap<String, Object>();
-        parametrosMap.put("bodega", bodega);
-        parametrosMap.put("producto", productoEnsamble);
-        List<Kardex> kardexList = obtenerPorMap(parametrosMap);
-        
         /**
          * ==========> Validar Disponibilidad de los producto<==========
          */
         
-        //Verificar si tiene habilitada la opcion de facturar inventario negativo activado para validar esta opcion 
+        //Verificar si tiene habilitada la opcion de FACTURA INVENTARIO NEGATIVO activado para validar esta opcion 
         if(validarStockComponentes && (accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA) )
                 && ParametroUtilidades.comparar(bodega.getEmpresa(),ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO,EnumSiNo.NO))
         {
+            //verifica que EXISTA STOCK EN LOS COMPONENTES PARA EL COMBO//
             validarEnsambleComponentes(productoEnsamble, bodega, cantidad);
         }
         
+        /**
+         * ===============> Buscar el Ensamble de producto o crear*/
+        Map<String, Object> parametrosMap = new HashMap<String, Object>();
+        parametrosMap.put("bodega", bodega);
+        parametrosMap.put("producto", productoEnsamble);
+        List<Kardex> kardexList = obtenerPorMap(parametrosMap);
 
         //Obtener o crear el kardex si no existe
-        Kardex kardex = null;
+        Kardex kardexEnsamble = null;
         if (kardexList != null && kardexList.size() > 0) {
-            kardex = kardex = kardexList.get(0);
+            kardexEnsamble = kardexEnsamble = kardexList.get(0);
         } else {
-            kardex = crearObjeto(bodega, productoEnsamble);
-            entityManager.persist(kardex);
+            kardexEnsamble = crearObjeto(bodega, productoEnsamble);
+            entityManager.persist(kardexEnsamble);
         }
-
+        
+        
         List<Kardex> componentesKardex = getKardexModificados(productoEnsamble, cantidad, bodega, accion);
         //Actualizar los detalles de los componentes del kardex                        
         for (Kardex kardexComponente : componentesKardex) {
@@ -271,9 +269,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
         }
 
-        //Calcular el valor del ensamble
+        //CALCULAR EL COSTO DEL ENSAMBLE
         BigDecimal costoIndividualEnsamble = BigDecimal.ZERO;
-        List<ProductoEnsamble> listaComponentes = kardex.getProducto().getDetallesEnsamble();
+        List<ProductoEnsamble> listaComponentes = kardexEnsamble.getProducto().getDetallesEnsamble();
         for (ProductoEnsamble componenteEmsamble : listaComponentes) {
             parametrosMap = new HashMap<String, Object>();
             parametrosMap.put("bodega", bodega);
@@ -286,7 +284,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 costoIndividualEnsamble = costoIndividualEnsamble.add(new BigDecimal(componenteEmsamble.getCantidad().toString()).multiply(kardexList.get(0).getPrecioUltimo()));
             }
         }
-
+        
+        
         ///Actualizar los totales del emsamble
         //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(costoIndividualEnsamble).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
         //kardex.setPrecioTotal(kardex.getPrecioTotal().add(costoIndividualEnsamble));
@@ -311,7 +310,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         {
             kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_CONSTRUIR_VENTA.getCodigo());
         
-        }else {
+        }else if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.QUITAR))
+        {
             kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_EGRESO.getCodigo());
         }
 
@@ -323,11 +323,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
         kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
 
-        kardex.addDetalleKardex(kardexDetalle);
-        recalcularValoresKardex(kardex, kardexDetalle);
+        kardexEnsamble.addDetalleKardex(kardexDetalle);
+        recalcularValoresKardex(kardexEnsamble, kardexDetalle);
         entityManager.persist(kardexDetalle);
-        entityManager.merge(kardex);
+        entityManager.merge(kardexEnsamble);
         entityManager.flush();
+        return kardexEnsamble;
     }
     
     /**

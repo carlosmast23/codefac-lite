@@ -785,7 +785,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI)) 
                 {
                     //No valida nada porque si este proceso falla automaticamente debe generar la excepcion interior, por ejemplo cuando no existe la cantidad necesaria de los componentes para construir el ensamble                    
-                    verificarConstruirEnsamble(kardex, cantidadFaltante,true);
+                    kardex=verificarConstruirEnsamble(kardex, cantidadFaltante,true);
                 } 
                 else 
                 {
@@ -799,7 +799,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
             if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI)) {
                 //En este caso si estaba activo construir el ensamble lo realizo pero sin validar el stock de los componentes
-                verificarConstruirEnsamble(kardex, cantidadFaltante,false);
+                kardex=verificarConstruirEnsamble(kardex, cantidadFaltante,false);
             }
         }
         
@@ -837,12 +837,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     /**
      * Metodo para verificar si tiene la opcion activa de generar ensamble y ver si se puede construir en ese momento
      */
-    public void verificarConstruirEnsamble(Kardex kardex,BigDecimal cantidadFaltante,Boolean validarStockComponentes) throws RemoteException, ServicioCodefacException
+    public Kardex verificarConstruirEnsamble(Kardex kardex,BigDecimal cantidadFaltante,Boolean validarStockComponentes) throws RemoteException, ServicioCodefacException
     {
         if(ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
         {
-            ServiceFactory.getFactory().getKardexServiceIf().ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA,validarStockComponentes);
+            return ServiceFactory.getFactory().getKardexServiceIf().ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA,validarStockComponentes);
         }
+        //Todo: Verificar que no genere problemas el NULL
+        return null;
     }
     
     
