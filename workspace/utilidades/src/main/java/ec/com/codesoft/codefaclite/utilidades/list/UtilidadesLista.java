@@ -45,6 +45,29 @@ public abstract class UtilidadesLista {
         List<T> listWithoutNulls = datos.stream().filter(Objects::nonNull).collect(Collectors.toList());        
         return listWithoutNulls;
     }
+
+    public static <T> List<T> restarListas(List<T> datosOriginales,List<T> datosNuevos)
+    {
+        List<T> listaEliminados=new ArrayList<T>();
+        for (T datoOriginal : datosOriginales) {
+            
+            Boolean datoEliminado=true;
+            for (T datoNuevo : datosNuevos) {
+                if(datoNuevo.equals(datoOriginal))
+                {
+                    datoEliminado=false;
+                }
+            }
+            
+            if(datoEliminado)
+            {
+                listaEliminados.add(datoOriginal);
+            }
+            
+        }
+       
+        return listaEliminados;
+    }
     
     public static void ordenarLista(List lista,Comparator comparator)
     {

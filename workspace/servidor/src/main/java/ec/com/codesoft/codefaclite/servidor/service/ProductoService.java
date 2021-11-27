@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -175,16 +176,41 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
-    public void editarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException
+    public void editarProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        validarGrabarProducto(p,CrudEnum.EDITAR);
+        validarGrabarProducto(producto,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                entityManager.merge(p);
+                
+                //Buscar componentes ensambles eliminados
+                List<ProductoEnsamble> productoEnsambleEliminar=productoEnsamblesEliminados(producto);
+                
+                //TODO: Por el momento ELIMINO directamente de la base de datos pero se deberia manejar por ESTADOS
+                for (ProductoEnsamble productoEnsamble : productoEnsambleEliminar) {
+                    ProductoEnsamble productoEnsambleTmp=entityManager.merge(productoEnsamble);
+                    entityManager.remove(productoEnsambleTmp);
+                }
+                
+                
+                entityManager.merge(producto);
             }
         });
 
+    }
+    
+    private List<ProductoEnsamble> productoEnsamblesEliminados(Producto producto) throws ServicioCodefacException, RemoteException
+    {
+        if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE))
+        {
+            List<ProductoEnsamble> productosActualesList= producto.getDetallesEnsamble();
+            List<ProductoEnsamble> productoOriginalList= ServiceFactory.getFactory().getProductoEnsambleServiceIf().buscarPorProducto(producto);
+            return UtilidadesLista.restarListas(productoOriginalList, productosActualesList);
+        }
+        else
+        {
+            return new ArrayList<ProductoEnsamble>();
+        }
     }
     
     public void eliminarProducto(Producto p) throws ServicioCodefacException, RemoteException

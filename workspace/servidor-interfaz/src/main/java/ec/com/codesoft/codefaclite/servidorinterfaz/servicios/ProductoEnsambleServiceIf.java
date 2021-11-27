@@ -5,8 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.Remote;
+import java.util.List;
 
 /**
  *
@@ -14,5 +17,5 @@ import java.rmi.Remote;
  */
 public interface ProductoEnsambleServiceIf extends ServiceAbstractIf<ProductoEnsamble>
 {
-    
+    public List<ProductoEnsamble> buscarPorProducto(Producto producto) throws ServicioCodefacException, java.rmi.RemoteException;
 }

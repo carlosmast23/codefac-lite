@@ -540,6 +540,14 @@ public class Producto implements Serializable, Comparable<Producto> {
 
     }
     
+    public void quitarProductoEnsamble(ProductoEnsamble detalle)
+    {
+        if(this.detallesEnsamble!=null)
+        {
+            this.detallesEnsamble.remove(detalle);
+        }
+    }
+    
     public TipoProductoEnum getTipoProductoEnum()
     {
         return TipoProductoEnum.getEnumByLetra(tipoProductoCodigo);

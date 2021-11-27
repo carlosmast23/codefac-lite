@@ -80,6 +80,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     Referencia sobre el producto seleccionado para el ensamble
      */
     private Producto productoEnsamble;
+    private ProductoEnsamble productoEnsambleEditar;
     
     private ProductoModelControlador controlador;
 
@@ -297,10 +298,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 int filaSeleccionada=getTblDatosEnsamble().getSelectedRow();
                 if(filaSeleccionada>=0)
                 {
-                    ProductoEnsamble productoEnsambleComponente=(ProductoEnsamble) getTblDatosEnsamble().getValueAt(filaSeleccionada,COLUMNA_ENSAMBLE_OBJECTO);
-                    productoEnsamble=productoEnsambleComponente.getComponenteEnsamble();
-                    cargarComponenteProductoEnsambleVista(productoEnsambleComponente.getComponenteEnsamble(),productoEnsambleComponente.getCantidad());
-
+                    productoEnsambleEditar=(ProductoEnsamble) getTblDatosEnsamble().getValueAt(filaSeleccionada,COLUMNA_ENSAMBLE_OBJECTO);
+                    productoEnsamble=productoEnsambleEditar.getComponenteEnsamble();                   
+                    cargarComponenteProductoEnsambleVista(productoEnsambleEditar.getComponenteEnsamble(),productoEnsambleEditar.getCantidad());
+                    //actualizarTablaEnsamble();
                 }
             }
 
@@ -321,8 +322,17 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     
     private void cargarComponenteProductoEnsambleVista(Producto producto,BigDecimal cantidad)
     {        
-        getTxtProductoEnsamble().setText(productoEnsamble.getNombre());
-        getTxtCantidadEnsamble().setText(cantidad+"");
+        if(producto!=null)
+        {
+            getTxtProductoEnsamble().setText(productoEnsamble.getNombre());
+            getTxtCantidadEnsamble().setText(cantidad+"");
+        }
+        else
+        {
+            getTxtProductoEnsamble().setText("");
+            getTxtCantidadEnsamble().setText("");
+        }
+        
     }
 
     private void listenerBotones() {
@@ -350,22 +360,43 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 componenteEnsamble.setComponenteEnsamble(productoEnsamble);
                 controlador.producto.addProductoEnsamble(componenteEnsamble);
                 actualizarTablaEnsamble();
+                //DialogoCodefac.mensaje(new CodefacMs);
             }
         });
         
         getBtnEditarEnsamble().addActionListener(listenerEditarEnsamble);
+        getBtnEliminarEnsamble().addActionListener(listenerEliminarEnsamble);
 
     }
+    
+    private ActionListener listenerEliminarEnsamble=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(productoEnsambleEditar!=null)
+            {
+                controlador.producto.quitarProductoEnsamble(productoEnsambleEditar);
+                cargarComponenteProductoEnsambleVista(null, BigDecimal.ONE);
+                actualizarTablaEnsamble();
+            }
+        }
+    };
     
     private ActionListener listenerEditarEnsamble=new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            int filaSeleccionada=getTblDatosEnsamble().getSelectedRowCount();
-            if(filaSeleccionada>=0)
+            //int filaSeleccionada=getTblDatosEnsamble().getSelectedRowCount();
+            if(productoEnsambleEditar!=null)
             {
-                ProductoEnsamble productoEnsamble=(ProductoEnsamble) getTblDatosEnsamble().getValueAt(filaSeleccionada,COLUMNA_ENSAMBLE_OBJECTO);
-                productoEnsamble.setCantidad(new BigDecimal(getTxtCantidadEnsamble().getText()));
+                //ProductoEnsamble productoEnsamble=(ProductoEnsamble) getTblDatosEnsamble().getValueAt(filaSeleccionada,COLUMNA_ENSAMBLE_OBJECTO);                
+                productoEnsambleEditar.setCantidad(new BigDecimal(getTxtCantidadEnsamble().getText()));
                 actualizarTablaEnsamble();
+                productoEnsambleEditar=null;
+                cargarComponenteProductoEnsambleVista(null, BigDecimal.ONE);
+            }
+            else
+            {
+                
+                //DialogoCodefac.mensaje(new CodefacMs);
             }
        }
     };
