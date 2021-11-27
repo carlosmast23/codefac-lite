@@ -59,7 +59,7 @@ create table PRODUCTO_ENSAMBLE
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     COMPONENTE_ENSAMBLE BIGINT,
     PRODUCTO_ENSAMBLE BIGINT, 
-    CANTIDAD integer, 
+    CANTIDAD decimal(13,5)
     primary key (ID)
 );
 

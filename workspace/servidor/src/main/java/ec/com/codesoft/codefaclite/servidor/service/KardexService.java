@@ -127,7 +127,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         {
             try {
                 Vector<String> fila=new Vector<String>();
-                Integer cantidadProducto=componenteProducto.getCantidad();
+                BigDecimal cantidadProducto=componenteProducto.getCantidad();
                 
                 Producto componente=componenteProducto.getComponenteEnsamble();
                 //Map<String,Object> mapParametros=new HashMap<String,Object>();
@@ -145,7 +145,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 if(kardexComponente!=null)
                 {
-                    BigDecimal cantidadTotal=cantidadEnsamble.multiply(new BigDecimal(cantidadProducto));
+                    BigDecimal cantidadTotal=cantidadEnsamble.multiply(cantidadProducto);
                     //Kardex kardexComponente=listaKardex.get(0);
                     //Este paso lo hago porque cuando seteo un valor a una entidad cuando esta asociado automaticamente se refleja en la base de datos
                     //ServiceAbstract.desasociarEntidadRecursivo(kardexComponente);
@@ -354,7 +354,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             }
             else
             {
-                BigDecimal productosFaltantes=kardexResultado.getStock().subtract(new BigDecimal(componenteProducto.getCantidad()).multiply(cantidad));
+                BigDecimal productosFaltantes=kardexResultado.getStock().subtract(componenteProducto.getCantidad().multiply(cantidad));
                 //Integer productosFaltantes=kardexResultado.getStock()-componenteProducto.getCantidad()*cantidad;
                 //boolean disponible=
                 //TODO:Si no existe la cantidad disponible del producto lanza una exceptcion

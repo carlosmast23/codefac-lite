@@ -39,9 +39,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +61,8 @@ import javax.swing.table.DefaultTableModel;
  * @author PC
  */
 public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> , InterfazPostConstructPanel,ProductoModelControlador.SwingIf ,ControladorVistaIf {
+    
+    private static final Integer COLUMNA_ENSAMBLE_OBJECTO=0;
 
     //private EnumSiNo imprimirBarrasSeleccionado;
         
@@ -83,33 +89,13 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        /*try {
-            setearValoresProducto(controlador.producto);
-            controlador.producto=productoService.grabar(controlador.producto);
-            DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
-            throw new ExcepcionCodefacLite("Error al grabar");
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        /*try {
-            
-            setearValoresProducto(controlador.producto);
-            productoService.editarProducto(controlador.producto);
-            DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Datos correctos", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
-            throw new ExcepcionCodefacLite(ex.getMessage());
-        }*/
+
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -119,18 +105,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
           
-        //BigDecimal valorUnitario=BigDecimal.ZERO;
-        //valorUnitario = new BigDecimal(getTextValorUnitario().getText());
 
-        //Si el valor esta incluido el iva calculo el valor sin iva
-        /*if(controlador.getIvaOpcionSeleccionado().equals(IvaOpcionEnum.CON_IVA))
-        {            
-            BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
-            BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
-            valorUnitario=valorUnitario.divide(ivaTmp,3,BigDecimal.ROUND_HALF_UP);
-            
-        }
-        producto.setValorUnitario(valorUnitario);*/
         /**
          * Setear valores adicionales
          */
@@ -153,15 +128,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //producto.setCategoriaProducto(catProducto);
         producto.setCaracteristicas(getTxtCaracteristica().getText());
         producto.setObservaciones(getTxtObservaciones().getText());
-        
-        //TipoProductoEnum tipoProductoEnum=(TipoProductoEnum) getCmbTipoProducto().getSelectedItem();
-        //producto.setTipoProductoCodigo(tipoProductoEnum.getLetra());
-        /**
-         * AGREGAR LOS DATOS ADICIONALES DEL CATALOGO PRODUCTO
-         */
-        //CatalogoProducto catalogoProducto=crearCatalogoProducto();
-        //producto.setCatalogoProducto(catalogoProducto);
-        
+
         
         EnumSiNo enumSiNo=EnumSiNo.getEnumByBoolean(getChkTransportarGuiaRemision().isSelected());        
         producto.setTransportarEnGuiaRemisionEnum(enumSiNo);
@@ -193,19 +160,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        /*ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
-        Producto productoTmp = (Producto) buscarDialogoModel.getResultado();
 
-        if (productoTmp == null) {
-            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
-        }
-        else
-        {
-            controlador.producto=productoTmp;
-            cargarProducto();
-        }*/
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -214,25 +169,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void limpiar() {
-        //controlador.producto=new Producto();
-        //controlador.producto.setGenerarCodigoBarrasEnum(EnumSiNo.NO);
-        //this.producto = new Producto();
 
         initModelTablaDatosEnsamble();
         setearValoresIniciales();
 
-        //getComboIce().setEditable(true);
-        //getComboIce().setSelectedItem("Seleccione : ");
 
-        //getComboIrbpnr().setEditable(true);
-        //getComboIrbpnr().setSelectedItem("Seleccione: ");
-        
-        //getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA);
-        
-        //getCmbGenerarCodigoBarras().setSelectedItem(EnumSiNo.NO);
-        //producto.setGenerarCodigoBarras(EnumSiNo.NO);
-        //imprimirBarrasSeleccionado=EnumSiNo.NO;
-        
         getChkTransportarGuiaRemision().setEnabled(true);
         getChkTransportarGuiaRemision().setSelected(true);
         
@@ -289,6 +230,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         listenerComboBox();
         listenerBotones();
+        listenerTablas();
         
         //mapDatosIngresadosDefault.put(getTextValorUnitario(),"0");
         mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
@@ -332,26 +274,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     private void listenerComboBox() {
-        //TODO: Terminar de implementar este listener
-        /*getCmbManejaInventario().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                if (getCmbManejaInventario().getSelectedItem().equals(EnumSiNo.SI)) 
-                {
-                    getTabMenu().setEnabledAt(2, true);
-                    getTabMenu().setEnabledAt(3, true);
-                }
-                else
-                {
-                    getTabMenu().setEnabledAt(2, false);
-                    getTabMenu().setEnabledAt(3, false);
-                }
-
-                
-            }
-        });*/
-        
+         
 
     }
 
@@ -365,6 +288,42 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
         }
     }
+    
+    private void listenerTablas()
+    {
+        getTblDatosEnsamble().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionada=getTblDatosEnsamble().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    ProductoEnsamble productoEnsambleComponente=(ProductoEnsamble) getTblDatosEnsamble().getValueAt(filaSeleccionada,COLUMNA_ENSAMBLE_OBJECTO);
+                    productoEnsamble=productoEnsambleComponente.getComponenteEnsamble();
+                    cargarComponenteProductoEnsambleVista(productoEnsambleComponente.getComponenteEnsamble(),productoEnsambleComponente.getCantidad());
+
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        
+    }
+    
+    private void cargarComponenteProductoEnsambleVista(Producto producto,BigDecimal cantidad)
+    {        
+        getTxtProductoEnsamble().setText(productoEnsamble.getNombre());
+        getTxtCantidadEnsamble().setText(cantidad+"");
+    }
 
     private void listenerBotones() {
         
@@ -377,32 +336,50 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 productoEnsamble = (Producto) buscarDialogoModel.getResultado();
 
                 if (productoEnsamble != null) {
-                    getTxtProductoEnsamble().setText(productoEnsamble.getNombre());
+                    cargarComponenteProductoEnsambleVista(productoEnsamble, BigDecimal.ONE);
+                    //getTxtProductoEnsamble().setText(productoEnsamble.getNombre());
                 }
             }
         });
-
+        
         getBtnAgregarEnsamble().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ProductoEnsamble componenteEnsamble = new ProductoEnsamble();
-                componenteEnsamble.setCantidad(Integer.parseInt(getTxtCantidadEnsamble().getText()));
+                componenteEnsamble.setCantidad(new BigDecimal(getTxtCantidadEnsamble().getText()));
                 componenteEnsamble.setComponenteEnsamble(productoEnsamble);
                 controlador.producto.addProductoEnsamble(componenteEnsamble);
                 actualizarTablaEnsamble();
             }
         });
+        
+        getBtnEditarEnsamble().addActionListener(listenerEditarEnsamble);
 
     }
+    
+    private ActionListener listenerEditarEnsamble=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int filaSeleccionada=getTblDatosEnsamble().getSelectedRowCount();
+            if(filaSeleccionada>=0)
+            {
+                ProductoEnsamble productoEnsamble=(ProductoEnsamble) getTblDatosEnsamble().getValueAt(filaSeleccionada,COLUMNA_ENSAMBLE_OBJECTO);
+                productoEnsamble.setCantidad(new BigDecimal(getTxtCantidadEnsamble().getText()));
+                actualizarTablaEnsamble();
+            }
+       }
+    };
 
     private void actualizarTablaEnsamble() {
-        String[] titulo = {"Cantidad", "Nombre", "Precio Venta"};
+        String[] titulo = {"","Cantidad", "Nombre", "Precio Venta"};
+        UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Object.class,String.class,String.class,String.class});
         DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
 
         if(controlador.producto.getDetallesEnsamble()!=null)
         {
             for (ProductoEnsamble productoEnsamble : controlador.producto.getDetallesEnsamble()) {
-                Vector<String> fila = new Vector<String>();
+                Vector<Object> fila = new Vector<Object>();
+                fila.add(productoEnsamble);
                 fila.add(productoEnsamble.getCantidad() + "");
                 fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
                 fila.add(productoEnsamble.getComponenteEnsamble().getValorUnitario() + "");
@@ -410,6 +387,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             }
         }
         getTblDatosEnsamble().setModel(tableModel);
+        UtilidadesTablas.definirTamanioColumnas(getTblDatosEnsamble(), new Integer[]{0});
     }
     
     private void setearValoresIniciales()

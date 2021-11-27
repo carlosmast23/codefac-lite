@@ -309,7 +309,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
     private List<Producto> verificarEnsamble()
     {
         List<Producto> productosProblemas=new ArrayList<Producto>();
-        Integer cantidad = Integer.parseInt(getTxtCantidad().getText());
+        BigDecimal cantidad = new BigDecimal(getTxtCantidad().getText());
         String accion = getCmbAccion().getSelectedItem().toString();
         Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
         
@@ -339,9 +339,11 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                     Kardex kardexComponente=kardexResultado;
                     fila.add(componente.getNombre());
                     fila.add(componenteProducto.getCantidad()+"");
-                    fila.add(componenteProducto.getCantidad()*cantidad+"");
+                    fila.add(componenteProducto.getCantidad().multiply(cantidad)+"");
                     fila.add(kardexComponente.getStock()+"");
-                    boolean disponible=componenteProducto.getCantidad()*cantidad<=kardexComponente.getStock().intValue();
+                    //boolean disponible=componenteProducto.getCantidad().multiply(cantidad)<=kardexComponente.getStock().intValue();
+                    
+                    boolean disponible=componenteProducto.getCantidad().multiply(cantidad).compareTo(kardexComponente.getStock())<=0;
                     
                     if(disponible)
                     {
@@ -359,7 +361,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                     //TODO: toca revisar si el producto es un servicio entonces esto no aplica
                     fila.add(componente.getNombre());
                     fila.add(componenteProducto.getCantidad() + "");
-                    fila.add(componenteProducto.getCantidad() * cantidad + "");
+                    fila.add(componenteProducto.getCantidad().multiply(cantidad) + "");
                     fila.add("0");
                     fila.add("NO");
                     productosProblemas.add(componente);
