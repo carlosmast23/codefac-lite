@@ -48,6 +48,7 @@ public enum VentanaEnum implements Serializable{
     NOTA_CREDITO_COMPRA("ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoCompraModel", "NCCC", "Nota de Crédito Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.PRO,null,""),
     FACTURA_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel", "FACR", "Factura Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES,TipoLicenciaEnum.GRATIS,null,"factura_reporte"),
     CLIENTE_REPORTE("ec.com.codesoft.codefaclite.crm.model.ClienteReporte", "CLIR", "Cliente Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,"cliente_reporte"),
+    DASHBOARD_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.DashBoardModel", "DBRT", "DashBoard Reporte", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     PROVEEDOR_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProveedorReporte", "PVOR", "Proveedor Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     PRODUCTO_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProductoReporte", "PROR", "Producto Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     FACTURA_DISENIO("ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel", "FACD", "Factura Diseño", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.GRATIS,null,true),
@@ -147,7 +148,7 @@ public enum VentanaEnum implements Serializable{
     TURNO("ec.com.codesoft.codefaclite.pos.model.TurnoModel", "TURN", "Turno", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
     TURNO_ASIGNADO("ec.com.codesoft.codefaclite.pos.model.TurnoAsignadoModel", "TURA", "Turno Asignado", ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
     REPORTE_CAJA_SESSION("ec.com.codesoft.codefaclite.pos.model.CajaSessionReporteModel", "CAJR", "Reporte Caja Sesion", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null),
-    REPORTE_ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaReporteModel", "ACRT", "Reporte Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null);
+    REPORTE_ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaReporteModel", "ACRT", "Reporte Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null),;
     
 
     
