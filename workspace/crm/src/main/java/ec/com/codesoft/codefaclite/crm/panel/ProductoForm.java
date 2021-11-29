@@ -1065,6 +1065,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.cmbGarantia = cmbGarantia;
     }
 
+    //todo: revisar que esta devolviendo otro dato
     @LimpiarAnotacion
     public JTextField getTxtCantidad() {
         return txtCantidadEnsamble;
@@ -1214,7 +1215,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[0-9]+$", nombre = "Cantidad", expresionRegularMensaje = "Solo numeros enteros")
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.NUMEROS_DECIMALES, nombre = "Cantidad", expresionRegularMensaje = "Solo permite números")
     public JTextField getTxtCantidadEnsamble() {
         return txtCantidadEnsamble;
     }
