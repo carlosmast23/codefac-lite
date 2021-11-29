@@ -24,6 +24,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.DashBoardData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ValidacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -532,7 +534,18 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         AbstractFacade.consultarConsistenciaTabla(nombreTabla);
     }
     
+    
+    public ReportDataAbstract<DashBoardData> consultarDashboard(Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException
+    {
+        ReportDataAbstract<DashBoardData> reporte=new ReportDataAbstract<DashBoardData>("DashBoard");
+        //Agregar parametros
+        reporte.agregarParametro("ventasDiarias", "130");
         
+        reporte.agregarDetalle(new DashBoardData());
+        
+        return reporte;
+    
+    }
 
 
 }

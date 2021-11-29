@@ -12,8 +12,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.DashBoardData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -56,5 +59,7 @@ public interface UtilidadesServiceIf extends Remote
     public void verficarConsistenciaTabla(String nombreTabla) throws RemoteException,ServicioCodefacException;
     
     public Integer obtenerCodigoMaximoPorId(String nombreTabla,String nombreCampoPk) throws RemoteException,ServicioCodefacException;
+    
+    public ReportDataAbstract<DashBoardData> consultarDashboard(Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException;
     
 }
