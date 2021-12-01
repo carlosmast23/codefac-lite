@@ -24,11 +24,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,6 +39,7 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -286,7 +289,8 @@ public class StockReporteModel extends StockMinimoPanel{
                         //System.out.println(producto.getNombre());
                         data.setCodigo(codigoPersonalizado);
                         data.setProducto(producto.getNombre());
-                        data.setStock(cantidad.toString());
+                        data.setStock(cantidad.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP)+"");
+                        
                         data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
                         data.setUbicacion(producto.getUbicacion());
                         if(producto.getCantidadMinima()!=null)
@@ -299,6 +303,8 @@ public class StockReporteModel extends StockMinimoPanel{
                         }
                         data.setCosto(costoPromedio.toString());
                         data.setBodega(bodega.getNombre());
+                        data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
+                        data.setUtilidad1(producto.getValorUnitario().subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
                         
                         //Agregar los detalles adicional cuando el producto tiene garantia
                         if(producto.getGarantiaEnum().equals(EnumSiNo.SI) && getCmbMostrarDetalle().getSelectedItem().equals(EnumSiNo.SI))
@@ -327,6 +333,29 @@ public class StockReporteModel extends StockMinimoPanel{
         }
     };
     
+    private Integer obtenerCantidadDecimales()
+    {
+        //Por defecto si no tiene un valor redondea al numero de decimales
+        Integer decimalesCantidadRedondear = null;
+        try {
+            decimalesCantidadRedondear = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, new ParametroUtilidades.ComparadorInterface() {
+                @Override
+                public Object consultarParametro(String nombreParametro) {
+                    return Integer.parseInt(nombreParametro);
+                }
+            });
+        } catch (RemoteException ex) {
+            Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(decimalesCantidadRedondear==null)
+        {
+            decimalesCantidadRedondear=2;
+        }
+        
+        return decimalesCantidadRedondear;
+    }
+    
     
     private void construirTabla()
     {
@@ -337,8 +366,10 @@ public class StockReporteModel extends StockMinimoPanel{
             "Categoria",
             "Ubicación",
             "Stock",
+            "Pvp1",
             "Cantidad Minima",
-            "Costo"
+            "Costo",
+            "Utilidad"
         };
         
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
@@ -352,8 +383,10 @@ public class StockReporteModel extends StockMinimoPanel{
                 stockMinimo.getCategoria(),
                 stockMinimo.getUbicacion(),
                 stockMinimo.getStock(),
+                stockMinimo.getPvp1()+"",
                 stockMinimo.getCantidadMinima(),
-                stockMinimo.getCosto()
+                stockMinimo.getCosto(),
+                stockMinimo.getUtilidad1()+""
             };
             
             modeloTabla.addRow(datos);
