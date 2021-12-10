@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class StockMinimoData implements ExcelDatosInterface{
     private String ubicacion;
     private String costo;
     private String bodega;
+    private BigDecimal pvp1;
+    private BigDecimal utilidad1;
     
     private List<StockUnicoData> detalles;
 
@@ -112,6 +115,23 @@ public class StockMinimoData implements ExcelDatosInterface{
         
         this.detalles.add(stockUnicoData);
     }
+
+    public BigDecimal getPvp1() {
+        return pvp1;
+    }
+
+    public void setPvp1(BigDecimal pvp1) {
+        this.pvp1 = pvp1;
+    }
+
+    public BigDecimal getUtilidad1() {
+        return utilidad1;
+    }
+
+    public void setUtilidad1(BigDecimal utilidad1) {
+        this.utilidad1 = utilidad1;
+    }
+    
     
     
 
@@ -126,7 +146,9 @@ public class StockMinimoData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.ubicacion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.stock,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.cantidadMinima, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.pvp1,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.costo,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.utilidad1,Excel.TipoDataEnum.NUMERO));
         
         
         return tiposDatos;

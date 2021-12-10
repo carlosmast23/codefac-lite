@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.inventario.data;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ import java.util.List;
  *
  * @author Carlos
  */
-public class KardexData implements ExcelDatosInterface{
+public class KardexData implements ExcelDatosInterface,Cloneable{
     private String documento;
     private String preimpreso;
     private String proveedor;
@@ -159,7 +161,45 @@ public class KardexData implements ExcelDatosInterface{
         this.documentoTransaccion = documentoTransaccion;
     }
     
+    //////////////////////////////////////////////////////////////////
+    ///                 METODOS PERSONALIZADOS
+    /////////////////////////////////////////////////////////////////
     
+    public String getIngreso_precioFormat() {
+        return formatearDosDecimales(ingreso_precio);
+    }
+    
+    public String getIngreso_totalFormat() {
+        return formatearDosDecimales(ingreso_total);
+    }
+    
+    public String getEgreso_precioFormat() {
+        return formatearDosDecimales(egreso_precio);
+    }
+    
+    public String getEgreso_totalFormat() {
+        return formatearDosDecimales(egreso_total);
+    }
+    
+    public String getSaldo_precioFormat() {
+        return formatearDosDecimales(saldo_precio);
+    }
+    
+    public String getSaldo_totalFormat() {
+        return formatearDosDecimales(saldo_total);
+    }
+    
+    
+    
+    private String formatearDosDecimales(String valorStr)
+    {
+        if(valorStr!=null && !valorStr.trim().isEmpty())
+        {
+            BigDecimal valor=new BigDecimal(valorStr).setScale(2,RoundingMode.HALF_UP);
+            return valor.toString();
+        }
+        return "";
+    }
     
 
     @Override
@@ -182,6 +222,11 @@ public class KardexData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.saldo_total,Excel.TipoDataEnum.TEXTO));    
         
         return tiposDatos;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
     
     

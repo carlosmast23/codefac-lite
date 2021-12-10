@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
@@ -170,9 +171,39 @@ public class KardexModel extends KardexPanel {
             @Override
             public void pdf() {
                 Map<String, Object> parameters = new HashMap<String, Object>();
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listaKardex, panelPadre, "Kardex " + productoSeleccionado.getNombre(), OrientacionReporteEnum.HORIZONTAL);
+                List<KardexData> listaConDecimales=redondearListaKardex(listaKardex);
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listaConDecimales, panelPadre, "Kardex " + productoSeleccionado.getNombre(), OrientacionReporteEnum.HORIZONTAL);
             }
         });
+    }
+    
+    //TODO:Solucion temporal para tener todos los calculos con todos los decimales y mostrar solo con 2    
+    public List<KardexData> redondearListaKardex(List<KardexData> kardexDataOriginal)
+    {
+        List<KardexData> resultado=new ArrayList<KardexData>();
+        for (KardexData kardexData : kardexDataOriginal) {
+            
+            try {
+                KardexData kardexDataTemp=(KardexData) kardexData.clone();
+                
+                kardexDataTemp.setIngreso_precio(kardexDataTemp.getIngreso_precioFormat());
+                kardexDataTemp.setIngreso_total(kardexDataTemp.getIngreso_totalFormat());
+
+                kardexDataTemp.setEgreso_precio(kardexDataTemp.getEgreso_precioFormat());
+                kardexDataTemp.setEgreso_total(kardexDataTemp.getEgreso_totalFormat());
+
+                kardexDataTemp.setSaldo_precio(kardexDataTemp.getSaldo_precioFormat());
+                kardexDataTemp.setSaldo_total(kardexDataTemp.getSaldo_totalFormat());
+                
+                resultado.add(kardexDataTemp);
+
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return resultado;
+        
     }
 
     @Override
@@ -336,8 +367,7 @@ public class KardexModel extends KardexPanel {
                     completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, true);
                 } else //Cuando afecta de forma negativa
                 {
-
-                    //cantidadAcumulada -= kardexDetalle.getCantidad();
+                    
                     cantidadAcumulada=cantidadAcumulada.subtract(kardexDetalle.getCantidad());
                     precioTotalAcumulado = precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
                     
@@ -450,16 +480,16 @@ public class KardexModel extends KardexPanel {
             fila.add(kardexData.getProveedor());
 
             fila.add(kardexData.getIngreso_cantidad());
-            fila.add(kardexData.getIngreso_precio());
-            fila.add(kardexData.getIngreso_total());
+            fila.add(kardexData.getIngreso_precioFormat());
+            fila.add(kardexData.getIngreso_totalFormat());
 
             fila.add(kardexData.getEgreso_cantidad());
-            fila.add(kardexData.getEgreso_precio());
-            fila.add(kardexData.getEgreso_total());
+            fila.add(kardexData.getEgreso_precioFormat());
+            fila.add(kardexData.getEgreso_totalFormat());
 
             fila.add(kardexData.getSaldo_cantidad());
-            fila.add(kardexData.getSaldo_precio());
-            fila.add(kardexData.getSaldo_total());
+            fila.add(kardexData.getSaldo_precioFormat());
+            fila.add(kardexData.getSaldo_totalFormat());
 
             modeloTabla.addRow(fila);
         }

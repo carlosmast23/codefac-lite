@@ -412,8 +412,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 Vector<Object> fila = new Vector<Object>();
                 fila.add(productoEnsamble);
                 fila.add(productoEnsamble.getCantidad() + "");
-                fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
-                fila.add(productoEnsamble.getComponenteEnsamble().getValorUnitario() + "");
+                if(productoEnsamble.getComponenteEnsamble()!=null)
+                {
+                    fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
+                    fila.add(productoEnsamble.getComponenteEnsamble().getValorUnitario() + "");
+                }
+                else
+                {
+                    fila.add("");
+                    fila.add("");
+                }
                 tableModel.addRow(fila);
             }
         }

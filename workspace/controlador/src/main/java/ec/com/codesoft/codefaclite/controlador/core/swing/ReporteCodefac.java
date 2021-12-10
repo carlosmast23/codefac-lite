@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
@@ -157,6 +158,11 @@ public class ReporteCodefac {
     public static void generarReporteInternalFramePlantilla(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte)
     {
         generarReporte(pathReporte,parametros,datos,panelPadre,tituloReporte,OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A4);
+    }
+    
+    public static void generarReporteInternalFramePlantilla(InputStream pathReporte,InterfazComunicacionPanel panelPadre,ReportDataAbstract reportAbstract)
+    {        
+        generarReporte(pathReporte,reportAbstract.getMapParametros(),reportAbstract.getDetalleList(),panelPadre,reportAbstract.getTituloReporte(),OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.A4);
     }
     
     public static void generarReporteInternalFramePlantilla(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum) {
