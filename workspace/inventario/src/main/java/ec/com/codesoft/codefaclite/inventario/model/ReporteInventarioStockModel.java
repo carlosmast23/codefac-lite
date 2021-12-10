@@ -48,10 +48,10 @@ import java.util.logging.Logger;
  */
 public class ReporteInventarioStockModel extends ReporteInventarioStockPanel implements ControladorVistaIf, ReporteInventarioStockControlador.SwingIf
 {
-    private ReporteInventarioStockControlador controlador = new ReporteInventarioStockControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+    private ReporteInventarioStockControlador controlador;
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        controlador = new ReporteInventarioStockControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
     }
 
     @Override

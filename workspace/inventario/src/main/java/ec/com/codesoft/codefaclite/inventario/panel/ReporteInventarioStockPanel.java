@@ -177,16 +177,17 @@ public abstract class ReporteInventarioStockPanel extends ControladorCodefacInte
         this.checkTodos = checkTodos;
     }
 
+    @ComboBoxBinding(source = "controlador.bodegasList", valueSelect = "controlador.bodega")
     public JComboBox<Bodega> getCmbBodega() {
         return cmbBodega;
     }
     
-    @ComboBoxBinding(source = "controlador.bodegas", valueSelect = "controlador.bodega")
+    
     public void setCmbBodega(JComboBox<Bodega> cmbBodega) {
         this.cmbBodega = cmbBodega;
     }
     
-    @ComboBoxBinding(source = "controlador.filtroPorCategoria", valueSelect = "controlador.elementoSeleccionadoFiltroPorCategoria")
+    //@ComboBoxBinding(source = "controlador.filtroPorCategoria", valueSelect = "controlador.elementoSeleccionadoFiltroPorCategoria")
     public JComboBox<String> getCmbTipoReporte() {
         return cmbTipoReporte;
     }

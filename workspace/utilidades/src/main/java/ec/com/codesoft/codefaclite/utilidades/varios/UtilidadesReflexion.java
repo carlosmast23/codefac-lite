@@ -115,15 +115,18 @@ public class UtilidadesReflexion {
     
     public static <T> T obtenerValorDelMetodo(Method metodo, Object context, Class<T> tipoClase) {
                 
-        try {
+        try {            
             metodo.setAccessible(true);
             return (T)metodo.invoke(context);
             //
         } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, "ERROR ACCEDIENDO AL METODO: "+metodo.getName());
             Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
+            Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, "ERROR ACCEDIENDO AL METODO: "+metodo.getName());
             Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
+            Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, "ERROR ACCEDIENDO AL METODO: "+metodo.getName());
             Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
