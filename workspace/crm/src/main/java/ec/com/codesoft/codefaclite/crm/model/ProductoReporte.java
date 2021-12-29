@@ -83,7 +83,13 @@ public class ProductoReporte extends ControladorCodefacInterface{
                     {
                         decimalesRedondear=ParametrosSistemaCodefac.PresentacionDecimales.DECIMALES_DEFECTO_PRODUCTO;
                     }
-
+                    
+                    productoData.setCategoria("");
+                    if(producto.getCatalogoProducto().getCategoriaProducto()!=null)
+                    {
+                        productoData.setCategoria(producto.getCatalogoProducto().getCategoriaProducto().getNombre());
+                    }
+                    
                     productoData.setValorUnitario(producto.getValorUnitario().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
                     productoData.setIva(producto.obtenerIvaValorUnitario().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
                     productoData.setTotal(producto.obtenerValorUnitarioConIva().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
@@ -109,7 +115,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
                 public void excel() {
                     try {
                         Excel excel = new Excel();
-                        String[] nombreCabeceras = {"Codigo", "Tipo", "Nombre","Valor Unit","Iva","Total"};
+                        String[] nombreCabeceras = {"Codigo", "Tipo", "Nombre","Categoria","Valor Unit","Iva","Total"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();
                     } catch (IOException ex) {

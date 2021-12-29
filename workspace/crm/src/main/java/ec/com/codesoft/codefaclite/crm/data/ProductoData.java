@@ -24,6 +24,7 @@ public class ProductoData implements ExcelDatosInterface
     private String iva;
     private String total;
     private String impuestoIva;
+    private String categoria;
 
     public ProductoData() {
     }
@@ -83,6 +84,16 @@ public class ProductoData implements ExcelDatosInterface
     public void setTotal(String total) {
         this.total = total;
     }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+    
+    
     
     
     
@@ -94,9 +105,11 @@ public class ProductoData implements ExcelDatosInterface
         tiposDatos.add(new TipoDato(this.codigoPrincipal,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.tipoProducto,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombre,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.categoria,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.valorUnitario,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.iva,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.total,Excel.TipoDataEnum.NUMERO));
+        
         
         //tiposDatos.add(new TipoDato(this.impuestoIva,Excel.TipoDataEnum.TEXTO));
         return tiposDatos;
