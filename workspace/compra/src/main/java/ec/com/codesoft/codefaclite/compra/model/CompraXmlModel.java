@@ -128,6 +128,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
             
             CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(fila, COLUMNA_OBJETO);
             
+            
             ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
                     @Override
                     public void updateInterface(Producto entity) {
@@ -143,7 +144,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     null,
                     compraDetalle.getCodigoProveedor(),
                     compraDetalle.getDescripcion(),
-                    compraDetalle.getPrecioUnitario()
+                    compraDetalle.getPrecioUnitario(),
+                    compraDetalle.getProductoProveedor().getProducto().getCatalogoProducto().getIva(),
                 };
                 
                 panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false,parametros,formularioActual);
@@ -250,8 +252,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     }
 
     public void crearModeloTabla() {
-        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema", "Cod Xml", "Descripción compra", "Cantidad", "Precio"};
-        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class, String.class, String.class, String.class});
+        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema", "Cod Xml", "Descripción compra","Iva","Cantidad", "Precio"};
+        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class, String.class, String.class, String.class,String.class});
         getTblDetalles().setModel(modelo);
         UtilidadesTablas.definirTamanioColumnas(getTblDetalles(), new Integer[]{0});
     }
@@ -265,10 +267,12 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                 String codigoSistema="";
                 String nombreProductoSistema="";
                 String codigoProveedor="";
-                if(value.getProductoProveedor()!=null)
+                String ivaPorcentaje=value.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getTarifa()+"";
+                if(value.getProductoProveedor().getId()!=null)
                 {
                     codigoSistema=value.getProductoProveedor().getProducto().getCodigoPersonalizado();
                     nombreProductoSistema=value.getProductoProveedor().getProducto().getNombre();
+                    
                 }
                 
                 
@@ -280,6 +284,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     nombreProductoSistema,
                     value.getCodigoProveedor(),
                     value.getDescripcion(),
+                    ivaPorcentaje,
                     value.getCantidad(),
                     value.getPrecioUnitario() + "",};
             }

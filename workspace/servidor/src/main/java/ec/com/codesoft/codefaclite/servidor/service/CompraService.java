@@ -25,6 +25,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -32,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -199,6 +202,19 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             }
             else
             {
+                //Crear temporalmente los datos para mandar los impuestos que deben crear en el nuevo producto}
+                ProductoProveedor productoProveedorTmp=new ProductoProveedor();
+                Producto productoTmp=new Producto();
+                CatalogoProducto catalogoProductoTmp=new CatalogoProducto();
+                ImpuestoDetalle impuestoDetalleIvaTmp=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorCodigo(Integer.parseInt(detalleXml.getImpuestos().get(0).getCodigoPorcentaje()));
+                
+                
+                
+                productoProveedorTmp.setProducto(productoTmp);
+                productoTmp.setCatalogoProducto(catalogoProductoTmp);
+                catalogoProductoTmp.setIva(impuestoDetalleIvaTmp);                
+                compraDetalle.setProductoProveedor(productoProveedorTmp);
+                
                 //TODO: Si no existe el producto falta programar esta parte
             }
             

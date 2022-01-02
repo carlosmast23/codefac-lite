@@ -95,5 +95,23 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
         }
         return null;
     }
+    
+    public ImpuestoDetalle buscarPorCodigo(Integer codigo) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        List<ImpuestoDetalle> resultados=(List<ImpuestoDetalle>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Map<String,Object> mapParametros=new HashMap<String, Object>();
+                mapParametros.put("codigo",codigo);
+                return getFacade().findByMap(mapParametros);
+            }
+        });
+        
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
+    }
 
 }

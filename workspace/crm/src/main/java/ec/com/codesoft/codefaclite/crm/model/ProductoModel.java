@@ -517,6 +517,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
      * [1] Codigo producto
      * [2] Nombre producto
      * [3] Pvp sin iva
+     * [4] Impuesto del Iva
      * @param parametros 
      */
     @Override
@@ -542,6 +543,12 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         {
             BigDecimal pvpPrecio=(BigDecimal) parametros[3];
             getTextValorUnitario().setText(pvpPrecio+"");
+        }
+        
+        if(parametros[4]!=null)
+        {
+            ImpuestoDetalle impuestoDetalleIva=(ImpuestoDetalle) parametros[4];
+            controlador.setIvaSeleccionado(impuestoDetalleIva);
         }
     }
 
