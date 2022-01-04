@@ -862,6 +862,7 @@ public class CompraModel extends CompraPanel{
                 File archivoSeleccionado=jFileChooser.getSelectedFile();
                 SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
                         new FileInputStream(archivoSeleccionado));
+                
                 Compra compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeXml(istream,session.getEmpresa());
                 
                 Object[] parametros={compra};
@@ -884,9 +885,10 @@ public class CompraModel extends CompraPanel{
         public void updateInterface(Object entity) {
             if(entity!=null)
             {
-                compra=(Compra) entity;
+                compra=(Compra) entity;                
                 //Agregar todos los detalles de la forma estandar en la compra para ir haciendo los calculos necesarios de la pantalla de COMPRA
                 List<CompraDetalle> detallesTemporal=compra.getDetalles();
+                //compra.setDetalles(null);
                 //compra.setDetalles(null);
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {

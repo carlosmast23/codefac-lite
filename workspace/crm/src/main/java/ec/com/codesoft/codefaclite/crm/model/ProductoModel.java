@@ -550,6 +550,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             ImpuestoDetalle impuestoDetalleIva=(ImpuestoDetalle) parametros[4];
             controlador.setIvaSeleccionado(impuestoDetalleIva);
         }
+        actualizarBindingCompontValues();
     }
 
    

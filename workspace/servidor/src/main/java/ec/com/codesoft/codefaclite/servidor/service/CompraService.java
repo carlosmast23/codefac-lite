@@ -236,6 +236,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             
             //Agregar el CODIGO DEL PROVEEDOR ORIGINAL DE LA COMPRA
             compraDetalle.setCodigoProveedor(codigoPrincipal);
+            //Calculor los totales previos
+            compraDetalle.calcularSubtotalSinIva();
             
             detalles.add(compraDetalle);
             
