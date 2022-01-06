@@ -100,6 +100,15 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     private void validacionGrabar(Cartera cartera) throws ServicioCodefacException
     {
+        //Validacion para que las retenciones tenga que ingresar un preimpreso como dato requerido
+        if(cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.RETENCIONES))
+        {
+            if(cartera.getPreimpreso()==null || cartera.getPreimpreso().trim().isEmpty() || cartera.getPreimpreso().equals("000-000-000000000"))
+            {
+                throw new ServicioCodefacException("No se puede grabar una retención si un preimpreso");
+            }
+        }
+        
         if(cartera.getSegundaReferenciaTipoEnum()!=null)
         {
             if(cartera.getSegundaReferenciaTipoEnum().equals(DocumentoEnum.ABONOS_ACADEMICO))

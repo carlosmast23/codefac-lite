@@ -33,8 +33,14 @@ public abstract class UtilidadesSistema {
         {
             Integer valor1=0;
             if(i<componentesVersion.length)
-            {
-                valor1=Integer.parseInt(componentesVersion[i]);                
+            {           
+                try
+                {
+                    valor1=Integer.parseInt(componentesVersion[i]);                
+                }catch(java.lang.NumberFormatException nfe)
+                {
+                    System.out.println("revisar");
+                }
             }
             
             Integer valor2=0;
