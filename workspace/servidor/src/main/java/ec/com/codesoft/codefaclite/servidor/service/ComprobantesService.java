@@ -84,6 +84,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
@@ -1067,7 +1068,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         Cartera cartera=new Cartera();
         cartera.setCodigoDocumento(factura.getCodigoDocumento());
-        cartera.setFechaCreacion(new java.sql.Date(new java.util.Date().getTime()));
+        cartera.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
         cartera.setPersona(factura.getCliente());
         cartera.setReferenciaID(factura.getId());
         cartera.setSaldo(factura.getTotal().subtract(factura.getIva()));

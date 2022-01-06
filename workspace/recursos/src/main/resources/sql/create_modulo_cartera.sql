@@ -23,7 +23,7 @@ create table CARTERA(
     ESTADO varchar(1),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
     TIPO_CARTERA varchar(1),
-    FECHA_CREACION date,
+    FECHA_CREACION TIMESTAMP,
     REFERENCIA_ID BIGINT,  
     CODIGO_DOCUMENTO varchar(3),  
     TOTAL decimal(13,2),

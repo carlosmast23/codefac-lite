@@ -19,6 +19,7 @@ import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +54,7 @@ public class Cartera implements Serializable{
     private Persona persona;
     
     @Column(name = "FECHA_CREACION")
-    private Date fechaCreacion;
+    private Timestamp fechaCreacion;
     
     @Column(name = "FECHA_EMISION")
     protected Date fechaEmision;
@@ -153,7 +154,7 @@ public class Cartera implements Serializable{
         this.tipoCartera = tipoCartera;
         this.sucursal = sucursal;
         this.usuario = usuario;
-        this.fechaCreacion=UtilidadesFecha.getFechaHoy();
+        this.fechaCreacion=UtilidadesFecha.getFechaHoyTimeStamp();
         this.fechaEmision=UtilidadesFecha.getFechaHoy();
         this.estado=estadoEnum.getEstado();
     }
@@ -174,11 +175,11 @@ public class Cartera implements Serializable{
         this.persona = persona;
     }
 
-    public Date getFechaCreacion() {
+    public Timestamp getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(Timestamp fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 

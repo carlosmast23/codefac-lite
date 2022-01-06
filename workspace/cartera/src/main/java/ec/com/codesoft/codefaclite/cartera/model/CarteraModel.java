@@ -1113,7 +1113,7 @@ public class CarteraModel extends CarteraPanel{
         cartera.setCodigoDocumento(documentoEnum.getCodigo());
         
         cartera.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-        cartera.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        cartera.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
         cartera.setFechaEmision(new java.sql.Date(getCmbFechaEmision().getDate().getTime()));
         
         String puntoEmision="";
