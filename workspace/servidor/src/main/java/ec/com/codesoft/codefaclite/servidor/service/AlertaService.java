@@ -34,8 +34,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
+import javax.mail.Session;
 
 /**
  *
@@ -66,10 +69,29 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         alertas.add(obtenerNotificacionFechaLimiteFirma(empresa));
         alertas.add(obtenerCantidadInventarioMinimo(empresa));
         alertas.add(obtenerAlertaDirectorioRespaldo(empresa));
+        alertas.add(obtenerAlertaIvaSinConfigurar(empresa));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
         
         return alertas;        
+    }
+    
+    private AlertaResponse obtenerAlertaIvaSinConfigurar(Empresa empresa)
+    {
+        try {
+            ParametroCodefac parametroCodefac= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.IVA_DEFECTO, empresa);
+            if(parametroCodefac!=null)
+            {
+                if(parametroCodefac.valor!=null && !parametroCodefac.valor.isEmpty())
+                {
+                    return null;
+                }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(AlertaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.GRAVE,"IVA sin configurar","Configurar el IVA");
+        return alertaRespuesta;
     }
     
     private AlertaResponse obtenerAlertaDirectorioRespaldo(Empresa empresa) throws RemoteException,ServicioCodefacException 
