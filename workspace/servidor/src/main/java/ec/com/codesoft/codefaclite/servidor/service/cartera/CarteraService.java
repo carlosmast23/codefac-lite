@@ -426,6 +426,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             case NOTA_VENTA_INTERNA:
             case NOTA_VENTA:
             case FACTURA:
+            case PASAJES_EMPRESA_AVIACION:    
                 //if(crudEnum.equals(CrudEnum.CREAR))
                 //{
                     crearCarteraFactura(comprobante, cartera, cruces, tipo,carteraParametro);
