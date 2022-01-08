@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,6 +170,23 @@ public class ActualizacionSistemaUtil {
         } catch (RemoteException ex) {
             Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void actualizarMicroempresaARimpe()
+    {
+        try {
+            List<Empresa> empresaList=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos();
+            for (Empresa empresa : empresaList) {
+                if(empresa.getContribuyenteRegimenMicroempresasEnum()!=null && empresa.getContribuyenteRegimenMicroempresasEnum().equals(EnumSiNo.SI))                
+                {
+                    empresa.setContribuyenteRegimenMicroempresasEnum(EnumSiNo.NO);
+                    empresa.setRimpeEnum(EnumSiNo.SI);
+                }
+            }
+            
+        } catch (RemoteException ex) {
             Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

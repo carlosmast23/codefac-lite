@@ -2334,7 +2334,23 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //Agregando estado de los documentos dependiendo el tipo
         setearEstadoComoprobante(comprobante);
         
+        //Agrega informacion adicional del sistema en este caso como el RIMPE
+        setearOtrosDatosAdicionalesSistema(comprobante);
+        
  
+        
+    }
+    
+    private void setearOtrosDatosAdicionalesSistema(ComprobanteEntity comprobante)
+    {
+       EnumSiNo rimpeEnumSiNo=comprobante.getEmpresa().getRimpeEnum();
+       if(rimpeEnumSiNo!=null && rimpeEnumSiNo.equals(EnumSiNo.SI))
+       {
+           
+           ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Tipo","Contribuyente Régimen RIMPE");
+           comprobante.addDatoAdicional(comprobanteAdicional);
+           //agregarParametroComprobante(comprobante, parametroCodefac.getValor());           
+       }                
         
     }
     

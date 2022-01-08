@@ -225,6 +225,7 @@ public class EmpresaModel extends EmpresaForm
         getjTextLogo().setText("");    
         getTxtOrden().setValue(0);
         getChkContribuyenteRegimenMicroempresas().setSelected(false);
+        getChkRIMPE().setSelected(false);
         getjCheckBLlevaContabilidad().setSelected(false);
     }
 
@@ -286,6 +287,16 @@ public class EmpresaModel extends EmpresaForm
         else
         {
             empresa.setContribuyenteRegimenMicroempresasEnum(EnumSiNo.NO);
+        }
+        
+        
+        if(getChkRIMPE().isSelected())
+        {
+            empresa.setRimpeEnum(EnumSiNo.SI);
+        }
+        else
+        {
+            empresa.setRimpeEnum(EnumSiNo.NO);
         }
         
         
@@ -415,6 +426,7 @@ public class EmpresaModel extends EmpresaForm
         getTxtAdicional().setText(empresa.getAdicional());
         getjTextCodigoEmpresa().setText(empresa.getCodigo());
         getChkContribuyenteRegimenMicroempresas().setSelected(empresa.getContribuyenteRegimenMicroempresasEnum().getBool());
+        getChkRIMPE().setSelected(empresa.getRimpeEnum().getBool());
         
         if (empresa.getOrden() != null) {
             getTxtOrden().setValue(empresa.getOrden());

@@ -79,6 +79,9 @@ public class Empresa implements Serializable {
     @Column(name = "AGENTE_RETENCION_RESOLUCION")
     private String agenteRetencionResolucion;
     
+    @Column(name = "RIMPE")
+    private String rimpe;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
     private List<Sucursal> sucursales;
 
@@ -282,6 +285,17 @@ public class Empresa implements Serializable {
     public void setContribuyenteRegimenMicroempresasEnum(EnumSiNo contribuyenteRegimenMicroempresasEnum) {
         this.contribuyenteRegimenMicroempresas = contribuyenteRegimenMicroempresasEnum.getLetra();
     }
+    
+    public EnumSiNo getRimpeEnum() {
+        return EnumSiNo.getEnumByLetra(rimpe);
+    }
+
+    public void setRimpeEnum(EnumSiNo rimpeEnum) {
+        this.rimpe = rimpeEnum.getLetra();
+    }
+    
+    
+    
 
     public String getAgenteRetencionResolucion() {
         return agenteRetencionResolucion;
@@ -298,6 +312,7 @@ public class Empresa implements Serializable {
     public void setInstagram(String instagram) {
         this.instagram = instagram;
     }
+    
     
     /**
      * Metodo que permite obtener por defecto el nombre comercial pero si no tiene devuelve la razon social

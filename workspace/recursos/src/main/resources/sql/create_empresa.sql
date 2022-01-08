@@ -34,6 +34,8 @@ create table EMPRESA
     AGENTE_RETENCION_RESOLUCION varchar(50),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.5.5)*/
     INSTAGRAM varchar(200),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.9.9)*/
+    RIMPE varchar(20),
     primary key (ID)
 );
 
