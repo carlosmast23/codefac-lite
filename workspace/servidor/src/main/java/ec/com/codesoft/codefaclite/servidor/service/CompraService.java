@@ -49,7 +49,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.sri.ComprobantesElectronicosParametros;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -448,6 +450,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             }
         }
         
+        validarAutorizacionPorDocumento(compra);
+        
         /**
          * Validar que este ingresando una compra repetida
          */
@@ -457,6 +461,18 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //}
         
         
+    }
+    
+    private void validarAutorizacionPorDocumento(Compra compra) throws RemoteException, ServicioCodefacException
+    {
+        //TODO: Crear un documento para FACTURAS DEL EXTERIOR y que en esas facturas les permita ingresar numeros y letras en las autorizaciones
+        //para todos los demas casos debe permitir ingresar solo numeros en el campo de autorizacion
+        
+        Boolean validacionCorrecta= UtilidadesExpresionesRegulares.validar(compra.getAutorizacion(), ExpresionRegular.soloNumeros);
+        if(!validacionCorrecta)
+        {
+            throw new ServicioCodefacException("La autorización de este tipo de compra solo puede ser números ");
+        }
     }
     
     private void grabarCartera(Compra compra,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException
