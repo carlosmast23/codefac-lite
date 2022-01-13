@@ -79,8 +79,11 @@ public class Empresa implements Serializable {
     @Column(name = "AGENTE_RETENCION_RESOLUCION")
     private String agenteRetencionResolucion;
     
-    @Column(name = "RIMPE")
-    private String rimpe;
+    @Column(name = "RIMPE_NEGOCIOS_POPULARES")
+    private String rimpeNegociosPopulares;
+    
+    @Column(name = "RIMPE_EMPRENDEDORES")
+    private String rimpeEmprendedores;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
     private List<Sucursal> sucursales;
@@ -252,6 +255,8 @@ public class Empresa implements Serializable {
     public void setOrden(Integer orden) {
         this.orden = orden;
     }
+    
+    
 
     public String getContribuyenteRegimenMicroempresas() {
         return contribuyenteRegimenMicroempresas;
@@ -285,13 +290,38 @@ public class Empresa implements Serializable {
     public void setContribuyenteRegimenMicroempresasEnum(EnumSiNo contribuyenteRegimenMicroempresasEnum) {
         this.contribuyenteRegimenMicroempresas = contribuyenteRegimenMicroempresasEnum.getLetra();
     }
-    
-    public EnumSiNo getRimpeEnum() {
-        return EnumSiNo.getEnumByLetra(rimpe);
+
+    public String getRimpeNegociosPopulares() {
+        return rimpeNegociosPopulares;
     }
 
-    public void setRimpeEnum(EnumSiNo rimpeEnum) {
-        this.rimpe = rimpeEnum.getLetra();
+    public void setRimpeNegociosPopulares(String rimpeNegociosPopulares) {
+        this.rimpeNegociosPopulares = rimpeNegociosPopulares;
+    }
+
+    public String getRimpeEmprendedores() {
+        return rimpeEmprendedores;
+    }
+
+    public void setRimpeEmprendedores(String rimpeEmprendedores) {
+        this.rimpeEmprendedores = rimpeEmprendedores;
+    }
+    
+
+    public EnumSiNo getRimpeNegociosPopularesEnum() {
+        return EnumSiNo.getEnumByLetra(rimpeNegociosPopulares);
+    }
+
+    public void setRimpeNegociosPopularesEnum(EnumSiNo rimpeNegociosPopularesEnum) {
+        this.rimpeNegociosPopulares = rimpeNegociosPopularesEnum.getLetra();
+    }
+
+    public EnumSiNo getRimpeEmprendedoresEnum() {
+        return EnumSiNo.getEnumByLetra(rimpeEmprendedores);
+    }
+
+    public void setRimpeEmprendedoresEnum(EnumSiNo rimpeEmprendedoresEnum) {
+        this.rimpeEmprendedores = rimpeEmprendedoresEnum.getLetra();
     }
     
     

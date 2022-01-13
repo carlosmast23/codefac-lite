@@ -225,7 +225,8 @@ public class EmpresaModel extends EmpresaForm
         getjTextLogo().setText("");    
         getTxtOrden().setValue(0);
         getChkContribuyenteRegimenMicroempresas().setSelected(false);
-        getChkRIMPE().setSelected(false);
+        getChkRIMPEEmprendedores().setSelected(false);
+        getChkRIMPENegociosPopulares().setSelected(false);
         getjCheckBLlevaContabilidad().setSelected(false);
     }
 
@@ -290,13 +291,22 @@ public class EmpresaModel extends EmpresaForm
         }
         
         
-        if(getChkRIMPE().isSelected())
+        if(getChkRIMPEEmprendedores().isSelected())
         {
-            empresa.setRimpeEnum(EnumSiNo.SI);
+            empresa.setRimpeEmprendedoresEnum(EnumSiNo.SI);
         }
         else
         {
-            empresa.setRimpeEnum(EnumSiNo.NO);
+            empresa.setRimpeEmprendedoresEnum(EnumSiNo.NO);
+        }
+        
+        if(getChkRIMPENegociosPopulares().isSelected())
+        {
+            empresa.setRimpeNegociosPopularesEnum(EnumSiNo.SI);
+        }
+        else
+        {
+            empresa.setRimpeNegociosPopularesEnum(EnumSiNo.NO);
         }
         
         
@@ -426,7 +436,8 @@ public class EmpresaModel extends EmpresaForm
         getTxtAdicional().setText(empresa.getAdicional());
         getjTextCodigoEmpresa().setText(empresa.getCodigo());
         getChkContribuyenteRegimenMicroempresas().setSelected(empresa.getContribuyenteRegimenMicroempresasEnum().getBool());
-        getChkRIMPE().setSelected(empresa.getRimpeEnum().getBool());
+        getChkRIMPEEmprendedores().setSelected(empresa.getRimpeEmprendedoresEnum().getBool());
+        getChkRIMPENegociosPopulares().setSelected(empresa.getRimpeNegociosPopularesEnum().getBool());
         
         if (empresa.getOrden() != null) {
             getTxtOrden().setValue(empresa.getOrden());

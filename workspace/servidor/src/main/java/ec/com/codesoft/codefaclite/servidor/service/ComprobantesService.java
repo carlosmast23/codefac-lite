@@ -2343,14 +2343,23 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     private void setearOtrosDatosAdicionalesSistema(ComprobanteEntity comprobante)
     {
-       EnumSiNo rimpeEnumSiNo=comprobante.getEmpresa().getRimpeEnum();
-       if(rimpeEnumSiNo!=null && rimpeEnumSiNo.equals(EnumSiNo.SI))
+       EnumSiNo rimpeEnumEmprendedoresSiNo=comprobante.getEmpresa().getRimpeEmprendedoresEnum();
+       if(rimpeEnumEmprendedoresSiNo!=null && rimpeEnumEmprendedoresSiNo.equals(EnumSiNo.SI))
        {
            
            ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Tipo","Contribuyente Régimen RIMPE");
            comprobante.addDatoAdicional(comprobanteAdicional);
            //agregarParametroComprobante(comprobante, parametroCodefac.getValor());           
-       }                
+       }      
+       
+       EnumSiNo rimpeEnumNegocioPopularSiNo=comprobante.getEmpresa().getRimpeNegociosPopularesEnum();
+       if(rimpeEnumNegocioPopularSiNo!=null && rimpeEnumNegocioPopularSiNo.equals(EnumSiNo.SI))
+       {
+           
+           ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Tipo","Contribuyente Negocio Popular - Régimen RIMPE");
+           comprobante.addDatoAdicional(comprobanteAdicional);
+           //agregarParametroComprobante(comprobante, parametroCodefac.getValor());           
+       }      
         
     }
     

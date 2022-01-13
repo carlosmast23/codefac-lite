@@ -166,7 +166,9 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jLabel14 = new javax.swing.JLabel();
         txtAgenteRetencionResolucion = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        chkRIMPE = new javax.swing.JCheckBox();
+        chkRIMPENegociosPopulares = new javax.swing.JCheckBox();
+        jLabel17 = new javax.swing.JLabel();
+        chkRIMPEEmprendedores = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         lblCelular = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -256,10 +258,10 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanelConfiguracionEmisor.add(jTextNumContribuyente, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel9.setText("RIMPE:");
+        jLabel9.setText("RIMPE (Emprendedores):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel9, gridBagConstraints);
@@ -274,13 +276,13 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jLabel10.setText("Logo(Imagen):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -298,13 +300,13 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         btnCargarImagen.setToolTipText("Buscar imagen en su computador");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         jPanelConfiguracionEmisor.add(btnCargarImagen, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -335,14 +337,14 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jLabel7.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jComboEstado, gridBagConstraints);
@@ -390,7 +392,22 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        jPanelConfiguracionEmisor.add(chkRIMPE, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(chkRIMPENegociosPopulares, gridBagConstraints);
+
+        jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel17.setText("RIMPE (Negocios Populares):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelConfiguracionEmisor.add(jLabel17, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        jPanelConfiguracionEmisor.add(chkRIMPEEmprendedores, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos generales", jPanelConfiguracionEmisor);
 
@@ -543,7 +560,8 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JCheckBox chkContribuyenteRegimenMicroempresas;
-    private javax.swing.JCheckBox chkRIMPE;
+    private javax.swing.JCheckBox chkRIMPEEmprendedores;
+    private javax.swing.JCheckBox chkRIMPENegociosPopulares;
     private javax.swing.JCheckBox jCheckBLlevaContabilidad;
     private javax.swing.JComboBox<GeneralEnumEstado> jComboEstado;
     private javax.swing.JLabel jLabel1;
@@ -554,6 +572,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -640,12 +659,20 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         this.txtInstagram = txtInstagram;
     }
 
-    public JCheckBox getChkRIMPE() {
-        return chkRIMPE;
+    public JCheckBox getChkRIMPEEmprendedores() {
+        return chkRIMPEEmprendedores;
     }
 
-    public void setChkRIMPE(JCheckBox chkRIMPE) {
-        this.chkRIMPE = chkRIMPE;
+    public void setChkRIMPEEmprendedores(JCheckBox chkRIMPEEmprendedores) {
+        this.chkRIMPEEmprendedores = chkRIMPEEmprendedores;
+    }
+
+    public JCheckBox getChkRIMPENegociosPopulares() {
+        return chkRIMPENegociosPopulares;
+    }
+
+    public void setChkRIMPENegociosPopulares(JCheckBox chkRIMPENegociosPopulares) {
+        this.chkRIMPENegociosPopulares = chkRIMPENegociosPopulares;
     }
     
     

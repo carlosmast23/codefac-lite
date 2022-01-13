@@ -182,7 +182,7 @@ public class ActualizacionSistemaUtil {
                 if(empresa.getContribuyenteRegimenMicroempresasEnum()!=null && empresa.getContribuyenteRegimenMicroempresasEnum().equals(EnumSiNo.SI))                
                 {
                     empresa.setContribuyenteRegimenMicroempresasEnum(EnumSiNo.NO);
-                    empresa.setRimpeEnum(EnumSiNo.SI);
+                    empresa.setRimpeEmprendedoresEnum(EnumSiNo.SI);
                 }
             }
             
