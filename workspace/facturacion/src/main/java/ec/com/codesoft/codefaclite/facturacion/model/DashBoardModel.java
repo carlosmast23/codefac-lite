@@ -4,6 +4,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -24,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  *
@@ -80,10 +84,22 @@ public class DashBoardModel extends DashBoardPanel{
 
                 @Override
                 public void pdf() {
-                    InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("dashboard.jrxml");
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path,panelPadre, reporte);
-                    dispose();
-                    setVisible(false);
+                    try {
+                        InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("dashboard.jrxml");
+                        
+                        
+                        InputStream pathSubReporteTopProducto = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("dashboard_top_productos.jrxml");
+                        
+                        JasperReport reportPiePagina = JasperCompileManager.compileReport(pathSubReporteTopProducto);
+                        
+                        reporte.agregarParametro("subreporte_top_productos",reportPiePagina);
+                        
+                        ReporteCodefac.generarReporteInternalFramePlantilla(path,panelPadre, reporte);
+                        dispose();
+                        setVisible(false);
+                    } catch (JRException ex) {
+                        Logger.getLogger(DashBoardModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
         } catch (ServicioCodefacException ex) {

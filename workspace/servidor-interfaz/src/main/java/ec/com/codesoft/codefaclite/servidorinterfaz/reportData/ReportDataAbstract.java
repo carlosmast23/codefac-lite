@@ -36,7 +36,7 @@ public class ReportDataAbstract<T> implements Serializable{
     ///                     METODOS PERSONALIZADOS
     ///////////////////////////////////////////////////////////////////
     
-    public void agregarParametro(String campo,String valor)
+    public void agregarParametro(String campo,Object valor)
     {
         this.mapParametros.put(campo, valor);
     }

@@ -541,7 +541,23 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         //Agregar parametros
         reporte.agregarParametro("ventasDiarias", "130");
         
-        reporte.agregarDetalle(new DashBoardData());
+        DashBoardData dashBoardData=new DashBoardData();
+                
+        DashBoardData.DashboardProductoTopData producto1=new DashBoardData.DashboardProductoTopData("Producto 1", "10");
+        DashBoardData.DashboardProductoTopData producto2=new DashBoardData.DashboardProductoTopData("Producto 2", "10");
+        DashBoardData.DashboardProductoTopData producto3=new DashBoardData.DashboardProductoTopData("Producto 3", "10");
+        
+        List<DashBoardData.DashboardProductoTopData> listaDetalle=new ArrayList<DashBoardData.DashboardProductoTopData>();
+        
+        listaDetalle.add(producto1);
+        listaDetalle.add(producto2);
+        listaDetalle.add(producto3);
+        
+        reporte.agregarParametro("productosList",listaDetalle);
+        
+        
+        
+        reporte.agregarDetalle(dashBoardData);
         
         return reporte;
     
