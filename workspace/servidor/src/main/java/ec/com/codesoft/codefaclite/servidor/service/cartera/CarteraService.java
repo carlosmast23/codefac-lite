@@ -47,6 +47,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -398,6 +399,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     private void validarSaldoNegativo(BigDecimal saldo) throws ServicioCodefacException 
     {
+        //Por el momento solo compara los saldo con 2 decimales, por que los detalles de las carteras pueden ttener varios decimales, pero finalmente la cartera solo tiene 2 decimales
+        //TODO:
+        saldo=saldo.setScale(2, RoundingMode.HALF_UP);
         if(saldo.compareTo(BigDecimal.ZERO)<0)
         {
             throw new ServicioCodefacException("Error al procesar la cartera por que el movimiento va a generar saldos negativos . Saldo negativo [ "+saldo+" ]");
@@ -727,7 +731,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     private void crearCarteraNotaCredito(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces)
     {
-        try {
+        try {            
             NotaCredito notaCredito = (NotaCredito) comprobante;
             cartera.setPersona(notaCredito.getCliente());
             cartera.setReferenciaID(notaCredito.getId());
@@ -757,8 +761,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 //Todo: Tener en cuenta que este codigo se daño pero no se el por que
                 //carteraDetalle.setSaldo(detalle.getTotal());
                 //carteraDetalle.setTotal(detalle.getTotal());
-                carteraDetalle.setSaldo(detalle.calcularTotalFinal());
-                carteraDetalle.setTotal(detalle.calcularTotalFinal());
+                carteraDetalle.setSaldo(detalle.calcularTotalFinalConTodosDecimales());
+                carteraDetalle.setTotal(detalle.calcularTotalFinalConTodosDecimales());
                 carteraDetalle.setId(carteraDetalle.generarIdTemporal() * -1l);
                 cartera.addDetalle(carteraDetalle);
                 
@@ -775,7 +779,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                     carteraCruceRenta.setCarteraDetalle(carteraDetalle);
                     carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                     carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
-                    carteraCruceRenta.setValor(detalle.calcularTotalFinal());
+                    carteraCruceRenta.setValor(detalle.calcularTotalFinalConTodosDecimales());
                     cruces.add(carteraCruceRenta);
                 }
             }

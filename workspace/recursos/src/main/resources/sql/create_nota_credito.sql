@@ -83,7 +83,7 @@ create table NOTA_CREDITO_DETALLE
     TIPO_REFERENCIA varchar(5),
     NOTA_CREDITO_ID BIGINT,
     CANTIDAD decimal(13,5),
-    PRECIO_UNITARIO decimal(13,3),
+    PRECIO_UNITARIO decimal(13,6),
     DESCUENTO decimal(13,2),
     VALOR_ICE decimal,
     IVA decimal(13,2),

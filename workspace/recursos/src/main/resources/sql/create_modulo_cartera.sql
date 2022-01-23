@@ -60,9 +60,9 @@ create table CARTERA_DETALLE(
     REFERENCIA_ID BIGINT,  
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
     DESCRIPCION varchar(300),
-    TOTAL decimal(13,2),
+    TOTAL decimal(13,6),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
-    SALDO decimal(13,2),
+    SALDO decimal(13,6),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.4)*/
     CODIGO_DETALLE_DOCUMENTO varchar(3),
     primary key (ID)
@@ -75,7 +75,7 @@ create table CARTERA_CRUCE(
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
     FECHA_CREACION  date,
     FECHA_CRUCE date,
-    VALOR decimal(13,2),
+    VALOR decimal(13,6),
     primary key (ID)
 );
 
