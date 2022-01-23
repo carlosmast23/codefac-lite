@@ -149,7 +149,8 @@ public enum VentanaEnum implements Serializable{
     TURNO("ec.com.codesoft.codefaclite.pos.model.TurnoModel", "TURN", "Turno", ModuloCodefacEnum.POS, CategoriaMenuEnum.GESTIONAR, TipoLicenciaEnum.PRO, null),
     TURNO_ASIGNADO("ec.com.codesoft.codefaclite.pos.model.TurnoAsignadoModel", "TURA", "Turno Asignado", ModuloCodefacEnum.POS, CategoriaMenuEnum.PROCESOS, TipoLicenciaEnum.PRO, null),
     REPORTE_CAJA_SESSION("ec.com.codesoft.codefaclite.pos.model.CajaSessionReporteModel", "CAJR", "Reporte Caja Sesion", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null),
-    REPORTE_ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaReporteModel", "ACRT", "Reporte Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null),;
+    REPORTE_ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaReporteModel", "ACRT", "Reporte Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null),
+    PRODUCCION("ec.com.codesoft.codefaclite.inventario.model.ProduccionModel", "PROD", "Producción", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO},TipoLicenciaEnum.GRATIS,null,null),;
     
 
     
