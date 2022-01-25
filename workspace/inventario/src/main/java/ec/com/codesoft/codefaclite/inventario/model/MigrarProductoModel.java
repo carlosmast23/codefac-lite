@@ -296,6 +296,10 @@ public class MigrarProductoModel extends MigrarModel {
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());
+                } catch(NumberFormatException ex)
+                {
+                    Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new ExcelMigrar.ExcepcionExcel("Error ingresando letras en un campo de números en el producto: "+fila.getByEnum(ExcelMigrarProductos.Enum.NOMBRE).valor);
                 }
 
             }
