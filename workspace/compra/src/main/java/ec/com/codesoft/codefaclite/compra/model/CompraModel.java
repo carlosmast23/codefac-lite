@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
@@ -33,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
@@ -627,6 +629,37 @@ public class CompraModel extends CompraPanel{
 
     private void agregarListenerBotones() {
         
+        getBtnBuscarFacturaReembolso().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                //buscar();
+                FacturaBusqueda facturaBusqueda = null;
+                //TODO: Unificar este metood con el de consultar la factura para tener en un solo lugar
+                ParametroCodefac siNofiltrarFacturaPorUsuario = session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
+                EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((siNofiltrarFacturaPorUsuario != null) ? siNofiltrarFacturaPorUsuario.getValor() : null);
+                if (enumSiNo != null && enumSiNo.equals(EnumSiNo.SI)) {
+                    facturaBusqueda = new FacturaBusqueda(session.getSucursal(), session.getUsuario());
+                } else {
+                    facturaBusqueda = new FacturaBusqueda(session.getSucursal());
+                }
+
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
+                buscarDialogoModel.setVisible(true);
+
+                Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
+
+                if (facturaTmp != null) {
+                    compra.addFacturaReembolso(facturaTmp);a
+                } else {
+                    //throw new ExcepcionCodefacLite("cancelar ejecucion");
+                }
+                
+                
+            }
+        }
+        );
+        
         getBtnOrdenCompraBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1008,6 +1041,11 @@ public class CompraModel extends CompraPanel{
         
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
         
+    }
+    
+    private void mostrarDatosFacturasReembolso()
+    {
+        String[] titulo={"# Factrura","Cliente"};
     }
     
     private void mostrarDatosTablaSinRetencion()

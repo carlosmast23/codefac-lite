@@ -160,6 +160,8 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
     
+    private List<CompraFacturaReembolso> facturaReembolsoList;
+    
 
     public Compra() {
         this.descuentoImpuestos=BigDecimal.ZERO;
@@ -535,6 +537,16 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     public BigDecimal getSubtotalSinImpuestosSinDescuentos() {
         return subtotalSinImpuestos.add(descuentoSinImpuestos);
     }
+
+    public List<CompraFacturaReembolso> getFacturaReembolsoList() {
+        return facturaReembolsoList;
+    }
+
+    public void setFacturaReembolsoList(List<CompraFacturaReembolso> facturaReembolsoList) {
+        this.facturaReembolsoList = facturaReembolsoList;
+    }
+    
+    
     
     /*public GeneralEnumEstado getEstadoEnum()
     {
@@ -623,6 +635,19 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         }
         detalle.setCompra(this);
         this.detalles.add(detalle);
+        
+    }
+    
+    public void addFacturaReembolso(Factura factura)
+    {
+        CompraFacturaReembolso facturaReembolso=new CompraFacturaReembolso();        
+        if(this.facturaReembolsoList==null)
+        {
+            this.facturaReembolsoList=new ArrayList<CompraFacturaReembolso>();            
+        }
+        facturaReembolso.setCompra(this);
+        facturaReembolso.setFactura(factura);
+        facturaReembolsoList.add(facturaReembolso);
         
     }
     

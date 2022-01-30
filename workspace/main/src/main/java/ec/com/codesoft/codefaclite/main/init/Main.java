@@ -866,6 +866,7 @@ public class Main {
         {
             setearEstiloSistema(EstiloCodefacEnum.findByNombre(tema));
         }
+        LOG.log(Level.INFO,"Cargando Tema Codefac ...");
     }
     
     private static void cargarPuertoSistema() {

@@ -5,11 +5,15 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
@@ -43,12 +47,13 @@ public abstract class ProduccionPanel extends ControladorCodefacInterface {
         jLabel3 = new javax.swing.JLabel();
         txtMerma = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
-        cmbProducto = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cmbBodega = new javax.swing.JComboBox<>();
         txtCantidad = new javax.swing.JSpinner();
         cmbFechaIngreso = new org.jdesktop.swingx.JXDatePicker();
+        txtProducto = new javax.swing.JTextField();
+        btnBuscarProducto = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -73,7 +78,7 @@ public abstract class ProduccionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -96,14 +101,6 @@ public abstract class ProduccionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbProducto, gridBagConstraints);
-
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Merma (Cantidad):");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -114,7 +111,7 @@ public abstract class ProduccionPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Bodega:");
+        jLabel6.setText("Bodega Producto Terminado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -144,6 +141,22 @@ public abstract class ProduccionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbFechaIngreso, gridBagConstraints);
 
+        txtProducto.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtProducto, gridBagConstraints);
+
+        btnBuscarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        jPanel1.add(btnBuscarProducto, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -151,9 +164,9 @@ public abstract class ProduccionPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JComboBox<Bodega> cmbBodega;
     private org.jdesktop.swingx.JXDatePicker cmbFechaIngreso;
-    private javax.swing.JComboBox<Producto> cmbProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -163,8 +176,10 @@ public abstract class ProduccionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSpinner txtCantidad;
     private javax.swing.JSpinner txtMerma;
+    private javax.swing.JTextField txtProducto;
     // End of variables declaration//GEN-END:variables
 
+    @ComboBoxBinding(source = "controlador.bodegaList",valueSelect = "controlador.bodegaSeleccionada")
     public JComboBox<Bodega> getCmbBodega() {
         return cmbBodega;
     }
@@ -181,14 +196,25 @@ public abstract class ProduccionPanel extends ControladorCodefacInterface {
         this.cmbFechaIngreso = cmbFechaIngreso;
     }
 
-    @ComboBoxBinding(source = "controlador.bodegaList",valueSelect = "controlador.bodegaSeleccionada")
-    public JComboBox<Producto> getCmbProducto() {
-        return cmbProducto;
+    @ButtonBinding(actionListener ="controlador.listenerBotonBuscarProducto" )
+    public JButton getBtnBuscarProducto() {
+        return btnBuscarProducto;
+    }
+
+    public void setBtnBuscarProducto(JButton btnBuscarProducto) {
+        this.btnBuscarProducto = btnBuscarProducto;
+    }
+
+    @TextFieldBinding(value = "controlador.productoSeleccionado.nombre")
+    public JTextField getTxtProducto() {
+        return txtProducto;
+    }
+
+    public void setTxtProducto(JTextField txtProducto) {
+        this.txtProducto = txtProducto;
     }
     
-    public void setCmbProducto(JComboBox<Producto> cmbProducto) {
-        this.cmbProducto = cmbProducto;
-    }
+    
 
     public JSpinner getTxtCantidad() {
         return txtCantidad;
