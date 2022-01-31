@@ -197,7 +197,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         lblSustentoSri1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblFacturaReembolso = new javax.swing.JTable();
         jToolBar3 = new javax.swing.JToolBar();
         btnBuscarFacturaReembolso = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -912,7 +912,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tblFacturaReembolso);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1022,7 +1022,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
@@ -1044,6 +1043,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JRadioButton rdbEmisionElectronica;
     private javax.swing.JRadioButton rdbEmisionFisica;
     private javax.swing.JTable tblDetalleProductos;
+    private javax.swing.JTable tblFacturaReembolso;
     private javax.swing.JTextField txtAutorizacion;
     private javax.swing.JTextField txtCantidadItem;
     private javax.swing.JTextField txtDescripcionItem;
@@ -1392,6 +1392,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
     public void setBtnBuscarFacturaReembolso(JButton btnBuscarFacturaReembolso) {
         this.btnBuscarFacturaReembolso = btnBuscarFacturaReembolso;
+    }
+
+    public JTable getTblFacturaReembolso() {
+        return tblFacturaReembolso;
+    }
+
+    public void setTblFacturaReembolso(JTable tblFacturaReembolso) {
+        this.tblFacturaReembolso = tblFacturaReembolso;
     }
 
     

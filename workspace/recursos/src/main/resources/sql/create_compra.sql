@@ -96,11 +96,13 @@ create table COMPRA_DETALLE
     primary key (ID)
 );
 
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.9.0.1)*/
 create table COMPRA_FACTURAS_REEMBOLSO
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
     FACTURA_ID BIGINT,
-    
+    COMPRA_ID BIGINT,
+    primary key (ID)
 );
 
 create table ORDEN_COMPRA

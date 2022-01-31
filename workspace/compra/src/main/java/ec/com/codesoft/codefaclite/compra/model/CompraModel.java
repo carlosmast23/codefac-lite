@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraFacturaReembolso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -54,6 +55,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaS
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
@@ -80,6 +82,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
@@ -88,6 +92,8 @@ import javax.swing.table.DefaultTableModel;
  * @author Carlos
  */
 public class CompraModel extends CompraPanel{
+    
+    private static final int INDICE_OBJ_TABLA_REEMBOLSO=0;
 
     /**
      * Referencia donde se va a almacenar la compra gestionado
@@ -98,6 +104,7 @@ public class CompraModel extends CompraPanel{
     //private Persona proveedor;
     private ProductoProveedor productoProveedor;
     private DefaultTableModel modeloTablaDetallesCompra;
+    private DefaultTableModel modeloTablaCompraReembolso;
     private Boolean bandera;
     private int filaDP;
     private Boolean banderaIngresoDetallesCompra;
@@ -115,7 +122,7 @@ public class CompraModel extends CompraPanel{
         iniciarCombos();
         agregarListerCombos();
         agregarListenerBotones();
-        agregarListenerTextoBox();
+        agregarListenerTextoBox();        
         crearVariables();
         if(session.getEmpresa() != null){
             if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
@@ -140,6 +147,7 @@ public class CompraModel extends CompraPanel{
         } catch (RemoteException ex) {
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        agregarListenerPopUp();
     }
 
     @Override
@@ -650,7 +658,9 @@ public class CompraModel extends CompraPanel{
                 Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
 
                 if (facturaTmp != null) {
-                    compra.addFacturaReembolso(facturaTmp);a
+                    //compra.add
+                    compra.addFacturaReembolso(facturaTmp);
+                    mostrarDatosFacturasReembolso();
                 } else {
                     //throw new ExcepcionCodefacLite("cancelar ejecucion");
                 }
@@ -1044,8 +1054,26 @@ public class CompraModel extends CompraPanel{
     }
     
     private void mostrarDatosFacturasReembolso()
-    {
-        String[] titulo={"# Factrura","Cliente"};
+    {        
+        String[] titulo={"","# Factura","Cliente"};
+        modeloTablaCompraReembolso=new DefaultTableModel(titulo,0);
+        
+        DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Object.class,String.class,String.class},new Boolean[]{false,false,false});
+        
+        if(compra!=null && compra.getFacturaReembolsoList()!=null)
+        {
+            for(CompraFacturaReembolso detalle : compra.getFacturaReembolsoList())
+            {
+                Vector<Object> fila=new Vector<Object>();
+                fila.add(detalle);
+                fila.add(detalle.getFactura().getSecuencial()+"");
+                fila.add(detalle.getFactura().getRazonSocial());
+                modeloTablaCompraReembolso.addRow(fila);
+            }
+        }
+                
+        getTblFacturaReembolso().setModel(modeloTablaCompraReembolso);
+        UtilidadesTablas.ocultarColumna(getTblFacturaReembolso(),0);  
     }
     
     private void mostrarDatosTablaSinRetencion()
@@ -1538,4 +1566,28 @@ public class CompraModel extends CompraPanel{
             }
         });
     }
+
+    private void agregarListenerPopUp() {
+        JPopupMenu jPopupMenu=new JPopupMenu();
+        JMenuItem jMenuItemDatoAdicional=new JMenuItem("Eliminar");
+        jPopupMenu.add(jMenuItemDatoAdicional);
+        jMenuItemDatoAdicional.addActionListener(listenerEliminarReembolsoPopUp);
+        getTblFacturaReembolso().setComponentPopupMenu(jPopupMenu);
+    }
+    
+    private ActionListener listenerEliminarReembolsoPopUp=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int indiceFilaSeleccionada=getTblFacturaReembolso().getSelectedRow();
+            if(indiceFilaSeleccionada>=0)
+            {
+                CompraFacturaReembolso compraFacturaReembolso=(CompraFacturaReembolso) getTblFacturaReembolso().getValueAt(indiceFilaSeleccionada,INDICE_OBJ_TABLA_REEMBOLSO);
+                compra.quitarFacturaReembolso(compraFacturaReembolso);
+                mostrarDatosFacturasReembolso();
+
+            }
+        }
+    };
+    
+    
 }

@@ -684,6 +684,11 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         //TODO: No tiene implementado nada en los datos adicionales
     }
     
+    public void quitarFacturaReembolso(CompraFacturaReembolso compraFacturaReembolso)
+    {
+        facturaReembolsoList.remove(compraFacturaReembolso);
+    }
+    
         
     public enum RetencionEnumCompras
     {

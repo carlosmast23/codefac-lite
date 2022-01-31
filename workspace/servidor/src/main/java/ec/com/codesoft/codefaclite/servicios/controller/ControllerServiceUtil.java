@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidor.service.AtsService;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.CompraFacturaReembolsoService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
@@ -108,6 +109,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraFacturaReembolsoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
@@ -302,6 +304,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(VentaService.class, VentaServiceIf.class);
             mapRecursos.put(HerramientasCodefacService .class, HerramientasCodefacServiceIf.class);
             mapRecursos.put(MarcaProductoService .class, MarcaProductoServiceIf.class);
+            mapRecursos.put(CompraFacturaReembolsoService.class, CompraFacturaReembolsoServiceIf.class);
             
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraFacturaReembolsoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
@@ -225,6 +226,9 @@ public abstract class ServiceFactory {
     public HerramientasCodefacServiceIf getHerramientasCodefacServiceIf(){return (HerramientasCodefacServiceIf) getRecursosRMI(HerramientasCodefacServiceIf.class);};
     
     public MarcaProductoServiceIf getMarcaProductoServiceIf(){return (MarcaProductoServiceIf) getRecursosRMI(MarcaProductoServiceIf.class);};
+    
+    public CompraFacturaReembolsoServiceIf getCompraFacturaReembolsoServiceIf(){return (CompraFacturaReembolsoServiceIf) getRecursosRMI(CompraFacturaReembolsoServiceIf.class);};
+    
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente
