@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoAtsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.UtilidadesServidorXml;
+import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -160,6 +161,7 @@ public class AtsModel extends AtsPanel {
                     } catch (IOException ex) {
                     Logger.getLogger(AtsModel.class.getName()).log(Level.SEVERE, null, ex);
                     }*/
+                    UtilidadesArchivos.generarNombreArchivoUnico(MENU_BAR_PROPERTY, title)
                     File file = new File( ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES+"/ejemplo.xml" );
                     UtilidadesServidorXml.convertirObjetoXmlEnArchivo(atsJaxb,file);
                     UtilidadesSistema.abrirDocumento(file);

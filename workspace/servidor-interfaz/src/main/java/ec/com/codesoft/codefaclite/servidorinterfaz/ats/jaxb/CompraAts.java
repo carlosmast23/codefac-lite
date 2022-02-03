@@ -50,7 +50,8 @@ import javax.xml.bind.annotation.XmlType;
     "ptoEmiRetencion1",
     "secRetencion1",
     "autRetencion1",
-    "fechaEmiRet1"})
+    "fechaEmiRet1",
+    "reembolsos"})
 public class CompraAts implements Serializable {
 
     private String codSustento;
@@ -92,6 +93,8 @@ public class CompraAts implements Serializable {
     private String secRetencion1;
     private String autRetencion1;
     private String fechaEmiRet1;
+    
+    private List<ReembolsoAts> reembolsos;
 
     public CompraAts() {
     }
@@ -258,6 +261,14 @@ public class CompraAts implements Serializable {
         return fechaEmiRet1;
     }
 
+    @XmlElementWrapper(name = "reembolsos")
+    @XmlElement(name = "reembolso")
+    public List<ReembolsoAts> getReembolsos() {
+        return reembolsos;
+    }
+    
+    
+
     //////////////////////////////////
     public void setCodSustento(String codSustento) {
         this.codSustento = codSustento;
@@ -386,6 +397,12 @@ public class CompraAts implements Serializable {
     public void setPagoExteriorAts(PagoExteriorAts pagoExteriorAts) {
         this.pagoExteriorAts = pagoExteriorAts;
     }
+
+    public void setReembolsos(List<ReembolsoAts> reembolsos) {
+        this.reembolsos = reembolsos;
+    }
+    
+    
     
     /**
      * Metodos Adicionales

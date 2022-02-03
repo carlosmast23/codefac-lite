@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra.RetencionEnumCompras;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraFacturaReembolso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -321,7 +322,36 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                         entityManager.merge(compraDetalle.getProductoProveedor());
                     }
                 }
+                
+                List<CompraFacturaReembolso> compraList=compra.getFacturaReembolsoList();                
+                compra.setFacturaReembolsoList(null);
+                
                 entityManager.persist(compra);
+                entityManager.flush();
+                
+                //Si la factura tiene FACTURAS DE REEMBOLSO empiezo a recorrer para poder grabar
+                if(compraList!=null)
+                {
+                    for (CompraFacturaReembolso facturaReembolso : compraList) 
+                    {    
+                        //Todo: por el momento no guardo la compra por que puede causar problemas
+                        facturaReembolso.setCompra(compra);
+                        if( facturaReembolso.getId() == null )
+                        {                            
+                            entityManager.persist(facturaReembolso);                            
+                        }
+                        else
+                        {
+                            entityManager.merge(facturaReembolso);
+                        }
+                        entityManager.flush();//facturaReembolso.setCompra(compra);                                                
+                    }
+                }
+                
+                
+                
+                
+                
                 grabarCartera(compra,carteraParametro); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
                 
             }

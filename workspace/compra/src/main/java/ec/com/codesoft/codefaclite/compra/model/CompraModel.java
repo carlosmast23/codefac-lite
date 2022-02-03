@@ -399,6 +399,7 @@ public class CompraModel extends CompraPanel{
         
         mostrarDatosTotales();
         desbloquearIngresoDetalleProducto();
+        mostrarDatosFacturasReembolso();
         
         //getCmbRetencionIva().setSelectedItem(compra.get);
     }
@@ -486,6 +487,7 @@ public class CompraModel extends CompraPanel{
         
         getTxtDiasCredito().setValue(0);
         getCmbSustentoComprobante().setSelectedIndex(0); //Selecionar el primer sustento despues de agregar
+        mostrarDatosFacturasReembolso();
     }
     
     private void cargarCatalogoRetencionesDefecto()

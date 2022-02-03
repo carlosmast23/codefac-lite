@@ -7,22 +7,29 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
+
 @Entity
-@Table(name = "COMPRA_FACTURA_REEMBOLSO")
-public class CompraFacturaReembolso implements Serializable{
+@Table(name = "COMPRA_ITEM_REEMBOLSO")
+public class CompraFacturaReembolso implements Serializable
+{
     
     @Id
     @Column(name = "ID")
@@ -34,9 +41,13 @@ public class CompraFacturaReembolso implements Serializable{
     private Factura factura;
     
     @JoinColumn(name="COMPRA_ID")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Compra compra;
 
+    public CompraFacturaReembolso() {
+    }
+    
+    
     public Long getId() {
         return id;
     }
@@ -64,7 +75,7 @@ public class CompraFacturaReembolso implements Serializable{
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 41 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -85,7 +96,6 @@ public class CompraFacturaReembolso implements Serializable{
         }
         return true;
     }
-    
 
     
     

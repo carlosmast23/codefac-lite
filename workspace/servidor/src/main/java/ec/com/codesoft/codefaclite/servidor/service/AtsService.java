@@ -11,9 +11,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.CompraAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.FormaDePagoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.PagoExteriorAts;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.ReembolsoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentaAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentasEstablecimientoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraFacturaReembolso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -314,6 +316,14 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 compraAts.setFormasDePago(formasPago);
             }
             
+            //Agregar las FACTURAS DE REEMBOLSO
+            System.out.println(compra.getSecuencial() +"-"+compra.getCodigoDocumentoEnum().getNombre());
+            if(compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
+            {
+                List<ReembolsoAts> reembolsoList=obtenerDetalleReembolso(compra, alertas);            
+                compraAts.setReembolsos(reembolsoList);
+            }
+            
             //TODO Falta completar los detalles de los impuestos a la renta
             
             //compraAts.setEstabRetencion1("");
@@ -325,10 +335,62 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             {
                 comprasAts.add(compraAts);
             }
+            
+            
         }
         
         return comprasAts;
         
+    }
+    
+    private List<ReembolsoAts> obtenerDetalleReembolso(Compra compra,List<String> alertas)
+    {
+        List<ReembolsoAts> reembolsoAtsList=new ArrayList<ReembolsoAts>();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
+        if(compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
+            {
+                if(compra.getFacturaReembolsoList()!=null && compra.getFacturaReembolsoList().size()>0)
+                {
+                    
+                    for (CompraFacturaReembolso compraFacturaReembolso : compra.getFacturaReembolsoList()) 
+                    {
+                        Factura factura=compraFacturaReembolso.getFactura();
+                        ReembolsoAts reembolsoAts = new ReembolsoAts();
+                        if (compra.getCodigoComprobanteSri() == null) 
+                        {
+                            reembolsoAts.setTipoComprobanteRemb(DocumentoEnum.FACTURA.getCodigoSri());
+                        } 
+                        else 
+                        {
+                            reembolsoAts.setTipoComprobanteRemb(factura.getCodigoDocumentoEnum().getCodigoSri());
+                        }
+                        reembolsoAts.setTipoComprobanteRemb("18"); //TODO: Revisar en la tabla 4 cuando sea otro tipo de documento
+                        String identificacionFactRemb=(factura.getIdentificacion()!=null && !factura.getIdentificacion().isEmpty())?factura.getIdentificacion():factura.getCliente().getIdentificacion();
+                        reembolsoAts.setIdProvRemb(identificacionFactRemb);
+                        reembolsoAts.setEstablecimientoRemb(UtilidadesTextos.llenarCarateresIzquierda(factura.getPuntoEstablecimiento().toString(),3,"0"));
+                        reembolsoAts.setPuntoEmisionRemb(UtilidadesTextos.llenarCarateresIzquierda(factura.getPuntoEmision().toString(),3,"0"));
+                        reembolsoAts.setSecuencialRemb(factura.getSecuencial().toString());
+                        reembolsoAts.setFechaEmisionRemb(dateFormat.format(factura.getFechaEmision()));
+                        
+                        String autorizacionRemb=(factura.getClaveAcceso()!=null && !factura.getClaveAcceso().isEmpty())?factura.getClaveAcceso():"0000000000";
+                        reembolsoAts.setAutorizacionRemb(autorizacionRemb.trim());
+                        reembolsoAts.setBaseImponibleRemb(factura.getSubtotalSinImpuestos());
+                        reembolsoAts.setBaseImpGravRemb(factura.getSubtotalImpuestos());
+                        reembolsoAts.setBaseNoGraIvaRemb(BigDecimal.ZERO); //Este valor debe ser para productos que no grabar , Ejemplo la venta de bienes inmuebles: oficinas, terrenos, locales
+                        reembolsoAts.setBaseImpExeReembRemb(BigDecimal.ZERO);
+                        reembolsoAts.setMontoIceRemb(BigDecimal.ZERO);
+                        reembolsoAts.setMontoIvaRemb(factura.getIva());
+                        
+                        reembolsoAtsList.add(reembolsoAts);
+                        
+                    }
+                }
+                else
+                {
+                    alertas.add("La compra "+compra.getSecuencial()+" no tiene facturas de reembolso vinculadas");
+                }
+            }
+        return reembolsoAtsList;
     }
     
     private Boolean validarCompraAts(CompraAts compraAts,List<String> alertas)

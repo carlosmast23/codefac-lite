@@ -135,53 +135,61 @@ public class Main {
      */
     public static Integer modoAplicativo;
 
-    public static void main(String[] args) {
-        
-        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
-        //Desabilito para que no se veo nada de la pantalla que contiene el proceso de inicio
-        frameAplicacion.setUndecorated(true);
-        frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
-        frameAplicacion.setVisible(true);
-        
-        System.setProperty("sun.net.client.defaultConnectTimeout", "2000"); //Establece el tiempo de espera para las conexiones con el servidor
-            
-        //Configurar diferente tipo de letra para los dialogos
-        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
-        
-        /**
-         * Configura el archivo para guardar la configuracion inicial en propertys de como va a iniciar el aplicativo
-         */
-        cargarConfiguracionesIniciales();
-        
-        //Verifica si se esta ejecutando la ultima version o manda a actualizar
-        ActualizarVersionCodefac.verificarUltimaVersionCodefac();
-        
-        //Configurar los log el directorio y donde se va a mandar a grabar los datos
-        configurarLogs();
+    public static void main(String[] args) 
+    {
+        try
+        {
+            System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
+            //Desabilito para que no se veo nada de la pantalla que contiene el proceso de inicio
+            frameAplicacion.setUndecorated(true);
+            frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
+            frameAplicacion.setVisible(true);
 
-        
-        /**
-         * Carga el tema seleccionado por defecto en aarchivo codefac.ini
-         */
-        cargarTemaCodefac();
-        cargarPuertoSistema();
-        
-        /**
-         * Verificar si estan actualizaciones pendientes de una nueva version
-         */
-        verificarActualizacionBaseDatosVersion();
+            System.setProperty("sun.net.client.defaultConnectTimeout", "2000"); //Establece el tiempo de espera para las conexiones con el servidor
 
-        /**
-         * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
-         * le permite acceder a los siguiente funcionalidad, que pueden ser CLIENTE , CLIENTE-SERVIDOR, SERVIDOR
-         */
-        iniciarModoAplicativo(true);
+            //Configurar diferente tipo de letra para los dialogos
+            UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
 
-        /**
-         * Funcionalidad complementaria que inicia todos los componentes
-         * necesarios
-         */
-        iniciarComponentes();
+            /**
+             * Configura el archivo para guardar la configuracion inicial en propertys de como va a iniciar el aplicativo
+             */
+            cargarConfiguracionesIniciales();
+
+            //Verifica si se esta ejecutando la ultima version o manda a actualizar
+            ActualizarVersionCodefac.verificarUltimaVersionCodefac();
+
+            //Configurar los log el directorio y donde se va a mandar a grabar los datos
+            configurarLogs();
+
+
+            /**
+             * Carga el tema seleccionado por defecto en aarchivo codefac.ini
+             */
+            cargarTemaCodefac();
+            cargarPuertoSistema();
+
+            /**
+             * Verificar si estan actualizaciones pendientes de una nueva version
+             */
+            verificarActualizacionBaseDatosVersion();
+
+            /**
+             * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
+             * le permite acceder a los siguiente funcionalidad, que pueden ser CLIENTE , CLIENTE-SERVIDOR, SERVIDOR
+             */
+            iniciarModoAplicativo(true);
+
+            /**
+             * Funcionalidad complementaria que inicia todos los componentes
+             * necesarios
+             */
+            iniciarComponentes();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            LOG.log(Level.INFO,e.getMessage());
+        }
     }
     
     private static void configurarLogs()
@@ -251,6 +259,7 @@ public class Main {
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
     private static void verificarActualizacionBaseDatosVersion()
     {        
+        LOG.log(Level.INFO," Iniciando verificarActualizacionBaseDatosVersion");
         PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
         String versionGrabada=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
         
@@ -315,6 +324,7 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        LOG.log(Level.INFO," Terminando verificarActualizacionBaseDatosVersion");
         
     }
 
@@ -882,6 +892,7 @@ public class Main {
             //Si existe un puerto en el archivo de configuracion cambio el puerto por defecto del aplicativo
             ParametrosSistemaCodefac.PUERTO_APP_MOVIL_SMS=Integer.parseInt(puertoSms);
         }
+        LOG.log(Level.INFO,"Cargando cargarPuertoSistema ...");
         
     }
     

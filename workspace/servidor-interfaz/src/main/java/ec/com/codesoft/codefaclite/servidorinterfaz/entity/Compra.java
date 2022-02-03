@@ -160,6 +160,7 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra",fetch = FetchType.EAGER)
     private List<CompraFacturaReembolso> facturaReembolsoList;
     
 
