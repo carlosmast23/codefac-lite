@@ -202,7 +202,15 @@ public class FirmaElectronica {
             datosParaFirmar.setDocument(documentoParaFirmar);
         } catch (Exception e) {        
             e.printStackTrace();
-            throw new Exception(e.toString());
+            //Creo una excepcion más entendible de facil interpretación
+            if(e.getMessage().equals("Error al interpretar el documento"))
+            {
+                throw new Exception("El documento que intenta firmar tiene CARACTERES NO COMPATIBLES\nPosible Solución: Revisar signos o caracteres especiales que puedan causar conflicto y modificar el texto ");
+            }
+            else
+            {
+                throw new Exception(e.toString());
+            }
         }
         return datosParaFirmar;
     }
