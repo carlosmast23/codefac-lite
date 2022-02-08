@@ -37,6 +37,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -255,7 +257,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             compraAts.setAutorizacion(autorizacion.trim()); //todo: En caso de que los comprobantes con código 11, 19 y 20 no posean numeración, así como en convenios de débito y recaudación deberán completar sus datos con nueves (9999999999)
             compraAts.setBaseNoGraIva(BigDecimal.ZERO);
             compraAts.setBaseImponible(compra.getSubtotalSinImpuestos());
-            compraAts.setBaseImpGrav(compra.getSubtotalImpuestos());
+            compraAts.setBaseImpGrav(compra.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
             compraAts.setBaseImpExe(BigDecimal.ZERO);//TODO: Revisar cuando se aplica este campo , el manula dice que son Base imponible exenta de IVA
             compraAts.setMontoIce(BigDecimal.ZERO);
             compraAts.setMontoIva(compra.getIva());
@@ -270,7 +272,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             compraAts.setValRetServ100(obtenerValorMapRetenciones(mapRetenciones,100)); //100% TODO:completar
             
             //========> COMPRAS DE REEMBOLSO <=================//
-            compraAts.setTotbasesImpReemb(BigDecimal.ZERO); //TODO: Esto queda pendiente de programar
+            //compraAts.setTotbasesImpReemb(BigDecimal.ZERO); //TODO: Esto queda pendiente de programar
             //TODO: Falta programar para pagos en el exterior
             
             //========> PAGO EXTERIOR <========================//
@@ -289,19 +291,22 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             formaPago.setFormaPago("01"); //Todo: Por defecto queda setear pago en efectivo(Sin utuizacion del sistema financiero)
             formasPago.add(formaPago);
             
-            
-            List<RetencionDetalle> retencionesRenta=consultarRetencionesRenta(compra, sriRetencionRenta);
-            List<AirAts> retencionesAts=new ArrayList<AirAts>();
-            for (RetencionDetalle retencionRenta : retencionesRenta) {
-                AirAts retencionRentaAts=new AirAts();
-                retencionRentaAts.setBaseImpAir(retencionRenta.getBaseImponible().setScale(2,BigDecimal.ROUND_UP));
-                retencionRentaAts.setCodRetAir(retencionRenta.getCodigoRetencionSri());
-                retencionRentaAts.setPorcentajeAir(retencionRenta.getPorcentajeRetener().setScale(2,BigDecimal.ROUND_UP));
-                retencionRentaAts.setValRetAir(retencionRenta.getValorRetenido().setScale(2,BigDecimal.ROUND_UP));
-                //retencionesAts.add(retencionRentaAts);
-                agregarAirAts(retencionesAts,retencionRentaAts);
+            //Solo informar el tema de retenciones para documentos diferentes de Facturas de Reembolso
+            if(!compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
+            {
+                List<RetencionDetalle> retencionesRenta=consultarRetencionesRenta(compra, sriRetencionRenta);
+                List<AirAts> retencionesAts=new ArrayList<AirAts>();
+                for (RetencionDetalle retencionRenta : retencionesRenta) {
+                    AirAts retencionRentaAts=new AirAts();
+                    retencionRentaAts.setBaseImpAir(retencionRenta.getBaseImponible().setScale(2,BigDecimal.ROUND_UP));
+                    retencionRentaAts.setCodRetAir(retencionRenta.getCodigoRetencionSri());
+                    retencionRentaAts.setPorcentajeAir(retencionRenta.getPorcentajeRetener().setScale(2,BigDecimal.ROUND_UP));
+                    retencionRentaAts.setValRetAir(retencionRenta.getValorRetenido().setScale(2,BigDecimal.ROUND_UP));
+                    //retencionesAts.add(retencionRentaAts);
+                    agregarAirAts(retencionesAts,retencionRentaAts);
+                }
+                compraAts.setDetalleAir(retencionesAts);
             }
-            compraAts.setDetalleAir(retencionesAts);
             
             //solo agregar las formas de pago cuando la base imponible superio los 1000
             //la suma de las BASES IMPONIBLES y los MONTOS de IVA e ICE exceden los USD. 1000.00.
@@ -324,6 +329,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 compraAts.setReembolsos(reembolsoList);
             }
             
+            compraAts.setTotbasesImpReemb(compra.obtenerTotalBaseReembolso());
+            
             //TODO Falta completar los detalles de los impuestos a la renta
             
             //compraAts.setEstabRetencion1("");
@@ -343,11 +350,14 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
     }
     
-    private List<ReembolsoAts> obtenerDetalleReembolso(Compra compra,List<String> alertas)
+    private List<ReembolsoAts> obtenerDetalleReembolso(Compra compra,List<String> alertas) throws  RemoteException,ServicioCodefacException
     {
         List<ReembolsoAts> reembolsoAtsList=new ArrayList<ReembolsoAts>();
-        SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
-        if(compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
+        try
+        {
+        
+            SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
+            if(compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
             {
                 if(compra.getFacturaReembolsoList()!=null && compra.getFacturaReembolsoList().size()>0)
                 {
@@ -356,30 +366,32 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                     {
                         Factura factura=compraFacturaReembolso.getFactura();
                         ReembolsoAts reembolsoAts = new ReembolsoAts();
-                        if (compra.getCodigoComprobanteSri() == null) 
+                        /*if (compra.getCodigoComprobanteSri() == null) 
                         {
                             reembolsoAts.setTipoComprobanteRemb(DocumentoEnum.FACTURA.getCodigoSri());
                         } 
                         else 
                         {
                             reembolsoAts.setTipoComprobanteRemb(factura.getCodigoDocumentoEnum().getCodigoSri());
-                        }
-                        reembolsoAts.setTipoComprobanteRemb("18"); //TODO: Revisar en la tabla 4 cuando sea otro tipo de documento
-                        String identificacionFactRemb=(factura.getIdentificacion()!=null && !factura.getIdentificacion().isEmpty())?factura.getIdentificacion():factura.getCliente().getIdentificacion();
-                        reembolsoAts.setIdProvRemb(identificacionFactRemb);
-                        reembolsoAts.setEstablecimientoRemb(UtilidadesTextos.llenarCarateresIzquierda(factura.getPuntoEstablecimiento().toString(),3,"0"));
-                        reembolsoAts.setPuntoEmisionRemb(UtilidadesTextos.llenarCarateresIzquierda(factura.getPuntoEmision().toString(),3,"0"));
-                        reembolsoAts.setSecuencialRemb(factura.getSecuencial().toString());
-                        reembolsoAts.setFechaEmisionRemb(dateFormat.format(factura.getFechaEmision()));
+                        }*/
+                        reembolsoAts.setTipoComprobanteRemb("41"); //TODO: Revisar en la tabla 4 cuando sea otro tipo de documento
+                        String identificacionFactRemb=compraFacturaReembolso.getIdProvReemb();
                         
-                        String autorizacionRemb=(factura.getClaveAcceso()!=null && !factura.getClaveAcceso().isEmpty())?factura.getClaveAcceso():"0000000000";
+                        reembolsoAts.setTpIdProvRemb(compraFacturaReembolso.getTpIdProvReemb());
+                        reembolsoAts.setIdProvRemb(identificacionFactRemb);
+                        reembolsoAts.setEstablecimientoRemb(UtilidadesTextos.llenarCarateresIzquierda(compraFacturaReembolso.getEstablecimientoReemb().toString(),3,"0"));
+                        reembolsoAts.setPuntoEmisionRemb(UtilidadesTextos.llenarCarateresIzquierda(compraFacturaReembolso.getPuntoEmisionReemb().toString(),3,"0"));
+                        reembolsoAts.setSecuencialRemb(compraFacturaReembolso.getSecuencialReemb().toString());
+                        reembolsoAts.setFechaEmisionRemb(dateFormat.format(compraFacturaReembolso.getFechaEmisionReemb()));
+                        
+                        String autorizacionRemb=compraFacturaReembolso.getAutorizacionReemb();
                         reembolsoAts.setAutorizacionRemb(autorizacionRemb.trim());
-                        reembolsoAts.setBaseImponibleRemb(factura.getSubtotalSinImpuestos());
-                        reembolsoAts.setBaseImpGravRemb(factura.getSubtotalImpuestos());
-                        reembolsoAts.setBaseNoGraIvaRemb(BigDecimal.ZERO); //Este valor debe ser para productos que no grabar , Ejemplo la venta de bienes inmuebles: oficinas, terrenos, locales
-                        reembolsoAts.setBaseImpExeReembRemb(BigDecimal.ZERO);
-                        reembolsoAts.setMontoIceRemb(BigDecimal.ZERO);
-                        reembolsoAts.setMontoIvaRemb(factura.getIva());
+                        reembolsoAts.setBaseImponibleRemb(compraFacturaReembolso.getBaseImponibleReemb());
+                        reembolsoAts.setBaseImpGravRemb(compraFacturaReembolso.getBaseImpGravReemb());
+                        reembolsoAts.setBaseNoGraIvaRemb(compraFacturaReembolso.getBaseNoGraIvaReemb()); //Este valor debe ser para productos que no grabar , Ejemplo la venta de bienes inmuebles: oficinas, terrenos, locales
+                        reembolsoAts.setBaseImpExeReembRemb(compraFacturaReembolso.getBaseImpExeReemb());
+                        reembolsoAts.setMontoIceRemb(compraFacturaReembolso.getMontoIceRemb());
+                        reembolsoAts.setMontoIvaRemb(compraFacturaReembolso.getMontoIvaRemb());
                         
                         reembolsoAtsList.add(reembolsoAts);
                         
@@ -390,6 +402,12 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                     alertas.add("La compra "+compra.getSecuencial()+" no tiene facturas de reembolso vinculadas");
                 }
             }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            throw new ServicioCodefacException(e.getMessage());
+        }
         return reembolsoAtsList;
     }
     

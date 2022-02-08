@@ -639,6 +639,25 @@ public class CompraModel extends CompraPanel{
 
     private void agregarListenerBotones() {
         
+        getBtnAgregarReembolso().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] parametros={};
+                
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<CompraFacturaReembolso>() {
+                    @Override
+                    public void updateInterface(CompraFacturaReembolso entity) {
+                        CompraFacturaReembolso reembolso = entity;
+                        if (reembolso != null) {
+                            compra.addFacturaReembolso(reembolso);
+                            mostrarDatosFacturasReembolso();
+                        }
+                    }
+                }, VentanaEnum.FACTURA_REEMBOLSO, false, parametros, formularioActual);
+                
+            }
+        });
+        
         getBtnBuscarFacturaReembolso().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1057,7 +1076,7 @@ public class CompraModel extends CompraPanel{
     
     private void mostrarDatosFacturasReembolso()
     {        
-        String[] titulo={"","# Factura","Cliente"};
+        String[] titulo={"","# Factura","Identificación","Base 0%","Base 12%","IVA"};
         modeloTablaCompraReembolso=new DefaultTableModel(titulo,0);
         
         DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Object.class,String.class,String.class},new Boolean[]{false,false,false});
@@ -1068,8 +1087,11 @@ public class CompraModel extends CompraPanel{
             {
                 Vector<Object> fila=new Vector<Object>();
                 fila.add(detalle);
-                fila.add(detalle.getFactura().getSecuencial()+"");
-                fila.add(detalle.getFactura().getRazonSocial());
+                fila.add(detalle.getSecuencialReemb()+"");
+                fila.add(detalle.getIdProvReemb());
+                fila.add(detalle.getBaseImponibleReemb());
+                fila.add(detalle.getBaseImpGravReemb());
+                fila.add(detalle.getMontoIvaRemb());
                 modeloTablaCompraReembolso.addRow(fila);
             }
         }

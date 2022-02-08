@@ -579,7 +579,21 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         return true;
     }
     
-    
+    public BigDecimal obtenerTotalBaseReembolso()
+    {
+        BigDecimal totalBaseReembolso=BigDecimal.ZERO;
+        if(facturaReembolsoList!=null)
+        {
+            for (CompraFacturaReembolso reembolso : facturaReembolsoList) 
+            {
+                totalBaseReembolso=totalBaseReembolso.add(reembolso.getBaseImpExeReemb());
+                totalBaseReembolso=totalBaseReembolso.add(reembolso.getBaseImpGravReemb());
+                totalBaseReembolso=totalBaseReembolso.add(reembolso.getBaseImponibleReemb());
+                totalBaseReembolso=totalBaseReembolso.add(reembolso.getBaseNoGraIvaReemb());
+            }
+        }
+        return totalBaseReembolso;
+    }
    
     /**
      * @deprecated ver como hacer que no depende del iva externamente porque va a ocacionar problemas al cargar los datos , y ver si los calculos del iva depende de los detalles y en esta pantalla solo sumariza
@@ -649,6 +663,18 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         facturaReembolso.setCompra(this);
         facturaReembolso.setFactura(factura);
         facturaReembolsoList.add(facturaReembolso);
+        
+    }
+    
+    public void addFacturaReembolso(CompraFacturaReembolso reembolso)
+    {
+        if(this.facturaReembolsoList==null)
+        {
+            this.facturaReembolsoList=new ArrayList<CompraFacturaReembolso>();            
+        }
+        reembolso.setCompra(this);
+        //facturaReembolso.setFactura(factura);
+        facturaReembolsoList.add(reembolso);
         
     }
     

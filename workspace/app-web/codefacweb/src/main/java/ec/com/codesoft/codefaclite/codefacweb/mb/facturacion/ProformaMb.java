@@ -176,6 +176,13 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
         
         visualizarCargarProforma=true;
+        
+        //Si no puede encontrar el tipo de la pantala por defecto abre como factura
+        if(tipoPaginaEnum==null)
+        {
+            tipoPaginaEnum=TipoPaginaEnum.FACTURA;
+        }
+        
         if(tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA))
         {
             visualizarCargarProforma=false;

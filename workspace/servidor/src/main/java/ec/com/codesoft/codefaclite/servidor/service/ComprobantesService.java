@@ -625,6 +625,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         switch(claveAcceso.getTipoComprobante())
         {
             case FACTURA:
+            case LIQUIDACION_COMPRA:
                 FacturaFacade servicio=new FacturaFacade();                
                 List<Factura> comprobantes=servicio.findByMap(mapParametros);
                 if(comprobantes.size()>0)

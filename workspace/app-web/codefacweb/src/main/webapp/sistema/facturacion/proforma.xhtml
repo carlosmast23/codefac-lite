@@ -303,6 +303,18 @@
                         </div>
                         
                     </p:tab>
+                    <p:tab title="Académico">
+                        
+                        <div class="p-grid" style="text-align: left" >
+                            <div class="p-col-12 p-md-6 p-lg-3" >
+                              <p:inputText id="txtEstudiante" placeholder="Estudiante" value="#{proformaMb.factura.cliente.identificacion}" style="width: 70%" />      
+                              <p:commandButton process="@this" icon="fa fa-search"  styleClass="white-button" >
+                                  <p:ajax event="dialogReturn"  />
+                              </p:commandButton>   
+                            </div>
+                            
+                        </div>
+                    </p:tab>
                 </p:tabView>
 
                 <p:dataTable 

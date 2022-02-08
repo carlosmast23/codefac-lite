@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- *
+ *TODO: Poner los mismo nombrs y etiquetas de xml y de la clase
  * @author CARLOS_CODESOFT
  */
 @XmlType(propOrder = {
@@ -49,7 +49,7 @@ public class ReembolsoAts implements Serializable{
     public ReembolsoAts() {
     }
 
-    @XmlElement(name = "tipoComprobanteRemb")
+    @XmlElement(name = "tipoComprobanteReemb")
     public String getTipoComprobanteRemb() {
         return tipoComprobanteRemb;
     }
@@ -58,7 +58,7 @@ public class ReembolsoAts implements Serializable{
         this.tipoComprobanteRemb = tipoComprobanteRemb;
     }
 
-    @XmlElement(name = "tpIdProvRemb")
+    @XmlElement(name = "tpIdProvReemb")
     public String getTpIdProvRemb() {
         return tpIdProvRemb;
     }
@@ -67,7 +67,7 @@ public class ReembolsoAts implements Serializable{
         this.tpIdProvRemb = tpIdProvRemb;
     }
 
-    @XmlElement(name = "idProvRemb")
+    @XmlElement(name = "idProvReemb")
     public String getIdProvRemb() {
         return idProvRemb;
     }
@@ -76,7 +76,7 @@ public class ReembolsoAts implements Serializable{
         this.idProvRemb = idProvRemb;
     }
 
-    @XmlElement(name = "establecimientoRemb")
+    @XmlElement(name = "establecimientoReemb")
     public String getEstablecimientoRemb() {
         return establecimientoRemb;
     }
@@ -85,7 +85,7 @@ public class ReembolsoAts implements Serializable{
         this.establecimientoRemb = establecimientoRemb;
     }
 
-    @XmlElement(name = "puntoEmisionRemb")
+    @XmlElement(name = "puntoEmisionReemb")
     public String getPuntoEmisionRemb() {
         return puntoEmisionRemb;
     }
@@ -94,7 +94,7 @@ public class ReembolsoAts implements Serializable{
         this.puntoEmisionRemb = puntoEmisionRemb;
     }
 
-    @XmlElement(name = "secuencialRemb")
+    @XmlElement(name = "secuencialReemb")
     public String getSecuencialRemb() {
         return secuencialRemb;
     }
@@ -103,7 +103,7 @@ public class ReembolsoAts implements Serializable{
         this.secuencialRemb = secuencialRemb;
     }
 
-    @XmlElement(name = "fechaEmisionRemb")
+    @XmlElement(name = "fechaEmisionReemb")
     public String getFechaEmisionRemb() {
         return fechaEmisionRemb;
     }
@@ -112,7 +112,7 @@ public class ReembolsoAts implements Serializable{
         this.fechaEmisionRemb = fechaEmisionRemb;
     }
 
-    @XmlElement(name = "autorizacionRemb")
+    @XmlElement(name = "autorizacionReemb")
     public String getAutorizacionRemb() {
         return autorizacionRemb;
     }
@@ -121,7 +121,7 @@ public class ReembolsoAts implements Serializable{
         this.autorizacionRemb = autorizacionRemb;
     }
 
-    @XmlElement(name = "baseImponibleRemb")
+    @XmlElement(name = "baseImponibleReemb")
     public BigDecimal getBaseImponibleRemb() {
         return baseImponibleRemb;
     }
@@ -130,7 +130,7 @@ public class ReembolsoAts implements Serializable{
         this.baseImponibleRemb = baseImponibleRemb;
     }
 
-    @XmlElement(name = "baseImpGravRemb")
+    @XmlElement(name = "baseImpGravReemb")
     public BigDecimal getBaseImpGravRemb() {
         return baseImpGravRemb;
     }
@@ -139,7 +139,7 @@ public class ReembolsoAts implements Serializable{
         this.baseImpGravRemb = baseImpGravRemb;
     }
 
-    @XmlElement(name = "baseNoGraIvaRemb")
+    @XmlElement(name = "baseNoGraIvaReemb")
     public BigDecimal getBaseNoGraIvaRemb() {
         return baseNoGraIvaRemb;
     }
@@ -148,7 +148,7 @@ public class ReembolsoAts implements Serializable{
         this.baseNoGraIvaRemb = baseNoGraIvaRemb;
     }
 
-    @XmlElement(name = "baseImpExeReembRemb")
+    @XmlElement(name = "baseImpExeReemb")
     public BigDecimal getBaseImpExeReembRemb() {
         return baseImpExeReembRemb;
     }

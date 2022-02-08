@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.ReembolsoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra.RetencionEnumCompras;
@@ -292,10 +293,53 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                             entityManager.merge(compraDetalle.getProductoProveedor());
                         }
                     }
+                    
+                    //Eliminar detalles de reembolso
+                    List<CompraFacturaReembolso> reembolsosEliminar=obtenerDetallesEliminarReembolso(compra);   
+                    
+                    for (CompraFacturaReembolso compraFacturaReembolso : reembolsosEliminar) {
+                        compraFacturaReembolso= entityManager.merge(compraFacturaReembolso);
+                        entityManager.remove(compraFacturaReembolso);                        
+                    }
 
                     entityManager.merge(compra);
+                    
+                    
+                    
+                    
             }
         });
+    }
+    
+    private List<CompraFacturaReembolso> obtenerDetallesEliminarReembolso(Compra compra) throws ServicioCodefacException, RemoteException
+    {
+        List<CompraFacturaReembolso> reembolsosEliminar=new ArrayList<CompraFacturaReembolso>();
+                
+        if(compra.getFacturaReembolsoList()!=null)
+        {            
+            List<CompraFacturaReembolso> reembolsosOriginales =ServiceFactory.getFactory().getCompraFacturaReembolsoServiceIf().buscarPorCompra(compra);
+            List<CompraFacturaReembolso> reembolsoList=compra.getFacturaReembolsoList();
+            
+            for (CompraFacturaReembolso reembolsoOriginal : reembolsosOriginales) {
+                
+                Boolean eliminarReembolso=true;
+                for (CompraFacturaReembolso reembolso : reembolsoList) {
+                    if(reembolso.getId().equals(reembolsoOriginal.getId()))
+                    {
+                        eliminarReembolso=false;
+                        break;
+                    }
+                }
+                
+                if(eliminarReembolso)
+                {
+                    reembolsosEliminar.add(reembolsoOriginal);
+                }
+                
+            }
+            
+        }
+        return reembolsosEliminar;
     }
     
     
@@ -347,9 +391,9 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                         entityManager.flush();//facturaReembolso.setCompra(compra);                                                
                     }
                 }
-                
-                
-                
+                //Despues de grabar seteo nuevamente la lista en la compra
+                compra.setFacturaReembolsoList(compraList);
+                entityManager.merge(compra);
                 
                 
                 grabarCartera(compra,carteraParametro); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera

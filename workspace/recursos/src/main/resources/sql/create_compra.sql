@@ -102,6 +102,20 @@ create table COMPRA_ITEM_REEMBOLSO
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
     FACTURA_ID BIGINT,
     COMPRA_ID BIGINT,
+    TIPO_COMPROBANTE varchar(2),    
+    TP_ID_PROV varchar(2),   
+    ID_PROV varchar(20), 
+    ESTABLECIMIENTO varchar(3), 
+    PUNTO_EMISION varchar(3), 
+    SECUENCIAL varchar(10), 
+    FECHA_EMISION date, 
+    AUTORIZACION varchar(50), 
+    BASE_IMPONIBLE decimal(13,2),
+    BASE_IMP_GRAV decimal(13,2),
+    BASE_NO_GRAIVA decimal(13,2),
+    BASE_IMP_EXE decimal(13,2),
+    MONTO_ICE decimal(13,2),
+    MONTO_IVA decimal(13,2),
     primary key (ID)
 );
 

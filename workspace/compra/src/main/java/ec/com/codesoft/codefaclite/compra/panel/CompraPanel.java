@@ -200,7 +200,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         tblFacturaReembolso = new javax.swing.JTable();
         jToolBar3 = new javax.swing.JToolBar();
         btnBuscarFacturaReembolso = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnAgregarReembolso = new javax.swing.JButton();
 
         btnCargarXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml2.png"))); // NOI18N
         btnCargarXml.setToolTipText("Cargar compra desde Xml");
@@ -931,13 +931,13 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         btnBuscarFacturaReembolso.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar3.add(btnBuscarFacturaReembolso);
 
-        jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
-        jButton2.setText("Agregar");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar3.add(jButton2);
+        btnAgregarReembolso.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnAgregarReembolso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarReembolso.setText("Agregar");
+        btnAgregarReembolso.setFocusable(false);
+        btnAgregarReembolso.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarReembolso.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(btnAgregarReembolso);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -969,6 +969,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarItem;
     private javax.swing.JButton btnAgregarProveedor;
+    private javax.swing.JButton btnAgregarReembolso;
     private javax.swing.JButton btnBuscarFacturaReembolso;
     private javax.swing.JButton btnBuscarProductoProveedor;
     private javax.swing.JButton btnCargarXml;
@@ -985,7 +986,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<SriSustentoComprobanteEnum> cmbSustentoComprobante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.ButtonGroup grupoTipoCompra;
-    private javax.swing.JButton jButton2;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1400,6 +1400,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
     public void setTblFacturaReembolso(JTable tblFacturaReembolso) {
         this.tblFacturaReembolso = tblFacturaReembolso;
+    }
+
+    public JButton getBtnAgregarReembolso() {
+        return btnAgregarReembolso;
+    }
+
+    public void setBtnAgregarReembolso(JButton btnAgregarReembolso) {
+        this.btnAgregarReembolso = btnAgregarReembolso;
     }
 
     

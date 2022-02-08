@@ -701,6 +701,9 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     };
 
+    /**
+     * CORRESPONDE A LA TABLA 2
+     */
     public enum TipoIdentificacionEnum {
         RUC("R", "Ruc", "04", "01"),
         CEDULA("C", "Cédula", "05", "02"),
@@ -710,7 +713,7 @@ public class Persona implements Serializable, Comparable<Persona> {
          * por ejemplo para manejar modulos de CRM
          */
         SIN_DEFINIR("S", "Sin Definir", "00", "00"),
-        CLIENTE_FINAL("F", "Consumidor Final", "9999999999999", new BigDecimal("200"), "07", "");
+        CLIENTE_FINAL("F", "Consumidor Final", "9999999999999", new BigDecimal("200"), "07", "07");
 
         private String letra;
         private String nombre;

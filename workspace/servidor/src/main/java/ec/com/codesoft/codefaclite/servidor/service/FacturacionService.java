@@ -410,7 +410,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     public void validacionInicialFacturar(Factura factura,CrudEnum modo) throws ServicioCodefacException, RemoteException
-    {
+    {                
+        
         if(factura.getCliente()==null)
         {
             throw new ServicioCodefacException("La factura tiene que tener un cliente asignado");
@@ -464,6 +465,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 {
                     throw new ServicioCodefacException("Error con las cantidades que tiene más de 6 decimales en el producto "+detalle.getDescripcion()+" ");
                 }
+                
+                //Validacion para hacer remplazo de caracteres que son incopatibles con la facturacion electronica
+                detalle.setDescripcion(detalle.getDescripcion().replace("“","\"").replace("”","\""));
             }
         }
         

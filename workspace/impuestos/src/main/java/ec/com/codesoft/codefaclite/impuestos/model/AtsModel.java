@@ -161,7 +161,7 @@ public class AtsModel extends AtsPanel {
                     } catch (IOException ex) {
                     Logger.getLogger(AtsModel.class.getName()).log(Level.SEVERE, null, ex);
                     }*/
-                    UtilidadesArchivos.generarNombreArchivoUnico(MENU_BAR_PROPERTY, title)
+                    //UtilidadesArchivos.generarNombreArchivoUnico(MENU_BAR_PROPERTY, title)
                     File file = new File( ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES+"/ejemplo.xml" );
                     UtilidadesServidorXml.convertirObjetoXmlEnArchivo(atsJaxb,file);
                     UtilidadesSistema.abrirDocumento(file);
