@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogModel;
 import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -110,13 +111,14 @@ public abstract class DialogoCodefac {
                 icono);
     }
     
-    public static void mostrarDialogoCargando(ProcesoSegundoPlano proceso)
+    public static void mostrarDialogoCargando(ProcesoSegundoPlano proceso) throws ExcepcionCodefacLite
     {        
         DialogoCargando dialogo= DialogoCargando.getInstance();
         HiloSegundoPlano hilo=new HiloSegundoPlano(proceso,dialogo);
         hilo.start();
         dialogo.getLblMensaje().setText(proceso.getMensaje());
         dialogo.setVisible(true);
+        hilo.verificarError();
         //dialogo.getLblMensaje().setText(proceso.getMensaje());
         
         //dialogo.setVisible(true);

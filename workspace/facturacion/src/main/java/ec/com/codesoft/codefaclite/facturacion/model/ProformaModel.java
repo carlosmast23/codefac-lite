@@ -122,7 +122,7 @@ public class ProformaModel extends FacturacionModel{
         
     }
     
-    public void listenerBtnEnviarCorreoProforma()
+    public void listenerBtnEnviarCorreoProforma() throws ExcepcionCodefacLite
     {
         if(super.estadoFormulario.equals(ESTADO_GRABAR))
         {
@@ -157,7 +157,7 @@ public class ProformaModel extends FacturacionModel{
         
         DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
             @Override
-            public void procesar() {
+            public void procesar() throws ExcepcionCodefacLite {
                 try {
                     validacionesGrabar(); //Metodo que realiza validaciones previas antes de grabar
                     FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
@@ -165,17 +165,20 @@ public class ProformaModel extends FacturacionModel{
                     //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
 
                     factura = servicio.grabarProforma(factura);
-                    DialogoCodefac.mensaje("Correcto", "Proforma generada correctamente", MENSAJE_CORRECTO);
+                    //DialogoCodefac.mensaje("Correcto", "Proforma generada correctamente", MENSAJE_CORRECTO);
                     imprimirProforma();
 
                 } catch (RemoteException ex) {
-                    Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);                                        
+                    throw new ExcepcionCodefacLite("Error al grabar: "+ex.getMessage());
 
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje("Error", ex.getMessage(), MENSAJE_INCORRECTO);
+                    throw new ExcepcionCodefacLite("Error al grabar: "+ex.getMessage());
                 } catch (ExcepcionCodefacLite ex) {
                     Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new ExcepcionCodefacLite("Error al grabar: "+ex.getMessage());
                 }
             }
 

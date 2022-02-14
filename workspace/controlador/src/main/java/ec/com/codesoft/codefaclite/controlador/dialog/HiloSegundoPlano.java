@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.controlador.dialog;
 
 import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,6 +17,7 @@ import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
 public class HiloSegundoPlano extends Thread{
     private ProcesoSegundoPlano proceso;
     private DialogoCargando dialogo;
+    private ExcepcionCodefacLite excepcion;
 
     public HiloSegundoPlano(ProcesoSegundoPlano proceso, DialogoCargando dialogo) {
         this.proceso = proceso;
@@ -24,8 +28,22 @@ public class HiloSegundoPlano extends Thread{
     
     @Override
     public void run() {
-         proceso.procesar();
-         dialogo.setVisible(false);
+        try {
+            proceso.procesar();
+            dialogo.setVisible(false);
+        } catch (ExcepcionCodefacLite ex) {
+            excepcion=ex;
+            Logger.getLogger(HiloSegundoPlano.class.getName()).log(Level.SEVERE, null, ex);
+            dialogo.setVisible(false);
+        }
+    }
+    
+    public void verificarError() throws ExcepcionCodefacLite
+    {
+        if(excepcion!=null)
+        {
+            throw excepcion;
+        }
     }
     
 }
