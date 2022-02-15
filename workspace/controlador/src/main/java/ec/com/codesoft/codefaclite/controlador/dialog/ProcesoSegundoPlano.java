@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.controlador.dialog;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+
 /**
  *
  * @author Carlos
  */
 public interface ProcesoSegundoPlano {
-    public void procesar();
+    public void procesar() throws ExcepcionCodefacLite;
     public String getMensaje();
 }

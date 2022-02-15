@@ -165,6 +165,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws RemoteException, ServicioCodefacException {
+                        validacionInicialFacturar(proforma, CrudEnum.CREAR);
                         //Agregado vendedor de forma automatica si el usuario tiene relacionado un empleado con departamento de ventas
                         asignarVendedorProforma(proforma);
                     
@@ -176,14 +177,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         grabarDetallesFacturaSinTransaccion(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                     
-                     
+                        /**
+                        * Informar por CORREO que la proforma fue enviada
+                        * correctamente
+                        */
+                        enviarCorreoProforma(proforma);
                }
             });
-            
-            /**
-             * Informar por CORREO que la proforma fue enviada correctamente
-             */
-            enviarCorreoProforma(proforma);
             
         
         return proforma;
@@ -193,6 +193,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         //TODO: Agregar para poner un validacion previa para evitar construir un reporte cuando no tenga correos a donde enviar
         try {
+            
+            List<String> destinatarios = Arrays.asList(proforma.obtenerCorreosStr());            
+            //Si no existen destinarios cancelo el envio a los correos
+            if(destinatarios.size()==0 || destinatarios.get(0).trim().isEmpty())
+            {
+                return;
+            }
+            
             String secuencialStr=proforma.getSecuencial()+"";
             Map<String, String> mapParametro = new HashMap<String, String>();
             mapParametro.put("numeroProforma",secuencialStr);
@@ -201,7 +209,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //mapParametro
             CodefacMsj mensaje = MensajeCodefacSistema.ProformasMensajes.PROFORMA_ENVIADA_CORREO.agregarParametros(mapParametro);
             //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
-            List<String> destinatarios = Arrays.asList(proforma.obtenerCorreosStr());
+                      
             //Controlador
             JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma);
             String pathReporte = UtilidadReportes.grabarArchivoJasperTemporal(jasperReporte);
@@ -484,6 +492,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
                 throw new ServicioCodefacException("Error de inconsistencia en el detalle, existe una diferencia de "+diferencia+" en el producto "+ detalle.getDescripcion()+"\nPosibles Causas:\n - El producto fue editado el precio\n - El producto requiere más decimales para el calculo exacto\n ");
             }
+            
+            //Validar que los detalles de las facturas no puedan tener más de 300 caracteres
+            if(detalle.getDescripcion().length()>300)
+            {
+                throw new ServicioCodefacException("Los detalles de las facturas no pueden tener más de 300 caracteres");
+            }
+            
         }
         
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
