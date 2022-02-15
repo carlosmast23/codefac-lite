@@ -196,6 +196,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.event.ChangeEvent;
+import org.jdesktop.swingx.JXTaskPane;
 
 /**
  *
@@ -279,7 +280,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA).setVisible(false);
+        JXTaskPane panelLateral=buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA);
+        if(panelLateral!=null)
+        {
+            panelLateral.setVisible(false);
+        }
     }
 
     public Factura getFactura() {

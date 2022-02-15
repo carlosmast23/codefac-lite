@@ -744,21 +744,21 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
             ///////////////////////////////////////////////////
             facturaNueva.datosAdicionales = new ArrayList<>();
 
-            /*List<FacturaAdicional> facturaAdicionalListTmp=new ArrayList<FacturaAdicional>(datosAdicionales);
+            List<FacturaAdicional> facturaAdicionalListTmp=new ArrayList<FacturaAdicional>(datosAdicionales);
             
             for (FacturaAdicional detalleTmp : facturaAdicionalListTmp) {
                 //detalleTmp.setFactura(facturaNueva);
                 facturaNueva.addDatoAdicional(detalleTmp);
-            }*/
+            }
             //////////////////////////////////////////////////
             facturaNueva.formaPagos = new ArrayList<>();
 
-            /*List<FormaPago> formaPagoTmpList =new ArrayList<FormaPago>(formaPagos);
+            List<FormaPago> formaPagoTmpList =new ArrayList<FormaPago>(formaPagos);
             
             for (FormaPago detalleTmp : formaPagoTmpList) {
                 //detalleTmp.setFactura(facturaNueva);
                 facturaNueva.addFormaPago(detalleTmp);
-            }*/
+            }
             facturaNueva.calcularTotalesDesdeDetalles();
 
         } catch (CloneNotSupportedException ex) {

@@ -398,10 +398,13 @@ public class AtsModel extends AtsPanel {
             "Establecimientos",
             "Punto Emisión",
             "Secuencial",
-            "Autorización"};
+            "Autorización",
+            "Documento"
+        };
         
         Class clase[]={
             AnuladoAts.class,
+            String.class,
             String.class,
             String.class,
             String.class,
@@ -414,6 +417,7 @@ public class AtsModel extends AtsPanel {
             false,
             false,
             false,
+            false,
         };
         
         DefaultTableModel modeloTabla = UtilidadesTablas.crearModeloTabla(titulo, clase, editar);
@@ -421,12 +425,18 @@ public class AtsModel extends AtsPanel {
         if(atsJaxb.getAnuladosAts()!=null)
         {
             for (AnuladoAts anulado : atsJaxb.getAnuladosAts()) {
+                
+                //TODO: Validar solo para comprobantes electronicos
+                //TODO: Enviar el tipo de documento directamente como resultado y no construir en la vista
+                ClaveAcceso claveAcceso=new ClaveAcceso(anulado.getAutorizacion());
+                
                 modeloTabla.addRow(new Object[]{
                     anulado,
                     anulado.getEstablecimiento(),
                     anulado.getPuntoEmision()+ "",
                     anulado.getSecuencialInicio().toString(),
                     anulado.getAutorizacion().toString(),
+                    claveAcceso.getTipoComprobante().getNombre()
                 });
             }
         }

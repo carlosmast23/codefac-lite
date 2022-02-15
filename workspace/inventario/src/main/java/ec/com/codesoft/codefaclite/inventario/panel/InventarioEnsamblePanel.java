@@ -57,6 +57,8 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         cmbAccion = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        cmbBodegaOrigen = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -69,7 +71,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         jLabel1.setText("Cantidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel1, gridBagConstraints);
@@ -77,7 +79,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         txtCantidad.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -131,7 +133,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -140,7 +142,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText("Bodega:");
+        jLabel8.setText("Bodega Origen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -150,7 +152,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -161,7 +163,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         btnVerificar.setToolTipText("Verificar existencia de stock para construir el ensamble");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnVerificar, gridBagConstraints);
 
@@ -169,7 +171,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         jLabel9.setText("Acccion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel9, gridBagConstraints);
@@ -177,7 +179,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         cmbAccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agregar", "Quitar" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -197,6 +199,23 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(jLabel10, gridBagConstraints);
 
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setText("Bodega Destino:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel11, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbBodegaOrigen, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -206,8 +225,10 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
     private javax.swing.JButton btnVerificar;
     private javax.swing.JComboBox<String> cmbAccion;
     private javax.swing.JComboBox<Bodega> cmbBodega;
+    private javax.swing.JComboBox<Bodega> cmbBodegaOrigen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -285,5 +306,15 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
     public void setLblStockActual(JLabel lblStockActual) {
         this.lblStockActual = lblStockActual;
     }
+
+    public JComboBox<Bodega> getCmbBodegaOrigen() {
+        return cmbBodegaOrigen;
+    }
+
+    public void setCmbBodegaOrigen(JComboBox<Bodega> cmbBodegaOrigen) {
+        this.cmbBodegaOrigen = cmbBodegaOrigen;
+    }
+    
+    
 
 }

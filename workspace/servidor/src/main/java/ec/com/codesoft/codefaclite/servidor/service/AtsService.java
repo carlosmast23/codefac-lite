@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.PagoExteriorAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.ReembolsoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentaAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.VentasEstablecimientoAts;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraFacturaReembolso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -22,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -51,6 +53,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -164,7 +168,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
          */
         if(anuladosBool)
         {
-            List<AnuladoAts> anulados=consultarAnuladosAts(fechaInicial, fechaFinal,empresa);
+            //List<AnuladoAts> anulados=consultarAnuladosAts(fechaInicial, fechaFinal,empresa);
+            List<AnuladoAts> anulados=consultarAnuladosSriAts(fechaInicial, fechaFinal,empresa);
             ats.setAnuladosAts(anulados);
         }
         
@@ -175,6 +180,76 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
     }
     
+    private AnuladoAts construirAnuladoAts(String preimpresoStr,String autorizacion,DocumentoEnum documentoEnum)
+    {
+        AnuladoAts anuladoAts = new AnuladoAts(); //DocumentoEnum.FACTURA.getCodigoSri()
+
+        anuladoAts.setTipoComprobante("18"); //Documentos Autorizados
+        //anuladoAts.setTipoComprobante(documentoEnum.getCodigoSri()); //Todo: por defecto solo anulo el tipo 18 que supuestamente corresponde documentos autorizados electronicamente
+        //String preimpreso[] = notaCredito.getNumDocModificado().split("-");
+        String preimpreso[] = preimpresoStr.split("-");
+        anuladoAts.setEstablecimiento(preimpreso[0]);
+        anuladoAts.setPuntoEmision(preimpreso[1]);
+        anuladoAts.setSecuencialInicio(Integer.parseInt(preimpreso[2]));
+        anuladoAts.setSecuencialFin(Integer.parseInt(preimpreso[2]));
+        anuladoAts.setAutorizacion(autorizacion); //Todo: Verifica si este dato es el de la nota de credito o la factura que elimina , pero si son algunas no tiene sentido que sea el de la factura
+        //anuladosAts.add(anuladoAts);
+        return anuladoAts;
+    }
+    
+    
+    private List<Retencion> consultarRetencionesSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estadoEnum)
+    {        
+        try {
+            return ServiceFactory.getFactory().getRetencionServiceIf().obtenerRetencionesSinDetalleReportes(null, fechaInicial, fechaFinal,null,null,null,estadoEnum, empresa);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    private List<NotaCredito> consultarNotasCreditoSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estadoEnum)
+    {
+        try {
+            return ServiceFactory.getFactory().getNotaCreditoServiceIf().obtenerNotasReporte(null, fechaInicial, fechaFinal, estadoEnum, empresa);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
+    
+    public List<AnuladoAts> consultarAnuladosSriAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
+    {        
+        List<AnuladoAts> anuladoList=new ArrayList<AnuladoAts>();
+        
+        //Consultar las FACTURAS anuladas
+        List<ComprobanteEntity> comprobantesList= (List<ComprobanteEntity>)(List<?>)consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI,DocumentoEnum.FACTURA);
+        
+        //Consulta las RETENCIONES anuladas
+        List<ComprobanteEntity> retencionesList=(List<ComprobanteEntity>)(List<?>)consultarRetencionesSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI);
+        comprobantesList.addAll(retencionesList);
+        
+        //Consultar las NOTAS DE CREDITO
+        List<ComprobanteEntity> notasCreditoList=(List<ComprobanteEntity>)(List<?>)consultarNotasCreditoSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI);
+        comprobantesList.addAll(notasCreditoList);
+        
+        //Consulta las LIQUIDACIONBES DE COMPRA
+        List<ComprobanteEntity> liquidacionCompraList= (List<ComprobanteEntity>)(List<?>)consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI,DocumentoEnum.LIQUIDACION_COMPRA);
+        comprobantesList.addAll(liquidacionCompraList);
+        
+        
+        for (ComprobanteEntity comprobanteEntity : comprobantesList) {
+             AnuladoAts anuladoAts= construirAnuladoAts(comprobanteEntity.getPreimpreso(),comprobanteEntity.getClaveAcceso(),comprobanteEntity.getCodigoDocumentoEnum());
+             anuladoList.add(anuladoAts);
+        }
+        
+        return anuladoList;        
+    }
+    
+    //TODO: Ya no se usa por que se debe presentar los documentos anulados en el Sri no la Notas de credito
+    @Deprecated
     public List<AnuladoAts> consultarAnuladosAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
         List<AnuladoAts> anuladosAts=new ArrayList<AnuladoAts>();
@@ -497,14 +572,27 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
     }
     
+    private List<Factura> consultaVentasLiquidacionCompraSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado enumEstado,DocumentoEnum documentoEnum)
+    {
+        try {
+            FacturacionService facturacionService=new FacturacionService();
+            List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,enumEstado,false,null,false,null,empresa,documentoEnum,null,null);
+            return facturas;
+        } catch (RemoteException ex) {
+            Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
-        FacturacionService facturacionService=new FacturacionService();
+        //FacturacionService facturacionService=new FacturacionService();
         /**
          * TODO: Verificar si en esta consulta no se traen las notas de venta interna porque no son documentos validos
          * Pero si deberia trear otros documentos que nos sean facturas tener pendiente
          */
-        List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,false,null,false,null,empresa,DocumentoEnum.FACTURA,null,null);
+        //List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,false,null,false,null,empresa,DocumentoEnum.FACTURA,null,null);
+        List<Factura> facturas=consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,DocumentoEnum.FACTURA);
         
         Map<String,VentaAts> mapVentas=new HashMap<String,VentaAts>();
         

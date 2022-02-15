@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -209,6 +210,25 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         //return retencionFacade.lista(persona, fi, ff, iva, renta,tipo);
         return retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion,estadoEnum,empresa);
     }
+    
+    //TODO: Mejorar para obtener todos los datos de una sola consulta y evitar estar construyendo
+    @Override
+    public List<Retencion> obtenerRetencionesSinDetalleReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa) throws RemoteException {
+        
+        List<RetencionDetalle> retencionDetalleList=retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion,estadoEnum,empresa);
+        List<Retencion> retencionList=new ArrayList<Retencion>();
+        for (RetencionDetalle retencionDetalle : retencionDetalleList)
+        {
+            if(!retencionList.contains(retencionDetalle.getRetencion()))
+            {
+                retencionList.add(retencionDetalle.getRetencion());
+            }
+        }
+        return retencionList;
+        //return retencionFacade.lista(persona, fi, ff, iva, renta,tipo);
+        
+    }
+    
     public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta,String tipo) {
         return retencionFacade.retencionesCodigo(persona, fi, ff, iva, renta, tipo);
     }

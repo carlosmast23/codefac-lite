@@ -35,6 +35,7 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
         titulo.add(new ColumnaDialogo("Preimpreso",0.2d));
         titulo.add(new ColumnaDialogo("Proveedor",0.3d));
         titulo.add(new ColumnaDialogo("Fecha Emisión",0.15d));
+        titulo.add(new ColumnaDialogo("Estado",0.15d));
         return titulo;
     }
 
@@ -61,6 +62,14 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
         dato.add(t.getPreimpreso());
         dato.add(t.getProveedor().getNombresCompletos());
         dato.add(FechaFormatoEnum.ANIO_MES_DIA.getFecha(t.getFechaEmision()));
+        if(t.getEstadoEnum()!=null)
+        {
+            dato.add(t.getEstadoEnum().getNombre());
+        }
+        else
+        {
+            dato.add("");
+        }
     }
 
     @Override

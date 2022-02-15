@@ -587,29 +587,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
          * Setear los componentes graficos despues de los calculos
          */
         interfaz.cargarTotalesVista();
-        
-        //Verifico que solo exista una forma de pago y si cumple ese requesito actualizo el valor de la forma de pago
-        /*if(factura.getFormaPagos()!=null)
+       
+        //Solo activar el calculo de las formas de pago cuando aun no tiene grabado una factura
+        if(factura.getId()==null)
         {
-            if(factura.getFormaPagos().size()==0)
-            {
-                a
-            }else if (factura.getFormaPagos().size() == 1) {
-                FormaPago formaPago = factura.getFormaPagos().get(0);
-                formaPago.setTotal(factura.getTotal());            
-
-            }else if( factura.getFormaPagos().size()>1)
-            {
-                //Si tengo varias formas de pago solo tengo que dejar una forma de pago
-               FormaPago formaPago=factura.getFormaPagos().get(0);
-               formaPago.setTotal(factura.getTotal());
-               factura.getFormaPagos().clear();
-               factura.addFormaPago(formaPago);   
-               
-            }
-        }*/
-        
-        this.cargarFormaPago();
+            this.cargarFormaPago();
+        }
         //agregarFormaPagoConCartera();
         interfaz.cargarFormasPagoTabla();
 
@@ -617,6 +600,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     /**
      * TODO: Cambiar el nombre de la funcion , por que es confuso por que este metodo permite MODIFICAR LA FORMA DE PAGO
+     * Este metodo solo sirve cuando estoy haciendo alguna modificacion en la factura para que se ponga de forma automatico las formas de pago, no se deberia usar para cuando se quiere solo consultar la factura
      */
     public void cargarFormaPago()
     {
@@ -663,6 +647,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             {
                 FormaPago formaPago = factura.getFormaPagos().get(0);
                 formaPago.setTotal(factura.getTotal());
+                
                 //TODO: Optimizar para que se cambie la forma de pago solo si es un cliente distinto
                 if (factura.getCliente()!=null && factura.getCliente().getSriFormaPago() != null) 
                 {

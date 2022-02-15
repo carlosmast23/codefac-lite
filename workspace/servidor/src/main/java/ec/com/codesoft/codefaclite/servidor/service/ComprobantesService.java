@@ -1710,8 +1710,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
             //String pathBase de los directorios            
             servicio.setPathBase(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa);
-            servicio.setNombreFirma(parametroCodefacMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
-            servicio.setClaveFirma(UtilidadesEncriptar.desencriptar(parametroCodefacMap.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
+            
+            //Si no existe esos datos no se cargan para procesar
+            String nombreFirma=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
+            if(nombreFirma!=null)
+            {
+                servicio.setNombreFirma(parametroCodefacMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
+                servicio.setClaveFirma(UtilidadesEncriptar.desencriptar(parametroCodefacMap.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
+            }
             String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
             servicio.setModoFacturacion(modoFacturacion);
 

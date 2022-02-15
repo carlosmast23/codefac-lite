@@ -166,10 +166,12 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         try {
             //Cargar las bodegas disponibles
             getCmbBodega().removeAllItems();
+            getCmbBodegaOrigen().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
             List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
             for (Bodega bodega : bodegas) {
-                getCmbBodega().addItem(bodega);        
+                getCmbBodega().addItem(bodega);   
+                getCmbBodegaOrigen().addItem(bodega);
             }
         } catch (RemoteException ex) {
             Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
