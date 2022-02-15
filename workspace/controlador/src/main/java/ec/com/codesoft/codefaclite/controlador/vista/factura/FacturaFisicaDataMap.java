@@ -9,6 +9,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,8 +43,9 @@ public class FacturaFisicaDataMap {
     
     public Map<String,Object> getMap(Factura factura,DocumentoEnum documento,String ivaStr)
     {
+        SimpleDateFormat sdf=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA;
         Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("fechaEmision",aplicarFormato("Fecha Emisión: ",factura.getFechaEmision().toString()));
+        parametros.put("fechaEmision",aplicarFormato("Fecha Emisión: ", sdf.format(factura.getFechaEmision())));
         parametros.put("razonSocial",aplicarFormato("Razón Social: ",factura.getRazonSocial()));
         parametros.put("direccion",aplicarFormato("Dirección: ",factura.getDireccion()));
         parametros.put("telefono",aplicarFormato("Telefono: ",factura.getTelefono()));
