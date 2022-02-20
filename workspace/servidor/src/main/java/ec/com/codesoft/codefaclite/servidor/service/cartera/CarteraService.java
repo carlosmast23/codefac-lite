@@ -425,15 +425,21 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
         
         List<CarteraCruce> cruces=new ArrayList<CarteraCruce>();
+        //TODO: Ver la forma para clasificar en general a todos los comprobante sy no una por una
         switch (documentoEnum) {
-            case FACTURA_REEMBOLSO:
-            case NOTA_VENTA_INTERNA:
-            case NOTA_VENTA:
             case FACTURA:
+            case FACTURA_REEMBOLSO:
+            case NOTA_VENTA:
+            case NOTA_VENTA_INTERNA:             
+            case BOLETOS_ESPETACULOS_PUBLICOS:
+            case TIQUETES_MAQUINAS_REGISTRADORAS:            
             case PASAJES_EMPRESA_AVIACION:    
+            case DOCUMENTOS_INSTITUCIONES_FINANCIERAS:
+            case COMPROBANTE_CUOTAS_APORTES:            
+            
                 //if(crudEnum.equals(CrudEnum.CREAR))
                 //{
-                    crearCarteraFactura(comprobante, cartera, cruces, tipo,carteraParametro);
+                crearCarteraFactura(comprobante, cartera, cruces, tipo,carteraParametro);
                 //}
                 //else if (crudEnum.equals(CrudEnum.ELIMINAR))
                 //{

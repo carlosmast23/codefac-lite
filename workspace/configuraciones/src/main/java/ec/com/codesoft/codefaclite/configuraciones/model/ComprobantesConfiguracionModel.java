@@ -535,17 +535,21 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                     return;
                 }
 
-                DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
-                    @Override
-                    public void procesar() {
-                        verificarCredencialesCorreo();
-                    }
-
-                    @Override
-                    public String getMensaje() {
-                        return "Validando Correo";
-                    }
-                });
+                try {
+                    DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
+                        @Override
+                        public void procesar() {
+                            verificarCredencialesCorreo();
+                        }
+                        
+                        @Override
+                        public String getMensaje() {
+                            return "Validando Correo";
+                        }
+                    });
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         });

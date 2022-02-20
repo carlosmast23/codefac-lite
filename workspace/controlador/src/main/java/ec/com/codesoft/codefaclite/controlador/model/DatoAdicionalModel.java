@@ -68,6 +68,7 @@ public class DatoAdicionalModel extends DatoAdicionalDialog{
         //Agregar valor por defecto para el combo de tipo
         getCmbTipo().removeAllItems();
         getCmbTipo().addItem(FacturaAdicional.Tipo.TIPO_CORREO);
+        getCmbTipo().addItem(FacturaAdicional.Tipo.TIPO_GUIA_REMISION);
         getCmbTipo().addItem(FacturaAdicional.Tipo.TIPO_OTRO);
         
     }
@@ -81,6 +82,11 @@ public class DatoAdicionalModel extends DatoAdicionalDialog{
                 if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_CORREO))
                 {
                     getTxtCampo().setText("correo");
+                    getTxtCampo().setEnabled(false);
+                }
+                else if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_GUIA_REMISION))
+                {
+                    getTxtCampo().setText("guiaRemision");
                     getTxtCampo().setEnabled(false);
                 }
                 else

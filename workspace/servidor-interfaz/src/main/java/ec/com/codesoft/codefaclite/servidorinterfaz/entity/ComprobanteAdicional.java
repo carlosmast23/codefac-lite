@@ -138,6 +138,7 @@ public class ComprobanteAdicional implements Serializable{
         CELULAR("celular"),
         CORREO("correo"),
         FECHA_VENCIMIENTO("Fecha Maxima de Pago"),
+        GUIA_REMISION("Guia de Remision"),
         VENDEDOR("Vendedor");
         
         private String nombre;
@@ -168,6 +169,7 @@ public class ComprobanteAdicional implements Serializable{
     {
         TIPO_CORREO("c","correo"),
         TIPO_CELULAR("t","celular"),
+        TIPO_GUIA_REMISION("g","Guía Remisión"),
         TIPO_OTRO("o","otro");
 
         private Tipo(String letra, String nombre) {

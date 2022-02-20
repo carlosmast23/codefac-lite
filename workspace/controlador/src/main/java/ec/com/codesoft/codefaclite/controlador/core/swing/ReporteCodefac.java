@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.core.swing;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -104,7 +105,7 @@ public class ReporteCodefac {
         }
     }
     
-    public static void generarReporteInternalFrame(InputStream pathReporte,Map parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,ConfiguracionImpresoraEnum configuracionImpresora)
+    public static void generarReporteInternalFrame(InputStream pathReporte,Map parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,ConfiguracionImpresoraEnum configuracionImpresora) throws ExcepcionCodefacLite
     {
         try {
             JasperReport report =JasperCompileManager.compileReport(pathReporte);
@@ -114,6 +115,16 @@ public class ReporteCodefac {
             panelPadre.crearReportePantalla(print,tituloReporte,configuracionImpresora);
         } catch (JRException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            
+           if(ex.getMessage().indexOf("The columns and the margins do not fit the page width")>=0)
+           {
+               throw new ExcepcionCodefacLite("El ancho del documento no puede ser menor a 500px");
+           }
+           else
+           {
+               throw new ExcepcionCodefacLite(ex.getMessage());
+           }
+           
         }
     }
     

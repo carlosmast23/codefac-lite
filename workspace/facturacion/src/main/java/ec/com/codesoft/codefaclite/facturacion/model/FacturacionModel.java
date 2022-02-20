@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaDat
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaFisicaDataMap;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FormatoReporteEnum;
+import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.obtenerDecimalesRedondeo;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -195,6 +196,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.RoundingMode;
 import javax.swing.event.ChangeEvent;
 import org.jdesktop.swingx.JXTaskPane;
 
@@ -325,7 +327,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Ingresar los campos para validar 
         camposValidar.add(getTxtValorUnitario());
         camposValidar.add(getTxtCantidad());
-        camposValidar.add(getTxtDescripcion());
+        //camposValidar.add(getTxtDescripcion());
         camposValidar.add(getTxtDescuento());
         //Obtener el estado de validacion de los campos
         for (JTextField campo : camposValidar) {
@@ -471,6 +473,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 FacturaAdicional.Tipo.TIPO_CORREO,
                                 ComprobanteAdicional.CampoDefectoEnum.CORREO));
                         //factura.addDatosAdicionalCorreo(valor,FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
+                    }
+                    else if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_GUIA_REMISION))
+                    {
+                        factura.addDatoAdicional(new FacturaAdicional(
+                                valor,
+                                FacturaAdicional.Tipo.TIPO_GUIA_REMISION,
+                                ComprobanteAdicional.CampoDefectoEnum.GUIA_REMISION));
                     }
                     else
                     {
@@ -1592,10 +1601,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             for (FacturaDetalle detalleFactura : factura.getDetalles()) {
                 DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
                 
-                detalle.setCantidad(detalleFactura.getCantidad() + "");
-                detalle.setDescripcion(detalleFactura.getDescripcion());
-                detalle.setValorTotal(detalleFactura.getTotal() + "");
-                detalle.setValorUnitario(detalleFactura.getPrecioUnitario() + "");
+                Integer numeroDecimales=FacturaModelControlador.obtenerDecimalesRedondeo(session.getEmpresa());
+                Integer numeroDecimalesCantidad=FacturaModelControlador.obtenerCantidadProducto(session.getEmpresa());
+                
+                detalle.setCantidad(detalleFactura.getCantidad().setScale(numeroDecimalesCantidad, RoundingMode.HALF_UP) + "");
+                String descripcionConSaltosDeLinea=detalleFactura.getDescripcion().replace("\n", "<br>");
+                detalle.setDescripcion(descripcionConSaltosDeLinea);                
+                detalle.setValorTotal(detalleFactura.getTotal().setScale(numeroDecimales, RoundingMode.HALF_UP) + "");
+                detalle.setValorUnitario(detalleFactura.getPrecioUnitario().setScale(numeroDecimales,RoundingMode.HALF_UP) + "");
                 detalle.setCodigoPrincipal(obtenerCodigoProducto(detalleFactura));
                 detalle.setDescuento(detalleFactura.getDescuento().toString());                
                 detalles.add(detalle);
@@ -1616,12 +1629,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             throw  ex; //Relanza el error al proceso principal
             
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
         }
         return null;
     
     }
+    
     
     
     

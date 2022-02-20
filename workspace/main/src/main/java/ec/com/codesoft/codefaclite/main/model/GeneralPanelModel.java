@@ -456,34 +456,41 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         String[] opciones = {"Salir", "Cambiar usuario", "Cancelar"};
         int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Por favor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
         switch (opcionSeleccionada) {
-            case 0: //opcion de salir
-                
-                DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
-                    @Override
-                    public void procesar() {
-                        //Grabar las posiciones de los widgets al momento de salir
-                        grabarDatosPosicionesWidgetSalir();                
-                        generarRespaldoBaseDatosPorCorreo();
-                        
-                        //Solo detener la publicidad cuando exista
-                        if (hiloPublicidadCodefac != null) {
-                            hiloPublicidadCodefac.hiloPublicidad = false;
-                        }
-                        UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web 
-                    }
-
-                    @Override
-                    public String getMensaje() {
-                        return "Cerrando el Sistema ...";
-                    }
+            case 0: {
+                try {
+                    //opcion de salir
                     
-                });
+                    DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
+                        @Override
+                        public void procesar() {
+                            //Grabar las posiciones de los widgets al momento de salir
+                            grabarDatosPosicionesWidgetSalir();
+                            generarRespaldoBaseDatosPorCorreo();
+                            
+                            //Solo detener la publicidad cuando exista
+                            if (hiloPublicidadCodefac != null) {
+                                hiloPublicidadCodefac.hiloPublicidad = false;
+                            }
+                            UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web
+                        }
+                        
+                        @Override
+                        public String getMensaje() {
+                            return "Cerrando el Sistema ...";
+                        }
+                        
+                    });
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
                 
                                             
                 
                 dispose();
                 System.exit(0);
                 break;
+
 
 
             case 1: //opcion cambiar de usuario

@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -113,7 +114,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jToolBar2 = new javax.swing.JToolBar();
         pnlDetalles = new javax.swing.JPanel();
         txtCodigoDetalle = new javax.swing.JTextField();
-        txtDescripcion = new javax.swing.JTextField();
         cmbPreciosVenta = new javax.swing.JComboBox<>();
         jLabel19 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
@@ -130,6 +130,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jToolBar4 = new javax.swing.JToolBar();
         btnCrearProducto = new javax.swing.JButton();
         btnAgregarProducto = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDescripcion = new javax.swing.JTextArea();
         PanelFormasPago = new javax.swing.JPanel();
         btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -338,14 +340,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         pnlDetalles.add(txtCodigoDetalle, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        pnlDetalles.add(txtDescripcion, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -474,6 +468,18 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         pnlDetalles.add(jToolBar4, gridBagConstraints);
+
+        txtDescripcion.setColumns(20);
+        txtDescripcion.setRows(5);
+        jScrollPane1.setViewportView(txtDescripcion);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        pnlDetalles.add(jScrollPane1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1659,6 +1665,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
@@ -1707,7 +1714,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtCodigoDetalle;
-    private javax.swing.JTextField txtDescripcion;
+    private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtDescuentoGlobal;
     private javax.swing.JSpinner txtDiasCredito;
@@ -1832,14 +1839,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "[^\\n]*",nombre = "Descripcion",grupo = "detalles")
-    public JTextField getTxtDescripcion() {
+    @ValidacionCodefacAnotacion(requerido=true ,nombre = "Descripcion",grupo = "detalles")
+    public JTextArea getTxtDescripcion() {
         return txtDescripcion;
     }
 
 
 
-    public void setTxtDescripcion(JTextField txtDescripcion) {
+    public void setTxtDescripcion(JTextArea txtDescripcion) {
         this.txtDescripcion = txtDescripcion;
     }
     

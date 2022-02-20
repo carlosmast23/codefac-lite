@@ -337,7 +337,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     
     
     public void addDatoAdicional(T comprobante) {
-        if (comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_OTRO)) {
+        if (comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_OTRO)  || comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_GUIA_REMISION) ) {
             addDatoAdicionalAbstract(comprobante);
         } else {
             if (comprobante.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_CORREO)) {

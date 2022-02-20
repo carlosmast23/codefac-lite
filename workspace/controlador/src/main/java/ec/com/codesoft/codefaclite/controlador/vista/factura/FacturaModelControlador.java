@@ -192,7 +192,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         String descripcion=productoSeleccionado.getNombre();
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
-        descripcion=descripcion.replace("\n"," ");
+        //descripcion=descripcion.replace("\n"," ");
         
         
         FacturaDetalle facturaDetalle=crearFacturaDetalle(
@@ -1138,11 +1138,29 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return mapParametros;
     }
     
+    //TODO: poner en otra parte como utilidades
     public static Integer obtenerDecimalesRedondeo(Empresa empresa)
     {
         try {
             return ParametroUtilidades.obtenerValorBaseDatos(empresa
                     , ParametroCodefac.NUMERO_DECIMALES_RIDE, new ParametroUtilidades.ComparadorInterface() {
+                @Override
+                public Object consultarParametro(String nombreParametro) {
+                    return Integer.parseInt(nombreParametro);
+                }
+            });
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    //TODO: poner en otra parte como utilidades
+    public static Integer obtenerCantidadProducto(Empresa empresa)
+    {
+        try {
+            return ParametroUtilidades.obtenerValorBaseDatos(empresa
+                    , ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, new ParametroUtilidades.ComparadorInterface() {
                 @Override
                 public Object consultarParametro(String nombreParametro) {
                     return Integer.parseInt(nombreParametro);
@@ -1169,7 +1187,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             BigDecimal precioUnitario=detalle.getPrecioUnitario();
             BigDecimal total=detalle.getTotal();
             
-            //Redondeando deciamales cuando este configurado ese modo
+            //Redondeando decimales cuando este configurado ese modo
             if(redondedoDecimalesPrecios!=null)
             {
                 precioUnitario=precioUnitario.setScale(redondedoDecimalesPrecios,BigDecimal.ROUND_UP);

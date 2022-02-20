@@ -451,6 +451,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             }
         }
         
+        //TODO:Optimizar esta parte para poner en otra parte
+        PuntoEmisionService puntoEmisionService = new PuntoEmisionService();
+        PuntoEmision puntoEmision = puntoEmisionService.buscarPorId(factura.getPuntoEmisionId());
+        
         //Validacion para los detalles
         for (FacturaDetalle detalle : factura.getDetalles()) 
         {
@@ -474,11 +478,22 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     throw new ServicioCodefacException("Error con las cantidades que tiene más de 6 decimales en el producto "+detalle.getDescripcion()+" ");
                 }
                 
+                                
+                
                 //Validacion para hacer remplazo de caracteres que son incopatibles con la facturacion electronica
-                detalle.setDescripcion(detalle.getDescripcion().replace("“","\"").replace("”","\""));
+                //detalle.setDescripcion(detalle.getDescripcion().replace("“","\"").replace("”","\""));
+                
+
+                //Validacion automatica de los espacios en blanco de los productos
+                if (puntoEmision != null) {
+                    if (puntoEmision.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA)) {
+                        detalle.setDescripcion(detalle.getDescripcion().replace("\n", " "));
+                    }
+                }
             }
         }
         
+                
         //validar que los totales coincidan o si tiene inconsistencias no grabar
         for (FacturaDetalle detalle : factura.getDetalles()) 
         {
@@ -498,6 +513,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             {
                 throw new ServicioCodefacException("Los detalles de las facturas no pueden tener más de 300 caracteres");
             }
+            
             
         }
         

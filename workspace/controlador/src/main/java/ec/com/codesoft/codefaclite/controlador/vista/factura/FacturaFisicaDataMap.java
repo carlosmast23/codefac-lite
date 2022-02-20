@@ -5,13 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,10 +38,11 @@ public class FacturaFisicaDataMap {
     public String subtotalConDescuento;
     public String valorIva;
     public String iva;
+    public String guiaRemision;
     
     public Boolean imprimirConTitulos;
 
-    public FacturaFisicaDataMap(Boolean imprimirConTitulos) {
+    public FacturaFisicaDataMap(Boolean imprimirConTitulos){
         this.imprimirConTitulos = imprimirConTitulos;
     }
     
@@ -51,6 +56,7 @@ public class FacturaFisicaDataMap {
         parametros.put("telefono",aplicarFormato("Telefono: ",factura.getTelefono()));
         parametros.put("correoElectronico",aplicarFormato("Correo: ", (factura.getCliente().getCorreoElectronico() != null) ? factura.getCliente().getCorreoElectronico() : ""));
         parametros.put("identificacion",aplicarFormato("Identificación: ",factura.getIdentificacion()));
+        parametros.put("guiaRemision",aplicarFormato("Guía Remisión: ",obtenerGuiaRemision(factura)));
 
         //Datos cuando es una nota de venta
         if(DocumentoEnum.NOTA_VENTA.equals(documento))
@@ -78,6 +84,18 @@ public class FacturaFisicaDataMap {
         
         return parametros;
     
+    }
+    
+    private String obtenerGuiaRemision(Factura factura)
+    {
+        for(FacturaAdicional facturaAdicional : factura.getDatosAdicionales())
+        {            
+            if(facturaAdicional.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_GUIA_REMISION))
+            {
+                return facturaAdicional.getValor();
+            }
+        }        
+        return "";
     }
     
     private String aplicarFormato(String titulo,String dato)

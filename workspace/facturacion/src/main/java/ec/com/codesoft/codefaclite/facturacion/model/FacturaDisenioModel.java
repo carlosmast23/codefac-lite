@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -186,7 +187,12 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         detalle.setValorUnitario("10");
         detalles.add(detalle);
 
-        ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",null);
+        try {
+            ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",null);
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+        }
 
     }
 
