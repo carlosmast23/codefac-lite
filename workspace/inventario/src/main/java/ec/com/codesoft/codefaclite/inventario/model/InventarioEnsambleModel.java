@@ -81,14 +81,15 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         {
             try {
                 KardexServiceIf kardexService=ServiceFactory.getFactory().getKardexServiceIf();
-                Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
+                Bodega bodegaDestino=(Bodega) getCmbBodegaDestino().getSelectedItem();
+                Bodega bodegaOrigen=(Bodega) getCmbBodegaOrigen().getSelectedItem();
                 String accion=getCmbAccion().getSelectedItem().toString();
                 BigDecimal cantidad=new BigDecimal(getTxtCantidad().getText());
                 //List<Kardex> kardexList=getKardexModificados();
                 Boolean ingreso=(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR)?true:false);
                 
                 //Por el momento cuando mando a grabar en el servidor siempre valida si existe el stock para construir
-                kardexService.ingresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad, ProductoEnsamble.EnsambleAccionEnum.AGREGAR,true);
+                kardexService.ingresoEgresoInventarioEnsamble(bodegaOrigen,bodegaDestino, productoEnsamble, cantidad, ProductoEnsamble.EnsambleAccionEnum.AGREGAR,true);
                 //kardexService.IngresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad,, ingreso);
                 DialogoCodefac.mensaje("Correcto", "Sus datos fueron grabados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             //} catch (ServicioCodefacException ex) {
@@ -165,12 +166,12 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
     private void cargarValoresIniciales() {
         try {
             //Cargar las bodegas disponibles
-            getCmbBodega().removeAllItems();
+            getCmbBodegaDestino().removeAllItems();
             getCmbBodegaOrigen().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
             List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
             for (Bodega bodega : bodegas) {
-                getCmbBodega().addItem(bodega);   
+                getCmbBodegaDestino().addItem(bodega);   
                 getCmbBodegaOrigen().addItem(bodega);
             }
         } catch (RemoteException ex) {
@@ -194,7 +195,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                         getTxtEnsamble().setText(productoEnsamble.getNombre());
                         //Buscar el Kardex o crear un Kardex nuevo si no existes
                         KardexServiceIf kardexService = ServiceFactory.getFactory().getKardexServiceIf();
-                        Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
+                        Bodega bodega = (Bodega) getCmbBodegaOrigen().getSelectedItem();
                         Kardex kardex = kardexService.buscarKardexPorProductoyBodega(bodega, productoEnsamble);
                         if(kardex!=null)
                         {
@@ -313,7 +314,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         List<Producto> productosProblemas=new ArrayList<Producto>();
         BigDecimal cantidad = new BigDecimal(getTxtCantidad().getText());
         String accion = getCmbAccion().getSelectedItem().toString();
-        Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
+        Bodega bodega = (Bodega) getCmbBodegaOrigen().getSelectedItem();
         
         String[] tituloIngreso={"Nombre","Cant.Nece.Indiv","Cant.Nece.Tot","Cant.Disponible","Cumple"};
         String[] tituloEgreso={"Nombre","Cantidad.Indiv","Cantidad.Tot","Stock Actual","Cumple"};

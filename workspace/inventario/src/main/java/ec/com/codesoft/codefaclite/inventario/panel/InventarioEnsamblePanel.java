@@ -51,7 +51,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatos = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
-        cmbBodega = new javax.swing.JComboBox<>();
+        cmbBodegaDestino = new javax.swing.JComboBox<>();
         btnVerificar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         cmbAccion = new javax.swing.JComboBox<>();
@@ -142,7 +142,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText("Bodega Origen:");
+        jLabel8.setText("Bodega Origen Materiales:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -156,7 +156,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(cmbBodega, gridBagConstraints);
+        getContentPane().add(cmbBodegaDestino, gridBagConstraints);
 
         btnVerificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/list.png"))); // NOI18N
         btnVerificar.setText("Verificar");
@@ -224,7 +224,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
     private javax.swing.JButton btnBuscarEnsamble;
     private javax.swing.JButton btnVerificar;
     private javax.swing.JComboBox<String> cmbAccion;
-    private javax.swing.JComboBox<Bodega> cmbBodega;
+    private javax.swing.JComboBox<Bodega> cmbBodegaDestino;
     private javax.swing.JComboBox<Bodega> cmbBodegaOrigen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -291,14 +291,16 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         this.txtEnsamble = txtEnsamble;
     }
 
-    public JComboBox<Bodega> getCmbBodega() {
-        return cmbBodega;
+    public JComboBox<Bodega> getCmbBodegaDestino() {
+        return cmbBodegaDestino;
     }
 
-    public void setCmbBodega(JComboBox<Bodega> cmbBodega) {
-        this.cmbBodega = cmbBodega;
+    public void setCmbBodegaDestino(JComboBox<Bodega> cmbBodegaDestino) {
+        this.cmbBodegaDestino = cmbBodegaDestino;
     }
 
+    
+    
     public JLabel getLblStockActual() {
         return lblStockActual;
     }

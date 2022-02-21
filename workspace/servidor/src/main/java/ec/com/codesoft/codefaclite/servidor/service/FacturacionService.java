@@ -876,7 +876,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         if(ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
         {
-            return ServiceFactory.getFactory().getKardexServiceIf().ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA,validarStockComponentes);
+            //ServiceFactory.getFactory().getBodegaServiceIf().obtenerActivosPorEmpresa(empresa);
+            //Cuando intenta construir los ensambles siempre va a coger de la misma bodega
+            return ServiceFactory.getFactory().getKardexServiceIf().ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(),kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA,validarStockComponentes);
         }
         //Todo: Verificar que no genere problemas el NULL
         return null;
