@@ -177,6 +177,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
@@ -1580,6 +1581,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             Map<String, Object> parametros = getParametroReporte(factura,documentoEnum,imprimirTitulos);
             
+            //TODO: Metodo remporal hasta ver una mejor manera
+            agregarGuiaRemisionManual(factura, parametros);
+            
             //Llenar los datos de los detalles
             List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
             
@@ -1593,7 +1597,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 detalleCabecera.setDescripcion("<b>Descripción</b>");
                 detalleCabecera.setDescuento("<b>Descuento</b>");
                 detalleCabecera.setValorTotal("<b>Total</b>");
-                detalleCabecera.setValorUnitario("<b>Val. Unit</b>");                
+                detalleCabecera.setValorUnitario("<b>Val. Unit</b>");  
                 detalles.add(detalleCabecera);
                 
             }
@@ -1638,6 +1642,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         return null;
     
+    }
+    
+    //TODO: Metodo temporal para poder imprimir una guia de remision cuando tiene ligado posteriormente 
+    @Deprecated
+    public void agregarGuiaRemisionManual(Factura factura,Map<String, Object> parametros) throws ServicioCodefacException, RemoteException
+    {
+        GuiaRemision guiaRemision= ServiceFactory.getFactory().getDestinatarioGuiaRemisionServiceIf().buscarGuiaRemisionPorFactura(factura);
+        if(guiaRemision!=null)
+        {
+            parametros.put("guiaRemision",guiaRemision.getPreimpreso());
+        }        
     }
     
     

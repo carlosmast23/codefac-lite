@@ -5,8 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -14,4 +18,5 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
  */
 public interface DestinatarioGuiaRemisionServiceIf extends ServiceAbstractIf<DestinatarioGuiaRemision> {
     
+    public GuiaRemision buscarGuiaRemisionPorFactura(Factura factura) throws ServicioCodefacException, RemoteException;
 }

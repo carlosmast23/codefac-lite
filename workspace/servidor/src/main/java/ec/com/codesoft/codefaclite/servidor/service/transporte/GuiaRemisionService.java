@@ -161,6 +161,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         });
                 
     }
+    
 
     @Override
     public void eliminar(GuiaRemision entity) throws RemoteException {
