@@ -85,6 +85,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -113,6 +116,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         listenerComponentes();
         listenerCombos();
         listenerFechas();
+        listenerTablas();
         iniciarComponentesPantalla();
     }
 
@@ -1138,6 +1142,41 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         getChkEnviarCorreoClientes().setSelected((boolean) parametros[1]);
         getChkEnviarCorreoTransportista().setSelected((boolean) parametros[2]);
         imprimirTabla();
+    }
+
+    private void listenerTablas() {        
+        JPopupMenu jpopMenuItem=new JPopupMenu();
+        JMenuItem itemRide= new JMenuItem("Editar cantidad");
+        
+        itemRide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblGuiaRemision().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    DetalleProductoGuiaRemision detalle= (DetalleProductoGuiaRemision) getTblGuiaRemision().getValueAt(filaSeleccionada,0);
+                    String cantidadTxt = JOptionPane.showInputDialog(null, "Ingrese la cantidad: ");
+                    if(cantidadTxt!=null)
+                    {
+                        try
+                        {
+                            Integer nuevaCantidad=Integer.parseInt(cantidadTxt);
+                            detalle.setCantidad(nuevaCantidad);
+                            imprimirTabla();
+                        }
+                        catch(Exception ex)
+                        {
+                            ex.printStackTrace();
+                        }
+                    }
+                    
+                }
+            }
+        });
+        
+        jpopMenuItem.add(itemRide);
+                
+        getTblGuiaRemision().setComponentPopupMenu(jpopMenuItem);
     }
     
     

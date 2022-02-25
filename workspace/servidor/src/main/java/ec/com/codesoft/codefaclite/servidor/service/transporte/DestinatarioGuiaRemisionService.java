@@ -13,6 +13,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.Destinatar
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.DestinatarioGuiaRemisionServiceIf;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -25,13 +27,19 @@ public class DestinatarioGuiaRemisionService extends ServiceAbstract<Destinatari
         super(DestinatarioGuiaRemisionFacade.class);        
     }
     
-    public GuiaRemision buscarGuiaRemisionPorFactura(Factura factura) throws ServicioCodefacException, RemoteException
+    public List<GuiaRemision> buscarGuiaRemisionPorFactura(Factura factura) throws ServicioCodefacException, RemoteException
     {
-        DestinatarioGuiaRemision destinatario=getFacade().obtenerGuiaRemision(factura);
-        if(destinatario!=null)
-        {
-            return destinatario.getGuiaRemision();
+        List<DestinatarioGuiaRemision> destinatarioList=getFacade().obtenerGuiaRemision(factura);
+        List<GuiaRemision> guiaRemisionList=new ArrayList<GuiaRemision>();
+        
+        for (DestinatarioGuiaRemision destinatarioGuiaRemision : destinatarioList) {
+            if(!guiaRemisionList.contains(destinatarioGuiaRemision.getGuiaRemision()))
+            {
+                guiaRemisionList.add(destinatarioGuiaRemision.getGuiaRemision());
+            }
+            
         }
-        return null;
+        
+        return guiaRemisionList;
     }
 }

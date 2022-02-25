@@ -116,16 +116,21 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                         }
                     }                    
                    //CAMBIAR ESTADOS DE LAS FACTURAS QUE VAN A SER ENVIADAS
+                   
                     for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
                         for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
                             Long facturaId=detallesProducto.getReferenciaId();
                             FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
                             FacturaDetalle facturaDetalle= facturaDetalleFacade.find(facturaId);;
                             
+                            //TODO: Por el momento dejo pendiente de validar cuando un mismo producto puede ir en partes en varias guias de remision
                             Factura facturaEditar=facturaDetalle.getFactura();
-                            System.out.println("Factura editar: "+facturaEditar.getPreimpreso());
-                            facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
-                            entityManager.merge(facturaEditar);
+                            if(facturaEditar.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
+                            {
+                                System.out.println("Factura editar: "+facturaEditar.getPreimpreso());
+                                facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
+                                entityManager.merge(facturaEditar);
+                            }
                         }
                         
                     }

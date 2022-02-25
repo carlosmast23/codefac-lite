@@ -1648,10 +1648,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Deprecated
     public void agregarGuiaRemisionManual(Factura factura,Map<String, Object> parametros) throws ServicioCodefacException, RemoteException
     {
-        GuiaRemision guiaRemision= ServiceFactory.getFactory().getDestinatarioGuiaRemisionServiceIf().buscarGuiaRemisionPorFactura(factura);
-        if(guiaRemision!=null)
+        List<GuiaRemision> guiaRemisionList= ServiceFactory.getFactory().getDestinatarioGuiaRemisionServiceIf().buscarGuiaRemisionPorFactura(factura);
+                
+        List<String> secuencialesGuiaRemision=new ArrayList<String>();
+        for (GuiaRemision guiaRemision : guiaRemisionList) {
+            secuencialesGuiaRemision.add(guiaRemision.getSecuencial()+"");
+        }
+        
+        String guiasRemisionTxt=UtilidadesLista.castListToString(secuencialesGuiaRemision," - ");
+        
+        if(guiasRemisionTxt!=null)
         {
-            parametros.put("guiaRemision",guiaRemision.getPreimpreso());
+            parametros.put("guiaRemision",guiasRemisionTxt);
         }        
     }
     
