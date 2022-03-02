@@ -606,12 +606,19 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     {
         try {
             //Validaciones previas para agregar el destinatario
-            /*if(getTxtAutorizacion().getText().isEmpty())
+            if(getTxtAutorizacion().getText().trim().isEmpty())
             {
-            DialogoCodefac.mensaje("Advertencia","No se puede agregar facturas sin autorización",DialogoCodefac.MENSAJE_ADVERTENCIA);
-            return null;
+                DialogoCodefac.mensaje("Advertencia","No se puede agregar facturas sin autorización",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return null;
             }
             
+            if(getTxtAutorizacion().getText().length()<=9)
+            {
+                DialogoCodefac.mensaje("Advertencia","La autorización tiene que tener más de 9 digitos",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return null;
+            }
+            
+            /*
             DestinatarioGuiaRemision destinatario=new DestinatarioGuiaRemision();
             destinatario.setAutorizacionNumero(getTxtAutorizacion().getText());
             destinatario.setCodDucumentoSustento(""); //TODO: falta ver si solo pongo el codigo de la factura o pueden haber otros documentos que se pueden transportar
@@ -762,6 +769,15 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnListenerBuscarCliente();
+            }
+        });
+        
+        getBtnEliminarDetalle().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                eliminarFila();
             }
         });
         
@@ -1147,11 +1163,40 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     private void listenerTablas() {        
         JPopupMenu jpopMenuItem=new JPopupMenu();
         JMenuItem itemRide= new JMenuItem("Editar cantidad");
+        JMenuItem itemEliminar= new JMenuItem("Eliminar Item");
         
-        itemRide.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada=getTblGuiaRemision().getSelectedRow();
+        itemRide.addActionListener(listenerEditarFila);
+        itemEliminar.addActionListener(listenerEliminarFila);
+        
+        jpopMenuItem.add(itemRide);
+        jpopMenuItem.add(itemEliminar);
+                
+        getTblGuiaRemision().setComponentPopupMenu(jpopMenuItem);        
+    }
+    
+    ActionListener listenerEliminarFila=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            eliminarFila();
+        }
+    };
+    
+    private void eliminarFila()
+    {
+        int filaSeleccionada = getTblGuiaRemision().getSelectedRow();
+        if (filaSeleccionada >= 0) {
+
+            DetalleProductoGuiaRemision detalle = (DetalleProductoGuiaRemision) getTblGuiaRemision().getValueAt(filaSeleccionada, 0);
+            guiaRemision.eliminarDetalleProducto(detalle);
+            imprimirTabla();
+        }
+    }
+    
+    
+    ActionListener listenerEditarFila=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int filaSeleccionada=getTblGuiaRemision().getSelectedRow();
                 if(filaSeleccionada>=0)
                 {
                     DetalleProductoGuiaRemision detalle= (DetalleProductoGuiaRemision) getTblGuiaRemision().getValueAt(filaSeleccionada,0);
@@ -1171,13 +1216,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                     }
                     
                 }
-            }
-        });
-        
-        jpopMenuItem.add(itemRide);
-                
-        getTblGuiaRemision().setComponentPopupMenu(jpopMenuItem);
-    }
+        }
+    };
     
     
 }

@@ -956,7 +956,15 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         this.cmbDocumento = cmbDocumento;
     }
 
+    public JButton getBtnEliminarDetalle() {
+        return btnEliminarDetalle;
+    }
 
+    public void setBtnEliminarDetalle(JButton btnEliminarDetalle) {
+        this.btnEliminarDetalle = btnEliminarDetalle;
+    }
+
+    
     
     
 

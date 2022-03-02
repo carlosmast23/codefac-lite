@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
@@ -177,7 +178,7 @@ public class LoginMb extends GeneralPublicoAbstractMb{
     private void iniciarDatos() {
         System.out.println("iniciando datos ...");
         try {
-            empresas = ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodos();
+            empresas = ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos(OrdenarEnum.ASCEDENTE);
             if (empresas.size() > 0) //Selecciono por defecto la primera empresa y carga la sucursal
             {
                 empresaSeleccionada = empresas.get(0);

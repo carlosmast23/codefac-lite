@@ -312,6 +312,18 @@ public class GuiaRemision extends ComprobanteEntity<GuiaRemisionAdicional> imple
         this.datosAdicionales.add(datoAdicional);
     }
     
+    public void eliminarDetalleProducto(DetalleProductoGuiaRemision detalle)
+    {
+        if(destinatarios!=null)
+        {
+            for (DestinatarioGuiaRemision destinatario : destinatarios) 
+            {
+                //Eliminar en cualquier listado de destinatarios
+                destinatario.getDetallesProductos().remove(detalle);
+            }
+        }
+    }
+    
     /**
      * TODO: Ver si puedo unificar este metodo con el resto de los comprobantes electronicos
      * @return 
