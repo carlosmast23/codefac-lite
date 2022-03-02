@@ -287,10 +287,10 @@ public class DestinatarioGuiaRemision implements Serializable{
     public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String preimpresoFactura,Integer codigoSucursal) throws ServicioCodefacException
     {
         //todo:Solucion temporal para las facturas fisicas que no tienen número de autorización
-        if(factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
-        {
-            autorizacion="000000000";
-        }
+        //if(factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
+        //{
+        //    autorizacion="000000000";
+        //}
         
         //Validaciones previas para agregar el destinatario
         if(autorizacion==null || autorizacion.isEmpty())
