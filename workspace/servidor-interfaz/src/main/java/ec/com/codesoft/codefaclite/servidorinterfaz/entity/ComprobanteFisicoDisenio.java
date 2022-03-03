@@ -102,6 +102,15 @@ public class ComprobanteFisicoDisenio implements Serializable {
         return nombre;
     }
     
+    ///////////////////////////////////////////////////////////////////////////
+    ///                     METODO PERSONALIZADO
+    ///////////////////////////////////////////////////////////////////////////
+    
+    public int getAnchoColumna()
+    {
+        //todo: por el momento dejo seteado este valor, aunque deberia calcularse
+        return ancho-5;
+    }
     
     
 }

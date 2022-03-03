@@ -42,6 +42,11 @@ public class ManagerReporteFacturaFisica {
     private final String NOMBRE_BOLD_COMPONENTE="isBold";
     
     /**
+     * Este campo va en funcion del ancho de la pagina y parece que es el mismo valor menos los margenes
+     */
+    private final String NOMBRE_ANCHO_COLUMNA="columnWidth";
+    
+    /**
      * Reporte original sobre el cual se va a trabajar
      */
     InputStream reporteOriginal;
@@ -162,6 +167,7 @@ public class ManagerReporteFacturaFisica {
        //Establecer propiedades de ancho y alto del documento
         rootNode.getAttribute(NOMBRE_ANCHO_DOCUMENTO).setValue(comprobante.getAncho()+"");
         rootNode.getAttribute(NOMBRE_ALTO_DOCUMENTO).setValue(comprobante.getAlto()+"");
+        rootNode.getAttribute(NOMBRE_ANCHO_COLUMNA).setValue(comprobante.getAnchoColumna()+"");
         
         //Establecer propiedades de las bandas
         for (BandaComprobante banda : comprobante.getSecciones()) {
