@@ -1347,7 +1347,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //List<FacturaParametro> facturasProcesar=new ArrayList<FacturaParametro>();
                     ///facturasProcesar.add(new FacturaParametro(factura, carteraParametro, prestamo));
                            
-                    List<FacturaParametro> facturasProcesar =obtenerFacturasManualesProcesar(factura);
+                    List<FacturaParametro> facturasProcesar =obtenerFacturasManualesProcesar(factura,carteraParametro);
                     FacturaLoteRespuesta respuestaManual=ServiceFactory.getFactory().getFacturacionServiceIf().grabarLote(facturasProcesar);
                     //Imprmir facturas manuales cuando son más de 1 factura o continua con el proceso normal
                     if(facturasProcesar.size()==1)
@@ -1451,7 +1451,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
     
-    private List<FacturaParametro> obtenerFacturasManualesProcesar(Factura factura) throws ServicioCodefacException
+    private List<FacturaParametro> obtenerFacturasManualesProcesar(Factura factura,CarteraParametro carteraParametro) throws ServicioCodefacException
     {
         List<FacturaParametro> respuestaList=new ArrayList<FacturaParametro>();
         
@@ -1462,7 +1462,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             List<Factura> facturasDividas=factura.dividirFactura(numeroMaxDetalleFactura);
             for (Factura facturaTmp : facturasDividas) 
             {
-                respuestaList.add(new FacturaParametro(facturaTmp,null, crearDatosPrestamo()));
+                respuestaList.add(new FacturaParametro(facturaTmp,carteraParametro, crearDatosPrestamo()));
             }        
         }
         else

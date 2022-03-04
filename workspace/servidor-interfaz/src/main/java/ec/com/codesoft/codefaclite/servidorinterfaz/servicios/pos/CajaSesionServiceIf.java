@@ -26,4 +26,6 @@ public interface CajaSesionServiceIf extends ServiceAbstractIf<CajaSession>
     public List<CajaSession> obtenerCajaSessionPorCajaYUsuario(Caja caja, Usuario usuario) throws RemoteException;
     public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio,Date fechaFin) throws RemoteException;
     public List<CajaSession> obtenerCajaSessionPorUsuarioYSucursal(Usuario usuario, Sucursal sucursal) throws RemoteException;
+    
+    public List<CajaSession> obtenerCajaSessionPorUsuario(Usuario usuario) throws RemoteException;
 }

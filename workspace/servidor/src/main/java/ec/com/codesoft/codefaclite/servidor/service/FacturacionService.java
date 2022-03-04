@@ -1156,11 +1156,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         if(cajaPermisoParaUsuario == null)
         {
-            throw new ServicioCodefacException("No tiene permisos asignados en el punto de emisión para este horario");
+            throw new ServicioCodefacException("No tiene permisos asignados en el punto de emisión para este horario.\n Solución: Asigne al usuario un horario");
         }
         
-        if(usuario.getCajasSessionUsuario().isEmpty())
-        {
+        //TODO: Este artificio solo es temporal por que esta referencia no se esta actualizando de forma automatica y toca cerrar y abrir el sistema para que se actualice
+        List<CajaSession> cajasSessionUsuarioList=ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuario(usuario);
+        if(cajasSessionUsuarioList.isEmpty())
+        {            
             throw new ServicioCodefacException("No se activado una caja para el procedimiento POS");
         }
         

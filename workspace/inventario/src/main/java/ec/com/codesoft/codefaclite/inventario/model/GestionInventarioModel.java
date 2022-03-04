@@ -64,7 +64,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getCmbTipoDocumento().setSelectedIndex(0);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         productoSeleccionado=null;
         getCmbFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
         getCmbBodega().setSelectedIndex(0);
-        getCmbTipoDocumento().setSelectedIndex(0);
+        //getCmbTipoDocumento().setSelectedIndex(0);
         getTxtDescripcion().setText("");
         getTxtCantidad().setText("1");
     }

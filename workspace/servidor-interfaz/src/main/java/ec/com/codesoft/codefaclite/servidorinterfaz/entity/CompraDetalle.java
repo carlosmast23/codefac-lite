@@ -153,6 +153,17 @@ public class CompraDetalle implements Serializable {
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
+    
+    //TODO: Metodo temporal hasta poder ver como hacer para grabar correctamente
+    //Parece que va a tocar grabar todos los decimales y en este punto redondear
+    public BigDecimal obtenerIvaCalculado()
+    {
+        if (iva.compareTo(BigDecimal.ZERO) == 0) {
+            return iva;
+        }
+        
+        return this.total.multiply(new BigDecimal("0.12")).setScale(2, RoundingMode.HALF_UP);
+    }
 
     public Compra getCompra() {
         return compra;
@@ -292,7 +303,9 @@ public class CompraDetalle implements Serializable {
      * @return 
      */
     public BigDecimal getTotalCalculado() {
-        return getSubtotal().add(iva);
+        //TODO modificado por el momento hasta solucionar el tema de grabar correctamente los decimales del iva
+        return getSubtotal().add(obtenerIvaCalculado()).setScale(2, RoundingMode.HALF_UP);
+        //return getSubtotal().add(iva);
     }
     
     

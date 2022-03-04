@@ -296,7 +296,14 @@ public class ControladorReporteCompra {
         compraAgrupadoData.setProducto(compraDetalle.getProductoProveedor().getProducto().getNombre());
         compraAgrupadoData.setCompra(compraDetalle.getCompra().getPreimpreso());
         compraAgrupadoData.setFecha(compraDetalle.getCompra().getFechaFactura().toString());
-        compraAgrupadoData.setIva((compraDetalle.getIva() != null) ? compraDetalle.getIva() : BigDecimal.ZERO);
+        //System.out.println(compraDetalle.getIva());
+        //compraAgrupadoData.setIva((compraDetalle.getIva() != null) ? compraDetalle.getIva() : BigDecimal.ZERO);
+        if(compraDetalle.getCompra().getSecuencial()==64573)
+        {
+            System.out.println("revisar ...");
+        }
+        compraAgrupadoData.setIva((compraDetalle.getIva() != null) ? compraDetalle.obtenerIvaCalculado() : BigDecimal.ZERO);
+        
         compraAgrupadoData.setSubtotalDescuento(compraDetalle.getDescuento());
         compraAgrupadoData.setTotal((compraDetalle.getTotalCalculado() != null) ? compraDetalle.getTotalCalculado() : BigDecimal.ZERO);
 
