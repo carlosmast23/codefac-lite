@@ -263,4 +263,14 @@ public abstract class UtilidadesTextos {
         return utf8EncodedString;
     }
     
+    public static Boolean verificarNullOVacio(String texto)
+    {
+        if(texto==null || texto.trim().isEmpty())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
 }

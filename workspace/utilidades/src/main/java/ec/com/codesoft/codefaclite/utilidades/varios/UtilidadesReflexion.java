@@ -163,6 +163,7 @@ public class UtilidadesReflexion {
             //metodo.setAccessible(true);
             metodo.invoke(context, value);
         } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE,"El tipo de datos recibido como ARGUMENTO es INCORRECTO");
             Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE, null, ex);
