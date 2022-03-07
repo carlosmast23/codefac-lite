@@ -6,10 +6,13 @@
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.SqlPanel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -33,6 +36,7 @@ public class SqlModel extends SqlPanel {
     
     private void listenerBotones()
     {
+                
         getBtnEjecutarComandos().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -42,6 +46,9 @@ public class SqlModel extends SqlPanel {
                     List<Object[]> ejemplo=ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarConsultaNativa(queryStr);
                     System.out.println("Tamanio:"+ejemplo.size());
                     construirModeloTabla(ejemplo);
+                    
+                    DialogoCodefac.mensaje(new CodefacMsj("Proceso ejecutado, recuerde REINICIAR EL SISTEMA antes de CONTINUAR usando por su SEGURIDAD", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    
                 } catch (RemoteException ex) {
                     Logger.getLogger(SqlModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
