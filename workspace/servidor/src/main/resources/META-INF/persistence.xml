@@ -104,6 +104,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.BodegaPermisoTransferencia</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraFacturaReembolso</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

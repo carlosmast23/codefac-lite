@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
@@ -71,13 +72,43 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * Metodo que permite buscar el kardex por bodega y el el producto
      * @return 
      */
-    
+    //TODO:Analizar para poder mostrar el listado de todos los karde 
+    @Deprecated
     public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("bodega",bodega);
         mapParametros.put("producto",producto);   
         List<Kardex> listaKardex=getFacade().findByMap(mapParametros);
+        //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
+        
+        if(listaKardex!=null && listaKardex.size()>0)
+        {
+            return listaKardex.get(0);
+        }
+        
+        return null;
+    }
+    
+    public List<Kardex> buscarPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("bodega",bodega);
+        mapParametros.put("producto",producto);   
+        List<Kardex> listaKardex=getFacade().findByMap(mapParametros);
+        //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
+                
+        return listaKardex;
+    }
+    
+    public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Lote lote) throws java.rmi.RemoteException
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("bodega", bodega);
+        map.put("producto", producto);
+        map.put("lote", lote);
+        
+        List<Kardex> listaKardex=getFacade().findByMap(map);
         //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
         
         if(listaKardex!=null && listaKardex.size()>0)
@@ -370,12 +401,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
     }
     
-    public void ingresarInventario(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException
+    public void ingresarInventario(KardexDetalle detalle,Lote lote) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarKardexDetallSinTransaccion(detalle);
+                grabarKardexDetallSinTransaccion(detalle,lote);
             }
         });
     }
@@ -514,8 +545,20 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
          
         BigDecimal signo=new BigDecimal(kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero());
         //Integer stockFinal=kardex.getStock()+signo.intValue()*kardexDetalle.getCantidad().intValue();
-        BigDecimal stockFinal=kardex.getStock().add(signo.multiply(kardexDetalle.getCantidad()));
+        BigDecimal cantidadMovimiento=signo.multiply(kardexDetalle.getCantidad());
+        BigDecimal stockFinal=kardex.getStock().add(cantidadMovimiento);
         kardex.setStock(stockFinal);
+        
+        //Actualizar los totales de los lotes
+        /*Lote lote=kardexDetalle.getLote();
+        //Solo sumar cantidades positivas
+        if(signo.compareTo(BigDecimal.ZERO)>0)
+        {
+            lote.setTotal(lote.getTotal().add(cantidadMovimiento));
+        }
+        
+        lote.setStock(lote.getStock().add(cantidadMovimiento));
+        ServiceFactory.getFactory().getLoteSeviceIf().editarSinTransaccion(lote);*/
         
         //CALCULAR EL PRECIO CON EL STOCK FINAL
         kardex.calcularPrecioTotal();
@@ -616,7 +659,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
                 kardexDetalle.setKardex(kardex);
                 
-                grabarKardexDetallSinTransaccion(kardexDetalle);
+                grabarKardexDetallSinTransaccion(kardexDetalle,null);
             }
         });
         
@@ -630,7 +673,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 for (KardexDetalle detalle : detalles) {
-                    grabarKardexDetallSinTransaccion(detalle);
+                    grabarKardexDetallSinTransaccion(detalle,null);
                     
                 }
                 
@@ -639,29 +682,27 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     
-    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws RemoteException, ServicioCodefacException
+    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle,Lote lote) throws RemoteException, ServicioCodefacException
     {
         /**
          * ==============================================================
          *            VALIDACIONES PARA LOS DETALLES DE KARDEX
          * ==============================================================
          */
-        /*if(detalle.getKardex()==null)
-        {
-            throw new ServicioCodefacException("No se puede grabar sin referencia de Kardex vacio");
-        }*/
         validarDetallesKardex(detalle);
         
         //Buscar si ya existe el kardex o si no existe los creamos
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("bodega", detalle.getKardex().getBodega());
-        map.put("producto", detalle.getKardex().getProducto());
+        //Map<String, Object> map = new HashMap<String, Object>();
+        //map.put("bodega", detalle.getKardex().getBodega());
+        //map.put("producto", detalle.getKardex().getProducto());
+        //map.put("lote", detalle.getKardex().getProducto());
+        Kardex kardex =buscarKardexPorProductoyBodegayLote(detalle.getKardex().getBodega(), detalle.getKardex().getProducto(), lote);
 
-        List<Kardex> kardexList = getFacade().findByMap(map);
+        //List<Kardex> kardexList = getFacade().findByMap(map);
 
         //TODO:Ver si se puede crear una sola funcion estandar de Kardex
-        Kardex kardex = null;
-        if (kardexList == null | kardexList.size() == 0) {
+        //Kardex kardex = null;
+        if (kardex == null ) {
             //Si no existe completo los datos para crear el kardex
             kardex = detalle.getKardex();
             //kardex.setBodega(bodega);
@@ -674,33 +715,20 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex.setStock(BigDecimal.ZERO);
             kardex.setReserva(0);
             kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+            kardex.setLote(lote);
             em.persist(kardex); //grabando la persistencia
-        } else {
-            //Si existe el kardex solo creo
-            kardex = kardexList.get(0);
-        }
+        } 
+        //else {
+            //Si existe el kardex solo busco el primer registro
+        //    kardex = kardexList.get(0);
+        //}
 
         //Agregar la fecha de creacion del sistema
         detalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
         detalle.setKardex(kardex);
         kardex.addDetalleKardex(detalle);
         em.persist(detalle);
-        //em.persist(kardexDetalle); //grabando el kardex detalle
 
-        //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
-        // el metodo es solo de ingreso asi que no considero el otro caso
-        /*if(detalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO))
-        {
-            kardex.setStock(kardex.getStock() + detalle.getCantidad());
-            kardex.setPrecioTotal(kardex.getPrecioTotal().add(detalle.getPrecioTotal()));
-        }
-        else
-        {
-            kardex.setStock(kardex.getStock() - detalle.getCantidad());
-            kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(detalle.getPrecioTotal()));
-        }
-        kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(detalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));        
-        kardex.setPrecioUltimo(detalle.getPrecioUnitario()); //Ver si grabar siempre el ultimo valor */
         recalcularValoresKardex(kardex, detalle); //Actualiza los valores desde un mismo lugar
         kardex = em.merge(kardex);
 

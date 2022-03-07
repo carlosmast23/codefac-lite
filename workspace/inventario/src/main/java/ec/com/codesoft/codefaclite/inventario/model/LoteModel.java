@@ -6,6 +6,10 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.controlador.vista.inventario.LoteControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.LotePanel;
@@ -18,11 +22,13 @@ import java.util.Map;
  *
  * @author CARLOS_CODESOFT
  */
-public class LoteModel extends LotePanel{
+public class LoteModel extends LotePanel implements ControladorVistaIf,LoteControlador.ISwing{
+    
+    private LoteControlador controlador;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        controlador=new LoteControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
     }
 
     @Override
@@ -57,7 +63,7 @@ public class LoteModel extends LotePanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -85,11 +91,32 @@ public class LoteModel extends LotePanel{
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
+
+    public LoteControlador getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(LoteControlador controlador) {
+        this.controlador = controlador;
+    }
+
+    @Override
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
+    }
+
+    @Override
+    public void limpiarPantalla() {
+        limpiar();
+    }
+
+    
+    
     
 }

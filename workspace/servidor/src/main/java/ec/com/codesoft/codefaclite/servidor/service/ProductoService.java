@@ -406,7 +406,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //Solo grabar cuando existen datos diferente de null
                 if(kardexDetalle!=null)
                 {
-                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle);
+                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle,null);
                 }
                 
             }

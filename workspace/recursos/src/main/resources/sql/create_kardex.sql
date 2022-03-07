@@ -3,6 +3,8 @@ create table KARDEX(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1), 
     PRODUCTO_ID BIGINT,  
     BODEGA_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.0.5)*/
+    LOTE_ID BIGINT,
     FECHA_CREACION date, 
     FECHA_MODIFICACION date,
     PRECIO_PROMEDIO decimal(13,2),
@@ -51,5 +53,23 @@ create table KARDEX_ITEM_ESPECIFICO(
     CODIGO_ESPECIFICO varchar(128),
     OBSERVACIONES varchar(128), 
     ESTADO varchar(1),
+    primary key (ID)
+);
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.9.0.5)*/
+create table LOTE( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1), 
+    CODIGO varchar(64), 
+    FECHA_ELABORACION timestamp, 
+    FECHA_VENCIMIENTO timestamp, 
+    PRODUCTO_ID BIGINT,  
+    EMPRESA_ID BIGINT,  
+
+    FECHA_CREACION timestamp, 
+    FECHA_ULTIMA_EDICION timestamp, 
+    USUARIO_CREACION_ID BIGINT,  
+    USUARIO_ULTIMA_EDICION_ID BIGINT,  
+    ESTADO varchar(1),
+ 
     primary key (ID)
 );

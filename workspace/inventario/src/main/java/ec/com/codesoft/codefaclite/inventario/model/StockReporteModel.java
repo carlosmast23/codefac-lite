@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -268,6 +269,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         BigDecimal cantidad = (BigDecimal) objeto[1];
                         BigDecimal costoPromedio=(BigDecimal)objeto[2];
                         Bodega bodega=(Bodega)objeto[3];
+                        Lote lote=(Lote)objeto[4];
                         
                         //Kardex kardexTemp = (Kardex) objeto[2];
                         
@@ -303,6 +305,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         }
                         data.setCosto(costoPromedio.toString());
                         data.setBodega(bodega.getNombre());
+                        data.setLote((lote!=null)?lote.getCodigo():"");
                         data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
                         data.setUtilidad1(producto.getValorUnitario().subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
                         
@@ -361,6 +364,7 @@ public class StockReporteModel extends StockMinimoPanel{
     {
         String[] titulo={
             "Código",
+            "Lote",
             "Bodega",
             "Producto",
             "Categoria",
@@ -378,6 +382,7 @@ public class StockReporteModel extends StockMinimoPanel{
             String[] datos=
             {
                 stockMinimo.getCodigo(),
+                stockMinimo.getLote(),
                 stockMinimo.getBodega(),
                 stockMinimo.getProducto(),
                 stockMinimo.getCategoria(),

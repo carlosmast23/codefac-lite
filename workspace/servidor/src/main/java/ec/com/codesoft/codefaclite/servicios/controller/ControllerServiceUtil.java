@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexItemEspecificoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
+import ec.com.codesoft.codefaclite.servidor.service.LoteService;
 import ec.com.codesoft.codefaclite.servidor.service.MarcaProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.NacionalidadService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
@@ -125,6 +126,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MarcaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
@@ -305,6 +307,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(HerramientasCodefacService .class, HerramientasCodefacServiceIf.class);
             mapRecursos.put(MarcaProductoService .class, MarcaProductoServiceIf.class);
             mapRecursos.put(CompraFacturaReembolsoService.class, CompraFacturaReembolsoServiceIf.class);
+            mapRecursos.put(LoteService.class, LoteSeviceIf.class);
             
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);

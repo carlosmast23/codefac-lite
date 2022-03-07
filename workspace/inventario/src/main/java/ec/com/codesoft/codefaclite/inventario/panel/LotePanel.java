@@ -6,6 +6,13 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.DateUtilToDateSqlConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.DateComboBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -35,12 +42,12 @@ public abstract class LotePanel extends ControladorCodefacInterface  {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         lblEspacio1 = new javax.swing.JLabel();
-        txtProducto = new javax.swing.JTextField();
+        txtNombreProducto = new javax.swing.JTextField();
         btnBuscarProducto = new javax.swing.JButton();
-        cmbFechaIngreso = new org.jdesktop.swingx.JXDatePicker();
-        cmbFechaIngreso1 = new org.jdesktop.swingx.JXDatePicker();
+        cmbFechaElaboracion = new org.jdesktop.swingx.JXDatePicker();
+        cmbFechaVencimiento = new org.jdesktop.swingx.JXDatePicker();
 
         setClosable(true);
         setIconifiable(true);
@@ -85,7 +92,7 @@ public abstract class LotePanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jTextField1, gridBagConstraints);
+        jPanel1.add(txtCodigo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
@@ -93,14 +100,14 @@ public abstract class LotePanel extends ControladorCodefacInterface  {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio1, gridBagConstraints);
 
-        txtProducto.setEditable(false);
+        txtNombreProducto.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(txtProducto, gridBagConstraints);
+        jPanel1.add(txtNombreProducto, gridBagConstraints);
 
         btnBuscarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -112,13 +119,13 @@ public abstract class LotePanel extends ControladorCodefacInterface  {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFechaIngreso, gridBagConstraints);
+        jPanel1.add(cmbFechaElaboracion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFechaIngreso1, gridBagConstraints);
+        jPanel1.add(cmbFechaVencimiento, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -128,15 +135,62 @@ public abstract class LotePanel extends ControladorCodefacInterface  {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarProducto;
-    private org.jdesktop.swingx.JXDatePicker cmbFechaIngreso;
-    private org.jdesktop.swingx.JXDatePicker cmbFechaIngreso1;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaElaboracion;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaVencimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblEspacio1;
-    private javax.swing.JTextField txtProducto;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtNombreProducto;
     // End of variables declaration//GEN-END:variables
+
+    @ButtonBinding(actionListener ="controlador.listenerBotonBuscarProducto" )
+    public JButton getBtnBuscarProducto() {
+        return btnBuscarProducto;
+    }
+
+    public void setBtnBuscarProducto(JButton btnBuscarProducto) {
+        this.btnBuscarProducto = btnBuscarProducto;
+    }
+
+    @DateComboBinding(value = "controlador.lote.fechaElaboracion",converter = DateUtilToDateSqlConverter.class)
+    public JXDatePicker getCmbFechaElaboracion() {
+        return cmbFechaElaboracion;
+    }
+
+    public void setCmbFechaElaboracion(JXDatePicker cmbFechaElaboracion) {
+        this.cmbFechaElaboracion = cmbFechaElaboracion;
+    }
+
+    @DateComboBinding(value = "controlador.lote.fechaVencimiento",converter = DateUtilToDateSqlConverter.class)
+    public JXDatePicker getCmbFechaVencimiento() {
+        return cmbFechaVencimiento;
+    }
+
+    public void setCmbFechaVencimiento(JXDatePicker cmbFechaVencimiento) {
+        this.cmbFechaVencimiento = cmbFechaVencimiento;
+    }
+
+    @TextFieldBinding(value = "controlador.lote.codigo")
+    public JTextField getTxtCodigo() {
+        return txtCodigo;
+    }
+
+    public void setTxtCodigo(JTextField txtCodigo) {
+        this.txtCodigo = txtCodigo;
+    }
+
+    @TextFieldBinding(value = "controlador.lote.producto.nombre")
+    public JTextField getTxtNombreProducto() {
+        return txtNombreProducto;
+    }
+
+    public void setTxtNombreProducto(JTextField txtNombreProducto) {
+        this.txtNombreProducto = txtNombreProducto;
+    }
+
+    
 }

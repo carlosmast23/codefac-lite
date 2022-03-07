@@ -85,6 +85,10 @@ public class Kardex implements Serializable,Cloneable {
     @Column(name = "ESTADO")
     private String estado;
     
+    @JoinColumn(name = "LOTE_ID")
+    @ManyToOne
+    private Lote lote;    
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardex" ,fetch = FetchType.EAGER )
     private List<KardexDetalle> detallesKardex;
 
@@ -232,6 +236,16 @@ public class Kardex implements Serializable,Cloneable {
             return this.precioTotal.divide(this.stock,2,BigDecimal.ROUND_HALF_UP);
         }
     }
+
+    public Lote getLote() {
+        return lote;
+    }
+
+    public void setLote(Lote lote) {
+        this.lote = lote;
+    }
+    
+    
 
     @Override
     public Object clone() throws CloneNotSupportedException {

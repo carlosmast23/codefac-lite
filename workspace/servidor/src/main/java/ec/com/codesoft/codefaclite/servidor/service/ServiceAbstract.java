@@ -10,7 +10,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.EntityAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
@@ -339,4 +344,33 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         public Object transaccionGenerica() throws ServicioCodefacException,RemoteException;
     }
     
+    
+    public void setDatosAuditoria(EntityAbstract entidad,Usuario usuario,CrudEnum crudEnum) throws ServicioCodefacException
+    {
+        entidad.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
+        entidad.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());        
+                
+        if (entidad.getEstado() == null) 
+        {
+            throw new ServicioCodefacException("No se puede grabar un registro sin Estado");
+        }
+        
+        if(crudEnum==CrudEnum.CREAR)
+        {
+            entidad.setUsuarioCreacion(usuario);
+            if(entidad.getUsuarioCreacion()==null)
+            {
+                throw new ServicioCodefacException("No se puede grabar un registro sin USUARIO DE CREACION");
+            }            
+        }
+        
+        if(crudEnum==CrudEnum.EDITAR)
+        {
+            entidad.setUsuarioUltimaEdicion(usuario);
+            if(entidad.getUsuarioUltimaEdicion()==null)
+            {
+                throw new ServicioCodefacException("No se puede editar un registro sin USUARIO DE EDICION");
+            }
+        }
+    }
 }

@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
-import com.sun.imageio.plugins.common.BogusColorSpace;
+//import com.sun.imageio.plugins.common.BogusColorSpace;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.io.Serializable;
