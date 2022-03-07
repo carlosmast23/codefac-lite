@@ -18,5 +18,6 @@ public interface LoteSeviceIf extends ServiceAbstractIf<Lote>{
     
     public Lote grabar(Lote entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;
     public Lote editar(Lote entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;
+    public void editarSinTransaccion(Lote entity) throws ServicioCodefacException, RemoteException;
     
 }

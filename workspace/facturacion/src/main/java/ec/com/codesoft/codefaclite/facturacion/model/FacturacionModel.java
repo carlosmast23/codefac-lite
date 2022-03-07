@@ -171,6 +171,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
@@ -1188,10 +1189,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
         }
-        ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta);
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
-        productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+                
+        if(manejaInventario.equals(EnumSiNo.SI))
+        {
+            ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta);
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
+            buscarDialogoModel.setVisible(true);
+            Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
+            productoSeleccionado = kardex.getProducto();
+            
+        }else if(manejaInventario.equals(EnumSiNo.NO))
+        {   
+            ProductoBusquedaDialogo busqueda=new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busqueda);
+            buscarDialogoModel.setVisible(true);
+            productoSeleccionado=(Producto) buscarDialogoModel.getResultado();
+            
+        }
+        
+        
+        
         
         /**
          * ==========================================================================
@@ -1202,7 +1219,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI) && cantidadItemsIndividuales>0)
         {
             ProductoInventarioEspecificoDialogo dialogoEspecifico=new ProductoInventarioEspecificoDialogo(productoSeleccionado);
-            buscarDialogoModel = new BuscarDialogoModel(dialogoEspecifico);
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(dialogoEspecifico);
             buscarDialogoModel.setVisible(true);
             KardexItemEspecifico kardexItemEspecifico=(KardexItemEspecifico)buscarDialogoModel.getResultado();
             /*

@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
 /**
@@ -46,8 +47,9 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.CREAR);
-                setearDatosGrabar(entity, empresa);
+                setearDatosGrabar(entity, empresa,CrudEnum.CREAR);
                 validarGrabar(entity, CrudEnum.CREAR);
                 entityManager.persist(entity);
             }
@@ -55,9 +57,14 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         return entity;
     }
     
-    private void setearDatosGrabar(Lote entity,Empresa empresa)
+    private void setearDatosGrabar(Lote entity,Empresa empresa,CrudEnum crudEnum)
     {
         entity.setEmpresa(empresa);
+        /*if(crudEnum.equals(CrudEnum.CREAR))
+        {
+            entity.setStock(BigDecimal.ZERO);
+            entity.setTotal(BigDecimal.ZERO);
+        }*/
     }
     
     @Override
@@ -67,12 +74,17 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {                                
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
-                setearDatosGrabar(entity, empresa);
-                validarGrabar(entity, CrudEnum.EDITAR);
-                entityManager.merge(entity);
+                setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
+                editarSinTransaccion(entity);
             }
         });
         return entity;
+    }
+    
+    public void editarSinTransaccion(Lote entity) throws ServicioCodefacException, RemoteException 
+    {
+        validarGrabar(entity, CrudEnum.EDITAR);
+        entityManager.merge(entity);
     }
 
     @Override
@@ -81,7 +93,8 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
-                entity.setEstadoEnum(GeneralEnumEstado.ANULADO);
+                entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                entityManager.merge(entity);
             }
         });
     }

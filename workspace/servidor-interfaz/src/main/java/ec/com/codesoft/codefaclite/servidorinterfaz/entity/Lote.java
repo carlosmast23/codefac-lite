@@ -6,6 +6,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import javax.persistence.Column;
@@ -38,6 +39,12 @@ public class Lote extends EntityAbstract{
     
     @JoinColumn(name = "EMPRESA_ID")
     protected Empresa empresa;
+    
+    /*@Column(name = "TOTAL")
+    protected BigDecimal total;
+    
+    @Column(name = "STOCK")
+    protected BigDecimal stock;*/
 
     public Lote() {
     }
@@ -121,8 +128,22 @@ public class Lote extends EntityAbstract{
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
-    
-    
+
+    /*public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public BigDecimal getStock() {
+        return stock;
+    }
+
+    public void setStock(BigDecimal stock) {
+        this.stock = stock;
+    }*/
     
     
     ///////////////////////////////////////////////////////////////////////////

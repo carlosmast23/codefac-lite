@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
@@ -19,10 +20,18 @@ import java.util.Vector;
 public class LoteBusqueda implements InterfaceModelFind<Lote>{
     
     private Empresa empresa;
+    private Producto productoFiltro;
 
     public LoteBusqueda(Empresa empresa) {
         this.empresa = empresa;
     }
+
+    public LoteBusqueda(Empresa empresa, Producto productoFiltro) {
+        this.empresa = empresa;
+        this.productoFiltro = productoFiltro;
+    }
+    
+    
     
     
     @Override
@@ -32,16 +41,29 @@ public class LoteBusqueda implements InterfaceModelFind<Lote>{
         titulo.add(new ColumnaDialogo("Producto", 0.2d));
         titulo.add(new ColumnaDialogo("Fecha Elaboración", 0.3d));
         titulo.add(new ColumnaDialogo("Fecha Caducidad", 0.3d));
+        //titulo.add(new ColumnaDialogo("Stock", 0.3d));
         return titulo;
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString=" SELECT u FROM Lote u where u.estado=?1 and u.empresa=?2 and u.codigo like ?3 ";
+        
+        if(productoFiltro!=null)
+        {
+            queryString+=" and u.producto= ?4 ";
+        }
+        
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2, empresa);
         queryDialog.agregarParametro(3, filter);
+        
+        if(productoFiltro!=null)
+        {
+            queryDialog.agregarParametro(4, productoFiltro);
+        }
+        
         return queryDialog;
     }
 
@@ -56,6 +78,7 @@ public class LoteBusqueda implements InterfaceModelFind<Lote>{
         dato.add(productoNombre);
         dato.add(t.getFechaElaboracion());
         dato.add(t.getFechaVencimiento());
+        //dato.add(t.getStock());
     }
 
     @Override

@@ -95,6 +95,9 @@ public class KardexDetalle implements Serializable ,Cloneable {
     @ManyToOne
     private Kardex kardex;
     
+    //@JoinColumn(name = "LOTE_ID")
+    //@ManyToOne
+    //private Lote lote;    
     
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardexDetalle")
@@ -244,6 +247,16 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public void setFechaDocumento(Date fechaDocumento) {
         this.fechaDocumento = fechaDocumento;
     }
+
+    /*public Lote getLote() {
+        return lote;
+    }
+
+    public void setLote(Lote lote) {
+        this.lote = lote;
+    }*/
+    
+    
 
     /*public String getCodigoTipoDocumentoReferencia() {
         return codigoTipoDocumentoReferencia;

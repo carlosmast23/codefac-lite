@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -17,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -50,6 +52,8 @@ public class GestionInventarioModel extends GestionInventarioPanel{
      */
     private Producto productoSeleccionado;
     
+    private Lote lote;
+    
     /**
      * Referencia para almacenar el kardex detalle a grabar
      */
@@ -59,6 +63,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         valoresIniciales();
         listenerBotones();
+        kardexDetalle=new KardexDetalle();
        
     }
 
@@ -72,7 +77,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         
         try {
             setearVariables();
-            ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(kardexDetalle);
+            ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(kardexDetalle,lote);
             DialogoCodefac.mensaje("Correcto","El proceso de grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,12 +108,15 @@ public class GestionInventarioModel extends GestionInventarioPanel{
 
     @Override
     public void limpiar() {
+        lote=null;
         productoSeleccionado=null;
+        kardexDetalle=new KardexDetalle();
         getCmbFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
         getCmbBodega().setSelectedIndex(0);
         //getCmbTipoDocumento().setSelectedIndex(0);
         getTxtDescripcion().setText("");
         getTxtCantidad().setText("1");
+        cargarDatosPantalla();
     }
 
     @Override
@@ -169,11 +177,43 @@ public class GestionInventarioModel extends GestionInventarioPanel{
 
         
     }
+    
+    private void cargarDatosPantalla()
+    {
+        if(kardexDetalle!=null)
+        {
+            if(lote!=null)
+            {
+                getTxtLoteNombre().setText(lote.getCodigo());
+            }
+            else
+            {
+                getTxtLoteNombre().setText("");
+           }
+        }
+    }
 
     private void listenerBotones() 
     {
-        getBtnBuscarProducto().addActionListener(listenerBuscarProducto);        
+        getBtnBuscarProducto().addActionListener(listenerBuscarProducto);       
+        getBtnBuscarLote().addActionListener(listenerBuscarLote);        
     }
+    
+    private ActionListener listenerBuscarLote=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            LoteBusqueda busqueda=new LoteBusqueda(session.getEmpresa(),productoSeleccionado);
+            BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(busqueda);            
+            buscarDialogo.setVisible(true);
+
+            if (buscarDialogo.getResultado() != null) 
+            {
+                lote= (Lote) buscarDialogo.getResultado();
+            }
+            
+            cargarDatosPantalla();
+        }
+    };
     
     private ActionListener listenerBuscarProducto=new ActionListener() {
         @Override
@@ -204,7 +244,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     
     private void setearVariables()
     {
-        kardexDetalle=new KardexDetalle();
+        //kardexDetalle=new KardexDetalle();
         kardexDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
         //Si no tiene ingresado un precio unitario grabo como null
         String precioUnitarioTxt=(!getTxtPrecio().getText().isEmpty())?getTxtPrecio().getText():"0";

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
@@ -31,12 +32,12 @@ import java.util.Map;
  * @author CodesoftDesarrollo 1
  */
 public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
-{
+{    
     public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException;
     public void ingresoEgresoInventarioEnsamble(Bodega bodegaOrigenMateriales,Bodega bodegaDestino,Producto productoEnsamble,BigDecimal cantidad,ProductoEnsamble.EnsambleAccionEnum accion,Boolean validarStockComponentes) throws java.rmi.RemoteException,ServicioCodefacException;
     public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
     public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void ingresarInventario(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException;
+    public void ingresarInventario(KardexDetalle detalle,Lote lote) throws java.rmi.RemoteException,ServicioCodefacException;
     public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos) throws java.rmi.RemoteException;
     public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria,Empresa empresa) throws java.rmi.RemoteException;    
     public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException;
@@ -72,4 +73,5 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public Integer consultarCantidadStockMinimo(Empresa empresa) throws java.rmi.RemoteException;
     
+    public List<Kardex> buscarPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException;
 }

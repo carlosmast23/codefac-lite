@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class StockMinimoData implements ExcelDatosInterface{
     private String codigo;
+    private String lote;
     private String producto;
     private String stock;
     private String cantidadMinima;
@@ -97,6 +98,16 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setBodega(String bodega) {
         this.bodega = bodega;
     }
+
+    public String getLote() {
+        return lote;
+    }
+
+    public void setLote(String lote) {
+        this.lote = lote;
+    }
+    
+      
 
     public List<StockUnicoData> getDetalles() {
         return detalles;
