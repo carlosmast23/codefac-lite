@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UtilidadFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
@@ -103,7 +104,28 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 p.getDetallesEnsamble().clear();
             }
         }
+        
         entityManager.persist(p);
+        entityManager.flush();
+        
+        //Crear siempre un kardex por defecto
+        
+        if(p.getManejarInventarioEnum().equals(EnumSiNo.SI))
+        {
+            BodegaService bodegaService = new BodegaService();
+            List<Bodega> bodegaVentaList = bodegaService.obtenerActivosPorEmpresa(p.getEmpresa());
+            if(bodegaVentaList.size()==0)
+            {
+                throw new ServicioCodefacException("Configure primero una bodega ");
+            }
+
+            for (Bodega bodega : bodegaVentaList) {
+                Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().crearObjeto(bodega, p);
+                entityManager.persist(kardex);            
+            }
+        }
+        
+        
     }
     
     private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    

@@ -74,4 +74,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public Integer consultarCantidadStockMinimo(Empresa empresa) throws java.rmi.RemoteException;
     
     public List<Kardex> buscarPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException;
+    
+    public Kardex crearObjeto(Bodega bodega,Producto producto) throws java.rmi.RemoteException,ServicioCodefacException;
+
 }

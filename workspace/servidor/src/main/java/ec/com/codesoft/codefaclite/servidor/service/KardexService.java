@@ -1042,7 +1042,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @param producto
      * @return 
      */
-    public Kardex crearObjeto(Bodega bodega,Producto producto)
+    public Kardex crearObjeto(Bodega bodega,Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
     {
         Kardex kardex=new Kardex();
         kardex.setBodega(bodega);
