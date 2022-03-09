@@ -74,182 +74,153 @@ public class MigrarProductoModel extends MigrarModel {
             @Override
             public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel, ExcelMigrar.ExcepcionExcelRegistroDuplicado {
                 try {
-                    KardexDetalle kardexDetalle=null; //Referencia para poder grabar cuando se va a ingresar el inventario
+                    
                     Producto producto = new Producto();
                     producto.setCodigoPersonalizado(((String) fila.getByEnum(ExcelMigrarProductos.Enum.CODIGO).valor).trim());
                     producto.setNombre(((String) fila.getByEnum(ExcelMigrarProductos.Enum.NOMBRE).valor).trim());
-                    System.out.println(producto.getNombre());
+                    System.out.println(producto.getNombre());         
                     
-                    Double precioVentaPublico = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
-                    
-                    validarProducto(producto);
-                                        
-                    /*Object precioVentaPromedioObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
-                    if(precioVentaPromedioObj!=null && !precioVentaPromedioObj.toString().isEmpty())
-                    {   
-                        Double precioVentaPromedio = (Double) precioVentaPromedioObj;
-                    }*/
-                    
-                    /**
-                     * ==========> BUSCAR O CREAR LA CATEGORIA SI NO EXISTE PARA CREAR <=======
-                     */
-                    String nombreCategoria=((String) fila.getByEnum(ExcelMigrarProductos.Enum.CATEGORIA).valor).trim();
-                    
-                    CategoriaProducto categoriaProducto=ServiceFactory.getFactory().getCategoriaProductoServiceIf().buscarPorNombre(session.getEmpresa(),nombreCategoria); //TODO: Revisar este tema porque segur que toca manejar las categorias por empresa
-                    if(categoriaProducto==null)
-                    {
-                        categoriaProducto=new CategoriaProducto();
-                        categoriaProducto.setNombre(nombreCategoria);
-                        categoriaProducto.setDescripcion(nombreCategoria);
-                        categoriaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-                        categoriaProducto.setEmpresa(session.getEmpresa());
-                    }
-
-                    /**
-                     * ============> CREAR EL CATALOGO PRODUCTO <=====================
-                     */
-                    Object porcentajeIvaObj=fila.getByEnum(ExcelMigrarProductos.Enum.IVA_PORCENTAJE).valor;
-                    Double porcentajeIva = (Double)Double.parseDouble(porcentajeIvaObj.toString());
-                    ImpuestoDetalle impuestoDetalleIva = ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorTarifa(porcentajeIva.intValue());
-                    CatalogoProducto catalogoProducto = new CatalogoProducto();
-                    catalogoProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-                    catalogoProducto.setIva(impuestoDetalleIva);
-                    catalogoProducto.setNombre(producto.getNombre());
-                    catalogoProducto.setModuloCodEnum(ModuloCodefacEnum.INVENTARIO);
-                    catalogoProducto.setCategoriaProducto(categoriaProducto);
-                    
-                    //catalogoProducto.setTipoCodEnum(null); Este campo no me parece que sirve para cuando se crea para inventario
-                    //Setear el catalogo del producto con el producto
-                    producto.setCatalogoProducto(catalogoProducto);
-                    /**
-                     * ===================================================================
-                     *             CREA DATOS ADICIONALES EN EL INVENTARIO
-                     * ===================================================================
-                     */
-                    Double stockMinimo=(Double) fila.getByEnum(ExcelMigrarProductos.Enum.STOCK_MINIMO).valor;
-                    String marca=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MARCA).valor;
-                    
+                    //Obtener datos iniciales del inventario que necesito
                     String manejaInventario=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MANEJA_INVENTARIO).valor;
                     EnumSiNo manejaInventarioEnumSiNo=EnumSiNo.getEnumByLetra(manejaInventario.substring(0,1));
-                    if(manejaInventarioEnumSiNo!=null && manejaInventarioEnumSiNo.equals(EnumSiNo.SI)) // Si cumple esta condicion vamos a grabar el resto de datos para el inventario
+                    
+                    Double stockMinimo=0d;
+                    
+                    KardexDetalle kardexDetalle=null; //Referencia para poder grabar cuando se va a ingresar el inventario
+                    
+                    //TODO: Validar para desde el inicio separar en 2 flujo de crear y actualizar
+                    Producto productoTmp =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(),session.getEmpresa());
+                    //Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
+                    
+                    //Si no existe el producto grabado ingreso todos los demas campos
+                    if(productoTmp==null)
                     {
-                        String bodegaNombre=(String) fila.getByEnum(ExcelMigrarProductos.Enum.BODEGA).valor;
-                        Bodega bodega=ServiceFactory.getFactory().getBodegaServiceIf().buscarPorNombre(bodegaNombre);
-                        if(bodega!=null) //Si la bodega existe consulto cuanto quiere agregar al stock
+                    
+                        Double precioVentaPublico = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
+
+                        validarProducto(producto);
+
+                        /*Object precioVentaPromedioObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
+                        if(precioVentaPromedioObj!=null && !precioVentaPromedioObj.toString().isEmpty())
+                        {   
+                            Double precioVentaPromedio = (Double) precioVentaPromedioObj;
+                        }*/
+
+                        /**
+                         * ==========> BUSCAR O CREAR LA CATEGORIA SI NO EXISTE PARA CREAR <=======
+                         */
+                        String nombreCategoria=((String) fila.getByEnum(ExcelMigrarProductos.Enum.CATEGORIA).valor).trim();
+
+                        CategoriaProducto categoriaProducto=ServiceFactory.getFactory().getCategoriaProductoServiceIf().buscarPorNombre(session.getEmpresa(),nombreCategoria); //TODO: Revisar este tema porque segur que toca manejar las categorias por empresa
+                        if(categoriaProducto==null)
                         {
-                            Double stock=0d;
-                            ExcelMigrar.CampoResultado campoResultado=fila.getByEnum(ExcelMigrarProductos.Enum.STOCK);
-                            if(campoResultado!=null)
-                            {                            
-                                stock=(Double) campoResultado.valor;
-                            }
-                            
-                            if(stock>0)
+                            categoriaProducto=new CategoriaProducto();
+                            categoriaProducto.setNombre(nombreCategoria);
+                            categoriaProducto.setDescripcion(nombreCategoria);
+                            categoriaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                            categoriaProducto.setEmpresa(session.getEmpresa());
+                        }
+
+                        /**
+                         * ============> CREAR EL CATALOGO PRODUCTO <=====================
+                         */
+                        Object porcentajeIvaObj=fila.getByEnum(ExcelMigrarProductos.Enum.IVA_PORCENTAJE).valor;
+                        Double porcentajeIva = (Double)Double.parseDouble(porcentajeIvaObj.toString());
+                        ImpuestoDetalle impuestoDetalleIva = ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorTarifa(porcentajeIva.intValue());
+                        CatalogoProducto catalogoProducto = new CatalogoProducto();
+                        catalogoProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                        catalogoProducto.setIva(impuestoDetalleIva);
+                        catalogoProducto.setNombre(producto.getNombre());
+                        catalogoProducto.setModuloCodEnum(ModuloCodefacEnum.INVENTARIO);
+                        catalogoProducto.setCategoriaProducto(categoriaProducto);
+
+                        //catalogoProducto.setTipoCodEnum(null); Este campo no me parece que sirve para cuando se crea para inventario
+                        //Setear el catalogo del producto con el producto
+                        producto.setCatalogoProducto(catalogoProducto);
+                        /**
+                         * ===================================================================
+                         *             CREA DATOS ADICIONALES EN EL INVENTARIO
+                         * ===================================================================
+                         */                        
+                        String marca=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MARCA).valor;
+                        stockMinimo=(Double) fila.getByEnum(ExcelMigrarProductos.Enum.STOCK_MINIMO).valor;
+
+                                                
+                        kardexDetalle=generarMovimientoInventario(manejaInventarioEnumSiNo, fila, producto,productoTmp);
+
+
+
+                        producto.setValorUnitario(new BigDecimal(precioVentaPublico.toString()));
+
+                        Object precioVentaOfertaObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_OFERTA).valor;
+                        if(precioVentaOfertaObj!=null && !precioVentaOfertaObj.toString().isEmpty())
+                        {
+                            Double precioVentaOferta = (Double) precioVentaOfertaObj;
+                            if(precioVentaOferta>0)
                             {
-                                kardexDetalle = new KardexDetalle();
-                                //kardexDetalle.setCantidad(stock.intValue());
-                                kardexDetalle.setCantidad(new BigDecimal(stock));
-                                kardexDetalle.setPrecioUnitario(BigDecimal.ZERO);
-                                kardexDetalle.recalcularTotalSinGarantia();
-
-                                //Setear el documento que esta usando el usuario 
-                                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.STOCK_INICIAL.getCodigo());
-
-                                //Fecha de ingreso                             
-                                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
-                                kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
-
-                                Kardex kardex = new Kardex();
-                                kardex.setBodega(bodega);
-                                
-                                //Obtener costo de la plantilla
-                                Double costo=(Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.COSTO);
-                                if(costo!=null)
-                                {
-                                    kardex.setCostoPromedio(new BigDecimal(costo+""));
-                                }
-                                
-
-                                kardex.setProducto(producto);
-                                kardexDetalle.setKardex(kardex);
-                                
+                                producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
                             }
-                            
                         }
-                        else
+                                            ///PVP4
+                        Object PVP3Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
+                        if(PVP3Obj!=null && !PVP3Obj.toString().isEmpty())
                         {
-                            throw new ExcelMigrar.ExcepcionExcel("La bodega no existe");
+                            Double PVP3 = (Double) PVP3Obj;
+                            if(PVP3>0)
+                            {
+                                producto.setPrecioTarjeta(new BigDecimal(PVP3.toString()));
+                            }
                         }
-                    }
-                    
-                    
-                   
-                    producto.setValorUnitario(new BigDecimal(precioVentaPublico.toString()));
-                    
-                    Object precioVentaOfertaObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_OFERTA).valor;
-                    if(precioVentaOfertaObj!=null && !precioVentaOfertaObj.toString().isEmpty())
-                    {
-                        Double precioVentaOferta = (Double) precioVentaOfertaObj;
-                        if(precioVentaOferta>0)
-                        {
-                            producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
-                        }
-                    }
-                                        ///PVP4
-                    Object PVP3Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
-                    if(PVP3Obj!=null && !PVP3Obj.toString().isEmpty())
-                    {
-                        Double PVP3 = (Double) PVP3Obj;
-                        if(PVP3>0)
-                        {
-                            producto.setPrecioTarjeta(new BigDecimal(PVP3.toString()));
-                        }
-                    }
-                    
-                    
-                    ///PVP4
-                    Object PVP4Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_4).valor;
-                    if(PVP4Obj!=null && !PVP4Obj.toString().isEmpty())
-                    {
-                        Double PVP4 = (Double) PVP4Obj;
-                        if(PVP4>0)
-                        {
-                            producto.setPvp4(new BigDecimal(PVP4.toString()));
-                        }
-                    }
-                    
-                    ///PVP5
-                    Object PVP5Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_5).valor;
-                    if(PVP5Obj!=null && !PVP5Obj.toString().isEmpty())
-                    {
-                        Double PVP5 = (Double) PVP5Obj;
-                        if(PVP5>0)
-                        {
-                            producto.setPvp5(new BigDecimal(PVP5.toString()));
-                        }
-                    }
-                    
-                    ///PVP6
-                    Object PVP6Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_6).valor;
-                    if(PVP6Obj!=null && !PVP6Obj.toString().isEmpty())
-                    {
-                        Double PVP6 = (Double) PVP6Obj;
-                        if(PVP6>0)
-                        {
-                            producto.setPvp6(new BigDecimal(PVP6.toString()));
-                        }
-                    }
 
-                    
-                    
-                    producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+
+                        ///PVP4
+                        Object PVP4Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_4).valor;
+                        if(PVP4Obj!=null && !PVP4Obj.toString().isEmpty())
+                        {
+                            Double PVP4 = (Double) PVP4Obj;
+                            if(PVP4>0)
+                            {
+                                producto.setPvp4(new BigDecimal(PVP4.toString()));
+                            }
+                        }
+
+                        ///PVP5
+                        Object PVP5Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_5).valor;
+                        if(PVP5Obj!=null && !PVP5Obj.toString().isEmpty())
+                        {
+                            Double PVP5 = (Double) PVP5Obj;
+                            if(PVP5>0)
+                            {
+                                producto.setPvp5(new BigDecimal(PVP5.toString()));
+                            }
+                        }
+
+                        ///PVP6
+                        Object PVP6Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_6).valor;
+                        if(PVP6Obj!=null && !PVP6Obj.toString().isEmpty())
+                        {
+                            Double PVP6 = (Double) PVP6Obj;
+                            if(PVP6>0)
+                            {
+                                producto.setPvp6(new BigDecimal(PVP6.toString()));
+                            }
+                        }
+
+
+
+                        producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                    }
+                    else
+                    {
+                        kardexDetalle=generarMovimientoInventario(manejaInventarioEnumSiNo, fila, producto,productoTmp);
+                    }
                     //producto.setCatalogoProducto(CatalogoPro);
 
                     ///========================> VALIDAR QUE NO EXISTA UN PRODUCTO SIMILAR YA INGRESADO POR CODIGO <======================//
                     //TODO: Esta parte esta de tener muy en cuenta porque aveces como se genera un codigo esta parte puede ser dificil de encontrar por el codigo y mas facil por el nombre
                     //Producto productoTmp =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(),session.getEmpresa());
                     //TODO: Esta de tener presente esta parte cuando ya existe un producto no debe crear otro kardex solo debe actualizar al mismo producto
-                    Producto productoTmp = ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(producto.getNombre(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
+                    //TODO: Mejorar esta parte
                     
                     if(productoTmp != null) 
                     {
@@ -304,6 +275,72 @@ public class MigrarProductoModel extends MigrarModel {
 
             }
         };
+    }
+    
+    //todo: Mejorar esa parte para no mandar el producto Tmp
+    private KardexDetalle generarMovimientoInventario(EnumSiNo manejaInventarioEnumSiNo,ExcelMigrar.FilaResultado fila,Producto producto,Producto productoTmp) throws ServicioCodefacException, RemoteException, ExcelMigrar.ExcepcionExcel
+    {
+        KardexDetalle kardexDetalle=null;
+        if (manejaInventarioEnumSiNo != null && manejaInventarioEnumSiNo.equals(EnumSiNo.SI)) // Si cumple esta condicion vamos a grabar el resto de datos para el inventario
+        {
+            String bodegaNombre = (String) fila.getByEnum(ExcelMigrarProductos.Enum.BODEGA).valor;
+            Bodega bodega = ServiceFactory.getFactory().getBodegaServiceIf().buscarPorNombre(bodegaNombre);
+            if (bodega != null) //Si la bodega existe consulto cuanto quiere agregar al stock
+            {
+                Double stock = 0d;
+                ExcelMigrar.CampoResultado campoResultado = fila.getByEnum(ExcelMigrarProductos.Enum.STOCK);
+                if (campoResultado != null) {
+                    stock = (Double) campoResultado.valor;
+                }
+
+                if (stock > 0) {
+                    kardexDetalle = new KardexDetalle();
+                    //kardexDetalle.setCantidad(stock.intValue());
+                    kardexDetalle.setCantidad(new BigDecimal(stock));
+                    kardexDetalle.setPrecioUnitario(BigDecimal.ZERO);
+                    kardexDetalle.recalcularTotalSinGarantia();
+
+                    //Setear el documento que esta usando el usuario 
+                    kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.STOCK_INICIAL.getCodigo());
+
+                    //Fecha de ingreso                             
+                    kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
+                    kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
+                    
+                    //Si no existe antes el producto tengo que crear un nuevo KARDEX
+                    Kardex kardex =null;
+                    if(productoTmp==null)
+                    {
+                        kardex = new Kardex();
+                        kardex.setBodega(bodega);                        
+                        //Obtener costo de la plantilla
+                        Double costo = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.COSTO);
+                        if (costo != null) {
+                            kardex.setCostoPromedio(new BigDecimal(costo + ""));
+                        }
+                    }
+                    else //En este caso se supone que ya existe el PRODUCTO y tengo que actualizar los movimientos para que coincida con el nuevo total
+                    {
+                        kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.STOCK_AJUSTE_MIGRADO.getCodigo());
+                        kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodega, productoTmp);
+                        BigDecimal stockActual=kardex.getStock();
+                        BigDecimal stockAjuste=new BigDecimal(stock).subtract(stockActual);                       
+                        //cuando tengo que hacer un ajuste inventario envio los nuevos datos
+                        kardexDetalle.setCantidad(stockAjuste);
+                    }
+                    
+
+                    kardex.setProducto(producto);
+                    kardexDetalle.setKardex(kardex);
+
+                }
+
+            } else {
+                throw new ExcelMigrar.ExcepcionExcel("La bodega no existe");
+            }
+        }
+        return kardexDetalle;
+    
     }
     
     

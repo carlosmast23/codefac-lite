@@ -148,6 +148,12 @@ public enum TipoDocumentoEnum implements ParametroUtilidades.ComparadorInterface
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
             true),
     
+    STOCK_AJUSTE_MIGRADO(ModuloCodefacEnum.INVENTARIO,
+            "ASM",
+            "Ajuste Stock Migrado",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
+            false),
+    
     SALDO_ANTERIOR(ModuloCodefacEnum.INVENTARIO,
             "SAA",
             "Saldo Anterior",
