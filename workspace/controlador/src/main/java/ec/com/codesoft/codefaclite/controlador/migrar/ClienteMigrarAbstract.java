@@ -18,7 +18,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Arrays;
@@ -96,10 +98,18 @@ public abstract class ClienteMigrarAbstract extends MigrarModel {
                     
                     
                     //Todo: por el momento solo dejo considerado para estos 2 casos
-                    if (cliente.getIdentificacion().length() > 10) {
+                    if (cliente.getIdentificacion().length() == 13) {
                         cliente.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.RUC);
-                    } else {
+                    } else if(cliente.getIdentificacion().length() == 10) {
                         cliente.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.CEDULA);
+                    } else
+                    {
+                        //Veificar si tiene vacio el campo entonces le grabo como otro para tener el dato como temporal
+                        if(cliente.getIdentificacion()==null || cliente.getIdentificacion().trim().isEmpty())
+                        {
+                            cliente.setTipoIdentificacionEnum(Persona.TipoIdentificacionEnum.SIN_DEFINIR);
+                            cliente.setIdentificacion(UtilidadesArchivos.generarNombreArchivoUnico("SN"));
+                        }
                     }
                     
                     //Todo: si la razon social es vacia entonces yo me encargo de setear ese campo automaticamente
@@ -118,6 +128,7 @@ public abstract class ClienteMigrarAbstract extends MigrarModel {
                     personaEstablecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
                     personaEstablecimiento.setNombreComercial((nombreComercial!=null)?nombreComercial.trim():"matriz");
                     personaEstablecimiento.setPersona(cliente);
+                    personaEstablecimiento.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                     
                     //List<PersonaEstablecimiento> establecimientos=new ArrayList<PersonaEstablecimiento>();
                     //establecimientos.add(personaEstablecimiento);

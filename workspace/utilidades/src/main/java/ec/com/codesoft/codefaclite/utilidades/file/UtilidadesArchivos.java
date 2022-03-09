@@ -135,6 +135,14 @@ public class UtilidadesArchivos {
         return nombrePrincipal+"-"+simpleDateFormat.format(UtilidadesFecha.getFechaHoy())+"."+formato;
     }
     
+        @Deprecated
+    public static String generarNombreArchivoUnico(String nombrePrincipal)
+    {
+        String pattern = "mmssSSSSSSSS";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return nombrePrincipal+"-"+simpleDateFormat.format(UtilidadesFecha.getFechaHoy());
+    }
+    
     public static Long obtenerTamanioArchivoEnKb(File archivo)
     {
         try {
