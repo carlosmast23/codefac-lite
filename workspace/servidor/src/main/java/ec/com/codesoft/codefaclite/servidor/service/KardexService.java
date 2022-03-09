@@ -141,6 +141,37 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         return null;
     }
+   
+   /**
+    * Metodo que me permite crear un nuevo kardex cuando no existe creado
+    * @return
+    * @throws java.rmi.RemoteException
+    * @throws ServicioCodefacException 
+    */
+   public void crearKardexSiNoExisteSinTransaccion(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
+   {
+       //Validar que tengan una empresa creada
+       if(producto.getEmpresa()==null)
+       {
+           throw new ServicioCodefacException("No se puede crear el kardex de un producto que no tiene una empresa");
+       }
+       
+       BodegaService bodegaService = new BodegaService();
+       List<Bodega> bodegaVentaList = bodegaService.obtenerActivosPorEmpresa(producto.getEmpresa());
+       if (bodegaVentaList.size() == 0) {
+           throw new ServicioCodefacException("Configure primero una bodega ");
+       }
+
+       for (Bodega bodega : bodegaVentaList) {
+           List<Kardex> kardexList = buscarPorProductoYBodega(producto, bodega);
+           //Solo crear el kardex si no existe para esa bodega
+           if (kardexList.size() == 0) 
+           {
+               Kardex kardex = ServiceFactory.getFactory().getKardexServiceIf().crearObjeto(bodega, producto);
+               entityManager.persist(kardex);
+           }
+       }
+   }
     
     /**
      * Obtiene los valores modificos del stock y la reserva para grabar en el Kardex

@@ -108,21 +108,10 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         entityManager.persist(p);
         entityManager.flush();
         
-        //Crear siempre un kardex por defecto
-        
+        //Crear los KARDEX CUANDO NO EXISTA
         if(p.getManejarInventarioEnum().equals(EnumSiNo.SI))
         {
-            BodegaService bodegaService = new BodegaService();
-            List<Bodega> bodegaVentaList = bodegaService.obtenerActivosPorEmpresa(p.getEmpresa());
-            if(bodegaVentaList.size()==0)
-            {
-                throw new ServicioCodefacException("Configure primero una bodega ");
-            }
-
-            for (Bodega bodega : bodegaVentaList) {
-                Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().crearObjeto(bodega, p);
-                entityManager.persist(kardex);            
-            }
+            ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(p);
         }
         
         
@@ -209,13 +198,21 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 List<ProductoEnsamble> productoEnsambleEliminar=productoEnsamblesEliminados(producto);
                 
                 //TODO: Por el momento ELIMINO directamente de la base de datos pero se deberia manejar por ESTADOS
-                for (ProductoEnsamble productoEnsamble : productoEnsambleEliminar) {
+                for (ProductoEnsamble productoEnsamble : productoEnsambleEliminar) 
+                {
                     ProductoEnsamble productoEnsambleTmp=entityManager.merge(productoEnsamble);
                     entityManager.remove(productoEnsambleTmp);
                 }
                 
                 
                 entityManager.merge(producto);
+                
+                //Crear los KARDEX CUANDO NO EXISTA
+                if (producto.getManejarInventarioEnum().equals(EnumSiNo.SI)) {
+                    ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(producto);
+                }
+
+                
             }
         });
 

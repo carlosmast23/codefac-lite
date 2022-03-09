@@ -52,6 +52,7 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
                 setearDatosGrabar(entity, empresa,CrudEnum.CREAR);
                 validarGrabar(entity, CrudEnum.CREAR);
                 entityManager.persist(entity);
+                
             }
         });
         return entity;
