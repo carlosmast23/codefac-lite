@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -284,7 +285,7 @@ public class DestinatarioGuiaRemision implements Serializable{
     ///                     METODOS PERSONALIZADOS
     ////////////////////////////////////////////////////////////////////////////
     
-    public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String ruta,String preimpresoFactura,Integer codigoSucursal) throws ServicioCodefacException
+    public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String ruta,String preimpresoFactura,Integer codigoSucursal) throws ServicioCodefacException, RemoteException
     {
         //todo:Solucion temporal para las facturas fisicas que no tienen número de autorización
         //if(factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
@@ -334,8 +335,10 @@ public class DestinatarioGuiaRemision implements Serializable{
                 
             }
             
+            BigDecimal saldoPendiente=ServiceFactory.getFactory().getGuiaRemisionServiceIf().consultarSaldoDetalleFactura(facturaDetalle);
+            
             DetalleProductoGuiaRemision detalle=new DetalleProductoGuiaRemision();
-            detalle.setCantidad(facturaDetalle.getCantidad().intValue());
+            detalle.setCantidad(saldoPendiente.intValue());
             detalle.setCodigoAdicional("");
             detalle.setCodigoInterno(facturaDetalle.getReferenciaId()+""); //Todo: Ver si en este campo para futuras versiones se graba mejor el codigo de los productos , sevicios , etc
             detalle.setDescripcion(facturaDetalle.getDescripcion().replace("\n"," "));

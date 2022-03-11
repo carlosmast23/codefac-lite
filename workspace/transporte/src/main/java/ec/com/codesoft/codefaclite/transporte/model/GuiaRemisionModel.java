@@ -612,6 +612,11 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 return null;
             }
             
+            if(getTxtRuta().getText().trim().isEmpty())
+            {
+                getTxtRuta().setText("Sin Ruta");
+            }
+            
             if(getTxtAutorizacion().getText().length()<=9)
             {
                 DialogoCodefac.mensaje("Advertencia","La autorización tiene que tener más de 9 digitos",DialogoCodefac.MENSAJE_ADVERTENCIA);

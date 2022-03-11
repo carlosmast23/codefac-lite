@@ -48,7 +48,7 @@ public class GuiaRemisionReporte extends ComprobanteElectronicoReporte {
             destinatario.setPreimpreso(destinatarioTemp.getNumDocSustento());
             destinatario.setRazon_social_persona(destinatarioTemp.getRazonSocialDestinatario());
             //destinatario.setRuta(destinatarioTemp.getRuta());
-            destinatario.setRuta("mas rutas");
+            destinatario.setRuta(destinatarioTemp.getRuta());
             
             /**
              * Agregar los productos de cada destinatario como un subreporte

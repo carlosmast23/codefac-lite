@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service.transporte;
 
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.transporte.DetalleProductoGuiaRemisionFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
@@ -26,10 +27,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +63,14 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
             if(destinatario.getAutorizacionNumero().length()<=9)
             {
                 throw new ServicioCodefacException("El tamanio de la  autorización debe ser mayor que 9 digitos");
+            }
+            
+            for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) 
+            {
+                if(detallesProducto.getCantidad()<=0)
+                {
+                    throw new ServicioCodefacException("No se puede emitir guias de remision con cantidad iguales o menores que cero");
+                }
             }
             
             
@@ -172,6 +184,30 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
             }
         });
                 
+    }
+    
+    //TODO: Optimizar esta parte
+    public BigDecimal consultarSaldoDetalleFactura(FacturaDetalle facturaDetalle) throws ServicioCodefacException, RemoteException
+    {
+        DetalleProductoGuiaRemision detalle;
+        //detalle.getDestinatario().getFacturaReferencia()
+        //g.get
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("referenciaId", facturaDetalle.getId());
+        mapParametros.put("destinatario.facturaReferencia", facturaDetalle.getFactura());
+        DetalleProductoGuiaRemisionFacade facade=new DetalleProductoGuiaRemisionFacade();
+        
+        List<DetalleProductoGuiaRemision> listaGuiasRemision = facade.findByMap(mapParametros);
+        
+        BigDecimal totalEnviado=BigDecimal.ZERO;
+        for (DetalleProductoGuiaRemision detalleGuia : listaGuiasRemision) 
+        {
+            if(detalleGuia.getDestinatario().getGuiaRemision().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO) || detalleGuia.getDestinatario().getGuiaRemision().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+            {
+                totalEnviado=totalEnviado.add(new BigDecimal(detalleGuia.getCantidad()));
+            }
+        }
+        return facturaDetalle.getCantidad().subtract(totalEnviado);
     }
     
 
