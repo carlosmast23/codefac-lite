@@ -275,6 +275,7 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
                         ventas.getSucursal().getDireccion(),
                         ventas.getFechaEmision(),
                         motivoTraslado,
+                        "", //Todo: Completar este dato de la ruta
                         ventas.getPreimpreso(),
                         codigoSucursal);
                 

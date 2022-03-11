@@ -83,8 +83,12 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         validarGrabarProducto(p,CrudEnum.CREAR);
         
-        //Si el catalogo producto no esta creado primero crea la entidad
         CatalogoProducto catalogoProducto = p.getCatalogoProducto();
+        p.setCatalogoProducto(null);
+        entityManager.persist(p);
+        entityManager.flush();
+        
+        //Si el catalogo producto no esta creado primero crea la entidad        
         if (catalogoProducto.getId() == null) {
             CategoriaProducto categoriaProducto = catalogoProducto.getCategoriaProducto();
             if(categoriaProducto!=null)
@@ -92,10 +96,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 if (categoriaProducto.getIdCatProducto() == null)//Si no existe la categoria tambien se los crea
                 {
                     entityManager.persist(categoriaProducto);
+                    entityManager.flush();
                 }
             }
 
             entityManager.persist(catalogoProducto);
+            entityManager.flush();
+            
+            p.setCatalogoProducto(catalogoProducto);
         }
 
         //Si no son ensables remover datos para no tener incoherencias
@@ -105,7 +113,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             }
         }
         
-        entityManager.persist(p);
+        entityManager.merge(p);
         entityManager.flush();
         
         //Crear los KARDEX CUANDO NO EXISTA

@@ -669,7 +669,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             return null;
             }*/
             java.util.Date fechaFactura=getCmbFechaFactura().getDate();
-            
+            //getTxtRuta().getText();
             DestinatarioGuiaRemision destinatario=DestinatarioGuiaRemision.crearDestinatario(
                     guiaRemision,
                     facturaSeleccionada,
@@ -678,6 +678,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                     getTxtDireccionDestino().getText(),
                     fechaFactura,
                     getTxtMotivoTraslado().getText(),
+                    getTxtRuta().getText(),
                     getTxtPreimpreso().getText(),
                     (Integer) getTxtCodigoSucursal().getValue());   
             
@@ -848,10 +849,12 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     private void imprimirTabla()
     {
         
-        String[] titulos={"","Factura","FechaFact","Destinatario","Código Producto","Descripción","Cantidad"};
+        String[] titulos={"","Motivo","Ruta","Factura","FechaFact","Destinatario","Código Producto","Descripción","Cantidad"};
         
         DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulos,
         new Class[]{DetalleProductoGuiaRemision.class,
+        String.class,
+        String.class,
         String.class,
         String.class,
         String.class,
@@ -879,6 +882,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             for (DetalleProductoGuiaRemision detalle : listaProductosTmp) {
                     modeloTabla.addRow(new Object[]{
                         detalle,
+                        detalle.getDestinatario().getMotivoTranslado(),
+                        detalle.getDestinatario().getRuta(),
                         detalle.getDestinatario().getPreimpreso(),
                         detalle.getDestinatario().getFechaEmision().toString(),
                         detalle.getDestinatario().getDestinatorio().getNombresCompletos(),

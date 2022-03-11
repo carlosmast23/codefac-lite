@@ -284,7 +284,7 @@ public class DestinatarioGuiaRemision implements Serializable{
     ///                     METODOS PERSONALIZADOS
     ////////////////////////////////////////////////////////////////////////////
     
-    public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String preimpresoFactura,Integer codigoSucursal) throws ServicioCodefacException
+    public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String ruta,String preimpresoFactura,Integer codigoSucursal) throws ServicioCodefacException
     {
         //todo:Solucion temporal para las facturas fisicas que no tienen número de autorización
         //if(factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
@@ -309,7 +309,7 @@ public class DestinatarioGuiaRemision implements Serializable{
         destinatario.setMotivoTranslado(motivoTraslado);
         destinatario.setPreimpreso(preimpresoFactura);
         destinatario.setRazonSocial(destinatarioCliente.getRazonSocial());
-        destinatario.setRuta(destinatario.getRuta());
+        destinatario.setRuta(ruta);
         destinatario.setFacturaReferencia(factura);
         destinatario.setIdentificacion(destinatarioCliente.getIdentificacion());
         destinatario.setCodigoEstablecimiento(codigoSucursal);
