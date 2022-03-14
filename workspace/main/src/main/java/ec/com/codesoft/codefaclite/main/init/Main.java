@@ -98,6 +98,7 @@ import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
@@ -255,13 +256,55 @@ public class Main {
 
     }
     
+    private static String consultarUltimaVersionBd()
+    {
+        String query="SELECT VALOR FROM PARAMETRO WHERE NOMBRE = '"+ParametroCodefac.VERSION_SISTEMA+"'";
+        String versionGrabada=UtilidadSql.ejecutarConsultaSqlPrimerResultado(AbstractFacade.usuarioDb, AbstractFacade.claveDb, query,"VALOR");
+        return versionGrabada;
+    }
+    
+    private static String obtenerUltimaVersion() 
+    {
+        //Primero intenta obtener la version de la base de datos
+        //String query="SELECT VALOR FROM PARAMETRO WHERE NOMBRE = '"+ParametroCodefac.VERSION_SISTEMA+"'";
+        //String versionGrabada=UtilidadSql.ejecutarConsultaSqlPrimerResultado(AbstractFacade.usuarioDb, AbstractFacade.claveDb, query,"VALOR");
+        String versionGrabada=consultarUltimaVersionBd();
+        //Si no encuentra la version en la ultima base de datos cargo la anterior
+        if(versionGrabada==null)
+        {
+            PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+            versionGrabada=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
+        }
+        return versionGrabada;
+    }
+    
+    private static void cargarCredencialesBaseDatos()
+    {
+        //Obtiene una instancia de un objeto donde puedo interactuar con la base de datos
+        BaseDatosCredenciales credenciales = BaseDatosCredenciales.getInstance();
+        //verificar si existen los datos creados
+        if (credenciales.cargarDatos()) {
+            String usuarioDb = credenciales.getUsuario();
+            String claveDb = credenciales.getClave();
+            //Si falta algun datos del usuario y la clave abro la pantalla de crear credenciales
+            if (usuarioDb != null || claveDb != null) { //TODO: hacer una validacion tambien cuando falte alguno de los datos por algun motivo anormal
+                AbstractFacade.usuarioDb = usuarioDb;
+                AbstractFacade.claveDb = claveDb;
+            }
+        } else {
+            DialogoCodefac.mensaje("Alerta", "No se puede actualizar la base de datos , error en las credenciales", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+    }
     
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
     private static void verificarActualizacionBaseDatosVersion()
     {        
         LOG.log(Level.INFO," Iniciando verificarActualizacionBaseDatosVersion");
+        //PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        //String versionGrabada=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
+        cargarCredencialesBaseDatos();
+        String versionGrabada=obtenerUltimaVersion();
         PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
-        String versionGrabada=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
         
         if(versionGrabada!=null)
         {
@@ -279,34 +322,18 @@ public class Main {
                         //Solo actualizar si es un modo servidor , o cliente servidor
                         if (modoAplicativo!=null && !modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE.toString())) 
                         {
-                            //Obtiene una instancia de un objeto donde puedo interactuar con la base de datos
-                            BaseDatosCredenciales credenciales = BaseDatosCredenciales.getInstance();
-                            //verificar si existen los datos creados
-                            if (credenciales.cargarDatos()) {
-                                String usuarioDb = credenciales.getUsuario();
-                                String claveDb = credenciales.getClave();
-                                //Si falta algun datos del usuario y la clave abro la pantalla de crear credenciales
-                                if (usuarioDb != null || claveDb != null) { //TODO: hacer una validacion tambien cuando falte alguno de los datos por algun motivo anormal
-                                    AbstractFacade.usuarioDb=usuarioDb;
-                                    AbstractFacade.claveDb=claveDb;
-                                }
-                            }
-                            else
-                            {
-                                DialogoCodefac.mensaje("Alerta","No se puede actualizar la base de datos , error en las credenciales",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                            }
+                            //qdjkqwe
 
                             //TODO: Metodo que ejecuta los scripts para actualizar el sistema
                             if(UtilidadesServidor.actualizarBaseDatos(versionGrabada))
                             {
                                 //Solo actualizo el archivo de la versión si efectivamente se realizo las modificaciones en la base de datos
-                                propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
-                                ArchivoConfiguracionesCodefac.getInstance().guardar();
+                                //propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
+                                //ArchivoConfiguracionesCodefac.getInstance().guardar();
+                                grabarVersionNueva();
                             }
                         }                        
                         
-                    } catch (IOException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (Exception ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -316,18 +343,40 @@ public class Main {
         }
         else
         {
-            try {
-                //Si no hay dato no se actualiza porque asumo que es la primera vez que se usa el sistema
-                propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
-                ArchivoConfiguracionesCodefac.getInstance().guardar();
-            } catch (IOException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            //Si no hay dato no se actualiza porque asumo que es la primera vez que se usa el sistema
+            //propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
+            //ArchivoConfiguracionesCodefac.getInstance().guardar();
+            grabarVersionNueva();
         }
         LOG.log(Level.INFO," Terminando verificarActualizacionBaseDatosVersion");
         
     }
 
+    private static void grabarVersionNueva()
+    {
+        String versionGrabadaBd=consultarUltimaVersionBd();
+        if(versionGrabadaBd==null)
+        {
+            String sqlInsert="INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('"+ParametroCodefac.VERSION_SISTEMA+"','"+ParametrosSistemaCodefac.VERSION+"')";
+            UtilidadSql.ejecutarProcesoSql(AbstractFacade.usuarioDb, AbstractFacade.claveDb, sqlInsert);
+        }
+        else
+        {
+            //Grabar en la base de datos
+            String sqlProceso="UPDATE PARAMETRO SET VALOR = '"+ParametrosSistemaCodefac.VERSION+"' WHERE NOMBRE = '"+ParametroCodefac.VERSION_SISTEMA+"' ";
+            UtilidadSql.ejecutarProcesoSql(AbstractFacade.usuarioDb, AbstractFacade.claveDb, sqlProceso);
+        }          
+       
+        
+        //Grabar en el archivo
+        try {
+            PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+            propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
+            ArchivoConfiguracionesCodefac.getInstance().guardar();
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * Cargar Recursos servicios protocolo RMI
      */

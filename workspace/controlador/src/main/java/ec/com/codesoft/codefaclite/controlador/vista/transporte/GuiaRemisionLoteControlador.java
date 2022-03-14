@@ -285,6 +285,8 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
                 //DialogoCodefac.mensaje(new CodefacMsj("Error factura:"+ventas.getPreimpreso()+" \nMotivo: "+ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                 Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);
                 throw new ServicioCodefacException("Error factura:"+ventas.getPreimpreso()+" \nMotivo: "+ex.getMessage());
+            } catch (RemoteException ex) {
+                Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         }

@@ -114,6 +114,8 @@ create table FACTURA_DETALLE
     CODIGO_PRINCIPAL varchar(100),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.2.5)*/
     PRECIO_SIN_SUBSIDIO decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.0.6)*/
+    LOTE_ID BIGINT,
     primary key (ID)
 );
 

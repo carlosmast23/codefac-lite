@@ -60,6 +60,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Column(name = "ICE_PORCENTAJE")
     private BigDecimal icePorcentaje;
     
+    @Column(name = "LOTE_ID")
+    private Long loteId;
+    
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     private CatalogoProducto catalogoProducto;
 
@@ -192,6 +195,16 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void setTipoDocumentoEnum(TipoDocumentoEnum tipoDocumentoEnum) {
         this.tipoDocumento = tipoDocumentoEnum.getCodigo();
     }
+
+    public Long getLoteId() {
+        return loteId;
+    }
+
+    public void setLoteId(Long loteId) {
+        this.loteId = loteId;
+    }
+    
+    
 
     public CatalogoProducto getCatalogoProducto() {
         return catalogoProducto;

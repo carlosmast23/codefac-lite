@@ -214,6 +214,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String NUMERO_DECIMAL_PRODUCTO = "numero_decimal_producto";
     
+    public static final String VERSION_SISTEMA="version_sistema";
+    
 
     @Id
     @Column(name = "ID")

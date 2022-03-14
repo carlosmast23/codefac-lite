@@ -217,6 +217,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private DefaultTableModel modeloTablaDetallesProductos;
     private DefaultTableModel modeloTablaDatosAdicionales;
     private Producto productoSeleccionado;
+    private Kardex kardexSeleccionado;
     private RubroEstudiante rubroSeleccionado;
     private Presupuesto presupuestoSeleccionado;
     //private int fila;
@@ -603,7 +604,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         }
                         break;
                     case LIBRE:
-                        agregarProducto(EnumSiNo.NO);
+                        agregarProductoSinInventario(EnumSiNo.NO);
                         break;
                 
                 }
@@ -963,6 +964,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             productoSeleccionado.getCodigoPersonalizado(), 
                             productoSeleccionado.getCatalogoProducto(), 
                             entity.getIdProducto(), 
+                            null,
                             TipoDocumentoEnum.LIBRE,
                             BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
                     controlador.setearValoresProducto(facturaDetalle);
@@ -1067,6 +1069,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     presupuestoSeleccionado.getId().toString(), 
                     presupuestoSeleccionado.getCatalogoProducto(), 
                     presupuestoSeleccionado.getId(),
+                    null,
                     controlador.getTipoDocumentoEnumSeleccionado(),
                     BigDecimal.ZERO);
             
@@ -1105,6 +1108,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     rubroEstudianteTmp.getId().toString(), 
                     rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 
                     rubroEstudianteTmp.getId(), 
+                    null,
                     controlador.getTipoDocumentoEnumSeleccionado(),
                     descuentoValor);
             controlador.setearValoresProducto(facturaDetalle);
@@ -1170,13 +1174,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return false;
     }
     
-    private void agregarProducto(EnumSiNo manejaInventario) {
+    private void agregarProductoSinInventario(EnumSiNo manejaInventario) {
             ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
             buscarDialogoModel.setVisible(true);
             productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
             getCmbIva().setSelectedItem(EnumSiNo.NO);    
-            controlador.agregarProductoVista(productoSeleccionado);
+            controlador.agregarProductoVista(productoSeleccionado,null);
     }
     
     private void agregarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
@@ -1196,7 +1200,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
             buscarDialogoModel.setVisible(true);
             Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
-            productoSeleccionado = kardex.getProducto();
+            kardexSeleccionado = kardex;
             
         }
         else if(manejaInventario.equals(EnumSiNo.NO))
@@ -1230,7 +1234,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         //productoSeleccionado = (Producto)resultados[0];
         getCmbIva().setSelectedItem(EnumSiNo.NO);
-        controlador.agregarProductoVista(productoSeleccionado);
+        
+        if(manejaInventario.equals(EnumSiNo.SI))
+        {
+            controlador.agregarProductoVista(kardexSeleccionado.getProducto(),kardexSeleccionado.getLote());
+        }
+        else if(manejaInventario.equals(EnumSiNo.NO))
+        {   
+            controlador.agregarProductoVista(productoSeleccionado,null);
+        }
+        
     }
     
 
@@ -3457,7 +3470,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             btnListenerCrearProducto();
                         }
                     } else {
-                        controlador.agregarProductoVista(producto);
+                        controlador.agregarProductoVista(producto,null);
                     }
                 }
 

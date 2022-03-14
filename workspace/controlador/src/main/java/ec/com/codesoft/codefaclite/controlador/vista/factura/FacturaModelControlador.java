@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -179,7 +180,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return tiposDocumento;
     }
     
-    public void agregarProductoVista(Producto productoSeleccionado) {
+    public void agregarProductoVista(Producto productoSeleccionado,Lote lote) {
         if (productoSeleccionado == null) {
             return;
         }
@@ -202,6 +203,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 productoSeleccionado.getCodigoPersonalizado(), 
                 productoSeleccionado.getCatalogoProducto(), 
                 productoSeleccionado.getIdProducto(), 
+                (lote!=null)?lote.getId():null,
                 interfaz.obtenerTipoDocumentoSeleccionado(),
                 BigDecimal.ZERO);
         
@@ -216,7 +218,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             String descripcion,
             String codigo,
             CatalogoProducto catalogoProducto,
-            Long referenciaId,            
+            Long referenciaId,  
+            Long loteId,
             TipoDocumentoEnum tipoDocumentoReferencia,
             BigDecimal descuento)
     {
@@ -226,6 +229,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setDescuento(descuento);
         facturaDetalle.setPrecioUnitario(valorUnitario);
         facturaDetalle.setReferenciaId(referenciaId);
+        facturaDetalle.setLoteId(loteId);
         facturaDetalle.setCatalogoProducto(catalogoProducto);
         facturaDetalle.setCodigoPrincipal(codigo);
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoReferencia);

@@ -692,6 +692,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
