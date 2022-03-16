@@ -1201,6 +1201,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             buscarDialogoModel.setVisible(true);
             Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
             kardexSeleccionado = kardex;
+            productoSeleccionado=kardexSeleccionado.getProducto();
             
         }
         else if(manejaInventario.equals(EnumSiNo.NO))
@@ -1787,6 +1788,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(!factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR) && !factura.getCodigoDocumentoEnum().equals(factura.getCodigoDocumentoEnum().PROFORMA))
         {
             DialogoCodefac.mensaje("Advertencia","La factura no se pueden modificar ",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("cancelar el evento editar");
+        }
+        
+        if(!DialogoCodefac.dialogoPregunta(new CodefacMsj("Solo debe editar las ventas con supervición de una persona de SOPORTE.\nDesea continuar de todos modos? ", CodefacMsj.TipoMensajeEnum.ERROR)))
+        {
             throw new ExcepcionCodefacLite("cancelar el evento editar");
         }
         

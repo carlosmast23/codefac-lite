@@ -80,7 +80,7 @@ public class CerrarCajaModel extends CajaSessionModel
         List<Caja> cajas = new ArrayList<>();
         try {
             List<CajaSession> cajasSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuarioYSucursal(this.session.getUsuario(), this.session.getSucursal());
-            if(cajasSession.size()>0)
+            if(cajasSession!=null && cajasSession.size()>0)
             {
                 cajasSession.forEach(cajaSession -> {
                     cajas.add(cajaSession.getCaja());
