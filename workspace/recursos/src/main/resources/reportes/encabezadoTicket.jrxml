@@ -38,7 +38,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="50" width="160" height="11" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true" isItalic="true"/>
+					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_nombre_empresa}]]></textFieldExpression>
 			</textField>

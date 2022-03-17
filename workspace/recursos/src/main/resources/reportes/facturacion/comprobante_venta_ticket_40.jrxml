@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="145" pageHeight="400" columnWidth="141" leftMargin="2" rightMargin="2" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="3.4462297397681207"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="297"/>
+	<property name="ireport.y" value="0"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -93,7 +93,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="20" y="39" width="120" height="12" uuid="12e07238-470a-46ff-add1-fb128f3e9d49"/>
 				<textElement>
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
@@ -107,12 +107,12 @@
 			<textField>
 				<reportElement x="20" y="27" width="120" height="12" uuid="5f603c69-4924-4a2f-a92c-b1d5610591c8"/>
 				<textElement>
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="6" y="0" width="135" height="15" uuid="8371e6ed-6cbb-4b05-93d4-adbd60f2d739"/>
+				<reportElement x="13" y="0" width="128" height="15" uuid="8371e6ed-6cbb-4b05-93d4-adbd60f2d739"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -252,7 +252,7 @@
 	<pageFooter>
 		<band height="76" splitType="Stretch">
 			<subreport>
-				<reportElement x="6" y="0" width="135" height="40" uuid="7968d49c-a764-40cd-8900-3f9f7f1947c8"/>
+				<reportElement x="13" y="0" width="128" height="40" uuid="7968d49c-a764-40cd-8900-3f9f7f1947c8"/>
 				<subreportParameter name="pl_telefonos">
 					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -285,19 +285,19 @@
 	<lastPageFooter>
 		<band height="173">
 			<staticText>
-				<reportElement x="6" y="70" width="134" height="32" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
+				<reportElement x="13" y="70" width="128" height="32" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
 				<text><![CDATA[Este documento es informativo y no tiene validez legal, para descargar el comprobante electrónico puede acceder desde su correo electrónico registrado o desde el portal del Sri.]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="6" y="55" width="134" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003"/>
+				<reportElement x="7" y="55" width="134" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Dotted"/>
 					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
@@ -349,7 +349,7 @@
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="6" y="102" width="135" height="52" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
+				<reportElement x="13" y="102" width="128" height="52" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
 				<subreportParameter name="pl_telefonos">
 					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>

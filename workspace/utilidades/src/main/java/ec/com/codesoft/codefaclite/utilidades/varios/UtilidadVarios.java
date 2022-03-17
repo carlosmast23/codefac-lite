@@ -106,8 +106,8 @@ public abstract class UtilidadVarios {
                             if (currentAddress instanceof Inet4Address && !currentAddress.isLoopbackAddress()) {
                                 //System.out.println(currentAddress);
                                 return currentAddress.getHostAddress();
-                            }
-                            currentAddress = inetAddress.nextElement();
+                            }                            
+                            //currentAddress = inetAddress.nextElement();
                         }
                         //eturn currentAddress.getHostAddress();
                     }
