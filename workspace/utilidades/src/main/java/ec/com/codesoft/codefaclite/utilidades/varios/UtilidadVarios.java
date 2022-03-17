@@ -99,9 +99,10 @@ public abstract class UtilidadVarios {
                         System.out.println(sb.toString());
                         //Enumeration<InetAddress> addresses = iface.getInetAddresses();
                         Enumeration<InetAddress> inetAddress = networkInterface.getInetAddresses();
-                        InetAddress currentAddress=inetAddress.nextElement();
-                        while (inetAddress.hasMoreElements()) {
-                                                       
+                        
+                        while (inetAddress.hasMoreElements()) 
+                        {
+                            InetAddress currentAddress=inetAddress.nextElement();                                                       
                             if (currentAddress instanceof Inet4Address && !currentAddress.isLoopbackAddress()) {
                                 //System.out.println(currentAddress);
                                 return currentAddress.getHostAddress();
