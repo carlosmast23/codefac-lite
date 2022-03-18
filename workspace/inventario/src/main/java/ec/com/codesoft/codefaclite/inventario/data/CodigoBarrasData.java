@@ -14,6 +14,7 @@ import java.awt.Image;
 public class CodigoBarrasData {
     private Image imagen;    
     private String codigo;
+    private String nombre;
 
     public CodigoBarrasData() 
     {
@@ -35,6 +36,16 @@ public class CodigoBarrasData {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    
 
     
     

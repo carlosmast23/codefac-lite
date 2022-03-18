@@ -80,7 +80,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("codigosBarras.jrxml");
+        InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("codigosBarrasMini.jrxml");
         Map<String,Object> parametros = new HashMap<String,Object>();
         
         ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, getData(), panelPadre,"Códigos de Barras");
@@ -102,6 +102,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                 CodigoBarrasData codigoBarraData=new CodigoBarrasData();
                 codigoBarraData.setImagen(imagenCodigoBarras);
                 codigoBarraData.setCodigo(producto.getCodigoPersonalizado());
+                codigoBarraData.setNombre(producto.getNombre());
                 listaDatos.add(codigoBarraData);
             }
         }
