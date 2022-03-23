@@ -99,6 +99,28 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return cartera;
     }
     
+    //TODO: Optimizar este metodo
+    private Cartera buscarCarteraActivaPorPreimpreso(String puntoEstablecimiento,String puntoEmision,int secuencial,Persona persona,String codigoDocumento,String tipoCartera,Empresa empresa)
+    {   
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("puntoEstablecimiento", puntoEmision);
+        mapParametros.put("puntoEmision", puntoEmision);
+        mapParametros.put("secuencial", secuencial);
+        mapParametros.put("persona", persona);
+        mapParametros.put("codigoDocumento", codigoDocumento);
+        mapParametros.put("tipoCartera", tipoCartera);
+        mapParametros.put("sucursal.empresa", empresa);        
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());        
+        
+        List<Cartera> resultados= getFacade().findByMap(mapParametros);
+        
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
+    }
+    
     private void validacionGrabar(Cartera cartera) throws ServicioCodefacException
     {
         //Validacion para que las retenciones tenga que ingresar un preimpreso como dato requerido
@@ -108,6 +130,13 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             {
                 throw new ServicioCodefacException("No se puede grabar una retención si un preimpreso");
             }
+            
+            Cartera carteraRetencion= buscarCarteraActivaPorPreimpreso(cartera.getPuntoEstablecimiento(), cartera.getPuntoEmision(), cartera.getSecuencial(),cartera.getPersona(), cartera.getCodigoDocumento(), cartera.getTipoCartera(),cartera.getSucursal().getEmpresa());
+            if(carteraRetencion!=null)
+            {
+                throw new ServicioCodefacException("Ya existe una retención ingresada con el mismo preimpreso");
+            }
+            
         }
         
         if(cartera.getSegundaReferenciaTipoEnum()!=null)
