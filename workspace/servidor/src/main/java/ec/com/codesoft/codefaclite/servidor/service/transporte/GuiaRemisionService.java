@@ -55,6 +55,12 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         }
         
         for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
+            
+            if(destinatario.getRuta()==null || destinatario.getRuta().trim().isEmpty())
+            {
+                destinatario.setRuta("Sin ruta");
+            }
+            
             if(destinatario.getAutorizacionNumero()==null || destinatario.getAutorizacionNumero().isEmpty())
             {
                 throw new ServicioCodefacException("No se puede grabar una guia de remisión sin autorización de la factura");
@@ -72,6 +78,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                     throw new ServicioCodefacException("No se puede emitir guias de remision con cantidad iguales o menores que cero");
                 }
             }
+            
             
             
         }   
