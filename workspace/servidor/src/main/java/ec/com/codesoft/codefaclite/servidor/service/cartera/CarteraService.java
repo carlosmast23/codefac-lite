@@ -659,14 +659,15 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             Factura factura = (Factura) comprobante;
             cartera.setPersona(factura.getCliente());
             cartera.setReferenciaID(factura.getId());
+            System.out.println("tot:"+factura.getTotal());
             cartera.setSaldo(factura.getTotal());
             cartera.setTotal(factura.getTotal());
 
             for (FacturaDetalle detalle : factura.getDetalles()) {
                 CarteraDetalle carteraDetalle = new CarteraDetalle();
                 carteraDetalle.setDescripcion(detalle.getDescripcion());
-                carteraDetalle.setSaldo(detalle.getTotal());
-                carteraDetalle.setTotal(detalle.getTotal());
+                carteraDetalle.setSaldo(detalle.calcularTotalFinal());
+                carteraDetalle.setTotal(detalle.calcularTotalFinal());                
                 cartera.addDetalle(carteraDetalle);
             }
             
