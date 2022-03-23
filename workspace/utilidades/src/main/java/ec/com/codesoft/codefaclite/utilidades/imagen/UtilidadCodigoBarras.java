@@ -25,8 +25,11 @@ public abstract class UtilidadCodigoBarras {
     public static Image obtenerImagenCodigoBarras(String codigo)
     {
         try {
+            //org.krysalis.barcode4j.impl.code128.EAN128
+            //Code39Bean bean39 = new Code39Bean();
             Code39Bean bean39 = new Code39Bean();
-            final int dpi = 160;
+            //final int dpi = 160;
+            final int dpi = 80;
 
             //Configure the barcode generator
             bean39.setModuleWidth(UnitConv.in2mm(2.8f / dpi));
