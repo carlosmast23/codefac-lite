@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.DetalleProductoGuiaRemisionFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
+import ec.com.codesoft.codefaclite.servidor.service.FacturaDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
@@ -56,6 +57,11 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         
         for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
             
+            if(destinatario.getDetallesProductos()==null || destinatario.getDetallesProductos().size()==0)
+            {
+                throw new ServicioCodefacException("No se puede grabar sin detalles para la factura "+destinatario.getPreimpreso());
+            }
+            
             if(destinatario.getRuta()==null || destinatario.getRuta().trim().isEmpty())
             {
                 destinatario.setRuta("Sin ruta");
@@ -77,6 +83,17 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                 {
                     throw new ServicioCodefacException("No se puede emitir guias de remision con cantidad iguales o menores que cero");
                 }
+                
+                FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
+                FacturaDetalle facturaDetalle= facturaDetalleFacade.find(detallesProducto.getReferenciaId());
+                
+                //Verificar que los saldos no sean superiores a los diponibles en las facturas
+                BigDecimal saldo=consultarSaldoDetalleFactura(facturaDetalle);
+                if(new BigDecimal(detallesProducto.getCantidad()+"").compareTo(saldo)>0)
+                {
+                    throw new ServicioCodefacException("La cantidad del producto "+detallesProducto.getDescripcion()+" es superior al saldo de "+saldo+" pendiente en la factura");
+                }
+                
             }
             
             

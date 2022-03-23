@@ -54,13 +54,16 @@ public class GuiaRemisionReporte extends ComprobanteElectronicoReporte {
              * Agregar los productos de cada destinatario como un subreporte
              */
             List<GuiaRemisionProductosReporte> productos=new ArrayList<GuiaRemisionProductosReporte>();
-            for (DetalleGuiaRemisionComprobante productoTmp : destinatarioTemp.getDetalles()) {
-                GuiaRemisionProductosReporte producto=new GuiaRemisionProductosReporte();
-                producto.setCantidad(productoTmp.getCantidad()+"");
-                producto.setCodigo_principal(productoTmp.getCodigoInterno());
-                producto.setCodigo_secundario(productoTmp.getCodigoAdicional());
-                producto.setDescripcion(productoTmp.getDescripcion());
-                productos.add(producto);
+            if(destinatarioTemp!=null && destinatarioTemp.getDetalles()!=null)
+            {
+                for (DetalleGuiaRemisionComprobante productoTmp : destinatarioTemp.getDetalles()) {
+                    GuiaRemisionProductosReporte producto=new GuiaRemisionProductosReporte();
+                    producto.setCantidad(productoTmp.getCantidad()+"");
+                    producto.setCodigo_principal(productoTmp.getCodigoInterno());
+                    producto.setCodigo_secundario(productoTmp.getCodigoAdicional());
+                    producto.setDescripcion(productoTmp.getDescripcion());
+                    productos.add(producto);
+                }
             }
             
             destinatario.setProductos(new JRBeanCollectionDataSource(productos)); //Agrega la lista de productos al reporte
