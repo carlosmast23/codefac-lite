@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura_fisica" pageWidth="500" pageHeight="842" whenNoDataType="BlankPage" columnWidth="496" leftMargin="2" rightMargin="2" topMargin="20" bottomMargin="20" uuid="9b36c502-cff2-4d1a-a8f4-03d85696bb48">
-	<property name="ireport.zoom" value="1.3310000000000048"/>
+	<property name="ireport.zoom" value="1.4641000000000064"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="identificacion" class="java.lang.String"/>
@@ -32,6 +32,7 @@
 	<field name="valorTotal" class="java.lang.String"/>
 	<field name="codigoPrincipal" class="java.lang.String"/>
 	<field name="descuento" class="java.lang.String"/>
+	<field name="ivaDetalle" class="java.lang.String"/>
 	<filterExpression><![CDATA[new Boolean($F{descripcion}.toString().indexOf("[Hidden]")<0)]]></filterExpression>
 	<background>
 		<band splitType="Stretch"/>
@@ -92,21 +93,14 @@
 	<detail>
 		<band height="21" splitType="Stretch">
 			<textField>
-				<reportElement x="91" y="0" width="81" height="15" uuid="4187fe71-1b90-4ecb-a317-b1515b77fe14"/>
+				<reportElement x="91" y="0" width="60" height="15" uuid="4187fe71-1b90-4ecb-a317-b1515b77fe14"/>
 				<textElement markup="html">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="172" y="0" width="117" height="15" uuid="63c13824-dd49-434e-a00d-7c356f78688b"/>
-				<textElement markup="html">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
-			</textField>
 			<textField>
-				<reportElement x="302" y="0" width="51" height="15" uuid="4352aef2-1d77-425e-95bd-736cd2211c25"/>
+				<reportElement x="289" y="0" width="51" height="15" uuid="4352aef2-1d77-425e-95bd-736cd2211c25"/>
 				<textElement markup="html">
 					<font size="10" isBold="false"/>
 				</textElement>
@@ -127,9 +121,23 @@
 				<textFieldExpression><![CDATA[$F{codigoPrincipal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="363" y="1" width="71" height="14" uuid="107d6f63-0c26-4b99-8921-75d43cb504b8"/>
+				<reportElement x="387" y="1" width="59" height="14" uuid="107d6f63-0c26-4b99-8921-75d43cb504b8"/>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="151" y="1" width="117" height="15" uuid="63c13824-dd49-434e-a00d-7c356f78688b"/>
+				<textElement markup="html">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="37" height="15" uuid="da4670c8-a585-4e0b-bb67-417c5efd01e3"/>
+				<textElement markup="html">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ivaDetalle}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

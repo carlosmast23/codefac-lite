@@ -17,6 +17,7 @@ public class DetalleFacturaFisicaData {
     private String valorTotal;
     private String codigoPrincipal;
     private String descuento;
+    private String ivaDetalle;
 
     public DetalleFacturaFisicaData() {
     }
@@ -68,5 +69,16 @@ public class DetalleFacturaFisicaData {
     public void setDescuento(String descuento) {
         this.descuento = descuento;
     }
+
+    public String getIvaDetalle() {
+        return ivaDetalle;
+    }
+
+    public void setIvaDetalle(String ivaDetalle) {
+        this.ivaDetalle = ivaDetalle;
+    }
+
+    
+    
     
 }
