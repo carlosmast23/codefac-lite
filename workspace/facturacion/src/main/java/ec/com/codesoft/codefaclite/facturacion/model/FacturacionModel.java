@@ -902,6 +902,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         
                 }
                 
+                controlador.actualizarFacturaDetalleCatalogo(facturaDetalle);
+                
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 if(controlador.agregarDetallesFactura(facturaDetalle,documentoSeleccionado))
                 {

@@ -255,6 +255,30 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return facturaDetalle;
     }
     
+    public FacturaDetalle actualizarFacturaDetalleCatalogo(FacturaDetalle facturaDetalle)
+    {
+        CatalogoProducto catalogoProducto=facturaDetalle.getCatalogoProducto();
+        
+        if(catalogoProducto!=null)
+        {
+            if(catalogoProducto.getIce()!=null)
+            {
+                facturaDetalle.setIcePorcentaje(catalogoProducto.getIce().getPorcentaje());                
+            }
+            
+            if(catalogoProducto.getIva()!=null)
+            {
+                facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
+            }
+        }
+        else
+        {
+            mostrarMensaje(new CodefacMsj("Advertencia","El producto no tiene catalago",DialogoCodefac.MENSAJE_ADVERTENCIA));            
+        }
+        
+        return facturaDetalle;
+    }
+    
         
     /**
      * Este metodo sirve para que cuando algun producto que vaya a ingresarse a la factura y no tiene que llevar iva cambiar las propiedades
