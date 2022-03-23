@@ -1629,7 +1629,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 detalleCabecera.setCantidad("<b>Cantidad</b>");
                 detalleCabecera.setCodigoPrincipal("<b>Código</b>");
                 detalleCabecera.setDescripcion("<b>Descripción</b>");
-                detalleCabecera.setDescuento("<b>Descuento</b>");
+                detalleCabecera.setDescuentoDetalle("<b>Descuento</b>");
                 detalleCabecera.setValorTotal("<b>Total</b>");
                 detalleCabecera.setValorUnitario("<b>Val. Unit</b>");  
                 detalleCabecera.setIvaDetalle("<b>IVA</b>");
@@ -1649,7 +1649,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 detalle.setValorTotal(detalleFactura.getTotal().setScale(numeroDecimales, RoundingMode.HALF_UP) + "");
                 detalle.setValorUnitario(detalleFactura.getPrecioUnitario().setScale(numeroDecimales,RoundingMode.HALF_UP) + "");
                 detalle.setCodigoPrincipal(obtenerCodigoProducto(detalleFactura));
-                detalle.setDescuento(detalleFactura.getDescuento().toString()); 
+                detalle.setDescuentoDetalle(detalleFactura.getDescuento().toString()); 
                 detalle.setIvaDetalle(detalleFactura.getIva()+"");
                 detalles.add(detalle);
             }

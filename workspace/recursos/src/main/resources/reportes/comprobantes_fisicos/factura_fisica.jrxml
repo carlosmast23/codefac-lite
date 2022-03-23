@@ -31,7 +31,7 @@
 	<field name="valorUnitario" class="java.lang.String"/>
 	<field name="valorTotal" class="java.lang.String"/>
 	<field name="codigoPrincipal" class="java.lang.String"/>
-	<field name="descuento" class="java.lang.String"/>
+	<field name="descuentoDetalle" class="java.lang.String"/>
 	<field name="ivaDetalle" class="java.lang.String"/>
 	<filterExpression><![CDATA[new Boolean($F{descripcion}.toString().indexOf("[Hidden]")<0)]]></filterExpression>
 	<background>
@@ -122,8 +122,10 @@
 			</textField>
 			<textField>
 				<reportElement x="387" y="0" width="59" height="14" uuid="107d6f63-0c26-4b99-8921-75d43cb504b8"/>
-				<textElement markup="html"/>
-				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
+				<textElement markup="html">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descuentoDetalle}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="151" y="0" width="117" height="15" uuid="63c13824-dd49-434e-a00d-7c356f78688b"/>
