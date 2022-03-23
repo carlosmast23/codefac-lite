@@ -25,6 +25,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,6 +104,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                 codigoBarraData.setImagen(imagenCodigoBarras);
                 codigoBarraData.setCodigo(producto.getCodigoPersonalizado());
                 codigoBarraData.setNombre(producto.getNombre());
+                codigoBarraData.setPrecio(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
                 listaDatos.add(codigoBarraData);
             }
         }
