@@ -993,6 +993,20 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                             servicioNotaCredito.anularProcesoFactura(detalle);
                         }
                         
+                        //ELIMINAR el registro de la CARTERA
+                        CarteraService carteraService=new CarteraService();
+                        
+                        Cartera carteraFactura=carteraService.buscarCarteraPorReferencia(
+                        factura.getId(),
+                        factura.getCodigoDocumentoEnum(),
+                        GeneralEnumEstado.ACTIVO,
+                        Cartera.TipoCarteraEnum.CLIENTE,
+                        factura.getSucursalEmpresa());
+                        
+                        if(carteraFactura!=null)
+                        {
+                            carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO);
+                        }
                     
                     
                 }
