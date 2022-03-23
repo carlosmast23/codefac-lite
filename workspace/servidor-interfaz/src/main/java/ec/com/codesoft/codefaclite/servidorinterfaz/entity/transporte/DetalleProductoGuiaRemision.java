@@ -122,8 +122,16 @@ public class DetalleProductoGuiaRemision implements Serializable{
             return false;
         }
         final DetalleProductoGuiaRemision other = (DetalleProductoGuiaRemision) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
+        
+        if(this.id==null)
+        {
+            return super.equals(obj);
+        }
+        else
+        {        
+            if (!Objects.equals(this.id, other.id)) {
+                return false;
+            }
         }
         return true;
     }
