@@ -296,6 +296,20 @@ public class MigrarProductoModel extends MigrarModel {
                 if (campoResultado != null) {
                     stock = (Double) campoResultado.valor;
                 }
+                
+                //Crear siempre un kardex aunque no tenga movimientos
+                Kardex kardex = null;
+                if (productoTmp == null) {
+                    kardex = new Kardex();
+                    kardex.setBodega(bodega);
+                    //Obtener costo de la plantilla
+                    Double costo = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.COSTO);
+                    if (costo != null) {
+                        kardex.setCostoPromedio(new BigDecimal(costo + ""));
+                    }
+                }
+  
+                
 
                 if (stock > 0) {
                     kardexDetalle = new KardexDetalle();
@@ -312,18 +326,19 @@ public class MigrarProductoModel extends MigrarModel {
                     kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
                     
                     //Si no existe antes el producto tengo que crear un nuevo KARDEX
-                    Kardex kardex =null;
-                    if(productoTmp==null)
-                    {
-                        kardex = new Kardex();
-                        kardex.setBodega(bodega);                        
-                        //Obtener costo de la plantilla
-                        Double costo = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.COSTO);
-                        if (costo != null) {
-                            kardex.setCostoPromedio(new BigDecimal(costo + ""));
-                        }
-                    }
-                    else //En este caso se supone que ya existe el PRODUCTO y tengo que actualizar los movimientos para que coincida con el nuevo total
+                    //Kardex kardex =null;
+                    //if(productoTmp==null)
+                    //{
+                    //    kardex = new Kardex();
+                    //    kardex.setBodega(bodega);                        
+                    //    //Obtener costo de la plantilla
+                    //    Double costo = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.COSTO);
+                    //    if (costo != null) {
+                    //        kardex.setCostoPromedio(new BigDecimal(costo + ""));
+                    //    }
+                    //}
+                    //else //En este caso se supone que ya existe el PRODUCTO y tengo que actualizar los movimientos para que coincida con el nuevo total
+                    if(productoTmp!=null)
                     {
                         kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.STOCK_AJUSTE_MIGRADO.getCodigo());
                         kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodega, productoTmp);

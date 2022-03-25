@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
@@ -22,14 +23,14 @@ import org.krysalis.barcode4j.tools.UnitConv;
  */
 public abstract class UtilidadCodigoBarras {
     
-    public static Image obtenerImagenCodigoBarras(String codigo)
+    public static Image obtenerImagenCodigoBarras(String codigo,int dpi)
     {
         try {
             //org.krysalis.barcode4j.impl.code128.EAN128
             //Code39Bean bean39 = new Code39Bean();
             Code39Bean bean39 = new Code39Bean();
             //final int dpi = 160;
-            final int dpi = 80;
+            //final int dpi = 80;
 
             //Configure the barcode generator
             bean39.setModuleWidth(UnitConv.in2mm(2.8f / dpi));
@@ -48,6 +49,7 @@ public abstract class UtilidadCodigoBarras {
 
             //Generate the barcode
             bean39.generateBarcode(canvas, codigo);
+            //bean39.setHeight(20d);
 
             //Signal end of generation
             canvas.finish();

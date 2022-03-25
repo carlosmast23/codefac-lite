@@ -102,21 +102,32 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
     
     private List<CodigoBarrasData> getData()
     {
-        
+        String opcionLlevaIva=(String) getCmbPrecioConIva().getSelectedItem();        
+               
         List<CodigoBarrasData> listaDatos=new ArrayList<CodigoBarrasData>();
+        int dpi=(int) getTxtDpi().getValue();
         
         for (Map.Entry<Producto,Integer> entry : mapProductosImprimir.entrySet()) {
             Producto producto = entry.getKey();
             Integer cantidad = entry.getValue();
             
-            Image imagenCodigoBarras= UtilidadCodigoBarras.obtenerImagenCodigoBarras(producto.getCodigoPersonalizado());
+            Image imagenCodigoBarras= UtilidadCodigoBarras.obtenerImagenCodigoBarras(producto.getCodigoPersonalizado(),dpi);
             for (int i = 0; i < cantidad; i++) 
             {
                 CodigoBarrasData codigoBarraData=new CodigoBarrasData();
                 codigoBarraData.setImagen(imagenCodigoBarras);
                 codigoBarraData.setCodigo(producto.getCodigoPersonalizado());
                 codigoBarraData.setNombre(producto.getNombre());
-                codigoBarraData.setPrecio(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
+                
+                if (opcionLlevaIva.equals("SI")) 
+                {
+                    codigoBarraData.setPrecio("$"+producto.obtenerValorUnitarioConIva().setScale(2, RoundingMode.HALF_UP).toString());
+                } 
+                else if (opcionLlevaIva.equals("NO")) 
+                {
+                    codigoBarraData.setPrecio("$"+producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
+                }
+                
                 listaDatos.add(codigoBarraData);
             }
         }
