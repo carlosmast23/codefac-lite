@@ -67,13 +67,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(p,generarCodigo);
+                grabarSinTransaccion(p,generarCodigo,true);
             }
         });        
         return p;
     }
     
-    public void grabarSinTransaccion(Producto p,Boolean generarCodigo) throws java.rmi.RemoteException,ServicioCodefacException{
+    //TODO: revisar una mejor solucion con lo de generar kardex
+    public void grabarSinTransaccion(Producto p,Boolean generarCodigo,Boolean generarKardex) throws java.rmi.RemoteException,ServicioCodefacException{
         
         if(generarCodigo)
         {
@@ -85,6 +86,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         CatalogoProducto catalogoProducto = p.getCatalogoProducto();
         p.setCatalogoProducto(null);
+        entityManager.flush();
         entityManager.persist(p);
         entityManager.flush();
         
@@ -117,11 +119,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         entityManager.flush();
         
         //Crear los KARDEX CUANDO NO EXISTA
-        if(p.getManejarInventarioEnum().equals(EnumSiNo.SI))
+        if(generarKardex)
         {
-            ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(p);
+            if(p.getManejarInventarioEnum().equals(EnumSiNo.SI))
+            {
+                ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(p);
+            }
         }
-        
         
     }
     
@@ -425,7 +429,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //Solo grabo el producto cuando no esta creado previamente
                 if(p.getIdProducto()==null)
                 {
-                    grabarSinTransaccion(p,false); //graba el producto                
+                    grabarSinTransaccion(p,false,false); //graba el producto                
                 }
                                 
                 KardexService kardexService=new KardexService();
@@ -433,7 +437,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //Solo grabar cuando existen datos diferente de null
                 if(kardexDetalle!=null)
                 {
-                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle,null);
+                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle,null,true);
                 }
                 
             }

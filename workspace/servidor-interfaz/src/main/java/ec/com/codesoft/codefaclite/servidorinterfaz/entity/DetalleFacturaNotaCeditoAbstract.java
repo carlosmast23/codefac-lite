@@ -63,6 +63,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Column(name = "LOTE_ID")
     private Long loteId;
     
+    @Column(name = "COSTO_PROMEDIO")
+    private BigDecimal costoPromedio;
+    
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     private CatalogoProducto catalogoProducto;
 
@@ -208,6 +211,14 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
 
     public CatalogoProducto getCatalogoProducto() {
         return catalogoProducto;
+    }
+
+    public BigDecimal getCostoPromedio() {
+        return costoPromedio;
+    }
+
+    public void setCostoPromedio(BigDecimal costoPromedio) {
+        this.costoPromedio = costoPromedio;
     }
 
     public void setCatalogoProducto(CatalogoProducto catalogoProducto) {

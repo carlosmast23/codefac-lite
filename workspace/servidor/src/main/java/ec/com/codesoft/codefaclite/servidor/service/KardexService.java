@@ -437,7 +437,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarKardexDetallSinTransaccion(detalle,lote);
+                grabarKardexDetallSinTransaccion(detalle,lote,false);
             }
         });
     }
@@ -690,7 +690,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
                 kardexDetalle.setKardex(kardex);
                 
-                grabarKardexDetallSinTransaccion(kardexDetalle,null);
+                grabarKardexDetallSinTransaccion(kardexDetalle,null,false);
             }
         });
         
@@ -704,7 +704,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 for (KardexDetalle detalle : detalles) {
-                    grabarKardexDetallSinTransaccion(detalle,null);
+                    grabarKardexDetallSinTransaccion(detalle,null,false);
                     
                 }
                 
@@ -713,14 +713,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     
-    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle,Lote lote) throws RemoteException, ServicioCodefacException
+    public void grabarKardexDetallSinTransaccion(KardexDetalle detalle,Lote lote,Boolean forzarGrabarCantidadCero) throws RemoteException, ServicioCodefacException
     {
         /**
          * ==============================================================
          *            VALIDACIONES PARA LOS DETALLES DE KARDEX
          * ==============================================================
          */
-        validarDetallesKardex(detalle);
+        validarDetallesKardex(detalle,forzarGrabarCantidadCero);
         
         //Buscar si ya existe el kardex o si no existe los creamos
         //Map<String, Object> map = new HashMap<String, Object>();
@@ -777,7 +777,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
     }
     
-    private void validarDetallesKardex(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException
+    private void validarDetallesKardex(KardexDetalle detalle,Boolean forzarCantidadCero) throws java.rmi.RemoteException,ServicioCodefacException
     {
          /**
          * ==============================================================
@@ -789,10 +789,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             throw new ServicioCodefacException("No se puede grabar sin referencia de Kardex vacio");
         }
         
-        if(detalle.getCantidad()==null || detalle.getCantidad().compareTo(BigDecimal.ZERO)==0)
-        //if(detalle.getCantidad()==null || detalle.getCantidad()==0)
+        if(!forzarCantidadCero)
         {
-            throw new ServicioCodefacException("No se puede ingresar cantidad negativas de stock o que sean 0");
+            if(detalle.getCantidad()==null || detalle.getCantidad().compareTo(BigDecimal.ZERO)==0)
+            //if(detalle.getCantidad()==null || detalle.getCantidad()==0)
+            {
+                throw new ServicioCodefacException("No se puede ingresar cantidad negativas de stock o que sean 0");
+            }
         }
         
         if(detalle.getFechaDocumento()==null)
@@ -1188,7 +1191,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * TODO: Unificar este metodo con la de factura que existe un metodo similar
      * @param detalle 
      */
-    public void afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento) throws RemoteException,ServicioCodefacException
+    public KardexDetalle afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento) throws RemoteException,ServicioCodefacException
     {
         try {
             Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaProductoId);
@@ -1226,13 +1229,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
                 
                 entityManager.merge(kardex);
+                return kardexDetalle;
             //}
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+        return null;
     }
     
     public List<RotacionInventarioRespuesta> consultarRotacionInventario(Date fechaInicio,Date fechaFinal,Sucursal sucursal) throws RemoteException,ServicioCodefacException

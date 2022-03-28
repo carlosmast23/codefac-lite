@@ -23,9 +23,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,120 +48,6 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    /*public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal) {
-        //Factura factura;
-        //factura.getSucursalEmpresa();
-        //factura.getSucursal();
-        //factura.getCodigoDocumentoEnum();
-        String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="";
-        if (persona != null) {
-            //cliente = "u.cliente=?1";
-            cliente = "u.sucursal=?1";
-        } else {
-            cliente = "1=1";
-        }
-        
-        if (fi == null && ff != null) {
-            fecha = " AND u.fechaEmision <= ?3";
-        } else if (fi != null && ff == null) {
-            fecha = " AND u.fechaEmision >= ?2";
-        } else if (fi == null && ff == null) {
-            fecha = "";
-        } else {
-            fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
-        }
-        
-        if (estadoEnum!= null) {
-            //Si la peticion es por todos sri entonces tengo que setear 2 valores
-            if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
-            {
-                estadoFactura = " AND ( u.estado=?10 or u.estado=?11 ) ";
-            }
-            else
-            {                
-                estadoFactura = " AND u.estado=?4";
-            }
-        }
-        
-        if(agrupadoReferido)
-        {
-            ordenarAgrupado=" u.referido ,";
-        }
-        
-        if(consultarReferidos)
-        {
-            filtrarReferidos=" AND u.referido IS NOT NULL ";
-            if(referido!=null)
-            {            
-                filtrarReferidos+=" AND u.referido=?5 ";
-            }
-        }
-        
-        if(sucursal!=null)
-        {
-            filtrarSucursal+=" AND u.sucursalEmpresa=?13 ";
-        }
-        
-        String filtroPuntoEmision="";
-        if(puntoEmision!=null)
-        {
-            filtroPuntoEmision=" AND u.puntoEmision =?12 ";
-        }
-        //Factura f;
-        //f.getPuntoEmision()
-
-        try {
-            String queryString = "SELECT u FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + fecha + estadoFactura +filtrarReferidos+filtroPuntoEmision+filtrarSucursal+" ORDER BY"+ ordenarAgrupado+" u.secuencial+0 asc";
-            Query query = getEntityManager().createQuery(queryString);
-            //System.err.println("QUERY--->"+query.toString());
-            if (persona != null) {
-                query.setParameter(1, persona);
-            }
-            if (fi != null) {
-                query.setParameter(2, fi);
-            }
-            if (ff != null) {
-                query.setParameter(3, ff);
-            }
-            if (estadoEnum != null) {
-                if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
-                {
-                    query.setParameter(10,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                    query.setParameter(11,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
-                }else
-                {
-                    query.setParameter(4, estadoEnum.getEstado());
-                }
-            }
-            
-            if (consultarReferidos) 
-            {
-                if (referido != null) 
-                {
-                    query.setParameter(5, referido);
-                }
-            }
-            
-            //query.setParameter(6,DocumentoEnum.FACTURA.getCodigo());
-            query.setParameter(6,documentoEnum.getCodigo());
-            query.setParameter(7,empresa);
-            
-            if (puntoEmision != null) {
-                query.setParameter(12,puntoEmision.getPuntoEmision()); //TODO: Grabo este valor porque de esta manera se esta grababndo en la factura
-            }
-            
-            if(sucursal!=null)
-            {
-                query.setParameter(13,sucursal);
-            }
-            
-            
-            return query.getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }*/
-    
     public Query listaQuery(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,TipoConsultaEnum tipoConsultaEnum,Boolean quitarVentasAnuladasNCTotal) {
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="", usuarioId="",enviadoGuiaRemisionStr="",vendedorStr="",afectaNotaCreditoTotalStr="";
         
@@ -472,5 +362,24 @@ public class FacturaFacade extends AbstractFacade<Factura> {
               return null;
           }
       }
-    //public Long obtenerSecuencialPresupuestos
+      
+      public List<UtilidadResult> consultaUtilidadFacade()
+      {
+          String queryString="SELECT F.SECUENCIAL, F.RAZON_SOCIAL FROM FACTURA F INNER JOIN " +
+                        "(" +
+                        "	SELECT FD.FACTURA_ID ,SUM(FD.TOTAL) AS SUBTOTAL ,SUM(FD.COSTO_PROMEDIO) AS COSTO , SUM(FD.TOTAL-FD.COSTO_PROMEDIO) AS UTILIDAD FROM FACTURA_DETALLE FD  GROUP BY FD.FACTURA_ID " +
+                        ") FD ON F.ID =FD.FACTURA_ID";
+      
+          Query query=getEntityManager().createNativeQuery(queryString);
+          List<Object[]> resultado=query.getResultList();
+          List<UtilidadResult> resultadoList=new ArrayList<UtilidadResult>();
+          for (Object[] objects : resultado) 
+          {
+              UtilidadResult resultadoObj=new UtilidadResult();
+              resultadoObj.constructor(objects);
+              resultadoList.add(resultadoObj);
+          }
+          return resultadoList;
+      }
+    
 }

@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -71,5 +72,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public Factura obtenerPedidoVentaDiariaActivo(Sucursal sucursal) throws RemoteException,ServicioCodefacException;
     
     public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
+    
+    public List<UtilidadResult> consultaUtilidadVentas() throws RemoteException,ServicioCodefacException;
     
 }

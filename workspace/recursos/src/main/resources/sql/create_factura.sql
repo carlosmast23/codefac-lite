@@ -116,6 +116,8 @@ create table FACTURA_DETALLE
     PRECIO_SIN_SUBSIDIO decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.0.6)*/
     LOTE_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.0.8)*/
+    COSTO_PROMEDIO decimal(13,6),
     primary key (ID)
 );
 

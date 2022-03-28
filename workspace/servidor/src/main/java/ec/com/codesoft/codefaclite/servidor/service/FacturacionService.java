@@ -65,6 +65,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -866,6 +867,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         //Solo ejecuto un merge por que anteriormente ya se ejecuto un persistent cuando no existe
         entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
+        
+        //adicional grabar el costo en el detalle de las facturas para luego hacer el reporte
+        detalle.setCostoPromedio(kardex.getCostoPromedio());
        
     }
     
@@ -1219,4 +1223,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
         return null;
     }    
+    
+   public List<UtilidadResult> consultaUtilidadVentas() throws RemoteException,ServicioCodefacException 
+   {
+       return getFacade().consultaUtilidadFacade();
+   }
 }

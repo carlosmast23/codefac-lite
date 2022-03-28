@@ -41,6 +41,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.*;
@@ -119,18 +120,84 @@ public class FacturaReporteModel extends FacturaReportePanel {
         return new ControladorReporteFactura(session.getEmpresa(), session.getUsuario());
     }
     
+    protected void generarReporteConLecturaParametros(Date fechaInicio,Date fechaFin)
+    {
+        
+        //Date fechaInicio = null;
+        //Date fechaFin = null;
+
+        //mapTotales=new HashMap<String,BigDecimal>();
+        //igDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
+        ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
+        String estadoStr = estadoFactura.getEstado();
+
+        //if (getDateFechaInicio().getDate() != null) {
+        //    fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+        //}
+
+        //if (getDateFechaFin().getDate() != null) {
+        //    fechaFin = new Date(getDateFechaFin().getDate().getTime());
+        //}
+
+        Sucursal sucursal = null;
+        if (!getChkSucursalTodos().isSelected()) {
+            sucursal = (Sucursal) getCmbSucursal().getSelectedItem();
+        }
+
+        DocumentoEnum documentoConsultaEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+
+        ParametroCodefac siNofiltrarFacturaPorUsuario = session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
+        EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((siNofiltrarFacturaPorUsuario != null) ? siNofiltrarFacturaPorUsuario.getValor() : null);
+        //session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO).compararEnumSiNo(EnumSiNo.SI))
+        if (enumSiNo != null && enumSiNo.equals(EnumSiNo.SI)) {
+            controladorReporte = crearControladorPorPuntoEmision();
+        } else {
+            controladorReporte = crearControlador();
+        }
+        //Seteando datos para el controlador         
+        //controladorReporte =crearControlador();
+        controladorReporte.setPersona(persona);
+        controladorReporte.setFechaInicio(fechaInicio);
+        controladorReporte.setFechaFin(fechaFin);
+        controladorReporte.setEstadoFactura(estadoFactura);
+        controladorReporte.setSucursal(sucursal);
+        controladorReporte.setFiltrarReferidos(filtrarReferidos);
+        controladorReporte.setReferido(referido);
+        controladorReporte.setReporteAgrupado(getChkReporteAgrupadoReferido().isSelected());
+        controladorReporte.setAfectarNotaCredito(getChkAfectaNotaCredito().isSelected());
+        controladorReporte.setDocumentoConsultaEnum(documentoConsultaEnum);
+        PuntoEmision puntoEmisionReporte = ((getChkPuntoEmisionTodos().isSelected()) ? null : (PuntoEmision) getCmbPuntoEmision().getSelectedItem());
+
+        controladorReporte.setPuntoEmision(puntoEmisionReporte);
+        controladorReporte.setAgregarCostos(getChkAgregarCostos().isSelected());
+
+        //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
+        TipoReporteEnum tipoReporteEnum = (TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
+        if (tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO)
+                || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CATEGORIA)
+                || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR)) {
+            controladorReporte.setReporteConDetallesFactura(true);
+        }
+
+        Long tiempoInicial = System.nanoTime();
+        controladorReporte.generarReporte();
+        long endTime = System.nanoTime() - tiempoInicial;
+        long segundosDemora = TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
+        System.out.println("El tiempo en generar el reporte es: " + segundosDemora);
+
+        data = controladorReporte.getData();
+
+        imprimirTabla();
+
+    }
     
-    private void generarReporte()
+    protected void generarReporte()
     {
         //try {
             
             Date fechaInicio=null;
             Date fechaFin =null;
             
-            //mapTotales=new HashMap<String,BigDecimal>();
-            //igDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
-            ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-            String estadoStr = estadoFactura.getEstado();
             
             if (getDateFechaInicio().getDate() != null) 
             {
@@ -142,61 +209,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 fechaFin = new Date(getDateFechaFin().getDate().getTime());
             }
             
-            Sucursal sucursal=null;
-            if(!getChkSucursalTodos().isSelected())
-            {
-                sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
-            }
-
-            DocumentoEnum documentoConsultaEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+            generarReporteConLecturaParametros(fechaInicio, fechaFin);
             
-            ParametroCodefac siNofiltrarFacturaPorUsuario = session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
-            EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((siNofiltrarFacturaPorUsuario != null ) ? siNofiltrarFacturaPorUsuario.getValor() : null);
-            //session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO).compararEnumSiNo(EnumSiNo.SI))
-            if(enumSiNo != null && enumSiNo.equals(EnumSiNo.SI))
-            {
-                controladorReporte = crearControladorPorPuntoEmision();    
-            }
-            else
-            {
-                controladorReporte =crearControlador();
-            }
-            //Seteando datos para el controlador         
-            //controladorReporte =crearControlador();
-            controladorReporte.setPersona(persona);
-            controladorReporte.setFechaInicio(fechaInicio);
-            controladorReporte.setFechaFin(fechaFin);
-            controladorReporte.setEstadoFactura(estadoFactura);
-            controladorReporte.setSucursal(sucursal);
-            controladorReporte.setFiltrarReferidos(filtrarReferidos);
-            controladorReporte.setReferido(referido);
-            controladorReporte.setReporteAgrupado(getChkReporteAgrupadoReferido().isSelected());
-            controladorReporte.setAfectarNotaCredito(getChkAfectaNotaCredito().isSelected());
-            controladorReporte.setDocumentoConsultaEnum(documentoConsultaEnum);
-            PuntoEmision puntoEmisionReporte=((getChkPuntoEmisionTodos().isSelected())?null:(PuntoEmision)getCmbPuntoEmision().getSelectedItem());
-            
-            controladorReporte.setPuntoEmision(puntoEmisionReporte);
-            controladorReporte.setAgregarCostos(getChkAgregarCostos().isSelected());
-            
-            //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
-            TipoReporteEnum tipoReporteEnum=(TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
-            if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO)
-                    || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CATEGORIA)
-                    || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR))
-            {
-                controladorReporte.setReporteConDetallesFactura(true);
-            }
-                                    
-            Long tiempoInicial=System.nanoTime();
-            controladorReporte.generarReporte();
-            long endTime = System.nanoTime() - tiempoInicial;
-            long segundosDemora=TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
-            System.out.println("El tiempo en generar el reporte es: "+segundosDemora);
-            
-            data=controladorReporte.getData();
-            
-            imprimirTabla();      
-
     }
     
     //protected InputStream getReporte()
@@ -399,7 +413,15 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     @Override
     public void imprimir() {
+        //try {
+        //    List<UtilidadResult> datos= ServiceFactory.getFactory().getFacturacionServiceIf().consultaUtilidadVentas();
+            
         imprimirReporte();
+        /*} catch (RemoteException ex) {
+            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }
 
     @Override

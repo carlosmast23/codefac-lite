@@ -311,7 +311,7 @@ public class MigrarProductoModel extends MigrarModel {
   
                 
 
-                if (stock > 0) {
+                //if (stock > 0) {
                     kardexDetalle = new KardexDetalle();
                     //kardexDetalle.setCantidad(stock.intValue());
                     kardexDetalle.setCantidad(new BigDecimal(stock));
@@ -352,7 +352,7 @@ public class MigrarProductoModel extends MigrarModel {
                     kardex.setProducto(producto);
                     kardexDetalle.setKardex(kardex);
 
-                }
+                //}
 
             } else {
                 throw new ExcelMigrar.ExcepcionExcel("La bodega no existe");

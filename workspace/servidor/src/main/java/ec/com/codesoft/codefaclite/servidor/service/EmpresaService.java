@@ -361,7 +361,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         ProductoService service=new ProductoService();
         Producto producto=service.crearProductoPorDefectoSinTransaccion(empresa,ivaDefecto);
         //entityManager.persist(producto.getCatalogoProducto());
-        service.grabarSinTransaccion(producto,false);
+        service.grabarSinTransaccion(producto,false,true);
     }
     
     

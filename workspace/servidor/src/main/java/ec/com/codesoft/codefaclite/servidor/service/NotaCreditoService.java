@@ -305,7 +305,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             case INVENTARIO:
                 Bodega bodega=obtenerBodegaAfecta(notaDetalle.getNotaCredito());
                 KardexService kardexService=new KardexService();
-                kardexService.afectarInventario(
+                KardexDetalle kardexDetalleNuevo= kardexService.afectarInventario(
                         bodega,
                         notaDetalle.getCantidad(), 
                         notaDetalle.getPrecioUnitario(),
@@ -317,6 +317,12 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         notaDetalle.getNotaCredito().getPuntoEstablecimiento().toString(),
                         notaDetalle.getNotaCredito().getSecuencial(),
                         UtilidadesFecha.castDateUtilToSql(notaDetalle.getNotaCredito().getFechaEmision()));
+                
+                //Actualizar el costo promedio del kardex generado
+                if(kardexDetalleNuevo!=null)
+                {
+                    notaDetalle.setCostoPromedio(kardexDetalleNuevo.getKardex().getCostoPromedio());
+                }
                 
                 break;
         }
