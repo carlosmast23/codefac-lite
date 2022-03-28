@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -494,7 +495,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param facturaDetalle
      * @return 
      */
-    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum) throws ServicioCodefacException {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum,Kardex kardex) throws ServicioCodefacException {
 
         //Validacion de los datos ingresados para ver si puedo agregar al detalle
         if (!interfaz.validarIngresoDetalle()) {
@@ -503,7 +504,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             interfaz.seleccionarFilaTablaDetalle(filaSeleccionada);
             return false;
         }
-
+        
+        //Cuando tiene seleccionado una kardex mando el valor del lote
+        Lote lote=null;
+        if(kardex!=null)
+        {
+            lote=kardex.getLote();
+        }
+        
+        facturaDetalle.setLoteId((lote!=null?lote.getId():null));
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));    
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
         if (!validacionPersonalizadaPorModulos(facturaDetalle,documentoEnum)) {

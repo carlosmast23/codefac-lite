@@ -59,6 +59,9 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     @Override
     public QueryDialog getConsulta(String filter) {
         String whereManejaInventario="";
+        
+        String whereBodega="";
+        
         //if(isManejoInvetario!=null)
         //{
         //    whereManejaInventario=" and u.manejarInventario=?98 ";
@@ -78,8 +81,13 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
             queryFiltroEmpresa = "";
         }
         
+        if(bodega!=null)
+        {
+            whereBodega=" and k.bodega=?5 ";
+        }
         
-        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario;      
+        
+        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega;      
         
         queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 ) ORDER BY u.codigoPersonalizado";
         
@@ -89,7 +97,12 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         if (!datosCompartidosEmpresas) 
         {
-            queryDialog.agregarParametro(4,empresa);
+           queryDialog.agregarParametro(4,empresa);
+        }
+        
+        if(bodega!=null)
+        {
+           queryDialog.agregarParametro(5,bodega);
         }
         
         /*if(isManejoInvetario!=null)

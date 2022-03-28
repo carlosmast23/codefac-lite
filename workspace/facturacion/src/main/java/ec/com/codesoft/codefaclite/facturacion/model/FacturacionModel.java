@@ -173,6 +173,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
@@ -641,7 +642,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 try {
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado);
+                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado,kardexSeleccionado);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -852,7 +853,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             try {
                 //Si esta habilitado el boton de agregar funciona para agregar
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado);
+                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado,kardexSeleccionado);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -905,7 +906,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 controlador.actualizarFacturaDetalleCatalogo(facturaDetalle);
                 
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-                if(controlador.agregarDetallesFactura(facturaDetalle,documentoSeleccionado))
+                if(controlador.agregarDetallesFactura(facturaDetalle,documentoSeleccionado,kardexSeleccionado))
                 {
                     habilitarModoIngresoDatos();
                 }

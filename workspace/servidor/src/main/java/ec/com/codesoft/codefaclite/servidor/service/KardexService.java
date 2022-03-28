@@ -148,6 +148,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     * @throws java.rmi.RemoteException
     * @throws ServicioCodefacException 
     */
+   @Deprecated //TODO: Hacer que funcione con los Lotes
    public void crearKardexSiNoExisteSinTransaccion(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
    {
        //Validar que tengan una empresa creada
@@ -167,7 +168,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
            //Solo crear el kardex si no existe para esa bodega
            if (kardexList.size() == 0) 
            {
-               Kardex kardex = ServiceFactory.getFactory().getKardexServiceIf().crearObjeto(bodega, producto);
+               Kardex kardex = ServiceFactory.getFactory().getKardexServiceIf().crearObjeto(bodega, producto,null);
                entityManager.persist(kardex);
            }
        }
@@ -201,7 +202,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //Si no existe el kardex del componente que intento facturar lo debo crear
                 if(kardexComponente==null)
                 {
-                    kardexComponente=consultarOCrearStockSinPersistencia(componente, bodega);
+                    kardexComponente=consultarOCrearStockSinPersistencia(componente, bodega,null);
                 }
                                 
                 
@@ -257,23 +258,28 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return kardeList;
         
     }
-    public  Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega) throws RemoteException, ServicioCodefacException
+    
+    public  Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega,Lote lote) throws RemoteException, ServicioCodefacException
     {
         
         //Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
         //Map<String,Object> mapParametros=new HashMap<String,Object>();
         //mapParametros.put("producto", producto);
         KardexService kardexService = new KardexService();
-        List<Kardex> kardexs = kardexService.buscarPorProductoYBodega(producto, bodega);
+        //List<Kardex> kardexs = kardexService.buscarKardexPorProductoyBodegayLote(bodega,producto,lote);
+        
+        Kardex kardex = kardexService.buscarKardexPorProductoyBodegayLote(bodega,producto,lote);
 
-        Kardex kardex = null;
-        if (kardexs == null || kardexs.size() == 0) {
-            kardex = kardexService.crearObjeto(bodega, producto);
+        //Kardex kardex = null;
+        if (kardex == null) 
+        {
+            kardex = kardexService.crearObjeto(bodega, producto,lote);
             entityManager.persist(kardex);
             entityManager.flush();
-        } else {
-            kardex = kardexs.get(0);
-        }
+        } 
+        //else {
+        //    kardex = kardex.get(0);
+        //}
         
         return kardex;
 
@@ -320,7 +326,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         if (kardexList != null && kardexList.size() > 0) {
             kardexEnsamble = kardexEnsamble = kardexList.get(0);
         } else {
-            kardexEnsamble = crearObjeto(bodegaDestino, productoEnsamble);
+            kardexEnsamble = crearObjeto(bodegaDestino, productoEnsamble,null);
             entityManager.persist(kardexEnsamble);
         }
         
@@ -485,7 +491,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 if(kardexResultado==null || kardexResultado.size()==0)
                 {
                     //Si no existe el kardex de destino creo uno similar con los datos del otro Kardex
-                    kardexDestino=crearObjeto(bodegaDestino,producto);
+                    kardexDestino=crearObjeto(bodegaDestino,producto,null);
                     entityManager.persist(kardexDestino);
                     
                 }
@@ -863,7 +869,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 {
                     //Creando el kardex cuando no existe en la base de datos
                     kardex=new Kardex();
-                    crearObjeto(bodega, value.getProductoProveedor().getProducto());/*
+                    crearObjeto(bodega, value.getProductoProveedor().getProducto(),null);/*
                     kardex.setBodega(bodega);
                     kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                     kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
@@ -1076,9 +1082,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @param producto
      * @return 
      */
-    public Kardex crearObjeto(Bodega bodega,Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
+    public Kardex crearObjeto(Bodega bodega,Producto producto,Lote lote) throws java.rmi.RemoteException,ServicioCodefacException
     {
         Kardex kardex=new Kardex();
+        kardex.setLote(lote);
         kardex.setBodega(bodega);
         kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
@@ -1200,7 +1207,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
             //Kardex kardexProducto=kardexService.buscarKardexPorProductoyBodega(bodega, producto);
-            Kardex kardexProducto=ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega);
+            Kardex kardexProducto=ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega,null);
             //List<Kardex> kardexs= kardexService.getFacade().findByMap(mapParametros);
             //TODO: Definir especificamente cual es la bodega principal
             //if(kardexProducto!=null && kardexProducto.size()>0)

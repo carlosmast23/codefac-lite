@@ -486,7 +486,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             factura.calcularTotalesDesdeDetalles();
             facturaDetalle = new FacturaDetalle();
             productoSeleccionado = new Producto();*/
-            controlador.agregarDetallesFactura(facturaDetalle,documentoSeleccionado);
+            controlador.agregarDetallesFactura(facturaDetalle,documentoSeleccionado,null);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle.EstadoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
@@ -803,8 +804,16 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
 
         Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+        
+        //Buscar el lote si no tiene un datos
+        Lote lote=null;
+        if(detalle.getLoteId()!=null)
+        {
+            lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorId(detalle.getLoteId());
+        }
 
-        Kardex kardex =ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega);
+        //ServiceFactory.getFactory().getKardexServiceIf().
+        Kardex kardex =ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega,lote);
         //Kardex kardex = consultarOCrearStock(producto, bodega);
 
         /**
