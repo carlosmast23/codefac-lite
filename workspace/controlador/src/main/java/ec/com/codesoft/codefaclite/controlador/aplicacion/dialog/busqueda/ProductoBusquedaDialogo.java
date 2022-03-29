@@ -133,7 +133,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         }
         
        
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 ) ORDER BY u.codigoPersonalizado";
+        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 ) ORDER BY u.nombre";
 
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());

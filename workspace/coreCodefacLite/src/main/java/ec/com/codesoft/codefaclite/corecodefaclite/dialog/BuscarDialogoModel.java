@@ -93,7 +93,13 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             String filtro=getTxtBuscar().getText().toLowerCase();
             filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
             
-            QueryDialog queryDialog=this.model.getConsulta("%"+filtro+"%");
+            String filtroConsuta=filtro;
+            if(!filtro.contains("%"))
+            {
+                filtroConsuta="%"+filtroConsuta+"%";
+            }
+            
+            QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             
             int limiteInferior=CANTIDAD_FILAS*(paginaActual-1);
@@ -159,7 +165,15 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         try {
             String filtro=getTxtBuscar().getText().toLowerCase();
             filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
-            QueryDialog queryDialog=this.model.getConsulta("%"+filtro+"%");
+            
+            //Si el filtro ya contiene el porcentaje entonces descativo la busqueda automatica
+            String filtroConsuta=filtro;
+            if(!filtro.contains("%"))
+            {
+                filtroConsuta="%"+filtroConsuta+"%";
+            }
+            
+            QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             String query=queryDialog.query;
             query=query.toLowerCase();
