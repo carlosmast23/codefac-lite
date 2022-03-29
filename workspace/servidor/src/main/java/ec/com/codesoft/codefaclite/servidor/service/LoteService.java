@@ -5,16 +5,27 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.LoteFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.FechaCaducidadData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReporteFechaCaducidadReport;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.FechaCaducidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -100,6 +111,32 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         });
     }
  
+    
+    public ReportDataAbstract reporteFechaCaducidad(Sucursal sucursal,Bodega bodega,Date fechaReferencia) throws ServicioCodefacException, RemoteException 
+    {
+        List<FechaCaducidadResult> resultDataList=getFacade().reporteFechaCaducidadFacade(sucursal, bodega,fechaReferencia);
+        
+        List<FechaCaducidadData> reporteDataList=new ArrayList<FechaCaducidadData>();
+        
+        for (FechaCaducidadResult dato : resultDataList) 
+        {
+            // TODO: Ver si esta parte convertir debe estar en la clase para no hacer tanto codigo que no correcponde
+            DateFormat dateFormat= ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA;
+            FechaCaducidadData fechaCaducidadData=new FechaCaducidadData(
+                    dato.getCodigoPersonalizado(), 
+                    dato.getNombreBodega(), 
+                    dato.getCodigoLote(), 
+                    dato.getNombreProducto(), 
+                    dateFormat.format(dato.getFechaCaducidad()), 
+                    dato.getStock().setScale(2, RoundingMode.HALF_UP).toString(), 
+                    dato.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
+           reporteDataList.add(fechaCaducidadData);
+        }
+        
+        ReporteFechaCaducidadReport reporte=new ReporteFechaCaducidadReport("Productos por Caducar");
+        reporte.setDetalleList(reporteDataList);    
+        return reporte;
+    }
     
     
 }

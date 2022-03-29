@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="3.4462297397679427"/>
+	<property name="ireport.zoom" value="1.4615378250000162"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="320"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -24,23 +24,16 @@
 	<parameter name="pl_facebook" class="java.lang.String"/>
 	<parameter name="pl_instagram" class="java.lang.String"/>
 	<parameter name="pl_img_instagram" class="java.lang.Object"/>
-	<parameter name="pl_detalle_item" class="java.lang.Object"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="codigo" class="java.lang.String"/>
-	<field name="producto" class="java.lang.String"/>
+	<field name="codigoPersonalizado" class="java.lang.String"/>
+	<field name="nombreProducto" class="java.lang.String"/>
 	<field name="stock" class="java.lang.String"/>
-	<field name="cantidadMinima" class="java.lang.String"/>
-	<field name="categoria" class="java.lang.String"/>
-	<field name="ubicacion" class="java.lang.String"/>
-	<field name="costo" class="java.lang.String"/>
-	<field name="bodega" class="java.lang.String"/>
-	<field name="detalles" class="java.util.Collection"/>
-	<field name="pvp1" class="java.math.BigDecimal"/>
-	<field name="utilidad1" class="java.math.BigDecimal"/>
+	<field name="nombreBodega" class="java.lang.String"/>
+	<field name="valorUnitario" class="java.lang.String"/>
 	<field name="fechaCaducidad" class="java.lang.String"/>
-	<field name="lote" class="java.lang.String"/>
+	<field name="codigoLote" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -93,7 +86,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="182" y="0" width="150" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
+				<reportElement x="182" y="0" width="250" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -104,19 +97,6 @@
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Producto]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="332" y="0" width="100" height="15" uuid="d8ff0833-b1a1-437b-81b2-4abd21d5df59"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Categoria]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="495" y="0" width="30" height="15" forecolor="#FFFFFF" backcolor="#666666" uuid="aa1cb3b4-be8f-4a75-80ee-cfafbb904caa"/>
@@ -186,9 +166,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="44" height="15" uuid="fbbacd57-c811-4907-881a-a6625dc3a2df"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="44" height="13" uuid="fbbacd57-c811-4907-881a-a6625dc3a2df"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -199,24 +179,10 @@
 					<font size="8"/>
 					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{codigoPersonalizado}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="182" y="0" width="150" height="15" uuid="86505e3e-c386-4ba6-836c-4243f9571225"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.75"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement>
-					<font size="8"/>
-					<paragraph leftIndent="5" rightIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="495" y="0" width="30" height="15" forecolor="#000000" backcolor="#E3E3E3" uuid="086ce8d9-5df6-456d-a820-f05251accdf5"/>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="495" y="0" width="30" height="13" forecolor="#000000" backcolor="#E3E3E3" uuid="086ce8d9-5df6-456d-a820-f05251accdf5"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -230,7 +196,7 @@
 				<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="332" y="0" width="100" height="15" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
+				<reportElement stretchType="RelativeToBandHeight" x="44" y="0" width="70" height="13" uuid="86480613-120b-4da3-a9e1-87849e20c0e4"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -241,31 +207,10 @@
 					<font size="8"/>
 					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombreBodega}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="44" y="0" width="70" height="15" uuid="86480613-120b-4da3-a9e1-87849e20c0e4"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.75"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement>
-					<font size="8"/>
-					<paragraph leftIndent="5" rightIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{bodega}]]></textFieldExpression>
-			</textField>
-			<subreport>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="140" y="15" width="157" height="0" uuid="19aebd5c-bb04-4c4c-a2dc-86f778c4e5d8">
-					<printWhenExpression><![CDATA[$F{detalles}!=null]]></printWhenExpression>
-				</reportElement>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalles})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{pl_detalle_item}]]></subreportExpression>
-			</subreport>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="525" y="0" width="30" height="15" uuid="5e533a13-5409-403b-8a86-1a61aa4f2fba"/>
+				<reportElement stretchType="RelativeToBandHeight" x="525" y="0" width="30" height="13" uuid="5e533a13-5409-403b-8a86-1a61aa4f2fba"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -276,10 +221,10 @@
 					<font size="8"/>
 					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{pvp1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{valorUnitario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="432" y="0" width="63" height="15" uuid="1f5cebed-3680-4732-a8f9-84eef0e66edc"/>
+				<reportElement stretchType="RelativeToBandHeight" x="432" y="0" width="63" height="13" uuid="1f5cebed-3680-4732-a8f9-84eef0e66edc"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -293,7 +238,7 @@
 				<textFieldExpression><![CDATA[$F{fechaCaducidad}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="114" y="0" width="68" height="15" uuid="06fb8d8c-7ef0-4ef5-b28a-182ca101f7a7"/>
+				<reportElement stretchType="RelativeToBandHeight" x="114" y="0" width="68" height="13" uuid="06fb8d8c-7ef0-4ef5-b28a-182ca101f7a7"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -304,12 +249,26 @@
 					<font size="8"/>
 					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{codigoLote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="182" y="0" width="250" height="13" uuid="86505e3e-c386-4ba6-836c-4243f9571225"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreProducto}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="11" splitType="Stretch"/>
+		<band height="12" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch">

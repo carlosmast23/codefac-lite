@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import org.jdesktop.swingx.JXDatePicker;
@@ -58,6 +59,8 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         cmbFechaInicial = new org.jdesktop.swingx.JXDatePicker();
         jLabel5 = new javax.swing.JLabel();
         cmbMostrarDetalle = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        txtDiasCaducidad = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -114,10 +117,10 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Fecha Final:");
+        jLabel2.setText("Días Caducidad Tolerancia:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -198,6 +201,22 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbMostrarDetalle, gridBagConstraints);
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel6.setText("Fecha Final:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel6, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtDiasCaducidad, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -218,12 +237,14 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio12;
     private javax.swing.JTable tblDato;
     private javax.swing.JTextField txtCategoria;
+    private javax.swing.JSpinner txtDiasCaducidad;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnBuscar() {
@@ -305,6 +326,16 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     public void setCmbMostrarDetalle(JComboBox<EnumSiNo> cmbMostrarDetalle) {
         this.cmbMostrarDetalle = cmbMostrarDetalle;
     }
+
+    public JSpinner getTxtDiasCaducidad() {
+        return txtDiasCaducidad;
+    }
+
+    public void setTxtDiasCaducidad(JSpinner txtDiasCaducidad) {
+        this.txtDiasCaducidad = txtDiasCaducidad;
+    }
+    
+    
 
     
     
