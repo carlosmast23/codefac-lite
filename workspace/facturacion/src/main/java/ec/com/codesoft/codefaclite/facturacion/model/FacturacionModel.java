@@ -2790,23 +2790,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         String mensajeValidacion = "Esta pantalla requiere : \n";
         boolean validado = true;
         
-        //TODO: Terminar de hacer la validacion cuando no tiene configurado un punto de emision
-        //Validacion cuando solo sea facturacion manual
-        /*ParametroCodefac tipoFacturacionParam=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION);
-        
-        if (tipoFacturacionParam == null) 
-        {
-            mensajeValidacion += " - Tipo Modo de Facturación \n";
-            validado = false;
-            
-        }else if(tipoFacturacionParam.getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
-        {
-            if (session.getEmpresa() == null) 
-            {
-                mensajeValidacion += " - Información de Empresa \n";
-                validado = false;
-            }
-        }*/
         if (session.getEmpresa() == null) 
         {
             mensajeValidacion += " - Información de Empresa \n";
@@ -2817,27 +2800,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
        
             try //Validacion cunando es facturacion electronica
             {
-                if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
-                    mensajeValidacion += " - Archivo Firma\n";
-                    validado = false;
-                }
+                DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 
+                //Solo hacer estas validaciones para facturas electronicas
+                if(documentoEnum.getComprobanteElectronico())
+                {
                 
-                String claveFirmaElectronica=UtilidadesEncriptar.desencriptar(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
-                
-                if (claveFirmaElectronica.equals("")) {
-                    mensajeValidacion += " - Clave Firma\n";
-                    validado = false;
-                }
-                
-                if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
-                    mensajeValidacion += " - Correo\n";
-                    validado = false;
-                }
-                
-                if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
-                    mensajeValidacion += " - Clave Correo \n";
-                    validado = false;
+                    if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
+                        mensajeValidacion += " - Archivo Firma\n";
+                        validado = false;
+                    }
+
+
+                    String claveFirmaElectronica=UtilidadesEncriptar.desencriptar(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+
+                    if (claveFirmaElectronica.equals("")) {
+                        mensajeValidacion += " - Clave Firma\n";
+                        validado = false;
+                    }
+
+                    if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+                        mensajeValidacion += " - Correo\n";
+                        validado = false;
+                    }
+
+                    if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+                        mensajeValidacion += " - Clave Correo \n";
+                        validado = false;
+                    }
                 }
                 
                 if (session.getEmpresa() == null) {

@@ -2364,7 +2364,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
        {
            
            ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Tipo","Contribuyente Negocio Popular - Régimen RIMPE");
-           comprobante.addDatoAdicional(comprobanteAdicional);
+           if(comprobanteAdicional!=null)
+           {
+                comprobante.addDatoAdicional(comprobanteAdicional);
+           }
            //agregarParametroComprobante(comprobante, parametroCodefac.getValor());           
        }      
         
