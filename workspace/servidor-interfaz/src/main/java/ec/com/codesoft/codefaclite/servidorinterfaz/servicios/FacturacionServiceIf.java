@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
@@ -73,6 +74,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
     
-    public List<UtilidadResult> consultaUtilidadVentas() throws RemoteException,ServicioCodefacException;
+    public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor) throws RemoteException,ServicioCodefacException  ;
     
 }

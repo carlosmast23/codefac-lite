@@ -64,6 +64,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
@@ -1233,8 +1234,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return null;
     }    
     
-   public List<UtilidadResult> consultaUtilidadVentas() throws RemoteException,ServicioCodefacException 
+   public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor) throws RemoteException,ServicioCodefacException 
    {
-       return getFacade().consultaUtilidadFacade();
+       
+       UtilidadReport reporte=new UtilidadReport("Reporte de Utilidades");
+       List<UtilidadResult> datosList= getFacade().consultaUtilidadFacade(fechaMenor,fechaMayor);       
+       reporte.setDetalleList(datosList);
+       
+       return reporte;
    }
 }

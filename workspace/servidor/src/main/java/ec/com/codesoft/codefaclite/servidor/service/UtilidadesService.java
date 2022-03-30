@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -537,7 +538,17 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     
     public ReportDataAbstract<DashBoardData> consultarDashboard(Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException
     {
-        ReportDataAbstract<DashBoardData> reporte=new ReportDataAbstract<DashBoardData>("DashBoard");
+        ReportDataAbstract<DashBoardData> reporte=new ReportDataAbstract<DashBoardData>("DashBoard") {
+            @Override
+            public String[] getTitulos() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void construirFilaTabla(DashBoardData dato, Vector<Object> fila) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
         //Agregar parametros
         reporte.agregarParametro("ventasDiarias", "130");
         

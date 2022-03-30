@@ -363,14 +363,40 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           }
       }
       
-      public List<UtilidadResult> consultaUtilidadFacade()
+      public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor)
       {
-          String queryString="SELECT F.SECUENCIAL, F.RAZON_SOCIAL FROM FACTURA F INNER JOIN " +
+          String whereFechaMenor="";
+          
+          String whereFechaMayor="";
+          
+          if(fechaMayor!=null)
+          {
+              whereFechaMayor= " AND F.FECHA_EMISION <= ?1";
+          }
+          
+          if(fechaMenor!=null)
+          {
+              whereFechaMenor= " AND F.FECHA_EMISION >= ?2";
+          }
+          
+          String queryString="SELECT F.SECUENCIAL,F.FECHA_EMISION ,F.RAZON_SOCIAL,F.IDENTIFICACION,F.ID,FD.SUBTOTAL,FD.COSTO,FD.UTILIDAD FROM FACTURA F INNER JOIN " +
                         "(" +
-                        "	SELECT FD.FACTURA_ID ,SUM(FD.TOTAL) AS SUBTOTAL ,SUM(FD.COSTO_PROMEDIO) AS COSTO , SUM(FD.TOTAL-FD.COSTO_PROMEDIO) AS UTILIDAD FROM FACTURA_DETALLE FD  GROUP BY FD.FACTURA_ID " +
-                        ") FD ON F.ID =FD.FACTURA_ID";
+                        "	SELECT FD.FACTURA_ID ,SUM(FD.TOTAL) AS SUBTOTAL ,SUM(FD.COSTO_PROMEDIO*FD.CANTIDAD) AS COSTO , SUM(FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD) AS UTILIDAD FROM FACTURA_DETALLE FD  GROUP BY FD.FACTURA_ID " +
+                        ") FD ON F.ID =FD.FACTURA_ID WHERE 1=1  "+whereFechaMayor+whereFechaMenor ;
       
           Query query=getEntityManager().createNativeQuery(queryString);
+          
+          if(fechaMayor!=null)
+          {
+              query.setParameter(1,fechaMayor);
+          }
+          
+          if(fechaMenor!=null)
+          {
+              query.setParameter(2,fechaMenor);
+          }
+          
+          
           List<Object[]> resultado=query.getResultList();
           List<UtilidadResult> resultadoList=new ArrayList<UtilidadResult>();
           for (Object[] objects : resultado) 
