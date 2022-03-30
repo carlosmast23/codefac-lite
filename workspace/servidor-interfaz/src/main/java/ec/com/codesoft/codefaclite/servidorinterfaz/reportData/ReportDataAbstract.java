@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class ReportDataAbstract<T> implements Serializable{
+public abstract class ReportDataAbstract<T> implements Serializable{
     
     //Map para almacenar todos los parametros del reporte
     private Map<String,Object> mapParametros;
@@ -24,6 +26,9 @@ public class ReportDataAbstract<T> implements Serializable{
     private String tituloReporte;
     
     private List<T> detalleList;
+    
+    public abstract String[] getTitulos();
+    public abstract void construirFilaTabla(T dato,Vector<Object> fila);
 
     public ReportDataAbstract(String tituloReporte) {
         this.tituloReporte = tituloReporte;
@@ -35,6 +40,20 @@ public class ReportDataAbstract<T> implements Serializable{
     ///////////////////////////////////////////////////////////////////
     ///                     METODOS PERSONALIZADOS
     ///////////////////////////////////////////////////////////////////
+    
+    
+    public DefaultTableModel obtenerModeloTabla()
+    {
+        DefaultTableModel model=new DefaultTableModel(getTitulos(), 0);
+        
+        for (T t : detalleList) {
+            Vector<Object> filaTabla=new Vector<Object>();
+            construirFilaTabla(t, filaTabla);
+            model.addRow(filaTabla);
+        }
+        
+        return model;
+    }
     
     public void agregarParametro(String campo,Object valor)
     {
