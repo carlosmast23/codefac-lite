@@ -1694,7 +1694,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         Map<ComprobanteEnum, String> aliasNombreDocumentosMap=new HashMap<ComprobanteEnum,String>();
         //Buscar el nombre de alias para las notas de venta interna
         String aliasNotaVentaInterna=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
-        if(aliasNotaVentaInterna!=null)
+        if(aliasNotaVentaInterna!=null && !aliasNotaVentaInterna.trim().isEmpty())
         {
             //Si tiene asignado un nombre le pongo al map para configurar
             aliasNombreDocumentosMap.put(ComprobanteEnum.NOTA_VENTA_INTERNA, aliasNotaVentaInterna);

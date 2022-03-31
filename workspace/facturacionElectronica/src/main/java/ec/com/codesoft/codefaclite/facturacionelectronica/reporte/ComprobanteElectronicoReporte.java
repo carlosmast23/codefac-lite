@@ -53,11 +53,12 @@ public abstract class ComprobanteElectronicoReporte
         map.put("fecha_hora_autorizacion","");
         
         //Buscar si tiene un alias para el nombre del documento
-        String nombreDocumento=comprobante.getInformacionTributaria().getCodigoDocumentoEnum().getNombre();
+        ComprobanteEnum comprobanteEnum = comprobante.getInformacionTributaria().getCodigoDocumentoEnum();
+        String nombreDocumento = comprobanteEnum.getNombre();
         if(aliasNombreDocumentosMap!=null)
         {
             String nombreDocumentoTmp=aliasNombreDocumentosMap.get(comprobante.getInformacionTributaria().getCodigoDocumentoEnum());
-            if(nombreDocumentoTmp!=null)
+            if(nombreDocumentoTmp!=null && !nombreDocumentoTmp.trim().isEmpty())
             {
                 nombreDocumento=nombreDocumentoTmp;
             }
