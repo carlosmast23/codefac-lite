@@ -1063,7 +1063,21 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         mapParametros.put("producto", producto);
         mapParametros.put("estado", estadoEnum.getEstado());
         //KardexService kardexService = new KardexService();
-        return getFacade().findByMap(mapParametros);
+        List<Kardex> listaOriginal=getFacade().findByMap(mapParametros);
+        List<Kardex> listaFiltrada=new ArrayList<Kardex>();
+        for (Kardex kardex : listaOriginal) {
+            
+            if(kardex.getBodega()==null)
+            {
+                Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, "Revisar kadex con bodega NULL ?? "+kardex.getId()+" - "+kardex.getProducto());
+                continue;
+            }
+            
+            listaFiltrada.add(kardex);
+        }
+                
+                
+        return listaFiltrada;
     }
     
     public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException

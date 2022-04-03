@@ -269,6 +269,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             
                         } else 
                         {
+                            System.out.println(kardex.getStock());
+                            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.WARNING, null, "Producto no se puede borrar por que tiene stock "+kardex.getStock()+" en producto "+kardex.getProducto().getNombre() );
                             //Agrego a la lista la bodega con el kardex que tiene problema antes de eliminar
                             stockPositivoBodega.add(kardex.getBodega().getNombre());                    
                         }
