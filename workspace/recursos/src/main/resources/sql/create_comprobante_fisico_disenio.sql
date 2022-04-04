@@ -15,6 +15,8 @@ create table COMPROBANTE_FISICO_DISENIO
     CODIGO_DOCUMENTO varchar(3),
     ANCHO BIGINT,
     ALTO BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.0.9)*/
+    PPP BIGINT,
     primary key (ID)
 );
 

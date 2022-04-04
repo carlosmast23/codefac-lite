@@ -83,6 +83,8 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         jSeparator4 = new javax.swing.JSeparator();
         jLabel14 = new javax.swing.JLabel();
         sliderZoom = new javax.swing.JSlider();
+        jLabel13 = new javax.swing.JLabel();
+        txtPPP = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel(){
             @Override
@@ -104,42 +106,17 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         });
 
         panelContenedor.setBackground(new java.awt.Color(255, 255, 255));
-        panelContenedor.setLayout(new java.awt.GridBagLayout());
+        panelContenedor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Y:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 27;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(jLabel1, gridBagConstraints);
+        panelContenedor.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 372, -1, -1));
 
         jLabel2.setText("X:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 21;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(jLabel2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 32;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(cmbTamanioLetra, gridBagConstraints);
+        panelContenedor.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 342, -1, -1));
+        panelContenedor.add(cmbTamanioLetra, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 459, 185, -1));
 
         jLabel3.setText("Tamaño:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 32;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(jLabel3, gridBagConstraints);
+        panelContenedor.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 462, -1, -1));
 
         chkNegrita.setBackground(new java.awt.Color(255, 255, 255));
         chkNegrita.setText("Negrita");
@@ -148,29 +125,10 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
                 chkNegritaActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 24;
-        gridBagConstraints.gridy = 33;
-        gridBagConstraints.ipadx = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(chkNegrita, gridBagConstraints);
+        panelContenedor.add(chkNegrita, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 489, 69, -1));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 25;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
-        panelContenedor.add(cmbSeccion, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 34;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 0.1;
-        panelContenedor.add(jLabel5, gridBagConstraints);
+        panelContenedor.add(cmbSeccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 133, 261, -1));
+        panelContenedor.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -203,200 +161,69 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         jPanel2.add(lblEspacio1, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
-        panelContenedor.add(jPanel2, gridBagConstraints);
+        panelContenedor.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(115, 249, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel6.setText("Documento");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        panelContenedor.add(jLabel6, gridBagConstraints);
+        panelContenedor.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 0, -1, -1));
 
         jSeparator1.setBorder(javax.swing.BorderFactory.createTitledBorder("we"));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        panelContenedor.add(jSeparator1, gridBagConstraints);
+        panelContenedor.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 15, 291, -1));
 
-        jLabel8.setText("Ancho:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 15);
-        panelContenedor.add(jLabel8, gridBagConstraints);
+        jLabel8.setText("PPP:");
+        panelContenedor.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
 
         jLabel9.setText("Alto:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 15);
-        panelContenedor.add(jLabel9, gridBagConstraints);
+        panelContenedor.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 25;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
-        panelContenedor.add(cmbDocumento, gridBagConstraints);
+        panelContenedor.add(cmbDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 22, 261, -1));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel7.setText("División       ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        panelContenedor.add(jLabel7, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 25;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        panelContenedor.add(jSeparator2, gridBagConstraints);
+        panelContenedor.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 111, -1, -1));
+        panelContenedor.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 126, 291, -1));
 
         jLabel10.setText("Alto:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 15);
-        panelContenedor.add(jLabel10, gridBagConstraints);
+        panelContenedor.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 163, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel4.setText("Componente");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        panelContenedor.add(jLabel4, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 25;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        panelContenedor.add(jSeparator3, gridBagConstraints);
+        panelContenedor.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 192, -1, -1));
+        panelContenedor.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 207, 291, -1));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 25;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
-        panelContenedor.add(cmbComponente, gridBagConstraints);
+        panelContenedor.add(cmbComponente, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 214, 261, -1));
 
         jLabel11.setText("Ancho:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 28;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(jLabel11, gridBagConstraints);
+        panelContenedor.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 402, -1, -1));
 
         jLabel12.setText("Alto:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 29;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(jLabel12, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(txtAnchoDocumento, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(txtAltoDocumento, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(txtAltoSeccion, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 21;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(txtX, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 27;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(txtY, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 28;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(txtAnchoComponente, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 29;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(txtAltoComponente, gridBagConstraints);
+        panelContenedor.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 432, -1, -1));
+        panelContenedor.add(txtAnchoDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, 50, -1));
+        panelContenedor.add(txtAltoDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 50, 20));
+        panelContenedor.add(txtAltoSeccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 165, 185, -1));
+        panelContenedor.add(txtX, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 339, 185, -1));
+        panelContenedor.add(txtY, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 369, 185, -1));
+        panelContenedor.add(txtAnchoComponente, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 399, 185, -1));
+        panelContenedor.add(txtAltoComponente, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 429, 185, -1));
 
         chkOculto.setBackground(new java.awt.Color(255, 255, 255));
         chkOculto.setText("Oculto");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 33;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        panelContenedor.add(chkOculto, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 35;
-        gridBagConstraints.gridwidth = 25;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        panelContenedor.add(jSeparator4, gridBagConstraints);
+        panelContenedor.add(chkOculto, new org.netbeans.lib.awtextra.AbsoluteConstraints(91, 489, -1, -1));
+        panelContenedor.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 291, -1));
 
         jLabel14.setText("Zoom:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 36;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panelContenedor.add(jLabel14, gridBagConstraints);
+        panelContenedor.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 558, -1, -1));
 
         sliderZoom.setBackground(new java.awt.Color(255, 255, 255));
         sliderZoom.setMinimum(30);
         sliderZoom.setValue(60);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 36;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        panelContenedor.add(sliderZoom, gridBagConstraints);
+        panelContenedor.add(sliderZoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(91, 552, -1, -1));
+
+        jLabel13.setText("Ancho:");
+        panelContenedor.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
+
+        txtPPP.setValue(300);
+        panelContenedor.add(txtPPP, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 50, -1));
 
         getContentPane().add(panelContenedor, java.awt.BorderLayout.LINE_END);
 
@@ -433,6 +260,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -457,6 +285,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private javax.swing.JSpinner txtAltoSeccion;
     private javax.swing.JSpinner txtAnchoComponente;
     private javax.swing.JSpinner txtAnchoDocumento;
+    private javax.swing.JSpinner txtPPP;
     private javax.swing.JSpinner txtX;
     private javax.swing.JSpinner txtY;
     // End of variables declaration//GEN-END:variables
@@ -636,6 +465,14 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
 
     public void setSliderZoom(JSlider sliderZoom) {
         this.sliderZoom = sliderZoom;
+    }
+
+    public JSpinner getTxtPPP() {
+        return txtPPP;
+    }
+
+    public void setTxtPPP(JSpinner txtPPP) {
+        this.txtPPP = txtPPP;
     }
 
     

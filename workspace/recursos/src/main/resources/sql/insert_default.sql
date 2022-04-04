@@ -112,9 +112,9 @@ INSERT INTO ACCESO_DIRECTO (NOMBRE, X,Y)
             ('WidgetVirtualMall',120,60),
             ('WidgetVentasDiarias',120,120);
 
-INSERT INTO COMPROBANTE_FISICO_DISENIO (NOMBRE,CODIGO_DOCUMENTO,ANCHO,ALTO)
-    VALUES('Factura','FAC',595,842),
-          ('Nota de Venta','NVT',595,842);
+INSERT INTO COMPROBANTE_FISICO_DISENIO (NOMBRE,CODIGO_DOCUMENTO,ANCHO,ALTO,PPP)
+    VALUES('Factura','FAC',595,842,300),
+          ('Nota de Venta','NVT',595,842,300);
 
 
 INSERT INTO BANDA_COMPROBANTE (COMPROBANTE_FISICO_ID, NOMBRE,TITULO,ORDEN,ALTO)
@@ -157,10 +157,6 @@ INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,
           (3,'formaPagoDineroElec','a320d71f-4e5d-42a1-943b-c67bb2520ea6',172,51,69,15,10,'n','s'),
           (3,'formaPagoTarjetaCred','0061e225-2555-43ea-96b1-5a3a5990c0a4',172,66,69,15,10,'n','s'),
           (3,'formaPagoOtros','773022d8-63ad-475c-adb6-1bc251ce1fd4',172,81,69,15,10,'n','s'),
-
-
-
-
           (4,'identificacion','e165fa85-1cb1-47e9-9af2-f89f0ff2c065',389,50,133,15,10,'n','n'),
           (4,'fechaEmision','2915f0d2-afa9-4aba-8f9a-6bc7a4ac49c7',18,5,133,15,10,'n','n'),
           (4,'razonSocial','a93fd1ad-f710-4b35-ad52-4a4a75b14b83',18,20,244,15,10,'n','n'),
@@ -173,7 +169,8 @@ INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,
           (5,'valorTotal','3119d150-a3dc-4e39-9e60-4e349cc1daf9',462,0,93,15,10,'n','n'),
           (6,'subtotal','86054d4c-ae41-4430-9510-2d8749561874',451,21,100,15,10,'n','n'),
           (6,'descuento','0e91accb-5609-49f8-9878-4f77c27b8491',451,36,100,15,10,'n','n'),
-          (6,'total','e8b582dc-3b95-4f26-a1b6-dddde4a42378',451,81,100,15,10,'n','n');
+          (6,'total','e8b582dc-3b95-4f26-a1b6-dddde4a42378',451,81,100,15,10,'n','n'),
+          (3,'lineaFinal','4ead026f-bfbb-4dbb-9189-f0cb97eb039a',0,1,50,1,10,'n','s');
 
 
 INSERT INTO CATEGORIA_PRODUCTO(NOMBRE,DESCRIPCION)

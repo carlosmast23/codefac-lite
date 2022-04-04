@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesUnidadesMedida;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -42,6 +43,9 @@ public class ComprobanteFisicoDisenio implements Serializable {
     
     @Column (name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
+    
+    @Column (name = "PPP")
+    private int ppp;
 
     @OneToMany(cascade = {CascadeType.ALL,CascadeType.DETACH}, mappedBy = "documento",fetch = FetchType.EAGER)
     private List<BandaComprobante> secciones;
@@ -81,6 +85,16 @@ public class ComprobanteFisicoDisenio implements Serializable {
         this.alto = alto;
     }
 
+    public int getPpp() {
+        return ppp;
+    }
+
+    public void setPpp(int ppp) {
+        this.ppp = ppp;
+    }
+    
+    
+
     public String getCodigoDocumento() {
         return codigoDocumento;
     }
@@ -112,5 +126,21 @@ public class ComprobanteFisicoDisenio implements Serializable {
         return ancho-5;
     }
     
+    public int getAnchoCm() {
+        return (int) UtilidadesUnidadesMedida.convertirPixelesACm(ancho, ppp);
+    }
+
+    
+    public int getAltoCm() {
+        return (int) UtilidadesUnidadesMedida.convertirPixelesACm(alto, ppp);
+    }
+    
+    public void setAnchoCm(int anchoCm) {
+        this.ancho = (int) UtilidadesUnidadesMedida.convertirCmAPixeles(anchoCm, ppp);
+    }
+
+    public void setAltoCm(int altoCm) {
+        this.alto = (int) UtilidadesUnidadesMedida.convertirCmAPixeles(altoCm, ppp);
+    }
     
 }

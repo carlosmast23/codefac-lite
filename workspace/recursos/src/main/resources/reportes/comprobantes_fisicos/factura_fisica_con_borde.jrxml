@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura_fisica" pageWidth="500" pageHeight="842" whenNoDataType="BlankPage" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9b36c502-cff2-4d1a-a8f4-03d85696bb48">
-	<property name="ireport.zoom" value="1.9487171000000094"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura_fisica" pageWidth="500" pageHeight="842" whenNoDataType="BlankPage" columnWidth="496" leftMargin="2" rightMargin="2" topMargin="20" bottomMargin="20" uuid="9b36c502-cff2-4d1a-a8f4-03d85696bb48">
+	<property name="ireport.zoom" value="1.4641000000000064"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="identificacion" class="java.lang.String"/>
@@ -88,12 +88,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{guiaRemision}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="0" y="0" width="60" height="1" uuid="eb719316-db48-41bc-b826-7e0ef1b2ff21"/>
-				<graphicElement>
-					<pen lineWidth="2.0" lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
 		</band>
 	</pageHeader>
 	<detail>
@@ -253,12 +247,6 @@
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA[$P{formaPagoOtros}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="0" y="103" width="60" height="1" uuid="4ead026f-bfbb-4dbb-9189-f0cb97eb039a"/>
-				<graphicElement>
-					<pen lineWidth="2.0" lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
 		</band>
 	</columnFooter>
 </jasperReport>

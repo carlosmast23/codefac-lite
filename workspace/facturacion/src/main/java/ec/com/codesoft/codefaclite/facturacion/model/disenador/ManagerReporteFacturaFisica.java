@@ -46,6 +46,9 @@ public class ManagerReporteFacturaFisica {
      */
     private final String NOMBRE_ANCHO_COLUMNA="columnWidth";
     
+    private final String ID_LINEA_INICIO="eb719316-db48-41bc-b826-7e0ef1b2ff21";
+    private final String ID_LINEA_FINAL="4ead026f-bfbb-4dbb-9189-f0cb97eb039a";
+    
     /**
      * Reporte original sobre el cual se va a trabajar
      */
@@ -91,15 +94,24 @@ public class ManagerReporteFacturaFisica {
     
     }
     
-    private void setearComponente(Element columna,ComponenteComprobanteFisico componente)
+    private void setearComponente(Element columna,ComponenteComprobanteFisico componente,int altoBanda)
     {
         Element bandaElemento=(Element) columna.getChildren().get(0); //el componente 0 es la banda
         //Va a recorrer todos los componentes de la banda
         for (Object object : bandaElemento.getChildren()) {
             Element tipoElemento=(Element) object;
             Element elementoReporte=buscarEtiquetaPorNombre(tipoElemento, "reportElement");
+            String elementoReporteId=elementoReporte.getAttribute(NOMBRE_ID_COMPONENTE).getValue();
+            
+            //Si coincide con alguna de las 2 lineas les elimino en la parte de visualizacion
+            if(elementoReporteId.equals(ID_LINEA_FINAL) )
+            {
+                elementoReporte.getAttribute(NOMBRE_Y_COMPONENTE).setValue((altoBanda-2)+"");
+                return;
+            }
+            
             //Si encuentra el elemento que busca setea los valores
-            if(elementoReporte.getAttribute(NOMBRE_ID_COMPONENTE).getValue().equals(componente.getUuid()))
+            if(elementoReporteId.equals(componente.getUuid()))
             {
                 if(componente.getOculto().equals("s"))
                 {
@@ -176,8 +188,9 @@ public class ManagerReporteFacturaFisica {
             bandaElemento.getAttribute(NOMBRE_ALTO_BANDA).setValue(banda.getAlto()+"");
             
             //Establcer propiedades de los componentes
-            for (ComponenteComprobanteFisico componente : banda.getComponentes()) {
-                setearComponente(columnaElemento,componente);
+            for (ComponenteComprobanteFisico componente : banda.getComponentes()) 
+            {
+                setearComponente(columnaElemento,componente,banda.getAlto());
             }
         }
         
