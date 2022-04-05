@@ -61,7 +61,7 @@
 			</textField>
 			<image isLazy="true">
 				<reportElement x="24" y="28" width="23" height="21" uuid="f753d110-9572-473c-b075-84ec6349c3ed"/>
-				<imageExpression><![CDATA[$P{pl_img_instagram}]]></imageExpression>
+				<imageExpression><![CDATA[new Boolean($P{pl_instagram}!=null && !$P{pl_instagram}.isEmpty() )]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="47" y="29" width="90" height="20" uuid="7bd5e7a9-0d75-414e-845c-e2f923853287"/>
