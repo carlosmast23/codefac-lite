@@ -339,12 +339,12 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             
             Map<BigDecimal,BigDecimal> mapRetenciones=consultarRetencionesIva(compra,sriRetencionIva);
             ///=======> DATOS DE LAS RETENCIONES <============///
-            compraAts.setValRetBien10(obtenerValorMapRetenciones(mapRetenciones,10)); //10% TODO:completar
-            compraAts.setValRetServ20(obtenerValorMapRetenciones(mapRetenciones,20)); //20% TODO:completar
-            compraAts.setValorRetBienes(obtenerValorMapRetenciones(mapRetenciones,30)); //30% TODO:completar 
-            compraAts.setValRetServ50(obtenerValorMapRetenciones(mapRetenciones,50)); //50% TODO:completar
-            compraAts.setValorRetServicios(obtenerValorMapRetenciones(mapRetenciones,70));//70% //TODO:completar
-            compraAts.setValRetServ100(obtenerValorMapRetenciones(mapRetenciones,100)); //100% TODO:completar
+            compraAts.setValRetBien10(obtenerValorMapRetenciones(mapRetenciones,10).setScale(2,RoundingMode.HALF_UP)); //10% TODO:completar
+            compraAts.setValRetServ20(obtenerValorMapRetenciones(mapRetenciones,20).setScale(2,RoundingMode.HALF_UP)); //20% TODO:completar
+            compraAts.setValorRetBienes(obtenerValorMapRetenciones(mapRetenciones,30).setScale(2,RoundingMode.HALF_UP)); //30% TODO:completar 
+            compraAts.setValRetServ50(obtenerValorMapRetenciones(mapRetenciones,50).setScale(2,RoundingMode.HALF_UP)); //50% TODO:completar
+            compraAts.setValorRetServicios(obtenerValorMapRetenciones(mapRetenciones,70).setScale(2,RoundingMode.HALF_UP));//70% //TODO:completar
+            compraAts.setValRetServ100(obtenerValorMapRetenciones(mapRetenciones,100).setScale(2,RoundingMode.HALF_UP)); //100% TODO:completar
             
             //========> COMPRAS DE REEMBOLSO <=================//
             //compraAts.setTotbasesImpReemb(BigDecimal.ZERO); //TODO: Esto queda pendiente de programar
@@ -386,11 +386,11 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             //solo agregar las formas de pago cuando la base imponible superio los 1000
             //la suma de las BASES IMPONIBLES y los MONTOS de IVA e ICE exceden los USD. 1000.00.
             if(compraAts.getBaseImpGrav()
-                    .add(compraAts.getBaseImpExe())
-                    .add(compraAts.getBaseImponible())
-                    .add(compraAts.getBaseNoGraIva())
-                    .add(compraAts.getMontoIva())
-                    .add(compraAts.getMontoIce())
+                    .add(compraAts.getBaseImpExe().setScale(2,RoundingMode.HALF_UP))
+                    .add(compraAts.getBaseImponible().setScale(2,RoundingMode.HALF_UP))
+                    .add(compraAts.getBaseNoGraIva().setScale(2,RoundingMode.HALF_UP))
+                    .add(compraAts.getMontoIva().setScale(2,RoundingMode.HALF_UP))
+                    .add(compraAts.getMontoIce().setScale(2,RoundingMode.HALF_UP))
                     .compareTo(new BigDecimal("1000"))>0)
             {
                 compraAts.setFormasDePago(formasPago);
@@ -404,7 +404,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 compraAts.setReembolsos(reembolsoList);
             }
             
-            compraAts.setTotbasesImpReemb(compra.obtenerTotalBaseReembolso());
+            compraAts.setTotbasesImpReemb(compra.obtenerTotalBaseReembolso().setScale(2,RoundingMode.HALF_UP));
             
             //TODO Falta completar los detalles de los impuestos a la renta
             
@@ -461,12 +461,12 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                         
                         String autorizacionRemb=compraFacturaReembolso.getAutorizacionReemb();
                         reembolsoAts.setAutorizacionRemb(autorizacionRemb.trim());
-                        reembolsoAts.setBaseImponibleRemb(compraFacturaReembolso.getBaseImponibleReemb());
-                        reembolsoAts.setBaseImpGravRemb(compraFacturaReembolso.getBaseImpGravReemb());
-                        reembolsoAts.setBaseNoGraIvaRemb(compraFacturaReembolso.getBaseNoGraIvaReemb()); //Este valor debe ser para productos que no grabar , Ejemplo la venta de bienes inmuebles: oficinas, terrenos, locales
-                        reembolsoAts.setBaseImpExeReembRemb(compraFacturaReembolso.getBaseImpExeReemb());
-                        reembolsoAts.setMontoIceRemb(compraFacturaReembolso.getMontoIceRemb());
-                        reembolsoAts.setMontoIvaRemb(compraFacturaReembolso.getMontoIvaRemb());
+                        reembolsoAts.setBaseImponibleRemb(compraFacturaReembolso.getBaseImponibleReemb().setScale(2,RoundingMode.HALF_UP));
+                        reembolsoAts.setBaseImpGravRemb(compraFacturaReembolso.getBaseImpGravReemb().setScale(2,RoundingMode.HALF_UP));
+                        reembolsoAts.setBaseNoGraIvaRemb(compraFacturaReembolso.getBaseNoGraIvaReemb().setScale(2,RoundingMode.HALF_UP)); //Este valor debe ser para productos que no grabar , Ejemplo la venta de bienes inmuebles: oficinas, terrenos, locales
+                        reembolsoAts.setBaseImpExeReembRemb(compraFacturaReembolso.getBaseImpExeReemb().setScale(2,RoundingMode.HALF_UP));
+                        reembolsoAts.setMontoIceRemb(compraFacturaReembolso.getMontoIceRemb().setScale(2,RoundingMode.HALF_UP));
+                        reembolsoAts.setMontoIvaRemb(compraFacturaReembolso.getMontoIvaRemb().setScale(2,RoundingMode.HALF_UP));
                         
                         reembolsoAtsList.add(reembolsoAts);
                         
@@ -633,9 +633,9 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 //Valores para los calculos
                 ventaAts.setNumeroComprobantes(1);
                 ventaAts.setBaseNoGraIva(BigDecimal.ZERO); //Este valor debe ser para productos que no grabar , Ejemplo la venta de bienes inmuebles: oficinas, terrenos, locales
-                ventaAts.setBaseImponible(factura.getSubtotalSinImpuestos());
-                ventaAts.setBaseImpGrav(factura.getSubtotalImpuestos());
-                ventaAts.setMontoIva(factura.getIva());
+                ventaAts.setBaseImponible(factura.getSubtotalSinImpuestos().setScale(2,RoundingMode.HALF_UP));
+                ventaAts.setBaseImpGrav(factura.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP));
+                ventaAts.setMontoIva(factura.getIva().setScale(2,RoundingMode.HALF_UP));
                 ventaAts.setMontoIce(BigDecimal.ZERO); // TODO: Este valor no estoy grabando para obtener el subtotal
                 ventaAts.setValorRetIva(BigDecimal.ZERO); //TODO: Este dato aun no tento porque viene de la cartera
                 ventaAts.setValorRetRenta(BigDecimal.ZERO); //TODO: Este dato aun no tengo porque viene de la cartera
@@ -649,9 +649,9 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 
                 ventaAts.setNumeroComprobantes(ventaAts.getNumeroComprobantes()+1);
                 ventaAts.setBaseNoGraIva(BigDecimal.ZERO); //Este valor debe ser para productos que no grabar , Ejemplo la venta de bienes inmuebles: oficinas, terrenos, locales
-                ventaAts.setBaseImponible(ventaAts.getBaseImponible().add(factura.getSubtotalSinImpuestos()));
-                ventaAts.setBaseImpGrav(ventaAts.getBaseImpGrav().add(factura.getSubtotalImpuestos()));
-                ventaAts.setMontoIva(ventaAts.getMontoIva().add(factura.getIva()));
+                ventaAts.setBaseImponible(ventaAts.getBaseImponible().add(factura.getSubtotalSinImpuestos()).setScale(2,RoundingMode.HALF_UP));
+                ventaAts.setBaseImpGrav(ventaAts.getBaseImpGrav().add(factura.getSubtotalImpuestos()).setScale(2,RoundingMode.HALF_UP));
+                ventaAts.setMontoIva(ventaAts.getMontoIva().add(factura.getIva()).setScale(2,RoundingMode.HALF_UP));
                 ventaAts.setMontoIce(BigDecimal.ZERO); // TODO: Este valor no estoy grabando para obtener el subtotal
                 ventaAts.setValorRetIva(BigDecimal.ZERO); //TODO: Este dato aun no tento porque viene de la cartera
                 ventaAts.setValorRetRenta(BigDecimal.ZERO); //TODO: Este dato aun no tengo porque viene de la cartera
