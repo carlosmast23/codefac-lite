@@ -20,15 +20,21 @@
 				<imageExpression><![CDATA[$P{pl_img_logo_pie}]]></imageExpression>
 			</image>
 			<image isLazy="true">
-				<reportElement x="142" y="28" width="23" height="21" uuid="2f5a8d90-0aac-44a5-b6a6-2c9036ede6c2"/>
+				<reportElement x="142" y="28" width="23" height="21" uuid="2f5a8d90-0aac-44a5-b6a6-2c9036ede6c2">
+					<printWhenExpression><![CDATA[new Boolean($P{pl_facebook}!=null && !$P{pl_facebook}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA[$P{pl_img_facebook}]]></imageExpression>
 			</image>
 			<image isLazy="true">
-				<reportElement x="263" y="28" width="24" height="21" uuid="75a5bd20-b40b-41c3-80a4-62828962a647"/>
+				<reportElement x="263" y="28" width="24" height="21" uuid="75a5bd20-b40b-41c3-80a4-62828962a647">
+					<printWhenExpression><![CDATA[new Boolean($P{pl_celular}!=null && !$P{pl_celular}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA[$P{pl_img_whatsapp}]]></imageExpression>
 			</image>
 			<image isLazy="true">
-				<reportElement x="385" y="28" width="27" height="21" uuid="15089e08-f78b-43be-84a9-1954807aadab"/>
+				<reportElement x="385" y="28" width="27" height="21" uuid="15089e08-f78b-43be-84a9-1954807aadab">
+					<printWhenExpression><![CDATA[new Boolean($P{pl_telefonos}!=null && !$P{pl_telefonos}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA[$P{pl_img_telefono}]]></imageExpression>
 			</image>
 			<textField>
@@ -60,8 +66,9 @@
 				<textFieldExpression><![CDATA[$P{pl_adicional}]]></textFieldExpression>
 			</textField>
 			<image isLazy="true">
-				<reportElement x="24" y="28" width="23" height="21" uuid="f753d110-9572-473c-b075-84ec6349c3ed"/>
-				<imageExpression><![CDATA[new Boolean($P{pl_instagram}!=null && !$P{pl_instagram}.isEmpty() )]]></imageExpression>
+				<reportElement x="24" y="28" width="23" height="21" uuid="f753d110-9572-473c-b075-84ec6349c3ed">
+					<printWhenExpression><![CDATA[new Boolean($P{pl_instagram}!=null && !$P{pl_instagram}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 			</image>
 			<textField>
 				<reportElement x="47" y="29" width="90" height="20" uuid="7bd5e7a9-0d75-414e-845c-e2f923853287"/>

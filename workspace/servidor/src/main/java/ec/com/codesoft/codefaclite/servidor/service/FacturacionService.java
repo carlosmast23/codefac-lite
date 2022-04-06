@@ -491,7 +491,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 if (puntoEmision != null) {
                     if (puntoEmision.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA)) {
                         detalle.setDescripcion(detalle.getDescripcion().replace("\n", " "));
+                        
+                        //TODO: Ver si se puede poner estos codigos en otra seccion 
+                        detalle.setDescripcion(detalle.getDescripcion().replace("”","''"));
                     }
+                    
                 }
             }
         }

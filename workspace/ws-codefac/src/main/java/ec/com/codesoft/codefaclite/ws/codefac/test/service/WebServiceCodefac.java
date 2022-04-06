@@ -193,7 +193,7 @@ public abstract class WebServiceCodefac {
 
             ObtenerDiasFechaPagoResponseType respuesta= soapServerPort.obtenerDiasFechaPago(parametros);
             String respuestaStr=respuesta.getReturn();
-            if("null".equals(respuestaStr))
+            if(respuestaStr==null || "null".equals(respuestaStr))
             {
                 return null;
             }
