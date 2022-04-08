@@ -53,7 +53,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                validarCliente(p, Boolean.TRUE, CrudEnum.EDITAR);
+                validarCliente(p, Boolean.TRUE, CrudEnum.EDITAR,false);
                 for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
                     if (establecimiento.getId() == null) {
                         entityManager.persist(establecimiento);
@@ -67,15 +67,19 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
 
     public Persona grabar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
-        return grabarConValidacion(p, true);
+        return grabarConValidacion(p, true,false);
+    }
+    
+    public Persona grabarModoForzado(Persona p,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException {
+        return grabarConValidacion(p, true,modoForzado);
     }
 
-    public Persona grabarConValidacion(Persona p, Boolean validarCedula) throws ServicioCodefacException, java.rmi.RemoteException {
+    public Persona grabarConValidacion(Persona p, Boolean validarCedula,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
 
-                validarCliente(p, validarCedula, CrudEnum.CREAR);
+                validarCliente(p, validarCedula, CrudEnum.CREAR,modoForzado);
                 /*if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
                     //Si no tiene un establecimiento lo creo automaticamente 
                     PersonaEstablecimiento personaEstablecimiento = PersonaEstablecimiento.buildFromPersona(p);
@@ -95,7 +99,8 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
                 p.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                 p.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
                 //Grabar los nuevos establecimientos
-                for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
+                for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) 
+                {
                     entityManager.persist(establecimiento);
                 }
                 entityManager.persist(p);
@@ -105,13 +110,16 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     }
 
-    private void validarCliente(Persona persona, Boolean validarCedula, CrudEnum crudEnum) throws ServicioCodefacException, java.rmi.RemoteException {
+    private void validarCliente(Persona persona, Boolean validarCedula, CrudEnum crudEnum,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException {
         /**
          * Validaciones previas de los datos
          */
         if (validarCedula) {
-            if (!persona.validarCedula()) {
-                throw new ServicioCodefacException("Error al validar la identificación");
+            if(!modoForzado)
+            {
+                if (!persona.validarCedula()) {
+                    throw new ServicioCodefacException("Error al validar la identificación",true);
+                }
             }
         }
 

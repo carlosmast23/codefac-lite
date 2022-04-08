@@ -272,7 +272,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     OperadorNegocioEnum.PROVEEDOR
             );
             
-            proveedor= ServiceFactory.getFactory().getPersonaServiceIf().grabarConValidacion(proveedor, Boolean.TRUE);
+            proveedor= ServiceFactory.getFactory().getPersonaServiceIf().grabarConValidacion(proveedor, Boolean.TRUE,false);
         }
         
         return proveedor;

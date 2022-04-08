@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     
-    public Persona grabarConValidacion(Persona p,Boolean validarCedula) throws ServicioCodefacException,java.rmi.RemoteException;    
+    public Persona grabarConValidacion(Persona p, Boolean validarCedula,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException ;    
     
     public Persona grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException;    
    
@@ -43,5 +43,7 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     public Persona crearConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException;
     
     public Persona crearPlantillaPersona(Empresa empresa,String identificacion,Persona.TipoIdentificacionEnum tipoIdentificacionEnum,String razonSocial,String direccion,OperadorNegocioEnum operadorNegocioEnum) throws ServicioCodefacException, java.rmi.RemoteException;
+    
+    public Persona grabarModoForzado(Persona p,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException;
     
 }

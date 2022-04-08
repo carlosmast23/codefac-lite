@@ -135,6 +135,9 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
      * value= instancia del panel de las categorias
      */
     private Map<String,JXTaskPane> mapPanelesSecundariosBuild;
+    
+    //Variable auxiliar que me va a permitir elegir cuando se tiene que procesar algo en modo forzado
+    public Boolean procesarModoForzado=false;
 
     public GeneralPanelInterface() {
         this.formularioActual=this;

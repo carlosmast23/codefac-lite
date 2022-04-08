@@ -778,6 +778,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
                     UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));                    
                     //frameInterface.limpiar();
+                    frameInterface.procesarModoForzado=false;
                     return;
                 }
                 
@@ -829,6 +830,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);                    
                     UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
                     //frameInterface.limpiar();
+                    frameInterface.procesarModoForzado=false;
                 }
                 catch(UnsupportedOperationException exception)
                 {
@@ -970,6 +972,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
                     UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
                     //frameInterface.limpiar();
+                    frameInterface.procesarModoForzado=false;
                     
                     limpiarCamposValidacion(frameInterface);
                     
@@ -1167,6 +1170,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
                 
                 //frameInterface.limpiar();
+                frameInterface.procesarModoForzado=false;
                 return;
             }
 

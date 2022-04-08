@@ -48,6 +48,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -166,10 +167,21 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 throw new ExcepcionCodefacLite("Error al prevalidar");
             }
             setearDatos();
-            persona = personaService.grabar(persona);
+            persona = personaService.grabarModoForzado(persona,procesarModoForzado);
             DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
+            //Si se puede reprocesar en modo forzado abro de nuevo la pantalla de grabar
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            if(ex.getProcesarModoForzado())
+            {
+                Boolean coninuar= DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea procesar en MODO FORZADO ?", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                if(coninuar)
+                {
+                    procesarModoForzado=true;
+                    grabar();
+                    return;
+                }
+            }            
             throw new ExcepcionCodefacLite("Error al prevalidar");
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -369,10 +381,12 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         switch (tipoIdentificacion) {
             case RUC:
-                verificador = UtilidadesJuridicas.validarTodosRuc(getjTextIdentificacion().getText());
+                //verificador = UtilidadesJuridicas.validarTodosRuc(getjTextIdentificacion().getText());
+                verificador=true;
                 break;
             case CEDULA:
-                verificador = UtilidadesJuridicas.validarCedula(getjTextIdentificacion().getText());
+                verificador=true;
+                //verificador = UtilidadesJuridicas.validarCedula(getjTextIdentificacion().getText());
                 break;
             case PASAPORTE:
             case SIN_DEFINIR:
