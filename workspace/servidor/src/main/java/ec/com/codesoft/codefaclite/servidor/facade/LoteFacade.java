@@ -27,7 +27,16 @@ public class LoteFacade extends AbstractFacade<Lote>{
     public LoteFacade() {
         super(Lote.class);
     }
-        
+   
+    public Long verificarExistenLotes(Empresa empresa)
+    {
+        //Lote lote=n;
+        String queryStr=" SELECT count(l.codigo) FROM Lote l WHERE l.estado=?1 and l.empresa=?2 ";
+        Query query=getEntityManager().createQuery(queryStr);
+        query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(2, empresa);
+        return (Long) query.getSingleResult();
+    }
     
     public List<FechaCaducidadResult> reporteFechaCaducidadFacade(Sucursal sucursal,Bodega bodega,Date fechaReferencia)
     {

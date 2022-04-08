@@ -5,25 +5,30 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
-import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.sql.Date;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -191,9 +196,144 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //query.setParameter(3,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
         
-        return query.getResultList();
+        //List<KardexDetalle> detalles= query.getResultList();
+        //return eliminarKardexPorLotes(detalles);
+        //return query.getResultList();
+        return eliminarProductosPorLote(query.getResultList(),empresa);
 
     }
+    
+    //Metodo temporal para no mostrar los productos on stock cero en el reporte de inventairo
+    //TODO: Ver como mejorar
+    @Deprecated
+    private List<Object[]> eliminarProductosPorLote(List<Object[]> resultadoList,Empresa empresa)
+    {
+        try {
+            //ordenar por producto y por nombre para no afectar en el orden final del resultado
+            UtilidadesLista.ordenarLista(resultadoList,new Comparator<Object[]>() {
+                @Override
+                public int compare(Object[] o1, Object[] o2) {
+                    Producto producto = (Producto) o1[0];
+                    BigDecimal cantidad = (BigDecimal) o1[1];
+                    
+                    Producto producto2 = (Producto) o2[0];
+                    BigDecimal cantidad2 = (BigDecimal) o2[1];
+                    
+                    int comparador=producto.getNombre().compareTo(producto2.getNombre());
+                    
+                    if(comparador==0)
+                    {
+                        comparador= cantidad.compareTo(cantidad2);
+                    }
+                    return comparador;
+                    
+                }
+            });
+                       
+            if(ServiceFactory.getFactory().getLoteSeviceIf().existenLotesIngresados(empresa))
+            {
+                List<Object[]> resultadoNuevo=new ArrayList<Object[]>();
+                for (Object[] objeto : resultadoList)
+                {
+                    Producto producto = (Producto) objeto[0];
+                    BigDecimal cantidad = (BigDecimal) objeto[1];
+                    BigDecimal costoPromedio = (BigDecimal) objeto[2];
+                    Bodega bodega = (Bodega) objeto[3];
+                    Lote lote = (Lote) objeto[4];
+                    
+                    if(cantidad.compareTo(BigDecimal.ZERO)>0)
+                    {
+                        resultadoNuevo.add(objeto);
+                    }
+                }
+                return resultadoNuevo;
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(KardexFacade.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(KardexFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultadoList;
+    }
+    
+    /*
+    private Boolean existeProductoKardexList(List<KardexDetalle> detalles, Producto producto)
+    {
+        for (KardexDetalle detalle : detalles) 
+        {
+            if(detalle.getKardex().getProducto().equals(producto))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
+    //TODO: metodo temporal ver como optimizar este asunto
+    @Deprecated
+    private List<KardexDetalle> eliminarKardexPorLotes( List<KardexDetalle> detalles)
+    {
+        List<KardexDetalle> resultadoList=new ArrayList<KardexDetalle>();
+        try 
+        {      
+            
+            if(ServiceFactory.getFactory().getLoteSeviceIf().obtenerTodos().size()>0)
+            {
+                //Ordenar primero por los valores mayores para que siempre se agregue aunque sea una sola vez el kardex de un producto con valores positivos
+                UtilidadesLista.ordenarLista(detalles,new Comparator<KardexDetalle>() {
+                    @Override
+                    public int compare(KardexDetalle o1, KardexDetalle o2) {
+                        return o1.getKardex().getStock().compareTo(o1.getKardex().getStock());
+                    }
+                });
+                
+                
+                for (KardexDetalle detalle : detalles) 
+                {
+                    
+                    if(!existeProductoKardexList(resultadoList, detalle.getKardex().getProducto()))
+                    {
+                        //Si no existe el producto agregado lo pongo una sola vez
+                        resultadoList.add(detalle);
+                    }
+                    else
+                    {
+                        //Solo agrego otro kardex si tiene un saldo positivo
+                        if(detalle.getKardex().getStock().compareTo(BigDecimal.ZERO)>0)
+                        {
+                            resultadoList.add(detalle);
+                        }
+                    }
+                }
+                
+            }
+            else //Este metodo se ejecuta cuando no estoy usando lotes y solo debo enviar el mismo resultado
+            {
+                resultadoList=detalles;
+            }
+        } 
+        catch (RemoteException ex) 
+        {
+            Logger.getLogger(KardexFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return resultadoList;
+    }
+    
+    private Boolean existeProductoKardexList(List<KardexDetalle> detalles, Producto producto)
+    {
+        for (KardexDetalle detalle : detalles) 
+        {
+            if(detalle.getKardex().getProducto().equals(producto))
+            {
+                return true;
+            }
+        }
+        return false;
+    }*/
+            
     
     public List<KardexDetalle> consultarMovimientosTransferenciaFacade(java.util.Date fechaInicial, java.util.Date fechaFinal) throws java.rmi.RemoteException,ServicioCodefacException
     {

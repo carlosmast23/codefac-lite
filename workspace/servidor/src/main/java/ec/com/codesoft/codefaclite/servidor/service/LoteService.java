@@ -98,6 +98,15 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         validarGrabar(entity, CrudEnum.EDITAR);
         entityManager.merge(entity);
     }
+    
+    public boolean existenLotesIngresados(Empresa empresa) throws ServicioCodefacException, RemoteException 
+    {
+        if(getFacade().verificarExistenLotes(empresa)>0)
+        {
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void eliminar(Lote entity) throws ServicioCodefacException, RemoteException {
