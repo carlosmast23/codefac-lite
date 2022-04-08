@@ -169,11 +169,14 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
         }
         
+        //Kardex kardex;
+        //kardex.getBodega().getEstado()
         //Talvez agregar condicion para buscar solo por kardex activos
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote FROM Kardex k WHERE k.bodega.empresa=?5 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) "+whereBodega+whereCategoria+" ORDER BY k.producto.nombre asc";
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote FROM Kardex k WHERE k.bodega.empresa=?5 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) "+whereBodega+whereCategoria+" ORDER BY k.producto.nombre asc";
         Query query = getEntityManager().createQuery(queryString);
         
         query.setParameter(5,empresa);
+        query.setParameter(6,GeneralEnumEstado.ACTIVO.getEstado());
         
         if(bodega!=null)
         {

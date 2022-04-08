@@ -42,6 +42,8 @@ public abstract class ExcelMigrar {
     private static final String ESTADO_MIGRADO="Migrado";
     private static final String ESTADO_DATO_DUPLICADO="El dato ya existe en el sistema";
     private static final String ESTADO_SIN_MIGRADO="Sin Migrar";
+    
+    public static String LOG_ULTIMO_CAMPO_LEIDO="";
     /**
      * Archivo excel donde va a contener los datos para migrar
      */
@@ -507,6 +509,7 @@ public abstract class ExcelMigrar {
         
         public CampoResultado getByEnum(CampoMigrarInterface campoEnum)
         {
+            ExcelMigrar.LOG_ULTIMO_CAMPO_LEIDO=campoEnum.getNombre();
             for (CampoResultado campoResultado : fila) 
             {
                 //System.out.println(campoResultado.campoEnum.getNombre());

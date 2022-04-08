@@ -143,7 +143,15 @@ public class MigrarProductoModel extends MigrarModel {
                          * ===================================================================
                          */                        
                         String marca=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MARCA).valor;
-                        stockMinimo=(Double) fila.getByEnum(ExcelMigrarProductos.Enum.STOCK_MINIMO).valor;
+                        
+                        try
+                        {
+                            stockMinimo=(Double) fila.getByEnum(ExcelMigrarProductos.Enum.STOCK_MINIMO).valor;
+                        }
+                        catch(ClassCastException e)
+                        {
+                            
+                        }
 
                                                 
                         kardexDetalle=generarMovimientoInventario(manejaInventarioEnumSiNo, fila, producto,productoTmp);
@@ -271,7 +279,13 @@ public class MigrarProductoModel extends MigrarModel {
                 {
                     Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel("Error ingresando letras en un campo de números en el producto: "+fila.getByEnum(ExcelMigrarProductos.Enum.NOMBRE).valor);
-                } catch(Exception ex)
+                }
+                catch(ClassCastException ex)
+                {
+                    Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new ExcelMigrar.ExcepcionExcel("Error de conversión con el campo: "+ExcelMigrar.LOG_ULTIMO_CAMPO_LEIDO+"\nDescripción:"+ex.getMessage());
+                }
+                catch(Exception ex)
                 {
                     Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcelMigrar.ExcepcionExcel(ex.getMessage());

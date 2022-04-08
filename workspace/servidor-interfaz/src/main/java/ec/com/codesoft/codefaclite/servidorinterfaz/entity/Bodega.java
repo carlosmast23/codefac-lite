@@ -109,8 +109,8 @@ public class Bodega implements Serializable {
         this.estado = estado;
     }
     
-    public String getEstadoEnum() {
-        return estado;
+    public GeneralEnumEstado getEstadoEnum() {
+        return GeneralEnumEstado.getEnum(estado);
     }
 
     public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
