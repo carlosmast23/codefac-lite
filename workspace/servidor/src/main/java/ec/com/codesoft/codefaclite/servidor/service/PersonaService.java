@@ -305,6 +305,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         establecimiento.setNombreComercial(Usuario.CONSUMIDOR_FINAL_NOMBRE);
         establecimiento.setDireccion("s/n"); //TODO: Significa sin direccion
         establecimiento.setPersona(persona);
+        establecimiento.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         establecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
         entityManager.persist(establecimiento);
 
