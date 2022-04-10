@@ -617,10 +617,14 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 getTxtRuta().setText("Sin Ruta");
             }
             
-            if(getTxtAutorizacion().getText().length()<=9)
+            DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+            if(!documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
-                DialogoCodefac.mensaje("Advertencia","La autorización tiene que tener más de 9 digitos",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                return null;
+                if(getTxtAutorizacion().getText().length()<=9)
+                {
+                    DialogoCodefac.mensaje("Advertencia","La autorización tiene que tener más de 9 digitos",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return null;
+                }
             }
             
             /*
