@@ -618,7 +618,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
             }
             
             DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-            if(!documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+            if(!documentoEnum.equals(DocumentoEnum.GUIA_REMISION_INTERNA))
             {
                 if(getTxtAutorizacion().getText().length()<=9)
                 {

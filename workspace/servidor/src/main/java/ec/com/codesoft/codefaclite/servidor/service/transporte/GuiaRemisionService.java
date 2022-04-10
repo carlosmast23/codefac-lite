@@ -72,9 +72,12 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                 throw new ServicioCodefacException("No se puede grabar una guia de remisión sin autorización de la factura");
             }
             
-            if(destinatario.getAutorizacionNumero().length()<=9)
+            if(entity.getCodigoDocumentoEnum().equals(DocumentoEnum.GUIA_REMISION))
             {
-                throw new ServicioCodefacException("El tamanio de la  autorización debe ser mayor que 9 digitos");
+                if(destinatario.getAutorizacionNumero().length()<=9)
+                {
+                    throw new ServicioCodefacException("El tamanio de la  autorización debe ser mayor que 9 digitos");
+                }
             }
             
             for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) 
