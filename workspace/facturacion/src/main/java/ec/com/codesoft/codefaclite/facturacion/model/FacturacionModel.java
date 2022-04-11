@@ -625,6 +625,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
                     getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
                     getTxtDescripcion().setText(facturaDetalle.getDescripcion());
+                    getTxtDescripcion().setCaretPosition(0);
                     getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
                     getCheckPorcentaje().setSelected(false);
                     getBtnEditarDetalle().setEnabled(true);
@@ -3833,9 +3834,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void cargarDatosDetalleVista(BigDecimal valorUnitario,BigDecimal descuento,String descripcion,String codigo) {
         getTxtValorUnitario().setText(valorUnitario+"");
         getTxtDescripcion().setText(descripcion);
+        getTxtDescripcion().setCaretPosition(0);
         getTxtDescuento().setText(descuento.toString());
         //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
-        //getTxtDescripcion().setText(productoSeleccionado.getNombre());
         //Dar foco a la cantidad a ingresar
         getTxtCantidad().setText("1");
         getTxtCodigoDetalle().setText(codigo);
@@ -3932,6 +3933,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void setearDescripcionTxt(String descripcion) {
         getTxtDescripcion().setText(descripcion);
+        getTxtDescripcion().setCaretPosition(0);
     }
 
     @Override

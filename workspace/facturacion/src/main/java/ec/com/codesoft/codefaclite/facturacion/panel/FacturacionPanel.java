@@ -335,15 +335,16 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.ipadx = 200;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         pnlDetalles.add(txtCodigoDetalle, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         pnlDetalles.add(cmbPreciosVenta, gridBagConstraints);
 
         jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -465,18 +466,20 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jToolBar4.add(btnAgregarProducto);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         pnlDetalles.add(jToolBar4, gridBagConstraints);
 
-        txtDescripcion.setColumns(20);
-        txtDescripcion.setRows(5);
+        txtDescripcion.setColumns(2);
+        txtDescripcion.setRows(2);
+        txtDescripcion.setText("\n");
         jScrollPane1.setViewportView(txtDescripcion);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         pnlDetalles.add(jScrollPane1, gridBagConstraints);
