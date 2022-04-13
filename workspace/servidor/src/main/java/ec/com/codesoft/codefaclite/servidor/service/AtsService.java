@@ -610,7 +610,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
             total= cartera.obtenerTotalDetallePorDocumento(detalleDocumento);
         }
             
-        return total;
+        return total.setScale(2, RoundingMode.HALF_UP);
     }
     
     public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException

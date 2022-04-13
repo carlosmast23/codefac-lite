@@ -1188,6 +1188,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         List<Cartera> carteraList= getFacade().findByMap(mapParametros);
         if(carteraList.size()>0)
         {
+            List<CarteraCruce> cruceList = carteraList.get(0).getCruces();
+            for (CarteraCruce carteraCruce : cruceList) {
+                
+                if(carteraCruce.getCarteraDetalle().getCartera().getCarteraDocumentoEnum().equals(DocumentoEnum.RETENCIONES))
+                {
+                    return carteraCruce.getCarteraDetalle().getCartera();
+                }
+            }
             return carteraList.get(0);
         }
         return null;
