@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -36,5 +37,6 @@ public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public List<Cartera> obtenerCarteraPorCobrar(Persona cliente,Estudiante estudiante,Empresa empresa) throws ServicioCodefacException, RemoteException;
     public BigDecimal obtenerSaldoDisponibleCruzar(Persona cliente,Empresa empresa,Estudiante estudiante) throws ServicioCodefacException, RemoteException;
     public void eliminarCarteraSinTransaccion(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException ;
+    public Cartera obtenerRetencionPorFactura(Factura factura,Cartera.TipoCarteraEnum tipoCartera) throws ServicioCodefacException, RemoteException;
     
 }

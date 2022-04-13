@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -21,7 +22,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -532,6 +535,34 @@ public class Cartera implements Serializable{
             }
         }*/
         
+    }
+    
+    public Map<DocumentoDetalleEnum,BigDecimal> obtenerDetallesPorValoresYCodigos()
+    {
+        Map<DocumentoDetalleEnum,BigDecimal> mapParametros=new HashMap<DocumentoDetalleEnum,BigDecimal>();
+        for (CarteraDetalle detalle : detalles) 
+        {
+            BigDecimal valor=mapParametros.get(detalle.getCodigoDetalleDocumentoEnum());
+            if(valor==null)
+            {
+                valor=BigDecimal.ZERO;
+            }
+            valor=valor.add(detalle.getTotal());
+            mapParametros.put(detalle.getCodigoDetalleDocumentoEnum(), valor);
+            
+        }
+        return mapParametros;
+    }
+    
+    public BigDecimal obtenerTotalDetallePorDocumento(DocumentoDetalleEnum documentoDetalle)
+    {
+        BigDecimal total=obtenerDetallesPorValoresYCodigos().get(documentoDetalle);
+        
+        if(total==null)
+        {
+            total=BigDecimal.ZERO;
+        }
+        return total;
     }
     
     ///////////////////////////////////////////////////////////////////////////

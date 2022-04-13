@@ -27,7 +27,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoCarteraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
@@ -584,6 +589,30 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         return null;
     }
     
+    private Cartera consultarRetencionVenta(Factura factura)
+    {
+        try {
+            Cartera carteraRetencion=ServiceFactory.getFactory().getCarteraServiceIf().obtenerRetencionPorFactura(factura,TipoCarteraEnum.CLIENTE);
+            return carteraRetencion;
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    private BigDecimal obtenerValorRetencionPorDocumento(Cartera cartera,DocumentoDetalleEnum detalleDocumento)
+    {
+        BigDecimal total=BigDecimal.ZERO;
+        if(cartera!=null)
+        {
+            total= cartera.obtenerTotalDetallePorDocumento(detalleDocumento);
+        }
+            
+        return total;
+    }
+    
     public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
         //FacturacionService facturacionService=new FacturacionService();
@@ -599,6 +628,9 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         for (Factura factura : facturas) 
         {
             VentaAts ventaAts=mapVentas.get(factura.getIdentificacion());
+            Cartera carteraRetencion=consultarRetencionVenta(factura);
+            BigDecimal retencionIva=obtenerValorRetencionPorDocumento(carteraRetencion, DocumentoDetalleEnum.RETENCION_IVA);
+            BigDecimal retencionRenta=obtenerValorRetencionPorDocumento(carteraRetencion, DocumentoDetalleEnum.RETENCION_RENTA);
             if(ventaAts==null)
             { //Cuando no existe el dato en el map lo creo
                 ventaAts=new VentaAts();
@@ -637,8 +669,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 ventaAts.setBaseImpGrav(factura.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP));
                 ventaAts.setMontoIva(factura.getIva().setScale(2,RoundingMode.HALF_UP));
                 ventaAts.setMontoIce(BigDecimal.ZERO); // TODO: Este valor no estoy grabando para obtener el subtotal
-                ventaAts.setValorRetIva(BigDecimal.ZERO); //TODO: Este dato aun no tento porque viene de la cartera
-                ventaAts.setValorRetRenta(BigDecimal.ZERO); //TODO: Este dato aun no tengo porque viene de la cartera
+                ventaAts.setValorRetIva(retencionIva); //TODO: Este dato aun no tento porque viene de la cartera
+                ventaAts.setValorRetRenta(retencionRenta); //TODO: Este dato aun no tengo porque viene de la cartera
                 ventaAts.setFormasDePago(getFormasPago(factura)); //La primera setea la primera forma de pago
 
                 mapVentas.put(factura.getIdentificacion(),ventaAts);
@@ -653,8 +685,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 ventaAts.setBaseImpGrav(ventaAts.getBaseImpGrav().add(factura.getSubtotalImpuestos()).setScale(2,RoundingMode.HALF_UP));
                 ventaAts.setMontoIva(ventaAts.getMontoIva().add(factura.getIva()).setScale(2,RoundingMode.HALF_UP));
                 ventaAts.setMontoIce(BigDecimal.ZERO); // TODO: Este valor no estoy grabando para obtener el subtotal
-                ventaAts.setValorRetIva(BigDecimal.ZERO); //TODO: Este dato aun no tento porque viene de la cartera
-                ventaAts.setValorRetRenta(BigDecimal.ZERO); //TODO: Este dato aun no tengo porque viene de la cartera
+                ventaAts.setValorRetIva(ventaAts.getValorRetIva().add(retencionIva)); //TODO: Este dato aun no tento porque viene de la cartera
+                ventaAts.setValorRetRenta(ventaAts.getValorRetRenta().add(retencionRenta)); //TODO: Este dato aun no tengo porque viene de la cartera
                 
                 //Agregar solo formas de pago que no esten ya registrados en el cliente
                 List<FormaDePagoAts> formasPagoOriginal=getFormasPago(factura);

@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -196,6 +197,7 @@ public class StockMinimoModel extends StockMinimoPanel{
             {
                 Producto producto = (Producto) objeto[0];
                 BigDecimal cantidad = (BigDecimal) objeto[1];
+                Lote lote=(Lote)objeto[4];
 
                 StockMinimoData data = new StockMinimoData();
 
@@ -204,6 +206,7 @@ public class StockMinimoModel extends StockMinimoPanel{
                 data.setStock(cantidad.toString());
                 data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto() != null) ? producto.getCatalogoProducto().getCategoriaProducto().getNombre() : "");
                 data.setCantidadMinima(producto.getCantidadMinima().toString());
+                data.setLote(lote.getCodigo());
 
                 listaData.add(data);
 

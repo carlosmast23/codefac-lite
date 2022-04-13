@@ -1173,5 +1173,24 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         });
     }
     
+    public Cartera obtenerRetencionPorFactura(Factura factura,Cartera.TipoCarteraEnum tipoCartera) throws ServicioCodefacException, RemoteException 
+    {
+        //Cartera cartera;
+        //cartera.setTipoCartera(tipoCartera);
+        //cartera.setReferenciaID(Long.MIN_VALUE);
+        //cartera.setCodigoDocumento(codigoDocumento);
+        //cartera.setEstado(estado);
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("referenciaID",factura.getId());
+        mapParametros.put("codigoDocumento", factura.getCodigoDocumento());
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("tipoCartera", tipoCartera.getLetra());
+        List<Cartera> carteraList= getFacade().findByMap(mapParametros);
+        if(carteraList.size()>0)
+        {
+            return carteraList.get(0);
+        }
+        return null;
+    }
             
 }
