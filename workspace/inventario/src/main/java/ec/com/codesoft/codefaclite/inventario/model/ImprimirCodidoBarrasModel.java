@@ -55,8 +55,16 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
  
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        cargarComboBox();
         listenerBotones();
         listenerPopUps();
+    }
+    
+    private void cargarComboBox()
+    {
+        getCmbTipoCodigoBarras().removeAllItems();
+        getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.CODE128);
+        getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.CODE39);        
     }
 
     @Override
@@ -102,16 +110,19 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
     
     private List<CodigoBarrasData> getData()
     {
+        UtilidadCodigoBarras.CodigoBarrasEnum codigoEnum = (UtilidadCodigoBarras.CodigoBarrasEnum) getCmbTipoCodigoBarras().getSelectedItem();
+        
         String opcionLlevaIva=(String) getCmbPrecioConIva().getSelectedItem();        
                
         List<CodigoBarrasData> listaDatos=new ArrayList<CodigoBarrasData>();
         int dpi=(int) getTxtDpi().getValue();
         
-        for (Map.Entry<Producto,Integer> entry : mapProductosImprimir.entrySet()) {
+        for (Map.Entry<Producto,Integer> entry : mapProductosImprimir.entrySet()) 
+        {
             Producto producto = entry.getKey();
             Integer cantidad = entry.getValue();
             
-            Image imagenCodigoBarras= UtilidadCodigoBarras.obtenerImagenCodigoBarras(producto.getCodigoPersonalizado(),dpi);
+            Image imagenCodigoBarras= UtilidadCodigoBarras.obtenerImagenCodigoBarras(producto.getCodigoPersonalizado(),dpi,codigoEnum);
             for (int i = 0; i < cantidad; i++) 
             {
                 CodigoBarrasData codigoBarraData=new CodigoBarrasData();

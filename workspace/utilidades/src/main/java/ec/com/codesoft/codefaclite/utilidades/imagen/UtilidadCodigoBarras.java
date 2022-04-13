@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
+import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
@@ -23,12 +24,20 @@ import org.krysalis.barcode4j.tools.UnitConv;
  */
 public abstract class UtilidadCodigoBarras {
     
-    public static Image obtenerImagenCodigoBarras(String codigo,int dpi)
+    public static Image obtenerImagenCodigoBarras(String codigo,int dpi,CodigoBarrasEnum codigoEnum)
     {
         try {
             //org.krysalis.barcode4j.impl.code128.EAN128
             //Code39Bean bean39 = new Code39Bean();
-            Code39Bean bean39 = new Code39Bean();
+            AbstractBarcodeBean bean39 =null;
+            if(codigoEnum.equals(CodigoBarrasEnum.CODE39))
+            {
+                bean39 = new Code39Bean();
+            }
+            else
+            {
+                bean39=new Code128Bean();
+            }
             //final int dpi = 160;
             //final int dpi = 80;
 
@@ -61,6 +70,10 @@ public abstract class UtilidadCodigoBarras {
         return null;
     }
     
-    
+    public enum CodigoBarrasEnum
+    {
+        CODE128,
+        CODE39;        
+    }
     
 }
