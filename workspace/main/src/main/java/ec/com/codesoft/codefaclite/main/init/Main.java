@@ -298,13 +298,23 @@ public class Main {
     
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
     private static void verificarActualizacionBaseDatosVersion()
-    {        
+    {   
+        PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
+        String modoAplicativo = propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
+        
+        //Si no tiene modo o tiene modo cliente no se tiene que hacer ninguna actualizacion
+        if (modoAplicativo==null || modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE.toString())) 
+        {
+            return ;
+        }
+        
         LOG.log(Level.INFO," Iniciando verificarActualizacionBaseDatosVersion");
         //PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
         //String versionGrabada=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
         cargarCredencialesBaseDatos();
         String versionGrabada=obtenerUltimaVersion();
-        PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        
         
         if(versionGrabada!=null)
         {
@@ -316,8 +326,7 @@ public class Main {
                    
                     try {
                         
-                        //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
-                        String modoAplicativo = propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
+                        
                         
                         //Solo actualizar si es un modo servidor , o cliente servidor
                         if (modoAplicativo!=null && !modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE.toString())) 
