@@ -35,7 +35,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class RespaldosModelUtilidades {
     
-    public static void generarRespaldoUbicacion(Boolean enviarCorreo,Empresa empresa) throws ServicioCodefacException
+    public static void generarRespaldoUbicacion(Boolean enviarCorreo,Empresa empresa,String correo) throws ServicioCodefacException
     {
         try
                 {
@@ -56,7 +56,8 @@ public class RespaldosModelUtilidades {
                         
                         if(enviarCorreo)
                         {
-                            enviarRespaldoCorreoEmpresa(destinoDirectorio,empresa);
+                            
+                            enviarRespaldoCorreoEmpresa(destinoDirectorio,empresa,correo);
                         }
                     }
                     else
@@ -72,7 +73,7 @@ public class RespaldosModelUtilidades {
                 }
     }
     
-    public static void enviarRespaldoCorreoEmpresa(File fileRespaldo,Empresa empresa) throws ServicioCodefacException
+    public static void enviarRespaldoCorreoEmpresa(File fileRespaldo,Empresa empresa,String correoEmpresa) throws ServicioCodefacException
     {
         try {
             String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(UtilidadesFecha.getFechaHoy());
@@ -80,8 +81,12 @@ public class RespaldosModelUtilidades {
             String tituloCorreo="Respaldo BaseDatos "+fechaStr;
             String mensajeCorreo="El respaldo de la base de datos de Codefac de la fecha "+fechaStr+" lo puede descargar como archivo adjunto";
             
-            ParametroCodefac parametroCorreo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO, empresa);
-            String correoEmpresa=parametroCorreo.valor;
+            if(correoEmpresa==null)
+            {
+                ParametroCodefac parametroCorreo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO, empresa);
+                correoEmpresa=parametroCorreo.valor;
+            }
+            //String correoEmpresa=parametroCorreo.valor;
             //String correoEmpresa=session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).valor;
             List correosList=Arrays.asList(correoEmpresa);
             Map<String,String> mapArchivosAdjuntos=Collections.singletonMap(fileRespaldo.getName(),fileRespaldo.getPath());

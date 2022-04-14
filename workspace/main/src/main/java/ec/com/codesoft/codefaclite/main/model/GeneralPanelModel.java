@@ -437,7 +437,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
                 try {
                     //Enviar al correo y generar el respaldo de la base de datos
-                    RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa());
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa(),null);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));

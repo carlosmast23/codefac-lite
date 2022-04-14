@@ -270,7 +270,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             public void actionPerformed(ActionEvent e) 
             {
                 try {
-                    RespaldosModelUtilidades.generarRespaldoUbicacion(getChkEnviarCorreo().isSelected(),session.getEmpresa());
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(getChkEnviarCorreo().isSelected(),session.getEmpresa(),null);
                     DialogoCodefac.mensaje("Correcto","El proceso termino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
                     //generarRespaldoUbicacion(getChkEnviarCorreo().isSelected());
                 } catch (ServicioCodefacException ex) {
@@ -296,6 +296,22 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     case JFileChooser.ERROR_OPTION:
 
                         break;
+                }
+            }
+        });
+        
+        getBtnEnviarBDCorreoPersonalizado().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    
+                    String correoEnviar=getTxtCorreoPersonalizado().getText();
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(true,session.getEmpresa(),correoEnviar);
+                    DialogoCodefac.mensaje("Correcto","El proceso termino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                    //generarRespaldoUbicacion(getChkEnviarCorreo().isSelected());
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                 }
             }
         });
