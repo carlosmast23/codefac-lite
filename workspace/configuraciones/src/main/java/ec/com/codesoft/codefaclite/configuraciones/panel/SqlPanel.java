@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefacEnum;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -44,6 +46,7 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
         jLabel2 = new javax.swing.JLabel();
         txtErrores = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        cmbQuerysGuardados = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -60,16 +63,22 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.3;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         btnEjecutarComandos.setText("Ejecutar");
+        btnEjecutarComandos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEjecutarComandosActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnEjecutarComandos, gridBagConstraints);
@@ -88,7 +97,7 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -99,14 +108,14 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
         jLabel2.setText("Salida:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -116,20 +125,33 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
         jLabel3.setText("Consola de Resultados:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbQuerysGuardados, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnEjecutarComandosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEjecutarComandosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEjecutarComandosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEjecutarComandos;
+    private javax.swing.JComboBox<RecursoCodefacEnum> cmbQuerysGuardados;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -173,5 +195,14 @@ public abstract class SqlPanel extends ControladorCodefacInterface {
         this.txtErrores = txtErrores;
     }
 
+    public JComboBox<RecursoCodefacEnum> getCmbQuerysGuardados() {
+        return cmbQuerysGuardados;
+    }
+
+    public void setCmbQuerysGuardados(JComboBox<RecursoCodefacEnum> cmbQuerysGuardados) {
+        this.cmbQuerysGuardados = cmbQuerysGuardados;
+    }
+
+    
     
 }

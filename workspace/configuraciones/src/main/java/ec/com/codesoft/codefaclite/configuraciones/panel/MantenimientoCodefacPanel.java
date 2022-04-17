@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
+import ec.com.codesoft.codefaclite.configuraciones.model.MantenimientoCodefacModel.EntidadEliminarEnum;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
@@ -34,6 +35,13 @@ public abstract class MantenimientoCodefacPanel extends ControladorCodefacInterf
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        lblEspacio3434 = new javax.swing.JLabel();
+        btnEliminarEntidad = new javax.swing.JButton();
+        cmbEliminarEntidad = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -47,6 +55,49 @@ public abstract class MantenimientoCodefacPanel extends ControladorCodefacInterf
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        getContentPane().setLayout(new java.awt.GridLayout());
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText("Eliminar datos especificos:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(lblEspacio3434, gridBagConstraints);
+
+        btnEliminarEntidad.setText("Eliminar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(btnEliminarEntidad, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(cmbEliminarEntidad, gridBagConstraints);
+
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(153, 51, 0));
+        jLabel6.setText("Nota: Estas opciones solo deben usar usadas por personal autorizada por que pueden ocacionar PROBLEMAS con su sistema");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel6, gridBagConstraints);
+
+        jTabbedPane1.addTab("General", jPanel2);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -55,8 +106,6 @@ public abstract class MantenimientoCodefacPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
-
-        jLabel2.setText("jLabel2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 5;
@@ -101,7 +150,9 @@ public abstract class MantenimientoCodefacPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jTabbedPane1.addTab("Base de Datos", jPanel1);
+
+        getContentPane().add(jTabbedPane1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -109,13 +160,20 @@ public abstract class MantenimientoCodefacPanel extends ControladorCodefacInterf
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntCorregirDatosTablaDuplicados;
+    private javax.swing.JButton btnEliminarEntidad;
     private javax.swing.JButton btnVerificarProblemaBaseDatos;
     private javax.swing.JComboBox<String> cbmTablaVerificar;
+    private javax.swing.JComboBox<EntidadEliminarEnum> cmbEliminarEntidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lblEspacio3434;
     // End of variables declaration//GEN-END:variables
 
     @ButtonBinding(actionListener = "btnListenerVerificarTablaBaseDatos")
@@ -143,6 +201,22 @@ public abstract class MantenimientoCodefacPanel extends ControladorCodefacInterf
 
     public void setBntCorregirDatosTablaDuplicados(JButton bntCorregirDatosTablaDuplicados) {
         this.bntCorregirDatosTablaDuplicados = bntCorregirDatosTablaDuplicados;
+    }
+
+    public JButton getBtnEliminarEntidad() {
+        return btnEliminarEntidad;
+    }
+
+    public void setBtnEliminarEntidad(JButton btnEliminarEntidad) {
+        this.btnEliminarEntidad = btnEliminarEntidad;
+    }
+
+    public JComboBox<EntidadEliminarEnum> getCmbEliminarEntidad() {
+        return cmbEliminarEntidad;
+    }
+
+    public void setCmbEliminarEntidad(JComboBox<EntidadEliminarEnum> cmbEliminarEntidad) {
+        this.cmbEliminarEntidad = cmbEliminarEntidad;
     }
     
     

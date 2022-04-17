@@ -112,7 +112,10 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         productoSeleccionado=null;
         kardexDetalle=new KardexDetalle();
         getCmbFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
-        getCmbBodega().setSelectedIndex(0);
+        if(getCmbBodega().getItemCount()>0)
+        {
+            getCmbBodega().setSelectedIndex(0);
+        }
         //getCmbTipoDocumento().setSelectedIndex(0);
         getTxtDescripcion().setText("");
         getTxtCantidad().setText("1");

@@ -10,12 +10,21 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,11 +49,55 @@ public class MantenimientoCodefacModel extends MantenimientoCodefacPanel{
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         cargarDatosIniciales();
+        listener();
+    }
+    
+    private void listener()
+    {
+        listenerBotones();
+    }
+    
+    private void listenerBotones()
+    {
+        getBtnEliminarEntidad().addActionListener(listenerEliminarEntidad);
+    }
+    
+    private ActionListener listenerEliminarEntidad = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+           
+            EntidadEliminarEnum entidadEliminar=(EntidadEliminarEnum) getCmbEliminarEntidad().getSelectedItem();
+            
+            switch(entidadEliminar)            
+            {
+                case CLIENTES_PROVEEDORES:
+                    eliminarClientes();
+                    break;
+            }
+            
+            
+        }
+    };
+    
+    private void eliminarClientes()
+    {
+        try {
+            List<Object[]> ejemplo = ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarConsultaNativaEnum(RecursoCodefacEnum.SQL_BORRAR_CLIENTE_POR_EMPRESA);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+            System.out.println("Tamanio:" + ejemplo.size());
+        } catch (RemoteException ex) {
+            Logger.getLogger(MantenimientoCodefacModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(MantenimientoCodefacModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void cargarDatosIniciales()
     {
         tablasBDListas=Arrays.asList(Factura.NOMBRE_TABLA,Persona.NOMBRE_TABLA);
+        
+        //Cargar datos en el combo
+        UtilidadesComboBox.llenarComboBox(getCmbEliminarEntidad(),EntidadEliminarEnum.values());
     }
 
     @Override
@@ -178,6 +231,13 @@ public class MantenimientoCodefacModel extends MantenimientoCodefacPanel{
     }
 
     
-    
+    public enum EntidadEliminarEnum
+    {
+        PRODUCTOS,
+        CLIENTES_PROVEEDORES,        
+        FACTURAS,
+        NOTAS_CREDITO
+        
+    }
     
 }

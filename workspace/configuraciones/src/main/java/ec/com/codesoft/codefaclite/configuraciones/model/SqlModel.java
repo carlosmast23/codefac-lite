@@ -9,10 +9,12 @@ import ec.com.codesoft.codefaclite.configuraciones.panel.SqlPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -32,6 +34,32 @@ public class SqlModel extends SqlPanel {
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         listenerBotones();
+        listenerComboBox();
+        cargarDatos();
+    }
+    
+    private void cargarDatos()
+    {
+        getCmbQuerysGuardados().removeAllItems();
+        getCmbQuerysGuardados().addItem(null);
+        for (RecursoCodefacEnum value : RecursoCodefacEnum.values()) {
+            getCmbQuerysGuardados().addItem(value);
+        }
+        
+    }
+    
+    private void listenerComboBox()
+    {
+        getCmbQuerysGuardados().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RecursoCodefacEnum sqlEnum=(RecursoCodefacEnum) getCmbQuerysGuardados().getSelectedItem();
+                if(sqlEnum!=null)
+                {
+                    getTxtAreaSql().setText(sqlEnum.getValueString());
+                }
+            }
+        });
     }
     
     private void listenerBotones()
@@ -43,7 +71,7 @@ public class SqlModel extends SqlPanel {
                 try {
                     getTxtErrores().setText("");
                     String queryStr=getTxtAreaSql().getText();
-                    List<Object[]> ejemplo=ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarConsultaNativa(queryStr);
+                    List<Object[]> ejemplo=ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarVariasConsultaNativa(queryStr);
                     System.out.println("Tamanio:"+ejemplo.size());
                     construirModeloTabla(ejemplo);
                     
@@ -54,6 +82,7 @@ public class SqlModel extends SqlPanel {
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(SqlModel.class.getName()).log(Level.SEVERE, null, ex);
                     getTxtErrores().setText(ex.getMessage());
+                    DialogoCodefac.mensaje(new CodefacMsj("Error al ejecutar el proceso revise el mensaje",CodefacMsj.TipoMensajeEnum.ERROR));
                 }
            }
         });

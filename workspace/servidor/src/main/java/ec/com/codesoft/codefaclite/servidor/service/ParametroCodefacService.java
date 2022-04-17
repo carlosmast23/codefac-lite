@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefacEnum;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
@@ -14,6 +16,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -264,6 +269,32 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         parametro.setNombre(nombre);
         parametro.setValor(valor);
         return parametro;
+    }
+    
+    public List ejecutarConsultaNativaEnum(RecursoCodefacEnum queryEnum) throws RemoteException,ServicioCodefacException
+    {
+        InputStream inputStreamReporte= RecursoCodefac.SQL_CODEFAC.getResourceInputStream(queryEnum.getNombre());
+        String queryDatos= UtilidadesTextos.getStringFromInputStream(inputStreamReporte);
+        String[] queryList= queryDatos.split(";");
+        
+        List resultado=new ArrayList();
+        for (String string : queryList) 
+        {
+            resultado.addAll(ejecutarConsultaNativa(string));
+        }
+        return resultado;
+    }
+    
+    public List ejecutarVariasConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException
+    {
+        String[] queryList= queryStr.split(";");
+        
+        List resultado=new ArrayList();
+        for (String string : queryList) 
+        {
+            resultado.addAll(ejecutarConsultaNativa(string));
+        }
+        return resultado;
     }
     
     /**
