@@ -47,7 +47,7 @@ public class CorreoCodefac {
     //}
     
     /**
-     * 
+     * TODO: Mejorar esta parte para parametrizar mejor desde donde tengo que enviar los correos
      * @param empresa
      * @param mensaje
      * @param titulo
@@ -65,11 +65,93 @@ public class CorreoCodefac {
 
             String clave=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_CLAVE,empresa).getValor();
             //Obtener clave desencriptada
-            clave=UtilidadesEncriptar.desencriptar(clave,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            //clave=UtilidadesEncriptar.desencriptar(clave,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             
             //Construir los datos de las propiedades si existen
             String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST,empresa).getValor();
             String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT,empresa).getValor();
+            
+            //PropiedadCorreo propiedadCorreo=null;
+            //if(!smtpHost.isEmpty() && !smtpPort.isEmpty())
+            //{
+            //    propiedadCorreo=new PropiedadCorreo(smtpHost,new Integer(smtpPort));
+            //} 
+            
+            //Agregar el nombre de la empresa o la razon social
+            String alias = obtenerNombreEmpresaCorreo(empresa);
+            
+            //if(modoSession)
+            //{
+                //Si no existe la referencia previamente creada creo uno nuevo
+            //    if (correoElectronico == null) {
+            //        correoElectronico = new CorreoElectronico(correo, alias, clave, mensaje, destinatorios,titulo, propiedadCorreo);
+            //        correoElectronico.sessionLoteActivo=true;
+            //    }
+            //}
+            //else
+            //{
+                //Si tiene esta opcion siempre creo una nueva conexion
+            //    correoElectronico = new CorreoElectronico(correo, alias, clave, mensaje, destinatorios, titulo, propiedadCorreo);
+            //}
+            
+            
+            enviarCorreo(correo, clave, smtpHost, smtpPort, alias, mensaje, titulo, destinatorios, pathFiles);
+            //correoElectronico.setPathFiles(getPathFiles());
+            
+            try
+            {
+            //    correoElectronico.sendMail(mensaje, destinatorios, titulo, pathFiles);
+            }catch(RuntimeException e)
+            {
+                e.printStackTrace();
+                throw new ExcepcionCorreoCodefac(e.getMessage());
+            //} catch (MessagingException ex) {
+            //    Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            //    throw new ExcepcionCorreoCodefac(ex.getMessage());
+            }
+            
+            
+        }catch(RemoteException ex)
+        {
+            Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCorreoCodefac(ex.getMessage());
+        }
+
+        
+    }
+    
+        
+    //Metodo que me permite enviar un correo directamente desde una cuenta de correo del sistema
+    public void enviarCorreoCuentaSistema(Empresa empresa,String mensaje, String titulo, List<String> destinatorios, Map<String, String> pathFiles) throws ExcepcionCorreoCodefac
+    {
+        String alias = obtenerNombreEmpresaCorreo(empresa);
+        String correo=ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO;
+        String claveEncriptada=ParametrosSistemaCodefac.CORREO_DEFECTO_CLAVE;
+        String smtp=ParametrosSistemaCodefac.CORREO_DEFECTO_HOST;
+        //String smtp="465";
+        //String puerto=ParametrosSistemaCodefac.CORREO_DEFECTO_PUERTO;
+        String puerto="465";
+        
+        enviarCorreo(correo, claveEncriptada, smtp, puerto, alias, mensaje, titulo, destinatorios, pathFiles);
+    }
+    
+    public void enviarCorreo(String correo,String claveEncriptada,String smtpHost,String smtpPort,String nombreEmpresa,String mensaje, String titulo, List<String> destinatorios, Map<String, String> pathFiles) throws ExcepcionCorreoCodefac
+    {
+        try
+        {
+            //ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO);
+            //String correo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO,empresa).getValor();
+            
+
+            //String clave=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_CLAVE,empresa).getValor();
+            //Obtener clave desencriptada
+            String clave=UtilidadesEncriptar.desencriptar(claveEncriptada,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            
+            //Construir los datos de las propiedades si existen
+            //String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST,empresa).getValor();
+            //String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT,empresa).getValor();
             
             PropiedadCorreo propiedadCorreo=null;
             if(!smtpHost.isEmpty() && !smtpPort.isEmpty())
@@ -78,11 +160,12 @@ public class CorreoCodefac {
             } 
             
             //Agregar el nombre de la empresa o la razon social
-            String alias=empresa.getNombreLegal();
-            if(alias==null || alias.trim().isEmpty())
-            {
-                alias=empresa.getRazonSocial();
-            }
+            //String alias=empresa.getNombreLegal();
+            String alias=nombreEmpresa;
+            //if(alias==null || alias.trim().isEmpty())
+            //{
+            //    alias=empresa.getRazonSocial();
+            //}
             
             if(modoSession)
             {
@@ -130,6 +213,16 @@ public class CorreoCodefac {
         }
 
         
+    }
+
+    
+    private String obtenerNombreEmpresaCorreo(Empresa empresa)
+    {
+        String alias = empresa.getNombreLegal();
+        if (alias == null || alias.trim().isEmpty()) {
+            alias = empresa.getRazonSocial();
+        }
+        return alias;
     }
 
     public CorreoElectronico getCorreoElectronico() {

@@ -35,6 +35,7 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj ACCION_PERMITIDA_MODULO_EDITAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Esta funcionalidad solo esta disponible en el modo editar",MENSAJE_INCORRECTO);
         public static final CodefacMsj PROCESO_CORRECTO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"El proceso finalizo correctamente",MENSAJE_CORRECTO);
         public static final CodefacMsj PROCESO_EN_CURSO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"El proceso comenzó a ejecutarse",MENSAJE_CORRECTO);
+        public static final CodefacMsj PROCESO_ESPERA = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Este proceso puede tardar unos minutos ...",MENSAJE_ADVERTENCIA);
     }
     
     public static abstract class Preguntas

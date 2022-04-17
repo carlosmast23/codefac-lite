@@ -97,7 +97,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     
     private void cargarValoresGrabados()
     {
-        String ubicacionRespaldo=RespaldosModelUtilidades.obtenerUbicacionCarpetaRespaldo(session.getEmpresa());
+        String ubicacionRespaldo=RespaldosModelUtilidades.obtenerUbicacionCarpetaRespaldo(session.getEmpresa(),false);
         getTxtUbicacionRespaldo().setText(ubicacionRespaldo);        
         
         ParametroCodefacServiceIf service=ServiceFactory.getFactory().getParametroCodefacServiceIf();
@@ -270,7 +270,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             public void actionPerformed(ActionEvent e) 
             {
                 try {
-                    RespaldosModelUtilidades.generarRespaldoUbicacion(getChkEnviarCorreo().isSelected(),session.getEmpresa(),null);
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(getChkEnviarCorreo().isSelected(),session.getEmpresa(),null,false);
                     DialogoCodefac.mensaje("Correcto","El proceso termino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
                     //generarRespaldoUbicacion(getChkEnviarCorreo().isSelected());
                 } catch (ServicioCodefacException ex) {
@@ -306,7 +306,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                 try {
                     
                     String correoEnviar=getTxtCorreoPersonalizado().getText();
-                    RespaldosModelUtilidades.generarRespaldoUbicacion(true,session.getEmpresa(),correoEnviar);
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(true,session.getEmpresa(),correoEnviar,false);
                     DialogoCodefac.mensaje("Correcto","El proceso termino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
                     //generarRespaldoUbicacion(getChkEnviarCorreo().isSelected());
                 } catch (ServicioCodefacException ex) {

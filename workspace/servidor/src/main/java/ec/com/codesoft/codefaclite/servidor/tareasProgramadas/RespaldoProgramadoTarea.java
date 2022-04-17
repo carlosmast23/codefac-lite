@@ -51,7 +51,7 @@ public class RespaldoProgramadoTarea implements Runnable
             if(empresaSeleccionada!=null)
             {
                 try {
-                    RespaldosModelUtilidades.generarRespaldoUbicacion(true,empresaSeleccionada,null);
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(true,empresaSeleccionada,null,false);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(RespaldoProgramadoTarea.class.getName()).log(Level.SEVERE, null, ex);
                 }

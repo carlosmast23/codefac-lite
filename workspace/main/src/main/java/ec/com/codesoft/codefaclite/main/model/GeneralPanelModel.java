@@ -20,6 +20,7 @@ import com.jtattoo.plaf.smart.SmartLookAndFeel;
 import com.jtattoo.plaf.texture.TextureLookAndFeel;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
+import ec.com.codesoft.codefaclite.configuraciones.model.RespaldarInformacionModel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -84,6 +85,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -98,6 +100,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
@@ -437,7 +440,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
                 try {
                     //Enviar al correo y generar el respaldo de la base de datos
-                    RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa(),null);
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa(),null,false);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -3281,12 +3284,30 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
         });
         
-                getjMenuItemAcerca().addActionListener(new ActionListener() {
+        getjMenuItemAcerca().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {                
                 AcercaModel.getInstance().setUsuario(sessionCodefac.getUsuarioLicencia());
                 AcercaModel.getInstance().setLicencia(sessionCodefac.getTipoLicenciaEnum().getNombre());
                 AcercaModel.getInstance().setVisible(true);
+            }
+        });
+        
+               
+        getjMenuItemEnviarDatosSoporte().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 try {
+                    //TODO: Solucion temporal pero ver otra manera mejor para solo enviar los parametros necesarios y no toda la empresa
+                    String correoEnviar=ParametrosSistemaCodefac.CORREO_SOPORTE;
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_ESPERA);
+                    RespaldosModelUtilidades.generarRespaldoUbicacion(true,sessionCodefac.getEmpresa(),correoEnviar,true);
+                    DialogoCodefac.mensaje("Correcto","El proceso termino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                    //generarRespaldoUbicacion(getChkEnviarCorreo().isSelected());
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                }
             }
         });
                 

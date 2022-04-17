@@ -94,6 +94,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemAcerca = new javax.swing.JMenuItem();
         jMenuItemActualizarLicencia = new javax.swing.JMenuItem();
         btnManualUsuario = new javax.swing.JMenuItem();
+        jMenuItemEnviarDatosSoporte = new javax.swing.JMenuItem();
         jMenuEstadoComprobantes = new javax.swing.JMenu();
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
@@ -274,7 +275,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/menu.png"))); // NOI18N
         jMenuInicio.setToolTipText("Principal");
 
-        jMenuItemInicio.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemInicio.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItemInicio.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemInicio.setText("Inicio");
         jMenuItemInicio.addActionListener(new java.awt.event.ActionListener() {
@@ -284,7 +285,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuInicio.add(jMenuItemInicio);
 
-        itemNuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        itemNuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itemNuevo.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         itemNuevo.setText("Nuevo");
         itemNuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -294,7 +295,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuInicio.add(itemNuevo);
 
-        itemGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        itemGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itemGuardar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         itemGuardar.setText("Guardar");
         itemGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -304,7 +305,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuInicio.add(itemGuardar);
 
-        itemEliminar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        itemEliminar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itemEliminar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         itemEliminar.setText("Eliminar");
         itemEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -314,7 +315,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuInicio.add(itemEliminar);
 
-        itemBuscar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        itemBuscar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itemBuscar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         itemBuscar.setText("Buscar");
         itemBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -324,7 +325,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuInicio.add(itemBuscar);
 
-        itemActualizar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        itemActualizar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itemActualizar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         itemActualizar.setText("Actualizar");
         itemActualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -334,7 +335,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuInicio.add(itemActualizar);
 
-        itemImprimir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        itemImprimir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itemImprimir.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         itemImprimir.setText("Imprimir");
         itemImprimir.addActionListener(new java.awt.event.ActionListener() {
@@ -344,7 +345,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuInicio.add(itemImprimir);
 
-        itemCerrarVentana.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        itemCerrarVentana.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itemCerrarVentana.setText("Cerrar Ventana");
         jMenuInicio.add(itemCerrarVentana);
 
@@ -399,7 +400,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuAyuda.add(jMenuItemContenido);
 
-        jMenuItemAcerca.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItemAcerca.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK));
         jMenuItemAcerca.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemAcerca.setText("Acerca");
         jMenuAyuda.add(jMenuItemAcerca);
@@ -413,9 +414,17 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuAyuda.add(jMenuItemActualizarLicencia);
 
-        btnManualUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.ALT_MASK));
+        btnManualUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.ALT_DOWN_MASK));
         btnManualUsuario.setText("Manual Usuario");
+        btnManualUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManualUsuarioActionPerformed(evt);
+            }
+        });
         jMenuAyuda.add(btnManualUsuario);
+
+        jMenuItemEnviarDatosSoporte.setText("Enviar Datos a Soporte");
+        jMenuAyuda.add(jMenuItemEnviarDatosSoporte);
 
         jMenuBar1.add(jMenuAyuda);
 
@@ -496,6 +505,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_itemAyudaActionPerformed
 
+    private void btnManualUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnManualUsuarioActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -570,6 +583,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItemAcerca;
     private javax.swing.JMenuItem jMenuItemActualizarLicencia;
     private javax.swing.JMenuItem jMenuItemContenido;
+    private javax.swing.JMenuItem jMenuItemEnviarDatosSoporte;
     private javax.swing.JMenuItem jMenuItemInicio;
     private javax.swing.JMenuItem jMenuItemSalir;
     private javax.swing.JMenu jMenuUtilidades;
@@ -910,9 +924,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuEstadoComprobantes(JMenu jMenuEstadoComprobantes) {
         this.jMenuEstadoComprobantes = jMenuEstadoComprobantes;
     }
-    
-    
-    
-    
+
+    public JMenuItem getjMenuItemEnviarDatosSoporte() {
+        return jMenuItemEnviarDatosSoporte;
+    }
+
+    public void setjMenuItemEnviarDatosSoporte(JMenuItem jMenuItemEnviarDatosSoporte) {
+        this.jMenuItemEnviarDatosSoporte = jMenuItemEnviarDatosSoporte;
+    }
+        
     
 }

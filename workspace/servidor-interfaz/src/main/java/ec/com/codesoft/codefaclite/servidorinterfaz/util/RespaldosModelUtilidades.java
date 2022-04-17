@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,11 +36,20 @@ import org.apache.commons.io.FileUtils;
  */
 public class RespaldosModelUtilidades {
     
-    public static void generarRespaldoUbicacion(Boolean enviarCorreo,Empresa empresa,String correo) throws ServicioCodefacException
+    /**
+     * 
+     * @param enviarCorreo
+     * @param empresa
+     * @param correo
+     * @param directorioTmp
+     * @param cuentaInternaSistema , se refiere cuando se quiere enviar desde la cuenta del programa de gmail
+     * @throws ServicioCodefacException 
+     */
+    public static void generarRespaldoUbicacion(Boolean enviarCorreo,Empresa empresa,String correo,Boolean cuentaInternaSistema) throws ServicioCodefacException
     {
         try
                 {
-                    String ubicacionRespaldo=obtenerUbicacionCarpetaRespaldo(empresa);
+                    String ubicacionRespaldo=obtenerUbicacionCarpetaRespaldo(empresa,cuentaInternaSistema);
                     if(!ubicacionRespaldo.equals(""))
                     {
                         String nombreCarpetaRelpaldo=crearNombreCarpetaRespaldo();
@@ -57,7 +67,7 @@ public class RespaldosModelUtilidades {
                         if(enviarCorreo)
                         {
                             
-                            enviarRespaldoCorreoEmpresa(destinoDirectorio,empresa,correo);
+                            enviarRespaldoCorreoEmpresa(destinoDirectorio,empresa,correo,cuentaInternaSistema);
                         }
                     }
                     else
@@ -73,7 +83,7 @@ public class RespaldosModelUtilidades {
                 }
     }
     
-    public static void enviarRespaldoCorreoEmpresa(File fileRespaldo,Empresa empresa,String correoEmpresa) throws ServicioCodefacException
+    public static void enviarRespaldoCorreoEmpresa(File fileRespaldo,Empresa empresa,String correoEmpresa,Boolean cuentaInternaSistema) throws ServicioCodefacException
     {
         try {
             String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(UtilidadesFecha.getFechaHoy());
@@ -91,7 +101,14 @@ public class RespaldosModelUtilidades {
             List correosList=Arrays.asList(correoEmpresa);
             Map<String,String> mapArchivosAdjuntos=Collections.singletonMap(fileRespaldo.getName(),fileRespaldo.getPath());
             
-            correoCodefac.enviarCorreo(empresa,mensajeCorreo,tituloCorreo,correosList,mapArchivosAdjuntos);
+            if(cuentaInternaSistema)
+            {
+                correoCodefac.enviarCorreoCuentaSistema(empresa, mensajeCorreo, tituloCorreo, correosList, mapArchivosAdjuntos);
+            }
+            else
+            {
+                correoCodefac.enviarCorreo(empresa,mensajeCorreo,tituloCorreo,correosList,mapArchivosAdjuntos);
+            }
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(RespaldosModelUtilidades.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException(ex.getMessage());
@@ -114,18 +131,34 @@ public class RespaldosModelUtilidades {
         return nombreCarpetaRelpaldo;
     }
     
-    public static String obtenerUbicacionCarpetaRespaldo(Empresa empresa)
+    public static String obtenerUbicacionCarpetaRespaldo(Empresa empresa,Boolean directorioTmp)
     {
         try {
-            ParametroCodefac parametroDirectorioRespaldo= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RESPALDO, empresa);
-            //this.parametro = this.parametroCodefacServiceIf.getParametrosMap(session.getEmpresa());
-            //ParametroCodefac p = this.parametro.get(ParametroCodefac.DIRECTORIO_RESPALDO);
-            if(parametroDirectorioRespaldo!=null && parametroDirectorioRespaldo.getValor() != null)
+            
+            if(directorioTmp)
             {
-                String ubicacionRespaldo = parametroDirectorioRespaldo.getValor();
-                //getTxtUbicacionRespaldo().setText(parametroDirectorioRespaldo.getValor());
-                //this.existeDirectorio = true;
-                return ubicacionRespaldo;
+                String directorioTempStr=ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES; 
+                File fileDestino = new File(directorioTempStr); 
+                //crear toda la ruta si no existe
+                if (!fileDestino.exists()) {
+                    fileDestino.getParentFile().mkdirs();
+                    //file.mkdir();
+                }
+                return fileDestino.getAbsolutePath();                
+            }
+            else
+            {
+            
+                ParametroCodefac parametroDirectorioRespaldo= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RESPALDO, empresa);
+                //this.parametro = this.parametroCodefacServiceIf.getParametrosMap(session.getEmpresa());
+                //ParametroCodefac p = this.parametro.get(ParametroCodefac.DIRECTORIO_RESPALDO);
+                if(parametroDirectorioRespaldo!=null && parametroDirectorioRespaldo.getValor() != null)
+                {
+                    String ubicacionRespaldo = parametroDirectorioRespaldo.getValor();
+                    //getTxtUbicacionRespaldo().setText(parametroDirectorioRespaldo.getValor());
+                    //this.existeDirectorio = true;
+                    return ubicacionRespaldo;
+                }
             }
         } catch (RemoteException ex) {
             Logger.getLogger(RespaldosModelUtilidades.class.getName()).log(Level.SEVERE, null, ex);
