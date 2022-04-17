@@ -133,7 +133,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Código", "Producto","Categoria","Ubicación", "Stock", "Cantidad Min","Costo"};
+                        String nombreCabeceras[] = {"Código","Lote","Bodega","Producto","Categoria","Ubicación", "Stock","Pvp1" ,"Cantidad Min","Costo","Utilidad"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras,listaData);
                         excel.abrirDocumento();
                     }
