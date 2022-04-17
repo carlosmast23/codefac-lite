@@ -64,7 +64,7 @@ public class EmpresaModel extends EmpresaForm
     {
         jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Elegir archivo");
-        jFileChooser.setFileFilter(new FileNameExtensionFilter("Logo Imagen", "png", "jpg", "bmp"));   
+        jFileChooser.setFileFilter(new FileNameExtensionFilter("Logo Imagen", "png", "jpg","jpeg","bmp","gif"));   
         //this.empresa = new Empresa();
         this.empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
         agregarListener();
