@@ -70,6 +70,23 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 grabarSinTransaccion(p,generarCodigo,true);
             }
         });        
+        
+        //TODO: Metodo temporal porque cuando se ejecuta sin esta parte causa conflicto al utilizar el producto en el resto de pantallas
+        //Al utilizar por segunda vez el mismo objeto por algun motivo genera un error y luego de eso ya funciona correctamente
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+
+                    Producto pTmp = getFacade().find(p.getIdProducto());
+                    entityManager.merge(pTmp);
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         return p;
     }
     
