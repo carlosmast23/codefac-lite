@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -453,6 +455,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             {
                 throw new ServicioCodefacException("El Monto no puede ser superior a $200 para el CLIENTES FINALES");
             }
+        }
+        
+        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
+        if(tipoIdentificacionEnum==null)
+        {
+            throw new ServicioCodefacException("Cliente no configurado el tipo de identificación");
         }
         
         //TODO:Optimizar esta parte para poner en otra parte

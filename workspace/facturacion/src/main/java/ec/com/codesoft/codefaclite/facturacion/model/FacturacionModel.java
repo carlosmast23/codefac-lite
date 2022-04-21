@@ -1335,6 +1335,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         }
+        
+        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
+        if(tipoIdentificacionEnum==null)
+        {
+            DialogoCodefac.mensaje("Alerta", "Cliente no configurado el tipo de identificación", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Cliente no configurado el tipo de identificación");
+        }
                
 
     }
@@ -2584,7 +2591,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     
 
-    protected void setearValoresDefaultFactura(CrudEnum crudEnum) {
+    protected void setearValoresDefaultFactura(CrudEnum crudEnum){
         /**
          * Todo: Carlos 
          */

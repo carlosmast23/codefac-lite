@@ -1,3 +1,6 @@
 
 instalar para proyectos net core
 dotnet-hosting-3.1.23-win
+
+manual:
+https://saulremis.wordpress.com/2012/07/13/como-hacer-correr-un-windowsserver-iis-y-no-morir-en-el-intento/
