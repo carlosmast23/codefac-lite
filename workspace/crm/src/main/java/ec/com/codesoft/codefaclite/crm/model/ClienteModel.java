@@ -796,6 +796,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     public void listenerBuscarDatoIngresado()
     {
+        
+        //Seleccionar el tipo de identificacion de forma automatica
+        seleccionarTipoIdentificacion();
                 
         //Este metodo solo funciona si el estado es grabar
         if(estadoFormulario.equals(ESTADO_GRABAR))
@@ -807,9 +810,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             }
             
             try {
-                
-                //Seleccionar el tipo de identificacion de forma automatica
-                seleccionarTipoIdentificacion();
                 
                 Persona persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(getjTextIdentificacion().getText(),session.getEmpresa());
                 //Si no esta ingresado ninguna persona continuar con el proceso normal
