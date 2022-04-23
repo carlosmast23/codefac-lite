@@ -7,7 +7,12 @@ package ec.com.codesoft.codefaclite.corecodefaclite.dialog;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.panel.DialogoBuscadorForm;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -367,9 +372,24 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         getTxtBuscar().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode()==KeyEvent.VK_ENTER)
-                {
-                    ejecutarConsulta();
+                
+                try {
+                    Boolean filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.NO);
+                    
+                    if(filtroRapido)
+                    {
+                        if(e.getKeyCode()==KeyEvent.VK_ENTER)
+                        {
+                            ejecutarConsulta();
+                        }
+                    }
+                    else
+                    {
+                        ejecutarConsulta();
+                    }
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 }); 

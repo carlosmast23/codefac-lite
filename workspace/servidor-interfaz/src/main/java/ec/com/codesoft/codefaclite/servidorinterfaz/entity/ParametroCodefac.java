@@ -201,6 +201,11 @@ public class ParametroCodefac implements Serializable {
     public static final String NOTA_VENTA_INTERNA_IVA="NOTA_VENTA_INTERNA_IVA";
     
     /**
+     * Filtro rapido que me permite hacer la busqueda de forma rapida
+     */
+    public static final String FILTRO_RAPIDO_BUSQUEDA="FILTRO_RAPIDO_BUSQUEDA";
+    
+    /**
      * Parametros para la firma de la factura
      */
     public static final String LEYENDA_FIRMA_FACTURA_1 = "leyenda_firma_factura_1";

@@ -147,6 +147,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbNotaVentaInternaIva(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbProformaFacturarVariasVeces(), EnumSiNo.values());
+        
+        UtilidadesComboBox.llenarComboBox(getCmbFiltroRapidoBusqueda(), EnumSiNo.values());
 
         //Agregar los tipos de documentos disponibles
         UtilidadesComboBox.llenarComboBox(getCmbTipoDocumento(), TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION));
@@ -328,6 +330,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroActivarCarteras = parametrosTodos.get(ParametroCodefac.ACTIVAR_CARTERA);
             EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((parametroActivarCarteras != null) ? parametroActivarCarteras.getValor() : null);
             getCmbActivarModuloCartera().setSelectedItem(enumSiNo);
+            
+            ParametroCodefac parametroFiltroBusquedaRapido = parametrosTodos.get(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroFiltroBusquedaRapido != null) ? parametroFiltroBusquedaRapido.getValor() : null);
+            getCmbFiltroRapidoBusqueda().setSelectedItem(enumSiNo);
             
             ParametroCodefac parametroMostrarTituloFactFisica = parametrosTodos.get(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarTituloFactFisica != null) ? parametroMostrarTituloFactFisica.getValor() : null);
@@ -645,6 +651,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES);
         
+        enumSiNo = (EnumSiNo) getCmbFiltroRapidoBusqueda().getSelectedItem();
+        agregarParametro(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA);
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {

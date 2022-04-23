@@ -175,6 +175,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtDiasAlertaPago = new javax.swing.JSpinner();
         jLabel35 = new javax.swing.JLabel();
         jComboFiltrarFacturaPorUsuario = new javax.swing.JComboBox<>();
+        jLabel54 = new javax.swing.JLabel();
+        cmbFiltroRapidoBusqueda = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -1111,7 +1113,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.add(cmbDatosCompartidosEmpresas, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel9.add(lblEspacio637, gridBagConstraints);
@@ -1133,10 +1135,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.add(txtDiasAlertaPago, gridBagConstraints);
 
         jLabel35.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel35.setText("Filtrar por usuario:");
+        jLabel35.setText("Filtro Rapido Dialogo de Busqueda:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(jLabel35, gridBagConstraints);
@@ -1153,6 +1155,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(jComboFiltrarFacturaPorUsuario, gridBagConstraints);
+
+        jLabel54.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel54.setText("Filtrar por usuario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel54, gridBagConstraints);
+
+        cmbFiltroRapidoBusqueda.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(cmbFiltroRapidoBusqueda, gridBagConstraints);
 
         jTabbedPane1.addTab("General", jPanel9);
 
@@ -1189,6 +1208,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescuentoFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarPrecioUnitFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbFacturarInventarioNegativo;
+    private javax.swing.JComboBox<EnumSiNo> cmbFiltroRapidoBusqueda;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
@@ -1252,6 +1272,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1634,6 +1655,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setTxtNumeroDecimalesProducto(JSpinner txtNumeroDecimalesProducto) {
         this.txtNumeroDecimalesProducto = txtNumeroDecimalesProducto;
+    }
+
+    public JComboBox<EnumSiNo> getCmbFiltroRapidoBusqueda() {
+        return cmbFiltroRapidoBusqueda;
+    }
+
+    public void setCmbFiltroRapidoBusqueda(JComboBox<EnumSiNo> cmbFiltroRapidoBusqueda) {
+        this.cmbFiltroRapidoBusqueda = cmbFiltroRapidoBusqueda;
     }
 
     
