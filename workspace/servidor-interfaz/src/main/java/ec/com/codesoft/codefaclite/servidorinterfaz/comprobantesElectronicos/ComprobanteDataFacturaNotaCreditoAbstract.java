@@ -177,8 +177,28 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             //Consultar una lista de todos los impuestos disponibles
             Map<Integer,ImpuestoDetalle> mapImpuestoDetalle=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().obtenerTodosMap();
             
+            //Buscar los tipos de impuestos disponibles en los detalles para los totales
+            Boolean impuestoDoce=false;
+            Boolean impuestoCero=false;
+            
+            List<DetalleFacturaNotaCeditoAbstract> detalles= comprobante.getDetallesComprobante();
+            for (DetalleFacturaNotaCeditoAbstract detalle : detalles) 
+            {
+                if(detalle.getCatalogoProducto().getIva().getTarifa()==12)
+                {
+                    impuestoDoce=true;
+                }
+                
+                if(detalle.getCatalogoProducto().getIva().getTarifa()==0)
+                {
+                    impuestoCero=true;
+                }
+            }
+            
             //Crear el IMPUESTO DEL IVA_CERO cuando exista esa clasificacion
-            if(comprobante.getSubtotalSinImpuestos().compareTo(BigDecimal.ZERO)>0)
+            
+            //if(comprobante.getSubtotalSinImpuestos().compareTo(BigDecimal.ZERO)>0)
+            if(impuestoCero)
             {
                 ImpuestoDetalle impuestoDetalleIvaCero=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_CERO);
                 TotalImpuesto totalImpuestoIva=new TotalImpuesto();
@@ -196,7 +216,8 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             }
             
             //Crear el IMPUESTO DEL IVA cuando exista
-            if(comprobante.getIva().compareTo(BigDecimal.ZERO)>0)
+            //if(comprobante.getIva().compareTo(BigDecimal.ZERO)>0)
+            if(impuestoDoce)
             {                
                 ImpuestoDetalle impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE);
                 TotalImpuesto totalImpuestoIva=new TotalImpuesto();
