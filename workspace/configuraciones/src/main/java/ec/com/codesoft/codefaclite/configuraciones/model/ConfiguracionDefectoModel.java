@@ -221,6 +221,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideRucEmpledo(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideReferenciaDireccion(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideCodigoPersonalizado(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbImprimirCodigoInternoProducto(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbMostrarTituloFactFisica(),EnumSiNo.values());
         
         
@@ -487,6 +488,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
             getCmbDatoAdicionalRideCodigoPersonalizado().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.IMPRIMIR_CODIGO_INTERNO_PRODUCTO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
+            getCmbImprimirCodigoInternoProducto().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
             getCmbDatoAdicionalRideRazoSocialEmpledo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -747,6 +752,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideCodigoPersonalizado().getSelectedItem();
         agregarParametro(ParametroCodefac.FACTURACION_RIDE_CODIGO_PERSONALIZADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FACTURACION_RIDE_CODIGO_PERSONALIZADO);
+        
+        enumSiNo = (EnumSiNo) getCmbImprimirCodigoInternoProducto().getSelectedItem();
+        agregarParametro(ParametroCodefac.IMPRIMIR_CODIGO_INTERNO_PRODUCTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.IMPRIMIR_CODIGO_INTERNO_PRODUCTO);
         
         enumSiNo = (EnumSiNo) getCmbDatoAdicionalRideRazoSocialEmpledo().getSelectedItem();
         agregarParametro(ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO, (enumSiNo != null) ? enumSiNo.getLetra() : null);

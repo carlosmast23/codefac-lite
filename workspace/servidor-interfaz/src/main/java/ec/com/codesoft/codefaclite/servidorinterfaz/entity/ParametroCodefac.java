@@ -221,6 +221,11 @@ public class ParametroCodefac implements Serializable {
     
     public static final String VERSION_SISTEMA="version_sistema";
     
+    /**
+     * Metodo que me permite imprimir el codigo interno del producto al momento de generar la factura
+     */
+    public static final String IMPRIMIR_CODIGO_INTERNO_PRODUCTO="imprimir_codigo_interno_producto";
+    
 
     @Id
     @Column(name = "ID")

@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
@@ -230,7 +231,16 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 DetalleFacturaComprobante detalle = new DetalleFacturaComprobante();
 
                 ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
-                detalle.setCodigoPrincipal(respuesta.obtenerCodigoPrincipal()+"");
+                
+                //Esta opcion me permite ocultar el codigo principal de los productos por ejemplo para que no puedan encontrar los clientes en otros proveedores
+                if(ParametroUtilidades.comparar(factura.getEmpresa(),ParametroCodefac.IMPRIMIR_CODIGO_INTERNO_PRODUCTO, EnumSiNo.SI))
+                {
+                    detalle.setCodigoPrincipal(facturaDetalle.getReferenciaId()+"");
+                }
+                else
+                {       
+                    detalle.setCodigoPrincipal(respuesta.obtenerCodigoPrincipal()+"");
+                }
 
                 
                 detalle.setCantidad(facturaDetalle.getCantidad());

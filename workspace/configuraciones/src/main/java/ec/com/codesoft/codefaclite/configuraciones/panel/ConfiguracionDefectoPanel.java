@@ -130,6 +130,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel50 = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
         cmbProformaFacturarVariasVeces = new javax.swing.JComboBox<>();
+        jLabel55 = new javax.swing.JLabel();
+        cmbImprimirCodigoInternoProducto = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -367,10 +369,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbActivarComprobanteVenta, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Nota de Venta Interna con iva:");
+        jLabel7.setText("Imprimir Codigo Interno Producto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel7, gridBagConstraints);
@@ -831,6 +833,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbProformaFacturarVariasVeces, gridBagConstraints);
 
+        jLabel55.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel55.setText("Nota de Venta Interna con iva:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel55, gridBagConstraints);
+
+        cmbImprimirCodigoInternoProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbImprimirCodigoInternoProducto, gridBagConstraints);
+
         jTabbedPane1.addTab("Facturas", jPanel4);
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
@@ -1212,6 +1231,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
+    private javax.swing.JComboBox<EnumSiNo> cmbImprimirCodigoInternoProducto;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbModoFacturasGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
@@ -1273,6 +1293,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1665,6 +1686,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.cmbFiltroRapidoBusqueda = cmbFiltroRapidoBusqueda;
     }
 
+    public JComboBox<EnumSiNo> getCmbImprimirCodigoInternoProducto() {
+        return cmbImprimirCodigoInternoProducto;
+    }
+
+    public void setCmbImprimirCodigoInternoProducto(JComboBox<EnumSiNo> cmbImprimirCodigoInternoProducto) {
+        this.cmbImprimirCodigoInternoProducto = cmbImprimirCodigoInternoProducto;
+    }
+
+    
     
     
     
