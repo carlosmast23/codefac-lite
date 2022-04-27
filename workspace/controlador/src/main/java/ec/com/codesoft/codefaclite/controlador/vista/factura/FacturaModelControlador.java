@@ -1107,6 +1107,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("ice", facturaProcesando.getIce().toString());
             mapParametros.put("total", facturaProcesando.getTotal().toString());
             mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
+            mapParametros.put("descuento", facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos())+"");
             
             return mapParametros;
             
