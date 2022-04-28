@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="2.5892034107948523"/>
-	<property name="ireport.x" value="14"/>
-	<property name="ireport.y" value="30"/>
+	<property name="ireport.zoom" value="1.7684607682500186"/>
+	<property name="ireport.x" value="70"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -282,7 +282,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="480" y="0" width="36" height="13" uuid="e1bd5e98-2097-411e-abd9-8ddf8e2bd6ef"/>
 				<box>
 					<topPen lineWidth="0.75"/>
@@ -317,7 +317,7 @@
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalles})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{pl_detalle_item}]]></subreportExpression>
 			</subreport>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="450" y="0" width="30" height="13" uuid="5e533a13-5409-403b-8a86-1a61aa4f2fba"/>
 				<box>
 					<topPen lineWidth="0.75"/>
@@ -331,7 +331,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pvp1}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="516" y="0" width="39" height="13" uuid="c0909c7f-cca0-46f1-b854-8117afc4c7a1"/>
 				<box>
 					<topPen lineWidth="0.75"/>

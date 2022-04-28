@@ -197,7 +197,7 @@ public class StockMinimoModel extends StockMinimoPanel{
             {
                 Producto producto = (Producto) objeto[0];
                 BigDecimal cantidad = (BigDecimal) objeto[1];
-                Lote lote=(Lote)objeto[4];
+                //Lote lote=(Lote)objeto[4];
 
                 StockMinimoData data = new StockMinimoData();
 
@@ -206,7 +206,8 @@ public class StockMinimoModel extends StockMinimoPanel{
                 data.setStock(cantidad.toString());
                 data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto() != null) ? producto.getCatalogoProducto().getCategoriaProducto().getNombre() : "");
                 data.setCantidadMinima(producto.getCantidadMinima().toString());
-                data.setLote(lote.getCodigo());
+                data.setLote(""); //Por el momento voy dejar que salga un stock minimo por todos los lotes
+                
 
                 listaData.add(data);
 
