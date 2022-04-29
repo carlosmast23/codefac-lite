@@ -466,7 +466,6 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 }
                 
                 
-                
                 Empresa empresa=producto.getEmpresa();
                 //==========> Buscar Primero para ver si existe el kardex del producto y la bodega <==========//
                 List<Kardex> kardexResultado=buscarPorProductoYBodega(producto, bodegaOrigen);
@@ -484,6 +483,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     throw new ServicioCodefacException("Cantidad insuficiente para hacer la transferencia");
                 }
                 
+                BigDecimal precioTransferencia=precio;
+                //Si no tiene ingresado un precio el seteo el mismo del kardex original
+                if(precioTransferencia==null)
+                {
+                    precioTransferencia=kardexOrigen.getCostoPromedio();
+                }
                 
                 //=============> Obtener el Kardex del producto de destino o crearlo <==================//
                 kardexResultado=buscarPorProductoYBodega(producto, bodegaDestino);
@@ -505,13 +510,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 KardexDetalle kardexDetalleOrigen=crearKardexDetalleSinPersistencia(
                         kardexOrigen, 
                         TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_ORIGEN, 
-                        precio, 
+                        precioTransferencia, 
                         cantidad);
                 
                 KardexDetalle kardexDetalleDestino=crearKardexDetalleSinPersistencia(
                         kardexDestino, 
                         TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_DESTINO, 
-                        precio, 
+                        precioTransferencia, 
                         cantidad);
                                 
                 entityManager.persist(kardexDetalleOrigen);

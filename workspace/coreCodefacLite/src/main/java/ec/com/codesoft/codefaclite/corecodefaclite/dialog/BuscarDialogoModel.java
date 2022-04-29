@@ -50,7 +50,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     /**
      * Cantidad maxima de filas que va a cargar la tabla 
      */
-    private static final int CANTIDAD_FILAS=12;
+    private static final int CANTIDAD_FILAS=15;
     /**
      * Setear la pagina actual de la consulta
      */
@@ -457,8 +457,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
 
     private void establecerPropiedadesIniciales() {
         //Centrar el dialogo
-        setPreferredSize(new Dimension(700,316));
-        setSize(700, 316);
+        setPreferredSize(new Dimension(800,410));
+        setSize(800, 410);
         setLocationRelativeTo(null);
 
     }

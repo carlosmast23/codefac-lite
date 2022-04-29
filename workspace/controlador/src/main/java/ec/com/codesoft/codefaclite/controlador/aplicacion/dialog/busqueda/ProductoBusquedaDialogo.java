@@ -54,9 +54,10 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     public Vector<ColumnaDialogo> getColumnas() 
     {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Codigo", 0.2d));
+        titulo.add(new ColumnaDialogo("Código", 0.2d));
+        titulo.add(new ColumnaDialogo("Código Aux", 0.2d));
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
-        titulo.add(new ColumnaDialogo("Precio Unit", 0.3d));
+        titulo.add(new ColumnaDialogo("Precio Unit", 0.1d));
         titulo.add(new ColumnaDialogo("IVA", 0.1d));        
         titulo.add(new ColumnaDialogo("ICE", 0.1d));        
         return titulo;
@@ -66,6 +67,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     public void agregarObjeto(Producto t, Vector dato) 
     {
         dato.add(t.getCodigoPersonalizado());
+        dato.add(t.getCodigoUPC());
         dato.add(t.getNombre());
         dato.add(t.getValorUnitario());
         
@@ -133,7 +135,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         }
         
        
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 ) ORDER BY u.nombre";
+        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 ) ORDER BY u.nombre";
 
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());

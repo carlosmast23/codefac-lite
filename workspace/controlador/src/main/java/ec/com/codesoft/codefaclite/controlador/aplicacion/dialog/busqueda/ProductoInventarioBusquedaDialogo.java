@@ -47,6 +47,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Codigo", 0.2d));
+        titulo.add(new ColumnaDialogo("Codigo Aux", 0.2d));
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Lote", 0.3d));
         titulo.add(new ColumnaDialogo("Ubicación", 0.3d));
@@ -89,7 +90,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega;      
         
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 ) ORDER BY u.codigoPersonalizado";
+        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 ) ORDER BY u.codigoPersonalizado";
         
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
@@ -120,6 +121,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         //Kardex kardex = servicio.buscarKardexPorProductoyBodega(this.bodega, producto);
         Producto producto=kardex.getProducto();
         vector.add(producto.getCodigoPersonalizado());
+        vector.add(producto.getCodigoUPC());
         vector.add(producto.getNombre());
         vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
