@@ -61,6 +61,12 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         
+        BigDecimal precio=null;
+        if(getTxtPrecio().getText()!=null && !getTxtPrecio().getText().trim().isEmpty())
+        {
+            precio=new BigDecimal(getTxtPrecio().getText());
+        }
+        
         try {
             setearVariables();
             ServiceFactory.getFactory().getKardexServiceIf().transferirProductoBodegas(
@@ -69,14 +75,14 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
                     bodegaDestino, 
                     getTxtDescripcion().getText(), 
                     new BigDecimal(getTxtCantidad().getText()),
-                    new BigDecimal(getTxtPrecio().getText()), 
+                    precio, 
                     new java.sql.Date(getCmbFechaIngreso().getDate().getTime()));
             
             DialogoCodefac.mensaje("Correcto","La transferencia de bodegas se realizo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-            throw new ExcepcionCodefacLite("Error");
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
 

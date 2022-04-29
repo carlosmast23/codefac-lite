@@ -113,8 +113,8 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
                 @Override
                 public void pdf() {
                     ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, datosReporte, panelPadre,"Transferencia de Bodegas");
-                    dispose();
-                    setVisible(false);
+                    //dispose();
+                    //setVisible(false);
                 }
             });
         
