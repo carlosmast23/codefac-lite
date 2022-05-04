@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -426,6 +427,14 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 Persona persona = cliente.buscarConsumidorFinal(session.getEmpresa());
                 if (persona == null) {
                     DialogoCodefac.mensaje("Advertencia", "No existe creado un consumidor final para facturar", DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+                
+                //Obtener un punto de emision del usuario iniciado la session
+                List<PuntoEmision> puntoEmisionList= ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivosPorSucursalCastPuntoEmision(session.getUsuario(),session.getSucursal());
+                if(puntoEmisionList.size()>0)
+                {
+                    this.factura.setPuntoEmision(puntoEmisionList.get(0).getPuntoEmision());
+                    this.factura.setPuntoEmisionId(puntoEmisionList.get(0).getId());
                 }
 
                 this.factura.setCliente(persona);

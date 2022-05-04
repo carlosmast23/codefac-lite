@@ -463,6 +463,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             throw new ServicioCodefacException("Cliente no configurado el tipo de identificación");
         }
         
+        if(factura.getPuntoEmisionId()==null)
+        {
+            throw new ServicioCodefacException("No se puede facturar sin tener un punto de emisión configurado");
+        }
+        
         //TODO:Optimizar esta parte para poner en otra parte
         PuntoEmisionService puntoEmisionService = new PuntoEmisionService();
         PuntoEmision puntoEmision = puntoEmisionService.buscarPorId(factura.getPuntoEmisionId());
