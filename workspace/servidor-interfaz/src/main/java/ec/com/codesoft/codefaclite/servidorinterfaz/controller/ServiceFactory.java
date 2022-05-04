@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecifi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MarcaProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MesaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MatriculaEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
@@ -230,6 +231,7 @@ public abstract class ServiceFactory {
     
     public CompraFacturaReembolsoServiceIf getCompraFacturaReembolsoServiceIf(){return (CompraFacturaReembolsoServiceIf) getRecursosRMI(CompraFacturaReembolsoServiceIf.class);};
     public LoteSeviceIf getLoteSeviceIf(){return (LoteSeviceIf) getRecursosRMI(LoteSeviceIf.class);};
+    public MesaServiceIf getMesaSeviceIf(){return (MesaServiceIf) getRecursosRMI(MesaServiceIf.class);};
     
     
     /**
