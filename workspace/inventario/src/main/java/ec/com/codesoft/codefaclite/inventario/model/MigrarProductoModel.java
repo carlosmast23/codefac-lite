@@ -97,14 +97,7 @@ public class MigrarProductoModel extends MigrarModel {
                     {
                     
                         Double precioVentaPublico = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
-
                         validarProducto(producto);
-
-                        /*Object precioVentaPromedioObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
-                        if(precioVentaPromedioObj!=null && !precioVentaPromedioObj.toString().isEmpty())
-                        {   
-                            Double precioVentaPromedio = (Double) precioVentaPromedioObj;
-                        }*/
 
                         /**
                          * ==========> BUSCAR O CREAR LA CATEGORIA SI NO EXISTE PARA CREAR <=======
@@ -232,6 +225,8 @@ public class MigrarProductoModel extends MigrarModel {
                     
                     if(productoTmp != null) 
                     {
+                        //TODO:Unificar la migracion con el dato d abajo
+                        productoTmp.setUbicacion((String) fila.getByEnum(ExcelMigrarProductos.Enum.UBICACION).valor);
                         Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.WARNING,"Producto actualizado : "+productoTmp.getNombre());
                         //Si maneja inventario y el producto existe entonces solo consulto el producto anterior
                         if(manejaInventarioEnumSiNo.equals(EnumSiNo.SI))
