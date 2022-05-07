@@ -182,6 +182,11 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
         
                 
         for (ModuloCodefacEnum moduloSistema : ModuloCodefacEnum.values()) {
+            
+             if (moduloSistema.equals(ModuloCodefacEnum.RESTAURANTE)) 
+             {
+                System.out.println("revisar ...");
+            }
                 
                 //JMenu menuModulo = new JMenu(moduloSistema.getNombre());
                 //menuModulo.setIcon(moduloSistema.getIcono());

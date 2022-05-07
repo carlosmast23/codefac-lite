@@ -46,8 +46,13 @@ public enum ModuloCodefacEnum implements Serializable{
     TRANSPORTE("Transporte","TRAN",
             "a","modulo_transporte",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/transporte.png")), //TODO: por el momento no modifico el valor de esa letra que esta duplicada porque por ejemplo con los clientes de la guarderia van a tener problemas , mejor verificar que saben las credenciales para actualizar
     
+    RESTAURANTE("Restaurante","REST",
+            "r","modulo_restaurante",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/restaurante.png")),
+    
     SISTEMA("Sistema","SIST",
-            "t","modulo_sistema",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/sistema.png"));
+            "t","modulo_sistema",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/sistema.png"))
+    
+    ;
     
     private String nombre;
     private String codigo;

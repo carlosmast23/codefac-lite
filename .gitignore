@@ -7,6 +7,7 @@
 /workspace/coreCodefacLite/target/
 /workspace/transporte/target/
 /workspace/contabilidad/target/
+/workspace/restaurante/target/
 
 #excluir arhivos de compilacion
 
@@ -91,3 +92,4 @@ workspace/main/codefac.ini
 /workspace/impuestos/target/
 /workspace/mavenCodefacLite/prestamos/target/
 /workspace/pos/target/
+/workspace/mavenCodefacLite/restaurante/target/
