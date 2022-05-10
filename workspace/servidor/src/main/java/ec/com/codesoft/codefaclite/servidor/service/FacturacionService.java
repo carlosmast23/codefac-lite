@@ -338,6 +338,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
+                setearDatosClienteYDistribuidor(factura);
+                
                 //Validaciones iniciales de la factura
                 validacionInicialFacturar(factura,CrudEnum.CREAR);
                 

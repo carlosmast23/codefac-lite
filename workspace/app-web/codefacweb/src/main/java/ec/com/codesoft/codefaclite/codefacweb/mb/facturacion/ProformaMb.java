@@ -508,6 +508,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void cargarDatosCliente(PersonaEstablecimiento establecimiento) {
         if (establecimiento != null) {
+            //TODO: La parte de la identificación solo dejo seteando de forma temporal esto debe estar en el servidor, pero por algun motivo luego se quita ese dato de identificación
+            factura.setIdentificacion(establecimiento.getPersona().getIdentificacion());
+            
             factura.setCliente(establecimiento.getPersona());
             factura.setSucursal(establecimiento); 
         }
@@ -569,6 +572,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         {
             factura.setCodigoDocumento(documentoSeleccionado.getCodigo());
         }
+        
+        //todo: Solucion temporal
+        factura.getCliente().setIdentificacion(factura.getIdentificacion());
+        
         
         /**
          * Redondeo los valores de los precios unitario de los detalles de la factura

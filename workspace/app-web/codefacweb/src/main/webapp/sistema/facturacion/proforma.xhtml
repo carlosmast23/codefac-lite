@@ -92,16 +92,21 @@
                     <p:panel id="datosCliente" styleClass="ui-noborder">      
                         <div class="p-grid" style="text-align: left" >
                             <div class="p-col-12 p-md-3 p-lg-3" >
-                                <h:outputLabel style="font-weight: bold">Razon Social:  </h:outputLabel>
+                                <h:outputLabel style="font-weight: bold">Identificación:  </h:outputLabel>
+                                <h:outputLabel>#{proformaMb.factura.cliente.identificacion}</h:outputLabel>
                             </div>
+                            
                             <div class="p-col-12 p-md-3 p-lg-3" >
+                                <h:outputLabel style="font-weight: bold">Razon Social:  </h:outputLabel>
                                 <h:outputLabel>#{proformaMb.factura.cliente.razonSocial}</h:outputLabel>
                             </div>
+                            
+                            
                             <div class="p-col-12 p-md-3 p-lg-3" >
                                 <h:outputLabel style="font-weight: bold">Dirección:  </h:outputLabel>
-                            </div><div class="p-col-12 p-md-3 p-lg-3" >
                                 <h:outputLabel>#{proformaMb.factura.cliente.imprimirDireccionPorDefecto()}</h:outputLabel>
                             </div>
+                            
 
                         </div>
                     </p:panel>
