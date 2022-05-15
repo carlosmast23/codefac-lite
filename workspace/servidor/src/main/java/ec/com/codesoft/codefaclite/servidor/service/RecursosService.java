@@ -72,6 +72,21 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         return null; //Si falla el servidor devuelve null        
     }
     
+    public byte[] obtenerRecurso(Empresa empresa,DirectorioCodefac directorio,String nameFile) throws RemoteException
+    {
+        try {
+            File file=new File(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa+"/"+directorio.getNombre()+"/"+nameFile);
+            InputStream input= new  FileInputStream(file);
+            RemoteInputStreamServer istream =new SimpleRemoteInputStream(input);
+            RemoteInputStream result = istream.export();
+            UtilidadesRmi.serializar(result);
+            //return UtilidadesRmi.serializar(ois);
+        } catch (IOException ex) {
+            Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null; //Si falla el servidor devuelve null        
+    }
+    
     public RemoteInputStream getDataBaseResources() throws RemoteException
     {
         try {

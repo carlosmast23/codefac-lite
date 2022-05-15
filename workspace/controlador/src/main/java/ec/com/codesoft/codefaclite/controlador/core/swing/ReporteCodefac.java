@@ -614,6 +614,7 @@ public class ReporteCodefac {
                 //TODO: Asumo que estoy consultado desde el servidor por que desde el cliente no va a funcionar
                 
                 //RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sucursal.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
+                ServiceFactory.getFactory().getRecursosServiceIf().getResourceInputStreamByFile(sucursal.getEmpresa(), DirectorioCodefac.IMAGENES, nombreImagen);
                 ParametroCodefac parametroDirectorio=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,sucursal.getEmpresa());
                 String pathEmpresa=parametroDirectorio.valor;
                 File file=new File(pathEmpresa+"/"+DirectorioCodefac.IMAGENES+"/"+nombreImagen);

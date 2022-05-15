@@ -268,34 +268,38 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
 
-                //Si el producto no maneja inventario lo puede eliminar directamente
-                KardexService kardexService = new KardexService();
-                List<Kardex> resultadoKardex = kardexService.buscarPorProducto(p, GeneralEnumEstado.ACTIVO);
-                List<String> stockPositivoBodega = new ArrayList<String>();
-                
-                for (Kardex kardex : resultadoKardex) {
-                    
-                    if(kardex.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
-                    {                        
-                        //if (kardex.getStock() > 0) 
-                        if (kardex.getStock().compareTo(BigDecimal.ZERO)==0) 
-                        {
-                            //Si los kardex no tiene problema y estan con saldos en 0 los elimino y si no se cumple con todos no importa porque se realiza un rollback
-                            kardex.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
-                            entityManager.merge(kardex);
-                            
-                        } else 
-                        {
-                            System.out.println(kardex.getStock());
-                            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.WARNING, null, "Producto no se puede borrar por que tiene stock "+kardex.getStock()+" en producto "+kardex.getProducto().getNombre() );
-                            //Agrego a la lista la bodega con el kardex que tiene problema antes de eliminar
-                            stockPositivoBodega.add(kardex.getBodega().getNombre());                    
+                //Hacer validaciones mas complicadas si sale que el producto maneja inventario
+                if(p.getManejarInventarioEnum().equals(EnumSiNo.SI))
+                {
+                    //Si el producto no maneja inventario lo puede eliminar directamente
+                    KardexService kardexService = new KardexService();
+                    List<Kardex> resultadoKardex = kardexService.buscarPorProducto(p, GeneralEnumEstado.ACTIVO);
+                    List<String> stockPositivoBodega = new ArrayList<String>();
+
+                    for (Kardex kardex : resultadoKardex) {
+
+                        if(kardex.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                        {                        
+                            //if (kardex.getStock() > 0) 
+                            if (kardex.getStock().compareTo(BigDecimal.ZERO)==0) 
+                            {
+                                //Si los kardex no tiene problema y estan con saldos en 0 los elimino y si no se cumple con todos no importa porque se realiza un rollback
+                                kardex.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                                entityManager.merge(kardex);
+
+                            } else 
+                            {
+                                System.out.println(kardex.getStock());
+                                Logger.getLogger(ServiceAbstract.class.getName()).log(Level.WARNING, null, "Producto no se puede borrar por que tiene stock "+kardex.getStock()+" en producto "+kardex.getProducto().getNombre() );
+                                //Agrego a la lista la bodega con el kardex que tiene problema antes de eliminar
+                                stockPositivoBodega.add(kardex.getBodega().getNombre());                    
+                            }
                         }
                     }
-                }
 
-                if (stockPositivoBodega.size() > 0) {
-                    throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: " + UtilidadesLista.castListToString(stockPositivoBodega, ","));
+                    if (stockPositivoBodega.size() > 0) {
+                        throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: " + UtilidadesLista.castListToString(stockPositivoBodega, ","));
+                    }
                 }
 
                 //============================================//
