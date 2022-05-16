@@ -5,10 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.restaurante.model;
 
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.MesaModelControlador;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.restaurante.panel.MesaPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,16 +23,18 @@ import java.util.Map;
  *
  * @author CARLOS_CODESOFT
  */
-public class MesaModel extends MesaPanel{
+public class MesaModel extends MesaPanel implements ControladorVistaIf,MesaModelControlador.SwingIf{
+    
+    private MesaModelControlador controlador;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        controlador=new MesaModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -55,7 +64,7 @@ public class MesaModel extends MesaPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -80,7 +89,34 @@ public class MesaModel extends MesaPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
+    
+    @Override
+    public ModelControladorAbstract getControladorVista() {
+        return controlador;
+    }
+    
+    ///////////////////////////////////////////////////////
+    //              METODOS GET AND SET
+    ///////////////////////////////////////////////////////
+
+    public MesaModelControlador getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(MesaModelControlador controlador) {
+        this.controlador = controlador;
+    }
+
+    
+    
     
 }

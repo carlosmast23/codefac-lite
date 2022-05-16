@@ -20,7 +20,7 @@ import javax.persistence.MappedSuperclass;
  * @author DellWin10
  */
 @MappedSuperclass
-public class EntityAbstract implements Serializable {
+public class EntityAbstract<T> implements Serializable {
     
     @Id
     @Column(name = "ID")
@@ -122,12 +122,15 @@ public class EntityAbstract implements Serializable {
     ///////////////////////////////////////////////////////////////////////////
     
     //Metedos generalizados ya implementados pero no visibles porque no entodos loscasos voy a necesitar
-    protected GeneralEnumEstado getEstadoEnum() {
-        return GeneralEnumEstado.getEnum(estado);
+    //Utilizo de forma de artificio para que cuando usen el caso más comun de EstadoEnum ya este programado
+    public T getEstadoEnum() {        
+        T estadoEnum=(T) GeneralEnumEstado.getEnum(estado);
+        return estadoEnum;
     }
 
-    protected void setEstadoEnum(GeneralEnumEstado estadoEnum) {
-        this.estado = estadoEnum.getEstado();
+    public void setEstadoEnum(T estadoEnum) {
+        GeneralEnumEstado estadoEnumOriginal=(GeneralEnumEstado) estadoEnum;
+        this.estado = estadoEnumOriginal.getEstado();
     }
     
     

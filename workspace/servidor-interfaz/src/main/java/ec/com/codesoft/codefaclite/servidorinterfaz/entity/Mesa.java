@@ -21,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "MESA")
-public class Mesa implements Serializable{
+public class Mesa extends EntityAbstract<Mesa.MesaEstadoEnum>{
 
     public Mesa() {
     }
@@ -40,7 +40,7 @@ public class Mesa implements Serializable{
     private String nombre;
     
     @Column(name = "CAPACIDAD")
-    private String capacidad;
+    private Integer capacidad;
     
     @Column(name = "ESTADO")
     private String estado;
@@ -69,11 +69,11 @@ public class Mesa implements Serializable{
         this.nombre = nombre;
     }
 
-    public String getCapacidad() {
+    public Integer getCapacidad() {
         return capacidad;
     }
 
-    public void setCapacidad(String capacidad) {
+    public void setCapacidad(Integer capacidad) {
         this.capacidad = capacidad;
     }
 
@@ -83,6 +83,18 @@ public class Mesa implements Serializable{
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    
+    
+    @Override
+    public MesaEstadoEnum getEstadoEnum() {
+        return MesaEstadoEnum.getEnum(estado);
+    }
+
+    @Override
+    public void setEstadoEnum(MesaEstadoEnum estadoEnum) {
+        this.estado = estadoEnum.letra;
     }
 
     @Override
@@ -110,6 +122,39 @@ public class Mesa implements Serializable{
         return true;
     }
     
+    public enum MesaEstadoEnum 
+    {
+        LIBRE("L","Libre"),
+        ELIMINADO("E","Eliminado"),
+        OCUPADO("O","Ocupado");
+
+        private MesaEstadoEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+        
+        private String letra;
+        private String nombre;
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static MesaEstadoEnum getEnum(String letra) {
+        for (MesaEstadoEnum enumerador : MesaEstadoEnum.values()) {
+            if (enumerador.letra.equals(letra)) {
+                return enumerador;
+            }
+        }
+        return null;
+    }
+        
+        
+    }
     
         
 }

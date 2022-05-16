@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "LOTE")
-public class Lote extends EntityAbstract{    
+public class Lote extends EntityAbstract<GeneralEnumEstado>{    
     
     @Column(name = "CODIGO")
     private String codigo;
@@ -150,7 +150,7 @@ public class Lote extends EntityAbstract{
     ///                     METODOS PERSONALIZADOS
     ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /*@Override
     public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
         super.setEstadoEnum(estadoEnum); //To change body of generated methods, choose Tools | Templates.
     }
@@ -158,7 +158,7 @@ public class Lote extends EntityAbstract{
     @Override
     public GeneralEnumEstado getEstadoEnum() {
         return super.getEstadoEnum(); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
         
     
 }

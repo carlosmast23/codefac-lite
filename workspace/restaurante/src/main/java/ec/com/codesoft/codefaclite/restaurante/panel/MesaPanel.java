@@ -6,6 +6,10 @@
 package ec.com.codesoft.codefaclite.restaurante.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 
 /**
  *
@@ -32,8 +36,12 @@ public abstract class MesaPanel extends ControladorCodefacInterface {
 
         jPanel1 = new javax.swing.JPanel();
         lblNombresTransportista = new javax.swing.JLabel();
-        lblEspacio = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        lblEspacio1828 = new javax.swing.JLabel();
+        txtNumeroMesa = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        lblNombresTransportista1 = new javax.swing.JLabel();
+        txtCapacidad = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -43,26 +51,57 @@ public abstract class MesaPanel extends ControladorCodefacInterface {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblNombresTransportista.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblNombresTransportista.setText("Numero Mesa:");
+        lblNombresTransportista.setText("Capacidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblNombresTransportista, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weightx = 0.4;
+        gridBagConstraints.weighty = 0.1;
+        jPanel1.add(lblEspacio1828, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtNumeroMesa, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Nombre:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtNombre, gridBagConstraints);
+
+        lblNombresTransportista1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblNombresTransportista1.setText("Numero Mesa:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(lblNombresTransportista, gridBagConstraints);
-
-        lblEspacio.setText("jLabel1");
+        jPanel1.add(lblNombresTransportista1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        jPanel1.add(lblEspacio, gridBagConstraints);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        jPanel1.add(txtCapacidad, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -71,9 +110,42 @@ public abstract class MesaPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblEspacio;
+    private javax.swing.JLabel lblEspacio1828;
     private javax.swing.JLabel lblNombresTransportista;
+    private javax.swing.JLabel lblNombresTransportista1;
+    private javax.swing.JSpinner txtCapacidad;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JSpinner txtNumeroMesa;
     // End of variables declaration//GEN-END:variables
+
+    @SpinnerBinding(value = "controlador.mesa.capacidad")  
+    public JSpinner getTxtCapacidad() {
+        return txtCapacidad;
+    }
+
+    public void setTxtCapacidad(JSpinner txtCapacidad) {
+        this.txtCapacidad = txtCapacidad;
+    }
+
+    @TextFieldBinding(value = "controlador.mesa.nombre")
+    public JTextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public void setTxtNombre(JTextField txtNombre) {
+        this.txtNombre = txtNombre;
+    }
+
+    @SpinnerBinding(value = "controlador.mesa.numero")  
+    public JSpinner getTxtNumeroMesa() {
+        return txtNumeroMesa;
+    }
+
+    public void setTxtNumeroMesa(JSpinner txtNumeroMesa) {
+        this.txtNumeroMesa = txtNumeroMesa;
+    }
+
+    
 }
