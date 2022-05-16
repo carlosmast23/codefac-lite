@@ -282,7 +282,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             @Override
             public void actionPerformed(ActionEvent e) {
                 EnumSiNo enumSiNo=(EnumSiNo) getCmbGenerarCodigoBarras().getSelectedItem();
-                if(enumSiNo.equals(EnumSiNo.SI))
+                if(enumSiNo!=null && enumSiNo.equals(EnumSiNo.SI))
                 {
                     getChkGenerarCodigoAutomatico().setSelected(true);
                     getTxtCodigoPersonalizado().setText("");

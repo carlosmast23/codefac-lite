@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
@@ -350,10 +351,18 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //Producto p;
         //p.getCodigoPersonalizado();
         //p.getEstado();GeneralEnumEstado
+        
         Map<String,Object> mapParametros=new HashMap<String,Object>();        
         mapParametros.put("codigoPersonalizado",codigo);
-        mapParametros.put("empresa",empresa);        
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
+        
+        //Cuando este configurado como datos compartidos no tomo en cuenta de donde esta cogiendo la empresa
+        if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
+        {
+            mapParametros.put("empresa",empresa);        
+        }        
+        
+        
         
         List<Producto> productos=getFacade().findByMap(mapParametros);
         if(productos.size()>0)

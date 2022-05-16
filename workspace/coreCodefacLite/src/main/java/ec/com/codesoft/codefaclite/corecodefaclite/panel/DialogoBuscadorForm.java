@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.panel;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBusquedaEnum;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -32,6 +34,7 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -47,6 +50,7 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         lblTextoBuscar = new javax.swing.JLabel();
         btnFiltrar = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
+        cmbTipoBusqueda = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTabla = new javax.swing.JTable();
 
@@ -95,10 +99,10 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setLayout(new java.awt.BorderLayout());
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
         lblTextoBuscar.setText("   Ingrese el texto a buscar:   ");
-        jPanel3.add(lblTextoBuscar, java.awt.BorderLayout.LINE_START);
+        jPanel3.add(lblTextoBuscar, new java.awt.GridBagConstraints());
 
         btnFiltrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnFiltrar.setText("Filtrar");
@@ -107,8 +111,22 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
                 btnFiltrarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnFiltrar, java.awt.BorderLayout.LINE_END);
-        jPanel3.add(txtBuscar, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        jPanel3.add(btnFiltrar, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel3.add(txtBuscar, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        jPanel3.add(cmbTipoBusqueda, gridBagConstraints);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_START);
 
@@ -188,6 +206,7 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     private javax.swing.JButton btnPrimero;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnUltimo;
+    private javax.swing.JComboBox<TipoBusquedaEnum> cmbTipoBusqueda;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -294,6 +313,15 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     public void setBtnUltimo(JButton btnUltimo) {
         this.btnUltimo = btnUltimo;
     }
+
+    public JComboBox<TipoBusquedaEnum> getCmbTipoBusqueda() {
+        return cmbTipoBusqueda;
+    }
+
+    public void setCmbTipoBusqueda(JComboBox<TipoBusquedaEnum> cmbTipoBusqueda) {
+        this.cmbTipoBusqueda = cmbTipoBusqueda;
+    }
+    
     
     
 

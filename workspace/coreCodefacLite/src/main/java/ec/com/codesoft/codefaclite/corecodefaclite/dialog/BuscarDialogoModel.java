@@ -9,10 +9,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.panel.DialogoBuscadorForm;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBusquedaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -81,12 +83,18 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     {
         super(null,true);
         this.model=model;
+        iniciarValores();
         initListener();
         //crearConsulta("");
         ejecutarConsulta();
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();        
         normalizarTextoBusqueda=false;
+    }
+    
+    private void iniciarValores()
+    {
+        UtilidadesComboBox.llenarComboBox(getCmbTipoBusqueda(),TipoBusquedaEnum.values());
     }
     
     /**
@@ -99,9 +107,19 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
             
             String filtroConsuta=filtro;
-            if(!filtro.contains("%"))
+            
+            TipoBusquedaEnum tipoBusquedaEnum=(TipoBusquedaEnum) getCmbTipoBusqueda().getSelectedItem();
+            if(tipoBusquedaEnum.equals(TipoBusquedaEnum.EXACTO))
             {
-                filtroConsuta="%"+filtroConsuta+"%";
+                //Quito los filtro de porcentaje para hacer la busqueda exacta
+                filtroConsuta=filtroConsuta.replace("%","");
+            } 
+            else if(tipoBusquedaEnum.equals(TipoBusquedaEnum.COINCIDENCIA))
+            {            
+                if(!filtro.contains("%"))
+                {
+                    filtroConsuta="%"+filtroConsuta+"%";
+                }
             }
             
             QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
@@ -171,14 +189,26 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             String filtro=getTxtBuscar().getText().toLowerCase();
             filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
             
-            //Si el filtro ya contiene el porcentaje entonces descativo la busqueda automatica
             String filtroConsuta=filtro;
-            if(!filtro.contains("%"))
-            {
-                filtroConsuta="%"+filtroConsuta+"%";
-            }
             
+            TipoBusquedaEnum tipoBusquedaEnum=(TipoBusquedaEnum) getCmbTipoBusqueda().getSelectedItem();
+            if(tipoBusquedaEnum.equals(TipoBusquedaEnum.EXACTO))
+            {
+                //Si la busqueda es exacta quito todo los porcentajes
+                filtroConsuta=filtroConsuta.replace("%","");
+                //Tambien cambio
+                        
+            }
+            else if(tipoBusquedaEnum.equals(TipoBusquedaEnum.COINCIDENCIA))
+            {            
+                //Si el filtro ya contiene el porcentaje entonces desactivo la busqueda automatica                
+                if(!filtro.contains("%"))
+                {
+                    filtroConsuta="%"+filtroConsuta+"%";
+                }
+            }
             QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
+            
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             String query=queryDialog.query;
             query=query.toLowerCase();
@@ -308,7 +338,18 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {}
+            public void keyReleased(KeyEvent e) {
+                try {
+                    Boolean filtroRapido = ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA, EnumSiNo.SI);
+                    
+                    if (filtroRapido) 
+                    {
+                        ejecutarConsulta();                        
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         });
         
         getBtnUltimo().addActionListener(new ActionListener() {
@@ -383,10 +424,10 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                             ejecutarConsulta();
                         }
                     }
-                    else
-                    {
-                        ejecutarConsulta();
-                    }
+                    //else
+                    //{
+                    //    ejecutarConsulta();
+                    
                     
                 } catch (RemoteException ex) {
                     Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
