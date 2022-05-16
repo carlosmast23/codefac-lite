@@ -26,7 +26,7 @@ public enum ComprobanteEnum {
      * Documentos no oficiales para generar otros tipos de reportes
      */
     NOTA_VENTA_INTERNA("NOTA DE VENTA INTERNA","99","NVI",FacturaComprobante.class),
-    GUIA_REMISION_INTERNA("NOTA DE VENTA INTERNA","98","GRI",GuiaRemisionComprobante.class);
+    GUIA_REMISION_INTERNA("GUÍA DE REMISIÓN INTERNA","98","GRI",GuiaRemisionComprobante.class);
     
     
     private String nombre;
