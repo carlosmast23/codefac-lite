@@ -79,7 +79,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
             InputStream input= new  FileInputStream(file);
             RemoteInputStreamServer istream =new SimpleRemoteInputStream(input);
             RemoteInputStream result = istream.export();
-            UtilidadesRmi.serializar(result);
+            return UtilidadesRmi.serializar(result);
             //return UtilidadesRmi.serializar(ois);
         } catch (IOException ex) {
             Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);

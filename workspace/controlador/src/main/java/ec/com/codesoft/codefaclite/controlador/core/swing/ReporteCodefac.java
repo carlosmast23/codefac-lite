@@ -9,6 +9,7 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -29,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -612,21 +614,24 @@ public class ReporteCodefac {
             else
             {
                 //TODO: Asumo que estoy consultado desde el servidor por que desde el cliente no va a funcionar
+                //TODO Mejorar esta parte para que cuando sea cliente servidor obtenga de la misma computadora                
+                byte[] imagenSerializada = service.obtenerRecurso(sucursal.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
+                RemoteInputStream risImagen= (RemoteInputStream) UtilidadesRmi.deserializar(imagenSerializada);
+                inputStream = RemoteInputStreamClient.wrap(risImagen);
+                //ServiceFactory.getFactory().getRecursosServiceIf().getResourceInputStreamByFile(sucursal.getEmpresa(), DirectorioCodefac.IMAGENES, nombreImagen);
+                //ParametroCodefac parametroDirectorio=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,sucursal.getEmpresa());
+                //String pathEmpresa=parametroDirectorio.valor;
+                //File file=new File(pathEmpresa+"/"+DirectorioCodefac.IMAGENES+"/"+nombreImagen);
                 
-                //RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(sucursal.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
-                ServiceFactory.getFactory().getRecursosServiceIf().getResourceInputStreamByFile(sucursal.getEmpresa(), DirectorioCodefac.IMAGENES, nombreImagen);
-                ParametroCodefac parametroDirectorio=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,sucursal.getEmpresa());
-                String pathEmpresa=parametroDirectorio.valor;
-                File file=new File(pathEmpresa+"/"+DirectorioCodefac.IMAGENES+"/"+nombreImagen);
+                //try
+                //{
+                //    inputStream=null;
+                //    inputStream= new  FileInputStream(file);
+                //}catch(FileNotFoundException e)
+                //{
+                //    e.printStackTrace();
+                //}
                 
-                try
-                {
-                    inputStream=null;
-                    inputStream= new  FileInputStream(file);
-                }catch(FileNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
                 //verifica que existe una imagen
                 //if (remoteInputStream != null) {
                 //    inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
@@ -729,6 +734,8 @@ public class ReporteCodefac {
         } catch (IOException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
         return parametros;
