@@ -617,7 +617,10 @@ public class ReporteCodefac {
                 //TODO Mejorar esta parte para que cuando sea cliente servidor obtenga de la misma computadora                
                 byte[] imagenSerializada = service.obtenerRecurso(sucursal.getEmpresa(),DirectorioCodefac.IMAGENES, nombreImagen);
                 RemoteInputStream risImagen= (RemoteInputStream) UtilidadesRmi.deserializar(imagenSerializada);
-                inputStream = RemoteInputStreamClient.wrap(risImagen);
+                if(risImagen!=null)
+                {
+                    inputStream = RemoteInputStreamClient.wrap(risImagen);
+                }
                 //ServiceFactory.getFactory().getRecursosServiceIf().getResourceInputStreamByFile(sucursal.getEmpresa(), DirectorioCodefac.IMAGENES, nombreImagen);
                 //ParametroCodefac parametroDirectorio=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS,sucursal.getEmpresa());
                 //String pathEmpresa=parametroDirectorio.valor;

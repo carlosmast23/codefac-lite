@@ -417,12 +417,9 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 try {
                     Boolean filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.NO);
                     
-                    if(filtroRapido)
+                    if(filtroRapido || e.getKeyCode()==KeyEvent.VK_ENTER)
                     {
-                        if(e.getKeyCode()==KeyEvent.VK_ENTER)
-                        {
-                            ejecutarConsulta();
-                        }
+                        ejecutarConsulta();
                     }
                     //else
                     //{

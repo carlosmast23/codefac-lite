@@ -245,6 +245,27 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 
             }
         });
+        
+        //TODO: Metodo temporal porque cuando se ejecuta sin esta parte causa conflicto al utilizar el producto en el resto de pantallas
+        //Al utilizar por segunda vez el mismo objeto por algun motivo genera un error y luego de eso ya funciona correctamente
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+
+                    Producto pTmp = getFacade().find(producto.getIdProducto());
+                    List<Kardex> kardexList=ServiceFactory.getFactory().getKardexServiceIf().buscarPorProducto(pTmp);
+                    for (Kardex kardex : kardexList) {
+                        entityManager.merge(kardex);
+                    }
+                    
+                    entityManager.merge(pTmp);
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
     

@@ -903,6 +903,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint,facturaProcesando.getPreimpreso());
                 
+                
                 //ComprobanteDataInterface dataFactura= obtenerComprobanteData(facturaProcesando);
                 //comprobanteService.generarRideComprobanteNoLegal(facturaProcesando,dataFactura, session.getUsuario());
                 
@@ -913,6 +914,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
             return;
         }
 
