@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pie_pagina" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f53d2141-f2f6-49f7-92d8-b84d6335680c">
-	<property name="ireport.zoom" value="1.6105100000000039"/>
+	<property name="ireport.zoom" value="2.5937424601000076"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_img_facebook" class="java.lang.Object"/>
@@ -69,6 +69,7 @@
 				<reportElement x="24" y="28" width="23" height="21" uuid="f753d110-9572-473c-b075-84ec6349c3ed">
 					<printWhenExpression><![CDATA[new Boolean($P{pl_instagram}!=null && !$P{pl_instagram}.isEmpty() )]]></printWhenExpression>
 				</reportElement>
+				<imageExpression><![CDATA[$P{pl_img_instagram}]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="47" y="29" width="90" height="20" uuid="7bd5e7a9-0d75-414e-845c-e2f923853287"/>
