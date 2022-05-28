@@ -48,6 +48,8 @@ create table PRODUCTO
     PVP_5 decimal(13,5),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.5.3)*/
     PVP_6 decimal(13,5),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.1.2)*/
+    APLICACION_PRODUCTO varchar(1024),
  
 
     primary key (ID_PRODUCTO)

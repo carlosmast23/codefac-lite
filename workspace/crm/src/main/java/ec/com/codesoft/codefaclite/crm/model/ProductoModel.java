@@ -129,7 +129,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //producto.setCategoriaProducto(catProducto);
         producto.setCaracteristicas(getTxtCaracteristica().getText());
         producto.setObservaciones(getTxtObservaciones().getText());
-
+        producto.setAplicacionProducto(getTxtAplicacionProducto().getText());
         
         EnumSiNo enumSiNo=EnumSiNo.getEnumByBoolean(getChkTransportarGuiaRemision().isSelected());        
         producto.setTransportarEnGuiaRemisionEnum(enumSiNo);
@@ -449,6 +449,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     
     private void setearValoresIniciales()
     {
+        getTxtAplicacionProducto().setText("");
         getTxtCantidadEnsamble().setText("0");
         getTxtCantidadMinima().setText("0");
         getTxtPrecioDistribuidor().setText("0");
@@ -475,12 +476,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void cargarDatosPantalla(Object entidad) {
         controlador.producto=(Producto) entidad;
-        //getTxtCodigoPersonalizado().setText(controlador.producto.getCodigoPersonalizado());
         getTxtCodigoEAN().setText(controlador.producto.getCodigoEAN());
         getTxtCodigoUPC().setText(controlador.producto.getCodigoUPC());
-        //getTextNombre().setText(controlador.producto.getNombre());
-        //getTextValorUnitario().setText(controlador.producto.getValorUnitario().toString());
-        //getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA); //Seleccciona esta opcion porque por defecto los precios en la base de datos estan grabados sin Iva
 
 
         /**
@@ -502,25 +499,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtPV4().setText((controlador.producto.getPvp4()!= null) ? controlador.producto.getPvp4() + "" : "0");
         getTxtPV5().setText((controlador.producto.getPvp5()!= null) ? controlador.producto.getPvp5() + "" : "0");
         getTxtPV6().setText((controlador.producto.getPvp6()!= null) ? controlador.producto.getPvp6() + "" : "0");
-        /**
-         * Cargar datos de la entidad catalogo producto
-         */
-        //getCmbCategoriaProducto().setSelectedItem(controlador.producto.getCatalogoProducto().getCategoriaProducto());
-        //getComboIva().setSelectedItem(controlador.producto.getCatalogoProducto().getIva());
-        //getComboIrbpnr().setSelectedItem(controlador.producto.getCatalogoProducto().getIrbpnr());
-        //getComboIce().setSelectedItem(controlador.producto.getCatalogoProducto().getIce()); 
+        getTxtAplicacionProducto().setText(controlador.producto.getAplicacionProducto());
         getTxtPrecio1SinSubsidio().setText((controlador.producto.getPrecioSinSubsidio()!=null)?controlador.producto.getPrecioSinSubsidio().toString():"0");
-        
-        //Setear la opcion de inventario y si no esta escogida ninguna opcion de si maneja inventario por defecte seteo en no
-        //String letraInventario=(controlador.producto.getManejarInventario()!=null)?controlador.producto.getManejarInventario():EnumSiNo.NO.getLetra();        
-        //EnumSiNo enumInventario=EnumSiNo.getEnumByLetra(letraInventario);        
-        //getCmbManejaInventario().setSelectedItem(enumInventario);
-        
-        //Cargar si desea generar el codigo de los productos
-        //String letraGenerarCodBarras=(controlador.producto.getGenerarCodigoBarras()!=null)?controlador.producto.getGenerarCodigoBarras():EnumSiNo.NO.getLetra();        
-        //EnumSiNo enumGenerarCodigoBarras=EnumSiNo.getEnumByLetra(letraGenerarCodBarras);        
-        //imprimirBarrasSeleccionado=enumGenerarCodigoBarras;
-        //getCmbGenerarCodigoBarras().setSelectedItem(enumGenerarCodigoBarras);
         
         
         getChkTransportarGuiaRemision().setSelected(controlador.producto.getTransportarEnGuiaRemisionEnum().getBool());
@@ -571,55 +551,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         actualizarBindingCompontValues();
     }
 
-   
-    /*@Override
-    public void llenarCmbGenerarCodigoBarras(EnumSiNo[] datos) {
-        UtilidadesComboBox.llenarComboBox(getCmbGenerarCodigoBarras(),datos);
-    }*/
-
-   
-
-    /*@Override
-    public void llenarCmbCategoriaProducto(List<CategoriaProducto> catProdList) {
-        UtilidadesComboBox.llenarComboBox(getCmbCategoriaProducto(),catProdList);
-    }*/
-
-    /*@Override
-    public void llenarComboIva(List<ImpuestoDetalle> impuestos) {
-        UtilidadesComboBox.llenarComboBox(getComboIva(),impuestos);
-    }*/
-
-    /*@Override
-    public void llenarComboIce(List<ImpuestoDetalle> impuestos) {
-        UtilidadesComboBox.llenarComboBox(getComboIce(),impuestos);
-    }*/
-
-    /*@Override
-    public void llenarComboIrbpnr(List<ImpuestoDetalle> impuestos) {
-        UtilidadesComboBox.llenarComboBox(getComboIrbpnr(),impuestos);
-    }*/
-
-    /*@Override
-    public void seleccionarComboIva(ImpuestoDetalle impuesto) {
-        getComboIva().setSelectedItem(impuesto);
-    }*/
-
-    /*@Override
-    public void llenarCmbGarantia(EnumSiNo[] datos) {
-        UtilidadesComboBox.llenarComboBox(getCmbGarantia(),datos);
-    }*/
-    
-    //==================== METODOS GET AND SET ==============================//
-    
-
-    /*public EnumSiNo getImprimirBarrasSeleccionado() {
-        return imprimirBarrasSeleccionado;
-    }
-
-    public void setImprimirBarrasSeleccionado(EnumSiNo imprimirBarrasSeleccionado) {
-        this.imprimirBarrasSeleccionado = imprimirBarrasSeleccionado;
-    }*/
-
+  
     @Override
     public ModelControladorAbstract getControladorVista() {
         return controlador;

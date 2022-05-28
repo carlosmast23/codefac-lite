@@ -132,6 +132,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne    
     private CatalogoProducto catalogoProducto;
+    
+    @Column(name = "APLICACION_PRODUCTO")
+    private String aplicacionProducto;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble",fetch = FetchType.EAGER)
     private List<ProductoEnsamble> detallesEnsamble;
@@ -503,6 +506,16 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setPvp6(BigDecimal pvp6) {
         this.pvp6 = pvp6;
     }
+
+    public String getAplicacionProducto() {
+        return aplicacionProducto;
+    }
+
+    public void setAplicacionProducto(String aplicacionProducto) {
+        this.aplicacionProducto = aplicacionProducto;
+    }
+    
+    
     
     
 

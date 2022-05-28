@@ -321,7 +321,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         producto.setGarantiaEnum(EnumSiNo.NO);
         producto.setValorUnitario(BigDecimal.ZERO);
         producto.setMarcaProducto(null);
-        
+        producto.setAplicacionProducto("");
         ivaOpcionSeleccionado=IvaOpcionEnum.SIN_IVA;
         categoriaSeleccionada=null;
         iceSeleccionado=null;
@@ -520,6 +520,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         producto.setCatalogoProducto(catalogoProducto);
         
         producto.setEmpresa(session.getEmpresa());
+        
         
         //Si el tipo que contralo es de escritorio termino de implementar las vistas
         if(tipoVista.equals(TipoVista.ESCRITORIO))
