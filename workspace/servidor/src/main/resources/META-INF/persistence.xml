@@ -106,6 +106,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraFacturaReembolso</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

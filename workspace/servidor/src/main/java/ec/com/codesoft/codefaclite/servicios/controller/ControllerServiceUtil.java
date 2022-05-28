@@ -51,6 +51,7 @@ import ec.com.codesoft.codefaclite.servidor.service.RecursosService;
 import ec.com.codesoft.codefaclite.servidor.service.RetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.RutaDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.RutaService;
+import ec.com.codesoft.codefaclite.servidor.service.SegmentoProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.SmsService;
 import ec.com.codesoft.codefaclite.servidor.service.SriFormaPagoService;
 import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
@@ -61,6 +62,7 @@ import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.SucursalService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoDocumentoService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoEstablecimientoService;
+import ec.com.codesoft.codefaclite.servidor.service.TipoProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.ZonaService;
@@ -184,8 +186,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
@@ -312,6 +316,8 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(CompraFacturaReembolsoService.class, CompraFacturaReembolsoServiceIf.class);
             mapRecursos.put(LoteService.class, LoteSeviceIf.class);
             mapRecursos.put(MesaService.class, MesaServiceIf.class);
+            mapRecursos.put(SegmentoProductoService.class, SegmentoProductoServiceIf.class);
+            mapRecursos.put(TipoProductoService.class, TipoProductoServiceIf.class);
             
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);

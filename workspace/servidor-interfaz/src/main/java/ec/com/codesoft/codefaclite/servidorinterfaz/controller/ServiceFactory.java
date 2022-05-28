@@ -93,8 +93,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
@@ -232,6 +234,8 @@ public abstract class ServiceFactory {
     public CompraFacturaReembolsoServiceIf getCompraFacturaReembolsoServiceIf(){return (CompraFacturaReembolsoServiceIf) getRecursosRMI(CompraFacturaReembolsoServiceIf.class);};
     public LoteSeviceIf getLoteSeviceIf(){return (LoteSeviceIf) getRecursosRMI(LoteSeviceIf.class);};
     public MesaServiceIf getMesaSeviceIf(){return (MesaServiceIf) getRecursosRMI(MesaServiceIf.class);};
+    public SegmentoProductoServiceIf getSegmentoProductoServiceIf(){return (SegmentoProductoServiceIf) getRecursosRMI(SegmentoProductoServiceIf.class);};
+    public TipoProductoServiceIf getTipoProductoServiceIf(){return (TipoProductoServiceIf) getRecursosRMI(TipoProductoServiceIf.class);};
     
     
     /**
