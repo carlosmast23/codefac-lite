@@ -323,7 +323,8 @@ public class ControladorReporteFactura {
                                 (factura.getReferido() != null) ? factura.getReferido().getContactoClientePorcentaje().toString() : "0",
                                 valorComision.toString(),
                                 factura.getClaveAcceso(),
-                                factura.getPuntoEmision().toString()
+                                factura.getPuntoEmision().toString(),
+                                factura.getUsuario().getNick()
                         );
                         
                         //Agregar datos adicionales al modelo de la factura
@@ -384,7 +385,8 @@ public class ControladorReporteFactura {
                                 "0",
                                 "0",//TODO: Revisar porque en esta parte me late que no necesito calcular el iva
                                 nota.getClaveAcceso(),
-                                nota.getPuntoEmision().toString()
+                                nota.getPuntoEmision().toString(),
+                                nota.getUsuario().getNick()
                         );
                         
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
@@ -1098,6 +1100,15 @@ public class ControladorReporteFactura {
     public enum TipoReporteEnum implements EnumReporteAgruparIf
     {
         NORMAL("Normal",null),
+        
+        AGRUPADO_POR_USUARIO("Agrupado por usuario",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_USUARIO).toString();
+                //return dato.getZona();
+            }
+        }),
+        
         AGRUPADO_POR_VENDEDOR("Agrupado por vendedor",new CampoAgruparIf() {
             @Override
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {

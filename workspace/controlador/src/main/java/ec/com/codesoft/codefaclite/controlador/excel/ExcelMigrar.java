@@ -133,6 +133,8 @@ public abstract class ExcelMigrar {
                     {
                         if(!tiposDatosCabecera.get(i).equals(Double.class))
                         {
+                           System.out.println(celda.getCellTypeEnum().toString());
+                           System.out.println(tiposDatosCabecera.get(i));
                            throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna con valor <" +celda.getNumericCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                         }
                     }

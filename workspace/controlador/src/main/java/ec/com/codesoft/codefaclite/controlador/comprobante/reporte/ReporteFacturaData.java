@@ -82,12 +82,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     protected String zona;
     protected String ruta;
     
+    protected String usuario;
+    
     public ReporteFacturaData() {
     }
     
     
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura,String fechaAutorizacion, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso,String puntoEmision) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura,String fechaAutorizacion, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso,String puntoEmision,String usuario) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
         this.fechaAutorizacion=fechaAutorizacion;
@@ -111,6 +113,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         this.valorComision=valorComision;
         this.claveAcceso=claveAcceso;
         this.puntoEmision=puntoEmision;
+        this.usuario=usuario;
     }
 
         
@@ -393,6 +396,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     public void setRuta(String ruta) {
         this.ruta = ruta;
     }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
     
     
     
@@ -424,6 +435,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.nombreProducto, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.usuario, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
         tiposDatos.add(new TipoDato((this.fechaAutorizacion!=null)?this.fechaAutorizacion:"", Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
@@ -441,6 +453,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.valorAfecta, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.totalFinal, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.costo, Excel.TipoDataEnum.NUMERO));
+        
 
         return tiposDatos;
     }
@@ -455,6 +468,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.valorComision, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.usuario, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
         tiposDatos.add(new TipoDato((this.fechaAutorizacion!=null)?this.fechaAutorizacion:"", Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identificacionCliente, Excel.TipoDataEnum.TEXTO));
@@ -469,6 +483,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.ivaDoceFactura, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.valorAfecta, Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.totalFinal, Excel.TipoDataEnum.NUMERO));
+        
 
         return tiposDatos;
     }
@@ -480,6 +495,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
                 
         switch(tipoRepoteEnum)
         {
+            case AGRUPADO_POR_USUARIO:return usuario;
             case AGRUPADO_POR_VENDEDOR:return vendedor;
             case AGRUPADO_POR_PUNTO_EMISION:return puntoEmision;
             case AGRUPADO_POR_PRODUCTO:return nombreProducto;
