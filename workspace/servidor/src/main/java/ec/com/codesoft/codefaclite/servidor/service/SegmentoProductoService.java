@@ -15,6 +15,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -47,16 +50,21 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-                
-                setDatosAuditoria(entity,usuarioCreacion,CrudEnum.CREAR);
-                setearDatosGrabar(entity, empresa,CrudEnum.CREAR);
-                validarGrabar(entity, CrudEnum.CREAR);
-                entityManager.persist(entity);
+                grabarSinTransaccion(entity, empresa, usuarioCreacion);
                 
             }
         });
         return entity;
+    }
+    
+    public void grabarSinTransaccion(SegmentoProducto entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException 
+    {
+        entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+
+        setDatosAuditoria(entity, usuarioCreacion, CrudEnum.CREAR);
+        setearDatosGrabar(entity, empresa, CrudEnum.CREAR);
+        validarGrabar(entity, CrudEnum.CREAR);
+        entityManager.persist(entity);
     }
     
     @Override
@@ -89,5 +97,32 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
                 entityManager.merge(entity);
             }
         });
+    }
+    
+    public List<SegmentoProducto> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        return (List<SegmentoProducto>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Map<String,Object> mapParameros=new HashMap<String, Object>();
+                mapParameros.put("empresa", empresa);
+                mapParameros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                return getFacade().findByMap(mapParameros);
+            }
+        } );
+    }
+    
+    public SegmentoProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("empresa", empresa);
+        mapParametros.put("nombre",nombre);
+        List<SegmentoProducto> resultados=getFacade().findByMap(mapParametros);
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
     }
 }

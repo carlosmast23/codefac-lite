@@ -22,6 +22,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -60,6 +62,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private List<ImpuestoDetalle> irbpnrList;
     private List<IvaOpcionEnum> ivaOpcionList;
     private List<MarcaProducto> marcaProductoList;
+    private List<TipoProducto> tipoProductoList;
+    private List<SegmentoProducto> segmentoProductoList;
     
     //private Interfaz interfaz;
     private CategoriaProducto categoriaSeleccionada;
@@ -167,7 +171,10 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         categoriaProductosList = catProdService.obtenerTodosPorEmpresa(session.getEmpresa());     
         
         try {
-            marcaProductoList=marcaProductoList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            marcaProductoList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            tipoProductoList=ServiceFactory.getFactory().getTipoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            segmentoProductoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -491,6 +498,22 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
 
     public void setMarcaProductoList(List<MarcaProducto> marcaProductoList) {
         this.marcaProductoList = marcaProductoList;
+    }
+
+    public List<TipoProducto> getTipoProductoList() {
+        return tipoProductoList;
+    }
+
+    public void setTipoProductoList(List<TipoProducto> tipoProductoList) {
+        this.tipoProductoList = tipoProductoList;
+    }
+
+    public List<SegmentoProducto> getSegmentoProductoList() {
+        return segmentoProductoList;
+    }
+
+    public void setSegmentoProductoList(List<SegmentoProducto> segmentoProductoList) {
+        this.segmentoProductoList = segmentoProductoList;
     }
     
     

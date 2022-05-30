@@ -20,6 +20,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -28,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -145,8 +148,14 @@ public class MigrarProductoModel extends MigrarModel {
                         {
                             
                         }
-
-                                                
+                        
+                        //Grabar la aplicacion
+                        String aplicacion=(String)fila.getByEnum(ExcelMigrarProductos.Enum.APLICACION).valor;
+                        producto.setAplicacionProducto(aplicacion);
+                        
+                        grabarTipoProducto(fila, producto);
+                        grabarSegmentoProducto(fila, producto);
+                        
                         kardexDetalle=generarMovimientoInventario(manejaInventarioEnumSiNo, fila, producto,productoTmp);
 
 
@@ -288,6 +297,44 @@ public class MigrarProductoModel extends MigrarModel {
 
             }
         };
+    }
+    
+    private void grabarTipoProducto(ExcelMigrar.FilaResultado fila,Producto producto) throws ServicioCodefacException, RemoteException
+    {
+        TipoProducto tipoProducto =null;
+        String tipo = (String) fila.getByEnum(ExcelMigrarProductos.Enum.TIPO).valor;
+        //Si existe un dato ingresado entonces creo ese valor
+        if(!UtilidadesTextos.verificarNullOVacio(tipo))
+        {        
+            tipoProducto = ServiceFactory.getFactory().getTipoProductoServiceIf().buscarPorNombre(session.getEmpresa(), tipo);
+            if (tipoProducto == null) {
+                tipoProducto = new TipoProducto();
+                tipoProducto.setNombre(tipo);
+                tipoProducto.setDescripcion(tipo);
+                tipoProducto.setEmpresa(session.getEmpresa());
+            }
+        }
+
+        producto.setTipoProducto(tipoProducto);
+    }
+    
+    private void grabarSegmentoProducto(ExcelMigrar.FilaResultado fila,Producto producto) throws ServicioCodefacException, RemoteException
+    {
+        SegmentoProducto segmentoProducto =null;
+        String tipo = (String) fila.getByEnum(ExcelMigrarProductos.Enum.SEGMENTO).valor;
+        //Si existe un dato ingresado entonces creo ese valor
+        if(!UtilidadesTextos.verificarNullOVacio(tipo))
+        {        
+            segmentoProducto = ServiceFactory.getFactory().getSegmentoProductoServiceIf().buscarPorNombre(session.getEmpresa(), tipo);
+            if (segmentoProducto == null) {
+                segmentoProducto = new SegmentoProducto();
+                segmentoProducto.setNombre(tipo);
+                segmentoProducto.setDescripcion(tipo);
+                segmentoProducto.setEmpresa(session.getEmpresa());
+            }
+        }
+
+        producto.setSegmentoProducto(segmentoProducto);
     }
     
     //todo: Mejorar esa parte para no mandar el producto Tmp

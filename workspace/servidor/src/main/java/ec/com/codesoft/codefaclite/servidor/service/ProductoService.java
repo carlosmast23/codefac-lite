@@ -21,6 +21,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -104,6 +106,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         CatalogoProducto catalogoProducto = p.getCatalogoProducto();
         p.setCatalogoProducto(null);
+        
+        TipoProducto tipoProducto=p.getTipoProducto();
+        p.setTipoProducto(null);
+        
+        SegmentoProducto segmentoProducto=p.getSegmentoProducto();
+        p.setSegmentoProducto(null);
+        
         entityManager.flush();
         entityManager.persist(p);
         entityManager.flush();
@@ -125,6 +134,32 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             
             p.setCatalogoProducto(catalogoProducto);
         }
+        
+        //Si no esta creado el tipo primero creo el tipo
+        if(tipoProducto!=null)
+        {   
+            if(tipoProducto.getId()==null)
+            {
+                ServiceFactory.getFactory().getTipoProductoServiceIf().grabarSinTransaccion(tipoProducto, p.getEmpresa(),null);
+                entityManager.flush();
+                tipoProducto=ServiceFactory.getFactory().getTipoProductoServiceIf().buscarPorNombre(p.getEmpresa(), tipoProducto.getNombre());
+            }
+            
+        }
+        
+        if(segmentoProducto!=null)
+        {   
+            if(segmentoProducto.getId()==null)
+            {
+                ServiceFactory.getFactory().getSegmentoProductoServiceIf().grabarSinTransaccion(segmentoProducto,  p.getEmpresa(), null);
+                entityManager.flush();
+                segmentoProducto=ServiceFactory.getFactory().getSegmentoProductoServiceIf().buscarPorNombre(p.getEmpresa(), segmentoProducto.getNombre());
+            }
+                        
+        }
+        
+        p.setTipoProducto(tipoProducto);            
+        p.setSegmentoProducto(segmentoProducto);
 
         //Si no son ensables remover datos para no tener incoherencias
         if (!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProductoCodigo())) {

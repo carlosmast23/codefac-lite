@@ -357,11 +357,11 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         
         if(crudEnum==CrudEnum.CREAR)
         {
-            entidad.setUsuarioCreacion(usuario);
-            if(entidad.getUsuarioCreacion()==null)
-            {
-                throw new ServicioCodefacException("No se puede grabar un registro sin USUARIO DE CREACION");
-            }            
+            //entidad.setUsuarioCreacion(usuario);
+            //if(entidad.getUsuarioCreacion()==null)
+            //{
+            //    throw new ServicioCodefacException("No se puede grabar un registro sin USUARIO DE CREACION");
+            //}            
         }
         
         if(crudEnum==CrudEnum.EDITAR)

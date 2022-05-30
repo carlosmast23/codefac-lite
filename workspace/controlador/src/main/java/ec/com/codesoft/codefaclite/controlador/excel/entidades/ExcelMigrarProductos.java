@@ -43,7 +43,10 @@ public class ExcelMigrarProductos extends ExcelMigrar{
         STOCK_MINIMO("Stock Min",14,Double.class,false),
         MARCA("Marca",15,String.class,false),
         UBICACION("Ubicación",16,String.class,false),
-        ESTADO("Estado",17,String.class,false);
+        APLICACION("Aplicación",17,String.class,false),
+        TIPO("Tipo",18,String.class,false),
+        SEGMENTO("Segmento",19,String.class,false),
+        ESTADO("Estado",20,String.class,false);
 
         private Enum(String nombre,Integer posicion,Class tipoDato,Boolean requerido) {
             this.nombre = nombre;

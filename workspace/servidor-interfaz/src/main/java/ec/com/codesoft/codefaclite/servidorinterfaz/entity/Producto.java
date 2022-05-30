@@ -134,7 +134,14 @@ public class Producto implements Serializable, Comparable<Producto> {
     private CatalogoProducto catalogoProducto;
     
     @Column(name = "APLICACION_PRODUCTO")
+    
     private String aplicacionProducto;
+    
+    @JoinColumn(name = "TIPO_ID")
+    private TipoProducto tipoProducto;
+        
+    @JoinColumn(name = "SEGMENTO_ID")    
+    private SegmentoProducto segmentoProducto;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble",fetch = FetchType.EAGER)
     private List<ProductoEnsamble> detallesEnsamble;
@@ -418,6 +425,22 @@ public class Producto implements Serializable, Comparable<Producto> {
 
     public void setMarcaProducto(MarcaProducto marcaProducto) {
         this.marcaProducto = marcaProducto;
+    }
+
+    public TipoProducto getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(TipoProducto tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
+    public SegmentoProducto getSegmentoProducto() {
+        return segmentoProducto;
+    }
+
+    public void setSegmentoProducto(SegmentoProducto segmentoProducto) {
+        this.segmentoProducto = segmentoProducto;
     }
     
     
