@@ -278,21 +278,21 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private void listenerComboBox() {
        
         //TODO: Mejorar esta parte para que funcione con el controlador
-        getCmbGenerarCodigoBarras().addActionListener(new ActionListener() {
+        /*getCmbGenerarCodigoBarras().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 EnumSiNo enumSiNo=(EnumSiNo) getCmbGenerarCodigoBarras().getSelectedItem();
                 if(enumSiNo!=null && enumSiNo.equals(EnumSiNo.SI))
                 {
                     getChkGenerarCodigoAutomatico().setSelected(true);
-                    getTxtCodigoPersonalizado().setText("");
+                    //getTxtCodigoPersonalizado().setText("");
                     //getTxtCodigoPersonalizado().setEnabled(false);
                     controlador.setGenerarCodigoAutomatico(true);
                 }
             }
-        });
+        });*/
         
-        getCmbGenerarCodigoBarras().getSelectedItem();
+        //getCmbGenerarCodigoBarras().getSelectedItem();
          
 
     }
@@ -564,6 +564,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     public void setControlador(ProductoModelControlador controlador) {
         this.controlador = controlador;
     }
+
+    /*@Override
+    public void setearChkGenerarCodAutomatico(Boolean valor) {
+        getChkGenerarCodigoAutomatico().setSelected(valor);
+    }*/
     
     
     

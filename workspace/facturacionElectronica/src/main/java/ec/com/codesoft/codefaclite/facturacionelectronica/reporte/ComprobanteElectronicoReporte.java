@@ -76,10 +76,20 @@ public abstract class ComprobanteElectronicoReporte
         return map;
     }
     
-    protected Map<String, Object> getMapInfoEmpresa() {
+    protected Map<String, Object> getMapInfoEmpresa(Boolean razonSocialTituloPrincipal) 
+    {
         Map<String,Object> map=new HashMap<String,Object>();
-        map.put("razon_social",comprobante.getInformacionTributaria().getRazonSocial());
-        map.put("nombre_legal",comprobante.getInformacionTributaria().getNombreComercial());
+        
+        if(razonSocialTituloPrincipal)
+        {
+            map.put("razon_social",comprobante.getInformacionTributaria().getRazonSocial());
+            map.put("nombre_legal",comprobante.getInformacionTributaria().getNombreComercial());                    
+        }
+        else
+        {
+            map.put("nombre_legal",comprobante.getInformacionTributaria().getRazonSocial());
+            map.put("razon_social",comprobante.getInformacionTributaria().getNombreComercial());
+        }
         map.put("direccion",comprobante.getInformacionTributaria().getDirecionMatriz());
         //Cambiar por la direccion de las sucursales cuando exista
         String direccionEstablecimiento=comprobante.getInformacionTributaria().getDirecionMatriz();
@@ -100,12 +110,12 @@ public abstract class ComprobanteElectronicoReporte
     }
     
 
-    public Map<String,Object> getMapReporte(Map<ComprobanteEnum, String> aliasNombreDocumentosMap)
+    public Map<String,Object> getMapReporte(Map<ComprobanteEnum, String> aliasNombreDocumentosMap,Boolean razonSocialTituloPrincipal)
     {
         //try {
             Map<String,Object> map=new HashMap<String,Object>();
             map.putAll(getMapInfoTributaria(aliasNombreDocumentosMap));
-            map.putAll(getMapInfoEmpresa());
+            map.putAll(getMapInfoEmpresa(razonSocialTituloPrincipal));
             map.putAll(getMapTotales());
             map.putAll(getMapInfoCliente());
             

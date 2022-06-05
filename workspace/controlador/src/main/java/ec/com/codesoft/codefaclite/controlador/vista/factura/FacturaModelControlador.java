@@ -1345,7 +1345,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public enum FormatoReporteEnum implements ParametroUtilidades.ComparadorInterface
     {
         A4("A4",""),
-        A2("A2",""),
+        A2("A2","comprobante_venta_ticket.jrxml"),
         POS_80("POS 80","comprobante_venta_ticket.jrxml"),
         POS_50("POS 50","comprobante_venta_ticket_50.jrxml"),
         POS_40("POS 40","comprobante_venta_ticket_40.jrxml");

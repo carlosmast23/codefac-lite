@@ -226,6 +226,8 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String IMPRIMIR_CODIGO_INTERNO_PRODUCTO="imprimir_codigo_interno_producto";
     
+    public static final String RIDE_NOMBRE_PRINCIPAL="ride_nombre_principal";
+    
 
     @Id
     @Column(name = "ID")

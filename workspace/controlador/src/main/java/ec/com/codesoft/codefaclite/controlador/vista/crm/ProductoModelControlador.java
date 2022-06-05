@@ -333,7 +333,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         categoriaSeleccionada=null;
         iceSeleccionado=null;
         irbpnrSeleccionado=null;
-        
+        generarCodigoAutomatico=false;
+        //getInterazEscritorio().setearChkGenerarCodAutomatico(false);
         
     }
 
@@ -618,6 +619,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     public interface SwingIf extends CommonIf
     {
         public void setearValoresProducto(Producto producto);
+        //public void setearChkGenerarCodAutomatico(Boolean valor);
     }
     
     public interface WebIf extends CommonIf

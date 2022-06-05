@@ -228,6 +228,11 @@ public class ComprobanteElectronicoService implements Runnable {
     private Boolean enviarCorreos;
     
     /**
+     * Variable que me permite saber si la razon social es el titulo principal o el nombre comercial, este campo sirve para mostrar en el ride
+     */
+    private Boolean razonSocialTituloPrincipal;
+    
+    /**
      * Map que me permite establecer nombres alternos para documentos internos, especialmente util cuando no quiere que se llame nota de venta interna
      */
     private Map<ComprobanteEnum,String> aliasNombreDocumentosMap;
@@ -240,6 +245,7 @@ public class ComprobanteElectronicoService implements Runnable {
         this.enviarCorreoComprobanteAutorizado=false;
         this.enviarCorreos=true;
         this.aliasNombreDocumentosMap=new HashMap<ComprobanteEnum,String>();
+        this.razonSocialTituloPrincipal=false;
     }
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
@@ -255,6 +261,7 @@ public class ComprobanteElectronicoService implements Runnable {
         this.enviarCorreoComprobanteAutorizado=false;
         this.enviarCorreos=true;
         this.aliasNombreDocumentosMap=new HashMap<ComprobanteEnum,String>();
+        this.razonSocialTituloPrincipal=false;
     }
 
     public void procesar(Boolean enviarPorLotes) {
@@ -901,7 +908,7 @@ public class ComprobanteElectronicoService implements Runnable {
             }
             
             List<Object> informacionAdiciona = reporte.getDetalles();
-            Map<String, Object> datosMap = reporte.getMapReporte(aliasNombreDocumentosMap);
+            Map<String, Object> datosMap = reporte.getMapReporte(aliasNombreDocumentosMap,razonSocialTituloPrincipal);
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
             datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
@@ -1109,7 +1116,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 //estado=comprobanteAutorizado.getEstado();
             //}
 
-            Map<String, Object> datosMap = reporte.getMapReporte(aliasNombreDocumentosMap);
+            Map<String, Object> datosMap = reporte.getMapReporte(aliasNombreDocumentosMap,razonSocialTituloPrincipal);
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
             datosMap.put("estado","");
@@ -2149,6 +2156,14 @@ public class ComprobanteElectronicoService implements Runnable {
 
     public void setAliasNombreDocumentosMap(Map<ComprobanteEnum, String> aliasNombreDocumentosMap) {
         this.aliasNombreDocumentosMap = aliasNombreDocumentosMap;
+    }
+
+    public Boolean getRazonSocialTituloPrincipal() {
+        return razonSocialTituloPrincipal;
+    }
+
+    public void setRazonSocialTituloPrincipal(Boolean razonSocialTituloPrincipal) {
+        this.razonSocialTituloPrincipal = razonSocialTituloPrincipal;
     }
     
     

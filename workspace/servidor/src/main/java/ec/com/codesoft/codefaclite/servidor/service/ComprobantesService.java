@@ -79,6 +79,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.RideNombrePrincipalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -1791,6 +1792,27 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 mapTipoDocumento.put(comprobanteEnum.getCodigo(),comprobanteEnum.getNombre());
             }
             servicio.setMapCodeAndNameTipoDocumento(mapTipoDocumento);
+            
+            /**
+             * Cargar el parametro del nombre principal para ver cual datos se debe mostrar grande si la razon social o el nombre legal
+             */
+            RideNombrePrincipalEnum rideNombrePrincipal= ParametroUtilidades.obtenerValorParametroEnum(empresa,ParametroCodefac.RIDE_NOMBRE_PRINCIPAL, RideNombrePrincipalEnum.NOMBRE_LEGAL);
+            //Si no encuentra configuracion pongo que por defect m
+            if(rideNombrePrincipal==null)
+            {
+                rideNombrePrincipal=RideNombrePrincipalEnum.RAZON_SOCIAL;
+            }
+            
+            
+            if(rideNombrePrincipal.equals(RideNombrePrincipalEnum.RAZON_SOCIAL))
+            {
+                servicio.setRazonSocialTituloPrincipal(Boolean.TRUE);
+            }
+            else
+            {
+                servicio.setRazonSocialTituloPrincipal(Boolean.FALSE);
+            }
+            
             
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);

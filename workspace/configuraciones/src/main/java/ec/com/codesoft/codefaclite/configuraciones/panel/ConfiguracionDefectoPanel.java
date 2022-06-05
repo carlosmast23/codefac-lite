@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpr
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.RideNombrePrincipalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -132,6 +133,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbProformaFacturarVariasVeces = new javax.swing.JComboBox<>();
         jLabel55 = new javax.swing.JLabel();
         cmbImprimirCodigoInternoProducto = new javax.swing.JComboBox<>();
+        jLabel56 = new javax.swing.JLabel();
+        cmbRideNombrePrincipal = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -441,7 +444,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(jLabel17, gridBagConstraints);
 
         jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel18.setText("Mostrar titulos facturas Físicas");
+        jLabel18.setText("Mostrar titulos facturas Físicas:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 17;
@@ -633,10 +636,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbReporteDefectoVenta, gridBagConstraints);
 
         jLabel37.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel37.setText("Número decimales Ride:");
+        jLabel37.setText("Ride Nombre Principal:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 19;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel37, gridBagConstraints);
@@ -849,6 +852,24 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbImprimirCodigoInternoProducto, gridBagConstraints);
+
+        jLabel56.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel56.setText("Número decimales Ride:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel56, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbRideNombrePrincipal, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -1239,6 +1260,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
+    private javax.swing.JComboBox<RideNombrePrincipalEnum> cmbRideNombrePrincipal;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
     private javax.swing.JComboBox<EnumSiNo> jComboFiltrarFacturaPorUsuario;
@@ -1294,6 +1316,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1694,9 +1717,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.cmbImprimirCodigoInternoProducto = cmbImprimirCodigoInternoProducto;
     }
 
-    
-    
-    
+    public JComboBox<RideNombrePrincipalEnum> getCmbRideNombrePrincipal() {
+        return cmbRideNombrePrincipal;
+    }
+
+    public void setCmbRideNombrePrincipal(JComboBox<RideNombrePrincipalEnum> cmbRideNombrePrincipal) {
+        this.cmbRideNombrePrincipal = cmbRideNombrePrincipal;
+    }
     
    
 }

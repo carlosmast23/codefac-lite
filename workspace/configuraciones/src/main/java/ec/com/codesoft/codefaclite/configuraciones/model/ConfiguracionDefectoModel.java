@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.RideNombrePrincipalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
@@ -176,6 +177,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         //getCmbConfiguracionImpresora().removeAllItems();
         UtilidadesComboBox.llenarComboBox(getCmbConfiguracionImpresora(),ConfiguracionImpresoraEnum.values());
         getCmbConfiguracionImpresora().setSelectedItem(ConfiguracionImpresoraEnum.NINGUNA);
+        
+        UtilidadesComboBox.llenarComboBox(getCmbRideNombrePrincipal(),RideNombrePrincipalEnum.values());
 
         //Agregar los datos del combo de tipo formato de hoja de las ordenes de trabajo
         FormatoHojaEnum[] formatos = FormatoHojaEnum.values();
@@ -313,6 +316,15 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             {
                 ConfiguracionImpresoraEnum configuracionImpresoraEnum=ConfiguracionImpresoraEnum.buscarPorLetra(parametroConfiguracionImpresora.getValor());
                 getCmbConfiguracionImpresora().setSelectedItem(configuracionImpresoraEnum);
+                
+            }
+            
+            
+            ParametroCodefac parametroRideNombrePrincipal = parametrosTodos.get(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL);
+            if(parametroRideNombrePrincipal!=null )
+            {
+                RideNombrePrincipalEnum rideNombrePrincipalEnum=RideNombrePrincipalEnum.buscarPorLetra(parametroRideNombrePrincipal.getValor());
+                getCmbRideNombrePrincipal().setSelectedItem(rideNombrePrincipalEnum);
                 
             }
 
@@ -578,6 +590,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,configuracionImpresoraEnum.getLetra());
         agregarParametroEditar(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
         
+        
         DocumentoEnum documentoDefectoVistaFactura =(DocumentoEnum) getCmbDocumentoDefectoVistaFactura().getSelectedItem();
         if(documentoDefectoVistaFactura!=null)
         {
@@ -782,6 +795,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbMostrarTituloFactFisica().getSelectedItem();
         agregarParametro(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA);
+        
+        RideNombrePrincipalEnum rideNombrePrincipal =(RideNombrePrincipalEnum) getCmbRideNombrePrincipal().getSelectedItem();
+        agregarParametro(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL,(rideNombrePrincipal!=null)?rideNombrePrincipal.getNombre():null);
+        agregarParametroEditar(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL);
 
     }
     

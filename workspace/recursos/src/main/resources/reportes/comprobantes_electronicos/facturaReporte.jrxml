@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="1.46410000000005"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="461"/>
+	<property name="ireport.y" value="397"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -632,7 +632,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="234">
+		<band height="242">
 			<rectangle radius="10">
 				<reportElement x="0" y="3" width="397" height="115" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
 			</rectangle>
@@ -771,7 +771,7 @@
 				<textFieldExpression><![CDATA[$P{ice}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="10">
-				<reportElement x="0" y="123" width="555" height="63" uuid="fdaef8cf-2b3b-4edc-9344-a5292370148a"/>
+				<reportElement x="0" y="123" width="555" height="72" uuid="fdaef8cf-2b3b-4edc-9344-a5292370148a"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="10" y="124" width="120" height="13" uuid="90d5319e-cb06-41a8-a66d-f6c3cff8b655"/>
@@ -781,7 +781,7 @@
 				<text><![CDATA[Otros Datos]]></text>
 			</staticText>
 			<subreport>
-				<reportElement stretchType="RelativeToTallestObject" x="11" y="135" width="524" height="50" uuid="ac53fb98-5fc4-4f8c-89eb-00feb26dab47"/>
+				<reportElement stretchType="RelativeToTallestObject" x="11" y="135" width="524" height="60" uuid="ac53fb98-5fc4-4f8c-89eb-00feb26dab47"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{informacionAdicionalList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_INFO_OTRO}]]></subreportExpression>
 			</subreport>
@@ -924,7 +924,7 @@
 				<text><![CDATA[Valor total sin subsidio]]></text>
 			</staticText>
 			<subreport isUsingCache="true">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="187" width="555" height="47" uuid="12493d25-f0d9-47a1-aeb8-e2ecef0d8d39"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="195" width="555" height="47" uuid="12493d25-f0d9-47a1-aeb8-e2ecef0d8d39"/>
 				<subreportParameter name="campoFirma3">
 					<subreportParameterExpression><![CDATA[$P{campoFirma3}]]></subreportParameterExpression>
 				</subreportParameter>
