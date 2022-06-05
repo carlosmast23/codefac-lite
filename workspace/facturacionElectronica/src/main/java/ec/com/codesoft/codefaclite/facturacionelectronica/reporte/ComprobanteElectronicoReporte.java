@@ -82,13 +82,14 @@ public abstract class ComprobanteElectronicoReporte
         
         if(razonSocialTituloPrincipal)
         {
-            map.put("razon_social",comprobante.getInformacionTributaria().getRazonSocial());
-            map.put("nombre_legal",comprobante.getInformacionTributaria().getNombreComercial());                    
+            map.put("nombre_legal",comprobante.getInformacionTributaria().getRazonSocial());
+            map.put("razon_social",comprobante.getInformacionTributaria().getNombreComercial());
+            
         }
         else
         {
-            map.put("nombre_legal",comprobante.getInformacionTributaria().getRazonSocial());
-            map.put("razon_social",comprobante.getInformacionTributaria().getNombreComercial());
+            map.put("razon_social",comprobante.getInformacionTributaria().getRazonSocial());
+            map.put("nombre_legal",comprobante.getInformacionTributaria().getNombreComercial());                    
         }
         map.put("direccion",comprobante.getInformacionTributaria().getDirecionMatriz());
         //Cambiar por la direccion de las sucursales cuando exista

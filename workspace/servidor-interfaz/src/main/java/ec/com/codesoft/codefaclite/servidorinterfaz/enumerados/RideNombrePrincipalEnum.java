@@ -47,7 +47,7 @@ public enum RideNombrePrincipalEnum implements ParametroUtilidades.ComparadorInt
     @Override
     public RideNombrePrincipalEnum consultarParametro(String nombreParametro) 
     {
-        return RideNombrePrincipalEnum.buscarPorLetra(letra);
+        return RideNombrePrincipalEnum.buscarPorLetra(nombreParametro);
     }
     
     

@@ -590,6 +590,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,configuracionImpresoraEnum.getLetra());
         agregarParametroEditar(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
         
+        RideNombrePrincipalEnum rideNombrePrincipal =(RideNombrePrincipalEnum) getCmbRideNombrePrincipal().getSelectedItem();
+        agregarParametro(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL,(rideNombrePrincipal!=null)?rideNombrePrincipal.getLetra():null);
+        agregarParametroEditar(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL);
         
         DocumentoEnum documentoDefectoVistaFactura =(DocumentoEnum) getCmbDocumentoDefectoVistaFactura().getSelectedItem();
         if(documentoDefectoVistaFactura!=null)
@@ -796,9 +799,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA);
         
-        RideNombrePrincipalEnum rideNombrePrincipal =(RideNombrePrincipalEnum) getCmbRideNombrePrincipal().getSelectedItem();
-        agregarParametro(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL,(rideNombrePrincipal!=null)?rideNombrePrincipal.getNombre():null);
-        agregarParametroEditar(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL);
+
 
     }
     
