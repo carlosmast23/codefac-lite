@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -370,7 +371,8 @@ public class Empresa implements Serializable {
         String nameString="";
         if(nombreLegal!=null && !nombreLegal.isEmpty())
         {
-            nameString=nombreLegal;
+            nameString=UtilidadesTextos.acortarTexto(nombreLegal,25);
+            //nameString=nombreLegal;
         }
         else if(razonSocial!=null && !razonSocial.isEmpty())
         {
