@@ -17,4 +17,6 @@ import java.util.List;
  */
 public interface MarcaProductoServiceIf extends ServiceAbstractIf<MarcaProducto>{
     public List<MarcaProducto> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException;
+    public MarcaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException;
+    public MarcaProducto grabarSinTransaccion(MarcaProducto marcaProducto) throws ServicioCodefacException, RemoteException;
 }

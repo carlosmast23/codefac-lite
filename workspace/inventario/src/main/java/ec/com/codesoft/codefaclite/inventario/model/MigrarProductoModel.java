@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
@@ -138,7 +139,8 @@ public class MigrarProductoModel extends MigrarModel {
                          *             CREA DATOS ADICIONALES EN EL INVENTARIO
                          * ===================================================================
                          */                        
-                        String marca=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MARCA).valor;
+                        //String marca=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MARCA).valor;
+                        grabarMarcaProducto(fila,producto);
                         
                         try
                         {
@@ -335,6 +337,28 @@ public class MigrarProductoModel extends MigrarModel {
         }
 
         producto.setSegmentoProducto(segmentoProducto);
+    }
+    
+    private void grabarMarcaProducto(ExcelMigrar.FilaResultado fila,Producto producto) throws ServicioCodefacException, RemoteException
+    {
+        MarcaProducto marcaProducto =null;
+        String marca = (String) fila.getByEnum(ExcelMigrarProductos.Enum.MARCA).valor;
+        //Si existe un dato ingresado entonces creo ese valor
+        if(!UtilidadesTextos.verificarNullOVacio(marca))
+        {       
+            
+            marcaProducto = ServiceFactory.getFactory().getMarcaProductoServiceIf().buscarPorNombre(session.getEmpresa(), marca);
+            
+            if (marcaProducto == null) 
+            {
+                marcaProducto = new MarcaProducto();
+                marcaProducto.setNombre(marca);
+                marcaProducto.setDescripcion(marca);
+                marcaProducto.setEmpresa(session.getEmpresa());
+            }
+        }
+
+        producto.setMarcaProducto(marcaProducto);
     }
     
     //todo: Mejorar esa parte para no mandar el producto Tmp

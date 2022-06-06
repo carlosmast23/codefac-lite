@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
@@ -113,6 +114,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         SegmentoProducto segmentoProducto=p.getSegmentoProducto();
         p.setSegmentoProducto(null);
         
+        MarcaProducto marcaProducto=p.getMarcaProducto();
+        p.setMarcaProducto(null);
+        
         entityManager.flush();
         entityManager.persist(p);
         entityManager.flush();
@@ -158,8 +162,20 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         
         }
         
+        if(marcaProducto!=null)
+        {
+            if(marcaProducto.getId()==null)
+            {
+                ServiceFactory.getFactory().getMarcaProductoServiceIf().grabarSinTransaccion(marcaProducto);
+                entityManager.flush();
+                marcaProducto=ServiceFactory.getFactory().getMarcaProductoServiceIf().buscarPorNombre(p.getEmpresa(),marcaProducto.getNombre());
+            }
+        
+        }
+        
         p.setTipoProducto(tipoProducto);            
         p.setSegmentoProducto(segmentoProducto);
+        p.setMarcaProducto(marcaProducto);
 
         //Si no son ensables remover datos para no tener incoherencias
         if (!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProductoCodigo())) {

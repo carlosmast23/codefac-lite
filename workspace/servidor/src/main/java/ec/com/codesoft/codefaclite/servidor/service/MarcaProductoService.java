@@ -40,11 +40,20 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                validarGrabar(marcaProducto);
-                marcaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-                entityManager.persist(marcaProducto);
+                //validarGrabar(marcaProducto);
+                //marcaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                //entityManager.persist(marcaProducto);
+                grabarSinTransaccion(marcaProducto);
             }
         });
+        return marcaProducto;
+    }
+    
+    
+    public MarcaProducto grabarSinTransaccion(MarcaProducto marcaProducto) throws ServicioCodefacException, RemoteException {
+        validarGrabar(marcaProducto);
+        marcaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        entityManager.persist(marcaProducto);
         return marcaProducto;
     }
 
@@ -83,6 +92,19 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
         } );
     }
     
+    public MarcaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("empresa", empresa);
+        mapParametros.put("nombre",nombre);
+        List<MarcaProducto> resultados=getFacade().findByMap(mapParametros);
+        if(resultados.size()>0)
+        {
+            return resultados.get(0);
+        }
+        return null;
+    }
     
     
     
