@@ -92,6 +92,11 @@ public class ArchivoConfiguracionesCodefac {
      */
     public static final String CAMPO_FORZAR_ACTUALIZACION="forzar_actualizar";
     
+    /**
+     * Campo que me permite desactivar la publicidad en la parte inferior de la barra lateral despues de realizar una venta
+     */
+    public static final String CAMPO_DESACTIVAR_PUBLICIDAD="desactivar_publicidad";
+    
     private PropertiesConfiguration propiedadesIniciales;
     
     private static ArchivoConfiguracionesCodefac instance;

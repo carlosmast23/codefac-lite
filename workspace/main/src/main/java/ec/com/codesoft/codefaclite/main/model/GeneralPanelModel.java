@@ -2478,7 +2478,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getjSplitPanel().setRightComponent(getJpanelAuxiliar());
             
             //Cargar el componente de publicidad para que siempre exista
-            cargarPublicidad();
+            EnumSiNo desactivarPublicidadEnum=EnumSiNo.NO;
+            String desactivarPublicidadStr=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales().getString(ArchivoConfiguracionesCodefac.CAMPO_DESACTIVAR_PUBLICIDAD);
+            if(desactivarPublicidadStr!=null)
+            {
+                EnumSiNo enumTmp=EnumSiNo.getEnumByNombre(desactivarPublicidadStr);
+                if(enumTmp!=null)
+                {
+                    desactivarPublicidadEnum=enumTmp;
+                }
+            }
+            
+            if(desactivarPublicidadEnum.equals(EnumSiNo.NO))
+            {
+                cargarPublicidad();
+            }
             
             AccesoDirectoServiceIf servicio=ServiceFactory.getFactory().getAccesoDirectoServiceIf();            
             
