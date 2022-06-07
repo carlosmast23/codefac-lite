@@ -123,5 +123,23 @@ create table PRESUPUESTO_DETALLE
     primary key(ID)
 );
 
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.9.1.3)*/
+create table OBJETO_MANTENIMIENTO( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1), 
+    CODIGO varchar(100),
+    NOMBRE varchar(100),
+    DESCRIPCION varchar(100),
+    TIPO varchar(1),   
+    EMPRESA_ID BIGINT,  
+    PROPIETARIO_ID BIGINT,  
 
+    FECHA_CREACION timestamp, 
+    FECHA_ULTIMA_EDICION timestamp, 
+    USUARIO_CREACION_ID BIGINT,  
+    USUARIO_ULTIMA_EDICION_ID BIGINT,  
+    ESTADO varchar(1), 
+    
+    primary key (ID),
+    CONSTRAINT id_propietario_fk FOREIGN KEY (PROPIETARIO_ID) REFERENCES CLIENTE(CLIENTE_ID)
+);
 

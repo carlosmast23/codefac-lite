@@ -40,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ObjetoMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
@@ -236,6 +237,7 @@ public abstract class ServiceFactory {
     public MesaServiceIf getMesaSeviceIf(){return (MesaServiceIf) getRecursosRMI(MesaServiceIf.class);};
     public SegmentoProductoServiceIf getSegmentoProductoServiceIf(){return (SegmentoProductoServiceIf) getRecursosRMI(SegmentoProductoServiceIf.class);};
     public TipoProductoServiceIf getTipoProductoServiceIf(){return (TipoProductoServiceIf) getRecursosRMI(TipoProductoServiceIf.class);};
+    public ObjetoMantenimientoServiceIf getObjetoMantenimientoServiceIf(){return (ObjetoMantenimientoServiceIf) getRecursosRMI(ObjetoMantenimientoServiceIf.class);};
     
     
     /**

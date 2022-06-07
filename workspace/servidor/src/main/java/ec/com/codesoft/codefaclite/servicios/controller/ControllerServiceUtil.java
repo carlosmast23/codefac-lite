@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidor.service.MarcaProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.MesaService;
 import ec.com.codesoft.codefaclite.servidor.service.NacionalidadService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
+import ec.com.codesoft.codefaclite.servidor.service.ObjetoMantenimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.OrdenTrabajoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.OrdenTrabajoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
@@ -103,6 +104,7 @@ import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaServ
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.HerramientasCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
@@ -137,6 +139,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ObjetoMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
@@ -317,7 +320,9 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(LoteService.class, LoteSeviceIf.class);
             mapRecursos.put(MesaService.class, MesaServiceIf.class);
             mapRecursos.put(SegmentoProductoService.class, SegmentoProductoServiceIf.class);
-            mapRecursos.put(TipoProductoService.class, TipoProductoServiceIf.class);
+            mapRecursos.put(TipoProductoService.class, TipoProductoServiceIf.class);            
+            mapRecursos.put(ObjetoMantenimientoService.class, ObjetoMantenimientoServiceIf.class);
+            
             
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);

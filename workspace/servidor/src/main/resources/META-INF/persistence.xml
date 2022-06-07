@@ -108,6 +108,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>
