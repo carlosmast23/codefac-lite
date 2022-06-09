@@ -7,6 +7,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoObjetoMantenimientoEnum;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -35,6 +36,9 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
 
     @Column(name = "DESCRIPCION")
     private String descripcion;
+    
+    @Column(name = "TIPO")
+    private String tipo;
     
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
@@ -98,8 +102,32 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
         this.propietario = propietario;
     }
     
-    
+    public String getTipo() {
+        return tipo;
+    }
 
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+ 
+    
+    
+    ////////////////////////////////////////////////
+    ///         METODOS PERSONALIZADOS
+    ////////////////////////////////////////////////
+
+    public TipoObjetoMantenimientoEnum getTipoEnum() {
+        return TipoObjetoMantenimientoEnum.getEnumByLetra(tipo);
+    }
+
+    public void setTipoEnum(TipoObjetoMantenimientoEnum tipoEnum) {
+        if(tipoEnum!=null)
+        {
+            this.tipo = tipoEnum.getLetra();
+        }
+    }
+    
+    
 
     @Override
     public String toString() {

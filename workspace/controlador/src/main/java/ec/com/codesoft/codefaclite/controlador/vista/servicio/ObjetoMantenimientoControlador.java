@@ -5,23 +5,32 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.servicio;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.*;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.MarcaProductoDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ObjetoMantenimientoBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.SegmentoProductoBusqueda;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.RutaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoObjetoMantenimientoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +43,8 @@ import java.util.logging.Logger;
  */
 public class ObjetoMantenimientoControlador extends ModelControladorAbstract<ObjetoMantenimientoControlador.CommonIf,ObjetoMantenimientoControlador.SwingIf,ObjetoMantenimientoControlador.WebIf> implements VistaCodefacIf {
 
+    private List<TipoObjetoMantenimientoEnum> tipoList;
+    
     private ObjetoMantenimiento objetoMantenimiento;
     
     public ObjetoMantenimientoControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
@@ -42,7 +53,7 @@ public class ObjetoMantenimientoControlador extends ModelControladorAbstract<Obj
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        tipoList=UtilidadesLista.arrayToList(TipoObjetoMantenimientoEnum.values());
     }
 
     @Override
@@ -145,6 +156,41 @@ public class ObjetoMantenimientoControlador extends ModelControladorAbstract<Obj
         this.objetoMantenimiento = segmentoProducto;
     }
 
+    public void listenerBotonBuscarCliente()
+    {
+        ClienteEstablecimientoBusquedaDialogo busqueda=new ClienteEstablecimientoBusquedaDialogo(session);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busqueda);
+        buscarDialogoModel.setVisible(true);
+        if (buscarDialogoModel.getResultado() != null) 
+        {
+            PersonaEstablecimiento personaEstablecimiento= (PersonaEstablecimiento) buscarDialogoModel.getResultado();
+            objetoMantenimiento.setPropietario(personaEstablecimiento.getPersona());
+        }
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    //                      METODOS GET AND SET
+    ///////////////////////////////////////////////////////////////////////////
+
+    public ObjetoMantenimiento getObjetoMantenimiento() {
+        return objetoMantenimiento;
+    }
+
+    public void setObjetoMantenimiento(ObjetoMantenimiento objetoMantenimiento) {
+        this.objetoMantenimiento = objetoMantenimiento;
+    }
+
+    public List<TipoObjetoMantenimientoEnum> getTipoList() {
+        return tipoList;
+    }
+
+    public void setTipoList(List<TipoObjetoMantenimientoEnum> tipoList) {
+        this.tipoList = tipoList;
+    }
+
+    
+
+    
     
     
         
