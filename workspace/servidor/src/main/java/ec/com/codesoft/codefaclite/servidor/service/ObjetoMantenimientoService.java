@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.ObjetoMantenimientoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -127,5 +128,16 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
             return resultados.get(0);
         }
         return null;
+    }
+    
+    public List<ObjetoMantenimiento> buscarPorPropietario(Empresa empresa,Persona propietario) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("empresa", empresa);
+        mapParametros.put("propietario",propietario);
+        List<ObjetoMantenimiento> resultados=getFacade().findByMap(mapParametros);
+        
+        return resultados;
     }
 }

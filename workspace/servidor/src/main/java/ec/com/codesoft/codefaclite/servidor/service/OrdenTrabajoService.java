@@ -6,17 +6,24 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.OrdenTrabajoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.OrdenTrabajoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
@@ -137,5 +144,59 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FINALIZADO);
         entityManager.merge(ordenTrabajo);
         
+    }
+    
+    public List<OrdenTrabajoDetalle> filtrarDetallesPorEstadoYEmpleado(OrdenTrabajoDetalle.EstadoEnum estadoEnum,Empleado empleado)throws ServicioCodefacException, java.rmi.RemoteException 
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("estado",estadoEnum.getLetra());
+        //mapParametros.put("ordenTrabajo.", empresa);
+        mapParametros.put("empleado",empleado);
+        
+        OrdenTrabajoDetalleFacade facade=new OrdenTrabajoDetalleFacade();
+        List<OrdenTrabajoDetalle> resultados=facade.findByMap(mapParametros);        
+        return resultados;
+    }
+    
+    public void terminarDetallesOrdenesTrabajo(Empleado empleado,List<OrdenTrabajoDetalle> detalles) throws ServicioCodefacException, java.rmi.RemoteException 
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() 
+        {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException 
+            {                
+                for (OrdenTrabajoDetalle detalle : detalles) 
+                {
+                    detalle.setEstadoEnum(OrdenTrabajoDetalle.EstadoEnum.TERMINADO);
+                    entityManager.merge(detalle);
+                    entityManager.flush();
+                }
+                
+                if(detalles.size()>0)
+                {
+                    verificarTerminarOrdenTrabajoSinTransaccion(detalles.get(0).getOrdenTrabajo());
+                }
+            }
+        });
+    }
+    
+    public void verificarTerminarOrdenTrabajoSinTransaccion(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, RemoteException
+    {       
+        Boolean terminadoTodo=true;
+        List<OrdenTrabajoDetalle> detalles= ServiceFactory.getFactory().getOrdenDetalleTrabajoServiceIf().buscarPorOrdenTrabajo(ordenTrabajo);
+        for (OrdenTrabajoDetalle detalle : detalles) {
+            //Si tiene cualquier estado diferente de TERMINADO o ANULADO significa que aun no esta terminado
+            if(!detalle.getEstadoEnum().equals(OrdenTrabajoDetalle.EstadoEnum.TERMINADO) && !detalle.getEstadoEnum().equals(OrdenTrabajoDetalle.EstadoEnum.ANULADO))
+            {
+                terminadoTodo=false;
+                break;
+            }
+        }
+        
+        if(terminadoTodo)
+        {
+            ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FINALIZADO);        
+            entityManager.merge(ordenTrabajo);
+        }
     }
 }

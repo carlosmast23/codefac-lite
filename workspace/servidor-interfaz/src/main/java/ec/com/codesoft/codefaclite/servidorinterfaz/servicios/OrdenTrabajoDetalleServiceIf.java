@@ -5,7 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.util.List;
 
 /**
  *
@@ -13,5 +16,5 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
  */
 public interface OrdenTrabajoDetalleServiceIf extends ServiceAbstractIf<OrdenTrabajoDetalle> 
 {
-    
+    public List<OrdenTrabajoDetalle> buscarPorOrdenTrabajo(OrdenTrabajo ordenTrabajo)throws ServicioCodefacException, java.rmi.RemoteException;
 }

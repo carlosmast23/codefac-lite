@@ -109,7 +109,16 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
  
+    
     
     
     ////////////////////////////////////////////////

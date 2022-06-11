@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servicios.reportdata.OrdenTrabajoDataReporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -37,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -160,6 +162,14 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             parametros.put("observacionOrdenTrabajo",(parametroCodefac!=null)?parametroCodefac.getValor():"");
             
             parametros.put("empleado",(session.getUsuario().getEmpleado()!=null)?session.getUsuario().getEmpleado().getNombresCompletos():"");
+            
+            parametros.put("empleado",(session.getUsuario().getEmpleado()!=null)?session.getUsuario().getEmpleado().getNombresCompletos():"");
+            
+            if(this.ordenTrabajo.getObjetoMantenimiento()!=null)
+            {
+                parametros.put("codigo_objeto",this.ordenTrabajo.getObjetoMantenimiento().getCodigo());
+                parametros.put("nombre_objeto",this.ordenTrabajo.getObjetoMantenimiento().getNombre());
+            }
             
             for(OrdenTrabajoDetalle otd : this.ordenTrabajo.getDetalles())
             {
@@ -614,6 +624,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             //GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
             this.ordenTrabajo.setFechaIngreso(new Date(getCmbDateFechaIngreso().getDate().getTime()));
             this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
+            
+            ObjetoMantenimiento objetoMantenimientoTmp= (ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
+            this.ordenTrabajo.setObjetoMantenimiento(objetoMantenimientoTmp);
             //this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
     }
     
@@ -704,6 +717,23 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             getLblRazonSocial().setText(cliente.getRazonSocial());
             getLblNombreLegal().setText(cliente.getEstablecimientos().get(0).getNombreComercial());
             getTxtCliente().setText(cliente.getIdentificacion());
+            cargarObjectosMantenimiento(cliente);
+        }
+    }
+    
+    private void cargarObjectosMantenimiento(Persona cliente)
+    {
+        getCmbObjetoMantenimiento().removeAllItems();
+        if(cliente!=null)
+        {
+            try {
+                List<ObjetoMantenimiento> resultado= ServiceFactory.getFactory().getObjetoMantenimientoServiceIf().buscarPorPropietario(session.getEmpresa(),cliente);
+                UtilidadesComboBox.llenarComboBox(getCmbObjetoMantenimiento(), resultado);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

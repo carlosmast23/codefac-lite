@@ -216,6 +216,13 @@ public enum TipoDocumentoEnum implements ParametroUtilidades.ComparadorInterface
      *              ** DOCUMENTOS PARA EL MODULO ACADEMICO  **       
      * =========================================================================
      */
+    
+    ORDEN_TRABAJO(ModuloCodefacEnum.FACTURACION,
+            "OTR",
+            "Orden de Trabajo",
+            TipoDocumentoEnum.NO_AFECTA_INVETARIO,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.SERVICIOS}),
+    
     PRESUPUESTOS(ModuloCodefacEnum.FACTURACION,
             "PRE",
             "Presupuestos",

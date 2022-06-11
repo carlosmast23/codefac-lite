@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -36,7 +37,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     public OrdenTrabajoPanel() {
         initComponents();
         txtDescripcion.setVisible(false);
-        jLabel3.setVisible(false);        
+        jLabel3.setVisible(false);      
         
     }
 
@@ -222,7 +223,22 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.lblRazonSocial = lblRazonSocial;
     }
     
-    
+    public JComboBox<ObjetoMantenimiento> getCmbObjetoMantenimiento() {
+        return cmbObjetoMantenimiento;
+    }
+
+    public void setCmbObjetoMantenimiento(JComboBox<ObjetoMantenimiento> cmbObjetoMantenimiento) {
+        this.cmbObjetoMantenimiento = cmbObjetoMantenimiento;
+    }
+
+    public JButton getBtnAgregarObjecto() {
+        return btnAgregarObjecto;
+    }
+
+    public void setBtnAgregarObjecto(JButton btnAgregarObjecto) {
+        this.btnAgregarObjecto = btnAgregarObjecto;
+    }
+
     
     
     /**
@@ -281,6 +297,9 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         lblNombreLegal = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         cmbEstadoDetallesOrdenTrabajo = new javax.swing.JComboBox<>();
+        jLabel17 = new javax.swing.JLabel();
+        cmbObjetoMantenimiento = new javax.swing.JComboBox<>();
+        btnAgregarObjecto = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -298,10 +317,10 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Identificación:");
+        jLabel2.setText("Objecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -319,7 +338,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel3.setText("Descripción:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel3, gridBagConstraints);
@@ -360,7 +379,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         getContentPane().add(btnCliente, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -388,7 +407,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -572,7 +591,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -594,14 +613,14 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         lblTotalDetalles.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         getContentPane().add(lblTotalDetalles, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("TOTAL:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         getContentPane().add(jLabel7, gridBagConstraints);
 
         lblCodigo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -650,7 +669,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -660,19 +679,43 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel15.setText("Detalles");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel15, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbEstadoDetallesOrdenTrabajo, gridBagConstraints);
+
+        jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel17.setText("Identificación:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel17, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbObjetoMantenimiento, gridBagConstraints);
+
+        btnAgregarObjecto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/mas-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnAgregarObjecto, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -681,6 +724,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarDetalle;
     private javax.swing.JButton btnAgregarDetalle;
+    private javax.swing.JButton btnAgregarObjecto;
     private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<Empleado> cmbAsignadoADetalle;
@@ -689,6 +733,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetalle;
     private javax.swing.JComboBox<OrdenTrabajo.EstadoEnum> cmbEstadoDetallesOrdenTrabajo;
     private javax.swing.JComboBox<OrdenTrabajo.EstadoEnum> cmbEstadoOrdenTrabajo;
+    private javax.swing.JComboBox<ObjetoMantenimiento> cmbObjetoMantenimiento;
     private javax.swing.JComboBox<PrioridadEnumEstado> cmbPrioridadDetalle;
     private javax.swing.JComboBox<Departamento> cmbTipoOrdenDetalle;
     private javax.swing.JLabel jLabel1;
@@ -699,6 +744,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -726,4 +772,8 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtDescripcion;
     // End of variables declaration//GEN-END:variables
+
+
+
+    
 }

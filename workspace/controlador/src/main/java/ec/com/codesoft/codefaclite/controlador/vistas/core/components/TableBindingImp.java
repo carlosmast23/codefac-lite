@@ -344,10 +344,13 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
                     //Verificar si es el mismo modelo anterior o nuevo nuevo para limpiar los datos de seleccion multiple
                     if(modoSelectedCheck)
                     {
-                        if(!value.equals(listaAnterior))
+                        if(value!=null)
                         {
-                            limpiarDatosSeleccionados();
-                            listaAnterior=value;
+                            if(!value.equals(listaAnterior))
+                            {
+                                limpiarDatosSeleccionados();
+                                listaAnterior=value;
+                            }
                         }
                     }
                     

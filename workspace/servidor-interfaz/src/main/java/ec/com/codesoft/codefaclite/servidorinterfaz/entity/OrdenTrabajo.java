@@ -44,6 +44,9 @@ public class OrdenTrabajo implements Serializable
     @Column(name = "ESTADO")
     private String estado;
     
+    @JoinColumn(name = "OBJECTO_MANTENIMIENTO_ID")
+    private ObjetoMantenimiento objetoMantenimiento;
+    
     /**
      * @deprecated 
      * Todo: Este estado me parece que esta mal ingresado
@@ -124,6 +127,16 @@ public class OrdenTrabajo implements Serializable
     public void setCliente(Persona cliente) {
         this.cliente = cliente;
     }
+
+    public ObjetoMantenimiento getObjetoMantenimiento() {
+        return objetoMantenimiento;
+    }
+
+    public void setObjetoMantenimiento(ObjetoMantenimiento objetoMantenimiento) {
+        this.objetoMantenimiento = objetoMantenimiento;
+    }
+    
+    
 
     /*public String getEstadoDetalles() {
         return estadoDetalles;

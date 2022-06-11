@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.StockMinimoData;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.StockUnicoData;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.inventario.panel.StockMinimoPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -29,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -126,7 +128,7 @@ public class StockReporteModel extends StockMinimoPanel{
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         
-        InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("stockMinimo.jrxml");
+        //InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("stockMinimo.jrxml");
         
         DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
                 @Override
@@ -150,7 +152,8 @@ public class StockReporteModel extends StockMinimoPanel{
                     JasperReport reportDatosAdicionales= obtenerSubReporte();
                     Map<String,Object> mapParametros=new HashMap<String,Object>();
                     mapParametros.put("pl_detalle_item",reportDatosAdicionales);
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path,mapParametros, listaData, panelPadre, "Reporte Stock");
+                    ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_INVENTARIO,"stockMinimo.jrxml", mapParametros, listaData, panelPadre, "Reporte Stock", OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
+                    //ReporteCodefac.generarReporteInternalFramePlantilla(path,mapParametros, listaData, panelPadre, "Reporte Stock");
                     //dispose();
                     //setVisible(false);
                 }
