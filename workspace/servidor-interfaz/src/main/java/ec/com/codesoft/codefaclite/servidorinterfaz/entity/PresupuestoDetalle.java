@@ -63,6 +63,10 @@ public class PresupuestoDetalle implements Serializable
     @JoinColumn(name = "PRODUCTO_ID")
     @ManyToOne
     private Producto producto;    
+    
+    @JoinColumn(name = "BODEGA_ID")
+    @ManyToOne
+    private Bodega bodega;
 
     @JoinColumn(name = "PRESUPUESTO_ID")
     @ManyToOne    
@@ -167,6 +171,15 @@ public class PresupuestoDetalle implements Serializable
     public void setProductoProveedor(ProductoProveedor productoProveedor) {
         this.productoProveedor = productoProveedor;
     }
+
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+    
     
     /**
      * ==========================> METODOS PERSONALIZADOS <====================

@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servicios.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenTrabajoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -29,7 +30,9 @@ import ec.com.codesoft.codefaclite.servicios.panel.PresupuestoPanel;
 import ec.com.codesoft.codefaclite.servicios.reportdata.OrdenCompraDataReporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -49,6 +52,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
@@ -115,6 +120,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Presupuesto presupuesto;
     
     private Producto producto;
+    private Bodega bodega;
     private Persona persona;
     private ProductoProveedor productoProveedor;
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
@@ -550,15 +556,23 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         
         getBtnProducto().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
-                producto = (Producto) buscarDialogoModel.getResultado();
-                if(producto != null)
+            public void actionPerformed(ActionEvent e) 
+            {
+                if(persona!=null)
                 {
-                    verificarExistenciadeProductoProveedor();
-                    getTxtProductoDetalle().setText(producto.getCodigoEAN()+" - "+ producto.getNombre());
+                    if(persona.getIdentificacion().equals(session.getEmpresa().getIdentificacion()))
+                    {
+                        buscarProductosConInventario();
+                    }
+                    else
+                    {
+                        //Buscar el producto sin inventario
+                        buscarProductoSinInventario();
+                    }
+                }
+                else
+                {
+                    DialogoCodefac.mensaje(new CodefacMsj("Por favor seleccione primero un proveedor ",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                 }
             }
         });
@@ -602,6 +616,51 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 eliminarDetallePresupuesto();
             }
         });
+    }
+    
+    private void buscarProductoSinInventario()
+    {
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        producto = (Producto) buscarDialogoModel.getResultado();
+        if (producto != null) {
+            cargarDatosDetallePantalla(producto);
+        }
+    }
+    
+    private void buscarProductosConInventario()
+    {
+        try {
+            //TODO: Ver si esta parte de la bodega se puede optimizar para poder crear directamente en la parte de Busqueda Dialogo y unificar esta parte en la pantalla de facturacion
+            BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+            Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+            if(bodegaVenta==null)
+            {
+                DialogoCodefac.mensaje(new CodefacMsj("No existe un tipo de Bodega de Venta Configurado",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            }
+            
+            ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI, session.getEmpresa(), bodegaVenta);
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
+            buscarDialogoModel.setVisible(true);
+            Kardex kardex = (Kardex) buscarDialogoModel.getResultado();
+            producto=kardex.getProducto();
+            bodega=kardex.getBodega();
+            getTxtPrecioCompra().setText(kardex.getCostoPromedio()+"");
+            cargarDatosDetallePantalla(producto);
+            //kardexSeleccionado = kardex;
+            //productoSeleccionado = kardexSeleccionado.getProducto();
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void cargarDatosDetallePantalla(Producto producto)
+    {
+        verificarExistenciadeProductoProveedor();
+        getTxtProductoDetalle().setText(producto.getCodigoEAN() + " - " + producto.getNombre());
     }
     
     public void addListenerCombos()
@@ -857,6 +916,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
             
             presupuestoDetalle.setProducto(this.producto);
+            presupuestoDetalle.setBodega(this.bodega);
             presupuestoDetalle.setPersona(this.persona);
             if (verificarCamposValidados()) {
                 
@@ -886,6 +946,10 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     presupuestoDetalle.setEstado(EnumSiNo.NO.getLetra());
                 }
                 BigDecimal costo = new BigDecimal(getTxtPrecioVenta().getText());
+                if(costo==null)
+                {
+                    costo=BigDecimal.ZERO;
+                }
                 this.productoProveedor.setCosto(costo.setScale(2, BigDecimal.ROUND_HALF_UP));
                 presupuestoDetalle.setProductoProveedor(this.productoProveedor);
             } else {

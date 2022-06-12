@@ -29,6 +29,13 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         query.setParameter(1, ordenTrabajo);
         return query.getResultList();
     }
+    
+    public List<Presupuesto> buscarPorOrdenTrabajoFacade(OrdenTrabajo ordenTrabajo) {
+        String queryString = " Select DISTINCT (p) From Presupuesto p INNER JOIN p.ordenTrabajoDetalle otd where otd.ordenTrabajo = ?1  ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, ordenTrabajo);
+        return query.getResultList();
+    }
 
     public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal, Persona cliente, Presupuesto.EstadoEnum estadoEnum) {
         //Presupuesto presupuesto;

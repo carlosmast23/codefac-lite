@@ -19,7 +19,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoService
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
@@ -121,6 +123,12 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         return getFacade().consultarPresupuestos(fechaInicial, fechaFinal, cliente, estadoEnum);
     }
     
+    public List<Presupuesto> consultarPorOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,RemoteException
+    {
+        List<Presupuesto> presupuestoList=getFacade().buscarPorOrdenTrabajoFacade(ordenTrabajo);
+             
+        return presupuestoList;
+    }
     
     
 }

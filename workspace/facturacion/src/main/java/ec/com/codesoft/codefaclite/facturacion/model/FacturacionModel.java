@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenTrabajoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
@@ -51,6 +52,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaFisicaDataMa
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FormatoReporteEnum;
 import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.obtenerDecimalesRedondeo;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -174,6 +176,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.Tip
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
@@ -593,6 +596,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         break;
                     case PRESUPUESTOS:
                         agregarPresupuesto();
+                        break;
+                    case ORDEN_TRABAJO:
+                        agregarOrdenTrabajo();
                         break;
                     case INVENTARIO:
                         try {
@@ -1039,6 +1045,40 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return true;
     }
     
+    private void agregarOrdenTrabajo()
+    {
+        OrdenTrabajoBusquedaDialogo ordenTrabajoDialog=null;
+        /*if(getChkFiltroPresupuestoCliente().isSelected())
+        {
+            ordenTrabajoDialog = new FacturaBusquedaPresupuesto(factura.getCliente());
+        }
+        else
+        {
+            ordenTrabajoDialog = new FacturaBusquedaPresupuesto();
+        }*/
+        ordenTrabajoDialog = new OrdenTrabajoBusquedaDialogo();
+        
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(ordenTrabajoDialog);
+        buscarDialogoModel.setVisible(true);
+
+        OrdenTrabajo ordenTrabajoTmp = (OrdenTrabajo) buscarDialogoModel.getResultado();
+
+        if (ordenTrabajoTmp != null) 
+        {
+            try {
+                List<Presupuesto> presupuestoList=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarPorOrdenTrabajo(ordenTrabajoTmp);
+                for (Presupuesto presupuesto : presupuestoList)
+                {
+                    agregarPresupuestoFactura(presupuesto,true);
+                }
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     private void agregarPresupuesto()
     {
         FacturaBusquedaPresupuesto presupuestoDialog=null;
@@ -1055,7 +1095,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         buscarDialogoModel.setVisible(true);
 
         Presupuesto presupuestoTmp = (Presupuesto) buscarDialogoModel.getResultado();
+        agregarPresupuestoFactura(presupuestoTmp,false);
 
+    }
+    
+    private void agregarPresupuestoFactura(Presupuesto presupuestoTmp,Boolean agregarAutomaticamente)
+    {
         if (presupuestoTmp != null) {
 
             if(verificarExistePresupuestoAgregado(presupuestoTmp))
@@ -1078,6 +1123,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     BigDecimal.ZERO);
             
             controlador.setearValoresProducto(facturaDetalle);
+            if(agregarAutomaticamente)
+            {
+                try {
+                    DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                    controlador.agregarDetallesFactura(facturaDetalle, documentoSeleccionado, kardexSeleccionado);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             //controlador.setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
             for (PersonaEstablecimiento establecimiento : presupuestoSeleccionado.getPersona().getEstablecimientos()) {
                 cargarCliente(establecimiento);
