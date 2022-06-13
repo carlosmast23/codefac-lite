@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -41,13 +42,13 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblMostrarDetalle = new javax.swing.JLabel();
         cmbBodega = new javax.swing.JComboBox<>();
         chkTodasBodega = new javax.swing.JCheckBox();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDato = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
+        lblDiasCaducidad = new javax.swing.JLabel();
         txtCategoria = new javax.swing.JTextField();
         chkTodasCategoria = new javax.swing.JCheckBox();
         lblEspacio = new javax.swing.JLabel();
@@ -61,6 +62,15 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         cmbMostrarDetalle = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         txtDiasCaducidad = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cmbSegmento = new javax.swing.JComboBox<>();
+        cmbTipo = new javax.swing.JComboBox<>();
+        chkTodosSegmento = new javax.swing.JCheckBox();
+        chkTodosTipo = new javax.swing.JCheckBox();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtNombreProducto = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -70,14 +80,14 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Mostrar Detalle:");
+        lblMostrarDetalle.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblMostrarDetalle.setText("Mostrar Detalle:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel1, gridBagConstraints);
+        jPanel1.add(lblMostrarDetalle, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -92,14 +102,16 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(chkTodasBodega, gridBagConstraints);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnBuscar, gridBagConstraints);
@@ -108,22 +120,22 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Días Caducidad Tolerancia:");
+        lblDiasCaducidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblDiasCaducidad.setText("Días Caducidad Tolerancia:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel2, gridBagConstraints);
+        jPanel1.add(lblDiasCaducidad, gridBagConstraints);
 
         txtCategoria.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -137,8 +149,9 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         chkTodasCategoria.setSelected(true);
         chkTodasCategoria.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(chkTodasCategoria, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -150,7 +163,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
 
         btnBuscarCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -165,11 +178,13 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbFechaFinal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -178,12 +193,17 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Fecha Inicial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
-        jPanel1.add(cmbFechaInicial, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbFechaInicial, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Categoria:");
@@ -195,27 +215,102 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbMostrarDetalle, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Fecha Final:");
+        jLabel6.setText("Tipo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtDiasCaducidad, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Nombre:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel7, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Fecha Final:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel8, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbSegmento, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbTipo, gridBagConstraints);
+
+        chkTodosSegmento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkTodosSegmento.setSelected(true);
+        chkTodosSegmento.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(chkTodosSegmento, gridBagConstraints);
+
+        chkTodosTipo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkTodosTipo.setSelected(true);
+        chkTodosTipo.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(chkTodosTipo, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(jLabel9, gridBagConstraints);
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Segmento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel10, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtNombreProducto, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -228,23 +323,32 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarCategoria;
     private javax.swing.JCheckBox chkTodasBodega;
     private javax.swing.JCheckBox chkTodasCategoria;
+    private javax.swing.JCheckBox chkTodosSegmento;
+    private javax.swing.JCheckBox chkTodosTipo;
     private javax.swing.JComboBox<Bodega> cmbBodega;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarDetalle;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JComboBox<Bodega> cmbSegmento;
+    private javax.swing.JComboBox<Bodega> cmbTipo;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblDiasCaducidad;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio12;
+    private javax.swing.JLabel lblMostrarDetalle;
     private javax.swing.JTable tblDato;
     private javax.swing.JTextField txtCategoria;
     private javax.swing.JSpinner txtDiasCaducidad;
+    private javax.swing.JTextField txtNombreProducto;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnBuscar() {
@@ -334,9 +438,65 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     public void setTxtDiasCaducidad(JSpinner txtDiasCaducidad) {
         this.txtDiasCaducidad = txtDiasCaducidad;
     }
-    
-    
 
+    public JCheckBox getChkTodosSegmento() {
+        return chkTodosSegmento;
+    }
+
+    public void setChkTodosSegmento(JCheckBox chkTodosSegmento) {
+        this.chkTodosSegmento = chkTodosSegmento;
+    }
+
+    public JCheckBox getChkTodosTipo() {
+        return chkTodosTipo;
+    }
+
+    public void setChkTodosTipo(JCheckBox chkTodosTipo) {
+        this.chkTodosTipo = chkTodosTipo;
+    }
+
+    public JComboBox<Bodega> getCmbSegmento() {
+        return cmbSegmento;
+    }
+
+    public void setCmbSegmento(JComboBox<Bodega> cmbSegmento) {
+        this.cmbSegmento = cmbSegmento;
+    }
+
+    public JComboBox<Bodega> getCmbTipo() {
+        return cmbTipo;
+    }
+
+    public void setCmbTipo(JComboBox<Bodega> cmbTipo) {
+        this.cmbTipo = cmbTipo;
+    }
+
+    public JTextField getTxtNombreProducto() {
+        return txtNombreProducto;
+    }
+
+    public void setTxtNombreProducto(JTextField txtNombreProducto) {
+        this.txtNombreProducto = txtNombreProducto;
+    }
+
+    public JLabel getLblDiasCaducidad() {
+        return lblDiasCaducidad;
+    }
+
+    public void setLblDiasCaducidad(JLabel lblDiasCaducidad) {
+        this.lblDiasCaducidad = lblDiasCaducidad;
+    }
+
+    public JLabel getLblMostrarDetalle() {
+        return lblMostrarDetalle;
+    }
+
+    public void setLblMostrarDetalle(JLabel lblMostrarDetalle) {
+        this.lblMostrarDetalle = lblMostrarDetalle;
+    }
+    
+    
+    
     
     
 }

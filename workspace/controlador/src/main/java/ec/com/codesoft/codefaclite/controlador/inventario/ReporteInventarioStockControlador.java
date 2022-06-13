@@ -143,7 +143,7 @@ public class ReporteInventarioStockControlador extends ModelControladorAbstract<
         try {
             //Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();
             
-            listaStock = ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada, categoriaSeleccionada,session.getEmpresa());
+            listaStock = ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,null, categoriaSeleccionada,null,null,session.getEmpresa());
             
             listaData = new ArrayList<StockMinimoData>();
             

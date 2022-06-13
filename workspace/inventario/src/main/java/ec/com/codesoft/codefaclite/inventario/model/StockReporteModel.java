@@ -28,6 +28,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
@@ -35,6 +37,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -73,7 +76,13 @@ public class StockReporteModel extends StockMinimoPanel{
         listenerBotones();
         listenerCheckBox();
         valoresIniciales();
+        ocultarComponentes();
         setTitle("Reporte Stock");
+    }
+    
+    public void ocultarComponentes()
+    {
+    
     }
     
     private void valoresIniciales() {
@@ -92,6 +101,14 @@ public class StockReporteModel extends StockMinimoPanel{
             //Por defecto aparece desctiva para que buque todas las categorias
             getChkTodasCategoria().setSelected(true);
             getBtnBuscarCategoria().setEnabled(false);
+            
+            //cargar los tipos de productos
+            List<TipoProducto> tipoProductoList=ServiceFactory.getFactory().getTipoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getCmbTipo(), tipoProductoList);
+            
+            //cargar los segmentos de los productos
+            List<SegmentoProducto> segmentoProductoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getCmbSegmento(), segmentoProductoList);
             
             //Cargar los datos del enum de los detalles
             getCmbMostrarDetalle().removeAllItems();
@@ -262,7 +279,31 @@ public class StockReporteModel extends StockMinimoPanel{
                         bodegaSeleccionada=null;
                     }
                     
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,categoriaProducto,session.getEmpresa());
+                    TipoProducto tipoSeleccionada=(TipoProducto) getCmbTipo().getSelectedItem();
+                    if(getChkTodosTipo().isSelected())
+                    {
+                        tipoSeleccionada=null;
+                    }
+                    
+                    SegmentoProducto segmentoProducto=(SegmentoProducto) getCmbSegmento().getSelectedItem();
+                    if(getChkTodosSegmento().isSelected())
+                    {
+                        segmentoProducto=null;
+                    }
+                    
+                    String nombreProducto=getTxtNombreProducto().getText();
+                    if(UtilidadesTextos.verificarNullOVacio(nombreProducto))
+                    {
+                        //Si no tiene nada ingresado envio un null
+                        nombreProducto=null;
+                    }
+                    else
+                    {
+                        //Si quiere poner parte de un nombre pongo los porcentajes para que pueda buscar en cualquier lugar
+                        nombreProducto="%"+nombreProducto+"%";
+                    }
+                    
+                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa());
                     
                     listaData=new ArrayList<StockMinimoData>();
                     
@@ -312,6 +353,10 @@ public class StockReporteModel extends StockMinimoPanel{
                         data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
                         data.setUtilidad1(producto.getValorUnitario().subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
                         
+                        data.setAplicacion(producto.getAplicacionProducto());
+                        data.setTipo(producto.getTipoProducto());
+                        data.setSegmento(producto.getSegmentoProducto());
+                        
                         //Agregar los detalles adicional cuando el producto tiene garantia
                         if(producto.getGarantiaEnum().equals(EnumSiNo.SI) && getCmbMostrarDetalle().getSelectedItem().equals(EnumSiNo.SI))
                         {
@@ -327,7 +372,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         listaData.add(data);                        
                     }
                      
-                     construirTabla();
+                     construirTabla(listaData);
                     
 
                     
@@ -363,7 +408,7 @@ public class StockReporteModel extends StockMinimoPanel{
     }
     
     
-    private void construirTabla()
+    public void construirTabla(List<StockMinimoData> listaData)
     {
         String[] titulo={
             "Código",

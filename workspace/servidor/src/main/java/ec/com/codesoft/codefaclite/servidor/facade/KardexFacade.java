@@ -13,13 +13,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -156,11 +159,11 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,CategoriaProducto categoria,Empresa empresa) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa) throws java.rmi.RemoteException {
         //Kardex k;k.getBodega().getEmpresa();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
         //k.getProducto().getNombre()
-        
+        //Producto p;
         
         String whereBodega="";
         if(bodega!=null)
@@ -170,7 +173,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             //NOTA: Esta parte queda de esta forma por que cuando no tiene asignado una empresa debe funcionar para todos los establecimientos
             if(bodega.getEmpresa()!=null)
             {
-                whereBodega+=" k.bodega.empresa=?5 "; 
+                whereBodega+=" and k.bodega.empresa=?5 "; 
             }
             
         }
@@ -181,10 +184,30 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
         }
         
+        String whereTipo="";
+        if(tipo!=null)
+        {
+            whereTipo=" and k.producto.tipoProducto=?7 ";
+        }
+        
+        String whereSegmento="";
+        if(segmento!=null)
+        {
+            whereTipo=" and k.producto.segmentoProducto=?8 ";
+        }
+        
+       
+        String whereNombreProducto="";
+        if(nombreProducto!=null)
+        {
+            whereNombreProducto=" and LOWER(k.producto.nombre) like LOWER(?9) ";
+        }
+        
+        
         //Kardex kardex;
         //kardex.getBodega().getEstado()
         //Talvez agregar condicion para buscar solo por kardex activos
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) "+whereBodega+whereCategoria+" ORDER BY k.producto.nombre asc";
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+" ORDER BY k.producto.nombre asc";
         Query query = getEntityManager().createQuery(queryString);
         
         
@@ -203,6 +226,21 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         if(categoria!=null)
         {
             query.setParameter(2,categoria);
+        }
+        
+        if(tipo!=null)
+        {
+            query.setParameter(7, tipo);
+        }
+        
+        if(segmento!=null)
+        {
+            query.setParameter(8, segmento);
+        }
+        
+        if(nombreProducto!=null)
+        {
+            query.setParameter(9, nombreProducto);
         }
         
         //query.setParameter(3,GeneralEnumEstado.ELIMINADO.getEstado());

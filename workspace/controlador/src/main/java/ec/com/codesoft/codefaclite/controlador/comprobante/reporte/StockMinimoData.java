@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,13 @@ public class StockMinimoData implements ExcelDatosInterface{
     private BigDecimal pvp1;
     private BigDecimal utilidad1;
     
+    private String aplicacion;
+    private TipoProducto tipo;
+    private SegmentoProducto segmento;
+    
     private List<StockUnicoData> detalles;
+    
+    
 
     public StockMinimoData() {
         detalles=new ArrayList<StockUnicoData>();
@@ -142,6 +150,31 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setUtilidad1(BigDecimal utilidad1) {
         this.utilidad1 = utilidad1;
     }
+
+    public String getAplicacion() {
+        return aplicacion;
+    }
+
+    public void setAplicacion(String aplicacion) {
+        this.aplicacion = aplicacion;
+    }
+
+    public TipoProducto getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoProducto tipo) {
+        this.tipo = tipo;
+    }
+
+    public SegmentoProducto getSegmento() {
+        return segmento;
+    }
+
+    public void setSegmento(SegmentoProducto segmento) {
+        this.segmento = segmento;
+    }
+    
     
     
     

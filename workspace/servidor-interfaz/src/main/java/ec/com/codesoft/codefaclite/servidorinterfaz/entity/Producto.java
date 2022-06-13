@@ -133,8 +133,7 @@ public class Producto implements Serializable, Comparable<Producto> {
     @ManyToOne    
     private CatalogoProducto catalogoProducto;
     
-    @Column(name = "APLICACION_PRODUCTO")
-    
+    @Column(name = "APLICACION_PRODUCTO")    
     private String aplicacionProducto;
     
     @JoinColumn(name = "TIPO_ID")

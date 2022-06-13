@@ -26,7 +26,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -1049,9 +1051,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return getFacade().consultarStockMinimoFacade(bodega,categoria);
     }
     
-    public List<Object[]> consultarStock(Bodega bodega,CategoriaProducto categoria,Empresa empresa) throws java.rmi.RemoteException
+    public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa) throws java.rmi.RemoteException
     {
-        return getFacade().consultarStockFacade(bodega,categoria,empresa);
+        return getFacade().consultarStockFacade(bodega,nombreProducto,categoria,tipo,segmento,empresa);
     }
 
     public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
