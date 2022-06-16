@@ -1,4 +1,7 @@
 
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -13,6 +16,20 @@ import java.util.concurrent.TimeUnit;
  */
 public class TestTexto {
     public static void main(String[] args) {        
-        System.out.println(TimeUnit.DAYS.toSeconds(1));
+        Date fechaActual= UtilidadesFecha.getFechaHoy();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyMMddHHmmSSS");
+        System.out.println(sdf.format(fechaActual));
+        
+        /*fechaActual= UtilidadesFecha.getFechaHoy();
+        sdf=new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        System.out.println(sdf.format(fechaActual));
+        
+        fechaActual= UtilidadesFecha.getFechaHoy();
+        sdf=new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        System.out.println(sdf.format(fechaActual));
+        
+        fechaActual= UtilidadesFecha.getFechaHoy();
+        sdf=new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        System.out.println(sdf.format(fechaActual));*/
     } 
 }

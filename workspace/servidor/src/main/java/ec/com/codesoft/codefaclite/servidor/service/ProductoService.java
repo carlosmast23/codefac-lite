@@ -33,7 +33,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -62,8 +64,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     private void generarCodigoProducto(Producto producto) throws RemoteException,ServicioCodefacException
     {
         UtilidadesService utilidadService=new UtilidadesService();
-        Integer ultimoId=utilidadService.obtenerCodigoMaximoPorId(Producto.NOMBRE_TABLA,Producto.NOMBRE_CAMPO_ID);
-        producto.setCodigoPersonalizado(ultimoId+"");
+        String codigoPersonalizado=UtilidadesCodigos.generarCodigoConTiempo();
+        //Integer ultimoId=utilidadService.obtenerCodigoMaximoPorId(Producto.NOMBRE_TABLA,Producto.NOMBRE_CAMPO_ID);
+        producto.setCodigoPersonalizado(codigoPersonalizado);
     }
       
     public Producto grabar(Producto p,Boolean generarCodigo) throws RemoteException, ServicioCodefacException

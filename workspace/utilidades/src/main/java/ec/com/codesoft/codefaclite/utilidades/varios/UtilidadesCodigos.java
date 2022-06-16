@@ -5,7 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -32,8 +35,27 @@ public abstract class UtilidadesCodigos {
         return codigoEmpresa+separador+codigoSucursal+separador+codigoDocumento+separador;
     }
     
+    /**
+     * Genera un codigo unico alfanumerico muy grande
+     * @return 
+     */
     public static String generarCodigoUnicoUUID()
     {
         return UUID.randomUUID().toString().replace("-","");
+    }
+    
+    /**
+     * TODO: Para que sea exacto este metodo deberia ejecutarse en el servidor, y parece que en este momento se va a generar pero desde el cliente
+     * @return 
+     */
+    public static String generarCodigoConTiempo()
+    {
+        java.util.Date fechaActual= UtilidadesFecha.getFechaHoraHoy();
+        //String anio=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.castDateUtilToSql(fechaActual));
+        //String mes=UtilidadesFecha.obtenerMesStr(UtilidadesFecha.castDateUtilToSql(fechaActual));
+        //String dia=UtilidadesFecha.obtenerDiaStr(UtilidadesFecha.castDateUtilToSql(fechaActual));
+        
+        SimpleDateFormat sdf=new SimpleDateFormat("yyMMddHHmmSSS");
+        return sdf.format(fechaActual);
     }
 }

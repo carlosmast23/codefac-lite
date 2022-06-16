@@ -200,6 +200,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         cmbRepresentante = new javax.swing.JComboBox<>();
         panelDatosPresupuestos = new javax.swing.JPanel();
         chkFiltroPresupuestoCliente = new javax.swing.JCheckBox();
+        jPanel6 = new javax.swing.JPanel();
+        chkOTDetalleUnico = new javax.swing.JCheckBox();
         jTabCartera = new javax.swing.JTabbedPane();
         panelDatosEmpresa = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -1113,6 +1115,20 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         panelTabDatos.addTab("Presupuestos", panelDatosPresupuestos);
 
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        chkOTDetalleUnico.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkOTDetalleUnico.setText("cargar un solo detalle");
+        chkOTDetalleUnico.setToolTipText("Permite filtrar presupuesto solo pertenecientes al cliente seleccionado para la factura");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 20;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel6.add(chkOTDetalleUnico, gridBagConstraints);
+
+        panelTabDatos.addTab("OT", jPanel6);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -1608,6 +1624,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkActivarFinanciamiento;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JCheckBox chkHabilitarCredito;
+    private javax.swing.JCheckBox chkOTDetalleUnico;
     private javax.swing.JCheckBox chkPagoConCartera;
     private javax.swing.JCheckBox chkPorcentajeDescuentoGlobal;
     private javax.swing.JCheckBox cmbConsumidorFinal;
@@ -1670,6 +1687,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2256,10 +2274,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setCmbIvaDescuento(JComboBox<EnumSiNo> cmbIvaDescuento) {
         this.cmbIvaDescuento = cmbIvaDescuento;
     }
-    
-    
-    
-    
-    
+
+    public JCheckBox getChkOTDetalleUnico() {
+        return chkOTDetalleUnico;
+    }
+
+    public void setChkOTDetalleUnico(JCheckBox chkOTDetalleUnico) {
+        this.chkOTDetalleUnico = chkOTDetalleUnico;
+    }
     
 }

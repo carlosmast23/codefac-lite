@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle.EstadoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
@@ -1141,6 +1142,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                             respuesta.codigoPrincipal=producto.getCodigoPersonalizado();
                             break;
 
+                        case ORDEN_TRABAJO:    
                         case PRESUPUESTOS:
                             Presupuesto presupuesto = ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(referenciaId);
                             catalogoProducto = presupuesto.getCatalogoProducto();
@@ -1150,6 +1152,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                                     tipoDocumentoEnum, 
                                     presupuesto);
                             break;
+                        
                     }
                 }
             

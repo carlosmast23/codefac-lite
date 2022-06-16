@@ -153,6 +153,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         addListenerCombos();
         addListenerTablas();
         addListenerTextos();
+        addListenerCheckBox();
         initDatosTabla();
         this.getCmbFechaPresupuesto().setDate(UtilidadesFecha.getFechaHoy());
         this.setEnabled(false);
@@ -726,6 +727,26 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
          presupuesto.setOrdenTrabajoDetalle((OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem());
          getTxtDescripcion().setText(presupuesto.getOrdenTrabajoDetalle().getDescripcion());
 
+    }
+    
+    public void addListenerCheckBox()
+    {
+        getChkInventarioProveedor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                try {
+                    persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(session.getEmpresa().getIdentificacion(),session.getEmpresa());
+                    if(persona != null)
+                    {
+                        getTxtProveedorDetalle().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        });
     }
     
     public void addListenerTextos()

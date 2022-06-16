@@ -57,6 +57,11 @@ public class UtilidadesFecha {
         return new java.sql.Date(fechaHoy.getTime());
     }
     
+    public static java.util.Date getFechaHoraHoy() {
+        java.util.Date fechaHoy = new java.util.Date();
+        return fechaHoy;
+    }
+    
     public static Timestamp getFechaHoyTimeStamp()
     {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());

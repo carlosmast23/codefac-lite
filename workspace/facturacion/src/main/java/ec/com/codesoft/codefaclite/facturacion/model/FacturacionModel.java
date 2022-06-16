@@ -1069,7 +1069,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 List<Presupuesto> presupuestoList=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarPorOrdenTrabajo(ordenTrabajoTmp);
                 for (Presupuesto presupuesto : presupuestoList)
                 {
-                    agregarPresupuestoFactura(presupuesto,true);
+                    presupuesto.setDescripcion(presupuesto.getOrdenTrabajoDetalle().getDescripcion());
+                    if(getChkOTDetalleUnico().isSelected())
+                    {
+                        // Si solo requiere cargar una sola vez entonces agrego solo el detalle principal
+                        agregarPresupuestoFactura(presupuesto,false);                        
+                        setFacturaDetalleSeleccionado(facturaDetalleSeleccionado);
+                        //setFacturaDetalleSeleccionado
+                        break;
+                    }
+                    else
+                    {
+                        agregarPresupuestoFactura(presupuesto,true);
+                    }
                 }
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1099,14 +1111,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
     
-    private void agregarPresupuestoFactura(Presupuesto presupuestoTmp,Boolean agregarAutomaticamente)
+    private FacturaDetalle agregarPresupuestoFactura(Presupuesto presupuestoTmp,Boolean agregarAutomaticamente)
     {
         if (presupuestoTmp != null) {
 
             if(verificarExistePresupuestoAgregado(presupuestoTmp))
             {
                  DialogoCodefac.mensaje("Advertencia","EL presupuesto ya esta agregado, no se puede agregar nuevamente",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                 return;
+                 return null;
             }            
             presupuestoSeleccionado=presupuestoTmp;
             
@@ -1138,7 +1150,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 break;
             }
             
+            return facturaDetalle;
+            
         }
+        return null;
     }
     
     private void agregarRubroAcademico() 
@@ -3355,6 +3370,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     break;
                 case PRESUPUESTOS:
                     activarTabDatos(2);
+                    break;
+                    
+                case ORDEN_TRABAJO:
+                    activarTabDatos(3);
                     break;
                 case INVENTARIO: case LIBRE:
                     activarTabDatos(0);
