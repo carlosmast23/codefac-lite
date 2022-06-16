@@ -84,6 +84,9 @@ public class KardexDetalle implements Serializable ,Cloneable {
     @Column(name = "FECHA_DOCUMENTO")
     private Date fechaDocumento;
     
+    @Column(name = "DESCRIPCION")
+    private String descripcion;
+    
     /**
      * Variable para almacenar el tipo de documento de la referencia para luego poder hacar una consulta
      */
@@ -247,6 +250,16 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public void setFechaDocumento(Date fechaDocumento) {
         this.fechaDocumento = fechaDocumento;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
+    
 
     /*public Lote getLote() {
         return lote;

@@ -43,7 +43,8 @@ create table KARDEX_DETALLE(
     NOMBRE_LEGAL varchar(256),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.6.0)*/
     CODIGO_TIPO_DOCUMENTO_REFERENCIA varchar(16),
-
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.1.6)*/
+    OBSERVACIONES varchar(512), 
     primary key (ID)
 );
 

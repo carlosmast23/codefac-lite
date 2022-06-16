@@ -80,16 +80,29 @@ public abstract class ComprobanteElectronicoReporte
     {
         Map<String,Object> map=new HashMap<String,Object>();
         
+        String nombreLegal=comprobante.getInformacionTributaria().getNombreComercial();
+        String razonSocial=comprobante.getInformacionTributaria().getRazonSocial();
+        
+        if(nombreLegal==null)
+        {
+            nombreLegal="";
+        }
+        
+        if(razonSocial==null)
+        {
+            razonSocial="";
+        }
+        
         if(razonSocialTituloPrincipal)
         {
-            map.put("nombre_legal",comprobante.getInformacionTributaria().getRazonSocial());
-            map.put("razon_social",comprobante.getInformacionTributaria().getNombreComercial());
+            map.put("nombre_legal",razonSocial);
+            map.put("razon_social",nombreLegal);
             
         }
         else
         {
-            map.put("razon_social",comprobante.getInformacionTributaria().getRazonSocial());
-            map.put("nombre_legal",comprobante.getInformacionTributaria().getNombreComercial());                    
+            map.put("razon_social",razonSocial);
+            map.put("nombre_legal",nombreLegal);                    
         }
         map.put("direccion",comprobante.getInformacionTributaria().getDirecionMatriz());
         //Cambiar por la direccion de las sucursales cuando exista
