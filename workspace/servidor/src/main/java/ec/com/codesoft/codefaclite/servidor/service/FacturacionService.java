@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
@@ -667,8 +668,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //TODO: Ver si es necesario grabar en esta parte
         List<FacturaDetalle> facturaDetalleList=factura.getDetalles();
         List<FormaPago> facturaFormasPagoList=factura.getFormaPagos();
+        List<FacturaAdicional> facturaAdicionalList=factura.getDatosAdicionales();
         factura.setFormaPagos(null);
         factura.setDetalles(null);
+        factura.setDatosAdicionales(null);
         entityManager.persist(factura);
         entityManager.flush();
         
@@ -676,6 +679,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         for (FormaPago formaPago : facturaFormasPagoList) {            
             formaPago.setFactura(factura);
             entityManager.persist(formaPago);       
+            entityManager.flush();
+        }
+        
+        for (FacturaAdicional facturaAdicional : facturaAdicionalList) {
+            facturaAdicional.setFactura(factura);
+            entityManager.persist(facturaAdicional);
             entityManager.flush();
         }
 
@@ -722,6 +731,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //Volver a setear la lista a la factura despues de grabar de forma individual los detalles
         factura.setDetalles(facturaDetalleList);
         factura.setFormaPagos(facturaFormasPagoList);
+        factura.setDatosAdicionales(facturaAdicionalList);
             
     }
     
@@ -1168,7 +1178,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         if(getFacade().verificarFacturaActivaIngresadaConPedido(proforma))
         {
-            throw new ServicioCodefacException("No se puede hacer más de 2 facturas con el mismo pedido");
+            //throw new ServicioCodefacException("No se puede hacer más de 2 facturas con el mismo pedido");
         }
     }
     
