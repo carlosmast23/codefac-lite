@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
@@ -94,6 +95,7 @@ public class DestinatarioGuiaRemision implements Serializable{
     
 
     public DestinatarioGuiaRemision() {
+        this.detallesProductos=new ArrayList<DetalleProductoGuiaRemision>();
     }
 
     public Long getId() {
@@ -285,7 +287,7 @@ public class DestinatarioGuiaRemision implements Serializable{
     ///                     METODOS PERSONALIZADOS
     ////////////////////////////////////////////////////////////////////////////
     
-    public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String ruta,String preimpresoFactura,Integer codigoSucursal) throws ServicioCodefacException, RemoteException
+    public static DestinatarioGuiaRemision crearDestinatario(GuiaRemision guiaRemision,Factura factura,String autorizacion,Persona destinatarioCliente,String direccionDestino,java.util.Date fechaFactura,String motivoTraslado,String ruta,String preimpresoFactura,Integer codigoSucursal,ModoProcesarEnum modoForzado) throws ServicioCodefacException, RemoteException
     {
         //todo:Solucion temporal para las facturas fisicas que no tienen número de autorización
         //if(factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
@@ -336,9 +338,15 @@ public class DestinatarioGuiaRemision implements Serializable{
             }
             
             BigDecimal saldoPendiente=ServiceFactory.getFactory().getGuiaRemisionServiceIf().consultarSaldoDetalleFactura(facturaDetalle);
+            //Si encuentra productos que tienen saldo en cero simplemente ya no se agregan
+            //TODO: Ver si esta opcion se puede hacer configurable en el fomulario
+            if(saldoPendiente.compareTo(BigDecimal.ZERO)==0)
+            {
+                continue;
+            }
             
             DetalleProductoGuiaRemision detalle=new DetalleProductoGuiaRemision();
-            detalle.setCantidad(saldoPendiente.intValue());
+            detalle.setCantidad(saldoPendiente);
             detalle.setCodigoAdicional("");
             detalle.setCodigoInterno(facturaDetalle.getReferenciaId()+""); //Todo: Ver si en este campo para futuras versiones se graba mejor el codigo de los productos , sevicios , etc
             detalle.setDescripcion(facturaDetalle.getDescripcion().replace("\n"," "));
@@ -346,11 +354,12 @@ public class DestinatarioGuiaRemision implements Serializable{
             destinatario.addProducto(detalle);
         }        
         
-        if(destinatario.getDetallesProductos()==null || destinatario.getDetallesProductos().size()==0)
+        if(modoForzado.equals(ModoProcesarEnum.NORMAL))
         {
-            throw new ServicioCodefacException("El destinatario no tiene ningun detalle");
-            //DialogoCodefac.mensaje(new CodefacMsj("El destinatario no tiene ningun detalle",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-            //return null;
+            if(destinatario.getDetallesProductos()==null || destinatario.getDetallesProductos().size()==0)
+            {
+                throw new ServicioCodefacException("El destinatario no tiene ningun detalle");
+            }
         }
         
         return destinatario;

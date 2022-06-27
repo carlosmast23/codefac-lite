@@ -107,7 +107,7 @@ create table DETALLE_PRODUCTO_GUIA_REMISION
     CODIGO_INTERNO varchar(32),
     CODIGO_ADICIONAL varchar(64),
     DESCRIPCION varchar(256),
-    CANTIDAD integer,
+    CANTIDAD decimal(13,5),
     REFERENCIA_ID BIGINT,
     primary key (ID)
 );

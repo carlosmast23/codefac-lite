@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.Destinatar
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -277,9 +278,13 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
                         motivoTraslado,
                         "", //Todo: Completar este dato de la ruta
                         ventas.getPreimpreso(),
-                        codigoSucursal);
+                        codigoSucursal,
+                        ModoProcesarEnum.FORZADO);
                 
-                guiaRemision.addDestinario(destinatario);
+                if(destinatario.getDetallesProductos().size()>0)
+                {                
+                    guiaRemision.addDestinario(destinatario);
+                }
                 
             } catch (ServicioCodefacException ex) {
                 //DialogoCodefac.mensaje(new CodefacMsj("Error factura:"+ventas.getPreimpreso()+" \nMotivo: "+ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));

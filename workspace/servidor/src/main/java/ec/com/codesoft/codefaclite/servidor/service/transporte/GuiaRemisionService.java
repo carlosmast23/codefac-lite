@@ -82,9 +82,9 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
             
             for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) 
             {
-                if(detallesProducto.getCantidad()<=0)
+                if(detallesProducto.getCantidad().compareTo(BigDecimal.ZERO)<=0)
                 {
-                    throw new ServicioCodefacException("No se puede emitir guias de remision con cantidad iguales o menores que cero");
+                    throw new ServicioCodefacException("No se puede emitir guias de remisión con cantidades iguales o menores que cero\nProducto con problema: "+detallesProducto.getDescripcion());
                 }
                 
                 FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
@@ -231,7 +231,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         {
             if(detalleGuia.getDestinatario().getGuiaRemision().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO) || detalleGuia.getDestinatario().getGuiaRemision().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
             {
-                totalEnviado=totalEnviado.add(new BigDecimal(detalleGuia.getCantidad()));
+                totalEnviado=totalEnviado.add(detalleGuia.getCantidad());
             }
         }
         return facturaDetalle.getCantidad().subtract(totalEnviado);

@@ -25,10 +25,10 @@ import org.eclipse.persistence.sessions.factories.SessionFactory;
 public class SubreporteGuiaRemisionProductoData {
     private String codigoInterno;
     private String nombre;
-    private int cantidad;
+    private BigDecimal cantidad;
     private BigDecimal subtotal;
 
-    public SubreporteGuiaRemisionProductoData(String codigoInterno,String nombre, int cantidad, BigDecimal subtotal) {
+    public SubreporteGuiaRemisionProductoData(String codigoInterno,String nombre, BigDecimal cantidad, BigDecimal subtotal) {
         this.codigoInterno=codigoInterno;
         this.nombre = nombre;
         this.cantidad = cantidad;
@@ -43,11 +43,11 @@ public class SubreporteGuiaRemisionProductoData {
         this.nombre = nombre;
     }
 
-    public int getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -94,7 +94,7 @@ public class SubreporteGuiaRemisionProductoData {
             {
                 
                 subReporte.subtotal=subReporte.subtotal.add(subtotalProducto);
-                subReporte.cantidad+=productoNuevo.getCantidad();
+                subReporte.cantidad=subReporte.cantidad.add(productoNuevo.getCantidad());
                 
                 //subReporte.nombre=productoNuevo.get;
                 return;

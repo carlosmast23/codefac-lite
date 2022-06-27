@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ public class ConsolidadoCargaData {
     private String codigoInterno;
     private String codigoAdicional;
     private String descripcion;
-    private Integer cantidad;
+    private BigDecimal cantidad;
     private BigDecimal total;
     
     
@@ -57,7 +58,7 @@ public class ConsolidadoCargaData {
          
     }
 
-    public ConsolidadoCargaData(String codigoInterno, String codigoAdicional, String descripcion, Integer cantidad) {
+    public ConsolidadoCargaData(String codigoInterno, String codigoAdicional, String descripcion, BigDecimal cantidad) {
         this.codigoInterno = codigoInterno;
         this.codigoAdicional = codigoAdicional;
         this.descripcion = descripcion;
@@ -88,11 +89,11 @@ public class ConsolidadoCargaData {
         this.descripcion = descripcion;
     }
 
-    public Integer getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -110,9 +111,9 @@ public class ConsolidadoCargaData {
     //                  METODOS PERSONALAZIDOS                             ////
     ///////////////////////////////////////////////////////////////////////////
     
-    public void agregarCantidad(Integer cantidad)
+    public void agregarCantidad(BigDecimal cantidad)
     {
-        this.cantidad+=cantidad;
+        this.cantidad=this.cantidad.add(cantidad);
     }
     
     

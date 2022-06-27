@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpr
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -689,7 +690,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                     getTxtMotivoTraslado().getText(),
                     getTxtRuta().getText(),
                     getTxtPreimpreso().getText(),
-                    (Integer) getTxtCodigoSucursal().getValue());   
+                    (Integer) getTxtCodigoSucursal().getValue(),
+                    ModoProcesarEnum.NORMAL);   
             
             return destinatario;
             
@@ -1221,7 +1223,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                     {
                         try
                         {
-                            Integer nuevaCantidad=Integer.parseInt(cantidadTxt);
+                            BigDecimal nuevaCantidad=new BigDecimal(cantidadTxt);
                             detalle.setCantidad(nuevaCantidad);
                             imprimirTabla();
                         }

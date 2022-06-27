@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -202,15 +203,15 @@ public class GuiaRemision extends ComprobanteEntity<GuiaRemisionAdicional> imple
         this.destinatarios.add(detalle);
     }
 
-    public Integer obtenerTotalProductos()
+    public BigDecimal obtenerTotalProductos()
     {
-        Integer cantidad=0;
+        BigDecimal cantidad=BigDecimal.ZERO;
         if(destinatarios!=null)
         {
             for (DestinatarioGuiaRemision destinatario : destinatarios) 
             {
                 for (DetalleProductoGuiaRemision detalle : destinatario.getDetallesProductos()) {
-                    cantidad+=detalle.getCantidad();
+                    cantidad=cantidad.add(detalle.getCantidad());
                 }
             }
         }
@@ -256,16 +257,16 @@ public class GuiaRemision extends ComprobanteEntity<GuiaRemisionAdicional> imple
     /**
      * =============> DATOS ADICIONALES <===============
      */
-    public Integer obtenerTotalItems()
+    public BigDecimal obtenerTotalItems()
     {
-        Integer total=0;
+        BigDecimal total=BigDecimal.ZERO;
         if(destinatarios!=null)
         {
             for (DestinatarioGuiaRemision destinatario : destinatarios) {
                 if(destinatario.getDetallesProductos()!=null)
                 {
                     for (DetalleProductoGuiaRemision detalleProducto : destinatario.getDetallesProductos()) {
-                       total+=detalleProducto.getCantidad(); 
+                       total=total.add(detalleProducto.getCantidad()); 
                     }
                 }
             }

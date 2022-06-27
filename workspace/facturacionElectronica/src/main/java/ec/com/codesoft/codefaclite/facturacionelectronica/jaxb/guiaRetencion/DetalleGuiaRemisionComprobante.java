@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -22,7 +23,7 @@ public class DetalleGuiaRemisionComprobante implements Serializable{
     private String codigoInterno;
     private String codigoAdicional;
     private String descripcion;
-    private Integer cantidad;
+    private BigDecimal cantidad;
 
     public DetalleGuiaRemisionComprobante() {
     }
@@ -55,11 +56,11 @@ public class DetalleGuiaRemisionComprobante implements Serializable{
     }
 
     @XmlElement(name = "cantidad")
-    public Integer getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
     

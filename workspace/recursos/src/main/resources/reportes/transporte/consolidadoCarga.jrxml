@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="1.7684607682500055"/>
-	<property name="ireport.x" value="43"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
@@ -28,7 +28,7 @@
 	<field name="codigoInterno" class="java.lang.String"/>
 	<field name="codigoAdicional" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
-	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="cantidad" class="java.math.BigDecimal"/>
 	<field name="total" class="java.math.BigDecimal"/>
 	<variable name="TOTAL_SUMA" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{total}]]></variableExpression>
@@ -193,7 +193,7 @@
 				<textElement textAlignment="Right">
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cantidad}.setScale(3, RoundingMode.HALF_UP)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="506" y="0" width="49" height="15" uuid="5c63b96c-1148-46b7-b9da-a2556b96d2c1"/>

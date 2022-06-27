@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +36,7 @@ public class DetalleProductoGuiaRemision implements Serializable{
     @Column(name = "DESCRIPCION")
     private String descripcion;
     @Column(name = "CANTIDAD")
-    private Integer cantidad;
+    private BigDecimal cantidad;
     
     @Column(name = "REFERENCIA_ID")
     private Long referenciaId; //Almacena la referencia al producto , TODO: verificar si tambien se graba cuando son de otro lado la referencia por ejemplo de presupuestos , por el momento se asume que viene de la tabla de productos
@@ -77,11 +78,11 @@ public class DetalleProductoGuiaRemision implements Serializable{
         this.descripcion = descripcion;
     }
 
-    public Integer getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
