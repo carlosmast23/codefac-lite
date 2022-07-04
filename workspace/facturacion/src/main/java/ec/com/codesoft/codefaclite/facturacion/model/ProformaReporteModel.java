@@ -116,6 +116,7 @@ public class ProformaReporteModel extends ProformaReportePanel {
                 dato.setDescFactura(proforma.getDescuentoImpuestos().add(proforma.getDescuentoSinImpuestos()).toString());
                 dato.setIvaDoceFactura(proforma.getIva().toString());
                 dato.setTotalFinal(proforma.getTotal().toString());
+                dato.setUsuario(proforma.getUsuario().getNick());
                 datosReporte.add(dato);
                 
                 agregarValorTotal("acum", proforma.getSubtotalSinImpuestos());
