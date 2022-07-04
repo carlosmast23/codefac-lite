@@ -2944,7 +2944,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     @Override
     @Deprecated //No tener dependencia con las pantallas para que se puedan generar los reportes de forma independiente desde el modulo del Servidor
     public Map<String, Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
-        return ReporteCodefac.mapReportePlantilla(sessionCodefac.getSucursal(), sessionCodefac.getUsuario(), orientacionEnum, formatoReporte);
+        return ReporteCodefac.mapReportePlantilla(sessionCodefac.getSucursal(), sessionCodefac.getUsuario(), orientacionEnum, formatoReporte,true);
 //        InputStream inputStream = null;
 //
 //        SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");

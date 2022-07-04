@@ -207,7 +207,13 @@ public class ReporteCodefac {
     public static JasperPrint generarReporteInternalFramePlantillaReturn(Sucursal sucursal,Usuario usuario,RecursoCodefac recursoCodefac,String nombre, Map<String, Object> parametros, Collection datos, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora) {
         
         //mapReportePlantilla(sucursal, usuario, orientacionEnum, formatoReporte);
-        return construirReporte(sucursal, usuario, recursoCodefac, nombre, parametros, datos, tituloReporte, orientacionEnum, formatoReporte);
+        return construirReporte(sucursal, usuario, recursoCodefac, nombre, parametros, datos, tituloReporte, orientacionEnum, formatoReporte,true);
+    }
+    
+    public static JasperPrint generarReporteInternalFramePlantillaReturn(Sucursal sucursal,Usuario usuario,RecursoCodefac recursoCodefac,String nombre, Map<String, Object> parametros, Collection datos, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora,Boolean mostrarFechaHora) {
+        
+        //mapReportePlantilla(sucursal, usuario, orientacionEnum, formatoReporte);
+        return construirReporte(sucursal, usuario, recursoCodefac, nombre, parametros, datos, tituloReporte, orientacionEnum, formatoReporte,mostrarFechaHora);
     }
     
     public static void generarReporteInternalFramePlantillaArchivo(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,String path) {
@@ -265,9 +271,9 @@ public class ReporteCodefac {
         return null;
     }
     
-    private static JasperPrint construirReporte(Sucursal sucursal,Usuario usuario,RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
+    private static JasperPrint construirReporte(Sucursal sucursal,Usuario usuario,RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,Boolean mostrarFechaUsuario)
     {
-        Map<String,Object> mapCompleto=mapReportePlantilla(sucursal, usuario, orientacionEnum, formatoReporte);
+        Map<String,Object> mapCompleto=mapReportePlantilla(sucursal, usuario, orientacionEnum, formatoReporte,mostrarFechaUsuario);
         //TODO: Optimizar la forma de unir las utilidadesMap
         for (Map.Entry<String, Object> entry : parametros.entrySet()) {
             String key = entry.getKey();
@@ -541,7 +547,7 @@ public class ReporteCodefac {
      * @param formatoReporte
      * @return 
      */
-    public static Map<String, Object> mapReportePlantilla(Sucursal sucursal,Usuario usuario,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
+    public static Map<String, Object> mapReportePlantilla(Sucursal sucursal,Usuario usuario,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,Boolean mostrarFechaUsuario) {
         
         Map<String, Object> parametros = new HashMap<String, Object>();
         try {
@@ -550,8 +556,11 @@ public class ReporteCodefac {
 
             SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
             
-            parametros.put("pl_fecha_hora", formateador.format(new Date()));
-            parametros.put("pl_usuario", usuario.getNick());
+            if(mostrarFechaUsuario)
+            {
+                parametros.put("pl_fecha_hora", formateador.format(new Date()));
+                parametros.put("pl_usuario", usuario.getNick());
+            }
             parametros.put("pl_direccion", sucursal.getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
             parametros.put("pl_razon_social",sucursal.getEmpresa().getRazonSocial());
 

@@ -181,6 +181,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         lblEspacio23 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         txtPrecio1SinSubsidio = new javax.swing.JTextField();
+        jPanel8 = new javax.swing.JPanel();
+        lblEspacio24 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        txtPrecio1SinSubsidio1 = new javax.swing.JTextField();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        jDateFechaEmision = new org.jdesktop.swingx.JXDatePicker();
+        jDateFechaEmision1 = new org.jdesktop.swingx.JXDatePicker();
 
         setClosable(true);
         setIconifiable(true);
@@ -965,6 +973,64 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         tabMenu.addTab("Otros", jPanel7);
 
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel8.add(lblEspacio24, gridBagConstraints);
+
+        jLabel37.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel37.setText("Fecha Inicial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel37, gridBagConstraints);
+
+        txtPrecio1SinSubsidio1.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(txtPrecio1SinSubsidio1, gridBagConstraints);
+
+        jLabel38.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel38.setText("Fecha Final:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel38, gridBagConstraints);
+
+        jLabel39.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel39.setText("Porcentaje Descuento");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel39, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
+        jPanel8.add(jDateFechaEmision, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
+        jPanel8.add(jDateFechaEmision1, gridBagConstraints);
+
+        tabMenu.addTab("Descuentos", jPanel8);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -1010,6 +1076,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIrbpnr;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIva;
+    private org.jdesktop.swingx.JXDatePicker jDateFechaEmision;
+    private org.jdesktop.swingx.JXDatePicker jDateFechaEmision1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1040,6 +1108,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1053,6 +1124,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1062,6 +1134,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio23;
+    private javax.swing.JLabel lblEspacio24;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacio5;
@@ -1085,6 +1158,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JTextField txtPV5;
     private javax.swing.JTextField txtPV6;
     private javax.swing.JTextField txtPrecio1SinSubsidio;
+    private javax.swing.JTextField txtPrecio1SinSubsidio1;
     private javax.swing.JTextField txtPrecioDistribuidor;
     private javax.swing.JTextField txtPrecioTarjeta;
     private javax.swing.JTextField txtProductoEnsamble;

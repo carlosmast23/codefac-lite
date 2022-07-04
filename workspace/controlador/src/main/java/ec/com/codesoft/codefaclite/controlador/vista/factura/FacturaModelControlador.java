@@ -1264,7 +1264,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 "Proforma", 
                 OrientacionReporteEnum.VERTICAL, 
                 FormatoHojaEnum.A4,
-                ConfiguracionImpresoraEnum.NINGUNA
+                ConfiguracionImpresoraEnum.NINGUNA,
+                false
                 );
     }
 
