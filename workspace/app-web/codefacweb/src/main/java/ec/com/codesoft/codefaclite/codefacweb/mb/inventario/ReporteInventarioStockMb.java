@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.codefacweb.mb.inventario;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.StockMinimoData;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.inventario.ReporteInventarioStockControlador;
@@ -30,6 +31,7 @@ import javax.faces.bean.ViewScoped;
 public class ReporteInventarioStockMb extends GeneralAbstractMb implements ControladorVistaIf, ReporteInventarioStockControlador.WebIf
 {
     private ReporteInventarioStockControlador controlador;
+    private List<StockMinimoData> filtroLista;
     
     public ModelControladorAbstract getControladorVista() {
         return controlador;
@@ -102,6 +104,16 @@ public class ReporteInventarioStockMb extends GeneralAbstractMb implements Contr
     public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public List<StockMinimoData> getFiltroLista() {
+        return filtroLista;
+    }
+
+    public void setFiltroLista(List<StockMinimoData> filtroLista) {
+        this.filtroLista = filtroLista;
+    }
+    
+    
     
     ////////////////////////////////////////////////////////////////////////////
     ///                     GET AND SET

@@ -39,11 +39,30 @@
                 </div>
                 <div class="p-grid" style="text-align: left" >
                     <div class="p-col-12 p-md-12 p-lg-12" >
-                        <p:dataTable id="tblDatos" var="dato" value="#{reporteInventarioStockMb.controlador.listaData}" reflow="true" >
+                        <p:dataTable 
+                            widgetVar="tblDatos"
+                            id="tblDatos" 
+                            var="dato" 
+                            value="#{reporteInventarioStockMb.controlador.listaData}" 
+                            reflow="true" 
+                            filteredValue="#{reporteInventarioStockMb.filtroLista}"
+                            globalFilter="true"
+                            >
+                            <f:facet name="header">
+                                <div class="p-d-flex p-ai-center p-jc-between">
+                                    <span>Filtrar Resultado</span>
+                                    <div>
+                                        <p:inputText id="globalFilter" onkeyup="PF('tblDatos').filter()"  placeholder="Ingrese una palabra" />                                        
+                                    </div>
+                                </div>
+
+                            </f:facet>
+                            
+                            
                             <p:column headerText="Código">
                                 <h:outputText value="#{dato.codigo}" />
                             </p:column>
-                            <p:column headerText="Producto">
+                            <p:column headerText="Producto" filterBy="#{dato.producto}">
                                 <h:outputText value="#{dato.producto}" />
                             </p:column>
                             <p:column headerText="Stock">
