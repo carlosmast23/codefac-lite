@@ -71,7 +71,7 @@
 				</reportElement>
 				<imageExpression><![CDATA[$P{pl_img_instagram}]]></imageExpression>
 			</image>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="47" y="29" width="90" height="20" uuid="7bd5e7a9-0d75-414e-845c-e2f923853287"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
