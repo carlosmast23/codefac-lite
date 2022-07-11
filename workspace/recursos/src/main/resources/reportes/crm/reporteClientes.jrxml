@@ -14,7 +14,7 @@
 	</parameter>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
-	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
+	<parameter name="pl_nombre_empresa" class="java.lang.String"/>pl_img_instagram
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_usuario" class="java.lang.String"/>
 	<parameter name="pl_titulo" class="java.lang.String"/>
