@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.0980750000000123"/>
+	<property name="ireport.zoom" value="2.3538212825407787"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="54"/>
+	<property name="ireport.y" value="15"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -271,7 +271,7 @@
 	<pageHeader>
 		<band height="61" splitType="Stretch">
 			<textField>
-				<reportElement x="406" y="15" width="148" height="15" uuid="5359034a-bef0-4d6c-a791-1d98dae1b744"/>
+				<reportElement x="432" y="15" width="122" height="15" uuid="5359034a-bef0-4d6c-a791-1d98dae1b744"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -284,7 +284,7 @@
 				<textFieldExpression><![CDATA[$P{codigo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="406" y="0" width="148" height="15" uuid="7d8e9256-1abb-4d32-9d8f-9b3d81ad61be"/>
+				<reportElement x="432" y="0" width="122" height="15" uuid="7d8e9256-1abb-4d32-9d8f-9b3d81ad61be"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -319,7 +319,7 @@
 				<text><![CDATA[Telefonos:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="277" y="15" width="54" height="15" uuid="a85d17f1-97cb-4c53-9a2c-4bac04ea09fb"/>
+				<reportElement x="266" y="15" width="76" height="15" uuid="a85d17f1-97cb-4c53-9a2c-4bac04ea09fb"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -330,11 +330,11 @@
 				<textFieldExpression><![CDATA[$P{telefonos}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="332" y="15" width="59" height="15" uuid="7103700e-d5ef-416d-876c-59cc811fe8b6"/>
+				<reportElement x="342" y="15" width="79" height="15" uuid="7103700e-d5ef-416d-876c-59cc811fe8b6"/>
 				<textFieldExpression><![CDATA[$P{fechaIngreso}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="277" y="0" width="54" height="15" uuid="3850b53f-6b00-448f-a344-ff0e93e75055"/>
+				<reportElement x="266" y="0" width="76" height="15" uuid="3850b53f-6b00-448f-a344-ff0e93e75055"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -348,7 +348,7 @@
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="332" y="0" width="59" height="15" uuid="6de6056a-ef2d-4eb1-aed8-907a3d86ae83"/>
+				<reportElement x="342" y="0" width="79" height="15" uuid="6de6056a-ef2d-4eb1-aed8-907a3d86ae83"/>
 				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -361,6 +361,17 @@
 			<textField>
 				<reportElement x="79" y="45" width="385" height="15" uuid="86aacb51-073c-4109-acf2-d225f9f03171"/>
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="266" y="30" width="76" height="15" uuid="31c2ac09-5cb5-4760-a032-b0caf49b46cd"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Responsable:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="342" y="30" width="123" height="15" uuid="d31ecb26-6f5e-4fc3-90b0-a8282e45a591"/>
+				<textFieldExpression><![CDATA[$P{empleado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

@@ -54,9 +54,8 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     public Vector<ColumnaDialogo> getColumnas() 
     {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Código", 0.2d));
-        titulo.add(new ColumnaDialogo("Código Aux", 0.2d));
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
+        titulo.add(new ColumnaDialogo("Código", 0.2d));        
         titulo.add(new ColumnaDialogo("Precio Unit", 0.1d));
         titulo.add(new ColumnaDialogo("IVA", 0.1d));        
         titulo.add(new ColumnaDialogo("ICE", 0.1d));        
@@ -174,8 +173,8 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     @Override
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
-        propiedades.add("codigoPersonalizado");
         propiedades.add("nombre");
+        propiedades.add("codigoPersonalizado");        
         propiedades.add("valorUnitario");
         propiedades.add("catalogoProducto.iva");
         propiedades.add("catalogoProducto.ice");
