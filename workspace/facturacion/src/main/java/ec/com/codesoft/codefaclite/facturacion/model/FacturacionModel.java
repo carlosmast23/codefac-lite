@@ -1995,7 +1995,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
-                FacturaModelControlador.imprimirComprobanteVenta(factura, FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA,false,session,panelPadre);
+                //todo: unificar para obtener el nombre desde un mismo lugar
+                //en Comprobantes service existe un metodo similar
+                String aliasNotaVentaInterna=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
+                if(aliasNotaVentaInterna==null || aliasNotaVentaInterna.trim().isEmpty())
+                {                   
+                    aliasNotaVentaInterna=FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA;
+                }    
+                    
+                FacturaModelControlador.imprimirComprobanteVenta(factura,aliasNotaVentaInterna,false,session,panelPadre);
             }
         }
     }
