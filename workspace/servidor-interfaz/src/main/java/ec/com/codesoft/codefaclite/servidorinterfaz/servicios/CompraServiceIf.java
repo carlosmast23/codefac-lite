@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -32,6 +33,7 @@ public interface CompraServiceIf extends ServiceAbstractIf<Compra>
     public List<Compra> obtenerCompraDisenable() throws java.rmi.RemoteException;
     public void eliminarCompra(Compra compra) throws ServicioCodefacException,RemoteException;
     public void eliminarCompraSinTransaccion(Compra compra) throws ServicioCodefacException, RemoteException;
-    public Compra obtenerCompraDesdeXml(RemoteInputStream archivoCompraXml,Empresa empresa) throws RemoteException,ServicioCodefacException;
+    //public Compra obtenerCompraDesdeXml(RemoteInputStream archivoCompraXml,Empresa empresa) throws RemoteException,ServicioCodefacException;
+    public Compra obtenerCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException;
     
 }

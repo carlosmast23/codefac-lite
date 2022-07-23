@@ -96,7 +96,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public Compra obtenerCompraDesdeXml(RemoteInputStream archivoCompraXml,Empresa empresa) throws RemoteException,ServicioCodefacException
+    /*public Compra obtenerCompraDesdeXml(RemoteInputStream archivoCompraXml,Empresa empresa) throws RemoteException,ServicioCodefacException
     {        
         InputStream inputStream=null;
         try {            
@@ -131,6 +131,41 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             } catch (IOException ex) {
                 Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        return null;
+    }*/
+    
+    public Compra obtenerCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException
+    {        
+        //InputStream inputStream=null;
+        try {            
+            //ParametroCodefac parametroEmpresa = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa);
+            //String pathServidor = parametroEmpresa.getValor();
+            
+            //Path pathDirectorioTmp=Paths.get(pathServidor+"/"+DirectorioCodefac.TEMP.getNombre());
+            
+            //UtilidadesArchivos.crearRutaDirectorio(pathDirectorioTmp.toString());
+            
+            //Path fileTmp=Files.createTempFile(pathDirectorioTmp, "compra", ".xml");
+            //Path file = Files.createTempFile(pathServidor+"/"+DirectorioCodefac.TEMP, "compra",".xml");
+            
+            //File fileDestino=new File(pathServidor+"/"+DirectorioCodefac.TEMP+"/"+archivoCompraXml.);
+            //OutputStream outputStream = new FileOutputStream(fileTmp.toFile());            
+            //inputStream = RemoteInputStreamClient.wrap(archivoCompraXml);
+                        
+            //Grabar en el disco de forma temporal para procesar el archivo xml
+            //UtilidadesArchivos.grabarInputStreamEnArchivo(inputStream, outputStream);
+            
+            //Obtener el comprobante desde el xml
+            //ComprobanteElectronico comprobanteElectronico=ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(fileTmp.toFile());
+            Compra compra=generarCompraDesdeXml((FacturaComprobante) comprobanteElectronico, empresa);
+            
+                        
+            return compra;
+        } catch (IOException ex) {
+            Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            //inputStream.close();
         }
         return null;
     }

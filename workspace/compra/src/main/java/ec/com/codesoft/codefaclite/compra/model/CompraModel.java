@@ -20,6 +20,8 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Produc
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -924,18 +926,18 @@ public class CompraModel extends CompraPanel{
         {
             try {
                 File archivoSeleccionado=jFileChooser.getSelectedFile();
-                SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
-                        new FileInputStream(archivoSeleccionado));
+                //SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
+                //        new FileInputStream(archivoSeleccionado));
                 
-                Compra compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeXml(istream,session.getEmpresa());
+                ComprobanteElectronico comprobanteElectronico=ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(archivoSeleccionado);
+                
+                Compra compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeXml(comprobanteElectronico,session.getEmpresa());
                 
                 Object[] parametros={compra};
                 panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
                         
                 //cargarDatosCompra(compra);
                 
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
