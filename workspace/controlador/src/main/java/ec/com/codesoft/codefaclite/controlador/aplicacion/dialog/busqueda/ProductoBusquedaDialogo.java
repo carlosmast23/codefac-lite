@@ -65,9 +65,9 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     @Override
     public void agregarObjeto(Producto t, Vector dato) 
     {
-        dato.add(t.getCodigoPersonalizado());
-        dato.add(t.getCodigoUPC());
         dato.add(t.getNombre());
+        dato.add(t.getCodigoPersonalizado());
+        //dato.add(t.getCodigoUPC());        
         dato.add(t.getValorUnitario());
         
         if(t.getCatalogoProducto().getIva()!=null)
