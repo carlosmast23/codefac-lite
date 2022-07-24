@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -275,9 +276,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     
                 }
                 
-                
-                
-                //if(value.get)
+
                 return new Object[]{
                     value,
                     codigoSistema,
@@ -326,9 +325,45 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     public void postConstructorExterno(Object[] parametros) {
         Compra compraXml = (Compra) parametros[0];
         this.compra = compraXml;
+        cargarProductosPorDefecto(compra);
         //getTxtProveedor().setText(this.compra.getRazonSocial());
         System.out.println("Compra: " + compraXml);
         actualizarBindingCompontValues();
+    }
+    
+    private void cargarProductosPorDefecto(Compra compraXml)
+    {
+        for(CompraDetalle compraDetalle : compraXml.getDetalles())
+        {
+            //Si no tiene un enlace entonces le busco directamente el producto
+            if(compraDetalle.getProductoProveedor()==null || compraDetalle.getProductoProveedor().getId()==null )
+            {
+                try {
+                    //Verificar si existe el PRODUCTO POR EL CODIGO
+                    Producto producto= ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(compraDetalle.getCodigoProveedor(), session.getEmpresa());
+                    if(producto!=null)
+                    {
+                        ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(producto, compraXml.getProveedor());
+                        compraDetalle.setProductoProveedor(productoProveedor);
+                    }
+                    else
+                    {
+                        //Verificar si existe el PRODUCTO POR EL NOMBRE
+                        producto= ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(compraDetalle.getDescripcion(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
+                        if(producto!=null)
+                        {
+                            ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(producto, compraXml.getProveedor());
+                            compraDetalle.setProductoProveedor(productoProveedor);
+                        }
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(CompraXmlModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        }
     }
 
     public Compra getCompra() {
