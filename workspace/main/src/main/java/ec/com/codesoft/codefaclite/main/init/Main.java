@@ -268,11 +268,20 @@ public class Main {
         //Primero intenta obtener la version de la base de datos
         //String query="SELECT VALOR FROM PARAMETRO WHERE NOMBRE = '"+ParametroCodefac.VERSION_SISTEMA+"'";
         //String versionGrabada=UtilidadSql.ejecutarConsultaSqlPrimerResultado(AbstractFacade.usuarioDb, AbstractFacade.claveDb, query,"VALOR");
-        String versionGrabada=consultarUltimaVersionBd();
-        //Si no encuentra la version en la ultima base de datos cargo la anterior
-        if(versionGrabada==null)
+        PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        String forzarVersion=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.FORZAR_VERSION);
+        
+        String versionGrabada=null;
+        
+        //Si la configuracion no existe o esta puesto en no consulto de la base de datos la version
+        if(forzarVersion==null || EnumSiNo.getEnumByNombre(forzarVersion).equals(EnumSiNo.NO))
         {
-            PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+            versionGrabada=consultarUltimaVersionBd();
+        }
+        
+        //Si no encuentra la version en la ultima base de datos cargo la anterior del archivo
+        if(versionGrabada==null)
+        {            
             versionGrabada=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
         }
         return versionGrabada;

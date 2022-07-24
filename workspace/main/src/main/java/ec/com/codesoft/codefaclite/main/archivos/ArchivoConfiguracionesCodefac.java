@@ -59,6 +59,8 @@ public class ArchivoConfiguracionesCodefac {
     
     public static final String CAMPO_VERSION="version";
     
+    public static final String FORZAR_VERSION="forzar_version";
+    
     public static final String CAMPO_TEMA="tema";
     
     public static final String CAMPO_PUERTO_SISTEMA="puerto_sistema";

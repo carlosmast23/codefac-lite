@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -50,6 +51,7 @@ public class CompraDetalle implements Serializable {
     @Column(name = "IVA")
     private BigDecimal iva;
     
+    
     @JoinColumn(name="COMPRA_ID")
     @ManyToOne(optional = false)
     private Compra compra;
@@ -74,6 +76,9 @@ public class CompraDetalle implements Serializable {
     
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
+    
+    @Column(name = "PORCENTAJE_IVA")
+    private Integer porcentajeIva;
         
     /**
      * Este campo me permite guardar cual fue el codigo original del proveedor cuando exista un codigo
@@ -217,13 +222,15 @@ public class CompraDetalle implements Serializable {
     public BigDecimal calcularValorIva()
     {
         //Todo: revisar el valor del iva 12 que esta quemado
-        return getSubtotal().multiply(new BigDecimal("0.12"));
+        //return getSubtotal().multiply( new BigDecimal("0.12"));
+        return UtilidadesImpuestos.calcularValorIva(new BigDecimal(porcentajeIva+""),getSubtotal());
     }
     
     public BigDecimal calcularTotal()
     {
         //Todo: revisar el valor del iva 12 que esta quemado
-        return getSubtotal().multiply(new BigDecimal("1.12"));
+        //return getSubtotal().multiply(new BigDecimal("1.12"));
+        return UtilidadesImpuestos.agregarValorIva(new BigDecimal(porcentajeIva+""), getSubtotal());
     }
 
     public SriRetencionIva getSriRetencionIva() {
@@ -280,6 +287,14 @@ public class CompraDetalle implements Serializable {
 
     public void setCodigoProveedor(String codigoProveedor) {
         this.codigoProveedor = codigoProveedor;
+    }
+
+    public Integer getPorcentajeIva() {
+        return porcentajeIva;
+    }
+
+    public void setPorcentajeIva(Integer porcentajeIva) {
+        this.porcentajeIva = porcentajeIva;
     }
             
     

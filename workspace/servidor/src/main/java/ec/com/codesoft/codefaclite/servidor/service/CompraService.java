@@ -257,6 +257,11 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 //TODO: Si no existe el producto falta programar esta parte
             }
             
+            //Consultar la tarifa de los impuestos
+            Integer ivaPorcentaje=detalleXml.getImpuestos().get(0).getTarifa().intValue();
+            compraDetalle.setPorcentajeIva(ivaPorcentaje);            
+            
+            
             //Agregar la CANTIDAD del detalle
             BigDecimal cantidad = detalleXml.getCantidad();
             compraDetalle.setCantidad(cantidad);

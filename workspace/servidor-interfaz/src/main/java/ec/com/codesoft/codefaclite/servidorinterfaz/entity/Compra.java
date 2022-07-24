@@ -612,7 +612,8 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
             //FacturaDetalle fd;
             //fd.getReferenciaId()
             for (CompraDetalle detalle : detalles) {
-                if(detalle.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
+                //if(detalle.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
+                if(detalle.getPorcentajeIva()==0)
                 {   //Sumar los subtotales con valor 0
                     subtotalSinImpuestos=subtotalSinImpuestos.add(detalle.getTotal());                    
                 }

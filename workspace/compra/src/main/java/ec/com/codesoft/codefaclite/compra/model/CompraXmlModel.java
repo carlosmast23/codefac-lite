@@ -268,7 +268,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                 String codigoSistema="";
                 String nombreProductoSistema="";
                 String codigoProveedor="";
-                String ivaPorcentaje=value.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getTarifa()+"";
+                String ivaPorcentaje=value.getPorcentajeIva()+"";
                 if(value.getProductoProveedor()!=null)
                 {
                     codigoSistema=value.getProductoProveedor().getProducto().getCodigoPersonalizado();

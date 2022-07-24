@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraFacturaReembols
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
@@ -542,61 +543,76 @@ public class CompraModel extends CompraPanel{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void iniciarCombos() {
+    private void iniciarCombos()  {
         
-        getCmbSustentoComprobante().removeAllItems();
-        SriSustentoComprobanteEnum[] sustentosComprobanteList=SriSustentoComprobanteEnum.values();
-        for (SriSustentoComprobanteEnum sriSustentoComprobanteEnum : sustentosComprobanteList) {
-            getCmbSustentoComprobante().addItem(sriSustentoComprobanteEnum);
-        }
-        
-        //Agregar los documentos del sri
-        getCmbDocumento().removeAllItems();
-        List<DocumentoEnum> documentos= DocumentoEnum.obtenerDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
-        for (DocumentoEnum documento : documentos) {
-            getCmbDocumento().addItem(documento);
-        }
-        //Quitar documento de compras que no deben estar como la liquidacion de compras
-        getCmbDocumento().removeItem(DocumentoEnum.LIQUIDACION_COMPRA);
-        
-        //Agregar los tipos de documentos disponibles
-        getCmbTipoDocumento().removeAllItems();
-        getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA);
-        getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA_INVENTARIO);
-        getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA_SERVICIOS);
-        
-        //Iniciar componentes de generar o no retencion
-        getCmbEmitirRetencion().removeAllItems();
-        getCmbEmitirRetencion().addItem(EnumSiNo.SI);
-        getCmbEmitirRetencion().addItem(EnumSiNo.NO);
+        try{
+            
+            getCmbSustentoComprobante().removeAllItems();
+            SriSustentoComprobanteEnum[] sustentosComprobanteList=SriSustentoComprobanteEnum.values();
+            for (SriSustentoComprobanteEnum sriSustentoComprobanteEnum : sustentosComprobanteList) {
+                getCmbSustentoComprobante().addItem(sriSustentoComprobanteEnum);
+            }
+            
+            //Agregar los documentos del sri
+            getCmbDocumento().removeAllItems();
+            List<DocumentoEnum> documentos= DocumentoEnum.obtenerDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
+            for (DocumentoEnum documento : documentos) {
+                getCmbDocumento().addItem(documento);
+            }
+            //Quitar documento de compras que no deben estar como la liquidacion de compras
+            getCmbDocumento().removeItem(DocumentoEnum.LIQUIDACION_COMPRA);
+            
+            //Agregar los tipos de documentos disponibles
+            getCmbTipoDocumento().removeAllItems();
+            getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA);
+            getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA_INVENTARIO);
+            getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA_SERVICIOS);
+            
+            //Iniciar componentes de generar o no retencion
+            getCmbEmitirRetencion().removeAllItems();
+            getCmbEmitirRetencion().addItem(EnumSiNo.SI);
+            getCmbEmitirRetencion().addItem(EnumSiNo.NO);
+            
+            List<ImpuestoDetalle> impuestoDetalleList = ServiceFactory.getFactory().getImpuestoDetalleServiceIf().obtenerIvaVigente();
+            getCmbIvaDetalle().removeAllItems();
+            for (ImpuestoDetalle impuestoDetalle : impuestoDetalleList)
+            {
+                getCmbIvaDetalle().addItem(impuestoDetalle.getTarifa());
                 
-        
-        //Agregar los tipos de retencion Iva
-        getCmbRetencionIva().removeAllItems();
-        SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
-        try{
-            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodosOrdenadoPorCodigo();
-            for (SriRetencionIva tipoRetencione : tipoRetencionesIva) {
-                getCmbRetencionIva().addItem(tipoRetencione);
+            }
+            
+            
+            //Agregar los tipos de retencion Iva
+            getCmbRetencionIva().removeAllItems();
+            SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
+            try{
+                List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodosOrdenadoPorCodigo();
+                for (SriRetencionIva tipoRetencione : tipoRetencionesIva) {
+                    getCmbRetencionIva().addItem(tipoRetencione);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            
+            //Agregar los tipos de retencion Renta
+            getCmbRetencionRenta().removeAllItems();
+            SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
+            try{
+                List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodosOrdenadoPorCodigo();
+                for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) {
+                    getCmbRetencionRenta().addItem(sriRetencionRenta);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
             }
         }
-        catch(Exception e)
+        catch(RemoteException ex)
         {
-            e.printStackTrace();
-        }
-        
-        //Agregar los tipos de retencion Renta
-        getCmbRetencionRenta().removeAllItems();
-        SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
-        try{
-            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodosOrdenadoPorCodigo();
-            for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) {
-                getCmbRetencionRenta().addItem(sriRetencionRenta);
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -845,6 +861,7 @@ public class CompraModel extends CompraPanel{
                     getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
                     getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
+                    getCmbIvaDetalle().setSelectedItem(compraDetalle.getPorcentajeIva());
                     //compraDetalle.setPrecioUnitario
                     compraDetalle.getPrecioUnitario();
                     bloquearDesbloquearBotones(false);
@@ -902,6 +919,7 @@ public class CompraModel extends CompraPanel{
         BigDecimal cantidad = new BigDecimal(getTxtCantidadItem().getText());
         BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText());
         //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
+        Integer porcentajeIva=(Integer) getCmbIvaDetalle().getSelectedItem();
         
         //validar el ingreso en la vista
         if (!panelPadre.validarPorGrupo("detalles")) {
@@ -911,7 +929,7 @@ public class CompraModel extends CompraPanel{
         //TODO:Verificar por que existen 2 validaciones para la vista
         if(verificarCamposValidados())
         {
-            agregarDetallesCompra(compraDetalle,productoProveedor ,costo, cantidad, precioUnitario, getTxtDescripcionItem().getText());
+            agregarDetallesCompra(compraDetalle,productoProveedor ,costo, cantidad, precioUnitario, getTxtDescripcionItem().getText(),porcentajeIva);
         }
         
     }
@@ -959,7 +977,7 @@ public class CompraModel extends CompraPanel{
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {
                     //TODO:Mejorar esta parte para no pasar los mismos datos
-                    agregarDetallesCompra(compraDetalle,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(), compraDetalle.getDescripcion());
+                    agregarDetallesCompra(compraDetalle,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(), compraDetalle.getDescripcion(),compraDetalle.getPorcentajeIva());
                     
                 }
                 
@@ -1204,7 +1222,7 @@ public class CompraModel extends CompraPanel{
     }
    
     //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
-    private void agregarDetallesCompra(CompraDetalle compraDetalle,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,String descripcion)
+    private void agregarDetallesCompra(CompraDetalle compraDetalle,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,String descripcion,Integer porcentajeIva)
     {
         Boolean agregar = true;
         
@@ -1216,14 +1234,12 @@ public class CompraModel extends CompraPanel{
         }
         
         
-            //BigDecimal costo=new BigDecimal(getTxtPrecionUnitarioItem().getText());
             productoProveedor.setCosto(costo);
-            //EnumSiNo enumSiNo= (EnumSiNo) getCmbCobraIva().getSelectedItem();
-            //productoProveedor.setConIva(enumSiNo.getLetra());
             
-            //Seteo los valores de los detalles e la compra
-            //compraDetalle.setCantidad(new BigDecimal(getTxtCantidadItem().getText()));
             compraDetalle.setCantidad(cantidadItem);
+            
+            compraDetalle.setPorcentajeIva(porcentajeIva);
+            
             
             //BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
             //compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
@@ -1232,14 +1248,16 @@ public class CompraModel extends CompraPanel{
             compraDetalle.setDescripcion(descripcion);
             //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
             compraDetalle.setDescuento(BigDecimal.ZERO);
-            if(productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
+            /*if(productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
             {
                 compraDetalle.setIva(BigDecimal.ZERO);                
             }
             else
             {
                 compraDetalle.setIva(compraDetalle.calcularValorIva());
-            }
+            }*/
+            
+            compraDetalle.setIva(compraDetalle.calcularValorIva());
             
             SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
             SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
