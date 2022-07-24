@@ -492,7 +492,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 
                 jFileChooser = new JFileChooser();
                 jFileChooser.setDialogTitle("Elegir archivo");
-                jFileChooser.setFileFilter(new FileNameExtensionFilter("Firma Electronica SRI", "p12"));
+                jFileChooser.setFileFilter(new FileNameExtensionFilter("Firma Electronica SRI", "p12","pfx"));
                 
                 int seleccion = jFileChooser.showDialog(null, "Abrir");
                 switch (seleccion) {

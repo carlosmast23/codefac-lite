@@ -479,6 +479,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //Validacion para los detalles
         for (FacturaDetalle detalle : factura.getDetalles()) 
         {
+            
             if(detalle.getDescuento()==null)
             {
                 throw new ServicioCodefacException("Error al grabar un descuento null en el pedido");
@@ -539,8 +540,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 throw new ServicioCodefacException("Los detalles de las facturas no pueden tener más de 300 caracteres");
             }
             
-            
-        }
+            //Validar que no se pueda grabar los detalles con tipos de datos no permitidos
+            if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.VENTA))
+            {
+                throw new ServicioCodefacException("El producto "+detalle.getDescripcion()+" tiene un tipo de documento invalido");
+            }
+        }   
         
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
         {

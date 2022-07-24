@@ -861,6 +861,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 mostrarMensaje(new CodefacMsj("No tiene disponible ningun modo para facturar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             }
             
+            //Quitar documentos que no se necesitan mostrar
+            //TODO: Revisar por que estaba saliendo este dato adicional
+            tipoDocumentoList.remove(TipoDocumentoEnum.VENTA);
+            
             //Seleccionar el tipo de documento configurado por defecto
             TipoDocumentoEnum tipoDocumentoEnumDefault=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA,TipoDocumentoEnum.ACADEMICO);
             tipoDocumentoEnumSeleccionado=TipoDocumentoEnum.LIBRE;
