@@ -6,6 +6,11 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JTable;
 
 /**
  *
@@ -32,7 +37,6 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        lblEspacio = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
         jSpinner2 = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
@@ -42,6 +46,10 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         jLabel5 = new javax.swing.JLabel();
         jSpinner5 = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblProductos = new javax.swing.JTable();
+        btnFiltrar = new javax.swing.JButton();
+        cmbSeleccionarTodo = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -55,13 +63,6 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        jPanel1.add(lblEspacio, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -123,6 +124,34 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel6, gridBagConstraints);
 
+        jScrollPane1.setViewportView(tblProductos);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jScrollPane1, gridBagConstraints);
+
+        btnFiltrar.setText("Filtrar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnFiltrar, gridBagConstraints);
+
+        cmbSeleccionarTodo.setFont(new java.awt.Font("Arial", 2, 11)); // NOI18N
+        cmbSeleccionarTodo.setText("Seleccionar Todo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbSeleccionarTodo, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -130,17 +159,58 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFiltrar;
+    private javax.swing.JCheckBox cmbSeleccionarTodo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JSpinner jSpinner3;
     private javax.swing.JSpinner jSpinner4;
     private javax.swing.JSpinner jSpinner5;
-    private javax.swing.JLabel lblEspacio;
+    private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
+
+    @TableBinding(
+            source = "controlador.productoList",
+            tableAddDataInterface = "tableBindingAddData",
+            selectValue = "controlador.productoSeleccionado",
+            listSelected = "controlador.productoSeleccionado",
+            componenteCheckSelect = "cmbSeleccionarTodo",
+            modeCheck = true,
+            controlador = "controlador.tableBindingControlador")
+    
+    public JTable getTblProductos() {
+        return tblProductos;
+    }
+
+    public void setTblProductos(JTable tblProductos) {
+        this.tblProductos = tblProductos;
+    }
+
+    public JCheckBox getCmbSeleccionarTodo() {
+        return cmbSeleccionarTodo;
+    }
+
+    public void setCmbSeleccionarTodo(JCheckBox cmbSeleccionarTodo) {
+        this.cmbSeleccionarTodo = cmbSeleccionarTodo;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerConsultarProductos")
+    public JButton getBtnFiltrar() {
+        return btnFiltrar;
+    }
+
+    public void setBtnFiltrar(JButton btnFiltrar) {
+        this.btnFiltrar = btnFiltrar;
+    }
+
+    
+    
+
 }
