@@ -184,15 +184,32 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             List<DetalleFacturaNotaCeditoAbstract> detalles= comprobante.getDetallesComprobante();
             for (DetalleFacturaNotaCeditoAbstract detalle : detalles) 
             {
-                if(detalle.getCatalogoProducto().getIva().getTarifa()==12)
+                if(detalle.getCatalogoProducto()!=null)
                 {
-                    impuestoDoce=true;
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==12)
+                    {
+                        impuestoDoce=true;
+                    }
+                    
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==0)
+                    {
+                        impuestoCero=true;
+                    }
+                }
+                else
+                {
+                    if(detalle.getIvaPorcentaje()==12)
+                    {
+                        impuestoDoce=true;
+                    }
+                    
+                    if(detalle.getIvaPorcentaje()==0)
+                    {
+                        impuestoCero=true;
+                    }
                 }
                 
-                if(detalle.getCatalogoProducto().getIva().getTarifa()==0)
-                {
-                    impuestoCero=true;
-                }
+                
             }
             
             //Crear el IMPUESTO DEL IVA_CERO cuando exista esa clasificacion

@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,12 +38,19 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     private TipoProductoEnum tipoProductoEnum;
     
     private EnumSiNo isManejoInvetario;
+    
+    private Integer numeroDecimales;
 
     public ProductoBusquedaDialogo(Empresa empresa) 
     {
         this.generarCodigoBarrasEnum = null; //Le pongo en null para que filtre todo
         this.empresa=empresa;
         this.isManejoInvetario=null;
+        //Por defecto pongo para mostrar solo 2 decimales
+        this.numeroDecimales=2;
+        
+        
+        
     }
     
     public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa) {
@@ -56,7 +64,8 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Código", 0.2d));        
-        titulo.add(new ColumnaDialogo("Precio Unit", 0.1d));
+        titulo.add(new ColumnaDialogo("Pvp1 ", 0.1d));
+        titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.1d));
         titulo.add(new ColumnaDialogo("IVA", 0.1d));        
         titulo.add(new ColumnaDialogo("ICE", 0.1d));        
         return titulo;
@@ -65,10 +74,20 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     @Override
     public void agregarObjeto(Producto t, Vector dato) 
     {
+        //ParametroCodefac.NUMERO_DECIMAL_PRODUCTO
+        String strNumeroDecimales=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);
+        if(strNumeroDecimales!=null)
+        {
+            this.numeroDecimales=Integer.parseInt(strNumeroDecimales);
+        }
+        
         dato.add(t.getNombre());
         dato.add(t.getCodigoPersonalizado());
-        //dato.add(t.getCodigoUPC());        
-        dato.add(t.getValorUnitario());
+        //dato.add(t.getCodigoUPC());       
+        
+        
+        dato.add(t.getValorUnitario().setScale(numeroDecimales, RoundingMode.HALF_UP));
+        dato.add(t.getValorUnitarioConIva().setScale(numeroDecimales, RoundingMode.HALF_UP));
         
         if(t.getCatalogoProducto().getIva()!=null)
         {
@@ -176,6 +195,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         propiedades.add("nombre");
         propiedades.add("codigoPersonalizado");        
         propiedades.add("valorUnitario");
+        propiedades.add("valorUnitarioConIva");
         propiedades.add("catalogoProducto.iva");
         propiedades.add("catalogoProducto.ice");
         return propiedades;

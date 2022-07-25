@@ -132,7 +132,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                 
                 if (opcionLlevaIva.equals("SI")) 
                 {
-                    codigoBarraData.setPrecio("$"+producto.obtenerValorUnitarioConIva().setScale(2, RoundingMode.HALF_UP).toString());
+                    codigoBarraData.setPrecio("$"+producto.getValorUnitarioConIva().setScale(2, RoundingMode.HALF_UP).toString());
                 } 
                 else if (opcionLlevaIva.equals("NO")) 
                 {

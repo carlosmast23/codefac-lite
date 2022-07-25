@@ -92,7 +92,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
                     
                     productoData.setValorUnitario(producto.getValorUnitario().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
                     productoData.setIva(producto.obtenerIvaValorUnitario().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
-                    productoData.setTotal(producto.obtenerValorUnitarioConIva().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
+                    productoData.setTotal(producto.getValorUnitarioConIva().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
                 }else{
                     productoData.setValorUnitario("0.00");
                     productoData.setIva("0.00");

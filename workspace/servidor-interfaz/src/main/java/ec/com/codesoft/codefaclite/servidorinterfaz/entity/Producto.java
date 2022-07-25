@@ -635,15 +635,20 @@ public class Producto implements Serializable, Comparable<Producto> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public BigDecimal obtenerValorUnitarioConIva()
+    public BigDecimal getValorUnitarioConIva()
     {
         BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
         return UtilidadesImpuestos.agregarValorIva(tarifa, valorUnitario);
     }
     
+    public void setValorUnitarioConIva(BigDecimal valorUnitarioConIva)
+    {
+        //TODO: Falta implementar
+    }
+    
     public BigDecimal obtenerIvaValorUnitario()
     {
-        return obtenerValorUnitarioConIva().subtract(valorUnitario);
+        return getValorUnitarioConIva().subtract(valorUnitario);
     }
     
     public static class PrecioVenta implements Serializable{
