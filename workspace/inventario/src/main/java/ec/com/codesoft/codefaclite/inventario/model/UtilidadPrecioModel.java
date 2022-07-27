@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaPedidoLoteModelControlador;
@@ -14,14 +15,20 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBind
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.UtilidadPrecioPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
@@ -39,6 +46,7 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Controla
     public void iniciar() throws ExcepcionCodefacLite, RemoteException 
     {
         this.controlador = new UtilidadPrecioModelControlador(DialogoCodefac.intefaceMensaje, session,this, UtilidadPrecioModelControlador.TipoVista.ESCRITORIO);
+        crearModeloTabla();
     }
 
     @Override
@@ -98,7 +106,14 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Controla
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     public UtilidadPrecioModelControlador getControlador() {
@@ -117,6 +132,7 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Controla
         String titulo[]=new String[]
         {
             "Objeto",
+            "Seleccion",
             "Código",
             "Nombre Producto",
             "Último Costo",
@@ -162,32 +178,45 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Controla
     
     public ITableBindingAddData getTableBindingAddData()
     {
-        return new ITableBindingAddData<UtilidadPrecioModelControlador.ProductoPrecioDataTable>() {
+        return new ITableBindingAddData<ProductoPrecioDataTable>() {
             @Override
-            public Object[] addData(UtilidadPrecioModelControlador.ProductoPrecioDataTable valueTmp) {
+            public Object[] addData(ProductoPrecioDataTable valueTmp) {
                 Producto producto=valueTmp.producto;
                 String codigo=producto.getCodigoPersonalizado();
                 String nombreProducto=producto.getNombre();
+                BigDecimal costoPromedio=BigDecimal.ZERO;
+                BigDecimal costoUltimo=BigDecimal.ZERO;
                 
-                                
+                try 
+                {
+                    Kardex kardexProducto = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
+                    if(kardexProducto!=null)
+                    {
+                        costoPromedio=kardexProducto.getCostoPromedio();
+                        costoUltimo=kardexProducto.getPrecioUltimo();
+                    }       
+                } catch (RemoteException ex) {
+                    Logger.getLogger(UtilidadPrecioModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
+                                                
                 return new Object[]{
                     valueTmp,
                     codigo,
                     nombreProducto,
-                    BigDecimal.ZERO,
-                    BigDecimal.ZERO,
-                    BigDecimal.ZERO,
-                    BigDecimal.ZERO,
-                    BigDecimal.ZERO,
-                    BigDecimal.ZERO,
-                    BigDecimal.ZERO,
-                    BigDecimal.ZERO,
+                    costoPromedio,
+                    costoUltimo,
+                    valueTmp.porcentajePvp1,
+                    valueTmp.porcentajePvp2,
+                    valueTmp.porcentajePvp3,
+                    valueTmp.porcentajePvp4,
+                    valueTmp.porcentajePvp5,
+                    valueTmp.porcentajePvp6,
                 };
             }
 
             @Override
-            public void setData(UtilidadPrecioModelControlador.ProductoPrecioDataTable objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+            public void setData(ProductoPrecioDataTable objetoOriginal, Object objetoModificado, Integer columnaModificada) {
                 final int COLUMNA_OBJETO=0;
                 final int COLUMNA_PVP1_PORCENTAJE=3;
                 final int COLUMNA_PVP2_PORCENTAJE=4;

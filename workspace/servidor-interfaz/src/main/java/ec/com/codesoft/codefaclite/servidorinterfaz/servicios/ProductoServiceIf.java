@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -43,4 +44,6 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public void eliminarProducto(Producto p) throws java.rmi.RemoteException,ServicioCodefacException;
     
     public List<Producto> buscarProductoActivo(Producto producto,Empresa empresa) throws ServicioCodefacException,RemoteException;
+    
+    public void actualizarPrecios(List<ProductoPrecioDataTable> productos ) throws RemoteException, ServicioCodefacException;
 }

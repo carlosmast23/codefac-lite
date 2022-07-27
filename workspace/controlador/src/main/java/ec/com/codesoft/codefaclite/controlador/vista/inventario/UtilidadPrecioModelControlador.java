@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.inventario;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaPedidoLoteModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TableBindingImp;
@@ -13,8 +14,15 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +36,23 @@ import java.util.logging.Logger;
  */
 public class UtilidadPrecioModelControlador extends ModelControladorAbstract<UtilidadPrecioModelControlador.CommonIf,UtilidadPrecioModelControlador.SwingIf,UtilidadPrecioModelControlador.WebIf> implements VistaCodefacIf {
 
+    private Integer pvp1Porcentaje=0;
+    private Integer pvp2Porcentaje=0;
+    private Integer pvp3Porcentaje=0;
+    private Integer pvp4Porcentaje=0;
+    private Integer pvp5Porcentaje=0;
+    private Integer pvp6Porcentaje=0;
+    
+    
     private List<ProductoPrecioDataTable> productoList;
     private List<ProductoPrecioDataTable> productoSeleccionadoList;
+    
+    private List<CostoCalculoEnum> costoCalculoList;
+    private CostoCalculoEnum costoCalculoEnum;
+    
     private ProductoPrecioDataTable productoSeleccionado;
     private TableBindingImp tableBindingControlador;
+    
     
     public UtilidadPrecioModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -50,19 +71,24 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
         
     }
     
+    
+    
     private void castListDataTable(List<Producto> productoTmpList)
     {
         productoList=new ArrayList<ProductoPrecioDataTable>();
         for (Producto producto : productoTmpList) 
         {
-            ProductoPrecioDataTable productoDataTable=new ProductoPrecioDataTable(
+            
+            ProductoPrecioDataTable productoDataTable=new ProductoPrecioDataTable
+            (
                     producto, 
-                    BigDecimal.ONE, 
-                    BigDecimal.ONE, 
-                    BigDecimal.ONE, 
-                    BigDecimal.ONE, 
-                    BigDecimal.ONE, 
-                    BigDecimal.ONE
+                    BigDecimal.ZERO,
+                    new BigDecimal(pvp1Porcentaje), 
+                    new BigDecimal(pvp2Porcentaje), 
+                    new BigDecimal(pvp3Porcentaje), 
+                    new BigDecimal(pvp4Porcentaje), 
+                    new BigDecimal(pvp5Porcentaje), 
+                    new BigDecimal(pvp6Porcentaje)
             );
             
             productoList.add(productoDataTable);
@@ -72,7 +98,7 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        costoCalculoList=UtilidadesLista.arrayToList(CostoCalculoEnum.values());
     }
 
     @Override
@@ -81,10 +107,17 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void grabar() throws ExcepcionCodefacLite, RemoteException 
+    {
+        try {
+            ServiceFactory.getFactory().getProductoServiceIf().actualizarPrecios(productoList);
+            mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        } catch (ServicioCodefacException ex) {
+            mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
+    
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -171,6 +204,24 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public void setTableBindingControlador(TableBindingImp tableBindingControlador) {
         this.tableBindingControlador = tableBindingControlador;
     }
+
+    public List<CostoCalculoEnum> getCostoCalculoList() {
+        return costoCalculoList;
+    }
+
+    public void setCostoCalculoList(List<CostoCalculoEnum> costoCalculoList) {
+        this.costoCalculoList = costoCalculoList;
+    }
+
+    public CostoCalculoEnum getCostoCalculoEnum() {
+        return costoCalculoEnum;
+    }
+
+    public void setCostoCalculoEnum(CostoCalculoEnum costoCalculoEnum) {
+        this.costoCalculoEnum = costoCalculoEnum;
+    }
+
+
     
     
     
@@ -192,33 +243,64 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
         //TODO: Implementacion de las interafaces solo para la web
     }
     
-    
-    ///////////////////////////////////////////////////////////////////////////
-    ///                 CLASES ADICIONALES
-    ///////////////////////////////////////////////////////////////////////////
-    public class ProductoPrecioDataTable
-    {
-        public Producto producto;
-        
-        public BigDecimal porcentajePvp1;
-        public BigDecimal porcentajePvp2;
-        public BigDecimal porcentajePvp3;
-        public BigDecimal porcentajePvp4;
-        public BigDecimal porcentajePvp5;
-        public BigDecimal porcentajePvp6;
+    ////////////////////////////////////////////////////////////////////////////
+    //                       GET AND SET
+    ////////////////////////////////////////////////////////////////////////////
 
-        public ProductoPrecioDataTable(Producto producto, BigDecimal porcentajePvp1, BigDecimal porcentajePvp2, BigDecimal porcentajePvp3, BigDecimal porcentajePvp4, BigDecimal porcentajePvp5, BigDecimal porcentajePvp6) {
-            this.producto = producto;
-            this.porcentajePvp1 = porcentajePvp1;
-            this.porcentajePvp2 = porcentajePvp2;
-            this.porcentajePvp3 = porcentajePvp3;
-            this.porcentajePvp4 = porcentajePvp4;
-            this.porcentajePvp5 = porcentajePvp5;
-            this.porcentajePvp6 = porcentajePvp6;
-        }
-        
-        
-        
-        
+    public Integer getPvp1Porcentaje() {
+        return pvp1Porcentaje;
     }
+
+    public void setPvp1Porcentaje(Integer pvp1Porcentaje) {
+        this.pvp1Porcentaje = pvp1Porcentaje;
+    }
+
+    public Integer getPvp2Porcentaje() {
+        return pvp2Porcentaje;
+    }
+
+    public void setPvp2Porcentaje(Integer pvp2Porcentaje) {
+        this.pvp2Porcentaje = pvp2Porcentaje;
+    }
+
+    public Integer getPvp3Porcentaje() {
+        return pvp3Porcentaje;
+    }
+
+    public void setPvp3Porcentaje(Integer pvp3Porcentaje) {
+        this.pvp3Porcentaje = pvp3Porcentaje;
+    }
+
+    public Integer getPvp4Porcentaje() {
+        return pvp4Porcentaje;
+    }
+
+    public void setPvp4Porcentaje(Integer pvp4Porcentaje) {
+        this.pvp4Porcentaje = pvp4Porcentaje;
+    }
+
+    public Integer getPvp5Porcentaje() {
+        return pvp5Porcentaje;
+    }
+
+    public void setPvp5Porcentaje(Integer pvp5Porcentaje) {
+        this.pvp5Porcentaje = pvp5Porcentaje;
+    }
+
+    public Integer getPvp6Porcentaje() {
+        return pvp6Porcentaje;
+    }
+
+    public void setPvp6Porcentaje(Integer pvp6Porcentaje) {
+        this.pvp6Porcentaje = pvp6Porcentaje;
+    }
+    
+    
+    public enum CostoCalculoEnum
+    {
+        COSTO_PROMEDIO,
+        ULTIMO_COSTO;
+    }
+    
+
 }

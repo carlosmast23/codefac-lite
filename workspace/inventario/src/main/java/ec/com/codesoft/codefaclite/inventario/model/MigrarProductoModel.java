@@ -379,8 +379,10 @@ public class MigrarProductoModel extends MigrarModel {
                 
                 //Crear siempre un kardex aunque no tenga movimientos
                 Kardex kardex = null;
-                if (productoTmp == null) {
+                kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodega, productoTmp);
+                if (kardex == null) {
                     kardex = new Kardex();
+                    kardex.setStock(BigDecimal.ZERO);
                     kardex.setBodega(bodega);
                     //Obtener costo de la plantilla
                     Double costo = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.COSTO);
@@ -421,7 +423,12 @@ public class MigrarProductoModel extends MigrarModel {
                     if(productoTmp!=null)
                     {
                         kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.STOCK_AJUSTE_MIGRADO.getCodigo());
-                        kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodega, productoTmp);
+                        
+                        if(kardex==null)
+                        {
+                            kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodega, productoTmp);
+                        }
+                        
                         BigDecimal stockActual=kardex.getStock();
                         BigDecimal stockAjuste=new BigDecimal(stock).subtract(stockActual);                       
                         //cuando tengo que hacer un ajuste inventario envio los nuevos datos

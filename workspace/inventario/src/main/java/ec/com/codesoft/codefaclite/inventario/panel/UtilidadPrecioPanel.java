@@ -6,10 +6,16 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.inventario.UtilidadPrecioModelControlador.CostoCalculoEnum;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.IntegerToStringConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 
 /**
@@ -37,19 +43,26 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
+        spnPvp1 = new javax.swing.JSpinner();
+        spnPvp2 = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
-        jSpinner3 = new javax.swing.JSpinner();
+        spnPvp4 = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
-        jSpinner4 = new javax.swing.JSpinner();
+        spnPvp5 = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
-        jSpinner5 = new javax.swing.JSpinner();
+        spnPvp3 = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
         btnFiltrar = new javax.swing.JButton();
         cmbSeleccionarTodo = new javax.swing.JCheckBox();
+        jLabel7 = new javax.swing.JLabel();
+        spnPvp6 = new javax.swing.JSpinner();
+        btnModificar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cmbCalcularCosto = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -66,61 +79,61 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jSpinner1, gridBagConstraints);
+        jPanel1.add(spnPvp1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jSpinner2, gridBagConstraints);
+        jPanel1.add(spnPvp2, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Pvp2 (% utilidad):");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jSpinner3, gridBagConstraints);
+        jPanel1.add(spnPvp4, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Pvp3 (% utilidad):");
+        jLabel4.setText("Calcular con costo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jSpinner4, gridBagConstraints);
+        jPanel1.add(spnPvp5, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Pvp4 (% utilidad):");
+        jLabel5.setText("Pvp5 (% utilidad):");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jSpinner5, gridBagConstraints);
+        jPanel1.add(spnPvp3, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Pvp5 (% utilidad):");
+        jLabel6.setText("Pvp6 (% utilidad):");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel6, gridBagConstraints);
 
@@ -128,18 +141,18 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
-        btnFiltrar.setText("Filtrar");
+        btnFiltrar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnFiltrar, gridBagConstraints);
@@ -148,9 +161,64 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         cmbSeleccionarTodo.setText("Seleccionar Todo");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbSeleccionarTodo, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Pvp3 (% utilidad):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel7, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(spnPvp6, gridBagConstraints);
+
+        btnModificar.setText("Actualizar Valores");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnModificar, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(jLabel2, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Pvp4 (% utilidad):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel8, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbCalcularCosto, gridBagConstraints);
+
+        jLabel9.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        jLabel9.setText("NOTA: Solo se van a actualizar los precios que tienen la utilidad distinto de cero");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel9, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -160,19 +228,26 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFiltrar;
+    private javax.swing.JButton btnModificar;
+    private javax.swing.JComboBox<CostoCalculoEnum> cmbCalcularCosto;
     private javax.swing.JCheckBox cmbSeleccionarTodo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JSpinner jSpinner4;
-    private javax.swing.JSpinner jSpinner5;
+    private javax.swing.JSpinner spnPvp1;
+    private javax.swing.JSpinner spnPvp2;
+    private javax.swing.JSpinner spnPvp3;
+    private javax.swing.JSpinner spnPvp4;
+    private javax.swing.JSpinner spnPvp5;
+    private javax.swing.JSpinner spnPvp6;
     private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
 
@@ -180,7 +255,7 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
             source = "controlador.productoList",
             tableAddDataInterface = "tableBindingAddData",
             selectValue = "controlador.productoSeleccionado",
-            listSelected = "controlador.productoSeleccionado",
+            listSelected = "controlador.productoSeleccionadoList",
             componenteCheckSelect = "cmbSeleccionarTodo",
             modeCheck = true,
             controlador = "controlador.tableBindingControlador")
@@ -210,7 +285,80 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         this.btnFiltrar = btnFiltrar;
     }
 
-    
-    
+    @SpinnerBinding(value="controlador.pvp1Porcentaje")
+    public JSpinner getSpnPvp1() {
+        return spnPvp1;
+    }
 
+    public void setSpnPvp1(JSpinner spnPvp1) {
+        this.spnPvp1 = spnPvp1;
+    }
+
+    @SpinnerBinding(value="controlador.pvp2Porcentaje")
+    public JSpinner getSpnPvp2() {
+        return spnPvp2;
+    }
+
+    public void setSpnPvp2(JSpinner spnPvp2) {
+        this.spnPvp2 = spnPvp2;
+    }
+
+    @SpinnerBinding(value="controlador.pvp3Porcentaje")
+    public JSpinner getSpnPvp3() {
+        return spnPvp3;
+    }
+
+    public void setSpnPvp3(JSpinner spnPvp3) {
+        this.spnPvp3 = spnPvp3;
+    }
+
+    @SpinnerBinding(value="controlador.pvp4Porcentaje")
+    public JSpinner getSpnPvp4() {
+        return spnPvp4;
+    }
+
+    public void setSpnPvp4(JSpinner spnPvp4) {
+        this.spnPvp4 = spnPvp4;
+    }
+
+    @SpinnerBinding(value="controlador.pvp5Porcentaje")
+    public JSpinner getSpnPvp5() {
+        return spnPvp5;
+    }
+
+    public void setSpnPvp5(JSpinner spnPvp5) {
+        this.spnPvp5 = spnPvp5;
+    }
+
+    @SpinnerBinding(value="controlador.pvp6Porcentaje")
+    public JSpinner getSpnPvp6() {
+        return spnPvp6;
+    }
+
+    public void setSpnPvp6(JSpinner spnPvp6) {
+        this.spnPvp6 = spnPvp6;
+    }
+
+    @ButtonBinding(actionListener = "controlador.listenerConsultarProductos")
+    public JButton getBtnModificar() {
+        return btnModificar;
+    }
+
+    public void setBtnModificar(JButton btnModificar) {
+        this.btnModificar = btnModificar;
+    }
+
+    @ComboBoxBinding(source = "controlador.costoCalculoList",valueSelect = "controlador.costoCalculoEnum")
+    public JComboBox<CostoCalculoEnum> getCmbCalcularCosto() {
+        return cmbCalcularCosto;
+    }
+
+    public void setCmbCalcularCosto(JComboBox<CostoCalculoEnum> cmbCalcularCosto) {
+        this.cmbCalcularCosto = cmbCalcularCosto;
+    }
+
+    
+    
+    
+    
 }

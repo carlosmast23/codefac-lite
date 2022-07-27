@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
@@ -476,6 +477,29 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
         return null;
     }
+    
+    public void actualizarPrecios(List<ProductoPrecioDataTable> productos ) throws RemoteException, ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                for (ProductoPrecioDataTable productoData : productos) 
+                {
+                    Producto producto= productoData.producto;
+                    producto.setValorUnitario(productoData.calcularPvp1());
+                    producto.setPrecioDistribuidor(productoData.calcularPvp2());
+                    producto.setPrecioTarjeta(productoData.calcularPvp3());
+                    producto.setPvp4(productoData.calcularPvp4());
+                    producto.setPvp5(productoData.calcularPvp5());
+                    producto.setPvp6(productoData.calcularPvp6());
+                    
+                    entityManager.merge(producto);
+                    
+                }
+            }
+        });
+    }   
     
     public Producto crearProductoPorDefectoSinTransaccion(Empresa empresa,Integer ivaDefecto) throws RemoteException, ServicioCodefacException
     {
