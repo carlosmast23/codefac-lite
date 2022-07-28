@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Vector;
@@ -51,8 +52,9 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Lote", 0.3d));
         titulo.add(new ColumnaDialogo("Ubicación", 0.3d));
-        titulo.add(new ColumnaDialogo("Precio Unit", 0.1d));
-        titulo.add(new ColumnaDialogo("IVA", 0.1d));        
+        titulo.add(new ColumnaDialogo("Pvp", 0.15d));
+        titulo.add(new ColumnaDialogo("Pvp+Iva", 0.15d));
+        titulo.add(new ColumnaDialogo("IVA", 0.05d));        
         titulo.add(new ColumnaDialogo("Stock", 0.1d));        
         return titulo;
     }
@@ -125,8 +127,9 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         vector.add(producto.getNombre());
         vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
-        vector.add(producto.getValorUnitario());
-        vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().toString():"Sin Especificar");
+        vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
+        vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
+        vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");
         vector.add(kardex.getStock());
     }
 
