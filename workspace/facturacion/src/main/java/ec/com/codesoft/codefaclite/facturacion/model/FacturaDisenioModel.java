@@ -172,7 +172,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
 
 
-        List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
+        /*List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
         DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
         detalle.setCantidad("1");
         detalle.setDescripcion("MOUSE OPTICO");
@@ -185,7 +185,16 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         detalle.setDescripcion("TECLADO");
         detalle.setValorTotal("10");
         detalle.setValorUnitario("10");
-        detalles.add(detalle);
+        detalles.add(detalle);*/
+        
+        String cantidadStr=JOptionPane.showInputDialog(null,"Ingrese la cantidad de detalles ?");
+        Integer cantidadDetalles=2;
+        if(cantidadStr!=null && !cantidadStr.trim().isEmpty())
+        {
+            cantidadDetalles=Integer.parseInt(cantidadStr);
+        }        
+        
+        List<DetalleFacturaFisicaData> detalles =agregarDetallesEjemplo(cantidadDetalles);
 
         try {
             ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa",null);
@@ -194,6 +203,24 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
             DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
         }
 
+    }
+    
+    private List<DetalleFacturaFisicaData> agregarDetallesEjemplo(int cantidadDetalles)
+    {
+        List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
+        
+        for (int i = 0; i < cantidadDetalles; i++) 
+        {
+            DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
+            detalle.setCantidad("1");
+            detalle.setDescripcion("MOUSE OPTICO DE EJEMPLO");
+            detalle.setValorTotal("12");
+            detalle.setValorUnitario("12");
+            detalles.add(detalle);
+        }
+        
+        return detalles;
+    
     }
 
     @Override
