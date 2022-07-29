@@ -184,28 +184,14 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Controla
                 Producto producto=valueTmp.producto;
                 String codigo=producto.getCodigoPersonalizado();
                 String nombreProducto=producto.getNombre();
-                BigDecimal costoPromedio=BigDecimal.ZERO;
-                BigDecimal costoUltimo=BigDecimal.ZERO;
-                
-                try 
-                {
-                    Kardex kardexProducto = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
-                    if(kardexProducto!=null)
-                    {
-                        costoPromedio=kardexProducto.getCostoPromedio();
-                        costoUltimo=kardexProducto.getPrecioUltimo();
-                    }       
-                } catch (RemoteException ex) {
-                    Logger.getLogger(UtilidadPrecioModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
+                                
                                                 
                 return new Object[]{
                     valueTmp,
                     codigo,
                     nombreProducto,
-                    costoPromedio,
-                    costoUltimo,
+                    valueTmp.costoUltimo,
+                    valueTmp.costoPromedio,
                     valueTmp.porcentajePvp1,
                     valueTmp.porcentajePvp2,
                     valueTmp.porcentajePvp3,

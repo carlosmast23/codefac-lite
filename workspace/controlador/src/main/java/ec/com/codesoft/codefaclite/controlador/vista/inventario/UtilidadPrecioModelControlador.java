@@ -5,14 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.inventario;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaPedidoLoteModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TableBindingImp;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -53,6 +56,8 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     private ProductoPrecioDataTable productoSeleccionado;
     private TableBindingImp tableBindingControlador;
     
+    private Producto productoFiltro;
+    
     
     public UtilidadPrecioModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -62,10 +67,12 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public void listenerConsultarProductos()
     {
         try {
-            List<Producto> productoTmpList= ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(session.getEmpresa());
+            List<Producto> productoTmpList= ServiceFactory.getFactory().getProductoServiceIf().reporteProducto(productoFiltro);
             castListDataTable(productoTmpList);
             
         } catch (RemoteException ex) {
+            Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -78,11 +85,26 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
         productoList=new ArrayList<ProductoPrecioDataTable>();
         for (Producto producto : productoTmpList) 
         {
+
+            BigDecimal costoPromedio = BigDecimal.ZERO;
+            BigDecimal costoUltimo = BigDecimal.ZERO;
+            
+            try {
+                Kardex kardexProducto = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
+                if (kardexProducto != null) {
+                    costoPromedio = kardexProducto.getCostoPromedio();
+                    costoUltimo = kardexProducto.getPrecioUltimo();
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             ProductoPrecioDataTable productoDataTable=new ProductoPrecioDataTable
             (
                     producto, 
                     BigDecimal.ZERO,
+                    costoPromedio,
+                    costoUltimo,
                     new BigDecimal(pvp1Porcentaje), 
                     new BigDecimal(pvp2Porcentaje), 
                     new BigDecimal(pvp3Porcentaje), 
@@ -96,9 +118,18 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
         
     }
     
+    public void listenerBuscarProducto()
+    {
+        ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI, session.getEmpresa());
+        BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+        buscarDialogo.setVisible(true);
+        productoFiltro = (Producto) buscarDialogo.getResultado();
+    }
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         costoCalculoList=UtilidadesLista.arrayToList(CostoCalculoEnum.values());
+        costoCalculoEnum=CostoCalculoEnum.ULTIMO_COSTO;
     }
 
     @Override
@@ -110,12 +141,43 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public void grabar() throws ExcepcionCodefacLite, RemoteException 
     {
         try {
-            ServiceFactory.getFactory().getProductoServiceIf().actualizarPrecios(productoList);
+            validarProducto();
+            if(!dialogoPregunta(new CodefacMsj("Esta seguro que quiere actualizar los datos ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
+            {
+                throw new ExcepcionCodefacLite("Cancelar grabar utilidad ...");
+            }
+            List<ProductoPrecioDataTable> productosSelecionadoList= completarCostoCalculoLista(productoSeleccionadoList);
+            ServiceFactory.getFactory().getProductoServiceIf().actualizarPrecios(productosSelecionadoList);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite("Cancelar grabar utilidad ...");
         }
+    }
+    
+    public void validarProducto() throws ServicioCodefacException
+    {
+        if(productoSeleccionadoList==null || productoSeleccionadoList.size()==0 )
+        {
+            throw new ServicioCodefacException("Seleccione uno o varios productos para actualizar el sistema");
+        }
+    }
+    
+    public List<ProductoPrecioDataTable> completarCostoCalculoLista(List<ProductoPrecioDataTable> lista)
+    {
+        for (ProductoPrecioDataTable productoData : lista) 
+        {
+            if(costoCalculoEnum.equals(CostoCalculoEnum.ULTIMO_COSTO))
+            {
+                productoData.costoCalculo=productoData.costoUltimo;
+            }
+            else if(costoCalculoEnum.equals(costoCalculoEnum.COSTO_PROMEDIO))
+            {
+                productoData.costoCalculo=productoData.costoPromedio;
+            }
+        }
+        return lista;
     }
     
     @Override
@@ -142,6 +204,7 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public void limpiar() {
         this.productoList=new ArrayList<ProductoPrecioDataTable>();
         this.productoSeleccionadoList=new ArrayList<ProductoPrecioDataTable>();
+        this.productoFiltro=null;
     }
 
     @Override
@@ -294,6 +357,15 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public void setPvp6Porcentaje(Integer pvp6Porcentaje) {
         this.pvp6Porcentaje = pvp6Porcentaje;
     }
+
+    public Producto getProductoFiltro() {
+        return productoFiltro;
+    }
+
+    public void setProductoFiltro(Producto productoFiltro) {
+        this.productoFiltro = productoFiltro;
+    }
+    
     
     
     public enum CostoCalculoEnum

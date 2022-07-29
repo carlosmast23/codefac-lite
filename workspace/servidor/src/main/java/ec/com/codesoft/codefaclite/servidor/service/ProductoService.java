@@ -62,6 +62,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         this.productoFacade = new ProductoFacade();
     }
     
+    public List<Producto> reporteProducto(Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        return  getFacade().reporteProductoFacade(producto);
+    }
+    
     private void generarCodigoProducto(Producto producto) throws RemoteException,ServicioCodefacException
     {
         UtilidadesService utilidadService=new UtilidadesService();
@@ -486,15 +491,19 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 
                 for (ProductoPrecioDataTable productoData : productos) 
                 {
-                    Producto producto= productoData.producto;
-                    producto.setValorUnitario(productoData.calcularPvp1());
-                    producto.setPrecioDistribuidor(productoData.calcularPvp2());
-                    producto.setPrecioTarjeta(productoData.calcularPvp3());
-                    producto.setPvp4(productoData.calcularPvp4());
-                    producto.setPvp5(productoData.calcularPvp5());
-                    producto.setPvp6(productoData.calcularPvp6());
-                    
-                    entityManager.merge(producto);
+                    //Solo calcular el precio de venta si tiene un costo mayor que cero
+                    if(productoData.costoCalculo.compareTo(BigDecimal.ZERO)>0)
+                    {
+                        Producto producto= productoData.producto;                    
+                        producto.setValorUnitario(productoData.calcularPvp1());
+                        producto.setPrecioDistribuidor(productoData.calcularPvp2());
+                        producto.setPrecioTarjeta(productoData.calcularPvp3());
+                        producto.setPvp4(productoData.calcularPvp4());
+                        producto.setPvp5(productoData.calcularPvp5());
+                        producto.setPvp6(productoData.calcularPvp6());
+
+                        entityManager.merge(producto);
+                    }
                     
                 }
             }

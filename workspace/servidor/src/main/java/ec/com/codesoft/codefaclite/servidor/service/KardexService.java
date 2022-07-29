@@ -754,7 +754,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
             kardex.setCostoPromedio((kardex.getCostoPromedio()!=null)?kardex.getCostoPromedio():BigDecimal.ZERO);
             kardex.setPrecioTotal(BigDecimal.ZERO);
-            kardex.setPrecioUltimo(BigDecimal.ZERO);
+            kardex.setPrecioUltimo(detalle.getPrecioUnitario());
             //kardex.setProducto(value.getProductoProveedor().getProducto());
             kardex.setStock(BigDecimal.ZERO);
             kardex.setReserva(0);

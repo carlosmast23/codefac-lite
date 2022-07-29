@@ -46,4 +46,8 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public List<Producto> buscarProductoActivo(Producto producto,Empresa empresa) throws ServicioCodefacException,RemoteException;
     
     public void actualizarPrecios(List<ProductoPrecioDataTable> productos ) throws RemoteException, ServicioCodefacException;
+    
+    public List<Producto> reporteProducto(Producto producto) throws RemoteException,ServicioCodefacException;
+    
+    
 }
