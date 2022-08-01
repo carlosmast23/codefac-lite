@@ -47,6 +47,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
@@ -391,6 +393,12 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         //CompraDetalle compraDetalle = new CompraDetalle();
         //compraDetalle.setDescripcion(getTxtDescripcion().getText());
         compraDetalle.setCantidad(BigDecimal.ONE);
+        
+        //TODO: Por el momento le dejo seteando que la compra tiene un iva de cero por que solo se usa de forma temporal
+        String ivaStr=ParametrosSistemaCodefac.IVA_DEFECTO;            
+        Integer ivaPorDefecto=new Integer(ivaStr);
+        
+        compraDetalle.setPorcentajeIva(ivaPorDefecto);
 
         //TODO: Revisar si solo una base imponible o debo usar 2 para mas precion con productos que no distintas base de retencion                
         
@@ -1009,10 +1017,16 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         //Revisar este mensaje porque causa error cuando el mismo rato se graba la 
         java.sql.Date fechaEmisionSql=UtilidadesFecha.castDateUtilToSql(retencion.getFechaEmision());
         java.sql.Date fechaEmisionDocSql=UtilidadesFecha.castDateUtilToSql(retencion.getFechaEmisionDocumento());
-        if(fechaEmisionSql.compareTo(fechaEmisionDocSql)<=0)
+        if(fechaEmisionSql.compareTo(fechaEmisionDocSql)<0)
         {
-            DialogoCodefac.mensaje("Advertencia","La fecha de emisón no puede ser inferior  a la fecha de la compra",DialogoCodefac.MENSAJE_ADVERTENCIA);
-            return false;
+            Boolean respuestaPregunta = DialogoCodefac.dialogoPregunta(new CodefacMsj("La fecha de emisión no puede ser inferior  a la fecha de la compra, desea continuar de todos modos ? ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            if(!respuestaPregunta)
+            {
+                return false;
+            }
+                
+            //DialogoCodefac.mensaje("Advertencia","La fecha de emisión no puede ser inferior  a la fecha de la compra",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            //return false;
         }
         
         final int DIAS_VALIDADOS_ENVIAR_RETENCION=5;

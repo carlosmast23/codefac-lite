@@ -39,15 +39,13 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     
     private EnumSiNo isManejoInvetario;
     
-    private Integer numeroDecimales;
+    private Integer numeroDecimales=2;
 
     public ProductoBusquedaDialogo(Empresa empresa) 
     {
         this.generarCodigoBarrasEnum = null; //Le pongo en null para que filtre todo
         this.empresa=empresa;
         this.isManejoInvetario=null;
-        //Por defecto pongo para mostrar solo 2 decimales
-        this.numeroDecimales=2;
         
         
         
