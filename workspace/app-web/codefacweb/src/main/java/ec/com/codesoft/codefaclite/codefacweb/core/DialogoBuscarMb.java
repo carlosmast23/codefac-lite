@@ -35,6 +35,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 
 /**
  *
@@ -48,10 +50,11 @@ public class DialogoBuscarMb implements Serializable {
     
     
 
-    private List<Object> datosBusqueda;
+    //private List<Object> datosBusqueda;
     private List<String> propiedadesObjeto;
     private List<Vector<String>> datosConsulta;
     private Vector<ColumnaDialogo> columnasConsulta;
+    private LazyDataModel<Object> datosBusquedaLazy;
     
     private Object objetoSeleccionado;
 
@@ -68,50 +71,69 @@ public class DialogoBuscarMb implements Serializable {
         //Despues de leer el dato de sessionMap lo elimino para evitar tener pesada la pagina
         sessionMap.remove("busquedaClase");
         
-        InterfaceModelFind controller =(InterfaceModelFind)busquedaClase;
+        final InterfaceModelFind controller =(InterfaceModelFind)busquedaClase;
+        
+        this.datosBusquedaLazy=new LazyDataModel<Object>() {
+            @Override
+            public List<Object> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) 
+            {
+                try {
+                    String filtroConsulta="%%";
+                    if(filters.size()>0)
+                    {
+                        filtroConsulta="%"+filters.get(filters.keySet().toArray()[0])+"%";
+                    }
+                    QueryDialog queryDialog = controller.getConsulta(filtroConsulta);
+                    Long tamanioConsulta=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryDialog.query, queryDialog.getParametros(),first, first+pageSize);                    
+                    setRowCount(tamanioConsulta.intValue());
+                    
+                    List<Object> datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(),first, first+pageSize);
+                    buscarDatos(controller, datosBusqueda);
+                    return datosBusqueda;
+                    //return super.load(first, pageSize, sortField, sortOrder, filters); //To change body of generated methods, choose Tools | Templates.
+                } catch (RemoteException ex) {
+                    Logger.getLogger(DialogoBuscarMb.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return new ArrayList<Object>();
+            }
+        };
        
-        buscarDatos(controller);
+        //buscarDatos(controller);
 
     }
+    
+   
 
-    public void buscarDatos(InterfaceModelFind busquedaClase) {
-        try {
-
-            InterfaceModelFind busquedaDialogo = busquedaClase;
-            QueryDialog queryDialog = busquedaDialogo.getConsulta("%%");
-            datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(), 0, 10000);
-
-            //Setear datos al controlador
-            columnasConsulta = busquedaDialogo.getColumnas();
-            datosConsulta = new ArrayList<Vector<String>>();
-
-            //buscar si la clase implementa la interfaz para busqueda de las propiedaes
-            if (busquedaClase instanceof InterfacesPropertisFindWeb) {
-                System.out.println("cargando clase de las propiedades del objecto");
-                InterfacesPropertisFindWeb propiedadesInterface = (InterfacesPropertisFindWeb) busquedaClase;
-                propiedadesObjeto = propiedadesInterface.getNamePropertysObject();
-            }
-
-            for (Object object : datosBusqueda) {
-                Vector datoFila = new Vector();
-                busquedaDialogo.agregarObjeto(object, datoFila);
-                datosConsulta.add(datoFila);
-            }
-            System.out.println("La busqueda genero " + datosConsulta.size() + " registros");
-
-        } catch (RemoteException ex) {
-            Logger.getLogger(ControllerCodefacMb.class.getName()).log(Level.SEVERE, null, ex);
+    public void buscarDatos(InterfaceModelFind busquedaClase,List<Object> datosBusqueda) {
+        InterfaceModelFind busquedaDialogo = busquedaClase;
+        QueryDialog queryDialog = busquedaDialogo.getConsulta("%%");
+        //datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(), 0, 10000);
+        //Setear datos al controlador
+        columnasConsulta = busquedaDialogo.getColumnas();
+        datosConsulta = new ArrayList<Vector<String>>();
+        //buscar si la clase implementa la interfaz para busqueda de las propiedaes
+        if (busquedaClase instanceof InterfacesPropertisFindWeb) {
+            System.out.println("cargando clase de las propiedades del objecto");
+            InterfacesPropertisFindWeb propiedadesInterface = (InterfacesPropertisFindWeb) busquedaClase;
+            propiedadesObjeto = propiedadesInterface.getNamePropertysObject();
         }
+        for (Object object : datosBusqueda) {
+            Vector datoFila = new Vector();
+            busquedaDialogo.agregarObjeto(object, datoFila);
+            datosConsulta.add(datoFila);
+        }
+        System.out.println("La busqueda genero " + datosConsulta.size() + " registros");
 
     }
 
-    private Vector<String> obtenerNombresColumnas(Vector<ColumnaDialogo> columnasDialogo) {
+    /*private Vector<String> obtenerNombresColumnas(Vector<ColumnaDialogo> columnasDialogo) 
+    {
         Vector<String> propiedades = new Vector<String>();
         for (ColumnaDialogo columnaDialogo : columnasDialogo) {
             propiedades.add(columnaDialogo.getNombre());
         }
         return propiedades;
-    }
+    }*/
 
     public Object buscarValorObjecto(Object objetoBase, String propiedad) {
 
@@ -174,7 +196,7 @@ public class DialogoBuscarMb implements Serializable {
         }
     }
 
-    public boolean filterByName(Object value, Object filter, Locale locale) {
+    /*public boolean filterByName(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
         if (filterText == null || filterText.equals("")) {
             return true;
@@ -192,16 +214,24 @@ public class DialogoBuscarMb implements Serializable {
         } else {
             return false;
         }
-    }
+    }*/
 
-    public List<Object> getDatosBusqueda() {
+    /*public List<Object> getDatosBusqueda() {
         return datosBusqueda;
     }
 
     public void setDatosBusqueda(List<Object> datosBusqueda) {
         this.datosBusqueda = datosBusqueda;
+    }*/
+
+    public LazyDataModel<Object> getDatosBusquedaLazy() {
+        return datosBusquedaLazy;
     }
 
+    public void setDatosBusquedaLazy(LazyDataModel<Object> datosBusquedaLazy) {
+        this.datosBusquedaLazy = datosBusquedaLazy;
+    }
+    
     public List<Vector<String>> getDatosConsulta() {
         return datosConsulta;
     }

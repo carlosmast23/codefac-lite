@@ -13,7 +13,7 @@
             <p:dataTable 
                 id="tablaBusqueda" 
                 var="objeto" 
-                value="#{dialogoBuscarMb.datosBusqueda}" 
+                value="#{dialogoBuscarMb.datosBusquedaLazy}" 
                 rowIndexVar="indice" 
                 paginator="true"
                 style="width: 100%;height: 100%;font-size: 12px"
@@ -21,6 +21,7 @@
                 selectionMode="single"
                 selection="#{dialogoBuscarMb.objetoSeleccionado}"
                 rowKey="#{objeto}"
+                lazy="true"
                 >
 
                 <p:ajax event="rowSelect" listener="#{dialogoBuscarMb.filaSeleccionada}" update="@this" />

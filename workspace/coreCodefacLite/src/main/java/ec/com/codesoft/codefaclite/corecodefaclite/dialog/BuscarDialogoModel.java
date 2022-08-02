@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
 import java.awt.Dimension;
@@ -209,8 +210,9 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             }
             QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
             
+            
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
-            String query=queryDialog.query;
+            /*String query=queryDialog.query;
             query=query.toLowerCase();
             int primerCorte=query.indexOf("select")+"select".length();
             int segundoCorte=query.indexOf("from");
@@ -218,6 +220,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             //Eliminar las columnas de ordenar porque no se pueden ejecutar en conjunto con el comando count(1)
             if(queryModificado.toLowerCase().indexOf("order by")>=0)
                 queryModificado=queryModificado.substring(0,queryModificado.toLowerCase().indexOf("order by")); //TODO: Analizar como verificar para otros casos que tengan mas espacios entre order y by
+            */
+            String queryModificado=UtilidadSql.convertirConsultaEnConsultaTamanio(queryDialog.query);
             
             System.out.println(queryModificado);            
             convertirMinusculasParametros(queryDialog);

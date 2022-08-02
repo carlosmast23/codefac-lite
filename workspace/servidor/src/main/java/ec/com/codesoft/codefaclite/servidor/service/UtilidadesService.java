@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
@@ -69,6 +70,11 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
 
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
         return AbstractFacade.findStaticDialog(query, map, limiteMinimo, limiteMaximo);
+    }
+    
+    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
+        query= UtilidadSql.convertirConsultaEnConsultaTamanio(query);
+        return AbstractFacade.findStaticSizeDialog(query, map, limiteMinimo, limiteMaximo);
     }
 
     public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {

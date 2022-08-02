@@ -62,4 +62,5 @@ public interface UtilidadesServiceIf extends Remote
     
     public ReportDataAbstract<DashBoardData> consultarDashboard(Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException;
     
+    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;    
 }

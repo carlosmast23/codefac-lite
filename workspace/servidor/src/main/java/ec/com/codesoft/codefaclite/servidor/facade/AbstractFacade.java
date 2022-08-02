@@ -283,6 +283,17 @@ public abstract class AbstractFacade<T>
     
     
     public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo) {
+        Query query = ejecutarConsultaConParametros(queryStr, map, limiteMinimo, limiteMaximo);
+        return query.getResultList();
+    }
+    
+    public static Long findStaticSizeDialog(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo) {
+        Query query = ejecutarConsultaConParametros(queryStr, map, limiteMinimo, limiteMaximo);
+        return (Long) query.getSingleResult();
+    }
+    
+    public static Query ejecutarConsultaConParametros(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo)
+    {
         System.out.println("[Dialog]"+queryStr);
         Query query = entityManager.createQuery(queryStr);
         //Agregar los parametros del map al query
@@ -294,7 +305,7 @@ public abstract class AbstractFacade<T>
         
         query.setMaxResults(limiteMaximo);
         query.setFirstResult(limiteMinimo);
-        return query.getResultList();
+        return query;
     }
     
     

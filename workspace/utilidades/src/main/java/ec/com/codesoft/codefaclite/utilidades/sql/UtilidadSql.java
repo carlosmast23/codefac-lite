@@ -82,4 +82,21 @@ public class UtilidadSql {
         return filasAfectadas;
     }
     
+    public static String convertirConsultaEnConsultaTamanio(String query)
+    {
+        //por el momento ocupo esta cadena temporal para luego poder encontrar las posiciones de corte con minusculas
+        String queryTmp=query.toLowerCase();
+        int primerCorte=queryTmp.indexOf("select")+"select".length();
+        int segundoCorte=queryTmp.indexOf("from");
+        String queryModificado=query.substring(0,primerCorte)+" count(1) "+query.substring(segundoCorte);
+        
+        //Eliminar las columnas de ordenar porque no se pueden ejecutar en conjunto con el comando count(1)
+        if(queryModificado.toLowerCase().indexOf("order by")>=0)
+        {
+            queryModificado = queryModificado.substring(0, queryModificado.toLowerCase().indexOf("order by")); //TODO: Analizar como verificar para otros casos que tengan mas espacios entre order y by
+        }
+    
+        return queryModificado;
+    }
+    
 }
