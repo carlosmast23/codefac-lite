@@ -105,7 +105,7 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
         InformacionGuiaRemision info=new InformacionGuiaRemision();
         
         //Revisar que codigo debe ir aqui , aunque en el SRI dice que es opcional
-        info.setContribuyenteEspecial("123");
+        //info.setContribuyenteEspecial("123");
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(guiaRemision.getDireccionEstablecimiento()));
         info.setFechaIniTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaIniciaTransporte()));
         info.setFechaFinTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaFinTransporte()));
