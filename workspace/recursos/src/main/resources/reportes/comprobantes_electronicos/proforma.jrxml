@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.0000000000000109"/>
+	<property name="ireport.zoom" value="1.2100000000000146"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="12"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -86,7 +86,7 @@
 	<title>
 		<band height="145" splitType="Stretch">
 			<staticText>
-				<reportElement x="421" y="50" width="134" height="20" uuid="10e48216-48bb-4bce-9370-a0d54c0a304f"/>
+				<reportElement x="450" y="70" width="105" height="20" uuid="10e48216-48bb-4bce-9370-a0d54c0a304f"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -102,6 +102,7 @@
 				<reportElement x="0" y="70" width="82" height="20" uuid="0339d62a-37fd-4428-8ee1-2c9c89925dfc"/>
 				<textElement>
 					<font isBold="true"/>
+					<paragraph leftIndent="3"/>
 				</textElement>
 				<text><![CDATA[Identificación:]]></text>
 			</staticText>
@@ -109,6 +110,7 @@
 				<reportElement x="0" y="90" width="82" height="20" uuid="853671ed-6041-4aa4-badb-4c46f5b0ee08"/>
 				<textElement>
 					<font isBold="true"/>
+					<paragraph leftIndent="3"/>
 				</textElement>
 				<text><![CDATA[Fecha Emisión:]]></text>
 			</staticText>
@@ -123,11 +125,12 @@
 				<reportElement x="0" y="110" width="82" height="17" uuid="fd41bd82-26d4-4f4e-9aa8-58cc11d97023"/>
 				<textElement>
 					<font isBold="true"/>
+					<paragraph leftIndent="3"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="183" y="50" width="238" height="20" uuid="7a51c9a1-117a-4cd1-9e9e-2050b5f8424b"/>
+				<reportElement x="82" y="50" width="473" height="20" uuid="7a51c9a1-117a-4cd1-9e9e-2050b5f8424b"/>
 				<textElement>
 					<paragraph leftIndent="5"/>
 				</textElement>
@@ -148,11 +151,12 @@
 				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="50" width="182" height="20" uuid="b0655437-1765-43fa-8aa8-396a8dd3634b"/>
+				<reportElement x="1" y="50" width="81" height="20" uuid="b0655437-1765-43fa-8aa8-396a8dd3634b"/>
 				<textElement>
 					<font isBold="true"/>
+					<paragraph leftIndent="3"/>
 				</textElement>
-				<text><![CDATA[Razón Social / Nombres y Apellidos:]]></text>
+				<text><![CDATA[Cliente:]]></text>
 			</staticText>
 			<subreport>
 				<reportElement x="0" y="0" width="555" height="50" uuid="60cc63ba-40b6-4392-b1da-b9fa4dc7f9cc"/>
@@ -184,7 +188,7 @@
 				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="421" y="70" width="134" height="57" uuid="a0727ea6-6a62-4dcd-b4b0-a1e57d389239"/>
+				<reportElement x="450" y="90" width="105" height="37" uuid="a0727ea6-6a62-4dcd-b4b0-a1e57d389239"/>
 				<box>
 					<pen lineStyle="Dashed"/>
 					<topPen lineWidth="1.0" lineStyle="Dashed"/>
@@ -193,7 +197,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Dashed"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="30"/>
+					<font size="25"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{secuencial}]]></textFieldExpression>
 			</textField>
