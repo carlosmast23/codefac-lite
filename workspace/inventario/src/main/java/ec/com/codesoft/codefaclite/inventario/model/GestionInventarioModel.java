@@ -12,9 +12,11 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.inventario.panel.GestionInventarioPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
@@ -25,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
@@ -200,7 +203,34 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     {
         getBtnBuscarProducto().addActionListener(listenerBuscarProducto);       
         getBtnBuscarLote().addActionListener(listenerBuscarLote);        
+        getBtnCrearLote().addActionListener(listenerCrearLote);
+        ObserverUpdateInterface observerCreate=new ObserverUpdateInterface<Lote>() {
+            @Override
+            public void updateInterface(Lote entity) {
+                if(entity!=null)
+                {
+                    lote = entity;
+                    cargarDatosPantalla();
+                }
+                
+            }
+        };
+        panelPadre.crearDialogoCodefac(observerCreate, VentanaEnum.LOTE, true, formOwnerFocus);
     }
+    
+    private ActionListener listenerCrearLote=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            //ObserverUpdateInterface observerUpdate=new ObserverUpdateInterface
+            
+            /*panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Lote>(){
+            
+            
+            
+            }, null,null,null);*/
+        }
+    };
     
     private ActionListener listenerBuscarLote=new ActionListener() {
         @Override

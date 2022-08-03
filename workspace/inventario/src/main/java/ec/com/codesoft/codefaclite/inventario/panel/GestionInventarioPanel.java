@@ -62,6 +62,7 @@ public abstract class GestionInventarioPanel extends ControladorCodefacInterface
         jLabel10 = new javax.swing.JLabel();
         txtLoteNombre = new javax.swing.JTextField();
         btnBuscarLote = new javax.swing.JButton();
+        btnCrearLote = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -178,8 +179,11 @@ public abstract class GestionInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnBuscarProducto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         jPanel1.add(lblEspacio1, gridBagConstraints);
@@ -238,7 +242,15 @@ public abstract class GestionInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnBuscarLote, gridBagConstraints);
+
+        btnCrearLote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnCrearLote, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -249,6 +261,7 @@ public abstract class GestionInventarioPanel extends ControladorCodefacInterface
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarLote;
     private javax.swing.JButton btnBuscarProducto;
+    private javax.swing.JButton btnCrearLote;
     private javax.swing.JComboBox<Bodega> cmbBodega;
     private org.jdesktop.swingx.JXDatePicker cmbFechaIngreso;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
@@ -364,6 +377,14 @@ public abstract class GestionInventarioPanel extends ControladorCodefacInterface
 
     public void setTxtLoteNombre(JTextField txtLoteNombre) {
         this.txtLoteNombre = txtLoteNombre;
+    }
+
+    public JButton getBtnCrearLote() {
+        return btnCrearLote;
+    }
+
+    public void setBtnCrearLote(JButton btnCrearLote) {
+        this.btnCrearLote = btnCrearLote;
     }
 
     

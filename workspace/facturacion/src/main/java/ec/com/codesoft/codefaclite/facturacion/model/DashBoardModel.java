@@ -64,7 +64,7 @@ public class DashBoardModel extends DashBoardPanel{
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         
         try {
-            ReportDataAbstract<DashBoardData> reporte=ServiceFactory.getFactory().getUtilidadesServiceIf().consultarDashboard(null,null);
+            ReportDataAbstract<DashBoardData> reporte=ServiceFactory.getFactory().getUtilidadesServiceIf().consultarDashboard(session.getEmpresa(),null,null);
             
             DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
                 @Override

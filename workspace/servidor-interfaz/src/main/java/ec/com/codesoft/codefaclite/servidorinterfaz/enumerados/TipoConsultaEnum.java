@@ -12,5 +12,6 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  */
 public enum TipoConsultaEnum {
     DATOS,
-    TAMANIO
+    TAMANIO,
+    VALOR_TOTAL,
 }

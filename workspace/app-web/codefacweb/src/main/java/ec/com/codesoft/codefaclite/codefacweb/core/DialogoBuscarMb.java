@@ -34,6 +34,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PrimeFaces;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -50,7 +51,7 @@ public class DialogoBuscarMb implements Serializable {
     
     
 
-    //private List<Object> datosBusqueda;
+    private List<Object> datosBusqueda;
     private List<String> propiedadesObjeto;
     private List<Vector<String>> datosConsulta;
     private Vector<ColumnaDialogo> columnasConsulta;
@@ -84,10 +85,11 @@ public class DialogoBuscarMb implements Serializable {
                         filtroConsulta="%"+filters.get(filters.keySet().toArray()[0])+"%";
                     }
                     QueryDialog queryDialog = controller.getConsulta(filtroConsulta);
-                    Long tamanioConsulta=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryDialog.query, queryDialog.getParametros(),first, first+pageSize);                    
+                    String queryTamanio= UtilidadSql.convertirConsultaEnConsultaTamanio(queryDialog.query);
+                    Long tamanioConsulta=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryTamanio, queryDialog.getParametros());                    
                     setRowCount(tamanioConsulta.intValue());
                     
-                    List<Object> datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(),first, first+pageSize);
+                    datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(),first,pageSize);
                     buscarDatos(controller, datosBusqueda);
                     return datosBusqueda;
                     //return super.load(first, pageSize, sortField, sortOrder, filters); //To change body of generated methods, choose Tools | Templates.
@@ -96,6 +98,42 @@ public class DialogoBuscarMb implements Serializable {
                 }
                 return new ArrayList<Object>();
             }
+
+            @Override
+            public String getRowKey(Object object) {                
+                return String.valueOf(object.hashCode());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public int hashCode() {                
+                return super.hashCode(); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+            
+
+            @Override
+            public Object getRowData(String rowKey) {
+                if(datosBusqueda!=null)
+                {                    
+                    for (Object datoBuscado : datosBusqueda) 
+                    {
+                        String datoBusquedaHashCode=String.valueOf(datoBuscado.hashCode());
+                        System.out.println(datoBusquedaHashCode);
+                        if(datoBusquedaHashCode.equals(rowKey))
+                        {
+                            return datoBuscado;
+                        }
+                    }
+                }
+                return null;                
+            }
+            
+            
         };
        
         //buscarDatos(controller);

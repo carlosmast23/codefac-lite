@@ -10,19 +10,23 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.LoteControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.LotePanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class LoteModel extends LotePanel implements ControladorVistaIf,LoteControlador.ISwing{
+public class LoteModel extends LotePanel implements DialogInterfacePanel<Lote>,ControladorVistaIf,LoteControlador.ISwing{
     
     private LoteControlador controlador;
 
@@ -116,7 +120,18 @@ public class LoteModel extends LotePanel implements ControladorVistaIf,LoteContr
         limpiar();
     }
 
-    
-    
+    @Override
+    public Lote getResult() throws ExcepcionCodefacLite {
+        try {
+            controlador.grabar();
+            return controlador.getLote();
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(LoteModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (RemoteException ex) {
+            Logger.getLogger(LoteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
 }

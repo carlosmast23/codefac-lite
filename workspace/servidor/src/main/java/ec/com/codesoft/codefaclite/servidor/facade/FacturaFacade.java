@@ -131,6 +131,10 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         {
             selectStr="SELECT COUNT(1) ";
         }
+        else if(tipoConsultaEnum.equals(TipoConsultaEnum.VALOR_TOTAL))
+        {
+            selectStr="SELECT SUM(u.total) ";
+        }
         
         String orderByStr=" ";
         if(tipoConsultaEnum.equals(TipoConsultaEnum.DATOS))
@@ -212,6 +216,12 @@ public class FacturaFacade extends AbstractFacade<Factura> {
     {
         Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.TAMANIO,false);
         return (Long) query.getSingleResult();
+    }
+    
+    public BigDecimal listaConTotalValor(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) 
+    {
+        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.VALOR_TOTAL,false);
+        return (BigDecimal) query.getSingleResult();
     }
    
 

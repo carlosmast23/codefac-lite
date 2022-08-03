@@ -76,4 +76,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor) throws RemoteException,ServicioCodefacException  ;
     
+    public BigDecimal obtenerFacturasReporteTotalVenta(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) throws java.rmi.RemoteException;
+    
 }

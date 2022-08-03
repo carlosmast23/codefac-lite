@@ -12,11 +12,14 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UtilidadFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
@@ -25,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.DashBoardData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.DashBoardReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ValidacionRespuesta;
@@ -34,6 +38,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.RemoteServer;
@@ -72,10 +77,10 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         return AbstractFacade.findStaticDialog(query, map, limiteMinimo, limiteMaximo);
     }
     
-    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
+    /*public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {
         query= UtilidadSql.convertirConsultaEnConsultaTamanio(query);
-        return AbstractFacade.findStaticSizeDialog(query, map, limiteMinimo, limiteMaximo);
-    }
+        return AbstractFacade.findCountStaticDialog(query, map);
+    }*/
 
     public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {
         return AbstractFacade.findCountStaticDialog(query, map);
@@ -542,21 +547,30 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     }
     
     
-    public ReportDataAbstract<DashBoardData> consultarDashboard(Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException
+    public ReportDataAbstract<DashBoardData> consultarDashboard(Empresa empresa,Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException
     {
-        ReportDataAbstract<DashBoardData> reporte=new ReportDataAbstract<DashBoardData>("DashBoard") {
-            @Override
-            public String[] getTitulos() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void construirFilaTabla(DashBoardData dato, Vector<Object> fila) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
+        java.sql.Date fechaHoy= UtilidadesFecha.getFechaHoy();
+        ReportDataAbstract<DashBoardData> reporte=new DashBoardReport("DashBoard");
         //Agregar parametros
-        reporte.agregarParametro("ventasDiarias", "130");
+        BigDecimal totalVentas= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTotalVenta
+        (
+                null, 
+                fechaHoy, 
+                fechaHoy, 
+                ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO, 
+                Boolean.TRUE, 
+                null, 
+                Boolean.TRUE, 
+                null, 
+                empresa, 
+                DocumentoEnum.FACTURA, 
+                null, 
+                null, 
+                null, 
+                null, 
+                Boolean.TRUE);
+        
+        reporte.agregarParametro("ventasDiarias",totalVentas);
         
         DashBoardData dashBoardData=new DashBoardData();
                 

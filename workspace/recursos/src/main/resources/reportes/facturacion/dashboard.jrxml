@@ -55,6 +55,9 @@
 	<parameter name="ventasDiarias" class="java.lang.String"/>
 	<parameter name="productosList" class="java.util.Collection"/>
 	<parameter name="subreporte_top_productos" class="java.lang.Object"/>
+	<parameter name="comprasDiarias" class="java.lang.String"/>
+	<parameter name="cuentasPorCobrar" class="java.lang.String"/>
+	<parameter name="cuentasPorPagar" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -134,14 +137,14 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{ventasDiarias}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{comprasDiarias}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="289" y="40" width="121" height="42" forecolor="#FFFFFF" backcolor="#0071BD" uuid="5cf1db1d-1b60-4223-acaa-4fce2a73376e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{ventasDiarias}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{cuentasPorCobrar}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Opaque" x="289" y="20" width="121" height="20" forecolor="#FFFFFF" backcolor="#0071BD" uuid="aef43042-a84a-41ca-bda7-cbb9575130a7"/>
@@ -176,7 +179,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{ventasDiarias}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{cuentasPorPagar}]]></textFieldExpression>
 			</textField>
 			<subreport>
 				<reportElement x="0" y="89" width="265" height="177" uuid="15ddced7-9d10-455b-95f5-bd7d84c1083a"/>

@@ -60,7 +60,7 @@ public interface UtilidadesServiceIf extends Remote
     
     public Integer obtenerCodigoMaximoPorId(String nombreTabla,String nombreCampoPk) throws RemoteException,ServicioCodefacException;
     
-    public ReportDataAbstract<DashBoardData> consultarDashboard(Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException;
+    public ReportDataAbstract<DashBoardData> consultarDashboard(Empresa empresa,Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException;
     
-    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;    
+    //public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;    
 }
