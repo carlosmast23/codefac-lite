@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -203,32 +204,29 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     {
         getBtnBuscarProducto().addActionListener(listenerBuscarProducto);       
         getBtnBuscarLote().addActionListener(listenerBuscarLote);        
-        getBtnCrearLote().addActionListener(listenerCrearLote);
-        ObserverUpdateInterface observerCreate=new ObserverUpdateInterface<Lote>() {
-            @Override
-            public void updateInterface(Lote entity) {
-                if(entity!=null)
-                {
-                    lote = entity;
-                    cargarDatosPantalla();
-                }
-                
-            }
-        };
-        panelPadre.crearDialogoCodefac(observerCreate, VentanaEnum.LOTE, true, formOwnerFocus);
+        getBtnCrearLote().addActionListener(listenerCrearLote);        
     }
     
     private ActionListener listenerCrearLote=new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             
-            //ObserverUpdateInterface observerUpdate=new ObserverUpdateInterface
+            Object[] paramPostConstruct = new Object[1];
+            paramPostConstruct[0] = productoSeleccionado;
             
-            /*panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Lote>(){
-            
-            
-            
-            }, null,null,null);*/
+            ObserverUpdateInterface observerCreate=new ObserverUpdateInterface<Lote>() 
+            {
+                @Override
+                public void updateInterface(Lote entity) {
+                    if(entity!=null)
+                    {
+                        lote = entity;
+                        cargarDatosPantalla();
+                    }
+
+                }
+            };
+            panelPadre.crearDialogoCodefac(observerCreate, VentanaEnum.LOTE, false,paramPostConstruct,formularioActual);        
         }
     };
     

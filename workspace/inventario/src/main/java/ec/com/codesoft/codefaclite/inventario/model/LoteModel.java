@@ -13,8 +13,10 @@ import ec.com.codesoft.codefaclite.controlador.vista.inventario.LoteControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.LotePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +28,7 @@ import java.util.logging.Logger;
  *
  * @author CARLOS_CODESOFT
  */
-public class LoteModel extends LotePanel implements DialogInterfacePanel<Lote>,ControladorVistaIf,LoteControlador.ISwing{
+public class LoteModel extends LotePanel implements DialogInterfacePanel<Lote>,InterfazPostConstructPanel,ControladorVistaIf,LoteControlador.ISwing{
     
     private LoteControlador controlador;
 
@@ -132,6 +134,17 @@ public class LoteModel extends LotePanel implements DialogInterfacePanel<Lote>,C
             Logger.getLogger(LoteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public void postConstructorExterno(Object[] parametros) {
+        
+        if(parametros[0]!=null)
+        {
+            Producto productoTmp=(Producto) parametros[0];
+            controlador.getLote().setProducto(productoTmp);            
+        }
+        actualizarBindingCompontValues();
     }
     
 }

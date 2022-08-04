@@ -83,6 +83,7 @@ public class DialogoBuscarMb implements Serializable {
                     if(filters.size()>0)
                     {
                         filtroConsulta="%"+filters.get(filters.keySet().toArray()[0])+"%";
+                        filtroConsulta=filtroConsulta.toLowerCase();
                     }
                     QueryDialog queryDialog = controller.getConsulta(filtroConsulta);
                     String queryTamanio= UtilidadSql.convertirConsultaEnConsultaTamanio(queryDialog.query);

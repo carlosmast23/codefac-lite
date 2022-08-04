@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
@@ -39,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
@@ -104,6 +106,7 @@ public class CompraModel extends CompraPanel{
     //private Empresa empresa;
     private Compra compra;
     private Producto productoSeleccionado;
+    private Lote loteSeleccionado;
     //private Persona proveedor;
     private ProductoProveedor productoProveedor;
     private DefaultTableModel modeloTablaDetallesCompra;
@@ -909,7 +912,34 @@ public class CompraModel extends CompraPanel{
                 listenerBtnCargarCompraXml();
             }
         });
+        
+        getBtnBuscarLote().addActionListener(listenerBuscarLote);
                 
+    }
+    
+    private ActionListener listenerBuscarLote=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            LoteBusqueda busqueda=new LoteBusqueda(session.getEmpresa(),productoSeleccionado);
+            BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(busqueda);            
+            buscarDialogo.setVisible(true);
+
+            if (buscarDialogo.getResultado() != null) 
+            {
+                loteSeleccionado= (Lote) buscarDialogo.getResultado();
+            }
+            
+            cargarDatosPantallaLote();
+        }
+    };
+    
+    private void cargarDatosPantallaLote()
+    {
+        if(loteSeleccionado!=null)
+        {
+            getTxtLoteNombre().setText(title);
+        }
     }
     
     private void agregarDetalleCompraConDatosVista(CompraDetalle compraDetalle)

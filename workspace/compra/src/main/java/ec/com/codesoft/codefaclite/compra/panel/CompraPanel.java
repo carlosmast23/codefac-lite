@@ -196,6 +196,10 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         lblSustentoSri1 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         cmbIvaDetalle = new javax.swing.JComboBox<>();
+        lblSustentoSri2 = new javax.swing.JLabel();
+        txtLoteNombre = new javax.swing.JTextField();
+        btnBuscarLote = new javax.swing.JButton();
+        btnCrearLote = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblFacturaReembolso = new javax.swing.JTable();
@@ -887,14 +891,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(cmbSustentoComprobante, gridBagConstraints);
 
         lblSustentoSri1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblSustentoSri1.setText("Sustento Sri:");
+        lblSustentoSri1.setText("Lote:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -917,6 +921,39 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(cmbIvaDetalle, gridBagConstraints);
+
+        lblSustentoSri2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSustentoSri2.setText("Sustento Sri:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(lblSustentoSri2, gridBagConstraints);
+
+        txtLoteNombre.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtLoteNombre, gridBagConstraints);
+
+        btnBuscarLote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(btnBuscarLote, gridBagConstraints);
+
+        btnCrearLote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(btnCrearLote, gridBagConstraints);
 
         jTabbedPane2.addTab("Detalles", jPanel2);
 
@@ -981,8 +1018,10 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarProveedor;
     private javax.swing.JButton btnAgregarReembolso;
     private javax.swing.JButton btnBuscarFacturaReembolso;
+    private javax.swing.JButton btnBuscarLote;
     private javax.swing.JButton btnBuscarProductoProveedor;
     private javax.swing.JButton btnCargarXml;
+    private javax.swing.JButton btnCrearLote;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarItem;
     private javax.swing.JButton btnEliminarItem;
@@ -1048,6 +1087,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSubtotalSinImpuestos;
     private javax.swing.JLabel lblSustentoSri;
     private javax.swing.JLabel lblSustentoSri1;
+    private javax.swing.JLabel lblSustentoSri2;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JPanel panelRetencion;
     private javax.swing.JPanel pblContenedora;
@@ -1063,6 +1103,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JSpinner txtDiasCredito;
     private javax.swing.JTextField txtEstablecimientoCompra;
     private javax.swing.JTextField txtIce;
+    private javax.swing.JTextField txtLoteNombre;
     private javax.swing.JTextField txtObservacion;
     private javax.swing.JTextField txtOrdenCompra;
     private javax.swing.JTextField txtPrecionUnitarioItem;
@@ -1429,6 +1470,31 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.cmbIvaDetalle = cmbIvaDetalle;
     }
 
+    public JButton getBtnBuscarLote() {
+        return btnBuscarLote;
+    }
+
+    public void setBtnBuscarLote(JButton btnBuscarLote) {
+        this.btnBuscarLote = btnBuscarLote;
+    }
+
+    public JButton getBtnCrearLote() {
+        return btnCrearLote;
+    }
+
+    public void setBtnCrearLote(JButton btnCrearLote) {
+        this.btnCrearLote = btnCrearLote;
+    }
+
+    public JTextField getTxtLoteNombre() {
+        return txtLoteNombre;
+    }
+
+    public void setTxtLoteNombre(JTextField txtLoteNombre) {
+        this.txtLoteNombre = txtLoteNombre;
+    }
+
+    
     
     
     
