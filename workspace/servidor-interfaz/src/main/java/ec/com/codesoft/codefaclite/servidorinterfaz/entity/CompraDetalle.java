@@ -79,6 +79,9 @@ public class CompraDetalle implements Serializable {
     
     @Column(name = "PORCENTAJE_IVA")
     private Integer porcentajeIva;
+    
+    @JoinColumn(name = "LOTE_ID")
+    private Lote lote;
         
     /**
      * Este campo me permite guardar cual fue el codigo original del proveedor cuando exista un codigo
@@ -296,7 +299,14 @@ public class CompraDetalle implements Serializable {
     public void setPorcentajeIva(Integer porcentajeIva) {
         this.porcentajeIva = porcentajeIva;
     }
-            
+
+    public Lote getLote() {
+        return lote;
+    }
+
+    public void setLote(Lote lote) {
+        this.lote = lote;
+    }
     
     
     /**

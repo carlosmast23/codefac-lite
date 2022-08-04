@@ -793,6 +793,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 Kardex kardex=new Kardex();
                 kardex.setBodega(kardexDetalle.bodega);
                 kardex.setProducto(compraDetalle.getProductoProveedor().getProducto());
+                kardex.setLote(compraDetalle.getLote());
                 
                 KardexDetalle kardexDetalleNuevo=kardexDetalle.obtenerObjetoOriginal();                
                 kardexDetalleNuevo.setKardex(kardex);

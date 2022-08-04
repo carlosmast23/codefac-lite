@@ -54,7 +54,7 @@ public class LoteControlador extends ModelControladorAbstract<LoteControlador.IC
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         
         try {           
-            ServiceFactory.getFactory().getLoteSeviceIf().grabar(lote, session.getEmpresa(), session.getUsuario());
+            lote=ServiceFactory.getFactory().getLoteSeviceIf().grabar(lote, session.getEmpresa(), session.getUsuario());
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(LoteControlador.class.getName()).log(Level.SEVERE, null, ex);

@@ -716,9 +716,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
-                for (KardexDetalle detalle : detalles) {
-                    grabarKardexDetallSinTransaccion(detalle,null,false);
-                    
+                for (KardexDetalle detalle : detalles) 
+                {
+                    grabarKardexDetallSinTransaccion(detalle,detalle.getKardex().getLote(),false);                    
                 }
                 
             }

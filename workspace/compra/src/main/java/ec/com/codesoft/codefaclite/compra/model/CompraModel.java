@@ -116,7 +116,8 @@ public class CompraModel extends CompraPanel{
     private Boolean banderaIngresoDetallesCompra;
     private Compra.RetencionEnumCompras estadoRetencion;
 
-    public CompraModel() {
+    public CompraModel() 
+    {
         super.validacionDatosIngresados=false;
     }
     
@@ -444,6 +445,7 @@ public class CompraModel extends CompraPanel{
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
         getTxtCantidadItem().setText("");
+        getTxtLoteNombre().setText("");
         //Limpiar Tabla de Detalles Producto 
         if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
         {
@@ -806,6 +808,11 @@ public class CompraModel extends CompraPanel{
                 buscarDialogo.setVisible(true);
                 Producto productoTmp = (Producto) buscarDialogo.getResultado();
                 agregarProductoVista(productoTmp);
+                
+                //Cuando seleccione otro producto por seguridad debo limpiar el lote para que seleccione de nuevo
+                //TODO:Mejorar esta parte para tener desde un mismo lugar donde limpiar los datos
+                loteSeleccionado=null;
+                getTxtLoteNombre().setText("");
             }
         });
         
@@ -865,11 +872,19 @@ public class CompraModel extends CompraPanel{
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
                     getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
                     getCmbIvaDetalle().setSelectedItem(compraDetalle.getPorcentajeIva());
+                    
+                    String loteCodigo="";
+                    if(compraDetalle.getLote()!=null)
+                    {
+                        loteCodigo=compraDetalle.getLote().getCodigo();
+                    }
+                    getTxtLoteNombre().setText(loteCodigo);
                     //compraDetalle.setPrecioUnitario
                     compraDetalle.getPrecioUnitario();
                     bloquearDesbloquearBotones(false);
                     //----------------------------------------------------------------------
                     productoSeleccionado = compraDetalle.getProductoProveedor().getProducto();
+                    loteSeleccionado=compraDetalle.getLote();
                     
                     
                     getCmbSustentoComprobante().setSelectedItem(compraDetalle.getCodigoSustentoSriEnum());
@@ -914,8 +929,32 @@ public class CompraModel extends CompraPanel{
         });
         
         getBtnBuscarLote().addActionListener(listenerBuscarLote);
+        getBtnCrearLote().addActionListener(listenerCrearLote);
                 
     }
+    
+    private ActionListener listenerCrearLote=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            Object[] paramPostConstruct = new Object[1];
+            paramPostConstruct[0] = productoSeleccionado;
+            
+            ObserverUpdateInterface observerCreate=new ObserverUpdateInterface<Lote>() 
+            {
+                @Override
+                public void updateInterface(Lote entity) {
+                    if(entity!=null)
+                    {
+                        loteSeleccionado= (Lote) entity;
+                        cargarDatosPantallaLote();
+                    }
+
+                }
+            };
+            panelPadre.crearDialogoCodefac(observerCreate, VentanaEnum.LOTE, false,paramPostConstruct,formularioActual);        
+        }
+    };
     
     private ActionListener listenerBuscarLote=new ActionListener() {
         @Override
@@ -938,7 +977,7 @@ public class CompraModel extends CompraPanel{
     {
         if(loteSeleccionado!=null)
         {
-            getTxtLoteNombre().setText(title);
+            getTxtLoteNombre().setText(loteSeleccionado.getCodigo());
         }
     }
     
@@ -959,7 +998,7 @@ public class CompraModel extends CompraPanel{
         //TODO:Verificar por que existen 2 validaciones para la vista
         if(verificarCamposValidados())
         {
-            agregarDetallesCompra(compraDetalle,productoProveedor ,costo, cantidad, precioUnitario, getTxtDescripcionItem().getText(),porcentajeIva);
+            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario, getTxtDescripcionItem().getText(),porcentajeIva);
         }
         
     }
@@ -1007,7 +1046,7 @@ public class CompraModel extends CompraPanel{
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {
                     //TODO:Mejorar esta parte para no pasar los mismos datos
-                    agregarDetallesCompra(compraDetalle,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(), compraDetalle.getDescripcion(),compraDetalle.getPorcentajeIva());
+                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(), compraDetalle.getDescripcion(),compraDetalle.getPorcentajeIva());
                     
                 }
                 
@@ -1106,13 +1145,21 @@ public class CompraModel extends CompraPanel{
      */
     private void mostrarDatosTabla()
     {
-        String[] titulo={"Cantidad","Descripción","ValorRetIVA","ValorRetRent","Valor Unitario","Valor Total"};
+        String[] titulo={"Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Valor Unitario","Valor Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         for (CompraDetalle detalle : detalles) {
+            
+            String loteCodigo="";
+            if(detalle.getLote()!=null)
+            {
+                loteCodigo=detalle.getLote().getCodigo();
+            }
+            
             Vector<String> fila=new Vector<String>();
             fila.add(detalle.getCantidad()+"");
             fila.add(detalle.getDescripcion()+"");
+            fila.add(loteCodigo);
             fila.add(detalle.getValorSriRetencionIVA()+"");
             fila.add(detalle.getValorSriRetencionRenta()+"");
             fila.add(detalle.getPrecioUnitario()+"");
@@ -1241,6 +1288,7 @@ public class CompraModel extends CompraPanel{
         getTxtPrecionUnitarioItem().setText("");
         getTxtProductoItem().setText("");
         getTxtCantidadItem().setText("");
+        getTxtLoteNombre().setText("");
         
     }
     
@@ -1252,7 +1300,7 @@ public class CompraModel extends CompraPanel{
     }
    
     //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
-    private void agregarDetallesCompra(CompraDetalle compraDetalle,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,String descripcion,Integer porcentajeIva)
+    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,String descripcion,Integer porcentajeIva)
     {
         Boolean agregar = true;
         
@@ -1278,6 +1326,7 @@ public class CompraModel extends CompraPanel{
             compraDetalle.setDescripcion(descripcion);
             //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
             compraDetalle.setDescuento(BigDecimal.ZERO);
+            compraDetalle.setLote(lote);
             /*if(productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
             {
                 compraDetalle.setIva(BigDecimal.ZERO);                
