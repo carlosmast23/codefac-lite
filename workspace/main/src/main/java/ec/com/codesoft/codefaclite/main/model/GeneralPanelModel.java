@@ -711,13 +711,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private ControladorCodefacInterface abrirVentanaCodefac(ControladorCodefacInterface ventana,VentanaEnum menuControlador )
     {
         cambiarCursorEspera();
-        //ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
-        if (!verificarPantallaCargada(ventana)) {
+        Boolean pantallasMultiples=false;
+        try {
+            //TODO: Optimizar esta parte para cargar estos datos de session una sola vez para evitar hacer multiples consultas al servidor
+            //ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
+            pantallasMultiples=ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.VENTANAS_MULTIPLES,EnumSiNo.SI);
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (!verificarPantallaCargada(ventana) || pantallasMultiples) 
+        {
             //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos7
             ventana = (ControladorCodefacInterface) menuControlador.createNewInstance();
             ventana.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
             agregarListenerMenu(ventana, menuControlador.isMaximizado(), null, null);
-        } else {
+        } 
+        else 
+        {
             try {
                 if (ventana.isIcon()) {
                     ventana.setIcon(false);

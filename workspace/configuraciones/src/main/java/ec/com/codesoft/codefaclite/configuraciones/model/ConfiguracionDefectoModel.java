@@ -215,6 +215,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbVentanasMultiples(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbAgregarLoteFactura(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbConstruirEnsamblesFacturar(),EnumSiNo.values());
         
@@ -479,6 +481,14 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroFacturarInventarioNegativo != null) ? parametroFacturarInventarioNegativo.getValor() : null);
             getCmbFacturarInventarioNegativo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac parametroVentasMultiples = parametrosTodos.get(ParametroCodefac.VENTANAS_MULTIPLES);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroVentasMultiples != null) ? parametroVentasMultiples.getValor() : null);
+            getCmbVentanasMultiples().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            ParametroCodefac parametroAgregarLoteFactura = parametrosTodos.get(ParametroCodefac.AGREGAR_LOTE_FACTURA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroAgregarLoteFactura != null) ? parametroAgregarLoteFactura.getValor() : null);
+            getCmbAgregarLoteFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             ParametroCodefac parametroConstruirEnsambleFacturar= parametrosTodos.get(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroConstruirEnsambleFacturar != null) ? parametroConstruirEnsambleFacturar.getValor() : null);
             getCmbConstruirEnsamblesFacturar().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -655,6 +665,14 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbFacturarInventarioNegativo().getSelectedItem();
         agregarParametro(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
+        
+        enumSiNo = (EnumSiNo) getCmbVentanasMultiples().getSelectedItem();
+        agregarParametro(ParametroCodefac.VENTANAS_MULTIPLES, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.VENTANAS_MULTIPLES);
+        
+        enumSiNo = (EnumSiNo) getCmbAgregarLoteFactura().getSelectedItem();
+        agregarParametro(ParametroCodefac.AGREGAR_LOTE_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.AGREGAR_LOTE_FACTURA);
         
         enumSiNo = (EnumSiNo) getCmbConstruirEnsamblesFacturar().getSelectedItem();
         agregarParametro(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, (enumSiNo != null) ? enumSiNo.getLetra() : null);

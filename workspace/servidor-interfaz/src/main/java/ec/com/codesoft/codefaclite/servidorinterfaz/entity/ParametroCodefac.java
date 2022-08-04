@@ -120,6 +120,17 @@ public class ParametroCodefac implements Serializable {
     public static final String FACTURAR_INVENTARIO_NEGATIVO="facturar_inventario_negativo";
     
     /**
+     * Parametro parametro que me permite elegir si en los detalles me permiten agregar la información del lote del producto
+     */
+    public static final String AGREGAR_LOTE_FACTURA="agregar_lote_factura";
+    
+    /**
+     * Configuracion que me permite establecer que se abran varias ventanas al mismo tiempo
+     */
+    public static final String VENTANAS_MULTIPLES="ventanas_multiples";
+    
+    
+    /**
      * Esta opcion me permite generar ensambles si no existe al momento de facturar
      * @result EnumSiNO
      */

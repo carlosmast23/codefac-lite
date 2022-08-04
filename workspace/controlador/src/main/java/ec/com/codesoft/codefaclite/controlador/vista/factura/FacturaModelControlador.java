@@ -498,7 +498,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum,Kardex kardex) throws ServicioCodefacException {
 
         //Validacion de los datos ingresados para ver si puedo agregar al detalle
-        if (!interfaz.validarIngresoDetalle()) {
+        if (!interfaz.validarIngresoDetalle()) 
+        {
             int filaSeleccionada=interfaz.filaSeleccionadaTablaDetalle();
             interfaz.cargarDatosDetalles(); //Si no se pudo editar vuelvo a cargar los detalles si se modifico desde la tabla para que quede la forma original
             interfaz.seleccionarFilaTablaDetalle(filaSeleccionada);

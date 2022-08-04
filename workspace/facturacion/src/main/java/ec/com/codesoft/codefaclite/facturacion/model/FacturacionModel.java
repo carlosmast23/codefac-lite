@@ -1294,6 +1294,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
          *         FALTA IMPLEMENTAR EL METODO PARA MANEJAR PRODUCTOS INDIVIDUALES
          * ==========================================================================
          */
+        if(kardexSeleccionado!=null && kardexSeleccionado.getLote()!=null)
+        {
+            //TODO: Ver si esta opcion de leer el parametro se puede hacer como un cache solo la primera vez para evitar tener que hacer muchas consultas al servidor
+            //TODO: Ver si esta parte se puede implentar en el controlador para tener una misma logica para el escritorio y la parte web
+            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_LOTE_FACTURA,EnumSiNo.SI))
+            {
+                String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaVencimiento());
+                String detalleTexto=productoSeleccionado.getNombre();
+                detalleTexto=detalleTexto+" [ lote: "+kardexSeleccionado.getLote().getCodigo()+", fecha caducidad: "+fechaStr+" ]";
+                productoSeleccionado.setNombre(detalleTexto);
+            }
+        }
+                
+        
+        
         int cantidadItemsIndividuales=ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
         if(productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI) && cantidadItemsIndividuales>0)
         {
