@@ -863,6 +863,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado,kardexSeleccionado);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             }
         } else //Si no esta habilitado el boton de editar funciona como para editar
         {
@@ -1443,10 +1444,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void grabar() throws ExcepcionCodefacLite {
 
         try {
-            //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
             validacionesGrabar();
-            PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
             
+            //Verificar si quiere iniciar con el proceso de vender
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Esta seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
                 throw new ExcepcionCodefacLite("Cancelacion usuario");
@@ -1456,6 +1456,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             setearValoresDefaultFactura(CrudEnum.CREAR);
+            PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();            
             
             //TODO: Por el momento dejo seteado para grabar distinto para la las liquidaciones de compra porque en verdad en el mismo procedimiento
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
@@ -1464,12 +1465,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             else
             {
+                
                 CarteraParametro carteraParametro=new CarteraParametro(
                         getChkHabilitarCredito().isSelected(), 
                         (Integer) getTxtDiasCredito().getValue());
                 
                 
-                if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
+                //Solo procesar normal si es una venta fisíca y distinto de una nota de venta interna
+                if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL) && !factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
                 {
                     //List<FacturaParametro> facturasProcesar=new ArrayList<FacturaParametro>();
                     ///facturasProcesar.add(new FacturaParametro(factura, carteraParametro, prestamo));
@@ -1496,7 +1499,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         for (Factura facturaProcesada : respuestaManual.procesadosList) 
                         {
                            DocumentoEnum documentoEnum=factura.getCodigoDocumentoEnum();
-                           JasperPrint jasperPrint=facturaManual(facturaProcesada, documentoEnum, true,true);
+                           JasperPrint jasperPrint=reporteVentaManual(facturaProcesada, documentoEnum, true,true);
                            reportesPendientes.add(jasperPrint);
                            //facturaManual(facturaProcesada,documentoEnum,true);
                         }
@@ -1524,7 +1527,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             //Si la factura en manual no continua el proceso de facturacion electronica
             //TODO: Ver si esta logica va incluida en el servidor
-            //if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
+            
             //TODO: Ver como hacer las facturas fisicas
             DocumentoEnum documentoEnum=factura.getCodigoDocumentoEnum();
             if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
@@ -1542,7 +1545,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {
-                    facturaManual(factura,documentoEnum,true,false);
+                    reporteVentaManual(factura,documentoEnum,true,false);
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 }
                 
@@ -1672,7 +1675,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //imprimirComprobanteVenta(factura);
     }
     
-    private JasperPrint facturaManual(Factura factura,DocumentoEnum documentoEnum,Boolean activarConfiguracionesImpresion,Boolean getJasperPrint) throws ServicioCodefacException
+    private JasperPrint reporteVentaManual(Factura factura,DocumentoEnum documentoEnum,Boolean activarConfiguracionesImpresion,Boolean getJasperPrint) throws ServicioCodefacException
     {
         try 
         {
@@ -2002,7 +2005,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                      * Imprimir facturas manuales
                      */
                     try {
-                        facturaManual(factura,factura.getCodigoDocumentoEnum(),false,false);
+                        reporteVentaManual(factura,factura.getCodigoDocumentoEnum(),false,false);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }

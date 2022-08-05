@@ -530,6 +530,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         BigDecimal valorTotalUnitario = new BigDecimal(interfaz.obtenerTxtValorUnitario());
         EnumSiNo incluidoIvaSiNo=interfaz.obtenerComboIva();
         //session.
+        ParametroCodefac parametroIva=session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
+        if(parametroIva==null)
+        {
+            throw new ServicioCodefacException("Falta configurar el IVA por DEFECTO");
+        }
+        
         BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
         
         if(incluidoIvaSiNo.equals(EnumSiNo.SI))
