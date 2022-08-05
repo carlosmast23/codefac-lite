@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaPermisoServiceIf;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,18 @@ public class CajaPermisoService extends ServiceAbstract<CajaPermiso, CajaPermiso
     {
         super(CajaPermisoFacade.class);
         cajaPermisoFacade = new CajaPermisoFacade();
+    }
+    
+    
+    public List<PuntoEmision> buscarPuntosEmisionPorCajas(Usuario usuario) throws ServicioCodefacException,java.rmi.RemoteException
+    {   
+        List<PuntoEmision> puntoEmisionList=new ArrayList<PuntoEmision>();
+        List<CajaPermiso> cajaPermisoList=buscarPermisosCajasActivos(usuario);
+        for (CajaPermiso cajaPermiso : cajaPermisoList) 
+        {
+            puntoEmisionList.add(cajaPermiso.getCaja().getPuntoEmision());
+        }
+        return puntoEmisionList;
     }
     
     public List<CajaPermiso> buscarPermisosCajasActivos(Usuario usuario) throws ServicioCodefacException,java.rmi.RemoteException

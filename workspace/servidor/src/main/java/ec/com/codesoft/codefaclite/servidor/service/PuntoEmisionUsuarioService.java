@@ -56,6 +56,19 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
         });
     }
     
+    public List<PuntoEmision> obtenerPuntosEmisionPorUsuario(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException, RemoteException
+    {
+        List<PuntoEmision> puntoEmisionList=new ArrayList<PuntoEmision>();
+        List<PuntoEmisionUsuario> puntoEmisionUsuarioList = obtenerActivoPorUsuario(usuario, sucursal);
+        
+        for (PuntoEmisionUsuario puntoEmisionUsuario : puntoEmisionUsuarioList) 
+        {
+            puntoEmisionList.add(puntoEmisionUsuario.getPuntoEmision());
+        }
+        
+        return puntoEmisionList;        
+    }
+    
     @Override   
     public List<PuntoEmisionUsuario> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException
     {

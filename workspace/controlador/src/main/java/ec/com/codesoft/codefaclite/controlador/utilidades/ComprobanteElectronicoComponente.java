@@ -180,20 +180,31 @@ public class ComprobanteElectronicoComponente {
         //Cargar Puntos de Venta disponibles para la sucursal
 
         try {
-            List<PuntoEmisionUsuario> puntosEmisionUsuario = ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(usuario, sucursal);
+            //TODO: El tema de los puntos de emision se deberia hacer una sola logica en el servidor para no hacer varias consultas
+            //Primero verifico si el usuario esta trabajando con el modulo de caja
+            //TODO: Talvez fuera bueno clasificar al usuarios con que tipo de facturacion va a trabajar
+            List<PuntoEmision> puntosEmisionList= ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarPuntosEmisionPorCajas(usuario);
+            
+            //Si no encuentra puntos de emision por el modulo de caja, busco los permisos normales
+            if(puntosEmisionList.size()==0)
+            {
+                puntosEmisionList=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerPuntosEmisionPorUsuario(usuario, sucursal);
+            }
+            
+            //List<PuntoEmisionUsuario> puntosEmisionUsuario = ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(usuario, sucursal);
             //List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);
             cmbPuntoEmision.removeAllItems();
             //Canfigurar un cell render para las sucursales
             //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
 
-            if (puntosEmisionUsuario != null) {
-                for (PuntoEmisionUsuario puntoUsuario : puntosEmisionUsuario) {
+            if (puntosEmisionList != null) {
+                for (PuntoEmision puntoEmision : puntosEmisionList) {
                     //Cargar solo los puntos de emision que estan relacionados con la sucursal
-                    if(puntoUsuario.getPuntoEmision()!=null)
+                    if(puntoEmision!=null)
                     {
-                        if (puntoUsuario.getPuntoEmision().getSucursal() != null) {
-                            if (puntoUsuario.getPuntoEmision().getSucursal().equals(sucursal)) {
-                                cmbPuntoEmision.addItem(puntoUsuario.getPuntoEmision());
+                        if (puntoEmision.getSucursal() != null) {
+                            if (puntoEmision.getSucursal().equals(sucursal)) {
+                                cmbPuntoEmision.addItem(puntoEmision);
                             }
                         }
                     }

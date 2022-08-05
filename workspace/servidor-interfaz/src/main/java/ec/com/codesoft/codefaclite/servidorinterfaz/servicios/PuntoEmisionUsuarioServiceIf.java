@@ -21,4 +21,5 @@ public interface PuntoEmisionUsuarioServiceIf extends ServiceAbstractIf<PuntoEmi
     public List<PuntoEmisionUsuario> obtenerActivoPorUsuario(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException, RemoteException;
     public List<PuntoEmisionUsuario> obtenerActivosPorSucursal(Sucursal sucursal) throws ServicioCodefacException, RemoteException;
     public List<PuntoEmision> obtenerActivosPorSucursalCastPuntoEmision(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException, RemoteException;
+    public List<PuntoEmision> obtenerPuntosEmisionPorUsuario(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException, RemoteException;
 }

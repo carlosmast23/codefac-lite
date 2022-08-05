@@ -25,4 +25,5 @@ public interface CajaPermisoServiceIf extends ServiceAbstractIf<CajaPermiso>
     public List<Usuario> buscarUsuariosPorSucursalYLigadosACaja(Sucursal sucursal, Caja caja) throws RemoteException;
     public List<CajaPermiso> obtenerTodasCajasPorUsuario(Usuario usuario, PuntoEmision puntoEmision) throws RemoteException;
     public List<CajaPermiso> buscarPermisosCajasActivos(Usuario usuario) throws ServicioCodefacException,java.rmi.RemoteException;
+    public List<PuntoEmision> buscarPuntosEmisionPorCajas(Usuario usuario) throws ServicioCodefacException,java.rmi.RemoteException;
 }

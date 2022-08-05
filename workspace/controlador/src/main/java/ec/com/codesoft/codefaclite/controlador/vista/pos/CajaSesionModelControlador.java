@@ -59,10 +59,12 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
         estadoCajaSessionList = UtilidadesLista.arrayToList(CajaSessionEnum.values());
         
-        if(this.session.getUsuario().getCajasPermisoUsuario() != null)
+        CajaServiceIf cajaServiceIf = ServiceFactory.getFactory().getCajaServiceIf();
+        cajasList = cajaServiceIf.buscarCajasAutorizadasPorUsuario(session.getUsuario());
+        
+        if(cajasList.size()>0)
         {
-            CajaServiceIf cajaServiceIf = ServiceFactory.getFactory().getCajaServiceIf();
-            cajasList = cajaServiceIf.buscarCajasAutorizadasPorUsuario(session.getUsuario());
+            cajaSession.setCaja(cajasList.get(0));
         }
     }
 
