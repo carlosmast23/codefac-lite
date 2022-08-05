@@ -81,6 +81,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
@@ -127,6 +128,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
     private FacturaAdicional facturaAdicionalSeleccionada;
+    private FormaPago formaPagoSeleccionada;
     private SriFormaPago sriFormaPagoSeleccionado;
     private Producto.PrecioVenta precioVentaSeleccionado;
     
@@ -467,6 +469,13 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         //factura.addDatoAdicional(ESTADO_EDITAR, ESTADO_EDITAR);
         
     }
+    
+    public void seleccionarFormaPago(SelectEvent event) {
+        FormaPago formaPago = (FormaPago) event.getObject();
+        factura.addFormaPago(formaPago);
+        
+    }
+
 
 
     public void agregarProducto() {
@@ -916,9 +925,19 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         UtilidadesWeb.abrirDialogo("datos_adicionales_dialogo",250); 
     }
     
+    public void abrirDialogoFormaPago()
+    {
+        UtilidadesWeb.abrirDialogo("forma_pago_dialogo",250); 
+    }
+    
     public void eliminarDatoAdicional()
     {
         factura.getDatosAdicionales().remove(facturaAdicionalSeleccionada); 
+    }
+    
+    public void eliminarFormaPago()
+    {
+        factura.getFormaPagos().remove(formaPagoSeleccionada);
     }
 
     private void cargarDatosAdicionalesCliente() {
@@ -1433,6 +1452,16 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void setPrecioVentaSeleccionado(Producto.PrecioVenta precioVentaSeleccionado) {
         this.precioVentaSeleccionado = precioVentaSeleccionado;
     }
+
+    public FormaPago getFormaPagoSeleccionada() {
+        return formaPagoSeleccionada;
+    }
+
+    public void setFormaPagoSeleccionada(FormaPago formaPagoSeleccionada) {
+        this.formaPagoSeleccionada = formaPagoSeleccionada;
+    }
+    
+    
 
     public FacturaModelControlador getControlador() {
         return controlador;

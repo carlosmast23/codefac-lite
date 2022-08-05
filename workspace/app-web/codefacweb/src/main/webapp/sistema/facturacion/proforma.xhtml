@@ -48,18 +48,6 @@
                             <p:datePicker  id="button" value="#{proformaMb.fechaEmision}" showIcon="true" placeholder="Fecha Emisión" style="width: 70%" />
                         </div>
 
-                        <div class="p-col-12 p-md-6 p-lg-3" >
-                            <div class="p-grid" style="text-align: left" >
-                                <div class="p-col-12 p-md-3 p-lg-6" >
-                                    <p:outputLabel value="Punto Emisión:" />
-                                </div>
-                                <div class="p-col-12 p-md-3 p-lg-6" >
-                                    <p:selectOneMenu label="label" title="title" id="cmbPuntoEmision" value="#{proformaMb.puntoEmisionSeleccionado}" converter="puntoEmisionConverter" style="width: 70%" >
-                                        <f:selectItems value="#{proformaMb.puntosEmision}" var="puntoEmision" itemValue="#{puntoEmision.id.toString()}" />
-                                    </p:selectOneMenu>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="p-col-12 p-md-6 p-lg-3" >
                             <div class="p-grid" style="text-align: left" >
@@ -69,6 +57,19 @@
                                 <div class="p-col-12 p-md-3 p-lg-6" >
                                     <p:selectOneMenu label="label" title="title" id="cmbTipoDocumento" value="#{proformaMb.controlador.tipoDocumentoEnumSeleccionado}" converter="tipoDocumentoConverter" style="width: 70%" >
                                         <f:selectItems value="#{proformaMb.controlador.tipoDocumentoList}" var="tipoDocumento" itemValue="#{tipoDocumento.codigo}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-col-12 p-md-6 p-lg-3" style="#{(proformaMb.visualizarCargarProforma)?'':'display: none;'}" >
+                            <div class="p-grid" style="text-align: left" >
+                                <div class="p-col-12 p-md-3 p-lg-6" >
+                                    <p:outputLabel value="Punto Emisión:" />
+                                </div>
+                                <div class="p-col-12 p-md-3 p-lg-6" >
+                                    <p:selectOneMenu label="label" title="title" id="cmbPuntoEmision" value="#{proformaMb.puntoEmisionSeleccionado}" converter="puntoEmisionConverter" style="width: 70%" >
+                                        <f:selectItems value="#{proformaMb.puntosEmision}" var="puntoEmision" itemValue="#{puntoEmision.id.toString()}" />
                                     </p:selectOneMenu>
                                 </div>
                             </div>
@@ -236,13 +237,19 @@
 
                             <p:panel  >
                                 <div style="text-align: center;margin-bottom: 10px">
-                                    <p:commandButton process="@this"   id="btnAgregarFormaPago"  icon="fa fa-plus" value="Agregar" style="margin: 0 auto" />
+                                    <p:commandButton process="@this" actionListener="#{proformaMb.abrirDialogoFormaPago()}"   id="btnAgregarFormaPago"  icon="fa fa-plus" value="Agregar" style="margin: 0 auto" >
+                                        <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarFormaPago}" update="tblDetalleFormaPago"  />
+                                    </p:commandButton>
                                 </div>
 
                                 <p:dataTable   
                                     id="tblDetalleFormaPago"
                                     var="detalleFormaPago" 
-                                    value="#{proformaMb.factura.formaPagos}">
+                                    value="#{proformaMb.factura.formaPagos}"
+                                    selectionMode="single"
+                                    selection="#{proformaMb.formaPagoSeleccionada}"
+                                    rowKey="#{detalleFormaPago}"
+                                    >
 
                                     <f:facet name="header">
                                         Forma de Pago
@@ -254,6 +261,10 @@
                                         <h:outputText value="#{detalleFormaPago.total}" />
                                     </p:column>
                                 </p:dataTable>
+                                
+                                <p:contextMenu for="tblDetalleFormaPago">
+                                    <p:menuitem value="Eliminar" update="tblDetalleFormaPago" icon="pi pi-times" action="#{proformaMb.eliminarFormaPago()}"/>
+                                </p:contextMenu>
                             </p:panel>
 
                             <p:panel id="pnlAdicionalDatos"  >

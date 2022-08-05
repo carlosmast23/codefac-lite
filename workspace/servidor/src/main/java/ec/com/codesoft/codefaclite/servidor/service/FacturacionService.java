@@ -467,9 +467,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             throw new ServicioCodefacException("Cliente no configurado el tipo de identificación");
         }
         
-        if(factura.getPuntoEmisionId()==null)
+        //Validar el punto de emision para cualquier tipo de documento que no sea una proforma
+        if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) && factura.getPuntoEmisionId()==null)
         {
-            throw new ServicioCodefacException("No se puede facturar sin tener un punto de emisión configurado");
+            throw new ServicioCodefacException("No se puede grabar sin tener un punto de emisión configurado");
         }
         
         //TODO:Optimizar esta parte para poner en otra parte

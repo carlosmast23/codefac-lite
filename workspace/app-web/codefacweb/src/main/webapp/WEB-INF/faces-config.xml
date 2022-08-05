@@ -173,6 +173,17 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>forma_pago_dialogo</from-outcome>
+            <to-view-id>sistema/dialog/forma_pago_dialogo.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>                
+            </redirect>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>reenviar_comprobante</from-outcome>
             <to-view-id>sistema/facturacion/reenviar_comprobante.xhtml</to-view-id>
             <redirect>
