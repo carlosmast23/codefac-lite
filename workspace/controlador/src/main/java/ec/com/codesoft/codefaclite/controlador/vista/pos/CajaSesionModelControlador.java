@@ -44,6 +44,9 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     private List<CajaSessionEnum> estadoCajaSessionList;
     private List<Caja> cajasList;
     
+    private List<CajaSession> cajaSessionList;
+    private CajaSession cajaSessionSeleccionada;
+    
     public CajaSesionModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CajaSesionModelControlador.CommonIf interfaz, TipoVista tipoVista) 
     {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -64,8 +67,17 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         
         if(cajasList.size()>0)
         {
-            cajaSession.setCaja(cajasList.get(0));
+            cajaSession.setCaja(cajasList.get(0));       
         }
+        
+        //Consultar las cajas session que tenga activas
+        cajaSessionList=ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuario(session.getUsuario());
+        if(cajaSessionList.size()>0)
+        {
+            cajaSessionSeleccionada=cajaSessionList.get(0);
+            cargarDatosPantalla(cajaSessionSeleccionada);
+        }
+        
     }
 
     @Override
@@ -78,10 +90,20 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         try
         {
             setearDatos();
-            //Grabar
-            ServiceFactory.getFactory().getCajaSesionServiceIf().grabar(cajaSession);
-            //Mensaje
-            mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            
+            
+            if(getInterazEscritorio().getTipoProcesoEnum().equals(TipoProcesoCajaEnum.APERTURA_CAJA))
+            {
+                //Grabar
+                ServiceFactory.getFactory().getCajaSesionServiceIf().grabar(cajaSession);
+                mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            }
+            else if(getInterazEscritorio().getTipoProcesoEnum().equals(TipoProcesoCajaEnum.CIERRE_CAJA))
+            {
+                ServiceFactory.getFactory().getCajaSesionServiceIf().editar(cajaSession);
+                mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            }
+            
         }
         catch(ServicioCodefacException e)
         {
@@ -157,6 +179,12 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     @Override
     public void cargarDatosPantalla(Object entidad) {
         cajaSession = (CajaSession)entidad;
+        //Hago esta validacion porque puede ser que me esta mandando datos vacios a cargar
+        if(cajaSession!=null && cajaSession.getId()!=null)
+        {
+            getInterfaz().cargarDatosVista(cajaSession);
+        }
+        
     }
 
     @Override
@@ -164,6 +192,28 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    
+    public CajaSession buscarSessionDesdeCaja(Caja caja)
+    {
+        //Caja caja = (Caja) getjCmbCajaPermiso().getSelectedItem();
+        if (caja != null) {
+            try {
+                List<CajaSession> cajasSessionList = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuarioYSucursal(session.getUsuario(), session.getSucursal());
+                if (cajasSessionList.size() > 0) {
+                    for (CajaSession cajaSession : cajasSessionList) 
+                    {
+                        if(cajaSession.getCaja().equals(caja))
+                        {
+                            return cajaSession;
+                        }
+                    }
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(CajaSesionModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
   
     /**
      * Agregado interfaces 
@@ -171,10 +221,12 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     public interface CommonIf
     {
         public String valorApertura();
+        public void cargarDatosVista(CajaSession cajaSession);
     }
     
     public interface SwingIf extends CajaSesionModelControlador.CommonIf
     {
+        public TipoProcesoCajaEnum getTipoProcesoEnum();
     }
     
     public interface WebIf extends CajaSesionModelControlador.CommonIf
@@ -217,6 +269,24 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         this.cajasList = cajasList;
     }
 
+    public List<CajaSession> getCajaSessionList() {
+        return cajaSessionList;
+    }
+
+    public void setCajaSessionList(List<CajaSession> cajaSessionList) {
+        this.cajaSessionList = cajaSessionList;
+    }
+
+    public CajaSession getCajaSessionSeleccionada() {
+        return cajaSessionSeleccionada;
+    }
+
+    public void setCajaSessionSeleccionada(CajaSession cajaSessionSeleccionada) {
+        this.cajaSessionSeleccionada = cajaSessionSeleccionada;
+    }
+
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     // Funciones
     ////////////////////////////////////////////////////////////////////////////
@@ -227,5 +297,11 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         {
             this.cajaSession.setValorApertura(new BigDecimal(getInterfaz().valorApertura()));
         }
+    }
+    
+    public enum TipoProcesoCajaEnum
+    {
+        APERTURA_CAJA,
+        CIERRE_CAJA;
     }
 }

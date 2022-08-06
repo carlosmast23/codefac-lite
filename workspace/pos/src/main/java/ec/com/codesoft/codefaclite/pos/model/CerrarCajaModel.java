@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.pos.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -31,28 +32,32 @@ import java.util.logging.Logger;
  */
 public class CerrarCajaModel extends CajaSessionModel
 {
-    private CajaSession cajaSessionA = null;
+    //private CajaSession cajaSessionA = null;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         //super.iniciar(); //To change body of generated methods, choose Tools | Templates.
         //super.cicloVida=false;
         //super.validacionDatosIngresados=false;
-        cajaSessionA = null;
-        limpiar();
-        getjTextValorApertura().setEnabled(false);
-        getjCmbCajaPermiso().removeAllItems();
-        getjComboBoxEstadoCierre().removeAllItems();
-        cargarDatos();
-        addListenerCombo();
+        //cajaSessionA = null;
+        //limpiar();
+        //getjTextValorApertura().setEnabled(false);
+        //getjCmbCajaPermiso().removeAllItems();
+        //getjComboBoxEstadoCierre().removeAllItems();
+        //cargarDatos();
+        //addListenerCombo();
+        getPnlCierreCaja().setVisible(true);
+        //set
+        super.iniciar();
     }
+    
     
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         //super.cicloVida=false;
         //super.validacionDatosIngresados = false;
         
-        if(cajaSessionA != null)
+        /*if(ca != null)
         {
             try {
                 ServiceFactory.getFactory().getCajaSesionServiceIf().editar(cajaSessionA);
@@ -62,17 +67,17 @@ public class CerrarCajaModel extends CajaSessionModel
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }       
+        } */      
     }
 
     @Override
     public void limpiar() {
-        getjTextFechaApertura().setText("");
+        /*getjTextFechaApertura().setText("");
         getjTextFechaCierre().setText("");
         getjTextHoraApertura().setText("");
         getjTextHoraCierre().setText("");
         getjTextValorApertura().setText("");
-        getjTextValorCierre().setText("");
+        getjTextValorCierre().setText("");*/
     }
    
     private void cargarDatos()
@@ -93,12 +98,15 @@ public class CerrarCajaModel extends CajaSessionModel
         UtilidadesComboBox.llenarComboBox(getjComboBoxEstadoCierre(), CajaSessionEnum.values()); 
     }
     
-    public void addListenerCombo(){
+    /*public void addListenerCombo(){
         getjCmbCajaPermiso().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Caja caja = (Caja) getjCmbCajaPermiso().getSelectedItem();
-                if(caja != null)
+                cajaSessionA=controlador.buscarSessionDesdeCaja(caja);
+                cargarDatosPantalla(cajaSessionA);
+                
+                /*if(caja != null)
                 {
                     try {
                         List<CajaSession> cajasSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuarioYSucursal(session.getUsuario(), session.getSucursal());
@@ -117,7 +125,7 @@ public class CerrarCajaModel extends CajaSessionModel
                 }
             }
         });
-    }
+    }*/
     
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
@@ -129,4 +137,11 @@ public class CerrarCajaModel extends CajaSessionModel
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
+
+    @Override
+    public CajaSesionModelControlador.TipoProcesoCajaEnum getTipoProcesoEnum() {
+        return CajaSesionModelControlador.TipoProcesoCajaEnum.CIERRE_CAJA; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

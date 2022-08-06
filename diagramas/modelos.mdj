@@ -14631,87 +14631,6 @@
 											}
 										},
 										{
-											"_type": "ERDRelationshipView",
-											"_id": "AAAAAAFwP1ugYwQ6c2Y=",
-											"_parent": {
-												"$ref": "AAAAAAFwPzx2/wHJ2vk="
-											},
-											"model": {
-												"$ref": "AAAAAAFwP1ugYgQ2UBI="
-											},
-											"subViews": [
-												{
-													"_type": "EdgeLabelView",
-													"_id": "AAAAAAFwP1ugZAQ7HWc=",
-													"_parent": {
-														"$ref": "AAAAAAFwP1ugYwQ6c2Y="
-													},
-													"visible": false,
-													"font": "Arial;13;0",
-													"left": 374,
-													"top": 145,
-													"height": 13,
-													"alpha": 1.5707963267948966,
-													"distance": 15,
-													"hostEdge": {
-														"$ref": "AAAAAAFwP1ugYwQ6c2Y="
-													},
-													"edgePosition": 1
-												},
-												{
-													"_type": "EdgeLabelView",
-													"_id": "AAAAAAFwP1ugZAQ81TQ=",
-													"_parent": {
-														"$ref": "AAAAAAFwP1ugYwQ6c2Y="
-													},
-													"font": "Arial;13;0",
-													"left": 390,
-													"top": 160,
-													"height": 13,
-													"alpha": 0.5235987755982988,
-													"distance": 30,
-													"hostEdge": {
-														"$ref": "AAAAAAFwP1ugYwQ6c2Y="
-													},
-													"edgePosition": 2
-												},
-												{
-													"_type": "EdgeLabelView",
-													"_id": "AAAAAAFwP1ugZAQ9POY=",
-													"_parent": {
-														"$ref": "AAAAAAFwP1ugYwQ6c2Y="
-													},
-													"font": "Arial;13;0",
-													"left": 375,
-													"top": 176,
-													"height": 13,
-													"alpha": -0.5235987755982988,
-													"distance": 30,
-													"hostEdge": {
-														"$ref": "AAAAAAFwP1ugYwQ6c2Y="
-													}
-												}
-											],
-											"font": "Arial;13;0",
-											"head": {
-												"$ref": "AAAAAAFwP0OGPQJyTsk="
-											},
-											"tail": {
-												"$ref": "AAAAAAFwP1Jg6gMykO0="
-											},
-											"lineStyle": 2,
-											"points": "416:152;360:152;360:208",
-											"nameLabel": {
-												"$ref": "AAAAAAFwP1ugZAQ7HWc="
-											},
-											"tailNameLabel": {
-												"$ref": "AAAAAAFwP1ugZAQ81TQ="
-											},
-											"headNameLabel": {
-												"$ref": "AAAAAAFwP1ugZAQ9POY="
-											}
-										},
-										{
 											"_type": "UMLNoteView",
 											"_id": "AAAAAAFwP1v5wARRJ4Q=",
 											"_parent": {
@@ -14739,34 +14658,6 @@
 											},
 											"lineStyle": 1,
 											"points": "639:143;564:192"
-										},
-										{
-											"_type": "UMLNoteView",
-											"_id": "AAAAAAFwP13JeQRc1CU=",
-											"_parent": {
-												"$ref": "AAAAAAFwPzx2/wHJ2vk="
-											},
-											"font": "Arial;13;0",
-											"left": 240,
-											"width": 152,
-											"height": 103,
-											"text": "Esta relación no es optima en el diseño pero en la practica me permite obtener reportes de forma facil por ejemplo para ventas por caja"
-										},
-										{
-											"_type": "UMLNoteLinkView",
-											"_id": "AAAAAAFwP16lhQRkZSw=",
-											"_parent": {
-												"$ref": "AAAAAAFwPzx2/wHJ2vk="
-											},
-											"font": "Arial;13;0",
-											"head": {
-												"$ref": "AAAAAAFwP1ugYwQ6c2Y="
-											},
-											"tail": {
-												"$ref": "AAAAAAFwP13JeQRc1CU="
-											},
-											"lineStyle": 1,
-											"points": "333:103;360:180"
 										},
 										{
 											"_type": "ERDEntityView",

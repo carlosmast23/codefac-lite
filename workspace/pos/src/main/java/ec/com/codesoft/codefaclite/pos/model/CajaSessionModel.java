@@ -163,4 +163,14 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
     public String valorApertura() {
         return getjTextValorApertura().getText();
     }
+
+    @Override
+    public CajaSesionModelControlador.TipoProcesoCajaEnum getTipoProcesoEnum() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosVista(CajaSession cajaSession) {
+        cargarDatosPantalla(cajaSession);
+    }
 }

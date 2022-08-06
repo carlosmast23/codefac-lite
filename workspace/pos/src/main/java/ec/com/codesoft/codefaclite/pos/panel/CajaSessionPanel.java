@@ -12,11 +12,13 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBi
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
@@ -34,6 +36,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
      */
     public CajaSessionPanel() {
         initComponents();
+        getPnlCierreCaja().setVisible(false);
     }
 
     /**
@@ -64,6 +67,9 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jTextHoraApertura = new javax.swing.JTextField();
         jTextFechaCierre = new javax.swing.JTextField();
         jTextHoraCierre = new javax.swing.JTextField();
+        pnlCierreCaja = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        cmbCajaSession = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -219,6 +225,29 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jTextHoraCierre, gridBagConstraints);
 
+        pnlCierreCaja.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnlCierreCaja.setLayout(new java.awt.GridBagLayout());
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Seleccioné la caja para realizar el cierre:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlCierreCaja.add(jLabel10, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlCierreCaja.add(cmbCajaSession, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(pnlCierreCaja, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -292,11 +321,34 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     public void setjCmbCajaPermiso(JComboBox<Caja> jCmbCajaPermiso) {
         this.jCmbCajaPermiso = jCmbCajaPermiso;
     }   
+
+    public JPanel getPnlCierreCaja() {
+        return pnlCierreCaja;
+    }
+
+    public void setPnlCierreCaja(JPanel pnlCierreCaja) {
+        this.pnlCierreCaja = pnlCierreCaja;
+    }
+
+    @ComboBoxBinding(source = "controlador.cajaSessionList",valueSelect = "controlador.cajaSessionSeleccionada")
+    public JComboBox<CajaSession> getCmbCajaSession() {
+        return cmbCajaSession;
+    }
+
+    public void setCmbCajaSession(JComboBox<CajaSession> cmbCajaSession) {
+        this.cmbCajaSession = cmbCajaSession;
+    }
+    
+    
+    
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<CajaSession> cmbCajaSession;
     private javax.swing.JComboBox<Caja> jCmbCajaPermiso;
     private javax.swing.JComboBox<CajaSessionEnum> jComboBoxEstadoCierre;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -312,5 +364,6 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextHoraCierre;
     private javax.swing.JTextField jTextValorApertura;
     private javax.swing.JTextField jTextValorCierre;
+    private javax.swing.JPanel pnlCierreCaja;
     // End of variables declaration//GEN-END:variables
 }

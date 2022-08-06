@@ -70,9 +70,9 @@ public class CajaSession implements Serializable
     @ManyToOne
     private Usuario usuario;
     
-    @JoinColumn(name = "VENTA_ID")
+    /*@JoinColumn(name = "VENTA_ID")
     @ManyToOne
-    private Venta venta;
+    private Venta venta;*/
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaSession", fetch = FetchType.EAGER)
     private List<ArqueoCaja> arqueosCaja;
@@ -145,13 +145,7 @@ public class CajaSession implements Serializable
         this.usuario = usuario;
     }
 
-    public Venta getVenta() {
-        return venta;
-    }
 
-    public void setVenta(Venta venta) {
-        this.venta = venta;
-    }
     
     public String getEstado() {
         return estado;
@@ -253,6 +247,11 @@ public class CajaSession implements Serializable
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return caja.getNombre()+" - "+usuario.getNick();
     }
     
 }
