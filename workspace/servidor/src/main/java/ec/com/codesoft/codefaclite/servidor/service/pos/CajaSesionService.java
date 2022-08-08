@@ -115,6 +115,48 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         });
 
     }
+    
+    private void validarCierreCaja(CajaSession caja) throws ServicioCodefacException
+    {
+        if(caja.getValorCierreReal()==BigDecimal.ZERO)
+        {
+            throw new ServicioCodefacException("El valor de cierre real no puede estar vacio");
+        }
+    }
+    
+    public void cerrarCaja(CajaSession entity) throws ServicioCodefacException, RemoteException 
+    {
+        validarCierreCaja(entity);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                BigDecimal totalVentas = BigDecimal.ZERO;
+                boolean grabarAunqueNoTengaVentas = false;
+                
+                if(entity.getIngresosCaja() == null || entity.getIngresosCaja().isEmpty())
+                {
+                    grabarAunqueNoTengaVentas = true;
+                }
+                
+                totalVentas = entity.getValorApertura();
+                
+                if(!grabarAunqueNoTengaVentas)
+                {
+                    for(IngresoCaja ingresoCaja: entity.getIngresosCaja())
+                    {
+                        totalVentas = totalVentas.add(ingresoCaja.getValor());
+                    }
+                }
+
+                entity.setValorCierre(totalVentas);
+                entity.setEstadoSessionEnum(CajaSessionEnum.FINALIZADO);
+                entity.setFechaHoraCierre(UtilidadesFecha.getFechaHoyTimeStamp());
+               
+                entityManager.merge(entity);
+            }
+        });
+    }
 
     @Override
     public boolean buscarSiCajaTieneSessionActiva(Caja caja) {

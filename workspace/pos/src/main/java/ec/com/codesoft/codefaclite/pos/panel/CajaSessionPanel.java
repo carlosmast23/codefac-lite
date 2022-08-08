@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.pos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
@@ -79,8 +80,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel13 = new javax.swing.JLabel();
         jTextValorCierreReal = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtObservacionesCierreCaja = new javax.swing.JTextArea();
+        txtObservacionesCierreCaja = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -287,20 +287,14 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel12, gridBagConstraints);
-
-        txtObservacionesCierreCaja.setColumns(20);
-        txtObservacionesCierreCaja.setRows(5);
-        jScrollPane3.setViewportView(txtObservacionesCierreCaja);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jScrollPane3, gridBagConstraints);
+        jPanel2.add(txtObservacionesCierreCaja, gridBagConstraints);
 
         pnlCierreCajaOpciones.addTab("Efectivo", jPanel2);
 
@@ -375,7 +369,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @TextFieldBinding(value="controlador.CajaSession.valorCierreReal",converter = "")
+    @TextFieldBinding(value="controlador.CajaSession.valorCierreReal",converter =StringToBigDecimalConverter.class)
     public JTextField getjTextValorCierreReal() {
         return jTextValorCierreReal;
     }
@@ -393,12 +387,14 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         this.jTextValorCierreTeorico = jTextValorCierreTeorico;
     }
 
+
     @LimpiarAnotacion
-    public JTextArea getTxtObservacionesCierreCaja() {
+    @TextFieldBinding(value = "controlador.CajaSession.observacionCierreCaja")
+    public JTextField getTxtObservacionesCierreCaja() {
         return txtObservacionesCierreCaja;
     }
 
-    public void setTxtObservacionesCierreCaja(JTextArea txtObservacionesCierreCaja) {
+    public void setTxtObservacionesCierreCaja(JTextField txtObservacionesCierreCaja) {
         this.txtObservacionesCierreCaja = txtObservacionesCierreCaja;
     }
     
@@ -495,7 +491,6 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextFechaApertura;
@@ -508,6 +503,6 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio882;
     private javax.swing.JPanel pnlCierreCaja;
     private javax.swing.JTabbedPane pnlCierreCajaOpciones;
-    private javax.swing.JTextArea txtObservacionesCierreCaja;
+    private javax.swing.JTextField txtObservacionesCierreCaja;
     // End of variables declaration//GEN-END:variables
 }

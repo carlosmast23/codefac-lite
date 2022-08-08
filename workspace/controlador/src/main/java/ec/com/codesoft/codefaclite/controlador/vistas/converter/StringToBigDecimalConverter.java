@@ -16,6 +16,10 @@ public class StringToBigDecimalConverter extends ConverterSwingMvvc<BigDecimal,S
 
     @Override
     public String castPropertyToComponente(BigDecimal value) {
+        if(value==null)
+        {
+            return null;
+        }
         return value.toString();
     }
 

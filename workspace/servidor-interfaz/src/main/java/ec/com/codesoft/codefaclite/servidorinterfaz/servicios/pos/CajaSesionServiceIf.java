@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
@@ -28,4 +29,6 @@ public interface CajaSesionServiceIf extends ServiceAbstractIf<CajaSession>
     public List<CajaSession> obtenerCajaSessionPorUsuarioYSucursal(Usuario usuario, Sucursal sucursal) throws RemoteException;
     
     public List<CajaSession> obtenerCajaSessionPorUsuario(Usuario usuario) throws RemoteException;
+    public void cerrarCaja(CajaSession entity) throws ServicioCodefacException, RemoteException;
+    
 }

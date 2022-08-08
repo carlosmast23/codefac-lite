@@ -39,7 +39,8 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
     protected CajaSesionModelControlador controlador ;
     
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+    public void iniciar() throws ExcepcionCodefacLite, RemoteException 
+    {
         controlador = new CajaSesionModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
         this.controlador.iniciar();
     }

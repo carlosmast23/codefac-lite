@@ -58,6 +58,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         cajaSession = new CajaSession();       
         cajaSession.setUsuario(this.session.getUsuario());
         cajaSession.setEstadoSessionEnum(CajaSessionEnum.ACTIVO);
+        cajaSession.setValorCierreReal(BigDecimal.ZERO);
         
         estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
         estadoCajaSessionList = UtilidadesLista.arrayToList(CajaSessionEnum.values());
@@ -100,7 +101,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
             }
             else if(getInterazEscritorio().getTipoProcesoEnum().equals(TipoProcesoCajaEnum.CIERRE_CAJA))
             {
-                ServiceFactory.getFactory().getCajaSesionServiceIf().editar(cajaSession);
+                ServiceFactory.getFactory().getCajaSesionServiceIf().cerrarCaja(cajaSession);
                 mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             }
             
