@@ -47,6 +47,7 @@ public class CerrarCajaModel extends CajaSessionModel
         //cargarDatos();
         //addListenerCombo();
         getPnlCierreCaja().setVisible(true);
+        getPnlCierreCajaOpciones().setVisible(true);
         //set
         super.iniciar();
     }
@@ -134,6 +135,7 @@ public class CerrarCajaModel extends CajaSessionModel
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }

@@ -56,8 +56,12 @@ public class CajaSession implements Serializable
     private BigDecimal valorApertura;
     @Column(name = "VALOR_CIERRE")
     private BigDecimal valorCierre;
+    @Column(name = "VALOR_CIERRE_REAL")
+    private BigDecimal valorCierreReal;
     @Column(name = "ESTADO_CIERRE_CAJA")
     private String estadoCierreCaja;
+    @Column(name = "OBSERVACION_CIERRE")
+    private String observacionCierreCaja;
     
     /*
     * Foreign Key
@@ -145,7 +149,23 @@ public class CajaSession implements Serializable
         this.usuario = usuario;
     }
 
+    public BigDecimal getValorCierreReal() {
+        return valorCierreReal;
+    }
 
+    public void setValorCierreReal(BigDecimal valorCierreReal) {
+        this.valorCierreReal = valorCierreReal;
+    }
+
+    public String getObservacionCierreCaja() {
+        return observacionCierreCaja;
+    }
+
+    public void setObservacionCierreCaja(String observacionCierreCaja) {
+        this.observacionCierreCaja = observacionCierreCaja;
+    }
+
+    
     
     public String getEstado() {
         return estado;

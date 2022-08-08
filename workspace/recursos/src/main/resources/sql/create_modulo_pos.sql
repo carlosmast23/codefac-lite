@@ -59,6 +59,10 @@ create table CAJA_SESSION(
     FECHA_HORA_CIERRE timestamp,
     VALOR_APERTURA decimal(13,2),
     VALOR_CIERRE decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.2.1)*/
+    VALOR_CIERRE_REAL decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.2.1)*/
+    OBSERVACION_CIERRE varchar(512),
     ESTADO_CIERRE_CAJA varchar(1),
 
     primary key (ID),

@@ -20,6 +20,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.xml.ws.BindingType;
@@ -37,6 +39,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     public CajaSessionPanel() {
         initComponents();
         getPnlCierreCaja().setVisible(false);
+        getPnlCierreCajaOpciones().setVisible(false);
     }
 
     /**
@@ -54,9 +57,7 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jTextValorApertura = new javax.swing.JTextField();
-        jTextValorCierre = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -70,6 +71,22 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         pnlCierreCaja = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         cmbCajaSession = new javax.swing.JComboBox<>();
+        pnlCierreCajaOpciones = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jTextValorCierreTeorico = new javax.swing.JTextField();
+        lblEspacio882 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jTextValorCierreReal = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtObservacionesCierreCaja = new javax.swing.JTextArea();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setClosable(true);
         setIconifiable(true);
@@ -117,36 +134,18 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Valor Apertura:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel5, gridBagConstraints);
-
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Valor Cierre:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel6, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jTextValorApertura, gridBagConstraints);
-
-        jTextValorCierre.setInheritsPopupMenu(true);
+        getContentPane().add(jLabel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jTextValorCierre, gridBagConstraints);
+        getContentPane().add(jTextValorApertura, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 9;
@@ -164,14 +163,14 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel9.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel9, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jComboBoxEstadoCierre, gridBagConstraints);
@@ -180,14 +179,14 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jLabel11.setText("Caja:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel11, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -248,6 +247,106 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(pnlCierreCaja, gridBagConstraints);
 
+        pnlCierreCajaOpciones.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cierre Caja", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel6.setText("Valor Teorico:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel6, gridBagConstraints);
+
+        jTextValorCierreTeorico.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jTextValorCierreTeorico, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(lblEspacio882, gridBagConstraints);
+
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText("Valor Real:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel13, gridBagConstraints);
+
+        jTextValorCierreReal.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jTextValorCierreReal, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setText("Observaciones:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel12, gridBagConstraints);
+
+        txtObservacionesCierreCaja.setColumns(20);
+        txtObservacionesCierreCaja.setRows(5);
+        jScrollPane3.setViewportView(txtObservacionesCierreCaja);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jScrollPane3, gridBagConstraints);
+
+        pnlCierreCajaOpciones.addTab("Efectivo", jPanel2);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        jPanel3.add(jScrollPane2);
+
+        pnlCierreCajaOpciones.addTab("Cheques", jPanel3);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jPanel4.add(jScrollPane1);
+
+        pnlCierreCajaOpciones.addTab("Otros", jPanel4);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 0);
+        getContentPane().add(pnlCierreCajaOpciones, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -269,20 +368,41 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     public void setjTextValorApertura(JTextField jTextValorApertura) {
         this.jTextValorApertura = jTextValorApertura;
     }
-
-    @LimpiarAnotacion
-    //@TextFieldBinding(value = "controlador.CajaSession.ValorCierre")
-    public JTextField getjTextValorCierre() {
-        return jTextValorCierre;
-    }
-
-    public void setjTextValorCierre(JTextField jTextValorCierre) {
-        this.jTextValorCierre = jTextValorCierre;
-    }
-
+    
+    
     public JTextField getjTextFechaApertura() {
         return jTextFechaApertura;
     }
+
+    @LimpiarAnotacion
+    @TextFieldBinding(value="controlador.CajaSession.valorCierreReal",converter = "")
+    public JTextField getjTextValorCierreReal() {
+        return jTextValorCierreReal;
+    }
+
+    public void setjTextValorCierreReal(JTextField jTextValorCierreReal) {
+        this.jTextValorCierreReal = jTextValorCierreReal;
+    }
+
+    @LimpiarAnotacion
+    public JTextField getjTextValorCierreTeorico() {
+        return jTextValorCierreTeorico;
+    }
+
+    public void setjTextValorCierreTeorico(JTextField jTextValorCierreTeorico) {
+        this.jTextValorCierreTeorico = jTextValorCierreTeorico;
+    }
+
+    @LimpiarAnotacion
+    public JTextArea getTxtObservacionesCierreCaja() {
+        return txtObservacionesCierreCaja;
+    }
+
+    public void setTxtObservacionesCierreCaja(JTextArea txtObservacionesCierreCaja) {
+        this.txtObservacionesCierreCaja = txtObservacionesCierreCaja;
+    }
+    
+    
 
     public void setjTextFechaApertura(JTextField jTextFechaApertura) {
         this.jTextFechaApertura = jTextFechaApertura;
@@ -338,6 +458,16 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     public void setCmbCajaSession(JComboBox<CajaSession> cmbCajaSession) {
         this.cmbCajaSession = cmbCajaSession;
     }
+
+    public JTabbedPane getPnlCierreCajaOpciones() {
+        return pnlCierreCajaOpciones;
+    }
+
+    public void setPnlCierreCajaOpciones(JTabbedPane pnlCierreCajaOpciones) {
+        this.pnlCierreCajaOpciones = pnlCierreCajaOpciones;
+    }
+    
+    
     
     
     
@@ -350,6 +480,8 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -358,12 +490,24 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextFechaApertura;
     private javax.swing.JTextField jTextFechaCierre;
     private javax.swing.JTextField jTextHoraApertura;
     private javax.swing.JTextField jTextHoraCierre;
     private javax.swing.JTextField jTextValorApertura;
-    private javax.swing.JTextField jTextValorCierre;
+    private javax.swing.JTextField jTextValorCierreReal;
+    private javax.swing.JTextField jTextValorCierreTeorico;
+    private javax.swing.JLabel lblEspacio882;
     private javax.swing.JPanel pnlCierreCaja;
+    private javax.swing.JTabbedPane pnlCierreCajaOpciones;
+    private javax.swing.JTextArea txtObservacionesCierreCaja;
     // End of variables declaration//GEN-END:variables
 }

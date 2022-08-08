@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.pos.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
@@ -23,7 +24,7 @@ public class AbrirCajaModel extends CajaSessionModel
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         super.iniciar();
-        getjTextValorCierre().setEnabled(false);
+        getjTextValorCierreTeorico().setEnabled(false);
     }
     
     
@@ -38,4 +39,11 @@ public class AbrirCajaModel extends CajaSessionModel
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
+
+    @Override
+    public CajaSesionModelControlador.TipoProcesoCajaEnum getTipoProcesoEnum() {
+        return CajaSesionModelControlador.TipoProcesoCajaEnum.APERTURA_CAJA; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

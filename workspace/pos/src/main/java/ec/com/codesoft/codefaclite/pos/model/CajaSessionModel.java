@@ -118,21 +118,27 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         
         getjCmbCajaPermiso().setSelectedItem(cajaSession.getCaja());
         
+        //get
+        getjTextValorCierreReal().setText(cajaSession.getValorCierreReal()+"");
+        getTxtObservacionesCierreCaja().setText(cajaSession.getObservacionCierreCaja());
+       
         if(cajaSession.getIngresosCaja().isEmpty())
         {
-            getjTextValorCierre().setText("" + cajaSession.getValorApertura());
+            getjTextValorCierreTeorico().setText("" + cajaSession.getValorApertura());
         }
         else
         {    
             BigDecimal totalVentas = BigDecimal.ZERO;
             totalVentas = cajaSession.getValorApertura();
 
+            //Total mejorar esta parte
             for(IngresoCaja ingresoCaja: cajaSession.getIngresosCaja())
             {
                 totalVentas = totalVentas.add(ingresoCaja.getValor());
             }
             
-            getjTextValorCierre().setText("" + totalVentas);
+            getjTextValorCierreTeorico().setText("" + totalVentas);
+            getjTextValorCierreReal().setText(totalVentas+"");
         }
     }
 
