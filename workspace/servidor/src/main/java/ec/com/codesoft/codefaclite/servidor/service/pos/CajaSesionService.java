@@ -124,7 +124,7 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         }
     }
     
-    public void cerrarCaja(CajaSession entity) throws ServicioCodefacException, RemoteException 
+    public CajaSession cerrarCaja(CajaSession entity) throws ServicioCodefacException, RemoteException 
     {
         validarCierreCaja(entity);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -154,8 +154,10 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
                 entity.setFechaHoraCierre(UtilidadesFecha.getFechaHoyTimeStamp());
                
                 entityManager.merge(entity);
+                
             }
         });
+        return entity;
     }
 
     @Override

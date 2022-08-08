@@ -17,7 +17,7 @@ public enum CajaSessionEnum {
     ACTIVO("A", "ACTIVO"),
     
     /**
-     * Valor cuando se finaliza el uso de la caja al finalizar el dia
+     * Valor cuando se finaliza el uso de la caja al finalizar el dia (CAJA CERRADA)
      */
     FINALIZADO("F", "FINALIZADO"),
     

@@ -6,19 +6,23 @@
 package ec.com.codesoft.codefaclite.pos.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
-import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.pos.reportdata.VentaReporteData;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -144,6 +148,80 @@ public class CerrarCajaModel extends CajaSessionModel
     public CajaSesionModelControlador.TipoProcesoCajaEnum getTipoProcesoEnum() {
         return CajaSesionModelControlador.TipoProcesoCajaEnum.CIERRE_CAJA; //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public void generarReporte()
+    {
+        InputStream path = RecursoCodefac.JASPER_POS.getResourceInputStream("reporteCierreCaja.jrxml");
+        Map<String,Object> parametros = new HashMap<String,Object>();
+        
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        CajaSession cajaSession=getControlador().getCajaSession();
+        String fechaAperturaStr= format.format(cajaSession.getFechaHoraApertura());
+        String fechaCierreStr= format.format(cajaSession.getFechaHoraCierre());
+        
+        //Cargar los datos de los parametros
+        
+        parametros.put("caja", cajaSession.getCaja().getNombre());
+        parametros.put("usuario", cajaSession.getUsuario().getNick());
+        parametros.put("fecha_apertura", fechaAperturaStr);
+        parametros.put("fecha_cierre", fechaCierreStr);
+        parametros.put("valor_apertura", cajaSession.getValorApertura()+"");
+        parametros.put("valor_cierre_teorico", cajaSession.getValorCierre()+"");
+        parametros.put("valor_ciere_practico", cajaSession.getValorCierreReal()+"");
+        parametros.put("observacion", cajaSession.getObservacionCierreCaja());
+        
+        
+        //Cargar los datos de los detalles
+        List<VentaReporteData> detalleData=new ArrayList<VentaReporteData>();
+        for (IngresoCaja ingresoCaja : cajaSession.getIngresosCaja()) 
+        {
+            VentaReporteData reporteData=new VentaReporteData(
+                    ingresoCaja.getFactura().getSecuencial()+"", 
+                    ingresoCaja.getFactura().getIdentificacion(), 
+                    ingresoCaja.getFactura().getRazonSocial(), 
+                    ingresoCaja.getFactura().getTotal()+"");
+            
+            detalleData.add(reporteData);            
+        }
+        
+        
+        DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = {"Secuencial", "Identificación","Cliente", "Total"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, detalleData);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        exc.printStackTrace();
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, detalleData, panelPadre,"Cierre Caja");
+                }
+            });
+        
+        //Llenar datos para el reporte
+    
+    }
+
+    @Override
+    public CajaSessionEnum getFiltroDialogoEnum() {
+        return CajaSessionEnum.FINALIZADO;
+    }
+
+    @Override
+    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+        generarReporte();
+    }
+    
     
     
 }

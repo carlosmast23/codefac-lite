@@ -67,7 +67,7 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
 
     @Override
@@ -179,5 +179,15 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
     @Override
     public void cargarDatosVista(CajaSession cajaSession) {
         cargarDatosPantalla(cajaSession);
+    }
+
+    @Override
+    public void generarReporte() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public CajaSessionEnum getFiltroDialogoEnum() {
+        return null;
     }
 }

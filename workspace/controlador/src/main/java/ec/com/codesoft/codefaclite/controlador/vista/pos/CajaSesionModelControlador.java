@@ -101,8 +101,9 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
             }
             else if(getInterazEscritorio().getTipoProcesoEnum().equals(TipoProcesoCajaEnum.CIERRE_CAJA))
             {
-                ServiceFactory.getFactory().getCajaSesionServiceIf().cerrarCaja(cajaSession);
+                cajaSession= ServiceFactory.getFactory().getCajaSesionServiceIf().cerrarCaja(cajaSession);
                 mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+                getInterfaz().generarReporte();
             }
             
         }
@@ -144,7 +145,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getInterfaz().generarReporte();
     }
 
     @Override
@@ -173,7 +174,14 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        CajaSessionBusquedaDialogo cajaBusquedaDialogo = new CajaSessionBusquedaDialogo(session);
+        CajaSessionEnum estadoFiltroEnum=getInterfaz().getFiltroDialogoEnum();
+        //Por defecto solo busca facturas activas
+        if(estadoFiltroEnum==null)
+        {
+            estadoFiltroEnum=CajaSessionEnum.ACTIVO;
+        }
+        
+        CajaSessionBusquedaDialogo cajaBusquedaDialogo = new CajaSessionBusquedaDialogo(session,estadoFiltroEnum);
         return cajaBusquedaDialogo;
     }
 
@@ -223,6 +231,9 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     {
         public String valorApertura();
         public void cargarDatosVista(CajaSession cajaSession);
+        public void generarReporte();
+        public CajaSessionEnum getFiltroDialogoEnum();
+        
     }
     
     public interface SwingIf extends CajaSesionModelControlador.CommonIf

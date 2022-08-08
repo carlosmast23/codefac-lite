@@ -23,9 +23,15 @@ public class CajaSessionBusquedaDialogo implements InterfaceModelFind<CajaSessio
 {
 
     private SessionCodefacInterface session;
+    private CajaSessionEnum estadoFiltro;
 
     public CajaSessionBusquedaDialogo(SessionCodefacInterface session) {
         this.session = session;
+    }
+
+    public CajaSessionBusquedaDialogo(SessionCodefacInterface session, CajaSessionEnum estadoFiltro) {
+        this.session = session;
+        this.estadoFiltro = estadoFiltro;
     }
     
     
@@ -55,7 +61,7 @@ public class CajaSessionBusquedaDialogo implements InterfaceModelFind<CajaSessio
         }
         
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(2, CajaSessionEnum.ACTIVO.getEstado());
+        queryDialog.agregarParametro(2, estadoFiltro.getEstado());
         
         if(session.getUsuario() != null)
         {
