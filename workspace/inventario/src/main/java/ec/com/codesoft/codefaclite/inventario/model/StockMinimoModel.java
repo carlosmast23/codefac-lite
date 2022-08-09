@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.StockMinimoData;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.inventario.panel.StockMinimoPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -22,7 +23,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
@@ -81,7 +84,7 @@ public class StockMinimoModel extends StockMinimoPanel{
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
         
-        InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("stockMinimo.jrxml");
+        //InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream("stockMinimoConProveedor.jrxml");
         
         DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
                 @Override
@@ -101,7 +104,8 @@ public class StockMinimoModel extends StockMinimoPanel{
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path,new HashMap(), listaData, panelPadre, "Reporte Stock Minimo ");
+                    //ReporteCodefac.generarReporteInternalFramePlantilla(path,new HashMap(), listaData, panelPadre, "Reporte Stock Minimo ");
+                    ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_INVENTARIO,"stockMinimoConProveedor.jrxml",new HashMap(), listaData, panelPadre, "Reporte Stock", OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
                     //dispose();
                     //setVisible(false);
                 }
@@ -207,7 +211,22 @@ public class StockMinimoModel extends StockMinimoPanel{
                 data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto() != null) ? producto.getCatalogoProducto().getCategoriaProducto().getNombre() : "");
                 data.setCantidadMinima(producto.getCantidadMinima().toString());
                 data.setLote(""); //Por el momento voy dejar que salga un stock minimo por todos los lotes
+                //Ver si este dato luego se debe poner
+                data.setBodega("");
                 
+                //TODO: Optimizar este proceso para obtener toda la informacipon directamente del servidor
+                List<ProductoProveedor> productoProveedorList= ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarPorProductoActivo(producto);
+                if(productoProveedorList.size()>0)
+                {
+                    ProductoProveedor productoProveedor=productoProveedorList.get(0);
+                    data.setRucProveedor(productoProveedor.getProveedor().getIdentificacion());
+                    data.setNombreProveedor(productoProveedor.getProveedor().getRazonSocial());
+                }else
+                {
+                    data.setRucProveedor("");
+                    data.setNombreProveedor("");
+                
+                }
 
                 listaData.add(data);
 
@@ -215,6 +234,8 @@ public class StockMinimoModel extends StockMinimoPanel{
 
             construirTabla();
         } catch (RemoteException ex) {
+            Logger.getLogger(StockMinimoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(StockMinimoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

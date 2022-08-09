@@ -35,6 +35,9 @@ public class StockMinimoData implements ExcelDatosInterface{
     private TipoProducto tipo;
     private SegmentoProducto segmento;
     
+    private String rucProveedor;
+    private String nombreProveedor;
+    
     private List<StockUnicoData> detalles;
     
     
@@ -173,6 +176,22 @@ public class StockMinimoData implements ExcelDatosInterface{
 
     public void setSegmento(SegmentoProducto segmento) {
         this.segmento = segmento;
+    }
+
+    public String getRucProveedor() {
+        return rucProveedor;
+    }
+
+    public void setRucProveedor(String rucProveedor) {
+        this.rucProveedor = rucProveedor;
+    }
+
+    public String getNombreProveedor() {
+        return nombreProveedor;
+    }
+
+    public void setNombreProveedor(String nombreProveedor) {
+        this.nombreProveedor = nombreProveedor;
     }
     
     
