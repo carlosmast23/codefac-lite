@@ -81,6 +81,14 @@ public class MigrarProductoModel extends MigrarModel {
                     
                     Producto producto = new Producto();
                     producto.setCodigoPersonalizado(((String) fila.getByEnum(ExcelMigrarProductos.Enum.CODIGO).valor).trim());
+                    
+                    //Obtener el segundo código (opcional)
+                    ExcelMigrar.CampoResultado campoCodigo2= fila.getByEnum(ExcelMigrarProductos.Enum.CODIGO_2);
+                    if(campoCodigo2!=null)
+                    {
+                        producto.setCodigoUPC(((String)campoCodigo2.valor).trim());
+                    }
+                    
                     producto.setNombre(((String) fila.getByEnum(ExcelMigrarProductos.Enum.NOMBRE).valor).trim());
                     System.out.println(producto.getNombre());         
                     

@@ -104,6 +104,12 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
    
     public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException
     {
+        //Cuando manden un valor que es null que genere un error
+        if(primaryKey==null)
+        {
+            return null;
+        }
+        
         try {
             return (Entity) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override

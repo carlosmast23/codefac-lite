@@ -1301,7 +1301,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //TODO: Ver si esta parte se puede implentar en el controlador para tener una misma logica para el escritorio y la parte web
             if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_LOTE_FACTURA,EnumSiNo.SI))
             {
-                String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaVencimiento());
+                String fechaStr="";
+                if(kardexSeleccionado.getLote().getFechaVencimiento()!=null)
+                {
+                    fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaVencimiento());
+                }
+                else
+                {
+                    DialogoCodefac.mensaje(new CodefacMsj("El producto no tiene fecha de caducidad en el lote", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                }
+                
                 String detalleTexto=productoSeleccionado.getNombre();
                 detalleTexto=detalleTexto+" [ lote: "+kardexSeleccionado.getLote().getCodigo()+", fecha caducidad: "+fechaStr+" ]";
                 productoSeleccionado.setNombre(detalleTexto);
