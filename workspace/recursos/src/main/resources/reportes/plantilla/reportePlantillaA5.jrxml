@@ -22,6 +22,10 @@
 	<parameter name="pl_celular" class="java.lang.String"/>
 	<parameter name="pl_adicional" class="java.lang.String"/>
 	<parameter name="pl_facebook" class="java.lang.String"/>
+	<parameter name="pl_ruc" class="java.lang.String"/>
+	<parameter name="pl_img_instagram" class="java.lang.Object"/>
+	<parameter name="pl_instagram" class="java.lang.String"/>
+	<parameter name="pl_razon_social" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -38,11 +42,17 @@
 				<subreportParameter name="pl_telefonos">
 					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
+				<subreportParameter name="pl_titulo">
+					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="pl_nombre_empresa">
 					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_titulo">
-					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
+				<subreportParameter name="pl_razon_social">
+					<subreportParameterExpression><![CDATA[$P{pl_razon_social}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_ruc">
+					<subreportParameterExpression><![CDATA[$P{pl_ruc}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_fecha_hora">
 					<subreportParameterExpression><![CDATA[$P{pl_fecha_hora}]]></subreportParameterExpression>

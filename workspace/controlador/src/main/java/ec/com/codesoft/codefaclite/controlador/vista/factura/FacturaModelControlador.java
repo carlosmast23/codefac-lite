@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 //import ec.com.codesoft.codefaclite.facturacion.model.ProformaModel;
 //import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -41,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpr
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -1146,14 +1148,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public static Map<String, Object> getMapParametrosReporteProforma(Factura facturaProcesando) 
     {
         Map<String, Object> mapParametros= FacturaModelControlador.getMapParametrosReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
-        //mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());        
-        mapParametros.put("estado",facturaProcesando.getEnumEstadoProforma().getNombre());        
+        //mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());    
+        ComprobanteEntity.ComprobanteEnumEstado estadoEnum= facturaProcesando.getEstadoEnum();
+        mapParametros.put("estado",estadoEnum.getNombre());        
         //subtotal_cero
         //Datos adicionales para las proformas
         mapParametros.put("secuencial", facturaProcesando.getSecuencial().toString());
         mapParametros.put("cliente_nombres", facturaProcesando.getRazonSocial());
         mapParametros.put("cliente_identificacion", facturaProcesando.getIdentificacion());
-        mapParametros.put("fecha_emision", facturaProcesando.getFechaEmision().toString());
+        mapParametros.put("fecha_emision", facturaProcesando.getFechaEmisionFormat());
         mapParametros.put("subtotal_cero",facturaProcesando.getSubtotalSinImpuestos().toString());
         mapParametros.put("descuento",facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos()).toString());
         String porcentajeIva="";
@@ -1257,8 +1260,24 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return dataReporte;
     }
     
-    public static JasperPrint getReporteJasperProforma(Factura proforma)
+    public static JasperPrint getReporteJasperProforma(Factura proforma,FacturaModelControlador.FormatoReporteEnum formatoEnum)
     {
+        //Formato A4 por defecto para el reporte de proformas
+        String nombreReporte="proforma.jrxml";
+        FormatoHojaEnum formatoHoja=FormatoHojaEnum.A4;
+        
+        if(formatoEnum.equals(FacturaModelControlador.FormatoReporteEnum.A4))
+        {
+            nombreReporte="proforma.jrxml";
+            formatoHoja=FormatoHojaEnum.A4;
+        }
+        else if(formatoEnum.equals(FacturaModelControlador.FormatoReporteEnum.A5))
+        {
+            nombreReporte="proformaA5.jrxml";
+            formatoHoja=FormatoHojaEnum.A5;
+        }
+        
+        
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(proforma);
 
         //map de los parametros faltantes
@@ -1268,13 +1287,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return ReporteCodefac.generarReporteInternalFramePlantillaReturn(
                 proforma.getSucursalEmpresa(),
                 proforma.getUsuario(),
-                RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,
-                "proforma.jrxml",
+                RecursoCodefac.JASPER_FACTURACION,
+                nombreReporte,
                 mapParametros, 
                 dataReporte,
                 "Proforma", 
                 OrientacionReporteEnum.VERTICAL, 
-                FormatoHojaEnum.A4,
+                formatoHoja,
                 ConfiguracionImpresoraEnum.NINGUNA,
                 false
                 );
@@ -1358,6 +1377,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     {
         A4("A4",""),
         A2("A2","comprobante_venta_ticket.jrxml"),
+        A5("A5","comprobante_venta_ticket.jrxml"),
         POS_80("POS 80","comprobante_venta_ticket.jrxml"),
         POS_50("POS 50","comprobante_venta_ticket_50.jrxml"),
         POS_40("POS 40","comprobante_venta_ticket_40.jrxml");

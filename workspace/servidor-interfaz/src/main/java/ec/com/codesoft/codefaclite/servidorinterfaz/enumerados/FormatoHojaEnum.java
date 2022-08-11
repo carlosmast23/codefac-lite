@@ -13,6 +13,7 @@ public enum FormatoHojaEnum {
     
     A5("A5"),
     A4("A4"),
+    @Deprecated
     A3("A3"),
     TICKET("TICKET");
     

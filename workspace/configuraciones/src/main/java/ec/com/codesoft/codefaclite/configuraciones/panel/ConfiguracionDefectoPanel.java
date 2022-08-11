@@ -73,6 +73,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacio6 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
         cmbCreditoDefectoFacturas = new javax.swing.JComboBox<>();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel59 = new javax.swing.JLabel();
+        cmbReporteDefectoPedido = new javax.swing.JComboBox<>();
+        lblMensaje = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         lblEspacioVertical = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -349,6 +353,34 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel3.add(cmbCreditoDefectoFacturas, gridBagConstraints);
 
         jTabbedPane1.addTab("Cartera", jPanel3);
+
+        jPanel11.setLayout(new java.awt.GridBagLayout());
+
+        jLabel59.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel59.setText("TIpo Reporte Defecto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel11.add(jLabel59, gridBagConstraints);
+
+        cmbReporteDefectoPedido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel11.add(cmbReporteDefectoPedido, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel11.add(lblMensaje, gridBagConstraints);
+
+        jTabbedPane1.addTab("Pedido", jPanel11);
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1296,6 +1328,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
     private javax.swing.JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces;
+    private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoPedido;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -1359,12 +1392,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1389,6 +1424,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblEspacioVertical1;
+    private javax.swing.JLabel lblMensaje;
     private javax.swing.JTextArea txtCodigoHtml;
     private javax.swing.JSpinner txtDiasAlertaPago;
     private javax.swing.JTextField txtLeyendaFirmaFactura1;
@@ -1782,6 +1818,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbVentanasMultiples(JComboBox<EnumSiNo> cmbVentanasMultiples) {
         this.cmbVentanasMultiples = cmbVentanasMultiples;
     }
+
+    public JComboBox<FormatoReporteEnum> getCmbReporteDefectoPedido() {
+        return cmbReporteDefectoPedido;
+    }
+
+    public void setCmbReporteDefectoPedido(JComboBox<FormatoReporteEnum> cmbReporteDefectoPedido) {
+        this.cmbReporteDefectoPedido = cmbReporteDefectoPedido;
+    }
     
-   
+    
 }

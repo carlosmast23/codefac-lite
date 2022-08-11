@@ -61,6 +61,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DiaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -219,7 +220,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
                       
             //Controlador
-            JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma);
+            JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
             String pathReporte = UtilidadReportes.grabarArchivoJasperTemporal(jasperReporte);
             Map<String, String> mapPathFiles = new HashMap<String, String>();
             mapPathFiles.put("proforma #" + secuencialStr+".pdf", pathReporte);

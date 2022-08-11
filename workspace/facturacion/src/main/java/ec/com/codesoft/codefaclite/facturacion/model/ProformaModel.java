@@ -51,12 +51,14 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -214,15 +216,31 @@ public class ProformaModel extends FacturacionModel{
     
     public void imprimirProforma()
     {
+        //Por defecto reporte
+        FacturaModelControlador.FormatoReporteEnum formatoReporte=FacturaModelControlador.FormatoReporteEnum.A4;
+        
+        String formatoImpresionTexto=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
+        if(formatoImpresionTexto!=null)
+        {
+            FacturaModelControlador.FormatoReporteEnum formatoReporteTmp=FacturaModelControlador.FormatoReporteEnum.findByName(formatoImpresionTexto);
+            if(formatoReporteTmp!=null)
+            {
+                formatoReporte=formatoReporteTmp;
+            }
+        }
+        
         /*List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
 
         //map de los parametros faltantes
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
         
         ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"proforma.jrxml",mapParametros, dataReporte, this.panelPadre, "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);*/
-        JasperPrint jasperReporte=FacturaModelControlador.getReporteJasperProforma(factura);
-        ReporteCodefac.generarReporteInternalFrame(jasperReporte, panelPadre, "Proforma "+factura.getSecuencial(), ConfiguracionImpresoraEnum.NINGUNA);
+        JasperPrint jasperReporte=FacturaModelControlador.getReporteJasperProforma(factura,formatoReporte);
         
+        
+        
+        ReporteCodefac.generarReporteInternalFrame(jasperReporte, panelPadre, "Proforma "+factura.getSecuencial(), ConfiguracionImpresoraEnum.NINGUNA);
+        //ReporteCodefac.generarReporteInternalFramePlantilla(pathReporte, parametros, bindingComponentList, panelPadre, TITLE_PROPERTY, OrientacionReporteEnum.HORIZONTAL);
 
     }
     

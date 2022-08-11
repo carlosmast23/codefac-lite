@@ -658,6 +658,8 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     }
 
+    //TODO: Parece que este estado no voy a necesitar por que viene directamente de la proforma
+    @Deprecated
     public GeneralEnumEstado getEnumEstadoProforma() {
         return GeneralEnumEstado.getEnum(estado);
     }

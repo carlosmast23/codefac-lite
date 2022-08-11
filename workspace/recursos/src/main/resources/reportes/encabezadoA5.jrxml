@@ -29,7 +29,9 @@
 				<textFieldExpression><![CDATA[$P{pl_nombre_empresa}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="40" width="96" height="9" uuid="2a89b962-3f61-40ba-b75e-599e103de21e"/>
+				<reportElement x="0" y="40" width="138" height="9" uuid="2a89b962-3f61-40ba-b75e-599e103de21e">
+					<printWhenExpression><![CDATA[$P{pl_fecha_hora}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="7" isBold="false"/>
 				</textElement>

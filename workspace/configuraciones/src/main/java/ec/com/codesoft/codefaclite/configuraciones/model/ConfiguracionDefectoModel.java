@@ -274,6 +274,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         UtilidadesComboBox.llenarComboBox(getCmbReporteDefectoVenta(),FormatoReporteEnum.values());
         
+        //Agregar los tipos de formato para los PEDIDOS
+        getCmbReporteDefectoPedido().removeAllItems();
+        getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A4);
+        getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A5);
+        
         //Llenar modo de facturas paras las guias de remision
         getCmbModoFacturasGuiaRemision().removeAllItems();
         getCmbModoFacturasGuiaRemision().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
@@ -341,6 +346,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroReporteDefectoVenta = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_VENTA);
             FormatoReporteEnum reporteEnum=FormatoReporteEnum.findByName((parametroReporteDefectoVenta != null) ? parametroReporteDefectoVenta.getValor() : null);
             getCmbReporteDefectoVenta().setSelectedItem(reporteEnum);
+            
+            ParametroCodefac parametroReporteDefectoPedido = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
+            FormatoReporteEnum reporteEnumPedido=FormatoReporteEnum.findByName((parametroReporteDefectoPedido != null) ? parametroReporteDefectoPedido.getValor() : null);
+            getCmbReporteDefectoPedido().setSelectedItem(reporteEnumPedido);
 
             ParametroCodefac parametroActivarCarteras = parametrosTodos.get(ParametroCodefac.ACTIVAR_CARTERA);
             EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((parametroActivarCarteras != null) ? parametroActivarCarteras.getValor() : null);
@@ -621,6 +630,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         FormatoReporteEnum reporteDefectoVenta =(FormatoReporteEnum) getCmbReporteDefectoVenta().getSelectedItem();
         agregarParametro(ParametroCodefac.REPORTE_DEFECTO_VENTA,(reporteDefectoVenta!=null)?reporteDefectoVenta.getNombre():null);
         agregarParametroEditar(ParametroCodefac.REPORTE_DEFECTO_VENTA);
+        
+        FormatoReporteEnum reporteDefectoPedido =(FormatoReporteEnum) getCmbReporteDefectoPedido().getSelectedItem();
+        agregarParametro(ParametroCodefac.REPORTE_DEFECTO_PEDIDO,(reporteDefectoPedido!=null)?reporteDefectoPedido.getNombre():null);
+        agregarParametroEditar(ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
 
         //Agregar detalle para la orden de trabajo
         agregarParametro(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES, getTxtOrdenTrabajoReporte().getText());
