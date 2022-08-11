@@ -230,17 +230,18 @@ public class UtilidadesServidor {
                                 for (int i = 1; i < etiquetasAgregarTabla.length; i++) {
                                     String etiqueta = etiquetasAgregarTabla[i];
                                     String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
+                                    String mostrarAdvertencia = obtenerPropiedad(etiqueta, ETIQUETA_MOSTRAR_ERROR);
                                     String queryNuevo = etiqueta.substring(etiqueta.indexOf("*/") + 2);
 
                                     //Agregar al Map los querys si no existe ninguno con ese numero de version
                                     if (mapQuerysVersion.get(version) == null) {
                                         List<ScriptCodefac> listaQuerys = new ArrayList<ScriptCodefac>();
-                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.CREATE_TABLE));
+                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.CREATE_TABLE,mostrarAdvertencia));
                                         mapQuerysVersion.put(version, listaQuerys);
                                     } else //Obtiene la lista de los querys anteriormente agregados para ingresar el nuevo query
                                     {
                                         List<ScriptCodefac> listaQuerys = mapQuerysVersion.get(version);
-                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.CREATE_TABLE));
+                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.CREATE_TABLE,mostrarAdvertencia));
                                         mapQuerysVersion.put(version, listaQuerys);
                                     }
 
@@ -260,17 +261,18 @@ public class UtilidadesServidor {
                                     String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
                                     String nombreTabla = obtenerNombreTabla(queryTabla);
                                     String queryNuevo = obtenerQueryEdit(etiqueta, nombreTabla);
+                                    String mostrarAdvertencia = obtenerPropiedad(etiqueta, ETIQUETA_MOSTRAR_ERROR);
 
                                     //En esta parte se esta creando un MAP, agrupando todas las sentencias SQL con una versión para luego ejecutar en conjunto
                                     //Agregar al Map los querys si no existe ninguno con ese numero de version
                                     if (mapQuerysVersion.get(version) == null) {
                                         List<ScriptCodefac> listaQuerys = new ArrayList<ScriptCodefac>();
-                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.INSERT_COLUMN));
+                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.INSERT_COLUMN,mostrarAdvertencia));
                                         mapQuerysVersion.put(version, listaQuerys);
                                     } else //Obtiene la lista de los querys anteriormente agregados para ingresar el nuevo query
                                     {
                                         List<ScriptCodefac> listaQuerys = mapQuerysVersion.get(version);
-                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.INSERT_COLUMN));
+                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.INSERT_COLUMN,mostrarAdvertencia));
                                         mapQuerysVersion.put(version, listaQuerys);
                                     }
 

@@ -17,11 +17,11 @@ public class ScriptCodefac {
      */
     private boolean mostrarAdvertencia;
 
-    public ScriptCodefac(String query, PrioridadQueryEnum prioridad) {
+    /*public ScriptCodefac(String query, PrioridadQueryEnum prioridad) {
         this.query = query;
         this.prioridad = prioridad;
         this.mostrarAdvertencia=true;
-    }
+    }*/
 
     public ScriptCodefac(String query, PrioridadQueryEnum prioridad, String mostrarAdvertencia) {
         this.query = query;
