@@ -139,7 +139,7 @@ public class UtilidadesServidor {
             if (conn != null) {
 
                 /**
-                 * Busca todos los querys disponibles para ejecutar
+                 * Busca todos los querys disponibles en los archivos Sql para ejecutar
                  */
                 for (InputStream query : querys) {
                     try {
@@ -161,7 +161,7 @@ public class UtilidadesServidor {
                     }
                 }
 
-                //Solo ejecutar estos querys si el modo es desarrollo para hacer pruebas
+                //Solo ejecutar estos querys si el modo es DESARROLLO PARA HACER PRUEBAS
                 if (ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO)) {
                     for (InputStream query : queryDevelopment) //TODO: Optimizar el codigo para reuutilizar para los querys anteriores
                     {
@@ -201,19 +201,25 @@ public class UtilidadesServidor {
         });
 
         try {
+            //Crear una conexion a la base de datos
+            //TODO: Mejorar esta parte para crear una unica instancia de la conexión desde un mismo lugar
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;user="+AbstractFacade.usuarioDb+";password="+AbstractFacade.claveDb);
             Statement s = conn.createStatement();
 
             if (conn != null) {
                 /**
-                 * Busca todos los querys disponibles para ejecutar
+                 * Busca todos los querys disponibles en los archivos SQL para ejecutar
+                 * Posteriormente va a crear un MAP con la version y las setencias SQL para solo ejecutar las que sean superior a la versióna actual
                  */
-                for (InputStream query : querys) {
+                for (InputStream query : querys) 
+                {
                     try {
                         String sql = UtilidadesTextos.getStringURLFile(query);
                         String[] sentencias = sql.split(";");
-                        for (String sentencia : sentencias) {
+                        //En esa parte voy a recorrer cada instrución sql de forma individual
+                        for (String sentencia : sentencias) 
+                        {
                             //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
                             byte ptext[] = sentencia.getBytes();
                             String queryTabla = new String(ptext, "UTF-8");
@@ -255,6 +261,7 @@ public class UtilidadesServidor {
                                     String nombreTabla = obtenerNombreTabla(queryTabla);
                                     String queryNuevo = obtenerQueryEdit(etiqueta, nombreTabla);
 
+                                    //En esta parte se esta creando un MAP, agrupando todas las sentencias SQL con una versión para luego ejecutar en conjunto
                                     //Agregar al Map los querys si no existe ninguno con ese numero de version
                                     if (mapQuerysVersion.get(version) == null) {
                                         List<ScriptCodefac> listaQuerys = new ArrayList<ScriptCodefac>();
@@ -280,6 +287,8 @@ public class UtilidadesServidor {
                     }
                 }
                 
+                
+                //Busca todas las sentencias SQL de actualización para poder agrupar en un MAP por versión
                 for (InputStream queryStream : querys_update) {
                     String sql = UtilidadesTextos.getStringURLFile(queryStream);
                     String[] sentencias = sql.split(";");
@@ -317,6 +326,7 @@ public class UtilidadesServidor {
                         }
                     }
                 }
+                
 
                 /**
                  * Ejecutar todos los scripts pendientes en el map
@@ -334,9 +344,15 @@ public class UtilidadesServidor {
                                 return o1.getPrioridad().compareTo(o2.getPrioridad());
                             }
                         });
+                        
+                        if(versionGrabada.equals("1.2.9.0.0"))
+                        {
+                            System.out.println("version nueva");
+                        }
 
                         //Solo ejecutar los scripts si la version para modificar es mayor la version actual, y menor e igual que la version a actualizar
-                        if (UtilidadesSistema.compareVersion(versionGrabada, versionPropiedades) == 1 && UtilidadesSistema.compareVersion(versionGrabada, ParametrosSistemaCodefac.VERSION) <= 0) {
+                        if (UtilidadesSistema.compareVersion(versionGrabada, versionPropiedades) >= 0 && UtilidadesSistema.compareVersion(versionGrabada, ParametrosSistemaCodefac.VERSION) <= 0) {
+                            LOG.log(Level.INFO, "ACTUALIZANDO VERSIÓNES: " + versionGrabada);
                             for (ScriptCodefac query : lista) {
                                 LOG.log(Level.INFO, "Query Actualizado:" + query.getQuery());
                                 try {

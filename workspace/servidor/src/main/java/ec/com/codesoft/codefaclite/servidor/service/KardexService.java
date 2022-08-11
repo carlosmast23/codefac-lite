@@ -760,7 +760,15 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex.setReserva(0);
             kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
             kardex.setLote(lote);
-            em.persist(kardex); //grabando la persistencia
+            
+            if(kardex.getId()==null)
+            {
+                em.persist(kardex); //grabando la persistencia
+            }
+            else
+            {
+                em.merge(kardex); //grabando la persistencia
+            }
         } 
         //else {
             //Si existe el kardex solo busco el primer registro
