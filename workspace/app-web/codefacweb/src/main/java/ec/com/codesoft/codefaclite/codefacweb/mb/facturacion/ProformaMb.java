@@ -623,7 +623,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("Imprimir ...");
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
-        InputStream path = RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("proforma.jrxml");
+        InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("proforma.jrxml");
         JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
         //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
         UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,"Presupuesto "+factura.getSecuencial()+".pdf");
