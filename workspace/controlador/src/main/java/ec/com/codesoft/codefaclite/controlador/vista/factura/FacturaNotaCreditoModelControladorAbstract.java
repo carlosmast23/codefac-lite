@@ -28,6 +28,10 @@ public abstract class FacturaNotaCreditoModelControladorAbstract extends ModelCo
     
     public void cargarDatosAdicionales(ComprobanteVentaNotaCreditoAbstract comprobante)
     {
+        //TODO: Revisar esta parte que no genere problemas en la pantalla de facturacion, esto se hace para evitar poner datos repetidos
+        //Por el momento antes de agregar datos adicionales voy a borrar todo
+        
+        comprobante.getDatosAdicionalesComprobante().clear();
         //Agregar el correo del establecimiento seleccionado
         crearCampoCorreo(comprobante.getSucursal(), comprobante,false);
         
