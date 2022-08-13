@@ -3366,17 +3366,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         //Si el campo ya existe solo lo modifico
                         if(facturaAdicional!=null)
                         {   
-                            if(persona.getCorreoElectronico()!=null)
-                                facturaAdicional.setValor(persona.getCorreoElectronico());
+                            if(persona.getEstablecimientosActivos().get(0).getCorreoElectronico()!=null)
+                                facturaAdicional.setValor(persona.getEstablecimientosActivos().get(0).getCorreoElectronico());
                             else//Si no existe correo lo elimina de la lista
                                 factura.getDatosAdicionales().remove(facturaAdicional);
                         }
                         else //Si no existe el campo de correo lo crea
                         {
                             //Solo agregar si el cliente tiene un correo por defecto
-                            if(persona.getCorreoElectronico()!=null)
+                            if(persona.getEstablecimientosActivos().get(0).getCorreoElectronico()!=null)
                             {
-                                factura.addDatoAdicional(new FacturaAdicional(persona.getCorreoElectronico(),FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO));
+                                factura.addDatoAdicional(new FacturaAdicional(persona.getEstablecimientosActivos().get(0).getCorreoElectronico(),FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO));
 
                             }
                         }

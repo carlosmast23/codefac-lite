@@ -84,8 +84,8 @@ public class ComprobanteDataNotaCredito extends ComprobanteDataFacturaNotaCredit
     @Override
     public List<String> getCorreos() {
         List<String> correos=new ArrayList<String>();
-        if(notaCredito!=null && notaCredito.getCliente()!=null)
-            correos.add(notaCredito.getCliente().getCorreoElectronico());
+        if(notaCredito!=null && notaCredito.getSucursal()!=null)
+            correos.add(notaCredito.getSucursal().getCorreoElectronico());
         
         //Agregar correos adicionales , solo si estan seteados los valores de los correos       
         if(this.correosAdicionales!=null)

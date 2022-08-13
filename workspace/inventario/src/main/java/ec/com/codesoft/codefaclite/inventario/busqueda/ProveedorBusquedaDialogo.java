@@ -45,7 +45,7 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<Persona>
         dato.add(t.getEstablecimientos().get(0).getTelefonoConvencional());
         dato.add(t.getEstablecimientos().get(0).getExtensionTelefono());
         dato.add(t.getEstablecimientos().get(0).getTelefonoCelular());
-        dato.add(t.getCorreoElectronico());
+        dato.add(t.getEstablecimientos().get(0).getCorreoElectronico());
    
     }
     /*

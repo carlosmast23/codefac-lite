@@ -75,7 +75,9 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
     public List<String> getCorreos() {
         List<String> correos=new ArrayList<String>();
         if(retencion!=null && retencion.getProveedor()!=null)
-            correos.add(retencion.getProveedor().getCorreoElectronico());
+        {
+            correos.add(retencion.getProveedor().getEstablecimientosActivos().get(0).getCorreoElectronico());
+        }
         
         //Agregar correos adicionales , solo si estan seteados los valores de los correos       
         if(this.correosAdicionales!=null)

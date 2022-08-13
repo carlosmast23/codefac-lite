@@ -81,7 +81,7 @@ public abstract class ClienteMigrarAbstract extends MigrarModel {
                     
                     //cliente.setDireccion((String) fila.getByEnum(ExcelMigrarClientes.Enum.DIRECCION).valor);
                     
-                    cliente.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarClientes.Enum.CORREO).valor);
+                    //cliente.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarClientes.Enum.CORREO).valor);
                     ExcelMigrar.CampoResultado campoNombreComercial=fila.getByEnum(ExcelMigrarClientes.Enum.NOMBRE_COMERCIAL);
                     String nombreComercial=null;
                     if(campoNombreComercial!=null)
@@ -128,6 +128,7 @@ public abstract class ClienteMigrarAbstract extends MigrarModel {
                     personaEstablecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);
                     personaEstablecimiento.setNombreComercial((nombreComercial!=null)?nombreComercial.trim():"matriz");
                     personaEstablecimiento.setPersona(cliente);
+                    personaEstablecimiento.setCorreoElectronico((String) fila.getByEnum(ExcelMigrarClientes.Enum.CORREO).valor);
                     personaEstablecimiento.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                     
                     //List<PersonaEstablecimiento> establecimientos=new ArrayList<PersonaEstablecimiento>();

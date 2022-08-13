@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.controlador.vista.factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteVentaNotaCreditoAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 
 /**
@@ -26,43 +28,17 @@ public abstract class FacturaNotaCreditoModelControladorAbstract extends ModelCo
     
     public void cargarDatosAdicionales(ComprobanteVentaNotaCreditoAbstract comprobante)
     {
-        //Cargar el correo solo cuando exista 
-        if (comprobante.getCliente().getCorreoElectronico() != null) {
-            
-                       
-            //Obtiene el campo del correo por defecto sis existe
-            FacturaAdicional campoAdicional=(FacturaAdicional) comprobante.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CORREO);
-            //Si no existe el campo del correo del cliente lo creo
-            
-            String correoElectronico=null;
-            if(comprobante.getCliente().getCorreoElectronico()!=null && !comprobante.getCliente().getCorreoElectronico().toString().isEmpty())
+        //Agregar el correo del establecimiento seleccionado
+        crearCampoCorreo(comprobante.getSucursal(), comprobante,false);
+        
+        //Agregar el correo de la matriz en el caso que el establecimiento sea una matriz
+        if(comprobante.getSucursal().getTipoSucursalEnum().equals(Sucursal.TipoSucursalEnum.SUCURSAL))
+        {
+            PersonaEstablecimiento matriz= comprobante.getSucursal().obtenerMatriz();
+            if(matriz!=null)
             {
-                correoElectronico=comprobante.getCliente().getCorreoElectronico();
+                crearCampoCorreo(matriz, comprobante,true);
             }
-
-            if (campoAdicional == null) 
-            {
-                if (correoElectronico != null) 
-                {
-                    comprobante.addDatoAdicional(crearComprobanteAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
-                    //comprobante.addDatoAdicional(new FacturaAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
-                }
-            } 
-            else //Si existe el campo del correo del cliente lo edito
-            {
-                if (correoElectronico != null) 
-                {
-                    campoAdicional.setValor(correoElectronico);
-                }
-                else
-                {
-                    comprobante.getDatosAdicionalesComprobante().remove(campoAdicional);
-                }
-            }
-           
-
-            
-            //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
         }
         
         //Cargar el numero e celular del cliente
@@ -91,5 +67,36 @@ public abstract class FacturaNotaCreditoModelControladorAbstract extends ModelCo
             //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
         }
         
+    }
+  
+    private void crearCampoCorreo(PersonaEstablecimiento establecimiento,ComprobanteVentaNotaCreditoAbstract comprobante,Boolean agregarMultiplesCorreos) 
+    {                 //Cargar el correo solo cuando exista 
+        if (establecimiento.getCorreoElectronico() != null) 
+        {
+
+            //Obtiene el campo del correo por defecto sis existe
+            FacturaAdicional campoAdicional = (FacturaAdicional) comprobante.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CORREO);
+            //Si no existe el campo del correo del cliente lo creo
+
+            String correoElectronico = null;
+            if (establecimiento.getCorreoElectronico() != null && !establecimiento.getCorreoElectronico().toString().isEmpty()) {
+                correoElectronico = establecimiento.getCorreoElectronico();
+            }
+
+            if (campoAdicional == null || agregarMultiplesCorreos) {
+                if (correoElectronico != null) {
+                    comprobante.addDatoAdicional(crearComprobanteAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
+                    //comprobante.addDatoAdicional(new FacturaAdicional(correoElectronico, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO));
+                }
+            } else //Si existe el campo del correo del cliente lo edito
+            {
+                if (correoElectronico != null) {
+                    campoAdicional.setValor(correoElectronico);
+                } else {
+                    comprobante.getDatosAdicionalesComprobante().remove(campoAdicional);
+                }
+            }
+
+        }
     }
 }

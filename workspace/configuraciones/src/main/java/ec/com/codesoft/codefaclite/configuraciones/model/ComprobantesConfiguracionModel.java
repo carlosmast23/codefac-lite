@@ -734,7 +734,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         return permisosPerfil;
     }
 
-    public void configurarCorreoDeConsumidorFinal() {
+    /*public void configurarCorreoDeConsumidorFinal() {
         try {
             clienteService = ServiceFactory.getFactory().getPersonaServiceIf();
             for (Persona c : clienteService.buscar()) {
@@ -749,7 +749,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {

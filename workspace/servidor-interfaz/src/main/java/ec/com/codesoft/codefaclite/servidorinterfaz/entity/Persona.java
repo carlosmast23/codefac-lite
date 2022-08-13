@@ -82,8 +82,9 @@ public class Persona implements Serializable, Comparable<Persona> {
     @Column(name = "TIPO_CLIENTE")
     private String tipCliente;
 
-    @Column(name = "CORREO_ELECTRONICO")
-    private String correoElectronico;
+    //@Column(name = "CORREO_ELECTRONICO")
+    //private String correoElectronico;
+    
     @Column(name = "ESTADO")
     private String estado;
 
@@ -221,13 +222,13 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.telefonoCelular = telefonoCelular;
     }
 
-    public String getCorreoElectronico() {
+    /*public String getCorreoElectronico() {
         return correoElectronico;
     }
 
     public void setCorreoElectronico(String correoElectronico) {
         this.correoElectronico = correoElectronico;
-    }
+    }*/
 
     public String getEstado() {
         return estado;
@@ -503,7 +504,15 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.fechaCreacion = fechaCreacion;
     }
     
-    
+    public String getCorreoElectronico()
+    {
+        PersonaEstablecimiento establecimientoDefecto=getEstablecimientosActivos().get(0);
+        if(establecimientoDefecto!=null && establecimientoDefecto.getCorreoElectronico()!=null)
+        {
+            return establecimientoDefecto.getCorreoElectronico();
+        }
+        return "";
+    }
     
     
 

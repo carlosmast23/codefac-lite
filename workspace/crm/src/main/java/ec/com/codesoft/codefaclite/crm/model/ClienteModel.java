@@ -218,7 +218,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setTipoIdentificacion(tipoIdentificacionEnum.getLetra());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
-        persona.setCorreoElectronico(getjTextCorreo().getText());
+        //persona.setCorreoElectronico(getjTextCorreo().getText());
         persona.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
         persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
         persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
@@ -270,6 +270,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 TipoSucursalEnum.MATRIZ, 
                 (Zona) getCmbZona().getSelectedItem(),
                 (TipoEstablecimiento)getCmbTipoCliente().getSelectedItem(),
+                getjTextCorreo().getText(),
                 GeneralEnumEstado.ACTIVO
                 );
         
@@ -417,7 +418,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         //getjComboIdentificacion().setSelectedItem(persona.getSriTipoIdentificacion());
         getjTextIdentificacion().setText(persona.getIdentificacion());
         getjComboTipoCliente().setSelectedItem(persona.getTipCliente());
-        getjTextCorreo().setText(persona.getCorreoElectronico());
+        //getjTextCorreo().setText(persona.getCorreoElectronico());
         getCmbEstado().setSelectedItem(GeneralEnumEstado.getEnum(persona.getEstado()));
         getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
         getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
@@ -965,7 +966,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         //personaEstablecimiento.setLatitud(new BigDecimal(getTxtLatitud().getText()));
         //personaEstablecimiento.setLatitud(new BigDecimal(getTxtLongitud().getText()));
         
-        personaEstablecimiento.setCorreoElectronico(""); //implementar de forma posterior
+        personaEstablecimiento.setCorreoElectronico(getjTextCorreoEstablecimiento().getText()); //implementar de forma posterior
         personaEstablecimiento.setDireccion(getjTextAreaDireccionEstablecimiento().getText());
         personaEstablecimiento.setReferenciaDireccion(getjTextReferenciaDireccionEstablecimiento().getText());
         personaEstablecimiento.setExtensionTelefono(getjTextExtensionEstablecimiento().getText());
@@ -1044,9 +1045,10 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public String getCorreo() {
+        PersonaEstablecimiento establecimiento=persona.getEstablecimientos().get(0);
         String correo="";
-        if(persona!=null)
-            correo=persona.getCorreoElectronico();
+        if(establecimiento!=null)
+            correo=establecimiento.getCorreoElectronico();
                     
         return correo;
     }
@@ -1056,7 +1058,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getTxtCodigoPersonalizadoOficina().setText("");
         getTxtNombreLegalEstablecimiento().setText("");
         getTxtCodigoPersonalizado().setText("");
-        getjTextAreaDireccionEstablecimiento().setText("");
+        getjTextAreaDireccionEstablecimiento().setText("");        
+        getjTextCorreoEstablecimiento().setText("");
         getjTextReferenciaDireccionEstablecimiento().setText("");
         getjTextTelefonoEstablecimiento().setText("");
         getjTextExtensionEstablecimiento().setText("");
@@ -1099,6 +1102,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getjTextTelefono().setText(establecimiento.getTelefonoConvencional());
             getjTextExtension().setText(establecimiento.getExtensionTelefono());
             getjTextCelular().setText(establecimiento.getTelefonoCelular());
+            getjTextCorreo().setText(establecimiento.getCorreoElectronico());
             getCmbZona().setSelectedItem(establecimiento.getZona());
             getCmbTipoCliente().setSelectedItem(establecimiento.getTipoEstablecimiento());
             construirVistaEstablecimientos();
@@ -1146,6 +1150,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         getTxtCodigoPersonalizado().setText(personaEstablecimientoEditar.getCodigoPersonalizado());
         getjTextAreaDireccionEstablecimiento().setText(personaEstablecimientoEditar.getDireccion());
+        getjTextCorreoEstablecimiento().setText(personaEstablecimientoEditar.getCorreoElectronico());
         getjTextReferenciaDireccionEstablecimiento().setText(personaEstablecimientoEditar.getReferenciaDireccion());
         getjTextExtensionEstablecimiento().setText(personaEstablecimientoEditar.getExtensionTelefono());
         getjTextCelularEstablecimiento().setText(personaEstablecimientoEditar.getTelefonoCelular());
@@ -1153,6 +1158,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getCmbTipoEstablecimiento().setSelectedItem(personaEstablecimientoEditar.getTipoSucursalEnum());
         getCmbZonaOficina().setSelectedItem(personaEstablecimientoEditar.getZona());
         getCmbTipoClienteOficina().setSelectedItem(personaEstablecimientoEditar.getTipoEstablecimiento());
+        //getjTextCorreo().setText(personaEstablecimientoEditar.getCorreoElectronico());
         //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
         //personaEstablecimiento.setPersona(persona);
         //personaEstablecimiento.setTelefonoConvencional(getjTextTelefono().getText());

@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -78,6 +79,7 @@ public class PersonaEstablecimiento implements  Serializable{
     
     @JoinColumn(name ="ZONA_ID")
     private Zona zona;
+    
     
     @JoinColumn(name ="TIPO_ESTABLECIMIENTO_ID")
     private TipoEstablecimiento tipoEstablecimiento;
@@ -264,7 +266,26 @@ public class PersonaEstablecimiento implements  Serializable{
         return true;
     }
     
-    
+    public PersonaEstablecimiento obtenerMatriz()
+    {
+        if(getTipoSucursalEnum().equals(TipoSucursalEnum.SUCURSAL))
+        {
+            List<PersonaEstablecimiento> personaEstablecimientoList= persona.getEstablecimientosActivos();
+            for (PersonaEstablecimiento establecimiento : personaEstablecimientoList) 
+            {
+                if(establecimiento.getTipoSucursalEnum().equals(TipoSucursalEnum.MATRIZ))
+                {
+                    return establecimiento;
+                }
+            }
+        }
+        else if(getTipoSucursalEnum().equals(TipoSucursalEnum.MATRIZ))
+        {
+            return this;
+        }
+        
+        return null;
+    }
     
     
     /**
@@ -283,7 +304,7 @@ public class PersonaEstablecimiento implements  Serializable{
     
     
     
-    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String referenciadireccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento,GeneralEnumEstado estadoEnum)
+    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String referenciadireccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento,String correo,GeneralEnumEstado estadoEnum)
     {
         //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
         establecimiento.setCodigoPersonalizado(codigo);
@@ -298,6 +319,7 @@ public class PersonaEstablecimiento implements  Serializable{
         establecimiento.setZona(zona);
         establecimiento.setTipoEstablecimiento(tipoEstablecimiento);
         establecimiento.setEstadoEnum(estadoEnum);
+        establecimiento.setCorreoElectronico(correo);
         return establecimiento;
     }
     
