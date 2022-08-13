@@ -50,6 +50,8 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         txtDpi = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
         cmbTipoCodigoBarras = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        cmbImprimirPrecio = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -64,7 +66,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -90,7 +92,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         jToolBar1.add(btnAgregarProducto);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -99,7 +101,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Nota: Ingresar las cantidades que desea generar en los códigos de barras");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 6;
         jPanel1.add(jLabel1, gridBagConstraints);
 
@@ -113,8 +115,8 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
 
         jLabel2.setText("DPI:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -129,24 +131,24 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
 
         cmbPrecioConIva.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SI", "NO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbPrecioConIva, gridBagConstraints);
 
-        jLabel4.setText("Tipo Código de Barras:");
+        jLabel4.setText("Imprimir precios");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
 
         txtDpi.setValue(80);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -154,7 +156,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
 
         jLabel5.setText("Precios con Iva:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -162,10 +164,26 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoCodigoBarras, gridBagConstraints);
+
+        jLabel6.setText("Tipo Código de Barras:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel6, gridBagConstraints);
+
+        cmbImprimirPrecio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SI", "NO" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbImprimirPrecio, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -177,6 +195,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnAgregarTodos;
     private javax.swing.JComboBox<String> cmbFormatoImpresion;
+    private javax.swing.JComboBox<String> cmbImprimirPrecio;
     private javax.swing.JComboBox<String> cmbPrecioConIva;
     private javax.swing.JComboBox<UtilidadCodigoBarras.CodigoBarrasEnum> cmbTipoCodigoBarras;
     private javax.swing.JLabel jLabel1;
@@ -184,6 +203,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
@@ -245,6 +265,14 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
 
     public void setCmbTipoCodigoBarras(JComboBox<UtilidadCodigoBarras.CodigoBarrasEnum> cmbTipoCodigoBarras) {
         this.cmbTipoCodigoBarras = cmbTipoCodigoBarras;
+    }
+
+    public JComboBox<String> getCmbImprimirPrecio() {
+        return cmbImprimirPrecio;
+    }
+
+    public void setCmbImprimirPrecio(JComboBox<String> cmbImprimirPrecio) {
+        this.cmbImprimirPrecio = cmbImprimirPrecio;
     }
 
     

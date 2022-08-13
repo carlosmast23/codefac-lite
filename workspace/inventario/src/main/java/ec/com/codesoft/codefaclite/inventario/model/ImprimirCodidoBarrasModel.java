@@ -113,6 +113,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         UtilidadCodigoBarras.CodigoBarrasEnum codigoEnum = (UtilidadCodigoBarras.CodigoBarrasEnum) getCmbTipoCodigoBarras().getSelectedItem();
         
         String opcionLlevaIva=(String) getCmbPrecioConIva().getSelectedItem();        
+        String opcionImprimirIva=(String) getCmbImprimirPrecio().getSelectedItem();
                
         List<CodigoBarrasData> listaDatos=new ArrayList<CodigoBarrasData>();
         int dpi=(int) getTxtDpi().getValue();
@@ -129,14 +130,19 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                 codigoBarraData.setImagen(imagenCodigoBarras);
                 codigoBarraData.setCodigo(producto.getCodigoPersonalizado());
                 codigoBarraData.setNombre(producto.getNombre());
+                codigoBarraData.setPrecio("");
                 
-                if (opcionLlevaIva.equals("SI")) 
+                //Solo agregar el precio si esta activa la opcion
+                if(opcionImprimirIva.equals("SI"))
                 {
-                    codigoBarraData.setPrecio("$"+producto.getValorUnitarioConIva().setScale(2, RoundingMode.HALF_UP).toString());
-                } 
-                else if (opcionLlevaIva.equals("NO")) 
-                {
-                    codigoBarraData.setPrecio("$"+producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
+                    if (opcionLlevaIva.equals("SI")) 
+                    {
+                        codigoBarraData.setPrecio("$"+producto.getValorUnitarioConIva().setScale(2, RoundingMode.HALF_UP).toString());
+                    } 
+                    else if (opcionLlevaIva.equals("NO")) 
+                    {
+                        codigoBarraData.setPrecio("$"+producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
+                    }
                 }
                 
                 listaDatos.add(codigoBarraData);
