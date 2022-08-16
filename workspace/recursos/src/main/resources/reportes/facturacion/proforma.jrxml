@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.2100000000000146"/>
+	<property name="ireport.zoom" value="2.35794769100003"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="6"/>
+	<property name="ireport.y" value="28"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -74,6 +74,7 @@
 	<parameter name="SUBREPORT_INFO_OTRO" class="java.lang.Object"/>
 	<parameter name="pl_instagram" class="java.lang.String"/>
 	<parameter name="pl_img_instagram" class="java.lang.Object"/>
+	<parameter name="telefono" class="java.lang.String"/>
 	<field name="codigo" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="precioUnitario" class="java.lang.String"/>
@@ -86,7 +87,7 @@
 	<title>
 		<band height="145" splitType="Stretch">
 			<staticText>
-				<reportElement x="450" y="87" width="105" height="20" uuid="10e48216-48bb-4bce-9370-a0d54c0a304f"/>
+				<reportElement x="465" y="87" width="90" height="15" uuid="10e48216-48bb-4bce-9370-a0d54c0a304f"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -101,7 +102,7 @@
 			<staticText>
 				<reportElement x="0" y="87" width="82" height="20" uuid="0339d62a-37fd-4428-8ee1-2c9c89925dfc"/>
 				<textElement>
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<text><![CDATA[Identificación:]]></text>
@@ -109,7 +110,7 @@
 			<staticText>
 				<reportElement x="0" y="107" width="82" height="20" uuid="853671ed-6041-4aa4-badb-4c46f5b0ee08"/>
 				<textElement>
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<text><![CDATA[Fecha Emisión:]]></text>
@@ -117,6 +118,7 @@
 			<textField>
 				<reportElement x="82" y="107" width="101" height="20" uuid="d61cbadd-18a1-4550-8c49-921ba009ddae"/>
 				<textElement>
+					<font size="9"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fecha_emision}]]></textFieldExpression>
@@ -124,7 +126,7 @@
 			<staticText>
 				<reportElement x="0" y="127" width="82" height="17" uuid="fd41bd82-26d4-4f4e-9aa8-58cc11d97023"/>
 				<textElement>
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
@@ -132,6 +134,7 @@
 			<textField>
 				<reportElement x="82" y="50" width="473" height="37" uuid="7a51c9a1-117a-4cd1-9e9e-2050b5f8424b"/>
 				<textElement>
+					<font size="9"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cliente_nombres}]]></textFieldExpression>
@@ -139,6 +142,7 @@
 			<textField>
 				<reportElement x="82" y="87" width="101" height="20" uuid="3fd4f4c5-365a-4994-86dc-4012c478e913"/>
 				<textElement>
+					<font size="9"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cliente_identificacion}]]></textFieldExpression>
@@ -146,6 +150,7 @@
 			<textField>
 				<reportElement x="82" y="127" width="101" height="17" uuid="046fb76e-13e3-4af6-9acd-409374600c26"/>
 				<textElement>
+					<font size="9"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
@@ -153,7 +158,7 @@
 			<staticText>
 				<reportElement x="1" y="50" width="81" height="20" uuid="b0655437-1765-43fa-8aa8-396a8dd3634b"/>
 				<textElement>
-					<font isBold="true"/>
+					<font size="9" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<text><![CDATA[Cliente:]]></text>
@@ -188,7 +193,7 @@
 				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="450" y="107" width="105" height="30" uuid="a0727ea6-6a62-4dcd-b4b0-a1e57d389239"/>
+				<reportElement x="465" y="102" width="90" height="25" uuid="a0727ea6-6a62-4dcd-b4b0-a1e57d389239"/>
 				<box>
 					<pen lineStyle="Dashed"/>
 					<topPen lineWidth="1.0" lineStyle="Dashed"/>
@@ -197,9 +202,41 @@
 					<rightPen lineWidth="1.0" lineStyle="Dashed"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="20"/>
+					<font size="18"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{secuencial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="214" y="128" width="55" height="17" uuid="70b05795-33be-4c63-9490-9975db63ecd8"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Dirección:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="217" y="108" width="52" height="20" uuid="cf7e786c-e898-407e-9426-cb0fd0fb49c5"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Teléfono:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="269" y="108" width="157" height="20" uuid="b0bdbd90-8e3e-46d9-9dbc-10c8b0b0f5d4"/>
+				<textElement>
+					<font size="9"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="269" y="127" width="286" height="17" uuid="e22399f5-c65f-4082-bbe1-b06f69d26b13"/>
+				<textElement>
+					<font size="9"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

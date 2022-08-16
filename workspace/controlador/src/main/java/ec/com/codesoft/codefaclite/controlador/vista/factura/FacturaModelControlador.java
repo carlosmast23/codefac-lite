@@ -1153,6 +1153,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         mapParametros.put("estado",estadoEnum.getNombre());        
         //subtotal_cero
         //Datos adicionales para las proformas
+        mapParametros.put("telefono", facturaProcesando.getTelefono());
+        mapParametros.put("direccion", facturaProcesando.getDireccion());
         mapParametros.put("secuencial", facturaProcesando.getSecuencial().toString());
         mapParametros.put("cliente_nombres", facturaProcesando.getRazonSocial());
         mapParametros.put("cliente_identificacion", facturaProcesando.getIdentificacion());
