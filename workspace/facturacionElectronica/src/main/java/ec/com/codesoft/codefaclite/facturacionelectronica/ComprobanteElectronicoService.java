@@ -928,6 +928,23 @@ public class ComprobanteElectronicoService implements Runnable {
             UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));            
     }
     
+    public static String normalizarXmlComprobante(String xmlStr)
+    {
+        //Normalizar el archivo xml cuando tiene un formato que no es legible por que tiene otros simbolos para las etiquetas de apartura y cierre
+        String xmlStrNormalizado = xmlStr.replace("&lt;", "<").replace("&gt;", ">");
+
+        //Si tiene estos códigos toca hacer un tratamiento especial con la factura para que pueda ser procesada
+        if (xmlStr.indexOf("&lt;") >= 0) 
+        {
+            int posicionInicioCorte=xmlStrNormalizado.indexOf("<comprobante>")+13;
+            int posicionFinCorte=xmlStrNormalizado.indexOf("</comprobante>");
+            xmlStrNormalizado=xmlStrNormalizado.substring(posicionInicioCorte, posicionFinCorte);            
+        }
+        
+        return xmlStrNormalizado;
+
+    }
+    
     //TODO: Tratar de unificar con el metodo generarRideIndividual por que son muy similares
     public static ComprobanteElectronico obtenerComprobanteDataDesdeXml(File archivoXml)
     {
@@ -935,7 +952,8 @@ public class ComprobanteElectronicoService implements Runnable {
             
             //VERIFICAR si existe un XML AUTORIZADO primero obtengo el formato normal del XML FIRMADO
             String xmlStr=new String(Files.readAllBytes(archivoXml.toPath()),StandardCharsets.UTF_8);
-            
+            xmlStr=normalizarXmlComprobante(xmlStr);
+                        
             final String etiquetaAperturaFirmado="[CDATA[";
             final String etiquetaCierreFirmado="]]>";
             if(xmlStr.indexOf(etiquetaAperturaFirmado)>=0)
