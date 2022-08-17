@@ -2245,6 +2245,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             // Obtenemos el objeto
             Object clave = e.nextElement();
             String valor = propiedades.getProperty(clave.toString());
+            
+            if(valor==null || valor.isEmpty())
+            {
+                valor=" ";
+            }
 
             DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
             switch (documentoEnum) {
