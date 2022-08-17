@@ -1271,7 +1271,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(manejaInventario.equals(EnumSiNo.SI))
         {
             ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta);
-            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1000);            
             buscarDialogoModel.setVisible(true);
             Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
             kardexSeleccionado = kardex;

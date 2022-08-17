@@ -356,6 +356,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         data.setAplicacion(producto.getAplicacionProducto());
                         data.setTipo(producto.getTipoProducto());
                         data.setSegmento(producto.getSegmentoProducto());
+                        data.setMarca((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
                         
                         //Agregar los detalles adicional cuando el producto tiene garantia
                         if(producto.getGarantiaEnum().equals(EnumSiNo.SI) && getCmbMostrarDetalle().getSelectedItem().equals(EnumSiNo.SI))

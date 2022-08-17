@@ -49,6 +49,9 @@ import javax.swing.table.TableColumnModel;
  */
 public class BuscarDialogoModel extends DialogoBuscadorForm
 {
+    private static final int altoVentanaDefecto=410;
+    private static final int anchoVentanaDefecto=800;
+    
     private static final String ALIAS_BUSQUEDA="?1000";
     /**
      * Cantidad maxima de filas que va a cargar la tabla 
@@ -71,6 +74,11 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
      * Variable que me permite configurar si la variable de busqueda quiero que normalize sin acentos o buscar de forma identica a lo escrito
      */
     private boolean normalizarTextoBusqueda;
+    
+    /**
+     * Variable que va a tener las dimenciones de la ventana
+     */
+    private Dimension dimensionVentana;
 
     /*
     public BuscarDialogoModel(DefaultTableModel modeloTablaBuscar) 
@@ -81,17 +89,32 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     }*/
     
     public BuscarDialogoModel(InterfaceModelFind model) 
-    {
+    {        
         super(null,true);
+        constructorGeneral(model,new Dimension(anchoVentanaDefecto, altoVentanaDefecto));
+        
+    }
+    
+    public BuscarDialogoModel(InterfaceModelFind model,int ancho) 
+    {        
+        super(null,true);
+        constructorGeneral(model,new Dimension(ancho, altoVentanaDefecto));
+        
+    }
+    
+    public void constructorGeneral(InterfaceModelFind model,Dimension dimensionVentana)
+    {
         this.model=model;
         iniciarValores();
         initListener();
         //crearConsulta("");
         ejecutarConsulta();
+        this.dimensionVentana=dimensionVentana;
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();        
         normalizarTextoBusqueda=false;
     }
+    
     
     private void iniciarValores()
     {
@@ -499,8 +522,9 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
 
     private void establecerPropiedadesIniciales() {
         //Centrar el dialogo
-        setPreferredSize(new Dimension(800,410));
-        setSize(800, 410);
+        
+        setPreferredSize(dimensionVentana);
+        setSize(dimensionVentana);
         setLocationRelativeTo(null);
 
     }
@@ -542,9 +566,19 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     public void setNormalizarTextoBusqueda(boolean normalizarTextoBusqueda) {
         this.normalizarTextoBusqueda = normalizarTextoBusqueda;
     }
-    
-    
 
+    public Dimension getDimensionVentana() {
+        return dimensionVentana;
+    }
+
+    public void setDimensionVentana(Dimension dimensionVentana) {
+        this.dimensionVentana = dimensionVentana;
+    }
     
+    public void setAnchoVentana(int ancho)
+    {
+        this.dimensionVentana.setSize(ancho,this.dimensionVentana.getHeight());
+    }
+
     
 }
