@@ -82,6 +82,19 @@ create table MARCA_PRODUCTO
     primary key (ID)
 );
 
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.9.2.2)*/
+create table CASA_COMERCIAL
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    EMPRESA_ID BIGINT, 
+    NOMBRE varchar(100),
+    DESCRIPCION varchar(100),
+    ESTADO varchar(1),
+    FECHA_CREACION TIMESTAMP,
+    FECHA_ULTIMA_MODIFICACION TIMESTAMP,
+    primary key (ID)
+);
+
 
 /*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.9.1.2)*/
 create table SEGMENTO_PRODUCTO( 

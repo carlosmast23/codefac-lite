@@ -148,6 +148,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel36 = new javax.swing.JLabel();
         cmbTipo = new javax.swing.JComboBox<>();
         cmbSegmento = new javax.swing.JComboBox<>();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel40 = new javax.swing.JLabel();
+        txtNombreGenerico = new javax.swing.JTextField();
+        lblEspacio12983 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatosEnsamble = new javax.swing.JTable();
@@ -734,6 +739,41 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         tabMenu.addTab("Info Adicional", jPanel5);
 
+        jPanel9.setLayout(new java.awt.GridBagLayout());
+
+        jLabel40.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel40.setText("Casa Comercial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel40, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(txtNombreGenerico, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel9.add(lblEspacio12983, gridBagConstraints);
+
+        jLabel41.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel41.setText("Nombre Genérico:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel41, gridBagConstraints);
+
+        tabMenu.addTab("Farmacia", jPanel9);
+
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setViewportView(tblDatosEnsamble);
@@ -1112,6 +1152,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1125,6 +1167,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1132,6 +1175,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio12;
+    private javax.swing.JLabel lblEspacio12983;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio23;
     private javax.swing.JLabel lblEspacio24;
@@ -1153,6 +1197,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCodigoPersonalizado;
     private javax.swing.JTextField txtCodigoUPC;
     private javax.swing.JTextField txtImagenProducto;
+    private javax.swing.JTextField txtNombreGenerico;
     private javax.swing.JTextArea txtObservaciones;
     private javax.swing.JTextField txtPV4;
     private javax.swing.JTextField txtPV5;

@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CasaComercialServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
@@ -238,6 +239,7 @@ public abstract class ServiceFactory {
     public SegmentoProductoServiceIf getSegmentoProductoServiceIf(){return (SegmentoProductoServiceIf) getRecursosRMI(SegmentoProductoServiceIf.class);};
     public TipoProductoServiceIf getTipoProductoServiceIf(){return (TipoProductoServiceIf) getRecursosRMI(TipoProductoServiceIf.class);};
     public ObjetoMantenimientoServiceIf getObjetoMantenimientoServiceIf(){return (ObjetoMantenimientoServiceIf) getRecursosRMI(ObjetoMantenimientoServiceIf.class);};
+    public CasaComercialServiceIf getCasaComercialServiceIf(){return (CasaComercialServiceIf) getRecursosRMI(CasaComercialServiceIf.class);};
     
     
     /**

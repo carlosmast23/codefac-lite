@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ActualizarSistemaService;
 import ec.com.codesoft.codefaclite.servidor.service.AlertaService;
 import ec.com.codesoft.codefaclite.servidor.service.AtsService;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
+import ec.com.codesoft.codefaclite.servidor.service.CasaComercialService;
 import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraFacturaReembolsoService;
@@ -113,6 +114,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CasaComercialServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
@@ -322,6 +324,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(SegmentoProductoService.class, SegmentoProductoServiceIf.class);
             mapRecursos.put(TipoProductoService.class, TipoProductoServiceIf.class);            
             mapRecursos.put(ObjetoMantenimientoService.class, ObjetoMantenimientoServiceIf.class);
+            mapRecursos.put(CasaComercialService.class, CasaComercialServiceIf.class);
             
             
             
