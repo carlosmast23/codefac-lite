@@ -51,7 +51,8 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         titulo.add(new ColumnaDialogo("Codigo Aux", 0.2d));
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Lote", 0.3d));
-        titulo.add(new ColumnaDialogo("Marca", 0.3d));
+        titulo.add(new ColumnaDialogo("Marca", 0.25d));
+        titulo.add(new ColumnaDialogo("Aplicación", 0.25d));
         titulo.add(new ColumnaDialogo("Ubicación", 0.3d));
         titulo.add(new ColumnaDialogo("Pvp", 0.10d));
         titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
@@ -128,6 +129,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         vector.add(producto.getNombre());
         vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
         vector.add((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
+        vector.add((producto.getAplicacionProducto()!=null)?producto.getAplicacionProducto():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));

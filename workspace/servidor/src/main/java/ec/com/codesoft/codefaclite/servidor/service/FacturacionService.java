@@ -344,7 +344,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 setearDatosClienteYDistribuidor(factura);
                 
                 //Validaciones iniciales de la factura
-                validacionInicialFacturar(factura,CrudEnum.CREAR);
+                validacionInicialFacturar(factura,CrudEnum.CREAR);568
                 
                 //Agrega datos adcional como por ejemplo la fecha de creacion de la factura
                 setearDatosPorDefecto(factura);
@@ -515,6 +515,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         //TODO: Ver si se puede poner estos codigos en otra seccion 
                         detalle.setDescripcion(detalle.getDescripcion().replace("”","''"));
+                        detalle.setDescripcion(detalle.getDescripcion().replace(""," "));
                     }
                     
                 }
