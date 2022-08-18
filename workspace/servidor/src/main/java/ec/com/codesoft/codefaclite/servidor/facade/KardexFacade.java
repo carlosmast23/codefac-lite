@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -43,6 +44,33 @@ public class KardexFacade extends AbstractFacade<Kardex> {
 
     public KardexFacade() {
         super(Kardex.class);
+    }
+    
+    public Kardex buscarPorProductoFacade(Producto producto)
+    {
+        //Kardex k;
+        //k.getFechaModificacion():
+        String queryString = "SELECT k  "
+                + "FROM Kardex k "                
+                + "WHERE k.producto=?1 "
+                + "ORDER BY k.fechaModificacion desc ";
+        
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, producto);
+        //query.setMaxResults(1);
+        List<Kardex> kardexList= query.getResultList();
+        
+        for (Kardex kardex : kardexList) 
+        {            
+            if(kardex.getPrecioUltimo()!=null && kardex.getPrecioUltimo().compareTo(BigDecimal.ZERO)!=0)
+            {
+                System.out.println(kardex.getPrecioUltimo());
+                return kardex;
+            }
+        }
+        
+        
+        return null;
     }
 
     public List<Object[]> obtenerConsultaSaldoAnterior(Date fechaCorte, Producto producto, Bodega bodega) {

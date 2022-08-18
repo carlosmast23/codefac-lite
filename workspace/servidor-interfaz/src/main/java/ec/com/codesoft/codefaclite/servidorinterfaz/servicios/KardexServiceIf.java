@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetall
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TransferenciaBodegaRespuesta;
 import java.math.BigDecimal;
 import java.rmi.Remote;
@@ -80,5 +81,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public Kardex crearObjeto(Bodega bodega,Producto producto,Lote lote) throws java.rmi.RemoteException,ServicioCodefacException;
     
     public void crearKardexSiNoExisteSinTransaccion(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException;
+    
+    public CostoProductoRespuesta buscarCostoProductoRespuesta(Producto producto) throws java.rmi.RemoteException;
 
 }

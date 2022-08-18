@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.RotacionInventarioRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TransferenciaBodegaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
@@ -143,6 +144,19 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         return null;
     }
+   
+   public CostoProductoRespuesta buscarCostoProductoRespuesta(Producto producto) throws java.rmi.RemoteException
+   {
+       Kardex kardex= getFacade().buscarPorProductoFacade(producto);
+       if(kardex!=null)
+       {
+            return new CostoProductoRespuesta(kardex.getCostoPromedio(),kardex.getPrecioUltimo());
+       }
+       else
+       {
+           return new CostoProductoRespuesta();
+       }
+   }
    
    /**
     * Metodo que me permite crear un nuevo kardex cuando no existe creado
@@ -603,7 +617,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         lote.setStock(lote.getStock().add(cantidadMovimiento));
         ServiceFactory.getFactory().getLoteSeviceIf().editarSinTransaccion(lote);*/
-        
+        //Cuando hago una modificacion de este tema guardo la fecha de edicion
+        //TODO: Ver si mejor la fecha de debe recalcular al momento de hacer la edicion global
+        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
         //CALCULAR EL PRECIO CON EL STOCK FINAL
         kardex.calcularPrecioTotal();
         
@@ -774,6 +790,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //Si existe el kardex solo busco el primer registro
         //    kardex = kardexList.get(0);
         //}
+        
+        //Cuando hago una modificacion de este tema guardo la fecha de edicion
+        //TODO: Ver si mejor la fecha de debe recalcular al momento de hacer la edicion global
+        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
 
         //Agregar la fecha de creacion del sistema
         detalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());

@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -90,10 +91,11 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
             BigDecimal costoUltimo = BigDecimal.ZERO;
             
             try {
-                Kardex kardexProducto = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
-                if (kardexProducto != null) {
-                    costoPromedio = kardexProducto.getCostoPromedio();
-                    costoUltimo = kardexProducto.getPrecioUltimo();
+                //Kardex kardexProducto = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
+                CostoProductoRespuesta costoProducto=ServiceFactory.getFactory().getKardexServiceIf().buscarCostoProductoRespuesta(producto);
+                if (costoProducto != null) {
+                    costoPromedio = costoProducto.costoPromedio;
+                    costoUltimo = costoProducto.costoUltimo;
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
