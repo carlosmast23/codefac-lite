@@ -14,13 +14,17 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -95,7 +99,10 @@ public class MigrarProductoModel extends MigrarModel {
                     }
                     
                     producto.setNombre(((String) fila.getByEnum(ExcelMigrarProductos.Enum.NOMBRE).valor).trim());
-                    System.out.println(producto.getNombre());         
+                    System.out.println(producto.getNombre());   
+                    
+                    //Obtener el nombre generico                    
+                    producto.setNombreGenerico(getValor(ExcelMigrarProductos.Enum.NOMBRE_GENERICO, fila));
                     
                     //Obtener datos iniciales del inventario que necesito
                     String manejaInventario=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MANEJA_INVENTARIO).valor;
@@ -115,6 +122,9 @@ public class MigrarProductoModel extends MigrarModel {
                     
                         Double precioVentaPublico = (Double) fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PUBLICO).valor;
                         validarProducto(producto);
+                        
+                        //Generar los enlaces con los proveedor en el caso que exista
+                        generarEnlaceProveedor(fila, producto);
 
                         /**
                          * ==========> BUSCAR O CREAR LA CATEGORIA SI NO EXISTE PARA CREAR <=======
@@ -154,6 +164,7 @@ public class MigrarProductoModel extends MigrarModel {
                          */                        
                         //String marca=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MARCA).valor;
                         grabarMarcaProducto(fila,producto);
+                        grabarCasaComercial(fila, producto);
                         
                         try
                         {
@@ -372,6 +383,52 @@ public class MigrarProductoModel extends MigrarModel {
         }
 
         producto.setMarcaProducto(marcaProducto);
+    }
+    
+    private void grabarCasaComercial(ExcelMigrar.FilaResultado fila,Producto producto) throws ServicioCodefacException, RemoteException
+    {
+        CasaComercial casaComercial =null;
+        String casaComercialStr = (String) fila.getByEnum(ExcelMigrarProductos.Enum.CASA_COMERCIAL).valor;
+        //Si existe un dato ingresado entonces creo ese valor
+        if(!UtilidadesTextos.verificarNullOVacio(casaComercialStr))
+        {       
+            
+            casaComercial = ServiceFactory.getFactory().getCasaComercialServiceIf().buscarPorNombre(session.getEmpresa(), casaComercialStr);
+            
+            if (casaComercial == null) 
+            {
+                casaComercial = new CasaComercial();
+                casaComercial.setNombre(casaComercialStr);
+                casaComercial.setDescripcion(casaComercialStr);
+                casaComercial.setEmpresa(session.getEmpresa());
+            }
+        }
+
+        producto.setCasaComercial(casaComercial);
+    }
+    
+    private void generarEnlaceProveedor(ExcelMigrar.FilaResultado fila,Producto producto)
+    {
+        String nombreComercialProveedor=getValor(ExcelMigrarProductos.Enum.NOMBRE_PROVEEDOR, fila);
+        if(!UtilidadesTextos.verificarNullOVacio(nombreComercialProveedor))
+        { 
+            try {
+                PersonaEstablecimiento proveedorEstablecimiento= ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().buscarActivoPorNombreComercial(nombreComercialProveedor, session.getEmpresa());
+                if(proveedorEstablecimiento.getPersona()!=null)
+                {
+                    ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(producto,proveedorEstablecimiento.getPersona());
+                    if(productoProveedor!=null)
+                    {
+                        producto.addProductoProveedor(productoProveedor);
+                    }
+                }
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
     }
     
     //todo: Mejorar esa parte para no mandar el producto Tmp

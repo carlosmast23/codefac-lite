@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
@@ -62,6 +63,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private List<ImpuestoDetalle> irbpnrList;
     private List<IvaOpcionEnum> ivaOpcionList;
     private List<MarcaProducto> marcaProductoList;
+    private List<CasaComercial> casaComercialList;
     private List<TipoProducto> tipoProductoList;
     private List<SegmentoProducto> segmentoProductoList;
     
@@ -172,6 +174,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         
         try {
             marcaProductoList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            casaComercialList=ServiceFactory.getFactory().getCasaComercialServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             tipoProductoList=ServiceFactory.getFactory().getTipoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             segmentoProductoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             
@@ -515,6 +518,14 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
 
     public void setSegmentoProductoList(List<SegmentoProducto> segmentoProductoList) {
         this.segmentoProductoList = segmentoProductoList;
+    }
+
+    public List<CasaComercial> getCasaComercialList() {
+        return casaComercialList;
+    }
+
+    public void setCasaComercialList(List<CasaComercial> casaComercialList) {
+        this.casaComercialList = casaComercialList;
     }
     
     

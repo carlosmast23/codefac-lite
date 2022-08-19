@@ -102,15 +102,18 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
             InputStream pathSubReporte = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPRA, "subReporteProductoProveedor.jrxml"));
             JasperReport reportPiePagina = JasperCompileManager.compileReport(pathSubReporte);
             parametros.put("subreporte_datos",reportPiePagina);
+            
             opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
             switch (opcionReporte) {
                 case "Producto":
+                    parametros.put("titulo_subReporte","Proveedor");
                     datos = cargarDatosReporteProducto();
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, datos, panelPadre, "Reporte Producto/Proveedor");           
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, datos, panelPadre, "Listado de Precios por Producto");           
                     break;
                 case "Proveedor":
+                    parametros.put("titulo_subReporte","Producto");
                     datos= cargarDatosReporteProveedor();
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, datos, panelPadre, "Reporte Producto/Proveedor");           
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, datos, panelPadre, "Listado de Precios por Proveedor");           
                     break;
             }
         } catch (IOException ex) {
@@ -468,10 +471,19 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
             for (ProductoProveedor productoProveedor : productoProveedors) 
             {
                 String nombreProveedor=(productoProveedor.getProveedor()!=null)?productoProveedor.getProveedor().getNombresCompletos():"Sin Proveedor";
+                String costo="0";
+                String tarifa="";
+                if(productoProveedor.getCosto()!=null)
+                {
+                    costo=productoProveedor.getCosto().toString();
+                }
+                
+                //if(productoProveedor.getProducto().getca)
+                
                 titulo = new Vector<>();
                 titulo.add("");
                 titulo.add("" + nombreProveedor);
-                titulo.add("" + productoProveedor.getCosto().toString());
+                titulo.add(costo);
                 titulo.add("" + productoProveedor.getProducto().getCatalogoProducto().getIva().getTarifa());
                 defaultTableModel.addRow(titulo);
             }            
@@ -562,7 +574,14 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
      
                     break;
             }
-            ipp.setPrecio(""+productoProveedor.getCosto().toString());
+            
+            String costoStr="0";
+            if(productoProveedor.getCosto()!=null)
+            {
+                costoStr=productoProveedor.getCosto().toString();
+            }
+            
+            ipp.setPrecio(costoStr);
             ipp.setIva(""+productoProveedor.getProducto().getCatalogoProducto().getIva().getTarifa());
             informacionProductoProveedors.add(ipp);
         }

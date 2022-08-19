@@ -84,6 +84,7 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         getContentPane().add(btnObtenerDatos, gridBagConstraints);
 
+        chckTodos.setSelected(true);
         chckTodos.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;

@@ -153,6 +153,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         txtNombreGenerico = new javax.swing.JTextField();
         lblEspacio12983 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
+        cmbCasaComercial = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatosEnsamble = new javax.swing.JTable();
@@ -772,6 +773,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(jLabel41, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(cmbCasaComercial, gridBagConstraints);
+
         tabMenu.addTab("Farmacia", jPanel9);
 
         jPanel6.setLayout(new java.awt.GridBagLayout());
@@ -1104,6 +1112,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
     private javax.swing.JCheckBox chkTransportarGuiaRemision;
+    private javax.swing.JComboBox<MarcaProducto> cmbCasaComercial;
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo> cmbGarantia;
     private javax.swing.JComboBox<EnumSiNo> cmbGenerarCodigoBarras;
@@ -1589,6 +1598,25 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setCmbTipo(JComboBox<TipoProducto> cmbTipo) {
         this.cmbTipo = cmbTipo;
+    }
+
+    @ComboBoxBinding(source ="controlador.casaComercialList" , valueSelect ="controlador.producto.casaComercial" )
+    public JComboBox<MarcaProducto> getCmbCasaComercial() {
+        return cmbCasaComercial;
+    }
+
+    public void setCmbCasaComercial(JComboBox<MarcaProducto> cmbCasaComercial) {
+        this.cmbCasaComercial = cmbCasaComercial;
+    }
+
+    @LimpiarAnotacion
+    @TextFieldBinding(value = "controlador.producto.nombreGenerico")
+    public JTextField getTxtNombreGenerico() {
+        return txtNombreGenerico;
+    }
+
+    public void setTxtNombreGenerico(JTextField txtNombreGenerico) {
+        this.txtNombreGenerico = txtNombreGenerico;
     }
 
     

@@ -274,4 +274,15 @@ public abstract class MigrarModel extends MigrarPanel{
     }
     
     
+    public String getValor(ExcelMigrar.CampoMigrarInterface enumerador,ExcelMigrar.FilaResultado fila)
+    {
+        ExcelMigrar.CampoResultado nuevoCampo=fila.getByEnum(enumerador);
+        if(nuevoCampo==null)
+        {
+            return "";
+        }
+        
+        return (String) nuevoCampo.valor;
+    }
+    
 }

@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import es.mityc.firmaJava.ocsp.config.ProveedorInfo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -141,9 +142,18 @@ public class Producto implements Serializable, Comparable<Producto> {
         
     @JoinColumn(name = "SEGMENTO_ID")    
     private SegmentoProducto segmentoProducto;
+    
+    @JoinColumn(name = "CASA_COMERCIAL_ID")
+    private CasaComercial casaComercial; 
+    
+    @Column(name = "NOMBRE_GENERICO")    
+    private String nombreGenerico;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble",fetch = FetchType.EAGER)
     private List<ProductoEnsamble> detallesEnsamble;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
+    private List<ProductoProveedor> productoProveedorList;
     
     public Producto() {
     }
@@ -536,8 +546,31 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setAplicacionProducto(String aplicacionProducto) {
         this.aplicacionProducto = aplicacionProducto;
     }
-    
-    
+
+    public CasaComercial getCasaComercial() {
+        return casaComercial;
+    }
+
+    public void setCasaComercial(CasaComercial casaComercial) {
+        this.casaComercial = casaComercial;
+    }
+
+    public String getNombreGenerico() {
+        return nombreGenerico;
+    }
+
+    public void setNombreGenerico(String nombreGenerico) {
+        this.nombreGenerico = nombreGenerico;
+    }
+
+    public List<ProductoProveedor> getProductoProveedorList() {
+        return productoProveedorList;
+    }
+
+    public void setProductoProveedorList(List<ProductoProveedor> productoProveedorList) {
+        this.productoProveedorList = productoProveedorList;
+    }
+
     
     
 
@@ -554,6 +587,16 @@ public class Producto implements Serializable, Comparable<Producto> {
             this.garantia=enumSiNo.getLetra();
         else
             this.garantia=null;
+    }
+    
+    public void addProductoProveedor(ProductoProveedor productoProveedor)
+    {
+        if(this.productoProveedorList==null)
+        {
+            this.productoProveedorList=new ArrayList<ProductoProveedor>();
+        }
+        productoProveedor.setProducto(this);
+        this.productoProveedorList.add(productoProveedor);
     }
     
     /*public EnumSiNo getManejarInventarioEnum()

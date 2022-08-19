@@ -56,4 +56,33 @@ public class PersonaEstablecimientoService extends ServiceAbstract<PersonaEstabl
         
         return  getFacade().findByMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
     }
+    
+    public PersonaEstablecimiento buscarActivoPorNombreComercial(String nombreComercial, Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException 
+    {
+        
+        Boolean datosCompartidosEmpresas=false;
+        try {
+            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
+        } catch (RemoteException ex) {
+            Logger.getLogger(PersonaEstablecimientoService.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
+        //PersonaEstablecimiento pe;
+        //pe.getNombreComercial();
+        //pe.getPersona().getEstadoEnum()
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nombreComercial", nombreComercial);
+        if(!datosCompartidosEmpresas)
+        {
+            mapParametros.put("persona.empresa", empresa);
+        }
+        mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
+        
+        List<PersonaEstablecimiento> resultadoList=  getFacade().findByMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+        if(resultadoList.size()>0)
+        {
+            return resultadoList.get(0);
+        }
+        return null;
+    }
 }

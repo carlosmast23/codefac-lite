@@ -47,7 +47,10 @@ public class ExcelMigrarProductos extends ExcelMigrar{
         APLICACION("Aplicación",18,String.class,false),
         TIPO("Tipo",19,String.class,false),
         SEGMENTO("Segmento",20,String.class,false),
-        ESTADO("Estado",21,String.class,false);
+        CASA_COMERCIAL("Casa Comercial",21,String.class,false),
+        NOMBRE_GENERICO("Nombre Generico",22,String.class,false),
+        NOMBRE_PROVEEDOR("Nombre Proveedor",23,String.class,false),
+        ESTADO("Estado",24,String.class,false);
 
         private Enum(String nombre,Integer posicion,Class tipoDato,Boolean requerido) {
             this.nombre = nombre;
