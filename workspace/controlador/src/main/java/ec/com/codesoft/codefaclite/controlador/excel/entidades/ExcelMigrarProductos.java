@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.excel.entidades;
 
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
+import java.util.Date;
 
 /**
  *
@@ -50,7 +51,10 @@ public class ExcelMigrarProductos extends ExcelMigrar{
         CASA_COMERCIAL("Casa Comercial",21,String.class,false),
         NOMBRE_GENERICO("Nombre Generico",22,String.class,false),
         NOMBRE_PROVEEDOR("Nombre Proveedor",23,String.class,false),
-        ESTADO("Estado",24,String.class,false);
+        FECHA_CADUCIDAD("Fecha Caducidad",24,Date.class,false),
+        CANTIDAD_CAJA("Cantidad Caja",25,Double.class,false),
+        STOCK_CAJA("Stock Caja",26,Double.class,false),
+        ESTADO("Estado",27,String.class,false);
 
         private Enum(String nombre,Integer posicion,Class tipoDato,Boolean requerido) {
             this.nombre = nombre;

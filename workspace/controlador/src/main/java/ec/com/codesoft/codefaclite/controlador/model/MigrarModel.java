@@ -28,6 +28,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
@@ -273,16 +274,44 @@ public abstract class MigrarModel extends MigrarPanel{
         return null;
     }
     
-    
-    public String getValor(ExcelMigrar.CampoMigrarInterface enumerador,ExcelMigrar.FilaResultado fila)
+    public Object getValorObject(ExcelMigrar.CampoMigrarInterface enumerador,ExcelMigrar.FilaResultado fila)
     {
         ExcelMigrar.CampoResultado nuevoCampo=fila.getByEnum(enumerador);
         if(nuevoCampo==null)
         {
+            return null;
+        }
+        
+        return  nuevoCampo.valor;
+    }
+    
+    
+    public String getValor(ExcelMigrar.CampoMigrarInterface enumerador,ExcelMigrar.FilaResultado fila)
+    {
+        Object valorObj=getValorObject(enumerador, fila);
+        if(valorObj==null)
+        {
             return "";
         }
         
-        return (String) nuevoCampo.valor;
+        return (String) valorObj;
+    }
+    
+    public Date getValorDate(ExcelMigrar.CampoMigrarInterface enumerador,ExcelMigrar.FilaResultado fila)
+    {
+        Object valorObj=getValorObject(enumerador, fila);
+        
+        if(!(valorObj instanceof java.util.Date))
+        {
+            return null;
+        }
+        
+        if(valorObj==null )
+        {
+            return null;
+        }
+        
+        return (Date)valorObj;
     }
     
 }

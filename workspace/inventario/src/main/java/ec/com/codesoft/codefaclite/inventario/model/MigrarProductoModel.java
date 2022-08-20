@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -39,6 +40,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -414,11 +416,16 @@ public class MigrarProductoModel extends MigrarModel {
         { 
             try {
                 PersonaEstablecimiento proveedorEstablecimiento= ServiceFactory.getFactory().getPersonaEstablecimientoServiceIf().buscarActivoPorNombreComercial(nombreComercialProveedor, session.getEmpresa());
-                if(proveedorEstablecimiento.getPersona()!=null)
+                if(proveedorEstablecimiento!=null && proveedorEstablecimiento.getPersona()!=null)
                 {
                     ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(producto,proveedorEstablecimiento.getPersona());
+                    productoProveedor.setCosto(BigDecimal.ZERO);
                     if(productoProveedor!=null)
                     {
+                        Double costo = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.COSTO);
+                        if (costo != null) {
+                            productoProveedor.setCosto(new BigDecimal(costo+""));
+                        }
                         producto.addProductoProveedor(productoProveedor);
                     }
                 }
@@ -507,6 +514,21 @@ public class MigrarProductoModel extends MigrarModel {
                     
 
                     kardex.setProducto(producto);
+                    
+                    //Verificar si tiene una fecha de caducidad para crear un lote por defecto
+                    Date fechaCaducidad=getValorDate(ExcelMigrarProductos.Enum.FECHA_CADUCIDAD, fila);
+                    if(fechaCaducidad!=null)
+                    {
+                        Lote lote=new Lote();
+                        lote.setCodigo(producto.getCodigoPersonalizado());
+                        lote.setEmpresa(session.getEmpresa());
+                        lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                        lote.setFechaVencimiento(UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
+                        lote.setProducto(producto);
+                        lote.setUsuarioCreacion(session.getUsuario());
+                        kardex.setLote(lote);
+                    }
+                    
                     kardexDetalle.setKardex(kardex);
 
                 //}

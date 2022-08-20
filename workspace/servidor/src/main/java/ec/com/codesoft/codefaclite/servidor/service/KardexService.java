@@ -775,7 +775,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex.setStock(BigDecimal.ZERO);
             kardex.setReserva(0);
             kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-            kardex.setLote(lote);
+            
+            if(lote==null && kardex.getLote()!=null)
+            {
+                if(kardex.getLote().getId()==null)
+                {
+                    entityManager.persist(kardex.getLote());
+                }
+            }
+            else
+            {
+                kardex.setLote(lote);
+            }
             
             if(kardex.getId()==null)
             {
