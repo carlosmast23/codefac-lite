@@ -18,6 +18,11 @@ public enum TipoProductoEnum {
      * Si el producto es de un servicio intangible
      */
     SERVICIO("Servicio", "s"),
+    
+    /**
+     * Si el producto esta compuesto
+     */
+    EMPAQUE("Empaque", "p"),
     /**
      * Si el producto es una mescla o esta compuesto de otros productos
      */

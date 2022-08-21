@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidor.service.PerfilUsuarioService;
 import ec.com.codesoft.codefaclite.servidor.service.PermisoVentanaService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaEstablecimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import ec.com.codesoft.codefaclite.servidor.service.PresentacionProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.PresupuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.PresupuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
@@ -106,6 +107,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceController
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.HerramientasCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
@@ -153,6 +155,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
@@ -325,6 +328,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(TipoProductoService.class, TipoProductoServiceIf.class);            
             mapRecursos.put(ObjetoMantenimientoService.class, ObjetoMantenimientoServiceIf.class);
             mapRecursos.put(CasaComercialService.class, CasaComercialServiceIf.class);
+            mapRecursos.put(PresentacionProductoService.class, PresentacionProductoServiceIf.class);
             
             
             

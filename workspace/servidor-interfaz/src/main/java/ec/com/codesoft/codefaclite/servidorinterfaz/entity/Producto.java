@@ -148,6 +148,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @Column(name = "NOMBRE_GENERICO")    
     private String nombreGenerico;
+    
+    @JoinColumn(name = "PRESENTACION_ID")
+    private PresentacionProducto presentacion;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble",fetch = FetchType.EAGER)
     private List<ProductoEnsamble> detallesEnsamble;
@@ -570,6 +573,16 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setProductoProveedorList(List<ProductoProveedor> productoProveedorList) {
         this.productoProveedorList = productoProveedorList;
     }
+
+    public PresentacionProducto getPresentacion() {
+        return presentacion;
+    }
+
+    public void setPresentacion(PresentacionProducto presentacion) {
+        this.presentacion = presentacion;
+    }
+
+    
 
     
     

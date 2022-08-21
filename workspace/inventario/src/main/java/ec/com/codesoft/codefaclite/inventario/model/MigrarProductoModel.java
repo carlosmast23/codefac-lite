@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
@@ -527,6 +528,15 @@ public class MigrarProductoModel extends MigrarModel {
                         lote.setProducto(producto);
                         lote.setUsuarioCreacion(session.getUsuario());
                         kardex.setLote(lote);
+                    }
+                    
+                    //Crear un ensamble o combo cuando lo requiera el sistema
+                    Double cantidadPorCaja = getValorDouble(ExcelMigrarProductos.Enum.CANTIDAD_CAJA, fila);
+                    if(cantidadPorCaja!=null)
+                    {
+                        ProductoEnsamble productoEnsamble=new ProductoEnsamble();
+                        productoEnsamble.setCantidad(new BigDecimal(cantidadPorCaja+""));
+                        producto.addProductoEnsamble(productoEnsamble);
                     }
                     
                     kardexDetalle.setKardex(kardex);

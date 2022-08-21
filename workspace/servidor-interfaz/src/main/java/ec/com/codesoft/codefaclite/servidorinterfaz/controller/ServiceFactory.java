@@ -77,6 +77,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaEstablecimientoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
@@ -232,6 +233,7 @@ public abstract class ServiceFactory {
     public HerramientasCodefacServiceIf getHerramientasCodefacServiceIf(){return (HerramientasCodefacServiceIf) getRecursosRMI(HerramientasCodefacServiceIf.class);};
     
     public MarcaProductoServiceIf getMarcaProductoServiceIf(){return (MarcaProductoServiceIf) getRecursosRMI(MarcaProductoServiceIf.class);};
+    public PresentacionProductoServiceIf getPresentacionProductoServiceIf(){return (PresentacionProductoServiceIf) getRecursosRMI(PresentacionProductoServiceIf.class);};
     
     public CompraFacturaReembolsoServiceIf getCompraFacturaReembolsoServiceIf(){return (CompraFacturaReembolsoServiceIf) getRecursosRMI(CompraFacturaReembolsoServiceIf.class);};
     public LoteSeviceIf getLoteSeviceIf(){return (LoteSeviceIf) getRecursosRMI(LoteSeviceIf.class);};

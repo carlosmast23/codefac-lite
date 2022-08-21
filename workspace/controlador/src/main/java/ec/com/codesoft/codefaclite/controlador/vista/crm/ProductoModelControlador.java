@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
@@ -37,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -58,6 +60,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private List<EnumSiNo> garantiaList;
     private List<TipoProductoEnum> tipoProductosList;
     private List<CategoriaProducto> categoriaProductosList;
+    private List<PresentacionProducto> presentacionProductosList;
     private List<ImpuestoDetalle> ivaList;
     private List<ImpuestoDetalle> iceList;
     private List<ImpuestoDetalle> irbpnrList;
@@ -69,6 +72,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     
     //private Interfaz interfaz;
     private CategoriaProducto categoriaSeleccionada;
+    //private PresentacionProducto presentacionSeleccionada;
     private ImpuestoDetalle ivaSeleccionado;
     private ImpuestoDetalle iceSeleccionado;
     private ImpuestoDetalle irbpnrSeleccionado;
@@ -170,13 +174,20 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         };
         
         CategoriaProductoServiceIf catProdService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
-        categoriaProductosList = catProdService.obtenerTodosPorEmpresa(session.getEmpresa());     
+       
+        
+        
+        categoriaProductosList = catProdService.obtenerTodosPorEmpresa(session.getEmpresa()); 
+        
         
         try {
             marcaProductoList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             casaComercialList=ServiceFactory.getFactory().getCasaComercialServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             tipoProductoList=ServiceFactory.getFactory().getTipoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             segmentoProductoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            
+            PresentacionProductoServiceIf presentacionService = ServiceFactory.getFactory().getPresentacionProductoServiceIf();
+            presentacionProductosList=presentacionService.obtenerActivosPorEmpresa(session.getEmpresa()); 
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -334,6 +345,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         producto.setAplicacionProducto("");
         ivaOpcionSeleccionado=IvaOpcionEnum.SIN_IVA;
         categoriaSeleccionada=null;
+        //presentacionSeleccionada=null;
         iceSeleccionado=null;
         irbpnrSeleccionado=null;
         generarCodigoAutomatico=false;
@@ -408,6 +420,24 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         this.categoriaProductosList = categoriaProductosList;
     }
 
+    public List<PresentacionProducto> getPresentacionProductosList() {
+        return presentacionProductosList;
+    }
+
+    public void setPresentacionProductosList(List<PresentacionProducto> presentacionProductosList) {
+        this.presentacionProductosList = presentacionProductosList;
+    }
+
+    /*public PresentacionProducto getPresentacionSeleccionada() {
+        return presentacionSeleccionada;
+    }
+
+    public void setPresentacionSeleccionada(PresentacionProducto presentacionSeleccionada) {
+        this.presentacionSeleccionada = presentacionSeleccionada;
+    }*/
+
+    
+    
     public CategoriaProducto getCategoriaSeleccionada() {
         return categoriaSeleccionada;
     }

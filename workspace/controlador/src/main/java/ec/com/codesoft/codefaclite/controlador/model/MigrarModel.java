@@ -297,6 +297,17 @@ public abstract class MigrarModel extends MigrarPanel{
         return (String) valorObj;
     }
     
+    public Double getValorDouble(ExcelMigrar.CampoMigrarInterface enumerador,ExcelMigrar.FilaResultado fila)
+    {
+        Object valorObj=getValorObject(enumerador, fila);
+        if(valorObj==null)
+        {
+            return null;
+        }
+        
+        return (Double) valorObj;
+    }
+    
     public Date getValorDate(ExcelMigrar.CampoMigrarInterface enumerador,ExcelMigrar.FilaResultado fila)
     {
         Object valorObj=getValorObject(enumerador, fila);

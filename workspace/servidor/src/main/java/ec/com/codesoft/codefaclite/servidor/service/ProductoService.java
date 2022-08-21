@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
@@ -131,6 +132,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         CasaComercial casaComercial=p.getCasaComercial();
         p.setCasaComercial(null);
         
+        PresentacionProducto presentacion=p.getPresentacion();
+        p.setPresentacion(null);
+        
         List<ProductoProveedor> productoProveedorList=p.getProductoProveedorList();
         p.setProductoProveedorList(null);
         
@@ -157,14 +161,16 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
         
         //grabar los proveedor
-        for (ProductoProveedor productoProveedor : productoProveedorList) 
+        if(productoProveedorList!=null)
         {
-            if(productoProveedor.getId()==null)
+            for (ProductoProveedor productoProveedor : productoProveedorList) 
             {
-                entityManager.persist(productoProveedor);
+                if(productoProveedor.getId()==null)
+                {
+                    entityManager.persist(productoProveedor);
+                }
             }
         }
-        
         
         //Si no esta creado el tipo primero creo el tipo
         if(tipoProducto!=null)
@@ -211,10 +217,23 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         }
         
+        if(presentacion!=null)
+        {
+            if(presentacion.getId()==null)
+            {
+                ServiceFactory.getFactory().getPresentacionProductoServiceIf().grabarSinTransaccion(presentacion);
+                entityManager.flush();
+                presentacion=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(p.getEmpresa(),casaComercial.getNombre());
+            }
+        
+        }
+        
+        
         p.setTipoProducto(tipoProducto);            
         p.setSegmentoProducto(segmentoProducto);
         p.setMarcaProducto(marcaProducto);
         p.setCasaComercial(casaComercial);
+        p.setPresentacion(presentacion);
         p.setProductoProveedorList(productoProveedorList);
 
         //Si no son ensables remover datos para no tener incoherencias
@@ -603,11 +622,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                     grabarSinTransaccion(p,false,false); //graba el producto                
                 }
                                 
-                KardexService kardexService=new KardexService();
                 
                 //Solo grabar cuando existen datos diferente de null
                 if(kardexDetalle!=null)
                 {
+                    KardexService kardexService=new KardexService();
                     kardexService.grabarKardexDetallSinTransaccion(kardexDetalle,null,true);
                 }
                 
