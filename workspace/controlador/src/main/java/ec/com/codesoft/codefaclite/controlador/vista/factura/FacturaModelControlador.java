@@ -193,6 +193,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         //cargarPrecios(productoSeleccionado);
         interfaz.cargarPrecios(productoSeleccionado);
+        interfaz.cargarPresentaciones(productoSeleccionado);
         
         String descripcion=productoSeleccionado.getNombre();
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
@@ -1325,6 +1326,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         Metodo que permite establecer como cargar los precios en la vista
         */
         public void cargarPrecios(Producto producto);
+        
+        public void cargarPresentaciones(Producto producto);
         
         /**
          * 

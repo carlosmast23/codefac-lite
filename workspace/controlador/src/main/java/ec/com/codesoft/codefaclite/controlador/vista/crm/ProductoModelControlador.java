@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -78,9 +79,11 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private ImpuestoDetalle irbpnrSeleccionado;
     private IvaOpcionEnum ivaOpcionSeleccionado;
     private Boolean generarCodigoAutomatico;
+    private ProductoPresentacionDetalle productoPresentacionDetalle;
     //private MarcaProducto marcaProductoSeleccionado;
     
     public Producto producto;
+    
 
     public ProductoModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session,ProductoModelControlador.CommonIf interfaz,TipoVista tipoVista) {
         super(mensajeVista, session,interfaz,tipoVista);
@@ -349,6 +352,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         iceSeleccionado=null;
         irbpnrSeleccionado=null;
         generarCodigoAutomatico=false;
+        productoPresentacionDetalle=new ProductoPresentacionDetalle();
         //getInterazEscritorio().setearChkGenerarCodAutomatico(false);
         
     }
@@ -378,6 +382,11 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         ivaSeleccionado=producto.getCatalogoProducto().getIva();
         irbpnrSeleccionado=producto.getCatalogoProducto().getIva();
         categoriaSeleccionada=producto.getCatalogoProducto().getCategoriaProducto();
+        
+        if(producto.getPresentacionList()!=null && producto.getPresentacionList().size()>0)
+        {
+            productoPresentacionDetalle=producto.getPresentacionList().get(0);
+        }
     }
 
     @Override
@@ -557,8 +566,15 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     public void setCasaComercialList(List<CasaComercial> casaComercialList) {
         this.casaComercialList = casaComercialList;
     }
-    
-    
+
+    public ProductoPresentacionDetalle getProductoPresentacionDetalle() {
+        return productoPresentacionDetalle;
+    }
+
+    public void setProductoPresentacionDetalle(ProductoPresentacionDetalle productoPresentacionDetalle) {
+        this.productoPresentacionDetalle = productoPresentacionDetalle;
+    }
+
     
     
 
@@ -592,6 +608,10 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         {
             getInterazEscritorio().setearValoresProducto(producto);
         }
+        
+        
+        //Agregar el producto presentacion al producto        
+        producto.addPresentacion(productoPresentacionDetalle);
 
     }
 

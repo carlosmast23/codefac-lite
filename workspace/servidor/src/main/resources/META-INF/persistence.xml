@@ -111,6 +111,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

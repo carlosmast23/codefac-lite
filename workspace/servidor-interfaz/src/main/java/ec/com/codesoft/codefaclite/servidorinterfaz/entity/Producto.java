@@ -10,10 +10,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
-import es.mityc.firmaJava.ocsp.config.ProveedorInfo;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,8 +25,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -157,6 +153,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
     private List<ProductoProveedor> productoProveedorList;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoOriginal",fetch = FetchType.EAGER)
+    private List<ProductoPresentacionDetalle> presentacionList;
     
     public Producto() {
     }
@@ -582,8 +581,17 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.presentacion = presentacion;
     }
 
-    
+    public List<ProductoPresentacionDetalle> getPresentacionList() {
+        return presentacionList;
+    }
 
+    public void setPresentacionList(List<ProductoPresentacionDetalle> presentacionList) {
+        this.presentacionList = presentacionList;
+    }
+
+
+    
+    
     
     
 
@@ -610,6 +618,18 @@ public class Producto implements Serializable, Comparable<Producto> {
         }
         productoProveedor.setProducto(this);
         this.productoProveedorList.add(productoProveedor);
+    }
+    
+    public void addPresentacion(ProductoPresentacionDetalle presentacionDetalle)
+    {
+        if(this.presentacionList==null)
+        {
+            this.presentacionList=new ArrayList<ProductoPresentacionDetalle>();
+        }
+        
+        presentacionDetalle.setProductoOriginal(this);
+        this.presentacionList.add(presentacionDetalle);
+        
     }
     
     /*public EnumSiNo getManejarInventarioEnum()
@@ -705,6 +725,21 @@ public class Producto implements Serializable, Comparable<Producto> {
     public BigDecimal obtenerIvaValorUnitario()
     {
         return getValorUnitarioConIva().subtract(valorUnitario);
+    }
+    
+    public Producto buscarProductoPorPresentacion(PresentacionProducto presentacion)
+    {
+        if(presentacionList!=null)
+        {
+            for (ProductoPresentacionDetalle detalle : presentacionList) 
+            {
+                if(detalle.getPresentacionProducto().equals(presentacion))
+                {
+                    return detalle.getProductoEmpaquetado();
+                }
+            }
+        }
+        return null;
     }
     
     public static class PrecioVenta implements Serializable{

@@ -151,6 +151,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel36 = new javax.swing.JLabel();
         cmbTipo = new javax.swing.JComboBox<>();
         cmbSegmento = new javax.swing.JComboBox<>();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel43 = new javax.swing.JLabel();
+        lblEspacio12984 = new javax.swing.JLabel();
+        jLabel44 = new javax.swing.JLabel();
+        txtCantidadEmpaquetado = new javax.swing.JTextField();
+        cmbPresentacionEmpaquetado = new javax.swing.JComboBox<>();
         jPanel9 = new javax.swing.JPanel();
         jLabel40 = new javax.swing.JLabel();
         txtNombreGenerico = new javax.swing.JTextField();
@@ -761,6 +767,52 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         tabMenu.addTab("Info Adicional", jPanel5);
 
+        jPanel10.setLayout(new java.awt.GridBagLayout());
+
+        jLabel43.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel43.setText("Cantidad empaquetado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(jLabel43, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel10.add(lblEspacio12984, gridBagConstraints);
+
+        jLabel44.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel44.setText("Presentación empaquetado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(jLabel44, gridBagConstraints);
+
+        txtCantidadEmpaquetado.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(txtCantidadEmpaquetado, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(cmbPresentacionEmpaquetado, gridBagConstraints);
+
+        tabMenu.addTab("Empaque", jPanel10);
+
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
         jLabel40.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1140,6 +1192,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPublico;
     private javax.swing.JComboBox<EnumSiNo> cmbManejaInventario;
     private javax.swing.JComboBox<MarcaProducto> cmbMarca;
+    private javax.swing.JComboBox<CategoriaProducto> cmbPresentacionEmpaquetado;
     private javax.swing.JComboBox<CategoriaProducto> cmbPresentacionProducto;
     private javax.swing.JComboBox<SegmentoProducto> cmbSegmento;
     private javax.swing.JComboBox<TipoProducto> cmbTipo;
@@ -1186,12 +1239,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1208,6 +1264,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio12983;
+    private javax.swing.JLabel lblEspacio12984;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio23;
     private javax.swing.JLabel lblEspacio24;
@@ -1222,6 +1279,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JTextField textNombre;
     private javax.swing.JTextField textValorUnitario;
     private javax.swing.JTextField txtAplicacionProducto;
+    private javax.swing.JTextField txtCantidadEmpaquetado;
     private javax.swing.JTextField txtCantidadEnsamble;
     private javax.swing.JTextField txtCantidadMinima;
     private javax.swing.JTextArea txtCaracteristica;
@@ -1651,6 +1709,25 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setTxtNombreGenerico(JTextField txtNombreGenerico) {
         this.txtNombreGenerico = txtNombreGenerico;
+    }
+
+    @ComboBoxBinding(source = "controlador.presentacionProductosList",valueSelect = "controlador.productoPresentacionDetalle.presentacionProducto")
+    public JComboBox<CategoriaProducto> getCmbPresentacionEmpaquetado() {
+        return cmbPresentacionEmpaquetado;
+    }
+
+    public void setCmbPresentacionEmpaquetado(JComboBox<CategoriaProducto> cmbPresentacionEmpaquetado) {
+        this.cmbPresentacionEmpaquetado = cmbPresentacionEmpaquetado;
+    }
+
+    @LimpiarAnotacion
+    @TextFieldBinding(value = "controlador.productoPresentacionDetalle.cantidad",converter =StringToBigDecimalConverter.class )
+    public JTextField getTxtCantidadEmpaquetado() {
+        return txtCantidadEmpaquetado;
+    }
+
+    public void setTxtCantidadEmpaquetado(JTextField txtCantidadEmpaquetado) {
+        this.txtCantidadEmpaquetado = txtCantidadEmpaquetado;
     }
 
     

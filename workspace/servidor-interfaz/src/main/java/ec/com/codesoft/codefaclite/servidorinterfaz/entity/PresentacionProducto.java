@@ -117,6 +117,8 @@ public class PresentacionProducto implements Serializable {
     public void setEstadoEnum(GeneralEnumEstado estadoEnum) {
         this.estado = estadoEnum.getEstado();
     }
+    
+    
 
     @Override
     public int hashCode() {

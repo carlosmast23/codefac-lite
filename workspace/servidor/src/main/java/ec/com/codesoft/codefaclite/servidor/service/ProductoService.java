@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
@@ -24,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
@@ -138,6 +140,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         List<ProductoProveedor> productoProveedorList=p.getProductoProveedorList();
         p.setProductoProveedorList(null);
         
+        List<ProductoPresentacionDetalle> productoPresentacionList=p.getPresentacionList();
+        p.setPresentacionList(null);
+        
         entityManager.flush();
         entityManager.persist(p);
         entityManager.flush();
@@ -158,6 +163,32 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             entityManager.flush();
             
             p.setCatalogoProducto(catalogoProducto);
+        }
+        
+        //grabar los detalles de  la presentacion
+        if(productoPresentacionList!=null)
+        {
+            for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) 
+            {
+                if(presentacionDetalle.getId()==null)
+                {
+                    
+                    try {
+                        Producto productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
+                        productoEmpaquetado.setIdProducto(null);
+                        productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
+                        productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
+                        entityManager.persist(productoEmpaquetado);
+                        entityManager.flush();
+                        presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    
+                    entityManager.persist(presentacionDetalle);
+                }
+            }
         }
         
         //grabar los proveedor
@@ -235,6 +266,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         p.setCasaComercial(casaComercial);
         p.setPresentacion(presentacion);
         p.setProductoProveedorList(productoProveedorList);
+        p.setPresentacionList(productoPresentacionList);
 
         //Si no son ensables remover datos para no tener incoherencias
         if (!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProductoCodigo())) {

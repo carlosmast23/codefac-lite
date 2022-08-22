@@ -177,6 +177,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
@@ -587,35 +589,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TipoDocumentoEnum tipoDocumentoEnum=controlador.getTipoDocumentoEnumSeleccionado();
-                
-                switch(tipoDocumentoEnum)
-                {
-                    case ACADEMICO:
-                        agregarRubroAcademico();
-                        break;
-                    case PRESUPUESTOS:
-                        agregarPresupuesto();
-                        break;
-                    case ORDEN_TRABAJO:
-                        agregarOrdenTrabajo();
-                        break;
-                    case INVENTARIO:
-                        try {
-                            agregarProductoInventario(EnumSiNo.SI);
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ServicioCodefacException ex) {
-                            DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_ADVERTENCIA);
-                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        break;
-                    case LIBRE:
-                        agregarProductoSinInventario(EnumSiNo.NO);
-                        break;
-                
-                }
-                
+                cargarDetalleProducto();                
             }
         });
 
@@ -797,6 +771,37 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getBtnAplicarDescuentoGlobal().addActionListener(listenerDescuentoGlobal);
 
+    }
+    
+    private void cargarDetalleProducto()
+    {
+        TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
+
+        switch (tipoDocumentoEnum) {
+            case ACADEMICO:
+                agregarRubroAcademico();
+                break;
+            case PRESUPUESTOS:
+                agregarPresupuesto();
+                break;
+            case ORDEN_TRABAJO:
+                agregarOrdenTrabajo();
+                break;
+            case INVENTARIO:
+                        try {
+                agregarProductoInventario(EnumSiNo.SI);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje(ex.getMessage(), DialogoCodefac.MENSAJE_ADVERTENCIA);
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            break;
+            case LIBRE:
+                agregarProductoSinInventario(EnumSiNo.NO);
+                break;
+
+        }
     }
     
     //TODO: Unificar esta parte en el controlador para luego poder usar en la interfaz web    
@@ -1287,62 +1292,56 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
         }
         
-        
-        
-        
+        cargarProductoInventario(manejaInventario);
+                
+    }
+    
+    private void cargarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
+    {
         /**
          * ==========================================================================
-         *         FALTA IMPLEMENTAR EL METODO PARA MANEJAR PRODUCTOS INDIVIDUALES
+         * FALTA IMPLEMENTAR EL METODO PARA MANEJAR PRODUCTOS INDIVIDUALES
          * ==========================================================================
          */
-        if(kardexSeleccionado!=null && kardexSeleccionado.getLote()!=null)
+        if (kardexSeleccionado != null && kardexSeleccionado.getLote() != null) 
         {
             //TODO: Ver si esta opcion de leer el parametro se puede hacer como un cache solo la primera vez para evitar tener que hacer muchas consultas al servidor
             //TODO: Ver si esta parte se puede implentar en el controlador para tener una misma logica para el escritorio y la parte web
-            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_LOTE_FACTURA,EnumSiNo.SI))
+            if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_LOTE_FACTURA, EnumSiNo.SI)) 
             {
-                String fechaStr="";
-                if(kardexSeleccionado.getLote().getFechaVencimiento()!=null)
-                {
-                    fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaVencimiento());
-                }
-                else
-                {
+                String fechaStr = "";
+                if (kardexSeleccionado.getLote().getFechaVencimiento() != null) {
+                    fechaStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaVencimiento());
+                } else {
                     DialogoCodefac.mensaje(new CodefacMsj("El producto no tiene fecha de caducidad en el lote", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                 }
-                
-                String detalleTexto=productoSeleccionado.getNombre();
-                detalleTexto=detalleTexto+" [ lote: "+kardexSeleccionado.getLote().getCodigo()+", fecha caducidad: "+fechaStr+" ]";
+
+                String detalleTexto = productoSeleccionado.getNombre();
+                detalleTexto = detalleTexto + " [ lote: " + kardexSeleccionado.getLote().getCodigo() + ", fecha caducidad: " + fechaStr + " ]";
                 productoSeleccionado.setNombre(detalleTexto);
             }
         }
-                
-        
-        
-        int cantidadItemsIndividuales=ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
-        if(productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI) && cantidadItemsIndividuales>0)
+
+        int cantidadItemsIndividuales = ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
+        if (productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI) && cantidadItemsIndividuales > 0) 
         {
-            ProductoInventarioEspecificoDialogo dialogoEspecifico=new ProductoInventarioEspecificoDialogo(productoSeleccionado);
+            ProductoInventarioEspecificoDialogo dialogoEspecifico = new ProductoInventarioEspecificoDialogo(productoSeleccionado);
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(dialogoEspecifico);
             buscarDialogoModel.setVisible(true);
-            KardexItemEspecifico kardexItemEspecifico=(KardexItemEspecifico)buscarDialogoModel.getResultado();
+            KardexItemEspecifico kardexItemEspecifico = (KardexItemEspecifico) buscarDialogoModel.getResultado();
             /*
             TODO:Solucion para por el momento agregar el codigo invividual pero falta programar en solo servicios para dar de baja a los productos individuales y que no me aparesca en la lista
-            */
-            productoSeleccionado.setNombre("["+kardexItemEspecifico.getCodigoEspecifico()+"] "+productoSeleccionado.getNombre());
+             */
+            productoSeleccionado.setNombre("[" + kardexItemEspecifico.getCodigoEspecifico() + "] " + productoSeleccionado.getNombre());
         }
         //productoSeleccionado = (Producto)resultados[0];
         getCmbIva().setSelectedItem(EnumSiNo.NO);
-        
-        if(manejaInventario.equals(EnumSiNo.SI))
-        {
-            controlador.agregarProductoVista(kardexSeleccionado.getProducto(),kardexSeleccionado.getLote());
+
+        if (manejaInventario.equals(EnumSiNo.SI)) {
+            controlador.agregarProductoVista(kardexSeleccionado.getProducto(), kardexSeleccionado.getLote());
+        } else if (manejaInventario.equals(EnumSiNo.NO)) {
+            controlador.agregarProductoVista(productoSeleccionado, null);
         }
-        else if(manejaInventario.equals(EnumSiNo.NO))
-        {   
-            controlador.agregarProductoVista(productoSeleccionado,null);
-        }
-        
     }
     
 
@@ -1370,6 +1369,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbPreciosVenta().removeAllItems();
         for (Producto.PrecioVenta precioVenta : producto.obtenerPreciosVenta()) {
             getCmbPreciosVenta().addItem(precioVenta);            
+        }
+    }
+    
+    public void cargarPresentaciones(Producto producto)
+    {
+        getCmbPresentacionProducto().removeAllItems();
+        if(producto.getPresentacionList()!=null)
+        {
+            for (ProductoPresentacionDetalle detalle : producto.getPresentacionList()) 
+            {
+                getCmbPresentacionProducto().addItem(detalle.getPresentacionProducto());
+            }
         }
     }
     
@@ -2223,6 +2234,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtVendedor().setText("");
         
         getCmbPreciosVenta().removeAllItems();
+        getCmbPresentacionProducto().removeAllItems();
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
         getTxtDiasCredito().setValue(0);
         getTxtDescuentoGlobal().setText("0");
@@ -3267,6 +3279,37 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(precioVenta!=null)
                 {
                     getTxtValorUnitario().setText(precioVenta.precio.toString());
+                }
+            }
+        });
+        
+        
+        getCmbPresentacionProducto().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PresentacionProducto presentacion=(PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
+                
+                if(presentacion!=null)
+                {
+                    //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
+                    productoSeleccionado= productoSeleccionado.buscarProductoPorPresentacion(presentacion);
+                    try {
+                        TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
+                        EnumSiNo enumBusqueda=EnumSiNo.NO;
+                        switch(tipoDocumentoEnum)
+                        {
+                            case INVENTARIO:
+                                enumBusqueda=EnumSiNo.SI;
+                                
+                        }
+                        //Volver a cargar los productos pero con la nueva presentacion
+                        cargarProductoInventario(enumBusqueda);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         });

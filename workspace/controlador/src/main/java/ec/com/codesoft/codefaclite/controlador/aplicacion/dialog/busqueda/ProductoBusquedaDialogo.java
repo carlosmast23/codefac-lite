@@ -62,6 +62,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Código", 0.2d));        
+        titulo.add(new ColumnaDialogo("Unidad", 0.2d));
         titulo.add(new ColumnaDialogo("Pvp1 ", 0.1d));
         titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.1d));
         titulo.add(new ColumnaDialogo("IVA", 0.1d));        
@@ -81,6 +82,13 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         
         dato.add(t.getNombre());
         dato.add(t.getCodigoPersonalizado());
+        
+        String presentacion="";
+        if(t.getPresentacion()!=null)
+        {
+            presentacion=t.getPresentacion().getNombre();
+        }
+        dato.add(presentacion);
         //dato.add(t.getCodigoUPC());       
         
         
@@ -191,7 +199,8 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
         propiedades.add("nombre");
-        propiedades.add("codigoPersonalizado");        
+        propiedades.add("codigoPersonalizado");   
+        propiedades.add("codigoPersonalizado");
         propiedades.add("valorUnitario");
         propiedades.add("valorUnitarioConIva");
         propiedades.add("catalogoProducto.iva");

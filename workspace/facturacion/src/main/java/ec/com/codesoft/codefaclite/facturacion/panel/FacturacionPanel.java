@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -49,7 +50,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
      */
     public FacturacionPanel() {
         initComponents();    
-        setTitle(VentanaEnum.FACTURACION.getNombre());
+        setTitle(VentanaEnum.FACTURACION.getNombre());        
     }
     
    
@@ -132,6 +133,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnAgregarProducto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
+        jLabel44 = new javax.swing.JLabel();
+        cmbPresentacionProducto = new javax.swing.JComboBox<>();
         PanelFormasPago = new javax.swing.JPanel();
         btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -390,10 +393,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         pnlDetalles.add(checkPorcentaje, gridBagConstraints);
 
         jLabel41.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel41.setText("Inc. Iva:");
+        jLabel41.setText("Unidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(1, 10, 1, 2);
         pnlDetalles.add(jLabel41, gridBagConstraints);
@@ -432,7 +435,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(1, 10, 1, 2);
         pnlDetalles.add(cmbIva, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -487,6 +490,22 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         pnlDetalles.add(jScrollPane1, gridBagConstraints);
+
+        jLabel44.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel44.setText("Inc. Iva:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(1, 10, 1, 2);
+        pnlDetalles.add(jLabel44, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(1, 10, 1, 2);
+        pnlDetalles.add(cmbPresentacionProducto, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1633,6 +1652,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<EnumSiNo> cmbIva;
     private javax.swing.JComboBox<EnumSiNo> cmbIvaDescuento;
     private javax.swing.JComboBox<Producto.PrecioVenta> cmbPreciosVenta;
+    private javax.swing.JComboBox<PresentacionProducto> cmbPresentacionProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JComboBox<Persona> cmbRepresentante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
@@ -1676,6 +1696,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -2282,5 +2303,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setChkOTDetalleUnico(JCheckBox chkOTDetalleUnico) {
         this.chkOTDetalleUnico = chkOTDetalleUnico;
     }
+
+    public JComboBox<PresentacionProducto> getCmbPresentacionProducto() {
+        return cmbPresentacionProducto;
+    }
+
+    public void setCmbPresentacionProducto(JComboBox<PresentacionProducto> cmbPresentacionProducto) {
+        this.cmbPresentacionProducto = cmbPresentacionProducto;
+    }
+    
+    
     
 }

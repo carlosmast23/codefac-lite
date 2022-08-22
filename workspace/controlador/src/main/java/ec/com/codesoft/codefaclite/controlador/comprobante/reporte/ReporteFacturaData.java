@@ -495,15 +495,24 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
                 
         switch(tipoRepoteEnum)
         {
-            case AGRUPADO_POR_USUARIO:return usuario;
-            case AGRUPADO_POR_VENDEDOR:return vendedor;
-            case AGRUPADO_POR_PUNTO_EMISION:return puntoEmision;
-            case AGRUPADO_POR_PRODUCTO:return nombreProducto;
-            case AGRUPADO_POR_CATEGORIA:return categoria;
-            case AGRUPADO_POR_FORMA_PAGO:return formaPago;
-            case AGRUPADO_POR_VALOR:return precioUnitarioReporte;
-            case AGRUPADO_POR_RUTA:return ruta;
-            case AGRUPADO_POR_ZONA:return zona;
+            case AGRUPADO_POR_USUARIO:
+                return usuario;
+            case AGRUPADO_POR_VENDEDOR:
+                return vendedor;
+            case AGRUPADO_POR_PUNTO_EMISION:
+                return puntoEmision;
+            case AGRUPADO_POR_PRODUCTO:
+                return "[ "+codigoProducto+" ] "+nombreProducto;
+            case AGRUPADO_POR_CATEGORIA:
+                return categoria;
+            case AGRUPADO_POR_FORMA_PAGO:
+                return formaPago;
+            case AGRUPADO_POR_VALOR:
+                return precioUnitarioReporte;
+            case AGRUPADO_POR_RUTA:
+                return ruta;
+            case AGRUPADO_POR_ZONA:
+                return zona;
         }
         
         /*String nombreCampo=nombreCampoAgrupadoIf.getNombreCampoAgrupado();
