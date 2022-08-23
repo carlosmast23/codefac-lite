@@ -67,9 +67,35 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         this.productoFacade = new ProductoFacade();
     }
     
+    public ProductoPresentacionDetalle buscarProductoPorPresentacion(PresentacionProducto presentacion,Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        Producto productoPrincipal= buscarProductoEmpaquePrincipal(producto);
+        return getFacade().buscarProductoPorPresentacionFacade(presentacion, productoPrincipal);
+        
+    }
+        
+    
+    public Producto buscarProductoEmpaquePrincipal(Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        //Solo buscar el producto principal cuando estoy buscando desde un empaque
+        if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+        {
+            return getFacade().buscarProductoEmpaquePrincipal(producto);
+        }        
+        
+        //Si no encuentra 
+        return producto;
+    }
+    
     public List<Producto> reporteProducto(Producto producto) throws RemoteException,ServicioCodefacException
     {
         return  getFacade().reporteProductoFacade(producto);
+    }
+    
+    public List<PresentacionProducto> obtenerPresentacionesProducto(Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        Producto productoPrincipal=buscarProductoEmpaquePrincipal(producto);
+        return  getFacade().obtenerPresentacionesProductoFacade(productoPrincipal);
     }
     
     private void generarCodigoProducto(Producto producto) throws RemoteException,ServicioCodefacException
@@ -168,18 +194,25 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //grabar los detalles de  la presentacion
         if(productoPresentacionList!=null)
         {
+                                    
             for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) 
             {
                 if(presentacionDetalle.getId()==null)
                 {
                     
                     try {
+                                                
+                        
+                        //Agregar si existe un empaquetado
                         Producto productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
                         productoEmpaquetado.setIdProducto(null);
                         productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
                         productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
+                        productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
+                        
                         entityManager.persist(productoEmpaquetado);
                         entityManager.flush();
+                        
                         presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);                        
                     } catch (RemoteException ex) {
                         Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
@@ -256,6 +289,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 entityManager.flush();
                 presentacion=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(p.getEmpresa(),casaComercial.getNombre());
             }
+            
+            //Agregar por defecto una presentacion a la lista de detalles
+            ProductoPresentacionDetalle presentacionDetalleTmp=new ProductoPresentacionDetalle();
+            presentacionDetalleTmp.setCantidad(new BigDecimal(1));
+            presentacionDetalleTmp.setPresentacionProducto(presentacion);
+            presentacionDetalleTmp.setProductoEmpaquetado(p);
+            presentacionDetalleTmp.setProductoOriginal(p);
+            entityManager.persist(presentacionDetalleTmp);
+            entityManager.flush();
         
         }
         

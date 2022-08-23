@@ -1337,9 +1337,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //productoSeleccionado = (Producto)resultados[0];
         getCmbIva().setSelectedItem(EnumSiNo.NO);
 
-        if (manejaInventario.equals(EnumSiNo.SI)) {
-            controlador.agregarProductoVista(kardexSeleccionado.getProducto(), kardexSeleccionado.getLote());
-        } else if (manejaInventario.equals(EnumSiNo.NO)) {
+        if (manejaInventario.equals(EnumSiNo.SI)) 
+        {
+            //controlador.agregarProductoVista(kardexSeleccionado.getProducto(), kardexSeleccionado.getLote());
+            controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote());
+        } 
+        else if (manejaInventario.equals(EnumSiNo.NO)) {
             controlador.agregarProductoVista(productoSeleccionado, null);
         }
     }
@@ -1377,9 +1380,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbPresentacionProducto().removeAllItems();
         if(producto.getPresentacionList()!=null)
         {
-            for (ProductoPresentacionDetalle detalle : producto.getPresentacionList()) 
+            //Por defecto agrego la presentacion del mismo producto            
+            //getCmbPresentacionProducto().addItem(producto.getPresentacion());
+            List<PresentacionProducto> presentacionList=producto.obtenerPresentacionesList();
+            
+            for (PresentacionProducto detallePresentacion : presentacionList) 
             {
-                getCmbPresentacionProducto().addItem(detalle.getPresentacionProducto());
+                getCmbPresentacionProducto().addItem(detallePresentacion);
+            }
+            
+            //Volver a seleccionar la presentacion correcta en el caso que existe el producto
+            if(productoSeleccionado!=null)
+            {
+                getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.getPresentacion());
             }
         }
     }
@@ -3293,7 +3306,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(presentacion!=null)
                 {
                     //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
-                    productoSeleccionado= productoSeleccionado.buscarProductoPorPresentacion(presentacion);
+                    Producto productoTmp= productoSeleccionado.buscarProductoPorPresentacion(presentacion);
+                    //Si la presentacion es igual al mismo producto entonces no hago nada mas
+                    if(productoTmp.equals(productoSeleccionado))
+                    {
+                        return ;
+                    }
+                    
+                    productoSeleccionado=productoTmp;
+                    
                     try {
                         TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
                         EnumSiNo enumBusqueda=EnumSiNo.NO;

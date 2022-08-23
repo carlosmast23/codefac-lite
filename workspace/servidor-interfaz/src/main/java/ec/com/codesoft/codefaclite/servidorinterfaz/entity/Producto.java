@@ -5,16 +5,21 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -727,20 +732,71 @@ public class Producto implements Serializable, Comparable<Producto> {
         return getValorUnitarioConIva().subtract(valorUnitario);
     }
     
-    public Producto buscarProductoPorPresentacion(PresentacionProducto presentacion)
+    /**
+     * Esto sirve cuando tiene varias presentaciones y se tiene que buscar el producto principal
+     * para hacer esta busqueda se tiene que buscar el que tenga el tipo distinto de Empaque
+     * @return 
+     */
+    public Producto buscarProductoEmpaquePrincipal()
     {
-        if(presentacionList!=null)
-        {
-            for (ProductoPresentacionDetalle detalle : presentacionList) 
-            {
-                if(detalle.getPresentacionProducto().equals(presentacion))
-                {
-                    return detalle.getProductoEmpaquetado();
-                }
-            }
+        try {
+            Producto producto= ServiceFactory.getFactory().getProductoServiceIf().buscarProductoEmpaquePrincipal(this);
+            return producto;
+        } catch (RemoteException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
+    
+    public Producto buscarProductoPorPresentacion(PresentacionProducto presentacion)
+    {
+        try {
+            //Si la presentacion buscada es del mismo producto envio los mismos datos
+            /*if(this.presentacion.equals(presentacion))
+            {
+            return this;
+            }
+            
+            if(presentacionList!=null) 
+            {
+            for (ProductoPresentacionDetalle detalle : presentacionList)
+            {
+            if(detalle.getPresentacionProducto().equals(presentacion))
+            {
+            return detalle.getProductoEmpaquetado();
+            }
+            }
+            }*/
+            ProductoPresentacionDetalle presentacionDetalle= ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacion(presentacion, this);
+            if(presentacionDetalle!=null)
+            {
+                return presentacionDetalle.getProductoEmpaquetado();
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
+    public List<PresentacionProducto> obtenerPresentacionesList()
+    {
+        try {
+            List<PresentacionProducto> presentacionList=ServiceFactory.getFactory().getProductoServiceIf().obtenerPresentacionesProducto(this);
+            return presentacionList;
+        } catch (RemoteException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<PresentacionProducto>();
+    }
+    
     
     public static class PrecioVenta implements Serializable{
         public static final String PV1="pv1";

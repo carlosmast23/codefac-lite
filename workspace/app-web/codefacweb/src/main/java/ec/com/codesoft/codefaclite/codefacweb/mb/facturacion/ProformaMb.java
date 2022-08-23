@@ -1181,6 +1181,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         return null;
     }
 
+    public void cargarPresentaciones(Producto producto) {
+        
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA

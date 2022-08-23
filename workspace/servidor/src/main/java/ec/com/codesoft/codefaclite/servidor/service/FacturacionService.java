@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle.E
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -717,6 +718,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     if (bodegaVenta == null) {
                         throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
                     }
+                    
                     afectarInventario(detalle, bodegaVenta);
                     break;
                 case LIBRE:
@@ -851,9 +853,21 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws ServicioCodefacException 
      */
     private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException
-    {
-
+    {        
         Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+        BigDecimal cantidad=detalle.getCantidad();
+        BigDecimal precioUnitario=detalle.getPrecioUnitario();
+        
+        //Si el producto es un empaque busco el producto original
+        if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+        {
+            ProductoPresentacionDetalle presentacionDetalle =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacion(producto.getPresentacion(), producto);
+            BigDecimal cantidadEquivalencia=presentacionDetalle.getCantidad();
+            cantidad=detalle.getCantidad().multiply(cantidadEquivalencia);
+            precioUnitario=(detalle.getPrecioUnitario().divide(cantidadEquivalencia,6,BigDecimal.ROUND_HALF_UP));
+            //Finalmente dejo seleccionado el producto principal para que continue con el proceso
+            producto=presentacionDetalle.getProductoOriginal();
+        }
         
         //Buscar el lote si no tiene un datos
         Lote lote=null;
@@ -870,11 +884,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
          * Validacion pára verificar que exista un stock superior o igual en el
          * kardex segun lo que quieran facturar
          */
-        BigDecimal cantidadFaltante = detalle.getCantidad().subtract(kardex.getStock());
+        BigDecimal cantidadFaltante = cantidad.subtract(kardex.getStock());
         if(ParametroUtilidades.comparar(detalle.getFactura().getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO,EnumSiNo.NO))
         {
             //Si el stock que queremos facturar es mayor del existe lanzo una excepcion                
-            if (detalle.getCantidad().compareTo(kardex.getStock()) > 0) 
+            if (cantidad.compareTo(kardex.getStock()) > 0) 
             {
                 //Solo para ensambles rerifica si tiene que construir el ensamble no importaria si no tiene el stock suficiente y mando a construir
                 if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI)) 
@@ -907,7 +921,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //TODO: Definir especificamente cual es la bodega principal
         //TODO: Analizar caso cuando se resta un producto especifico
         KardexService kardexService = new KardexService();
-        KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, detalle.getPrecioUnitario(), detalle.getCantidad());;
+        KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, precioUnitario,cantidad);;
         //Agregando datos adicionales del movimiento en la factura
         kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
         kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());

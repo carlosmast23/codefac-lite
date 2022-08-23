@@ -24,8 +24,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
@@ -534,9 +536,27 @@ public class MigrarProductoModel extends MigrarModel {
                     Double cantidadPorCaja = getValorDouble(ExcelMigrarProductos.Enum.CANTIDAD_CAJA, fila);
                     if(cantidadPorCaja!=null)
                     {
-                        ProductoEnsamble productoEnsamble=new ProductoEnsamble();
-                        productoEnsamble.setCantidad(new BigDecimal(cantidadPorCaja+""));
-                        producto.addProductoEnsamble(productoEnsamble);
+                        ProductoPresentacionDetalle detallePresentacion=new ProductoPresentacionDetalle();
+                        detallePresentacion.setCantidad(new BigDecimal(cantidadPorCaja));                        
+                        PresentacionProducto presentacionCaja=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(session.getEmpresa(),"CAJA");
+                        
+                        if(presentacionCaja==null)
+                        {
+                            throw new ExcelMigrar.ExcepcionExcel("No existe la unidad para migrar CAJA");
+                        }
+                        detallePresentacion.setPresentacionProducto(presentacionCaja);
+                        detallePresentacion.setProductoOriginal(producto);
+                        
+                        producto.addPresentacion(detallePresentacion);
+                        
+                        //Si el sistema va a utilizar unidades busco una unidad por defecto
+                        PresentacionProducto presentacionUnidad=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(session.getEmpresa(),"UNI");
+                        if(presentacionUnidad==null)
+                        {
+                            throw new ExcelMigrar.ExcepcionExcel("No existe la unidad para migrar UNI");
+                        }
+                        producto.setPresentacion(presentacionUnidad);
+                        
                     }
                     
                     kardexDetalle.setKardex(kardex);

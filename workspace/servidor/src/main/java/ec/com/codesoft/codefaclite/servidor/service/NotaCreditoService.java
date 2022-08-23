@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -305,6 +306,11 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             case INVENTARIO:
                 Bodega bodega=obtenerBodegaAfecta(notaDetalle.getNotaCredito());
                 KardexService kardexService=new KardexService();
+                
+                //Enviar valores calcular de la cantidad, precio unitario cuando es un producto empaquetado
+                ///ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(notaDetalle.getTipoDocumentoEnum(),notaDetalle.getReferenciaId());
+                //if(respuesta.tipoDocumentoEnum.equals(TipoDocumentoEnum.))
+                
                 KardexDetalle kardexDetalleNuevo= kardexService.afectarInventario(
                         bodega,
                         notaDetalle.getCantidad(), 

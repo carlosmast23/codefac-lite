@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlado
 import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
@@ -1185,7 +1186,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
     private javax.swing.JCheckBox chkTransportarGuiaRemision;
-    private javax.swing.JComboBox<MarcaProducto> cmbCasaComercial;
+    private javax.swing.JComboBox<CasaComercial> cmbCasaComercial;
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo> cmbGarantia;
     private javax.swing.JComboBox<EnumSiNo> cmbGenerarCodigoBarras;
@@ -1693,12 +1694,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     @ComboBoxBinding(source ="controlador.casaComercialList" , valueSelect ="controlador.producto.casaComercial" )
-    public JComboBox<MarcaProducto> getCmbCasaComercial() {
-        return cmbMarca;
+    public JComboBox<CasaComercial> getCmbCasaComercial() {        
+        return this.cmbCasaComercial;
     }
 
-    public void setCmbCasaComercial(JComboBox<MarcaProducto> cmbCasaComercial) {
-        this.cmbMarca = cmbCasaComercial;
+    public void setCmbCasaComercial(JComboBox<CasaComercial> cmbCasaComercial) {
+        this.cmbCasaComercial = cmbCasaComercial;
     }
 
     @LimpiarAnotacion

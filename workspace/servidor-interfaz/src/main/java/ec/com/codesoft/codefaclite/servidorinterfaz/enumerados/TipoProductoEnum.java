@@ -22,7 +22,7 @@ public enum TipoProductoEnum {
     /**
      * Si el producto esta compuesto
      */
-    EMPAQUE("Empaque", "p"),
+    EMPAQUE("Empaque", "m"),
     /**
      * Si el producto es una mescla o esta compuesto de otros productos
      */

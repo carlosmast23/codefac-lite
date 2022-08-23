@@ -13,19 +13,23 @@ import java.io.Serializable;
  *
  * @author CARLOS_CODESOFT
  */
-public class ReferenciaDetalleFacturaRespuesta implements Serializable{
+public class ReferenciaDetalleFacturaRespuesta implements Serializable
+{
     public CatalogoProducto catalogoProducto;
     public Long referenciaId;
     public String codigoPrincipal;
     public TipoDocumentoEnum tipoDocumentoEnum;
     public Object objecto;
 
-    public ReferenciaDetalleFacturaRespuesta() {
+    public ReferenciaDetalleFacturaRespuesta() 
+    {
+        
     }
     
     
 
-    public ReferenciaDetalleFacturaRespuesta(CatalogoProducto catalogoProducto, Long referenciaId, TipoDocumentoEnum tipoDocumentoEnum, Object objecto) {
+    public ReferenciaDetalleFacturaRespuesta(CatalogoProducto catalogoProducto, Long referenciaId, TipoDocumentoEnum tipoDocumentoEnum, Object objecto) 
+    {
         this.catalogoProducto = catalogoProducto;
         this.referenciaId = referenciaId;
         this.tipoDocumentoEnum = tipoDocumentoEnum;
