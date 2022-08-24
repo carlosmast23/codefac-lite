@@ -26,7 +26,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PRESENTACION_PRODUCTO")
 public class PresentacionProducto implements Serializable {
-
+    
+    public static String CAJA_PRESENTACION="CAJA";
+    public static String UNIDAD_PRESENTACION="UNI";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)

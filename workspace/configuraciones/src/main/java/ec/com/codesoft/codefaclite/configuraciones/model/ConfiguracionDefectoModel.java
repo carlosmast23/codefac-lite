@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.RideNombrePrincipalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
@@ -279,6 +280,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A4);
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A5);
         
+        //Agregar los tipos de negocios        
+        UtilidadesComboBox.llenarComboBox(getCmbTipoNegocio(), TipoNegocioEnum.values());
+        
         //Llenar modo de facturas paras las guias de remision
         getCmbModoFacturasGuiaRemision().removeAllItems();
         getCmbModoFacturasGuiaRemision().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
@@ -350,6 +354,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroReporteDefectoPedido = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
             FormatoReporteEnum reporteEnumPedido=FormatoReporteEnum.findByName((parametroReporteDefectoPedido != null) ? parametroReporteDefectoPedido.getValor() : null);
             getCmbReporteDefectoPedido().setSelectedItem(reporteEnumPedido);
+            
+            ParametroCodefac parametroTipoNegocio = parametrosTodos.get(ParametroCodefac.TIPO_NEGOCIO);
+            TipoNegocioEnum tipoNegocioEnum=TipoNegocioEnum.getEnum((parametroTipoNegocio != null) ? parametroTipoNegocio.getValor() : null);
+            getCmbTipoNegocio().setSelectedItem(tipoNegocioEnum);
 
             ParametroCodefac parametroActivarCarteras = parametrosTodos.get(ParametroCodefac.ACTIVAR_CARTERA);
             EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((parametroActivarCarteras != null) ? parametroActivarCarteras.getValor() : null);
@@ -634,6 +642,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         FormatoReporteEnum reporteDefectoPedido =(FormatoReporteEnum) getCmbReporteDefectoPedido().getSelectedItem();
         agregarParametro(ParametroCodefac.REPORTE_DEFECTO_PEDIDO,(reporteDefectoPedido!=null)?reporteDefectoPedido.getNombre():null);
         agregarParametroEditar(ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
+        
+        TipoNegocioEnum tipoNegocioEnum =(TipoNegocioEnum) getCmbTipoNegocio().getSelectedItem();
+        agregarParametro(ParametroCodefac.TIPO_NEGOCIO,(tipoNegocioEnum!=null)?tipoNegocioEnum.getLetra():null);
+        agregarParametroEditar(ParametroCodefac.TIPO_NEGOCIO);
 
         //Agregar detalle para la orden de trabajo
         agregarParametro(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES, getTxtOrdenTrabajoReporte().getText());

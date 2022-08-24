@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.math.RoundingMode;
@@ -49,15 +50,15 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Codigo", 0.2d));
         titulo.add(new ColumnaDialogo("Codigo Aux", 0.2d));
-        titulo.add(new ColumnaDialogo("Nombre", 0.3d));
-        titulo.add(new ColumnaDialogo("Lote", 0.3d));
-        titulo.add(new ColumnaDialogo("Marca", 0.25d));
-        titulo.add(new ColumnaDialogo("Aplicación", 0.25d));
-        titulo.add(new ColumnaDialogo("Ubicación", 0.3d));
+        titulo.add(new ColumnaDialogo("Nombre", 0.5d));
+        //titulo.add(new ColumnaDialogo("Lote", 0.3d));
+        titulo.add(new ColumnaDialogo("Marca", 0.3d));
+        titulo.add(new ColumnaDialogo("Aplicación", 0.3d));
+        titulo.add(new ColumnaDialogo("Ubicación", 0.2d));
         titulo.add(new ColumnaDialogo("Pvp", 0.10d));
         titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
         titulo.add(new ColumnaDialogo("IVA", 0.05d));        
-        titulo.add(new ColumnaDialogo("Stock", 0.1d));        
+        titulo.add(new ColumnaDialogo("Stock", 0.05d));        
         return titulo;
     }
 
@@ -91,10 +92,9 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
             whereBodega=" and k.bodega=?5 ";
         }
         
+        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega;      
         
-        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega;      
-        
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 ) ORDER BY u.codigoPersonalizado";
+        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado";
         
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
@@ -110,6 +110,9 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
            queryDialog.agregarParametro(5,bodega);
         }
         
+        //Solo mostrar los productos que son distintos de empaque
+        queryDialog.agregarParametro(6, TipoProductoEnum.EMPAQUE.getLetra());
+        
         /*if(isManejoInvetario!=null)
         {
             queryDialog.agregarParametro(98,isManejoInvetario.getLetra());
@@ -117,6 +120,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
        
         return queryDialog;
     }
+    
     
     
     @Override
@@ -127,14 +131,14 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         vector.add(producto.getCodigoPersonalizado());
         vector.add(producto.getCodigoUPC());
         vector.add(producto.getNombre());
-        vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
+        //vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
         vector.add((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
         vector.add((producto.getAplicacionProducto()!=null)?producto.getAplicacionProducto():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
-        vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");
-        vector.add(kardex.getStock());
+        vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");        
+        vector.add((kardex.getStock()!=null)?kardex.getStock().setScale(2,RoundingMode.HALF_UP):"");
     }
 
     @Override

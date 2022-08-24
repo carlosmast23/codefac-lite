@@ -750,6 +750,31 @@ public class Producto implements Serializable, Comparable<Producto> {
         return null;
     }
     
+    /**
+     * Metodo que solo va a buscar la presentacion pero desde el mismo producto
+     * eso quiere decir que tiene que estar desde el producto principal y no desde un componente
+     * @param nombre
+     * @return 
+     */
+    public ProductoPresentacionDetalle buscarProductoPorNombrePresentacionLocal(String nombre)
+    {
+        if(presentacionList!=null)
+        {
+            for (ProductoPresentacionDetalle detalle : presentacionList) 
+            {
+                if(detalle.getPresentacionProducto()!=null)
+                {
+                    if(detalle.getPresentacionProducto().getNombre().equals(nombre))
+                    {
+                        return detalle;
+                    }
+                }
+                
+            }        
+        }
+        return null;
+    }
+    
     public Producto buscarProductoPorPresentacion(PresentacionProducto presentacion)
     {
         try {

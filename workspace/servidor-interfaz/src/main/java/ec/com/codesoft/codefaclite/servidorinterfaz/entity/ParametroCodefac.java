@@ -241,6 +241,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String RIDE_NOMBRE_PRINCIPAL="ride_nombre_principal";
     
+    public static final String TIPO_NEGOCIO="tipo_negocio";
+    
 
     @Id
     @Column(name = "ID")

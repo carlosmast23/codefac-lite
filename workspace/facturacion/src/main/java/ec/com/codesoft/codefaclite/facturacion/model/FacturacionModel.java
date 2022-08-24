@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FarmaciaProductoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenTrabajoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
@@ -189,6 +190,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpr
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
@@ -1278,7 +1280,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(manejaInventario.equals(EnumSiNo.SI))
         {
             ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta);
-            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1000);            
+            
+            //cambiar el tipo de buscador si tiene activo el parametro de farmacia
+            if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.FARMACIA))
+            {
+                productoInventarioBusquedaDialogo=new FarmaciaProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(), bodegaVenta);
+            }
+            
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);            
             buscarDialogoModel.setVisible(true);
             Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
             kardexSeleccionado = kardex;

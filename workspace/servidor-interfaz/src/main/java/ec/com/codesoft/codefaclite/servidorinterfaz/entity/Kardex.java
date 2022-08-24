@@ -3,6 +3,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -245,6 +246,29 @@ public class Kardex implements Serializable,Cloneable {
         this.lote = lote;
     }
     
+    //TODO:Unificar los 2 metodos
+    public BigDecimal obtenerTotalCajas()
+    {
+        ProductoPresentacionDetalle empaque=producto.buscarProductoPorNombrePresentacionLocal(PresentacionProducto.CAJA_PRESENTACION);
+        if(empaque!=null)
+        {
+            BigDecimal totalCajas=stock.divide(empaque.getCantidad(),0,RoundingMode.HALF_UP);    
+            return totalCajas;
+        }
+        return BigDecimal.ZERO;
+    }
+    
+    //TODO:Unificar los 2 metodos
+    public BigDecimal obtenerTotalUnidadesSueltas()
+    {
+        ProductoPresentacionDetalle empaque=producto.buscarProductoPorNombrePresentacionLocal(PresentacionProducto.CAJA_PRESENTACION);
+        if(empaque!=null)
+        {
+            BigDecimal unidadesSueltas=stock.remainder(empaque.getCantidad());
+            return unidadesSueltas;
+        }
+        return BigDecimal.ZERO;
+    }
     
 
     @Override
