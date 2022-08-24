@@ -37,11 +37,13 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
         titulo.add(new ColumnaDialogo("Lote", 0.2d));                
         titulo.add(new ColumnaDialogo("Ubicación", 0.3d));
         titulo.add(new ColumnaDialogo("Pvp", 0.10d));
-        titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
+        //titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
         titulo.add(new ColumnaDialogo("Pvp2", 0.10d));
-        titulo.add(new ColumnaDialogo("IVA", 0.05d));        
-        titulo.add(new ColumnaDialogo("Caja", 0.05d));        
-        titulo.add(new ColumnaDialogo("Uni", 0.05d));        
+        //titulo.add(new ColumnaDialogo("IVA", 0.05d)); 
+        titulo.add(new ColumnaDialogo("UnixCaja", 0.1d));
+        titulo.add(new ColumnaDialogo("Cant Caja", 0.1d));        
+        titulo.add(new ColumnaDialogo("Cant Uni", 0.1d));        
+        titulo.add(new ColumnaDialogo("Stock", 0.05d));        
         return titulo;
     }
 
@@ -54,9 +56,9 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
         vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
-        vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
-        vector.add(producto.getPrecioDistribuidor());
-        vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");
+        //vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
+        vector.add(producto.getPrecioDistribuidor().setScale(3,RoundingMode.HALF_UP));
+        //vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");
         
         //TODO: Mejorar este calculo para poder obtener este calculo desde un lugar general
         BigDecimal totalUnidadesSueltas=kardex.obtenerTotalUnidadesSueltas();
@@ -72,8 +74,10 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
             totalCajas=BigDecimal.ZERO;
         }
         
+        vector.add(kardex.obtenerCantidadPorCaja().setScale(0, RoundingMode.HALF_UP));
         vector.add(totalCajas);
         vector.add(totalUnidadesSueltas.setScale(0, RoundingMode.HALF_UP));
+        vector.add(kardex.getStock().setScale(0,RoundingMode.HALF_UP));
     }
     
     

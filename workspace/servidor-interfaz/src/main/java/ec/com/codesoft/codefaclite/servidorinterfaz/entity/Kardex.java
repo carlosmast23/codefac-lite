@@ -270,6 +270,15 @@ public class Kardex implements Serializable,Cloneable {
         return BigDecimal.ZERO;
     }
     
+    public BigDecimal obtenerCantidadPorCaja()
+    {
+        ProductoPresentacionDetalle empaque=producto.buscarProductoPorNombrePresentacionLocal(PresentacionProducto.CAJA_PRESENTACION);
+        if(empaque!=null)
+        {
+            return empaque.getCantidad();
+        } 
+        return BigDecimal.ZERO;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
