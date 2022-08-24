@@ -972,17 +972,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void updateInterface(Producto entity) {
                 if (entity != null) {
-                    productoSeleccionado = entity;
+                    controlador.verificarProductoConNotaVentaInterna(entity);
+                    productoSeleccionado = entity;                    
                     FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
-                            productoSeleccionado.getValorUnitario(), 
-                            productoSeleccionado.getPrecioSinSubsidio(), 
-                            productoSeleccionado.getNombre(), 
-                            productoSeleccionado.getCodigoPersonalizado(), 
-                            productoSeleccionado.getCatalogoProducto(), 
-                            entity.getIdProducto(), 
+                            productoSeleccionado.getValorUnitario(),
+                            productoSeleccionado.getPrecioSinSubsidio(),
+                            productoSeleccionado.getNombre(),
+                            productoSeleccionado.getCodigoPersonalizado(),
+                            productoSeleccionado.getCatalogoProducto(),
+                            entity.getIdProducto(),
                             null,
                             TipoDocumentoEnum.LIBRE,
                             BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
+                    
                     controlador.setearValoresProducto(facturaDetalle);
                     setFacturaDetalleSeleccionado(facturaDetalle);
                     //Establecer puntero en la cantidad para agregar

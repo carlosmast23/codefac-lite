@@ -434,9 +434,12 @@ public class Persona implements Serializable, Comparable<Persona> {
             //TODO: Remplazar esto por alguna funcion en las utilidades de listas
             for (PersonaEstablecimiento establecimiento : establecimientos) 
             {
-                if(establecimiento.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                if(establecimiento.getEstadoEnum()!=null)
                 {
-                    establecimientosList.add(establecimiento);
+                    if(establecimiento.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                    {
+                        establecimientosList.add(establecimiento);
+                    }
                 }
             }
             //return establecimientos.stream().filter(e -> e.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO)).collect(Collectors.toList());

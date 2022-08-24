@@ -288,7 +288,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * Este metodo sirve para que cuando algun producto que vaya a ingresarse a la factura y no tiene que llevar iva cambiar las propiedades
      * @param producto 
      */
-    private void verificarProductoConNotaVentaInterna(Producto producto)
+    public void verificarProductoConNotaVentaInterna(Producto producto)
     {
         DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
         BigDecimal valorUnitario=producto.getValorUnitario();
