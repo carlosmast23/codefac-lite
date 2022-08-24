@@ -25,6 +25,12 @@ public class ProductoData implements ExcelDatosInterface
     private String total;
     private String impuestoIva;
     private String categoria;
+    private String pvp2;
+    private String pvp3;
+    private String pvp4;
+    private String pvp5;
+    private String pvp6;
+    
 
     public ProductoData() {
     }
@@ -92,6 +98,46 @@ public class ProductoData implements ExcelDatosInterface
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
+
+    public String getPvp2() {
+        return pvp2;
+    }
+
+    public void setPvp2(String pvp2) {
+        this.pvp2 = pvp2;
+    }
+
+    public String getPvp3() {
+        return pvp3;
+    }
+
+    public void setPvp3(String pvp3) {
+        this.pvp3 = pvp3;
+    }
+
+    public String getPvp4() {
+        return pvp4;
+    }
+
+    public void setPvp4(String pvp4) {
+        this.pvp4 = pvp4;
+    }
+
+    public String getPvp5() {
+        return pvp5;
+    }
+
+    public void setPvp5(String pvp5) {
+        this.pvp5 = pvp5;
+    }
+
+    public String getPvp6() {
+        return pvp6;
+    }
+
+    public void setPvp6(String pvp6) {
+        this.pvp6 = pvp6;
+    }
     
     
     
@@ -109,6 +155,11 @@ public class ProductoData implements ExcelDatosInterface
         tiposDatos.add(new TipoDato(this.valorUnitario,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.iva,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.total,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.pvp2,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.pvp3,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.pvp4,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.pvp5,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.pvp6,Excel.TipoDataEnum.NUMERO));
         
         
         //tiposDatos.add(new TipoDato(this.impuestoIva,Excel.TipoDataEnum.TEXTO));

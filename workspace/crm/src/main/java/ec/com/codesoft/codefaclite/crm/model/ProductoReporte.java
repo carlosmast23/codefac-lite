@@ -99,6 +99,12 @@ public class ProductoReporte extends ControladorCodefacInterface{
                     productoData.setTotal("0.00");
                 }
                 
+                productoData.setPvp2((producto.getPrecioDistribuidor()!=null)?producto.getPrecioDistribuidor()+"":"0");
+                productoData.setPvp3((producto.getPrecioTarjeta()!=null)?producto.getPrecioTarjeta()+"":"0");
+                productoData.setPvp4((producto.getPvp4()!=null)?producto.getPvp4()+"":"0");
+                productoData.setPvp5((producto.getPvp5()!=null)?producto.getPvp5()+"":"0");
+                productoData.setPvp6((producto.getPvp6()!=null)?producto.getPvp6()+"":"0");
+                
                 
                 data.add(productoData);
             }
@@ -115,7 +121,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
                 public void excel() {
                     try {
                         Excel excel = new Excel();
-                        String[] nombreCabeceras = {"Codigo", "Tipo", "Nombre","Categoria","Valor Unit","Iva","Total"};
+                        String[] nombreCabeceras = {"Codigo", "Tipo", "Nombre","Categoria","Valor Unit","Iva","Total","Pvp2","Pvp3","Pvp4","Pvp5","Pvp6"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();
                     } catch (IOException ex) {
