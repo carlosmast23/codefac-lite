@@ -170,7 +170,8 @@ public class ComprobanteAdicional implements Serializable{
         TIPO_CORREO("c","correo"),
         TIPO_CELULAR("t","celular"),
         TIPO_GUIA_REMISION("g","Guía Remisión"),
-        TIPO_OTRO("o","otro");
+        TIPO_OTRO("o","otro"),
+        TIPO_ADICIONAL("1","Adicional 1"),;
 
         private Tipo(String letra, String nombre) {
             this.letra = letra;
@@ -187,6 +188,16 @@ public class ComprobanteAdicional implements Serializable{
         public String getNombre() {
             return nombre;
         }
+
+        public void setLetra(String letra) {
+            this.letra = letra;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        
         
         public static Tipo getByLetra(String letra)
         {
@@ -199,6 +210,13 @@ public class ComprobanteAdicional implements Serializable{
             return null;
         }
         
+        @Override
+        public String toString() 
+        {
+            return nombre;
+        }
+        
     }    
+
     
 }

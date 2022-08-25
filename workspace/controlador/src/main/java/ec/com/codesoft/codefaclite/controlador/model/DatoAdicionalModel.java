@@ -8,6 +8,9 @@ package ec.com.codesoft.codefaclite.controlador.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.panel.DatoAdicionalDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -71,6 +74,15 @@ public class DatoAdicionalModel extends DatoAdicionalDialog{
         getCmbTipo().addItem(FacturaAdicional.Tipo.TIPO_GUIA_REMISION);
         getCmbTipo().addItem(FacturaAdicional.Tipo.TIPO_OTRO);
         
+        String datoAdicionalTitulo = ParametroUtilidades.obtenerValorParametroSinEmpresa(ParametroCodefac.DATO_ADICIONAL_TITULO);
+        
+        if(!UtilidadesTextos.verificarNullOVacio(datoAdicionalTitulo))
+        {
+            FacturaAdicional.Tipo tipoEnum=FacturaAdicional.Tipo.TIPO_ADICIONAL;
+            tipoEnum.setNombre(datoAdicionalTitulo);
+            getCmbTipo().addItem(tipoEnum);         
+        }
+        
     }
 
     private void agregarListenerCombos() {
@@ -89,7 +101,12 @@ public class DatoAdicionalModel extends DatoAdicionalDialog{
                     getTxtCampo().setText("guiaRemision");
                     getTxtCampo().setEnabled(false);
                 }
-                else
+                else if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_ADICIONAL))
+                {
+                    getTxtCampo().setText(FacturaAdicional.Tipo.TIPO_ADICIONAL.getNombre());
+                    getTxtCampo().setEnabled(false);
+                }
+                else if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_OTRO))
                 {
                     getTxtCampo().setText("");
                     getTxtCampo().setEnabled(true);

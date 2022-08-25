@@ -478,6 +478,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro = parametrosTodos.get(ParametroCodefac.LEYENDA_FIRMA_FACTURA_3);
             getTxtLeyendaFirmaFactura3().setText((parametro != null) ? parametro.getValor():"");
             
+            parametro = parametrosTodos.get(ParametroCodefac.DATO_ADICIONAL_TITULO);
+            getTxtDatoAdicionalTitulo().setText((parametro != null) ? parametro.getValor():"");
+            
             parametro=parametrosTodos.get(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
             getTxtNotaVentaInternaAlias().setText((parametro != null) ? parametro.getValor():"");
             
@@ -749,6 +752,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.LEYENDA_FIRMA_FACTURA_3,getTxtLeyendaFirmaFactura3().getText());
         agregarParametroEditar(ParametroCodefac.LEYENDA_FIRMA_FACTURA_3);
+        
+        agregarParametro(ParametroCodefac.DATO_ADICIONAL_TITULO,getTxtDatoAdicionalTitulo().getText());
+        agregarParametroEditar(ParametroCodefac.DATO_ADICIONAL_TITULO);
 
         agregarParametro(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION, getTxtMotivoTrasladoGuiaRemision().getText());
         agregarParametroEditar(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);

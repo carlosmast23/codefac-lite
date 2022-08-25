@@ -36,7 +36,7 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
         titulo.add(new ColumnaDialogo("Nombre generico", 0.4d));
         titulo.add(new ColumnaDialogo("Lote", 0.2d));                
         titulo.add(new ColumnaDialogo("Ubicación", 0.3d));
-        titulo.add(new ColumnaDialogo("Pvp", 0.10d));
+        titulo.add(new ColumnaDialogo("Pvp+iva", 0.10d));
         //titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
         titulo.add(new ColumnaDialogo("Pvp2", 0.10d));
         //titulo.add(new ColumnaDialogo("IVA", 0.05d)); 
@@ -55,8 +55,8 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
         vector.add(producto.getNombreGenerico());
         vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
-        vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
-        //vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
+        //vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
+        vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getPrecioDistribuidor().setScale(3,RoundingMode.HALF_UP));
         //vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");
         

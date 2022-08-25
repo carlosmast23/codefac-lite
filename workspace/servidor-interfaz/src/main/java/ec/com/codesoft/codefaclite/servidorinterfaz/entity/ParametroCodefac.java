@@ -243,6 +243,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String TIPO_NEGOCIO="tipo_negocio";
     
+    public static final String DATO_ADICIONAL_TITULO="dato_adicional_titulo";
+    
 
     @Id
     @Column(name = "ID")
@@ -303,6 +305,8 @@ public class ParametroCodefac implements Serializable {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+    
+    
     
     
     @Override
