@@ -123,6 +123,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     @Override
     public QueryDialog getConsulta(String filter) {
         //Producto p;
+        //p.getTipoProductoCodigo()
         //p.getGenerarCodigoBarras()
         String queryExtra="";
         if(tipoProductoEnum!=null)
@@ -159,11 +160,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         }
         
        
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 ) ORDER BY u.nombre";
+        queryString+=" and u.tipoProductoCodigo<>?5 and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 ) ORDER BY u.nombre";
 
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,filter);
+        queryDialog.agregarParametro(5,TipoProductoEnum.EMPAQUE.getLetra());
         
         if (generarCodigoBarrasEnum != null)
         {

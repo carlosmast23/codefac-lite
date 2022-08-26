@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.IvaOpcionEnum;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
@@ -33,9 +34,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -54,6 +59,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -63,6 +69,9 @@ import javax.swing.table.DefaultTableModel;
 public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> , InterfazPostConstructPanel,ProductoModelControlador.SwingIf ,ControladorVistaIf {
     
     private static final Integer COLUMNA_ENSAMBLE_OBJECTO=0;
+    
+    //TODO: Mejorar esta parte para ver si tengo una referencia absoluta
+    private ProductoModel formularioInstancia=this;
 
     //private EnumSiNo imprimirBarrasSeleccionado;
         
@@ -83,6 +92,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private ProductoEnsamble productoEnsambleEditar;
     
     private ProductoModelControlador controlador;
+    
 
     public ProductoModel() {
                 
@@ -211,8 +221,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public Producto getResult() throws ExcepcionCodefacLite {
         try {
-            controlador.grabar();
+            if(estadoFormularioEnum.equals(EstadoFormularioEnum.GRABAR))
+            {
+                controlador.grabar();
+            }
+            else if(estadoFormularioEnum.equals(EstadoFormularioEnum.EDITAR))
+            {
+                controlador.editar();
+            }
             return controlador.producto;
+            
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
@@ -353,7 +371,32 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
     }
 
-    private void listenerBotones() {
+    private void listenerBotones() 
+    {
+        
+        getBtnEditarEmpaque().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                if(controlador!=null && controlador.producto!=null)
+                {                
+                    ProductoPresentacionDetalle productoEmpaque =controlador.producto.obtenerProductoPresentacionPorDefecto();
+                    ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() 
+                    {
+                        @Override
+                        public void updateInterface(Producto entity) 
+                        {
+                            //Actualizar los datos al momento de recibir
+                        }
+                    };
+
+                    Object[] parametroProductos={null,null,null,null,null};
+                    panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false,productoEmpaque.getProductoEmpaquetado() ,parametroProductos,formularioInstancia);
+                
+                }
+            }
+        });
         
         getBtnBuscarProductoEnsamble().addActionListener(new ActionListener() {
             @Override
@@ -548,6 +591,24 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             ImpuestoDetalle impuestoDetalleIva=(ImpuestoDetalle) parametros[4];
             controlador.setIvaSeleccionado(impuestoDetalleIva);
         }
+        
+        /*if(parametros[5]!=null)
+        {
+            EstadoFormularioEnum estadoEnum = (EstadoFormularioEnum) parametros[5];
+            if(estadoEnum.equals(estadoFormularioEnum.EDITAR))
+            {
+                //utilizar el nuevo estado
+                this.estadoFormularioEnum=estadoEnum;                
+            }
+        }
+        
+        if(parametros[6]!=null)
+        {
+            Producto producto=(Producto) parametros[6];
+            cargarDatosPantalla(producto);
+        }*/
+        
+        
         actualizarBindingCompontValues();
     }
 

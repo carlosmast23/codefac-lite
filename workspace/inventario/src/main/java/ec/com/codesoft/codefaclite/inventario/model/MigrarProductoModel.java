@@ -192,6 +192,13 @@ public class MigrarProductoModel extends MigrarModel {
 
 
                         producto.setValorUnitario(new BigDecimal(precioVentaPublico.toString()));
+                        //Por defecto si no tiene precios les dejo en cero para grabar por defectos valores
+                        producto.setPrecioDistribuidor(BigDecimal.ZERO);
+                        producto.setPrecioTarjeta(BigDecimal.ZERO);
+                        producto.setPvp4(BigDecimal.ZERO);
+                        producto.setPvp5(BigDecimal.ZERO);
+                        producto.setPvp6(BigDecimal.ZERO);                        
+                        
 
                         Object precioVentaOfertaObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_OFERTA).valor;
                         if(precioVentaOfertaObj!=null && !precioVentaOfertaObj.toString().isEmpty())
@@ -202,7 +209,7 @@ public class MigrarProductoModel extends MigrarModel {
                                 producto.setPrecioDistribuidor(new BigDecimal(precioVentaOferta.toString()));
                             }
                         }
-                                            ///PVP4
+                                           
                         Object PVP3Obj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_PROMEDIO).valor;
                         if(PVP3Obj!=null && !PVP3Obj.toString().isEmpty())
                         {

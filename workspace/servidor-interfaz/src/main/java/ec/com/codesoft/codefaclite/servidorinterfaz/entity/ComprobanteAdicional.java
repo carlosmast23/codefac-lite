@@ -139,7 +139,8 @@ public class ComprobanteAdicional implements Serializable{
         CORREO("correo"),
         FECHA_VENCIMIENTO("Fecha Maxima de Pago"),
         GUIA_REMISION("Guia de Remision"),
-        VENDEDOR("Vendedor");
+        VENDEDOR("Vendedor"),
+        ADICIONAL("Adicional");
         
         private String nombre;
 
@@ -150,6 +151,12 @@ public class ComprobanteAdicional implements Serializable{
         public String getNombre() {
             return nombre;
         }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        
         
         public static CampoDefectoEnum obtenerPorNombre(String nombre)
         {

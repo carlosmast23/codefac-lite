@@ -385,7 +385,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         
         if(producto.getPresentacionList()!=null && producto.getPresentacionList().size()>0)
         {
-            productoPresentacionDetalle=producto.getPresentacionList().get(0);
+            productoPresentacionDetalle=producto.obtenerProductoPresentacionPorDefecto();
         }
     }
 

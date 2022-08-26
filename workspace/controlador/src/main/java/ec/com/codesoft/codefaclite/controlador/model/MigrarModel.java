@@ -300,6 +300,12 @@ public abstract class MigrarModel extends MigrarPanel{
     public Double getValorDouble(ExcelMigrar.CampoMigrarInterface enumerador,ExcelMigrar.FilaResultado fila)
     {
         Object valorObj=getValorObject(enumerador, fila);
+        
+        if(!(valorObj instanceof Double))
+        {
+            return null;
+        }
+        
         if(valorObj==null)
         {
             return null;

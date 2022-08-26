@@ -492,6 +492,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 FacturaAdicional.Tipo.TIPO_GUIA_REMISION,
                                 ComprobanteAdicional.CampoDefectoEnum.GUIA_REMISION));
                     }
+                    else if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_ADICIONAL))
+                    {
+                        ComprobanteAdicional.CampoDefectoEnum campoEnum= ComprobanteAdicional.CampoDefectoEnum.ADICIONAL;
+                        campoEnum.setNombre(tipoEnum.getNombre());
+                        
+                        factura.addDatoAdicional(new FacturaAdicional(
+                                valor,
+                                FacturaAdicional.Tipo.TIPO_ADICIONAL,
+                                ComprobanteAdicional.CampoDefectoEnum.ADICIONAL));
+                    }
                     else
                     {
                         FacturaAdicional dato=new FacturaAdicional();
@@ -1782,6 +1792,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 Integer numeroDecimales=FacturaModelControlador.obtenerDecimalesRedondeo(session.getEmpresa());
                 Integer numeroDecimalesCantidad=FacturaModelControlador.obtenerCantidadProducto(session.getEmpresa());
+                
+                //Si no tiene una cantidad de decimales por defecto pongo en 2
+                if(numeroDecimalesCantidad==null)
+                {
+                    numeroDecimalesCantidad=2;
+                }
                 
                 detalle.setCantidad(detalleFactura.getCantidad().setScale(numeroDecimalesCantidad, RoundingMode.HALF_UP) + "");
                 String descripcionConSaltosDeLinea=detalleFactura.getDescripcion().replace("\n", "<br>");

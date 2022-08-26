@@ -1100,6 +1100,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             } else {
                 mostrarPanelSecundario(true);
+                DialogoCodefac.mensaje(new CodefacMsj("Error de validación de datos, verifique la información para continuar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));                    
             }
             return;
 
@@ -3172,20 +3173,26 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      @Override
     public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,GeneralPanelInterface panelPadre)
     {
-        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,null,panelPadre);    
+        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,null,null,panelPadre);    
     }
     
     @Override
     public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre)
     {
-        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,parametrosPostConstructor,panelPadre);    
+        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,null,parametrosPostConstructor,panelPadre);    
+    }
+    
+    @Override
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object datoEditar,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre)
+    {        
+        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,datoEditar,parametrosPostConstructor,panelPadre);    
     }
 
     @Override
     public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel, boolean maximizado,GeneralPanelInterface panelPadre) {
         
         Class clase=buscarPanelDialog(namePanel);
-        crearDialogoVentana(clase, panel, maximizado,null,panelPadre);
+        crearDialogoVentana(clase, panel, maximizado,null,null,panelPadre);
                 
     }
     
@@ -3195,12 +3202,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         ControladorCodefacInterface ventana= abrirVentanaCodefac((ControladorCodefacInterface) ventanEnum.getInstance(), ventanEnum);
       
         //Validacion para verificar si implementa la interfaz del postcostructod
-        if (ventana instanceof InterfazPostConstructPanel) {
+        if (ventana instanceof InterfazPostConstructPanel) 
+        {
             ((InterfazPostConstructPanel) ventana).postConstructorExterno(parametrosPostConstructor);
         }
     }   
     
-    private void crearDialogoVentana(Class clase,ObserverUpdateInterface panel,boolean maximizado,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre)
+    private void crearDialogoVentana(Class clase,ObserverUpdateInterface panel,boolean maximizado,Object datoEditar,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre)
     {
         if(clase!=null)
         {
@@ -3208,6 +3216,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 Constructor constructor=clase.getConstructor();
                 Object ventanaGeneral=constructor.newInstance();
                 ControladorCodefacInterface ventana=(ControladorCodefacInterface) ventanaGeneral;
+                
                 //Verificar si el objeto implementa el metodo para comportarse como dialogo
                 if(ventana instanceof  DialogInterfacePanel)
                 {
@@ -3218,10 +3227,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     habilitarBotones(false);
                     getBtnGuardar().setEnabled(true);
                     
+                    //Verificar si tiene un objeto para editar
+                    if(datoEditar!=null)
+                    {
+                        //ventana.estadoFormularioEnum=GeneralPanelInterface.EstadoFormularioEnum.EDITAR;
+                        //Cambiar el estado para poder editar
+                        cambiarEstadoFormularioEditar(ventana);
+                        ventana.cargarDatosPantalla(datoEditar);
+                    }
+                    
                     //Validacion para verificar si implementa la interfaz del postcostructod
                     if (ventana instanceof InterfazPostConstructPanel) {
                         ((InterfazPostConstructPanel) ventana).postConstructorExterno(parametrosPostConstructor);
                     }
+                    
                 }
                 else
                 {
@@ -3778,6 +3797,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         String tituloOriginal = getTituloOriginal(frame.getTitle());
         frame.setTitle(tituloOriginal + " [Editar]");
         frame.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;
+        frame.estadoFormularioEnum=GeneralPanelInterface.EstadoFormularioEnum.EDITAR;
     }
 
     //TODO: HACER QUE ESTOS METODOS TAMBIEN SIRVAN PARA OTRAS FUNCIONALIDADES DE ESTA CLASE
@@ -3786,6 +3806,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         String tituloOriginal = getTituloOriginal(frame.getTitle());
         frame.setTitle(tituloOriginal + " [Nuevo]");
         frame.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
+        frame.estadoFormularioEnum=GeneralPanelInterface.EstadoFormularioEnum.GRABAR;
     }
     
     ////////////////////////////////////////////////////////////////////////////

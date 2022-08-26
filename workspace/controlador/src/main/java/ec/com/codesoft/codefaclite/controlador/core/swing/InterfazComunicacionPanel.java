@@ -56,6 +56,9 @@ public interface InterfazComunicacionPanel
      */
     public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre);
     
+    
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object datoEditar,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre);
+    
     public Map<String,Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte);
     /**
      * Metodo que permite validar todos los componentes del formulario

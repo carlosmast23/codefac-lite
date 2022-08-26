@@ -29,7 +29,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -304,7 +306,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     {
         Date fechaPorDefecto=getCmbFechaIngreso().getDate();
         
-        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Cantidad","Costo Unitario","Costo Total","garantia"};        
+        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Presentación","Cantidad","Costo Unitario","Costo Total","garantia"};        
         Class clases[] = {
             KardexDetalleTmp.class,
             Boolean.class,
@@ -314,9 +316,10 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             String.class,
             String.class,
             String.class,
+            String.class,
             String.class};
         
-        DefaultTableModel modelTable=UtilidadesTablas.crearModeloTabla(titulo,clases,new Boolean[]{false,true,true,false,false,false,false,false,false});
+        DefaultTableModel modelTable=UtilidadesTablas.crearModeloTabla(titulo,clases,new Boolean[]{false,true,true,false,false,false,false,false,false,false});
         
         //Agregar los detalles a la tabla principal
         if(detallesKardex!=null)
@@ -325,13 +328,17 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             {
                 KardexDetalleTmp kardexDetalle = entry.getKey();
                 CompraDetalle compraDetalle = entry.getValue();
+                Producto producto= compraDetalle.getProductoProveedor().getProducto();
+                String presentacionStr=(producto.getPresentacion()!=null)?producto.getPresentacion().getNombre():"";
 
-                Object[] fila={
+                Object[] fila=
+                {
                     kardexDetalle,
                     kardexDetalle.seleccion,
                     kardexDetalle.bodega,
                     kardexDetalle.getFechaIngreso(),
                     compraDetalle.getDescripcion(),
+                    presentacionStr,
                     kardexDetalle.getCantidad(),
                     kardexDetalle.getPrecioUnitario(),
                     kardexDetalle.getPrecioTotal(),
@@ -790,9 +797,21 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 //Crear una variable referencial de tipo Kardex para que sepa la bodega y el producto que esta relacionado este producto
                 //TODO: Esta no parece ser la mejor manera pero es un artificio que me ahorra mucha programacion adicional
                 
+                //Buscar el producto para realizar el kardex, si es un empaque buscar el producto original y hacer la respectiva reconstruccion
+                Producto producto=compraDetalle.getProductoProveedor().getProducto();
+                if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+                {
+                    producto=producto.buscarProductoEmpaquePrincipal();
+                    BigDecimal cantidadPorCaja= producto.obtenerCantidadPorCaja();
+                                        
+                    kardexDetalle.setCantidad(kardexDetalle.getCantidad().multiply(cantidadPorCaja));
+                    kardexDetalle.setPrecioUnitario(kardexDetalle.getPrecioUnitario().divide(cantidadPorCaja,6,BigDecimal.ROUND_HALF_UP));
+                }
+                
+                
                 Kardex kardex=new Kardex();
                 kardex.setBodega(kardexDetalle.bodega);
-                kardex.setProducto(compraDetalle.getProductoProveedor().getProducto());
+                kardex.setProducto(producto);
                 kardex.setLote(compraDetalle.getLote());
                 
                 KardexDetalle kardexDetalleNuevo=kardexDetalle.obtenerObjetoOriginal();                
@@ -800,7 +819,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 //kardexDetalleNuevo.setCodigoTipoDocumentoReferenciaEnum(compraDetalle.getCompra().getCodigoTipoDocumentoEnum());
                 
                 
-               detallesKardexFinal.add(kardexDetalleNuevo);
+                detallesKardexFinal.add(kardexDetalleNuevo);
                 
                 //Si existen mas items especificos los guardo
                 if(kardexDetalle.getDetallesEspecificos()!=null && kardexDetalle.getDetallesEspecificos().size()>0)

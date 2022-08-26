@@ -92,6 +92,8 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
     
     /**
      * Variable que contiene el estado actual del formulario para que el desarrollado pueda consultar
+     * TODO: Mejorar esta parte para que solo pueda consultar la referencia del estado desde el enum para evitar problemeas
+     * TODO: Hacer que tengan un estado private
      */
     public String estadoFormulario;
     public EstadoFormularioEnum estadoFormularioEnum;

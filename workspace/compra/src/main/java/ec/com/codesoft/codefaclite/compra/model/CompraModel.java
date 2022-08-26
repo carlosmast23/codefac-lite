@@ -43,6 +43,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
@@ -446,6 +447,7 @@ public class CompraModel extends CompraPanel{
         getTxtPrecionUnitarioItem().setText("");
         getTxtCantidadItem().setText("");
         getTxtLoteNombre().setText("");
+        getCmbPresentacionProducto().removeAllItems();
         //Limpiar Tabla de Detalles Producto 
         if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
         {
@@ -807,12 +809,7 @@ public class CompraModel extends CompraPanel{
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 Producto productoTmp = (Producto) buscarDialogo.getResultado();
-                agregarProductoVista(productoTmp);
-                
-                //Cuando seleccione otro producto por seguridad debo limpiar el lote para que seleccione de nuevo
-                //TODO:Mejorar esta parte para tener desde un mismo lugar donde limpiar los datos
-                loteSeleccionado=null;
-                getTxtLoteNombre().setText("");
+                cargarProductoVistaAgregar(productoTmp);
             }
         });
         
@@ -863,6 +860,7 @@ public class CompraModel extends CompraPanel{
                 bandera = true;
                 if(filaDP>=0)
                 {
+                    
                     CompraDetalle compraDetalle = (CompraDetalle) compra.getDetalles().get(filaDP); //TODO: Revisar si esta forma es la mas optima
                     getTxtProductoItem().setText(compraDetalle.getProductoProveedor().getProducto().getCodigoPersonalizado());
                     verificarExistenciadeProductoProveedor();
@@ -872,6 +870,9 @@ public class CompraModel extends CompraPanel{
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
                     getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
                     getCmbIvaDetalle().setSelectedItem(compraDetalle.getPorcentajeIva());
+                    
+                    cargarPresentaciones(compraDetalle.getProductoProveedor().getProducto());
+                    getCmbPresentacionProducto().setSelectedItem(compraDetalle.getProductoProveedor().getProducto().getPresentacion());
                     
                     String loteCodigo="";
                     if(compraDetalle.getLote()!=null)
@@ -928,9 +929,65 @@ public class CompraModel extends CompraPanel{
             }
         });
         
+        getCmbPresentacionProducto().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PresentacionProducto presentacion=(PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
+                
+                if(presentacion!=null)
+                {
+                    //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
+                    Producto productoTmp= productoSeleccionado.buscarProductoPorPresentacion(presentacion);
+                    //Si la presentacion es igual al mismo producto entonces no hago nada mas
+                    if(productoTmp.equals(productoSeleccionado))
+                    {
+                        return ;
+                    }
+                    
+                    productoSeleccionado=productoTmp;
+                    
+                    cargarProductoVistaAgregar(productoTmp);
+                }
+            }
+        });
+        
         getBtnBuscarLote().addActionListener(listenerBuscarLote);
         getBtnCrearLote().addActionListener(listenerCrearLote);
                 
+    }
+    
+    private void cargarProductoVistaAgregar(Producto productoTmp)
+    {
+        agregarProductoVista(productoTmp);
+
+        //Cuando seleccione otro producto por seguridad debo limpiar el lote para que seleccione de nuevo
+        //TODO:Mejorar esta parte para tener desde un mismo lugar donde limpiar los datos
+        loteSeleccionado = null;
+        getTxtLoteNombre().setText("");
+        cargarPresentaciones(productoTmp);
+    }
+    
+    public void cargarPresentaciones(Producto producto)
+    {
+        getCmbPresentacionProducto().removeAllItems();
+        if(producto.getPresentacionList()!=null)
+        {
+            //Por defecto agrego la presentacion del mismo producto            
+            //getCmbPresentacionProducto().addItem(producto.getPresentacion());
+            List<PresentacionProducto> presentacionList=producto.obtenerPresentacionesList();
+            
+            for (PresentacionProducto detallePresentacion : presentacionList) 
+            {
+                getCmbPresentacionProducto().addItem(detallePresentacion);
+            }
+            
+            //Volver a seleccionar la presentacion correcta en el caso que existe el producto
+            if(productoSeleccionado!=null)
+            {
+                getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.getPresentacion());
+            }
+        }
     }
     
     private ActionListener listenerCrearLote=new ActionListener() {
@@ -1289,6 +1346,7 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().setText("");
         getTxtCantidadItem().setText("");
         getTxtLoteNombre().setText("");
+        getCmbPresentacionProducto().removeAllItems();
         
     }
     

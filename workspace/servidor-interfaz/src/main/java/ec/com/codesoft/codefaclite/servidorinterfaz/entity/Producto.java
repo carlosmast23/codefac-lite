@@ -808,6 +808,15 @@ public class Producto implements Serializable, Comparable<Producto> {
         return null;
     }
     
+    public BigDecimal obtenerCantidadPorCaja()
+    {
+        ProductoPresentacionDetalle empaque=buscarProductoPorNombrePresentacionLocal(PresentacionProducto.CAJA_PRESENTACION);
+        if(empaque!=null)
+        {
+            return empaque.getCantidad();
+        } 
+        return BigDecimal.ZERO;
+    }
     
     public List<PresentacionProducto> obtenerPresentacionesList()
     {
@@ -822,6 +831,24 @@ public class Producto implements Serializable, Comparable<Producto> {
         return new ArrayList<PresentacionProducto>();
     }
     
+    /**
+     * Obtiene una presentacion cualquiera que sea disntinta de la ingresada en el producto
+     * @return 
+     */
+    public ProductoPresentacionDetalle obtenerProductoPresentacionPorDefecto()
+    {
+        if(presentacionList!=null)
+        {
+            for (ProductoPresentacionDetalle detallePresentacion : presentacionList) 
+            {
+                if(!detallePresentacion.getPresentacionProducto().equals(presentacion))
+                {
+                    return detallePresentacion;
+                }
+            }
+        }
+        return null;
+    }
     
     public static class PrecioVenta implements Serializable{
         public static final String PV1="pv1";
