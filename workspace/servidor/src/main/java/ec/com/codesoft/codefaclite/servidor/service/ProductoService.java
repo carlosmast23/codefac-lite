@@ -323,7 +323,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //Crear los KARDEX CUANDO NO EXISTA
         if(generarKardex)
         {
-            if(p.getManejarInventarioEnum().equals(EnumSiNo.SI) && !p.getTipoProducto().equals(TipoProductoEnum.EMPAQUE))
+            if(p.getManejarInventarioEnum().equals(EnumSiNo.SI) && !p.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
             {
                 ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(p);
             }

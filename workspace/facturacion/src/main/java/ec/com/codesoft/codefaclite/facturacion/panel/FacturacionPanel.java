@@ -205,6 +205,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         chkFiltroPresupuestoCliente = new javax.swing.JCheckBox();
         jPanel6 = new javax.swing.JPanel();
         chkOTDetalleUnico = new javax.swing.JCheckBox();
+        panelProductos1 = new javax.swing.JPanel();
+        jLabel46 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel47 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jTabCartera = new javax.swing.JTabbedPane();
         panelDatosEmpresa = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -213,7 +220,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblNombreCliente = new javax.swing.JLabel();
         lblDireccionCliente = new javax.swing.JLabel();
         lblTelefonoCliente = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         txtCliente = new javax.swing.JTextField();
         btnAgregarCliente = new javax.swing.JButton();
@@ -541,17 +547,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         PanelFormasPago.add(btnAgregarFormaPago, gridBagConstraints);
 
-        tblFormasPago.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane3.setViewportView(tblFormasPago);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -588,17 +583,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         PanelDatosAdicionales.add(btnAgregarDatosAdicionales, gridBagConstraints);
 
-        tblDatosAdicionales.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane5.setViewportView(tblDatosAdicionales);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1148,6 +1132,51 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         panelTabDatos.addTab("OT", jPanel6);
 
+        panelProductos1.setLayout(new java.awt.GridBagLayout());
+
+        jLabel46.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        jLabel46.setText("Mesa:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelProductos1.add(jLabel46, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelProductos1.add(jComboBox1, gridBagConstraints);
+
+        jLabel47.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel47.setText("# Clientes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelProductos1.add(jLabel47, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelProductos1.add(jSpinner1, gridBagConstraints);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane4.setViewportView(jTextArea1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panelProductos1.add(jScrollPane4, gridBagConstraints);
+
+        panelTabDatos.addTab("Restaurante", panelProductos1);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -1162,7 +1191,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel3.setText("Direccion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         panelDatosEmpresa.add(jLabel3, gridBagConstraints);
@@ -1171,7 +1200,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel6.setText("Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         panelDatosEmpresa.add(jLabel6, gridBagConstraints);
@@ -1180,7 +1209,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel7.setText("Telefono:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         panelDatosEmpresa.add(jLabel7, gridBagConstraints);
@@ -1189,7 +1218,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblNombreCliente.setText("nombre cliente");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         panelDatosEmpresa.add(lblNombreCliente, gridBagConstraints);
@@ -1198,7 +1227,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblDireccionCliente.setText("direccion cliente");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -1210,18 +1239,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblTelefonoCliente.setText("Telefono Cliente");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         panelDatosEmpresa.add(lblTelefonoCliente, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 0.1;
-        panelDatosEmpresa.add(jLabel20, gridBagConstraints);
 
         jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
@@ -1249,7 +1272,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         panelDatosEmpresa.add(jToolBar1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.weightx = 0.1;
         panelDatosEmpresa.add(lblEspacioBlanco, gridBagConstraints);
 
@@ -1261,7 +1284,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
         panelDatosEmpresa.add(cmbConsumidorFinal, gridBagConstraints);
 
         jTabCartera.addTab("Datos del Cliente", panelDatosEmpresa);
@@ -1657,6 +1684,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<Persona> cmbRepresentante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private org.jdesktop.swingx.JXDatePicker jDateFechaEmision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1670,7 +1698,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -1698,6 +1725,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1712,8 +1741,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTabbedPane jTabCartera;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
@@ -1749,6 +1781,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel panelDatosFactura;
     private javax.swing.JPanel panelDatosPresupuestos;
     private javax.swing.JPanel panelProductos;
+    private javax.swing.JPanel panelProductos1;
     private javax.swing.JTabbedPane panelTabDatos;
     private javax.swing.JPanel pnlDetalles;
     private javax.swing.JPanel pnlVuelto;

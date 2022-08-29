@@ -610,8 +610,11 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         }
         
         
-        //Agregar el producto presentacion al producto        
-        producto.addPresentacion(productoPresentacionDetalle);
+        //Agregar el producto presentacion al producto      
+        if(productoPresentacionDetalle!=null && productoPresentacionDetalle.getCantidad()!=null)
+        {
+            producto.addPresentacion(productoPresentacionDetalle);
+        }
 
     }
 
