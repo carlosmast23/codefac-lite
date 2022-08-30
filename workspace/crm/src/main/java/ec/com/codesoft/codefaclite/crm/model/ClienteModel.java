@@ -533,7 +533,16 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public Persona getResult() throws ExcepcionCodefacLite {
 
         try {
-            grabar();
+            
+            if(estadoFormularioEnum.equals(EstadoFormularioEnum.GRABAR))
+            {
+                grabar();
+            }
+            else if(estadoFormularioEnum.equals(EstadoFormularioEnum.EDITAR))
+            {
+                editar();
+            }
+            
             return persona;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -861,10 +870,16 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         //Cargar el tipo de operador de negocio : cliente , proveedor, ambos          
         OperadorNegocioEnum operadorNegocioEnum=(OperadorNegocioEnum) parametros[0];
         operadorNegocioDefault=operadorNegocioEnum;
-        getCmbTipoOperador().setSelectedItem(operadorNegocioEnum);
+        if(operadorNegocioEnum!=null)
+        {
+            getCmbTipoOperador().setSelectedItem(operadorNegocioEnum);
+        }
         
         String identificacion=(String) parametros[1];
-        getjTextIdentificacion().setText(identificacion);
+        if(identificacion!=null)
+        {
+            getjTextIdentificacion().setText(identificacion);
+        }
         
     }
 

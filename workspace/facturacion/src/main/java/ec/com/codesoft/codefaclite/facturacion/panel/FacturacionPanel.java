@@ -224,6 +224,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         txtCliente = new javax.swing.JTextField();
         btnAgregarCliente = new javax.swing.JButton();
         btnBuscarCliente = new javax.swing.JButton();
+        btnEditarCliente = new javax.swing.JButton();
         lblEspacioBlanco = new javax.swing.JLabel();
         cmbConsumidorFinal = new javax.swing.JCheckBox();
         lblEspacioVertical = new javax.swing.JPanel();
@@ -1262,13 +1263,20 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnBuscarCliente.setToolTipText("Buscar Cliente");
         jToolBar1.add(btnBuscarCliente);
 
+        btnEditarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
+        btnEditarCliente.setToolTipText("Buscar Cliente");
+        btnEditarCliente.setFocusable(false);
+        btnEditarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEditarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnEditarCliente);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 20, 5, 20);
+        gridBagConstraints.insets = new java.awt.Insets(5, 20, 5, 5);
         panelDatosEmpresa.add(jToolBar1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1661,6 +1669,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnCargarPedido;
     private javax.swing.JButton btnCargarProforma;
     private javax.swing.JButton btnCrearProducto;
+    private javax.swing.JButton btnEditarCliente;
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnEnviarCorreoProforma;
     private javax.swing.JButton btnGenerarCartera;
@@ -2344,6 +2353,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setCmbPresentacionProducto(JComboBox<PresentacionProducto> cmbPresentacionProducto) {
         this.cmbPresentacionProducto = cmbPresentacionProducto;
     }
+
+    public JButton getBtnEditarCliente() {
+        return btnEditarCliente;
+    }
+
+    public void setBtnEditarCliente(JButton btnEditarCliente) {
+        this.btnEditarCliente = btnEditarCliente;
+    }
+    
     
     
     

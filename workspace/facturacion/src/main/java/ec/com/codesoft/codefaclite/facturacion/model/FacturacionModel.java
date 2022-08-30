@@ -404,6 +404,29 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void addListenerButtons() { 
         
+        //formularioActual;
+        getBtnEditarCliente().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Persona cliente=factura.getCliente();
+                if(cliente!=null)
+                {                
+                    ObserverUpdateInterface observer = new ObserverUpdateInterface<Persona>() 
+                    {
+                        @Override
+                        public void updateInterface(Persona entity) 
+                        {
+                            //Actualizar los datos al momento de recibir
+                            cargarCliente(cliente.getEstablecimientosActivos().get(0));
+                        }
+                    };
+
+                    Object[] parametroProductos={null,null,null,null,null};
+                    panelPadre.crearDialogoCodefac(observer, VentanaEnum.CLIENTE, false,cliente.getEstablecimientosActivos().get(0) ,parametroProductos,formularioActual);
+                
+                }
+            }
+        });
         
         getBtnGenerarCartera().addActionListener(new ActionListener() {
             @Override
