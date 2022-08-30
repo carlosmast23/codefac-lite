@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega.TipoBodegaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -30,7 +31,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
     /**
      * Creates new form BodegaForm
      */
-    public BodegaPanel() {
+    public BodegaPanel() {        
         initComponents();
     }
 
@@ -63,6 +64,8 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         jLabel8 = new javax.swing.JLabel();
         cmbSucursal = new javax.swing.JComboBox<>();
         cmbTipoBodega = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        cmbAlertaStockMinimo = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         txtBodegaNombre = new javax.swing.JTextField();
@@ -114,7 +117,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -123,7 +126,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         jLabel3.setText("Encargado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
@@ -131,20 +134,20 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         jLabel4.setText("Foto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtFoto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -154,7 +157,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         btnCargarImagen.setToolTipText("Buscar imagen en su computador");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnCargarImagen, gridBagConstraints);
 
@@ -173,15 +176,15 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacioBlanco2, gridBagConstraints);
 
-        jLabel7.setText("Tipo Bodega:");
+        jLabel7.setText("Stock minimo advertencia:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel7, gridBagConstraints);
@@ -189,7 +192,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         jLabel8.setText("Descripcion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel8, gridBagConstraints);
@@ -207,6 +210,21 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoBodega, gridBagConstraints);
+
+        jLabel9.setText("Tipo Bodega:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel9, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbAlertaStockMinimo, gridBagConstraints);
 
         jTabbedPane1.addTab("General", jPanel1);
 
@@ -302,6 +320,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnEliminarDetalle;
+    private javax.swing.JComboBox<EnumSiNo> cmbAlertaStockMinimo;
     private javax.swing.JComboBox<Sucursal> cmbSucursal;
     private javax.swing.JComboBox<TipoBodegaEnum> cmbTipoBodega;
     private javax.swing.JLabel jLabel1;
@@ -313,6 +332,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -435,6 +455,14 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
 
     public void setTxtBodegaNombre(JTextField txtBodegaNombre) {
         this.txtBodegaNombre = txtBodegaNombre;
+    }
+
+    public JComboBox<EnumSiNo> getCmbAlertaStockMinimo() {
+        return cmbAlertaStockMinimo;
+    }
+
+    public void setCmbAlertaStockMinimo(JComboBox<EnumSiNo> cmbAlertaStockMinimo) {
+        this.cmbAlertaStockMinimo = cmbAlertaStockMinimo;
     }
     
     

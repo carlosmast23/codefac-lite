@@ -10,7 +10,7 @@ create table KARDEX(
     PRECIO_PROMEDIO decimal(13,2),
     PRECIO_ULTIMO decimal(13,2),
     PRECIO_TOTAL decimal(13,2),
-    STOCK BIGINT,
+    STOCK decimal(13,5),
     RESERVA BIGINT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.3)*/
     ESTADO varchar(1), 

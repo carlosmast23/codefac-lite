@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -60,7 +61,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     private Bodega bodegaPermisoSeleccionado;
     private BodegaPermisoTransferencia bodegaPermisoTransferenciaSeleccionado;
 
-    public BodegaModel() {
+    public BodegaModel() {        
         crearModeloTabla();
     }
 
@@ -84,6 +85,10 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         bodega.setDescripcion(getTxtDescripcion().getText());
         bodega.setEncargado(getTxtEncargado().getText());
         bodega.setImagenPath(getTxtFoto().getText());
+        
+        //Seterar si requiere mostrar las alertas del inventario        
+        EnumSiNo enumSiNo=(EnumSiNo) getCmbAlertaStockMinimo().getSelectedItem();
+        bodega.setStockMinimoAdvertenciaEnum(enumSiNo);
         
         //Guardar a la sucursal que pertenece la empresa
         Sucursal sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
@@ -186,13 +191,17 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         {
             getCmbSucursal().setSelectedItem(Sucursal.getSucursalPermitirTodos());
         }
+        
+        getCmbAlertaStockMinimo().setSelectedItem(bodega.getStockMinimoAdvertenciaEnum());
     }
 
     @Override
     public void limpiar() {
         bodega = new Bodega();
         getCmbTipoBodega().setSelectedIndex(0);
-        getCmbSucursal().setSelectedIndex(0);        
+        getCmbSucursal().setSelectedIndex(0);  
+        getCmbAlertaStockMinimo().setSelectedItem(EnumSiNo.SI);
+        
     }
 
 //    @Override
@@ -309,6 +318,8 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             UtilidadesComboBox.llenarComboBox(getCmbSucursal(), sucursales);
             
             UtilidadesComboBox.llenarComboBox(getCmbTipoBodega(),Bodega.TipoBodegaEnum.values());
+            
+            UtilidadesComboBox.llenarComboBox(getCmbAlertaStockMinimo(), EnumSiNo.values());
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);

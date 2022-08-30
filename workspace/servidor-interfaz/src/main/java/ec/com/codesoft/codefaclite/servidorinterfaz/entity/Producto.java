@@ -841,9 +841,13 @@ public class Producto implements Serializable, Comparable<Producto> {
         {
             for (ProductoPresentacionDetalle detallePresentacion : presentacionList) 
             {
-                if(!detallePresentacion.getPresentacionProducto().equals(presentacion))
+                PresentacionProducto presentacionProducto= detallePresentacion.getPresentacionProducto();
+                if(presentacionProducto!=null)
                 {
-                    return detallePresentacion;
+                    if(!presentacionProducto.equals(presentacion))
+                    {
+                        return detallePresentacion;
+                    }
                 }
             }
         }

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -57,6 +58,9 @@ public class Bodega implements Serializable {
     
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
+    
+    @Column(name = "STOCK_MINIMO_ADVERTENCIA")
+    private String stockMinimoAdvertencia;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bodegaPermiso", fetch = FetchType.EAGER)
     private List<BodegaPermisoTransferencia> bodegasPermisoTransfereciaList;
@@ -156,7 +160,23 @@ public class Bodega implements Serializable {
     public void setBodegasPermisoTransfereciaList(List<BodegaPermisoTransferencia> bodegasPermisoTransfereciaList) {
         this.bodegasPermisoTransfereciaList = bodegasPermisoTransfereciaList;
     }
+
+    public String getStockMinimoAdvertencia() {
+        return stockMinimoAdvertencia;
+    }
+
+    public void setStockMinimoAdvertencia(String stockMinimoAdvertencia) {
+        this.stockMinimoAdvertencia = stockMinimoAdvertencia;
+    }
     
+    public EnumSiNo getStockMinimoAdvertenciaEnum() {
+        return EnumSiNo.getEnumByLetra(stockMinimoAdvertencia);
+    }
+
+    public void setStockMinimoAdvertenciaEnum(EnumSiNo enumSiNo) {
+        this.stockMinimoAdvertencia = enumSiNo.getLetra();
+    }
+        
     
     public void agregarPermisoTransferenciaBodega(BodegaPermisoTransferencia bodegaPermisoTransferencia)
     {

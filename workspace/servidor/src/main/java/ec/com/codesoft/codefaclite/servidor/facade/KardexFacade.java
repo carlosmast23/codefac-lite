@@ -141,9 +141,13 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //Producto producto;
         //producto.getCantidadMinima()
         //Kardex kardex;
-        String queryString = " SELECT COUNT(k) FROM Kardex k WHERE (k.producto.estado<>?4 ) AND k.stock<k.producto.cantidadMinima ";               
+        //kardex.getBodega();
+        //Bodega b;
+        //b.getStockMinimoAdvertencia()
+        String queryString = " SELECT COUNT(k) FROM Kardex k WHERE (k.producto.estado<>?4 ) AND k.stock<k.producto.cantidadMinima AND k.bodega.stockMinimoAdvertencia=?5  ";               
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(5,EnumSiNo.SI.getLetra());
         return (Long) query.getSingleResult();
     }
 
@@ -152,7 +156,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         String whereBodega="";
         if(bodega!=null)
         {
-            whereBodega=" and k.bodega=?1 ";
+            //Bodega b;
+            //b.getStockMinimoAdvertencia();            
+            whereBodega=" and k.bodega=?1 and k.bodega.stockMinimoAdvertencia=?5 ";
         }
         
         String whereCategoria="";
@@ -168,6 +174,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         if(bodega!=null)
         {
             query.setParameter(1,bodega);
+            query.setParameter(5,EnumSiNo.SI.getLetra());
         }
         
         if(categoria!=null)
