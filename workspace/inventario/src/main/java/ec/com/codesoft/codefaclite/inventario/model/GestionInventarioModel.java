@@ -167,6 +167,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         getCmbTipoDocumento().removeAllItems();
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.AGREGAR_MERCADERIA_MANUAL);
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.QUITAR_MERCADERIA_MANUAL);
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.AJUSTE_EXACTO_INVENTARIO);
         
         try {
                        
@@ -298,6 +299,8 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         Bodega bodegaSeleccionada=(Bodega)getCmbBodega().getSelectedItem();
         kardex.setBodega(bodegaSeleccionada);
         kardex.setProducto(productoSeleccionado);
+        
+        
     
         kardexDetalle.setKardex(kardex);
         
@@ -312,8 +315,8 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         }
         
     }
-
-    @Override
+    
+     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

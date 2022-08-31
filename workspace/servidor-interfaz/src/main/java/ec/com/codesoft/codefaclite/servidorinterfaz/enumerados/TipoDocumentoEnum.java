@@ -124,6 +124,12 @@ public enum TipoDocumentoEnum implements ParametroUtilidades.ComparadorInterface
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
             true),
     
+    AJUSTE_EXACTO_INVENTARIO(ModuloCodefacEnum.INVENTARIO,
+            "AEI",
+            "Ajuste Exacto Inventario",
+            TipoDocumentoEnum.NO_AFECTA_INVETARIO,
+            true),
+    
     ANULAR_MERCADERIA_POSITIVO(ModuloCodefacEnum.INVENTARIO,
             "AMP",
             "Anulado Stock Positivo",

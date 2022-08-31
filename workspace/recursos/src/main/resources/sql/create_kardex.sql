@@ -45,6 +45,8 @@ create table KARDEX_DETALLE(
     CODIGO_TIPO_DOCUMENTO_REFERENCIA varchar(16),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.1.7)*/
     DESCRIPCION varchar(512), 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.2.7)*/
+    SIGNO INT,
     primary key (ID)
 );
 
