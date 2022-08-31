@@ -191,6 +191,8 @@ public class ParametroCodefac implements Serializable {
 
     public static final String REPORTE_DEFECTO_VENTA="reporte_defecto_venta";
     
+    public static final String REPORTE_ORIENTACION_VENTA="reporte_orientacion_venta";
+    
     public static final String REPORTE_DEFECTO_PEDIDO="reporte_defecto_pedido";
     
     /**

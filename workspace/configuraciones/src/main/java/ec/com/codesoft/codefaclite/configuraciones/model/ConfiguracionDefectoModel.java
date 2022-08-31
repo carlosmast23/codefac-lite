@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FormatoReporteEnum;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -267,6 +268,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+                
         
         /**
         * Filtrar factura por usuario
@@ -274,6 +276,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getjComboFiltrarFacturaPorUsuario(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbReporteDefectoVenta(),FormatoReporteEnum.values());
+        
+        UtilidadesComboBox.llenarComboBox(getCmbOrientacionReporte(), OrientacionReporteEnum.values());
         
         //Agregar los tipos de formato para los PEDIDOS
         getCmbReporteDefectoPedido().removeAllItems();
@@ -350,6 +354,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroReporteDefectoVenta = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_VENTA);
             FormatoReporteEnum reporteEnum=FormatoReporteEnum.findByName((parametroReporteDefectoVenta != null) ? parametroReporteDefectoVenta.getValor() : null);
             getCmbReporteDefectoVenta().setSelectedItem(reporteEnum);
+            
+            ParametroCodefac parametroReporteOrientacionVenta = parametrosTodos.get(ParametroCodefac.REPORTE_ORIENTACION_VENTA);
+            OrientacionReporteEnum orientacionEnum=OrientacionReporteEnum.buscarPorLetra((parametroReporteOrientacionVenta != null) ? parametroReporteOrientacionVenta.getValor() : null);
+            getCmbOrientacionReporte().setSelectedItem(orientacionEnum);
             
             ParametroCodefac parametroReporteDefectoPedido = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
             FormatoReporteEnum reporteEnumPedido=FormatoReporteEnum.findByName((parametroReporteDefectoPedido != null) ? parametroReporteDefectoPedido.getValor() : null);
@@ -641,6 +649,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         FormatoReporteEnum reporteDefectoVenta =(FormatoReporteEnum) getCmbReporteDefectoVenta().getSelectedItem();
         agregarParametro(ParametroCodefac.REPORTE_DEFECTO_VENTA,(reporteDefectoVenta!=null)?reporteDefectoVenta.getNombre():null);
         agregarParametroEditar(ParametroCodefac.REPORTE_DEFECTO_VENTA);
+        
+        OrientacionReporteEnum reporteOrientacionVenta =(OrientacionReporteEnum) getCmbOrientacionReporte().getSelectedItem();
+        agregarParametro(ParametroCodefac.REPORTE_ORIENTACION_VENTA,(reporteOrientacionVenta!=null)?reporteOrientacionVenta.getLetra():null);
+        agregarParametroEditar(ParametroCodefac.REPORTE_ORIENTACION_VENTA);
         
         FormatoReporteEnum reporteDefectoPedido =(FormatoReporteEnum) getCmbReporteDefectoPedido().getSelectedItem();
         agregarParametro(ParametroCodefac.REPORTE_DEFECTO_PEDIDO,(reporteDefectoPedido!=null)?reporteDefectoPedido.getNombre():null);
