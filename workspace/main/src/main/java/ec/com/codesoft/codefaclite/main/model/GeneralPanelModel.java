@@ -3235,6 +3235,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         cambiarEstadoFormularioEditar(ventana);
                         ventana.cargarDatosPantalla(datoEditar);
                     }
+                    else
+                    {
+                        cambiarEstadoFormularioNuevo(ventana);
+                    }
                     
                     //Validacion para verificar si implementa la interfaz del postcostructod
                     if (ventana instanceof InterfazPostConstructPanel) {
