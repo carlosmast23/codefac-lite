@@ -2542,6 +2542,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                     precioUnitarioTxt=producto.getValorUnitario()+"";
                 }
+                else
+                {
+                    precioUnitarioTxt=detalle.getPrecioUnitario().toString();
+                }
                 
                 fila.add(precioUnitarioTxt);               
                 
