@@ -184,7 +184,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return tiposDocumento;
     }
     
-    public void agregarProductoVista(Producto productoSeleccionado,Lote lote) {
+    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,BigDecimal stock) {
         if (productoSeleccionado == null) {
             return;
         }
@@ -195,6 +195,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //cargarPrecios(productoSeleccionado);
         interfaz.cargarPrecios(productoSeleccionado);
         interfaz.cargarPresentaciones(productoSeleccionado);
+        if(stock!=null)
+        {
+            stock=stock.setScale(2, RoundingMode.HALF_UP);
+        }
+        interfaz.cargarEtiquetaStock(stock);
         
         String descripcion=productoSeleccionado.getNombre();
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
@@ -821,6 +826,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //Desctivar los diferentes precios si el producto fue agregado correctamente
         //getCmbPreciosVenta().removeAllItems();
         interfaz.limpiarComboPrecioVenta();
+        interfaz.cargarEtiquetaStock(BigDecimal.ZERO);
     }
 
     @Override
@@ -1342,6 +1348,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public void cargarPrecios(Producto producto);
         
         public void cargarPresentaciones(Producto producto);
+        
+        public void cargarEtiquetaStock(BigDecimal stock);
         
         /**
          * 
