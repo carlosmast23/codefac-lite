@@ -137,6 +137,9 @@ public class Persona implements Serializable, Comparable<Persona> {
      */
     @Column(name = "CONTACTO_CLIENTE_NOMBRE")
     private String contactoClienteNombre;
+    
+    @Column(name = "HABILITAR_CREDITO")
+    private String habilitarCredito;
 
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
@@ -506,6 +509,34 @@ public class Persona implements Serializable, Comparable<Persona> {
     public void setFechaCreacion(Timestamp fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
+
+    public String getHabilitarCredito() {
+        return habilitarCredito;
+    }
+
+    public void setHabilitarCredito(String habilitarCredito) {
+        this.habilitarCredito = habilitarCredito;
+    }
+    
+    public EnumSiNo getHabilitarCreditoEnum() 
+    {
+        return EnumSiNo.getEnumByLetra(habilitarCredito);
+    }
+
+    public void setHabilitarCreditoEnum(EnumSiNo habilitarCreditoEnum) 
+    {
+        if(habilitarCreditoEnum!=null)
+        {
+            this.habilitarCredito = habilitarCreditoEnum.getLetra();
+        }
+        else
+        {
+            this.habilitarCredito = null;
+        }
+        
+    }
+    
+    
     
     public String getCorreoElectronico()
     {

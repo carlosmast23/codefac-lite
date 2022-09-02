@@ -170,12 +170,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {            
-            validacionInicialFacturar(proforma,CrudEnum.CREAR);
+            validacionInicialFacturar(proforma,null,CrudEnum.CREAR);
         
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws RemoteException, ServicioCodefacException {
-                        validacionInicialFacturar(proforma, CrudEnum.CREAR);
+                        validacionInicialFacturar(proforma,null, CrudEnum.CREAR);
                         //Agregado vendedor de forma automatica si el usuario tiene relacionado un empleado con departamento de ventas
                         asignarVendedorProforma(proforma);
                     
@@ -288,7 +288,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
-        validacionInicialFacturar(proforma,CrudEnum.EDITAR);
+        validacionInicialFacturar(proforma,null,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -345,7 +345,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 setearDatosClienteYDistribuidor(factura);
                 
                 //Validaciones iniciales de la factura
-                validacionInicialFacturar(factura,CrudEnum.CREAR);
+                validacionInicialFacturar(factura,carteraParametro,CrudEnum.CREAR);
                 
                 //Agrega datos adcional como por ejemplo la fecha de creacion de la factura
                 setearDatosPorDefecto(factura);
@@ -429,8 +429,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    public void validacionInicialFacturar(Factura factura,CrudEnum modo) throws ServicioCodefacException, RemoteException
-    {                
+    public void validacionInicialFacturar(Factura factura,CarteraParametro carteraParametro,CrudEnum modo) throws ServicioCodefacException, RemoteException
+    { 
         
         if(factura.getCliente()==null)
         {
@@ -473,6 +473,24 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) && factura.getPuntoEmisionId()==null)
         {
             throw new ServicioCodefacException("No se puede grabar sin tener un punto de emisión configurado");
+        }
+        
+        if(modo.equals(CrudEnum.CREAR))
+        {
+            if(carteraParametro!=null)
+            {
+                //Si la factura tiene credito verifico que el cliente tenga esa opcion
+                if(carteraParametro.habilitarCredito)
+                {
+                    if(factura.getCliente().getHabilitarCreditoEnum()!=null )
+                    {
+                        if(factura.getCliente().getHabilitarCreditoEnum().equals(EnumSiNo.NO))
+                        {
+                            throw new ServicioCodefacException("El cliente no tiene habilitada la opción para generar ventas con Crédito ");
+                        }
+                    }
+                }            
+            }
         }
         
         //TODO:Optimizar esta parte para poner en otra parte

@@ -191,6 +191,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
         //persona.setCorreoElectronico(getjTextCorreo().getText());
         persona.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+        EnumSiNo habilitarCreditoEnum=(EnumSiNo) getCmbHabilitarCredito().getSelectedItem();
+        persona.setHabilitarCreditoEnum(habilitarCreditoEnum);
         persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
         persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
         persona.setSriFormaPago((SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem());
@@ -391,6 +393,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjComboTipoCliente().setSelectedItem(persona.getTipCliente());
         //getjTextCorreo().setText(persona.getCorreoElectronico());
         getCmbEstado().setSelectedItem(GeneralEnumEstado.getEnum(persona.getEstado()));
+        getCmbHabilitarCredito().setSelectedItem(persona.getHabilitarCreditoEnum());
         getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
         getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
         getCmbFormaPagoDefecto().setSelectedItem(persona.getSriFormaPago());
@@ -471,6 +474,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
             //Setear el valor por defecto
             getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
+            getCmbHabilitarCredito().setSelectedItem(EnumSiNo.SI);
             
             getTxtPorcentajeComision().setText("0");
             getChkContacto().setSelected(false);
@@ -577,6 +581,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             List<TipoEstablecimiento> tipoEstablecimientoList=ServiceFactory.getFactory().getTipoEstablecimientoServiceIf().obtenerActivos(OperadorNegocioEnum.CLIENTE);
             UtilidadesComboBox.llenarComboBox(getCmbTipoCliente(),tipoEstablecimientoList);
             UtilidadesComboBox.llenarComboBox(getCmbTipoClienteOficina(),tipoEstablecimientoList);
+            UtilidadesComboBox.llenarComboBox(getCmbHabilitarCredito(), EnumSiNo.values());
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
