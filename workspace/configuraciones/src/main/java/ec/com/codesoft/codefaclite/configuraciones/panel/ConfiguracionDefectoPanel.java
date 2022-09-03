@@ -643,7 +643,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbConfiguracionImpresora, gridBagConstraints);
 
         jLabel33.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel33.setText("Activar Documento Nota de  Venta:");
+        jLabel33.setText("Activar Documento Nota de  Venta Interno:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
