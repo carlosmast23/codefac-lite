@@ -602,6 +602,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
          
         BigDecimal signo=new BigDecimal(kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero());
+        kardexDetalle.setSigno(signo.intValue());
         //Integer stockFinal=kardex.getStock()+signo.intValue()*kardexDetalle.getCantidad().intValue();
         BigDecimal cantidadMovimiento=signo.multiply(kardexDetalle.getCantidad());
         BigDecimal stockFinal=kardex.getStock().add(cantidadMovimiento);
@@ -809,9 +810,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //Agregar la fecha de creacion del sistema
         detalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
         detalle.setKardex(kardex);
+        
+        verificarCuadreExactoKardex(kardex, detalle);
+        detalle.setSigno(detalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero());
+        
         kardex.addDetalleKardex(detalle);
         em.persist(detalle);
-
+        
+        
         recalcularValoresKardex(kardex, detalle); //Actualiza los valores desde un mismo lugar
         kardex = em.merge(kardex);
 
@@ -826,6 +832,30 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 em.merge(compra);
                 break;
 
+        }
+    }
+    
+    public void verificarCuadreExactoKardex(Kardex kardex, KardexDetalle kardexDetalle)
+    {
+        if(kardexDetalle.getCodigoTipoDocumentoEnum().equals(TipoDocumentoEnum.AJUSTE_EXACTO_INVENTARIO))
+        {
+            //Recalcular el stock en funcion del kardex cuando exista un problema de descuadre
+            kardex.setStock(kardex.recalcularStock());
+            
+            BigDecimal stockActual= kardex.getStock();
+            BigDecimal cantidadCuadre=kardexDetalle.getCantidad().subtract(stockActual);
+            if(cantidadCuadre.compareTo(BigDecimal.ZERO)>0)
+            {
+                kardexDetalle.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.AGREGAR_MERCADERIA_MANUAL);
+            }
+            else
+            {
+                kardexDetalle.setCodigoTipoDocumentoEnum(TipoDocumentoEnum.QUITAR_MERCADERIA_MANUAL);
+            }
+            
+            //Si por algun motivo estaba descuadrado el inventario con este artificio puedo corregir el stock y el kardex
+            
+            kardexDetalle.setCantidad(cantidadCuadre.abs());
         }
     }
     

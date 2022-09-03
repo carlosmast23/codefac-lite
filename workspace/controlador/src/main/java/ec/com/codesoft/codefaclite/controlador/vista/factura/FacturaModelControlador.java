@@ -58,6 +58,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.IOException;
@@ -183,7 +184,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return tiposDocumento;
     }
     
-    public void agregarProductoVista(Producto productoSeleccionado,Lote lote) {
+    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,BigDecimal stock) {
         if (productoSeleccionado == null) {
             return;
         }
@@ -194,6 +195,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //cargarPrecios(productoSeleccionado);
         interfaz.cargarPrecios(productoSeleccionado);
         interfaz.cargarPresentaciones(productoSeleccionado);
+        if(stock!=null)
+        {
+            stock=stock.setScale(2, RoundingMode.HALF_UP);
+        }
+        interfaz.cargarEtiquetaStock(stock);
         
         String descripcion=productoSeleccionado.getNombre();
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
@@ -820,6 +826,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //Desctivar los diferentes precios si el producto fue agregado correctamente
         //getCmbPreciosVenta().removeAllItems();
         interfaz.limpiarComboPrecioVenta();
+        interfaz.cargarEtiquetaStock(BigDecimal.ZERO);
     }
 
     @Override
@@ -936,11 +943,24 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
         
         String nombreReporte="comprobante_venta.jrxml";
+        FormatoHojaEnum formatoEnum=FormatoHojaEnum.A5;
         
+        //OrientacionReporteEnum
+        //TODO: Mejorarar esta parte para solo cargar en horizontal
+        String parametroOrientacion = ParametroUtilidades.obtenerValorParametro(session.getEmpresa(), ParametroCodefac.REPORTE_ORIENTACION_VENTA);
+        if(!UtilidadesTextos.verificarNullOVacio(parametroOrientacion))
+        {
+            OrientacionReporteEnum orientacionEnum=OrientacionReporteEnum.buscarPorLetra(parametroOrientacion);
+            if(orientacionEnum!=null && orientacionEnum.equals(OrientacionReporteEnum.HORIZONTAL))
+            {
+                nombreReporte="comprobante_venta_A5_horizontal.jrxml";
+                formatoEnum=FormatoHojaEnum.A4;
+            }
+        }
         
         //TODO: Ver si esta parte se puede mejorar para imprimir
         ParametroCodefac parametroCodefac = session.getParametrosCodefac().get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
-        FormatoHojaEnum formatoEnum=FormatoHojaEnum.A5;
+        
         
         if (parametroCodefac !=null) 
         {
@@ -1329,6 +1349,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         public void cargarPresentaciones(Producto producto);
         
+        public void cargarEtiquetaStock(BigDecimal stock);
+        
         /**
          * 
          * @param valorUnitario
@@ -1420,5 +1442,6 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
     }
+
     
 }

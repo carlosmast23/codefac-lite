@@ -1296,7 +1296,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             buscarDialogoModel.setVisible(true);
             productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
             getCmbIva().setSelectedItem(EnumSiNo.NO);    
-            controlador.agregarProductoVista(productoSeleccionado,null);
+            controlador.agregarProductoVista(productoSeleccionado,null,null);
     }
     
     private void agregarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
@@ -1384,10 +1384,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (manejaInventario.equals(EnumSiNo.SI)) 
         {
             //controlador.agregarProductoVista(kardexSeleccionado.getProducto(), kardexSeleccionado.getLote());
-            controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote());
+            controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexSeleccionado.getStock());
         } 
         else if (manejaInventario.equals(EnumSiNo.NO)) {
-            controlador.agregarProductoVista(productoSeleccionado, null);
+            controlador.agregarProductoVista(productoSeleccionado, null,BigDecimal.ZERO);
         }
     }
     
@@ -2541,6 +2541,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                     precioUnitarioTxt=producto.getValorUnitario()+"";
+                }
+                else
+                {
+                    precioUnitarioTxt=detalle.getPrecioUnitario().toString();
                 }
                 
                 fila.add(precioUnitarioTxt);               
@@ -3701,14 +3705,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void keyPressed(KeyEvent e) {
                 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    Producto producto=FacturaModelControlador.listenerBuscarProducto(getTxtCodigoDetalle().getText(), controlador.getTipoDocumentoEnumSeleccionado(), session.getEmpresa());
-
-                    if (producto == null) {
-                        if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
-                            btnListenerCrearProducto();
+                    try {
+                        Producto producto=FacturaModelControlador.listenerBuscarProducto(getTxtCodigoDetalle().getText(), controlador.getTipoDocumentoEnumSeleccionado(), session.getEmpresa());
+                        
+                        //Todo: Mejorar esta parte
+                        BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+                        Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+                        Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodegaVenta, producto);
+                        
+                        
+                        if (producto == null) {
+                            if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                                btnListenerCrearProducto();
+                            }
+                        } else {
+                            controlador.agregarProductoVista(producto,null,(kardex!=null)?kardex.getStock():BigDecimal.ZERO);
                         }
-                    } else {
-                        controlador.agregarProductoVista(producto,null);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
 
@@ -4264,6 +4280,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public Estudiante getEStudiante() {
         return estudiante;
+    }
+
+    @Override
+    public void cargarEtiquetaStock(BigDecimal stock) {
+        
+        getLblStockDetalle().setText(stock+"");
     }
 
 }

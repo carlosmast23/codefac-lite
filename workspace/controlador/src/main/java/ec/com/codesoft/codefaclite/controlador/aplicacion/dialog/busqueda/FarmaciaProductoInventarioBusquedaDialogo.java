@@ -57,7 +57,9 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         //vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
-        vector.add(producto.getPrecioDistribuidor().setScale(3,RoundingMode.HALF_UP));
+        BigDecimal precioDistribuidor=(producto.getPrecioDistribuidor()!=null)?producto.getPrecioDistribuidor().setScale(3,RoundingMode.HALF_UP):BigDecimal.ZERO;        
+        
+        vector.add(precioDistribuidor);
         //vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");
         
         //TODO: Mejorar este calculo para poder obtener este calculo desde un lugar general

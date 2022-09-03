@@ -60,10 +60,18 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }*/
 
-        if (sriIdentificacion != null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION)) {
+        if (sriIdentificacion != null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION)) 
+        {
             informacionComprobante.setIdentificacion(comprobante.getCliente().getIdentificacion());
-        } else {
+        } 
+        else if(sriIdentificacion != null && sriIdentificacion.getCodigo().equals(SriIdentificacion.RUC_IDENTIFICACION)) 
+        {
+            //TODO: Revisar si esta parte tiene sentido que complete los ceros
             informacionComprobante.setIdentificacion(UtilidadesTextos.llenarCarateresDerecha(comprobante.getCliente().getIdentificacion(), 13, "0"));
+        }
+        else
+        {
+            informacionComprobante.setIdentificacion(comprobante.getCliente().getIdentificacion());
         }
         //informacionComprobante.setIdentificacion(comprobante.getIdentificacion());
         

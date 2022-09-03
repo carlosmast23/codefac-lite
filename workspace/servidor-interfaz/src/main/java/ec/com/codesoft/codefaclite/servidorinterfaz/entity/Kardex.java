@@ -279,6 +279,25 @@ public class Kardex implements Serializable,Cloneable {
         } 
         return BigDecimal.ZERO;
     }
+    
+    public BigDecimal recalcularStock()
+    {
+        BigDecimal stock=BigDecimal.ZERO;
+        if(detallesKardex!=null)
+        {
+            for (KardexDetalle kardexDetalle: detallesKardex) 
+            {
+                Integer signo=kardexDetalle.getSigno();
+                if(signo==null)
+                {
+                    signo=kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero();
+                }
+                
+                stock=stock.add(kardexDetalle.getCantidad().multiply(new BigDecimal(signo)));
+            }
+        }
+        return stock;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

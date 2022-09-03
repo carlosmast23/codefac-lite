@@ -10,11 +10,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
+import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidor.service.OrdenTrabajoService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.PresupuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -40,51 +45,31 @@ public class TestBaseDatos {
             EntityManager em= AbstractFacade.entityManager;
             EntityTransaction et= em.getTransaction();
             
+            KardexDetalleService kardexService=new KardexDetalleService();
+            List<KardexDetalle> detalleList= kardexService.obtenerTodos();
             
-//            ComprobanteFisicoDisenioService servicio = new ComprobanteFisicoDisenioService();
-//            ComprobanteFisicoDisenio c2=servicio.obtenerTodos().get(0);
-//            AbstractFacade.detachRecursive(c2);
-            
-//            PersonaService servicio = new PersonaService();
-//            List <Persona> personas = servicio.obtenerTodos();
-//            for (Persona persona : personas) {
-//                System.out.println(" - " + persona);
-//            }
-            OrdenTrabajoService service = new OrdenTrabajoService();
-            OrdenTrabajo ordenTrabajo = (OrdenTrabajo) service.obtenerTodos().get(0);
-            System.out.println("Número de ordenes de trabajo: " + ordenTrabajo.getDetalles().size()); 
-            PresupuestoService servicio1 = new PresupuestoService();
-            List <OrdenTrabajoDetalle> ordenesTrabajoDetalles = servicio1.listarOrdenesTrabajo(ordenTrabajo);
-            for (OrdenTrabajoDetalle ordenTrabajoDetalle : ordenesTrabajoDetalles) {
-                System.out.println("-> " + ordenTrabajo.toString());
-            }
-                    
-            
-            /*
-            //et.begin();
-            //Usuario usuario=em.find(Usuario.class,"admin");
-            //usuario.setClave("12345");
-            //System.out.println(usuario);em.detach(et);            
-            ComprobanteFisicoDisenioService servicio = new ComprobanteFisicoDisenioService();
-            List<ComprobanteFisicoDisenio> documentos = servicio.obtenerTodos();
-            ComprobanteFisicoDisenio comprobante=documentos.get(0);
-            comprobante.setNombre("vvvvv");
-            ServiceAbstract.desasociarEntidadPersistencia(comprobante);
-            //em.detach(comprobante);
-            
-            ComprobanteFisicoDisenio c2=servicio.obtenerTodos().get(0);
-            System.out.println(c2.getNombre());
-            //em.merge(comprobante);
-            //et.commit();
-            
-            et= em.getTransaction();
-
-            //et.commit();
             et.begin();
-            Usuario usuario=em.find(Usuario.class,"admin");
-            usuario.setClave("12345");
+            for (KardexDetalle kd:detalleList) 
+            {
+                Integer signo= kd.getCodigoTipoDocumentoEnum().getSignoInventarioNumero();
+                kd.setSigno(signo);
+                em.merge(kd);
+            }
+            
             et.commit();
-            //System.out.println(usuario);*/
+
+            //Permitir actualizar de nuevo la suma de los valores por cada kardex
+            et.begin();
+            KardexService service=new KardexService();
+            List<Kardex> kardexList= service.obtenerTodos();
+            for (Kardex kardex : kardexList) {
+                
+                kardex.setStock(kardex.recalcularStock());
+                em.merge(kardex);                
+            }
+            
+            et.commit();
+            
             em.close();
             System.exit(0);
             

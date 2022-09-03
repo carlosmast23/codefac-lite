@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 public class TestClienteRMI {
     public static void main(String[] args) {
         try {
-            ServiceFactory.newController("192.168.1.7");
+            ServiceFactory.newController("192.168.200.3");
             //ServiceFactory.newController("186.4.212.15");
             //ServiceFactory.newController("192.168.100.13");
             
