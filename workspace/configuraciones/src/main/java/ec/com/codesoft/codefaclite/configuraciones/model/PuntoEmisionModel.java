@@ -97,6 +97,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         
         getCmbSucursal().setSelectedIndex(0);
         getCmbTipoFacturacion().setSelectedIndex(0);
+        getCmbTipoNotaVentaIntena().setSelectedIndex(0);
         
         getTxtPuntoEmision().setValue(new Integer(1));
         
@@ -159,15 +160,20 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         
         getCmbSucursal().setSelectedItem(puntoEmision.getSucursal());
         getCmbTipoFacturacion().setSelectedItem(puntoEmision.getTipoFacturacionEnum());
+        getCmbTipoNotaVentaIntena().setSelectedItem(puntoEmision.getTipoNotaVentaInternaEnum());
         
     }
 
     private void valoresIniciales() {
         
         getCmbTipoFacturacion().removeAllItems();
+        getCmbTipoNotaVentaIntena().removeAllItems();
         ComprobanteEntity.TipoEmisionEnum[] tipos = ComprobanteEntity.TipoEmisionEnum.values();
-        for (ComprobanteEntity.TipoEmisionEnum tipo : tipos) {
+        
+        for (ComprobanteEntity.TipoEmisionEnum tipo : tipos) 
+        {
             getCmbTipoFacturacion().addItem(tipo);
+            getCmbTipoNotaVentaIntena().addItem(tipo);
         }
         
         try {
@@ -204,6 +210,9 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         
         ComprobanteEntity.TipoEmisionEnum tipoEmisionEnum=(ComprobanteEntity.TipoEmisionEnum) getCmbTipoFacturacion().getSelectedItem();
         puntoEmision.setTipoFacturacion(tipoEmisionEnum.getLetra());
+        
+        ComprobanteEntity.TipoEmisionEnum tipoEmisionNVIEnum=(ComprobanteEntity.TipoEmisionEnum) getCmbTipoNotaVentaIntena().getSelectedItem();
+        puntoEmision.setTipoNotaVentaInterna(tipoEmisionNVIEnum.getLetra());
         
         
     }

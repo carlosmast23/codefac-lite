@@ -2326,7 +2326,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         
         //Setea para saber si es facturacion fisica o electronica el código
-        comprobante.setTipoFacturacion(puntoEmision.getTipoFacturacion());
+        if(comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            comprobante.setTipoFacturacion(puntoEmision.getTipoNotaVentaInterna());
+        }
+        else
+        {
+            comprobante.setTipoFacturacion(puntoEmision.getTipoFacturacion());
+        }
+        
         
         //Obtiene los secuenciales eletrónicos
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();

@@ -1611,7 +1611,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 DialogoCodefac.mensaje("Correcto", "La nota de venta interna se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                 //facturaManual(factura.getCodigoDocumentoEnum());
-                FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre);
+                if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
+                {
+                    reporteVentaManual(factura,documentoEnum,true,false);
+                }
+                else if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                {                    
+                    FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre);
+                }
             }
             else
             {
@@ -1759,7 +1766,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             InputStream reporteOriginal = null;
             if(documentoEnum.NOTA_VENTA_INTERNA.equals(documentoEnum))
             {                   
-                
+                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+                //TODO: Por el momento utilizo este artificio para poder mostrar en el mismo formato que las facturas
+                //TODO: pero ver si se puede mejorar esta parte para hacer mas estandar
+                documentoEnum=DocumentoEnum.FACTURA;
             }else if (documentoEnum.NOTA_VENTA.equals(documentoEnum)) {
                 reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
             } else if(documentoEnum.FACTURA.equals(documentoEnum)) {
@@ -2104,7 +2114,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     aliasNotaVentaInterna=FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA;
                 }    
                     
-                FacturaModelControlador.imprimirComprobanteVenta(factura,aliasNotaVentaInterna,false,session,panelPadre);
+                if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                {
+                    FacturaModelControlador.imprimirComprobanteVenta(factura,aliasNotaVentaInterna,false,session,panelPadre);
+                }
+                else if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
+                {
+                    try {
+                        reporteVentaManual(factura, factura.getCodigoDocumentoEnum(),false,false);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
         }
     }
