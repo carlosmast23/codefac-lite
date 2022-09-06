@@ -59,7 +59,7 @@ public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>
         queryDialog.agregarParametro(2, GeneralEnumEstado.ACTIVO.getEstado());
         if(this.session != null)
         {
-            queryDialog.agregarParametro(3, this.session.getMatriz());
+            queryDialog.agregarParametro(3, this.session.getSucursal());
         }
         
         return queryDialog;

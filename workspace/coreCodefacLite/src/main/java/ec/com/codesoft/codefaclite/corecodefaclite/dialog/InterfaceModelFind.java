@@ -31,4 +31,6 @@ public interface InterfaceModelFind<T>
     //public abstract Boolean buscarObjeto(T t,Object valor);
     public abstract Vector<String> getNamePropertysObject();
     
+    //public abstract Vector<ComponenteFiltro> getfiltrosList();
+    
 }

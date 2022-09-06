@@ -18,6 +18,8 @@ import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.Panel;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,12 +34,19 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -69,6 +78,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     private InterfaceModelFind model;
     private Object resultado;
     private List<Object> listaResultados;
+    private List<ComponenteFiltro> componenteFiltroList=new ArrayList<ComponenteFiltro>();
     
     /**
      * Variable que me permite configurar si la variable de busqueda quiero que normalize sin acentos o buscar de forma identica a lo escrito
@@ -113,13 +123,82 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();        
         normalizarTextoBusqueda=false;
+        crearFiltrosVista();
     }
+    
+    private void crearFiltrosVista()
+    {
+        //List<ComponenteFiltro> filtrosList= model.getfiltrosList();
+        List<ComponenteFiltro> filtrosList= new ArrayList<ComponenteFiltro>();
+        for (ComponenteFiltro componenteFiltro : filtrosList) 
+        {
+            if(componenteFiltro.tipoFiltroEnum.equals(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX))
+            {
+                JPanel panelCompontenteFiltro=crearComboxBox(componenteFiltro, componenteFiltroList);
+                agregarPanelFiltro(panelCompontenteFiltro, componenteFiltroList);
+            }
+        }
+    }
+    
+    private void agregarPanelFiltro(JPanel panel,List<ComponenteFiltro> componenteFiltroList)
+    {
+        if(componenteFiltroList.size()%2==0)
+        {
+            getPnlFiltroParametrosA().add(panel);
+        }
+        else
+        {
+            getPnlFiltroParametrosB().add(panel);
+        }
+        pack();
+    }
+    
+    private JPanel crearComboxBox(ComponenteFiltro componenteFiltro,List<ComponenteFiltro> componenteFiltroList)
+    {
+        JComboBox cmbFiltro=new JComboBox();
+        for (Object dato : componenteFiltro.listaDatos) 
+        {
+            cmbFiltro.addItem(dato);
+        }
+        
+        JPanel pnlNuevo=new JPanel();
+        pnlNuevo.setLayout(new BoxLayout(pnlNuevo, BoxLayout.X_AXIS));
+        pnlNuevo.add(new JLabel(componenteFiltro.titulo));
+        pnlNuevo.add(Box.createRigidArea(new Dimension(5, 0)));
+        pnlNuevo.add(cmbFiltro);
+        componenteFiltro.componenteVista=cmbFiltro;
+        componenteFiltroList.add(componenteFiltro);
+        //panelPadre.add(pnlNuevo);
+        
+        return pnlNuevo;
+    }
+    
+    
+   
     
     
     private void iniciarValores()
     {
         UtilidadesComboBox.llenarComboBox(getCmbTipoBusqueda(),TipoBusquedaEnum.values());
     }
+    
+    private Map<Integer,Object> obtenerDatosFiltro()
+    {
+        Map<Integer,Object> mapFiltro = new HashMap<Integer,Object>();
+        
+        for (ComponenteFiltro componenteFiltro : componenteFiltroList) 
+        {
+            if(componenteFiltro.tipoFiltroEnum.equals(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX))
+            {
+                JComboBox comboBox=(JComboBox) componenteFiltro.componenteVista;
+                Object valor=comboBox.getSelectedItem();
+                mapFiltro.put(componenteFiltro.numeroParametro, valor);
+            }
+        }
+        
+        return mapFiltro;
+    }
+
     
     /**
      * Consulta que obtiene datos segun los datos seteados
@@ -147,6 +226,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             }
             
             QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
+            agregarParametrosFiltros(queryDialog);
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             
             int limiteInferior=CANTIDAD_FILAS*(paginaActual-1);
@@ -165,6 +245,19 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    private void agregarParametrosFiltros(QueryDialog queryDialog)
+    {
+        Map<Integer,Object> mapFiltro = obtenerDatosFiltro();
+        for (Map.Entry<Integer, Object> entry : mapFiltro.entrySet()) 
+        {
+            Integer numeroParametro = entry.getKey();
+            Object valor = entry.getValue();
+            
+            queryDialog.agregarParametro(numeroParametro, valor);
+        }
+    
     }
     
     private void imprimirTexto()
@@ -232,7 +325,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 }
             }
             QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
-            
+            agregarParametrosFiltros(queryDialog);
             
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             /*String query=queryDialog.query;
@@ -329,6 +422,39 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         }
     }
        
+    /*private void agregarFiltroBusquedaEjemplo()
+    {
+        JPanel panelFiltroA= getPnlFiltroParametrosA();
+        JPanel panelFiltroB= getPnlFiltroParametrosB();
+        
+        /*JLabel tituloFiltro=new JLabel("Filtro: ");
+        panelFiltroA.add(tituloFiltro);
+        panelFiltroB.add(tituloFiltro);
+        
+        JComboBox<String> cmbDatos=new JComboBox<String>();
+        cmbDatos.addItem("dato1");
+        cmbDatos.addItem("dato2");
+        cmbDatos.addItem("dato3");
+        panelFiltroA.add(cmbDatos);
+        panelFiltroB.add(cmbDatos);*/
+        
+        /*GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        
+        JPanel pnlNuevo=new JPanel();
+        pnlNuevo.setLayout(new BoxLayout(pnlNuevo, BoxLayout.X_AXIS));
+        pnlNuevo.add(new JLabel("Filtro1"));
+        pnlNuevo.add(Box.createRigidArea(new Dimension(5, 0)));
+        pnlNuevo.add(new JComboBox());
+        panelFiltroA.add(pnlNuevo);
+        panelFiltroA.add(Box.createRigidArea(new Dimension(5, 5)));
+        
+        
+        
+        pack();
+        
+        
+    }*/
     
     private void initListener()
     {        
@@ -433,6 +559,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             @Override
             public void actionPerformed(ActionEvent e) {
                 ejecutarConsulta();
+                //agregarFiltroBusquedaEjemplo();
                 
             }
         });

@@ -21,7 +21,7 @@ create table PRODUCTO
     CODIGO_EAN varchar(70),
     CODIGO_UPC varchar(70),
     TIPO_PRODUCTO_COD varchar(1),
-    NOMBRE varchar(100),
+    NOMBRE varchar(300),
     VALOR_UNITARIO decimal(13,5),
     ESTADO varchar(1),
     UBICACION varchar(100),

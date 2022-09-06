@@ -32,6 +32,17 @@ public abstract class UtilidadesLista {
         return StringUtils.join(lista,caracter);
     }
     
+    //TODO: Unificar este metodo con el de más abajo
+    public static List<String> castListToListString(List lista,CastListInterface interfaz)
+    {
+        List<String> datos=new ArrayList<String>();
+        for (Object object : lista) {
+            String textoNuevo=interfaz.getString(object);
+            datos.add(textoNuevo);
+        }
+        return datos;
+    }
+    
     public static String castListToString(List lista,String caracter,CastListInterface interfaz)
     {
         List<String> datos=new ArrayList<String>();

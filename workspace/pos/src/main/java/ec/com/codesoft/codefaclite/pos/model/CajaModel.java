@@ -35,11 +35,12 @@ import java.util.logging.Logger;
  */
 public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaModelControlador.SwingIf{
      
-    private CajaModelControlador controlador=new CajaModelControlador(DialogoCodefac.intefaceMensaje, session, this,ModelControladorAbstract.TipoVista.ESCRITORIO);
+    private CajaModelControlador controlador=null;
     private PuntoEmision puntoEmision;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        controlador=new CajaModelControlador(DialogoCodefac.intefaceMensaje, session, this,ModelControladorAbstract.TipoVista.ESCRITORIO);
         this.controlador.iniciar();
         listenerCombos();
     }

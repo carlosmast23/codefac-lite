@@ -69,7 +69,11 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         caja.setDescripcion("");
         caja.setEstadoEnum(CajaEnum.ACTIVO);
         
-        sucursalList = ServiceFactory.getFactory().getSucursalServiceIf().obtenerTodos();
+        try {
+            sucursalList = ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(session.getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
         estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
     }
 
