@@ -17,6 +17,7 @@ public class ComponenteFiltro {
     public Integer numeroParametro;
     public List listaDatos;
     public Object componenteVista;
+    public FiltroParametroIf filtroParametroIf;
 
     public ComponenteFiltro(TipoFiltroEnum tipoFiltroEnum, String titulo,Integer numeroParametro, List listaDatos) 
     {
@@ -26,11 +27,11 @@ public class ComponenteFiltro {
         this.listaDatos = listaDatos;
     }
     
-    /*public ComponenteFiltro(TipoFiltroEnum tipoFiltroEnum, String titulo,String parametroSql, String[] listaDatos) 
+    /*public ComponenteFiltro(TipoFiltroEnum tipoFiltroEnum, String titulo,Integer numeroParametro, List[] listaDatos) 
     {
         this.tipoFiltroEnum = tipoFiltroEnum;
         this.titulo = titulo;
-        this.parametroSql=parametroSql;
+        this.numeroParametro=numeroParametro;
         this.listaDatos = UtilidadesLista.arrayToList(listaDatos);
     }*/
     
@@ -42,5 +43,10 @@ public class ComponenteFiltro {
         COMBO_BOX,
         TEXTO,
         CHECK;
+    }
+    
+    public interface FiltroParametroIf<T>
+    {
+        public Object getValor(T dato);
     }
 }

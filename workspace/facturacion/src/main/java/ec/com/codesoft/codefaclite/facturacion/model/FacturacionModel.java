@@ -1615,7 +1615,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     reporteVentaManual(factura,documentoEnum,true,false);
                 }
-                else if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                else if(factura.getTipoFacturacionEnum()==null ||  factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {                    
                     FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre);
                 }
@@ -2114,7 +2114,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     aliasNotaVentaInterna=FacturacionModel.NOMBRE_REPORTE_FACTURA_INTERNA;
                 }    
                     
-                if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                if(factura.getTipoFacturacionEnum()==null || factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
                     FacturaModelControlador.imprimirComprobanteVenta(factura,aliasNotaVentaInterna,false,session,panelPadre);
                 }

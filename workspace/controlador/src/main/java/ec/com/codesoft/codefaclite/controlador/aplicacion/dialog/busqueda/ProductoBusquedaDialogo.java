@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 
@@ -35,7 +36,7 @@ import java.util.logging.Logger;
  *
  * @author PC
  */
-public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , InterfacesPropertisFindWeb
+public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , InterfacesPropertisFindWeb,FiltroDialogoIf
 {
     
     
@@ -163,7 +164,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         }
         //Producto p;
         //p.getMarcaProducto().getNombre();
-        String filtroMarca=" ( u.marcaProducto.nombre = ?97 ) OR ";
+        String filtroMarca="";
+        
+        if(filtroMarca!=null)
+        {
+            filtroMarca=" AND ( u.marcaProducto=?97 ) ";
+        }
                 
         String queryString = "SELECT u FROM Producto u WHERE 1=1 "+filtroMarca+queryFiltroEmpresa+" and (u.estado=?1) "+queryExtra+whereManejaInventario;        
         

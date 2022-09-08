@@ -65,9 +65,9 @@ create table PERSONA_ESTABLECIMIENTO(
     CODIGO_SUCURSAL varchar(3),
     NOMBRE_COMERCIAL varchar(256),
     DIRECCION varchar(1024), 
-    TELEFONO_CONVENCIONAL varchar(9),
+    TELEFONO_CONVENCIONAL varchar(64),
     EXTENSION_TELEFONO varchar(4), 
-    TELEFONO_CELULAR varchar(10), 
+    TELEFONO_CELULAR varchar(64), 
     CORREO_ELECTRONICO varchar(300),
     TIPO_SUCURSAL varchar(3),    
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.3.7)*/

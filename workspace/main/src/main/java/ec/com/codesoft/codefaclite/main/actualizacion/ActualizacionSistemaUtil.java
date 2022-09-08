@@ -95,11 +95,11 @@ public class ActualizacionSistemaUtil {
                     establecimiento.setCodigoSucursal("1");
                     establecimiento.setCorreoElectronico(persona.getCorreoElectronico());
                     //establecimiento.setDireccion(persona.getDireccion());
-                    establecimiento.setExtensionTelefono(persona.getExtensionTelefono());
-                    establecimiento.setNombreComercial(persona.getNombreLegal());
+                    //establecimiento.setExtensionTelefono(persona.getExtensionTelefono());
+                    //establecimiento.setNombreComercial(persona.getNombreLegal());
                     establecimiento.setPersona(persona);
-                    establecimiento.setTelefonoCelular(persona.getTelefonoCelular());
-                    establecimiento.setTelefonoConvencional(persona.getTelefonoConvencional());
+                    //establecimiento.setTelefonoCelular(persona.getTelefonoCelular());
+                    //establecimiento.setTelefonoConvencional(persona.getTelefonoConvencional());
                     establecimiento.setTipoSucursalEnum(Sucursal.TipoSucursalEnum.MATRIZ);                
                     persona.addEstablecimiento(establecimiento);
 

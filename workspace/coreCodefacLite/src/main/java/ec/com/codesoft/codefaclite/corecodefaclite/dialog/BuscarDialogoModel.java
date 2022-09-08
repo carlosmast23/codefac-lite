@@ -116,6 +116,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     {
         this.model=model;
         iniciarValores();
+        crearFiltrosVista();
         initListener();
         //crearConsulta("");
         ejecutarConsulta();
@@ -123,32 +124,40 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();        
         normalizarTextoBusqueda=false;
-        crearFiltrosVista();
+        
     }
     
     private void crearFiltrosVista()
     {
-        //List<ComponenteFiltro> filtrosList= model.getfiltrosList();
-        List<ComponenteFiltro> filtrosList= new ArrayList<ComponenteFiltro>();
-        for (ComponenteFiltro componenteFiltro : filtrosList) 
+        getPnlFiltros().setVisible(false);
+        if(model instanceof FiltroDialogoIf)
         {
-            if(componenteFiltro.tipoFiltroEnum.equals(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX))
+            getPnlFiltros().setVisible(true);
+            FiltroDialogoIf filtroDialogIf=(FiltroDialogoIf) model;
+            List<ComponenteFiltro> filtrosList= filtroDialogIf.getfiltrosList();
+            //List<ComponenteFiltro> filtrosList= new ArrayList<ComponenteFiltro>();
+            for (ComponenteFiltro componenteFiltro : filtrosList) 
             {
-                JPanel panelCompontenteFiltro=crearComboxBox(componenteFiltro, componenteFiltroList);
-                agregarPanelFiltro(panelCompontenteFiltro, componenteFiltroList);
+                if(componenteFiltro.tipoFiltroEnum.equals(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX))
+                {
+                    JPanel panelCompontenteFiltro=crearComboxBox(componenteFiltro, componenteFiltroList);
+                    agregarPanelFiltro(panelCompontenteFiltro, componenteFiltroList);
+                }
             }
-        }
+        }        
     }
     
     private void agregarPanelFiltro(JPanel panel,List<ComponenteFiltro> componenteFiltroList)
     {
         if(componenteFiltroList.size()%2==0)
         {
-            getPnlFiltroParametrosA().add(panel);
+            getPnlFiltroParametrosB().add(panel);
+            getPnlFiltroParametrosB().add(Box.createRigidArea(new Dimension(10, 10)));
         }
         else
         {
-            getPnlFiltroParametrosB().add(panel);
+            getPnlFiltroParametrosA().add(panel);
+            getPnlFiltroParametrosA().add(Box.createRigidArea(new Dimension(10, 10)));
         }
         pack();
     }
@@ -156,11 +165,12 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     private JPanel crearComboxBox(ComponenteFiltro componenteFiltro,List<ComponenteFiltro> componenteFiltroList)
     {
         JComboBox cmbFiltro=new JComboBox();
+        cmbFiltro.addItem(null);
         for (Object dato : componenteFiltro.listaDatos) 
         {
             cmbFiltro.addItem(dato);
         }
-        
+        cmbFiltro.setSelectedItem(null);
         JPanel pnlNuevo=new JPanel();
         pnlNuevo.setLayout(new BoxLayout(pnlNuevo, BoxLayout.X_AXIS));
         pnlNuevo.add(new JLabel(componenteFiltro.titulo));
@@ -191,7 +201,13 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             if(componenteFiltro.tipoFiltroEnum.equals(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX))
             {
                 JComboBox comboBox=(JComboBox) componenteFiltro.componenteVista;
+                
                 Object valor=comboBox.getSelectedItem();
+                if(valor!=null && componenteFiltro.filtroParametroIf!=null)
+                {
+                    valor=componenteFiltro.filtroParametroIf.getValor(valor);
+                }
+                
                 mapFiltro.put(componenteFiltro.numeroParametro, valor);
             }
         }
@@ -225,8 +241,10 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 }
             }
             
+            
             QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
-            agregarParametrosFiltros(queryDialog);
+            agregarParametrosFiltros(queryDialog,this.model);
+            
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             
             int limiteInferior=CANTIDAD_FILAS*(paginaActual-1);
@@ -247,17 +265,55 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         
     }
     
-    private void agregarParametrosFiltros(QueryDialog queryDialog)
+    private void agregarParametrosFiltros(QueryDialog queryDialog,InterfaceModelFind model)
     {
-        Map<Integer,Object> mapFiltro = obtenerDatosFiltro();
-        for (Map.Entry<Integer, Object> entry : mapFiltro.entrySet()) 
+        String query=queryDialog.query;
+        if (model instanceof FiltroDialogoIf) 
         {
-            Integer numeroParametro = entry.getKey();
-            Object valor = entry.getValue();
-            
-            queryDialog.agregarParametro(numeroParametro, valor);
+            Map<Integer,Object> mapFiltro = obtenerDatosFiltro();
+            for (Map.Entry<Integer, Object> entry : mapFiltro.entrySet()) 
+            {
+                Integer numeroParametro = entry.getKey();
+                Object valor = entry.getValue();
+                
+                if(valor==null)
+                {
+                    query=remplazarParametroVerdadero(query, numeroParametro);
+                }
+                else
+                {
+                    queryDialog.agregarParametro(numeroParametro, valor);
+                }
+                
+            }
         }
+        queryDialog.query=query;
+        //return query;
     
+    }
+    
+    //El objetivo de este metodo es encontrar un parametro y modificar por una igualdad
+    //Ejemplo  p.nombre=?1 ==> 1=1
+    private String remplazarParametroVerdadero(String query,Integer numeroParametro)
+    {
+        //Dividir el query en 2 textos antes y despues del caracteres que estoy buscando
+        Integer posicionParametro=query.indexOf("?"+numeroParametro.toString());
+        String queryPrimeraParte=query.substring(0,posicionParametro);
+        String querySegundaParte=query.substring(posicionParametro,query.length());
+        
+        //Buscar en la parte derecha el tramo que debo eliminar hasta encontrar el primer espacio        
+        Integer primerEspacio=querySegundaParte.indexOf(" ");        
+        querySegundaParte=querySegundaParte.substring(primerEspacio,querySegundaParte.length());
+        
+        
+        //Buscar en la parte izquierda el primer tramo antes de un espacio
+        String textoInvertido=new StringBuilder(queryPrimeraParte).reverse().toString();
+        Integer posicionCorte = textoInvertido.indexOf(" ");
+        queryPrimeraParte=queryPrimeraParte.substring(0,queryPrimeraParte.length()-posicionCorte);
+        
+        //unificar el query total para retornar
+        String queryModificado=queryPrimeraParte+" 1=1 "+querySegundaParte;
+        return queryModificado;
     }
     
     private void imprimirTexto()
@@ -325,7 +381,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 }
             }
             QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
-            agregarParametrosFiltros(queryDialog);
+            agregarParametrosFiltros(queryDialog,this.model);
             
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             /*String query=queryDialog.query;

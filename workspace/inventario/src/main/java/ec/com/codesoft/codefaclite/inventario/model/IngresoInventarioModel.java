@@ -782,7 +782,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
      * Funcion que me permite generar solo los detalles del kardex seleccionados
      * @return devuelve el numero de items no seleccionados
      */
-    private int generarKardexDetalleSeleccionados()
+    private int generarKardexDetalleSeleccionados() throws ServicioCodefacException
     {
         int datosEliminados=0; //TODO: Optimizar como contar los datos eliminados porque por ejemplo en los productos que tienen garantia solo debe contar una vez por los detalles especificos
         detallesKardexFinal=new ArrayList<KardexDetalle>();
@@ -803,6 +803,11 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 {
                     producto=producto.buscarProductoEmpaquePrincipal();
                     BigDecimal cantidadPorCaja= producto.obtenerCantidadPorCaja();
+                    
+                    if(cantidadPorCaja.compareTo(BigDecimal.ZERO)==0)
+                    {
+                        throw new ServicioCodefacException("Las cantidades de las conversiones no pueden ser CERO, producto: "+producto.getNombre());
+                    }
                                         
                     kardexDetalle.setCantidad(kardexDetalle.getCantidad().multiply(cantidadPorCaja));
                     kardexDetalle.setPrecioUnitario(kardexDetalle.getPrecioUnitario().divide(cantidadPorCaja,6,BigDecimal.ROUND_HALF_UP));

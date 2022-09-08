@@ -306,7 +306,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         Map<String,Object> parametros=new HashMap<String,Object>();
         parametros.put("identificacion", presupuesto.getPersona().getIdentificacion());
         parametros.put("razonSocial", presupuesto.getPersona().getRazonSocial());
-        parametros.put("telefonos",(presupuesto.getPersona().getTelefonoCelular()!=null )?presupuesto.getPersona().getTelefonoCelular():"");
+        parametros.put("telefonos",(presupuesto.getPersona().getEstablecimientos().get(0).getTelefonoCelular()!=null )?presupuesto.getPersona().getEstablecimientos().get(0).getTelefonoCelular():"");
         parametros.put("direccion", (presupuesto.getPersona().getEstablecimientos().get(0).getDireccion()!=null)?presupuesto.getPersona().getEstablecimientos().get(0).getDireccion():"");
         parametros.put("estado", presupuesto.getEstadoEnum().getNombre());
         parametros.put("fecha", presupuesto.getFechaPresupuesto().toString());

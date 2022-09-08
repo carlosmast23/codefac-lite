@@ -60,24 +60,24 @@ public class Persona implements Serializable, Comparable<Persona> {
     @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
 
-    @Deprecated
-    @Column(name = "NOMBRE_LEGAL")
-    private String nombreLegal;
+    //@Deprecated
+    //@Column(name = "NOMBRE_LEGAL")
+    //private String nombreLegal;
 
     //@Deprecated
     //@Column(name = "DIRECCION")
     //private String direccion;
-    @Deprecated
-    @Column(name = "TELEFONO_CONVENCIONAL")
-    private String telefonoConvencional;
+    //@Deprecated
+    //@Column(name = "TELEFONO_CONVENCIONAL")
+    //private String telefonoConvencional;
 
-    @Deprecated
-    @Column(name = "EXTENSION_TELEFONO")
-    private String extensionTelefono;
+    //@Deprecated
+    //@Column(name = "EXTENSION_TELEFONO")
+    //private String extensionTelefono;
 
-    @Deprecated
-    @Column(name = "TELEFONO_CELULAR")
-    private String telefonoCelular;
+    //@Deprecated
+    //@Column(name = "TELEFONO_CELULAR")
+    //private String telefonoCelular;
 
     @Column(name = "TIPO_CLIENTE")
     private String tipCliente;
@@ -175,13 +175,13 @@ public class Persona implements Serializable, Comparable<Persona> {
         this.razonSocial = razonSocial;
     }
 
-    public String getNombreLegal() {
+    /*public String getNombreLegal() {
         return nombreLegal;
     }
 
     public void setNombreLegal(String nombreLegal) {
         this.nombreLegal = nombreLegal;
-    }
+    }*/
 
     public String getTipCliente() {
         return tipCliente;
@@ -201,7 +201,7 @@ public class Persona implements Serializable, Comparable<Persona> {
     //public void setDireccion(String direccion) {
     //    this.direccion = direccion;
     //}
-    public String getTelefonoConvencional() {
+    /*public String getTelefonoConvencional() {
         return telefonoConvencional;
     }
 
@@ -223,7 +223,7 @@ public class Persona implements Serializable, Comparable<Persona> {
 
     public void setTelefonoCelular(String telefonoCelular) {
         this.telefonoCelular = telefonoCelular;
-    }
+    }*/
 
     /*public String getCorreoElectronico() {
         return correoElectronico;

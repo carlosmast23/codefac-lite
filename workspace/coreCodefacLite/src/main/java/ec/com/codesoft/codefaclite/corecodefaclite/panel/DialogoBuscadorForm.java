@@ -58,8 +58,6 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         tblTabla = new javax.swing.JTable();
         pnlFiltros = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        blas = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         pnlFiltroParametrosA = new javax.swing.JPanel();
         pnlFiltroParametrosB = new javax.swing.JPanel();
         lblEspacio = new javax.swing.JLabel();
@@ -123,7 +121,7 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel5.add(jPanel1, gridBagConstraints);
@@ -160,7 +158,7 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel5.add(jPanel3, gridBagConstraints);
@@ -183,7 +181,7 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 4;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.gridwidth = 5;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 0.1;
@@ -202,34 +200,22 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     gridBagConstraints.gridwidth = 5;
     jPanel5.add(pnlFiltros, gridBagConstraints);
 
-    blas.setText("Filtro2");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 3;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.weightx = 0.1;
-    jPanel5.add(blas, gridBagConstraints);
-
-    jLabel4.setText("Filtro1");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.ipadx = 10;
-    gridBagConstraints.ipady = 10;
-    gridBagConstraints.weightx = 0.1;
-    jPanel5.add(jLabel4, gridBagConstraints);
-
     pnlFiltroParametrosA.setLayout(new javax.swing.BoxLayout(pnlFiltroParametrosA, javax.swing.BoxLayout.Y_AXIS));
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 0.1;
     jPanel5.add(pnlFiltroParametrosA, gridBagConstraints);
 
     pnlFiltroParametrosB.setLayout(new javax.swing.BoxLayout(pnlFiltroParametrosB, javax.swing.BoxLayout.Y_AXIS));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 3;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 0.1;
     gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
     jPanel5.add(pnlFiltroParametrosB, gridBagConstraints);
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -292,7 +278,6 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel blas;
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnCancelar;
@@ -303,7 +288,6 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     private javax.swing.JComboBox<TipoBusquedaEnum> cmbTipoBusqueda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

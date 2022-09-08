@@ -6,12 +6,16 @@
 package ec.com.codesoft.codefaclite.cartera.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -19,7 +23,7 @@ import java.util.Vector;
  *
  * @author Carlos
  */
-public class CarteraBusqueda implements InterfaceModelFind<Cartera> 
+public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialogoIf
 {
     /**
      * Variable para filtrar solo los que tengan saldo pendiente
@@ -65,13 +69,14 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
     @Override
     public QueryDialog getConsulta(String filter) {
         //Cartera cartera;        
-        //cartera.getFechaCreacion();
+        //cartera.getCarteraDocumentoEnum()
         //cartera.getSecuencial();
         //cartera.getPersona().getRazonSocial();
         //cartera.getPreimpreso();
         
+        String filtroStr=" AND ( u.codigoDocumento=?97 ) ";
         
-        String queryString = "SELECT u FROM Cartera u WHERE 1=1 ";
+        String queryString = "SELECT u FROM Cartera u WHERE 1=1 "+ filtroStr;
         
         if(documentosEnum!=null)
         {
@@ -174,6 +179,30 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
     @Override
     public Vector<String> getNamePropertysObject() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Vector<ComponenteFiltro> getfiltrosList() {
+        //Cartera c;
+        List<DocumentoEnum> documentoList=new ArrayList<DocumentoEnum>();
+        
+        
+        Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();
+        List<DocumentoEnum> documentoLista=UtilidadesLista.arrayToList(DocumentoEnum.values());
+        
+        ComponenteFiltro componenteFiltro = new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX, "documento: ", 97, documentoLista);
+        
+        componenteFiltro.filtroParametroIf = new ComponenteFiltro.FiltroParametroIf<DocumentoEnum>() {
+            @Override
+            public Object getValor(DocumentoEnum dato) {
+                return dato.getCodigo();
+            }
+        };
+        
+        filtroList.add(componenteFiltro);
+        //List;
+        
+        return filtroList;
     }
     
 }

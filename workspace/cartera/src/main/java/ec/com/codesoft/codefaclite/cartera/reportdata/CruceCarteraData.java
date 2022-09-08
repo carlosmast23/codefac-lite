@@ -120,7 +120,7 @@ public class CruceCarteraData {
             CruceCarteraData data=new CruceCarteraData();
             
             data.setIdentificacion(cartera.getPersona().getIdentificacion());
-            String nombreLegal=(cartera.getPersona().getNombreLegal()!=null)?cartera.getPersona().getNombreLegal():"";
+            String nombreLegal=(cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial()!=null)?cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial():"";
             data.setNombreLegal(nombreLegal);
             data.setRazonSocial(cartera.getPersona().getRazonSocial());
             data.setDocumento(cartera.getCarteraDocumentoEnum().getNombre());
@@ -137,7 +137,7 @@ public class CruceCarteraData {
                 data=new CruceCarteraData();
                 //TODO:Optmizar codigo repetido
                 data.setIdentificacion(cartera.getPersona().getIdentificacion());
-                String nombreLegal2=(cartera.getPersona().getNombreLegal()!=null)?cartera.getPersona().getNombreLegal():"";
+                String nombreLegal2=(cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial()!=null)?cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial():"";
                 data.setNombreLegal(nombreLegal2);
                 data.setRazonSocial(cartera.getPersona().getRazonSocial());
                 data.setDocumento(cruce.getCarteraDetalle().getCartera().getCarteraDocumentoEnum().getNombre());
