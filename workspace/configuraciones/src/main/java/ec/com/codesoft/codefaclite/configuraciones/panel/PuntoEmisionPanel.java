@@ -71,6 +71,8 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         lblEspacio5 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtGuiaRemisionInterna = new javax.swing.JSpinner();
+        jLabel20 = new javax.swing.JLabel();
+        cmbTipoNotaVentaIntena = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -318,6 +320,22 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtGuiaRemisionInterna, gridBagConstraints);
 
+        jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel20.setText("Tipo de Nota Venta Interna:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel20, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(cmbTipoNotaVentaIntena, gridBagConstraints);
+
         jTabbedPane1.addTab("Documentos Internos", jPanel2);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
@@ -329,12 +347,14 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<Sucursal> cmbSucursal;
     private javax.swing.JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoFacturacion;
+    private javax.swing.JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoNotaVentaIntena;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -428,8 +448,14 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     public void setTxtGuiaRemisionInterna(JSpinner txtGuiaRemisionInterna) {
         this.txtGuiaRemisionInterna = txtGuiaRemisionInterna;
     }
-    
-    
 
+    public JComboBox<ComprobanteEntity.TipoEmisionEnum> getCmbTipoNotaVentaIntena() {
+        return cmbTipoNotaVentaIntena;
+    }
+
+    public void setCmbTipoNotaVentaIntena(JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoNotaVentaIntena) {
+        this.cmbTipoNotaVentaIntena = cmbTipoNotaVentaIntena;
+    }
+    
     
 }

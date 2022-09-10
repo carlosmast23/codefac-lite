@@ -1082,7 +1082,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{9}$",nombre = "Celular", expresionRegularMensaje = "Ingrese un número de celular valido" )
+    //@ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{9}$",nombre = "Celular", expresionRegularMensaje = "Ingrese un número de celular valido" )
+    @ValidacionCodefacAnotacion(requerido=false ,nombre = "Celular", expresionRegularMensaje = "Ingrese un número de celular valido" )
     public JTextField getjTextCelular() {
         return jTextCelular;
     }
@@ -1135,7 +1136,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{8}$",nombre = "Telefono", expresionRegularMensaje = "Anteponga el código provincial")
+    //@ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{8}$",nombre = "Telefono", expresionRegularMensaje = "Anteponga el código provincial")
+    @ValidacionCodefacAnotacion(requerido=false ,nombre = "Telefono", expresionRegularMensaje = "Anteponga el código provincial")
     public JTextField getjTextTelefono() {
         return jTextTelefono;
     }

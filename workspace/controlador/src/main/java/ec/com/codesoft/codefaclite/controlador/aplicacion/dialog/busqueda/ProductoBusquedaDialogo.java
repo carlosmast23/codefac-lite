@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 
@@ -14,12 +16,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,8 +36,10 @@ import java.util.logging.Logger;
  *
  * @author PC
  */
-public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , InterfacesPropertisFindWeb
+public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , InterfacesPropertisFindWeb,FiltroDialogoIf
 {
+    
+    
     private Empresa empresa;
     /**
      * Variable para hacer ese filtro cuando lo requiera
@@ -151,9 +162,16 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             //Si los datos son compratidos entre empresas entoces no hago ningun filtro
             queryFiltroEmpresa = "";
         }
+        //Producto p;
+        //p.getMarcaProducto().getNombre();
+        String filtroMarca="";
         
-        
-        String queryString = "SELECT u FROM Producto u WHERE 1=1 "+queryFiltroEmpresa+" and (u.estado=?1) "+queryExtra+whereManejaInventario;        
+        if(filtroMarca!=null)
+        {
+            filtroMarca=" AND ( u.marcaProducto=?97 ) ";
+        }
+                
+        String queryString = "SELECT u FROM Producto u WHERE 1=1 "+filtroMarca+queryFiltroEmpresa+" and (u.estado=?1) "+queryExtra+whereManejaInventario;        
         
         if (generarCodigoBarrasEnum != null) {
             queryString+=" and  u.generarCodigoBarras=?3 ";
@@ -218,6 +236,29 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         this.tipoProductoEnum = tipoProductoEnum;
     }
     
+    public  Vector<ComponenteFiltro> getfiltrosList()
+    {
+        try {
+            List<MarcaProducto> marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(empresa);
+            
+            Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();
+            //UtilidadesLista.castListToListString(marcaList, new UtilidadesLista.CastListInterface<MarcaProducto>() {
+                        
+            //UtilidadesLista.castListToString(marcaList, caracter, interfaz);
+            
+            ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"marca",97,marcaList);
+            
+            filtroList.add(componenteFiltro);
+            
+            return filtroList;
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
     
     

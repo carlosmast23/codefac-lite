@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBusquedaEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -36,6 +37,8 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jLabel2 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnAceptar = new javax.swing.JButton();
@@ -53,12 +56,22 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         cmbTipoBusqueda = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTabla = new javax.swing.JTable();
+        pnlFiltros = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        pnlFiltroParametrosA = new javax.swing.JPanel();
+        pnlFiltroParametrosB = new javax.swing.JPanel();
+        lblEspacio = new javax.swing.JLabel();
+
+        jLabel2.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Buscar");
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -70,13 +83,20 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         btnCancelar.setText("Cancelar");
         jPanel2.add(btnCancelar);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_END);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(jPanel2, gridBagConstraints);
 
         lblPiePagina.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblPiePagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPiePagina.setToolTipText("");
         lblPiePagina.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(lblPiePagina, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(lblPiePagina, gridBagConstraints);
 
         btnPrimero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flecha_primero.png"))); // NOI18N
         btnPrimero.setToolTipText("Inicio");
@@ -94,9 +114,17 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         btnUltimo.setToolTipText("Fin");
         jPanel4.add(btnUltimo);
 
-        jPanel1.add(jPanel4, java.awt.BorderLayout.LINE_START);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(jPanel4, gridBagConstraints);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel5.add(jPanel1, gridBagConstraints);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -128,7 +156,12 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         gridBagConstraints.gridy = 0;
         jPanel3.add(cmbTipoBusqueda, gridBagConstraints);
 
-        getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_START);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel5.add(jPanel3, gridBagConstraints);
 
         tblTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -146,7 +179,53 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     tblTabla.setUpdateSelectionOnSort(false);
     jScrollPane1.setViewportView(tblTabla);
 
-    getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.gridwidth = 5;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 0.1;
+    gridBagConstraints.weighty = 0.1;
+    jPanel5.add(jScrollPane1, gridBagConstraints);
+
+    pnlFiltros.setLayout(new java.awt.GridBagLayout());
+
+    jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+    jLabel1.setText("Filtros Busqueda");
+    pnlFiltros.add(jLabel1, new java.awt.GridBagConstraints());
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridwidth = 5;
+    jPanel5.add(pnlFiltros, gridBagConstraints);
+
+    pnlFiltroParametrosA.setLayout(new javax.swing.BoxLayout(pnlFiltroParametrosA, javax.swing.BoxLayout.Y_AXIS));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 0.1;
+    jPanel5.add(pnlFiltroParametrosA, gridBagConstraints);
+
+    pnlFiltroParametrosB.setLayout(new javax.swing.BoxLayout(pnlFiltroParametrosB, javax.swing.BoxLayout.Y_AXIS));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 0.1;
+    gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
+    jPanel5.add(pnlFiltroParametrosB, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 0.1;
+    jPanel5.add(lblEspacio, gridBagConstraints);
+
+    getContentPane().add(jPanel5);
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -207,13 +286,20 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnUltimo;
     private javax.swing.JComboBox<TipoBusquedaEnum> cmbTipoBusqueda;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JLabel lblTextoBuscar;
+    private javax.swing.JPanel pnlFiltroParametrosA;
+    private javax.swing.JPanel pnlFiltroParametrosB;
+    private javax.swing.JPanel pnlFiltros;
     private javax.swing.JTable tblTabla;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
@@ -321,7 +407,31 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     public void setCmbTipoBusqueda(JComboBox<TipoBusquedaEnum> cmbTipoBusqueda) {
         this.cmbTipoBusqueda = cmbTipoBusqueda;
     }
-    
+
+    public JPanel getPnlFiltros() {
+        return pnlFiltros;
+    }
+
+    public void setPnlFiltros(JPanel pnlFiltros) {
+        this.pnlFiltros = pnlFiltros;
+    }
+
+    public JPanel getPnlFiltroParametrosA() {
+        return pnlFiltroParametrosA;
+    }
+
+    public void setPnlFiltroParametrosA(JPanel pnlFiltroParametrosA) {
+        this.pnlFiltroParametrosA = pnlFiltroParametrosA;
+    }
+
+    public JPanel getPnlFiltroParametrosB() {
+        return pnlFiltroParametrosB;
+    }
+
+    public void setPnlFiltroParametrosB(JPanel pnlFiltroParametrosB) {
+        this.pnlFiltroParametrosB = pnlFiltroParametrosB;
+    }
+        
     
     
 

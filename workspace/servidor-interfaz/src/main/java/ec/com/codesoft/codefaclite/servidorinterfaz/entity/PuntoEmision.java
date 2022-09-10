@@ -72,6 +72,10 @@ public class PuntoEmision implements Serializable{
     @Column(name = "SECUENCIAL_LIQUIDACION_COMPRA")
     private Integer secuencialLiquidacionCompra;
     
+    
+    @Column(name = "TIPO_NOTA_VENTA_INTERNA")
+    private String tipoNotaVentaInterna;
+    
     @JoinColumn(name = "SUCURSAL_ID")
     private Sucursal sucursal;
 
@@ -207,7 +211,23 @@ public class PuntoEmision implements Serializable{
     public void setSecuencialGuiaRemisionInterna(Integer secuencialGuiaRemisionInterna) {
         this.secuencialGuiaRemisionInterna = secuencialGuiaRemisionInterna;
     }
+
+    public String getTipoNotaVentaInterna() {
+        return tipoNotaVentaInterna;
+    }
+
+    public void setTipoNotaVentaInterna(String tipoNotaVentaInterna) {
+        this.tipoNotaVentaInterna = tipoNotaVentaInterna;
+    }
     
+    public ComprobanteEntity.TipoEmisionEnum getTipoNotaVentaInternaEnum() 
+    {
+        return ComprobanteEntity.TipoEmisionEnum.getEnumByLetra(tipoNotaVentaInterna);
+    }
+
+    public void setTipoNotaVentaInternaEnum(ComprobanteEntity.TipoEmisionEnum tipoEmisionEnum) {
+        this.tipoFacturacion = tipoEmisionEnum.getLetra();
+    }
     
     
     

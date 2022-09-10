@@ -81,7 +81,7 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
     
     public List<MarcaProducto> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException
     {
-        return (List<MarcaProducto>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+        /*return (List<MarcaProducto>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParameros=new HashMap<String, Object>();
@@ -89,7 +89,13 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
                 mapParameros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                 return getFacade().findByMap(mapParameros);
             }
-        } );
+        } );*/
+        return (List<MarcaProducto>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                return getFacade().obtenerActivosPorEmpresa(empresa);
+            }
+        });
     }
     
     public MarcaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException

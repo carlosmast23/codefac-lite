@@ -1933,7 +1933,19 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         } 
         
         //Agregar el campo para saber si es regimen microempresas
-        EnumSiNo regimenMicroEmpresasEnum=(empresa.getContribuyenteRegimenMicroempresasEnum()!=null)?empresa.getContribuyenteRegimenMicroempresasEnum():EnumSiNo.NO;
+        //TODO: Por el momento voy a utilizar este campo para mandar los datos para RIMPE, pero esta de cambiar los nombres
+        EnumSiNo regimenMicroEmpresasEnum=EnumSiNo.NO;
+        if(empresa.getRimpeEmprendedoresEnum()!=null && empresa.getRimpeEmprendedoresEnum().equals(EnumSiNo.SI))
+        {
+            regimenMicroEmpresasEnum=EnumSiNo.SI;
+        }
+        
+        if(empresa.getRimpeNegociosPopularesEnum()!=null && empresa.getRimpeNegociosPopularesEnum().equals(EnumSiNo.SI))
+        {
+            regimenMicroEmpresasEnum=EnumSiNo.SI;
+        }
+        
+        //EnumSiNo regimenMicroEmpresasEnum=(empresa.get!=null)?empresa.getContribuyenteRegimenMicroempresasEnum():EnumSiNo.NO;
         parametros.put("pl_contribuyenteRegimenMicroempresas", regimenMicroEmpresasEnum.getLetra());
         
         if(empresa.getAgenteRetencionResolucion()!=null)
@@ -2326,7 +2338,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         
         //Setea para saber si es facturacion fisica o electronica el código
-        comprobante.setTipoFacturacion(puntoEmision.getTipoFacturacion());
+        if(comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            comprobante.setTipoFacturacion(puntoEmision.getTipoNotaVentaInterna());
+        }
+        else
+        {
+            comprobante.setTipoFacturacion(puntoEmision.getTipoFacturacion());
+        }
+        
         
         //Obtiene los secuenciales eletrónicos
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();

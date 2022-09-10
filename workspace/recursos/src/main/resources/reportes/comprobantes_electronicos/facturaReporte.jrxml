@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="1.46410000000005"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="200"/>
+	<property name="ireport.y" value="2"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -324,7 +324,7 @@
 				<textFieldExpression><![CDATA[$P{direccion_comprador}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="313" y="237" width="242" height="12" uuid="0246c355-91f2-4a2f-818c-79ac219c483b">
+				<reportElement x="6" y="238" width="292" height="12" uuid="0246c355-91f2-4a2f-818c-79ac219c483b">
 					<printWhenExpression><![CDATA[new Boolean($P{pl_contribuyenteRegimenMicroempresas}.equals("s"))]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -334,10 +334,10 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[Contribuyente Régimen Microempresas]]></text>
+				<text><![CDATA[CONTRIBUYENTE RÉGIMEN RIMPE]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="-2" y="237" width="305" height="13" uuid="5409c158-a50e-49ac-aa60-6837ba292c83">
+				<reportElement x="319" y="238" width="229" height="13" uuid="5409c158-a50e-49ac-aa60-6837ba292c83">
 					<printWhenExpression><![CDATA[new Boolean(!$P{pl_agenteRetencionResolucion}.equals(""))]]></printWhenExpression>
 				</reportElement>
 				<box>

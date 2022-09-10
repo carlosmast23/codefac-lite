@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -29,7 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
  *
  * @author Carlos
  */
-public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPropertisFindWeb {   
+public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPropertisFindWeb,FiltroDialogoIf {   
     private Persona cliente;
     private PersonaEstablecimiento establecimiento;
     private EnumSiNo estadoEnviadoGuiaRemision;
@@ -73,7 +75,8 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        Factura f;
+        //Factura f;
+        //f.getEstado();
         //f.getSucursalEmpresa().gete
         //f.getEstadoEnviadoGuiaRemision()
         //f.getSecuencial();
@@ -106,6 +109,9 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         
         queryString+=getQueryDocumentos();
         
+        String filtroStr=" AND ( u.codigoDocumento=?97 AND u.estado=?96 ) ";
+        
+        queryString+=filtroStr;
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
         queryString+=" ORDER BY u.secuencial+0 DESC ";
         QueryDialog queryDialog=new QueryDialog(queryString);
@@ -134,8 +140,13 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         }
         
         if(usuario != null)
+        {
             if(usuario.getFiltrarFacturaEnum().compareTo(EnumSiNo.SI) == 0 )
+            {
                 queryDialog.agregarParametro(14, usuario);
+            }
+        }
+        
         
         
         //queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
@@ -188,6 +199,44 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         propiedades.add("fechaEmision"); //TODO: Probar cambiando por el metodo fechaEmisionFormat
         propiedades.add("total");
         return propiedades;
+    }
+
+    @Override
+    public Vector<ComponenteFiltro> getfiltrosList() 
+    {
+        Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();
+        
+        List<DocumentoEnum> documentoList=new ArrayList<DocumentoEnum>();
+        documentoList.add(DocumentoEnum.FACTURA);
+        documentoList.add(DocumentoEnum.NOTA_VENTA_INTERNA);
+        
+        ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"documento: ",97,documentoList);
+        componenteFiltro.filtroParametroIf=new ComponenteFiltro.FiltroParametroIf<DocumentoEnum>() {
+            @Override
+            public Object getValor(DocumentoEnum dato) {
+                return dato.getCodigo();
+            }
+        };
+        
+        filtroList.add(componenteFiltro);
+        //Factura f;
+        //f.
+        //Agregar Estados de la factura
+        List<ComprobanteEntity.ComprobanteEnumEstado> estadoList=new ArrayList<ComprobanteEntity.ComprobanteEnumEstado>();
+        estadoList.add(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+        estadoList.add(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+        estadoList.add(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI);
+        componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"estado: ",96,estadoList);
+        componenteFiltro.filtroParametroIf=new ComponenteFiltro.FiltroParametroIf<ComprobanteEntity.ComprobanteEnumEstado>() {
+            @Override
+            public Object getValor(ComprobanteEntity.ComprobanteEnumEstado dato) {
+                return dato.getEstado();
+            }
+        };
+        filtroList.add(componenteFiltro);
+        
+        return filtroList;
+        
     }
     
     
