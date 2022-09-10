@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -373,6 +374,20 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     private void listenerBotones() 
     {
+        
+        getBtnAgregarEmpaque().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BigDecimal cantidad=new BigDecimal(getTxtCantidadEmpaquetado().getText());
+                PresentacionProducto presentacion= (PresentacionProducto) getCmbPresentacionEmpaquetado().getSelectedItem();
+                
+                ProductoPresentacionDetalle productoEmpaque=new ProductoPresentacionDetalle();
+                productoEmpaque.setCantidad(cantidad);
+                productoEmpaque.setPresentacionProducto(presentacion);
+                productoEmpaque.setProductoEmpaquetado(productoEnsamble);
+                
+            }
+        });
         
         getBtnEditarEmpaque().addActionListener(new ActionListener() 
         {

@@ -117,7 +117,7 @@ public abstract class ExcelMigrar {
                     //System.out.println(celda.getStringCellValue());
                     if(!tiposDatosCabecera.get(i).equals(String.class))
                     {
-                       throw new ExcepcionMigrar("Se esperaba un tipo String pero la columna con valor <"+celda.getStringCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
+                       throw new ExcepcionMigrar("Se esperaba un tipo String pero la columna "+i+" con valor <"+celda.getStringCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                     }
                     break;
 
@@ -127,7 +127,7 @@ public abstract class ExcelMigrar {
                     {
                         if(!tiposDatosCabecera.get(i).equals(Date.class))
                         {
-                            throw new ExcepcionMigrar("Se esperaba un tipo Date pero la columna con valor <"+celda.getDateCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
+                            throw new ExcepcionMigrar("Se esperaba un tipo Date pero la columna "+i+" con valor <"+celda.getDateCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                         }
                     }else
                     {
@@ -135,7 +135,7 @@ public abstract class ExcelMigrar {
                         {
                            System.out.println(celda.getCellTypeEnum().toString());
                            System.out.println(tiposDatosCabecera.get(i));
-                           throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna con valor <" +celda.getNumericCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
+                           throw new ExcepcionMigrar("Se esperaba un tipo Double pero la columna "+i+" con valor <" +celda.getNumericCellValue()+"> tiene un tipo de dato diferente  "+tiposDatosCabecera.get(i).getName());
                         }
                     }
                     break;
