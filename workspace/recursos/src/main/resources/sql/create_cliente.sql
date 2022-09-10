@@ -80,6 +80,8 @@ create table PERSONA_ESTABLECIMIENTO(
     REFERENCIA_DIRECCION varchar(100), 
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.9.2)*/
     ESTADO varchar(1),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.3.1)*/
+    CIUDAD varchar(100), 
 
     primary key (ID)
 );

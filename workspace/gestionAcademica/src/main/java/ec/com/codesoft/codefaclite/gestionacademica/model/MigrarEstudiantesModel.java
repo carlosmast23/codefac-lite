@@ -181,7 +181,7 @@ public class MigrarEstudiantesModel extends MigrarModel{
                     
                     //Verificar si existe el curso a inscribir
                     String nombreCurso=(String) fila.getByEnum(ExcelMigrarEstudiantes.Enum.CURSO_ACTUAL).valor;
-                    NivelAcademico nivelAcademico=ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorNombreYEstado(nombreCurso,GeneralEnumEstado.ACTIVO); //TODO: Verificarsi para esta migracion tengo que mandar tambien el periodo
+                    NivelAcademico nivelAcademico=ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorNombreYEstadoPeriodoActivo(nombreCurso,GeneralEnumEstado.ACTIVO); //TODO: Verificarsi para esta migracion tengo que mandar tambien el periodo
                     
                     if(nivelAcademico==null)
                     {
