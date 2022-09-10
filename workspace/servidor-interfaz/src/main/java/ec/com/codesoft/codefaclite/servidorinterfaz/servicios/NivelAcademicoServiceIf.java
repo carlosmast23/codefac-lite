@@ -23,5 +23,6 @@ public interface NivelAcademicoServiceIf extends ServiceAbstractIf<NivelAcademic
     public NivelAcademico obtenerPorNombreYEstadoYPeriodo(String nombre,GeneralEnumEstado estado,Periodo periodo) throws RemoteException;
     public NivelAcademico obtenerPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException;
     public List<NivelAcademico> buscarPorPeriodo(Periodo p) throws RemoteException,ServicioCodefacException;
+    public NivelAcademico obtenerPorNombreYEstadoPeriodoActivo(String nombre,GeneralEnumEstado estado) throws RemoteException;
     
 }

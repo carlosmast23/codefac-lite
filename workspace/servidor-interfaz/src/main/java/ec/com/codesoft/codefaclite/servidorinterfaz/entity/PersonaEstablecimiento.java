@@ -74,6 +74,9 @@ public class PersonaEstablecimiento implements  Serializable{
     @Column(name = "ESTADO")
     private String estado;
     
+    @Column(name = "CIUDAD")
+    private String ciudad;
+    
     @JoinColumn(name ="PERSONA_ID")
     private Persona persona;
     
@@ -241,6 +244,15 @@ public class PersonaEstablecimiento implements  Serializable{
         this.estado = estadoEnum.getEstado();
     }
 
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+    
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -304,12 +316,27 @@ public class PersonaEstablecimiento implements  Serializable{
     
     
     
-    public static PersonaEstablecimiento buildFromPersona(PersonaEstablecimiento establecimiento,String codigo,String nombreComercial,String direccion,String referenciadireccion,String extensionTelefono,String telefonoCelular,String telefonoConvencional,TipoSucursalEnum tipoEnum,Zona zona,TipoEstablecimiento tipoEstablecimiento,String correo,GeneralEnumEstado estadoEnum)
+    public static PersonaEstablecimiento buildFromPersona(
+            PersonaEstablecimiento establecimiento,
+            String codigo,
+            String nombreComercial,
+            String direccion,
+            String ciudad,
+            String referenciadireccion,
+            String extensionTelefono,
+            String telefonoCelular,
+            String telefonoConvencional,
+            TipoSucursalEnum tipoEnum,
+            Zona zona,
+            TipoEstablecimiento tipoEstablecimiento,
+            String correo,
+            GeneralEnumEstado estadoEnum)
     {
         //PersonaEstablecimiento personaEstablecimiento = new PersonaEstablecimiento();
         establecimiento.setCodigoPersonalizado(codigo);
         establecimiento.setNombreComercial(nombreComercial);
         establecimiento.setDireccion(direccion);
+        establecimiento.setCiudad(ciudad);
         establecimiento.setReferenciaDireccion(referenciadireccion);
         establecimiento.setExtensionTelefono(extensionTelefono);
         //establecimiento.setPersona(persona);
