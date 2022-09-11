@@ -562,7 +562,7 @@ public class MigrarProductoModel extends MigrarModel {
                         {
                             throw new ExcelMigrar.ExcepcionExcel("No existe la unidad para migrar UNI");
                         }
-                        producto.setPresentacion(presentacionUnidad);
+                        producto.agregarPresentacionOriginal(presentacionUnidad);
                         
                     }
                     

@@ -150,8 +150,8 @@ public class Producto implements Serializable, Comparable<Producto> {
     @Column(name = "NOMBRE_GENERICO")    
     private String nombreGenerico;
     
-    @JoinColumn(name = "PRESENTACION_ID")
-    private PresentacionProducto presentacion;
+    /*@JoinColumn(name = "PRESENTACION_ID")
+    private PresentacionProducto presentacion;*/
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble",fetch = FetchType.EAGER)
     private List<ProductoEnsamble> detallesEnsamble;
@@ -467,6 +467,40 @@ public class Producto implements Serializable, Comparable<Producto> {
      *=========================================================================
      */
     
+    public void eliminarPresentacionProducto(ProductoPresentacionDetalle presentacionProducto)
+    {
+        if(presentacionList!=null)
+        {
+            presentacionList.remove(presentacionProducto);
+        }
+    }
+    
+    public PresentacionProducto buscarPresentacionOriginal()
+    {
+        if(presentacionList!=null)
+        {
+            for (ProductoPresentacionDetalle productoEnsamble : presentacionList) 
+            {
+                if(productoEnsamble.getTipoEnum()!=null && productoEnsamble.getTipoEnum().equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ORIGINAL))
+                {
+                    return productoEnsamble.getPresentacionProducto();
+                }
+            }
+        }
+        return null;
+    }
+    
+    public void agregarPresentacionOriginal(PresentacionProducto presentacionProducto)
+    {
+        ProductoPresentacionDetalle detalle=new ProductoPresentacionDetalle();
+        detalle.setCantidad(BigDecimal.ONE);
+        detalle.setTipoEnum(ProductoPresentacionDetalle.TipoPresentacionEnum.ORIGINAL);
+        detalle.setPresentacionProducto(presentacionProducto);
+        detalle.setProductoOriginal(this);
+        detalle.setProductoEmpaquetado(this);
+        addPresentacion(detalle);
+    }
+    
     public List<PrecioVenta> obtenerPreciosVenta()
     {
         List<PrecioVenta> valores=new ArrayList<PrecioVenta>();
@@ -578,13 +612,13 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.productoProveedorList = productoProveedorList;
     }
 
-    public PresentacionProducto getPresentacion() {
+    /*public PresentacionProducto getPresentacion() {
         return presentacion;
     }
 
     public void setPresentacion(PresentacionProducto presentacion) {
         this.presentacion = presentacion;
-    }
+    }*/
 
     public List<ProductoPresentacionDetalle> getPresentacionList() {
         return presentacionList;
@@ -835,7 +869,7 @@ public class Producto implements Serializable, Comparable<Producto> {
      * Obtiene una presentacion cualquiera que sea disntinta de la ingresada en el producto
      * @return 
      */
-    public ProductoPresentacionDetalle obtenerProductoPresentacionPorDefecto()
+    /*public ProductoPresentacionDetalle obtenerProductoPresentacionPorDefecto()
     {
         if(presentacionList!=null)
         {
@@ -852,7 +886,7 @@ public class Producto implements Serializable, Comparable<Producto> {
             }
         }
         return null;
-    }
+    }*/
     
     public static class PrecioVenta implements Serializable{
         public static final String PV1="pv1";

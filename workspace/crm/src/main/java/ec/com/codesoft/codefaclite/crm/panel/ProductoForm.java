@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -30,6 +31,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -44,7 +46,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(min = 1,max = 300,requerido = true, expresionRegular = ExpresionRegular.textoSinSaltosLinea, nombre = "Nombre", expresionRegularMensaje = "No se permiten saltos de linea")
     @TextFieldBinding(value = "controlador.producto.nombre")
-    public JTextField getTextNombre() {
+    public JTextField getTextNombre() {        
         return textNombre;
     }
 
@@ -96,7 +98,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         textValorUnitario = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
         cmbCategoriaProducto = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         comboIva = new javax.swing.JComboBox<>();
@@ -115,7 +116,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         lblEspacioBlanco = new javax.swing.JLabel();
         chkGenerarCodigoAutomatico = new javax.swing.JCheckBox();
         jLabel42 = new javax.swing.JLabel();
-        cmbPresentacionProducto = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -153,16 +153,20 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         cmbTipo = new javax.swing.JComboBox<>();
         cmbSegmento = new javax.swing.JComboBox<>();
         jPanel10 = new javax.swing.JPanel();
-        jLabel43 = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
-        txtCantidadEmpaquetado = new javax.swing.JTextField();
         cmbPresentacionEmpaquetado = new javax.swing.JComboBox<>();
         btnEditarEmpaque = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblEmpaquetado = new javax.swing.JTable();
         btnAgregarEmpaque = new javax.swing.JButton();
+        jLabel46 = new javax.swing.JLabel();
+        cmbTipoPresentacion = new javax.swing.JComboBox<>();
+        pnlPresentacionAdicional = new javax.swing.JPanel();
+        jLabel43 = new javax.swing.JLabel();
+        txtCantidadEmpaquetado = new javax.swing.JTextField();
         jLabel45 = new javax.swing.JLabel();
         txtPrecioEmpaquetado = new javax.swing.JTextField();
+        btnEliminarEmpaque = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jLabel40 = new javax.swing.JLabel();
         txtNombreGenerico = new javax.swing.JTextField();
@@ -306,15 +310,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         jPanel1.add(lblEspacio2, gridBagConstraints);
-
-        jLabel22.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel22.setText("Presentación:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel22, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -472,15 +467,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel42, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbPresentacionProducto, gridBagConstraints);
 
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -775,17 +761,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
-        jLabel43.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel43.setText("Precio:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel10.add(jLabel43, gridBagConstraints);
-
         jLabel44.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel44.setText("Presentación empaquetado:");
+        jLabel44.setText("Tipo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -793,17 +770,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel10.add(jLabel44, gridBagConstraints);
 
-        txtCantidadEmpaquetado.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 30;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel10.add(txtCantidadEmpaquetado, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 30;
@@ -812,7 +780,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel10.add(cmbPresentacionEmpaquetado, gridBagConstraints);
 
         btnEditarEmpaque.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
-        btnEditarEmpaque.setText("Editar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
@@ -824,7 +791,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -832,31 +799,90 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel10.add(jScrollPane4, gridBagConstraints);
 
         btnAgregarEmpaque.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarEmpaque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarEmpaqueActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel10.add(btnAgregarEmpaque, gridBagConstraints);
 
-        jLabel45.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel45.setText("Cantidad :");
+        jLabel46.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel46.setText("Presentación empaquetado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel10.add(jLabel45, gridBagConstraints);
+        jPanel10.add(jLabel46, gridBagConstraints);
 
-        txtPrecioEmpaquetado.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(cmbTipoPresentacion, gridBagConstraints);
+
+        pnlPresentacionAdicional.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
+        pnlPresentacionAdicional.setLayout(new java.awt.GridBagLayout());
+
+        jLabel43.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel43.setText("Precio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlPresentacionAdicional.add(jLabel43, gridBagConstraints);
+
+        txtCantidadEmpaquetado.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlPresentacionAdicional.add(txtCantidadEmpaquetado, gridBagConstraints);
+
+        jLabel45.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel45.setText("Cantidad :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlPresentacionAdicional.add(jLabel45, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel10.add(txtPrecioEmpaquetado, gridBagConstraints);
+        pnlPresentacionAdicional.add(txtPrecioEmpaquetado, gridBagConstraints);
 
-        tabMenu.addTab("Empaque", jPanel10);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        jPanel10.add(pnlPresentacionAdicional, gridBagConstraints);
+
+        btnEliminarEmpaque.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        btnEliminarEmpaque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarEmpaqueActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(btnEliminarEmpaque, gridBagConstraints);
+
+        tabMenu.addTab("Presentaciones", jPanel10);
 
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
@@ -1221,6 +1247,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_chkGenerarCodigoAutomaticoActionPerformed
 
+    private void btnAgregarEmpaqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEmpaqueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarEmpaqueActionPerformed
+
+    private void btnEliminarEmpaqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEmpaqueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarEmpaqueActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEmpaque;
     private javax.swing.JButton btnAgregarEnsamble;
@@ -1228,6 +1262,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarProductoEnsamble;
     private javax.swing.JButton btnEditarEmpaque;
     private javax.swing.JButton btnEditarEnsamble;
+    private javax.swing.JButton btnEliminarEmpaque;
     private javax.swing.JButton btnEliminarEnsamble;
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
@@ -1240,9 +1275,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<EnumSiNo> cmbManejaInventario;
     private javax.swing.JComboBox<MarcaProducto> cmbMarca;
     private javax.swing.JComboBox<CategoriaProducto> cmbPresentacionEmpaquetado;
-    private javax.swing.JComboBox<CategoriaProducto> cmbPresentacionProducto;
     private javax.swing.JComboBox<SegmentoProducto> cmbSegmento;
     private javax.swing.JComboBox<TipoProducto> cmbTipo;
+    private javax.swing.JComboBox<ProductoPresentacionDetalle.TipoPresentacionEnum> cmbTipoPresentacion;
     private javax.swing.JComboBox<TipoProductoEnum> cmbTipoProducto;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIrbpnr;
@@ -1263,7 +1298,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
@@ -1289,6 +1323,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1322,6 +1357,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio6;
     private javax.swing.JLabel lblEspacio8;
     private javax.swing.JLabel lblEspacioBlanco;
+    private javax.swing.JPanel pnlPresentacionAdicional;
     private javax.swing.JTabbedPane tabMenu;
     private javax.swing.JTable tblDatosEnsamble;
     private javax.swing.JTable tblEmpaquetado;
@@ -1576,14 +1612,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.cmbCategoriaProducto = cmbCategoriaProducto;
     }
 
-    @ComboBoxBinding(source = "controlador.presentacionProductosList",valueSelect = "controlador.producto.presentacion")
+    /*@ComboBoxBinding(source = "controlador.presentacionProductosList",valueSelect = "controlador.producto.presentacion")
     public JComboBox<CategoriaProducto> getCmbPresentacionProducto() {
         return cmbPresentacionProducto;
     }
 
     public void setCmbPresentacionProducto(JComboBox<CategoriaProducto> cmbPresentacionProducto) {
         this.cmbPresentacionProducto = cmbPresentacionProducto;
-    }
+    }*/
     
     
 
@@ -1761,7 +1797,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.txtNombreGenerico = txtNombreGenerico;
     }
 
-    @ComboBoxBinding(source = "controlador.presentacionProductosList",valueSelect = "controlador.productoPresentacionDetalle.presentacionProducto")
+    //@ComboBoxBinding(source = "controlador.presentacionProductosList",valueSelect = "controlador.productoPresentacionDetalle.presentacionProducto")
     public JComboBox<CategoriaProducto> getCmbPresentacionEmpaquetado() {
         return cmbPresentacionEmpaquetado;
     }
@@ -1771,7 +1807,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @TextFieldBinding(value = "controlador.productoPresentacionDetalle.cantidad",converter =StringToBigDecimalConverter.class )
+    //@TextFieldBinding(value = "controlador.productoPresentacionDetalle.cantidad",converter =StringToBigDecimalConverter.class )
     public JTextField getTxtCantidadEmpaquetado() {
         return txtCantidadEmpaquetado;
     }
@@ -1796,6 +1832,47 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.btnAgregarEmpaque = btnAgregarEmpaque;
     }
 
+    public JTable getTblEmpaquetado() {
+        return tblEmpaquetado;
+    }
+
+    public void setTblEmpaquetado(JTable tblEmpaquetado) {
+        this.tblEmpaquetado = tblEmpaquetado;
+    }
+
+    public JTextField getTxtPrecioEmpaquetado() {
+        return txtPrecioEmpaquetado;
+    }
+
+    public void setTxtPrecioEmpaquetado(JTextField txtPrecioEmpaquetado) {
+        this.txtPrecioEmpaquetado = txtPrecioEmpaquetado;
+    }
+
+    public JComboBox<ProductoPresentacionDetalle.TipoPresentacionEnum> getCmbTipoPresentacion() {
+        return cmbTipoPresentacion;
+    }
+
+    public void setCmbTipoPresentacion(JComboBox<ProductoPresentacionDetalle.TipoPresentacionEnum> cmbTipoPresentacion) {
+        this.cmbTipoPresentacion = cmbTipoPresentacion;
+    }
+
+    public JPanel getPnlPresentacionAdicional() {
+        return pnlPresentacionAdicional;
+    }
+
+    public void setPnlPresentacionAdicional(JPanel pnlPresentacionAdicional) {
+        this.pnlPresentacionAdicional = pnlPresentacionAdicional;
+    }
+
+    public JButton getBtnEliminarEmpaque() {
+        return btnEliminarEmpaque;
+    }
+
+    public void setBtnEliminarEmpaque(JButton btnEliminarEmpaque) {
+        this.btnEliminarEmpaque = btnEliminarEmpaque;
+    }
+
+    
 
     
     

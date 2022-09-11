@@ -61,7 +61,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private List<EnumSiNo> garantiaList;
     private List<TipoProductoEnum> tipoProductosList;
     private List<CategoriaProducto> categoriaProductosList;
-    private List<PresentacionProducto> presentacionProductosList;
+    //private List<PresentacionProducto> presentacionProductosList;
     private List<ImpuestoDetalle> ivaList;
     private List<ImpuestoDetalle> iceList;
     private List<ImpuestoDetalle> irbpnrList;
@@ -79,7 +79,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private ImpuestoDetalle irbpnrSeleccionado;
     private IvaOpcionEnum ivaOpcionSeleccionado;
     private Boolean generarCodigoAutomatico;
-    private ProductoPresentacionDetalle productoPresentacionDetalle;
+    //private ProductoPresentacionDetalle productoPresentacionDetalle;
     //private MarcaProducto marcaProductoSeleccionado;
     
     public Producto producto;
@@ -190,7 +190,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             segmentoProductoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             
             PresentacionProductoServiceIf presentacionService = ServiceFactory.getFactory().getPresentacionProductoServiceIf();
-            presentacionProductosList=presentacionService.obtenerActivosPorEmpresa(session.getEmpresa()); 
+            //presentacionProductosList=presentacionService.obtenerActivosPorEmpresa(session.getEmpresa()); 
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -352,7 +352,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         iceSeleccionado=null;
         irbpnrSeleccionado=null;
         generarCodigoAutomatico=false;
-        productoPresentacionDetalle=new ProductoPresentacionDetalle();
+        //productoPresentacionDetalle=new ProductoPresentacionDetalle();
         //getInterazEscritorio().setearChkGenerarCodAutomatico(false);
         
     }
@@ -383,10 +383,10 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         irbpnrSeleccionado=producto.getCatalogoProducto().getIva();
         categoriaSeleccionada=producto.getCatalogoProducto().getCategoriaProducto();
         
-        if(producto.getPresentacionList()!=null && producto.getPresentacionList().size()>0)
+        /*if(producto.getPresentacionList()!=null && producto.getPresentacionList().size()>0)
         {
             productoPresentacionDetalle=producto.obtenerProductoPresentacionPorDefecto();
-        }
+        }*/
     }
 
     @Override
@@ -429,13 +429,13 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         this.categoriaProductosList = categoriaProductosList;
     }
 
-    public List<PresentacionProducto> getPresentacionProductosList() {
+    /*public List<PresentacionProducto> getPresentacionProductosList() {
         return presentacionProductosList;
     }
 
     public void setPresentacionProductosList(List<PresentacionProducto> presentacionProductosList) {
         this.presentacionProductosList = presentacionProductosList;
-    }
+    }*/
 
     /*public PresentacionProducto getPresentacionSeleccionada() {
         return presentacionSeleccionada;
@@ -567,13 +567,13 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         this.casaComercialList = casaComercialList;
     }
 
-    public ProductoPresentacionDetalle getProductoPresentacionDetalle() {
+    /*public ProductoPresentacionDetalle getProductoPresentacionDetalle() {
         return productoPresentacionDetalle;
     }
 
     public void setProductoPresentacionDetalle(ProductoPresentacionDetalle productoPresentacionDetalle) {
         this.productoPresentacionDetalle = productoPresentacionDetalle;
-    }
+    }*/
 
     
     
@@ -597,7 +597,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         }
         producto.setValorUnitario(valorUnitario);
         
-        CatalogoProducto catalogoProducto=crearCatalogoProducto();
+        CatalogoProducto catalogoProducto=crearCatalogoProducto(producto);
         producto.setCatalogoProducto(catalogoProducto);
         
         producto.setEmpresa(session.getEmpresa());
@@ -611,16 +611,23 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         
         
         //Agregar el producto presentacion al producto      
-        if(productoPresentacionDetalle!=null && productoPresentacionDetalle.getPresentacionProducto()!=null &&  productoPresentacionDetalle.getCantidad()!=null)
+        /*if(productoPresentacionDetalle!=null && productoPresentacionDetalle.getPresentacionProducto()!=null &&  productoPresentacionDetalle.getCantidad()!=null)
         {
             producto.addPresentacion(productoPresentacionDetalle);
-        }
+        }*/
 
     }
 
-    private CatalogoProducto crearCatalogoProducto()
+    private CatalogoProducto crearCatalogoProducto(Producto producto)
     {
         CatalogoProducto catalogoProducto=new CatalogoProducto();
+        
+        //Si existe el catalogo previamente creado solo lo cargo para que lo edite
+        if(producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getId()!=null)
+        {
+            catalogoProducto=producto.getCatalogoProducto();
+        }
+        
         
         //TODO: Unir codigo
         CategoriaProducto categoriaProducto=categoriaSeleccionada;

@@ -160,8 +160,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         CasaComercial casaComercial=p.getCasaComercial();
         p.setCasaComercial(null);
         
-        PresentacionProducto presentacion=p.getPresentacion();
-        p.setPresentacion(null);
+        //PresentacionProducto presentacion=p.getPresentacion();
+        //p.setPresentacion(null);
         
         List<ProductoProveedor> productoProveedorList=p.getProductoProveedorList();
         p.setProductoProveedorList(null);
@@ -191,39 +191,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             p.setCatalogoProducto(catalogoProducto);
         }
         
-        //grabar los detalles de  la presentacion
-        if(productoPresentacionList!=null)
-        {
-                                    
-            for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) 
-            {
-                if(presentacionDetalle.getId()==null)
-                {
-                    
-                    try {
-                                                
-                        
-                        //Agregar si existe un empaquetado
-                        Producto productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
-                        productoEmpaquetado.setIdProducto(null);
-                        productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
-                        productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
-                        productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
-                        
-                        entityManager.persist(productoEmpaquetado);
-                        entityManager.flush();
-                        
-                        presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);                        
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    
-                    entityManager.persist(presentacionDetalle);
-                }
-            }
-        }
-        
+                
         //grabar los proveedor
         if(productoProveedorList!=null)
         {
@@ -281,7 +249,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         }
         
-        if(presentacion!=null)
+        grabarEmpaques(p, productoPresentacionList);
+        
+        /*if(presentacion!=null)
         {
             if(presentacion.getId()==null)
             {
@@ -299,16 +269,19 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             entityManager.persist(presentacionDetalleTmp);
             entityManager.flush();
         
-        }
+        }*/
+        
+        
         
         
         p.setTipoProducto(tipoProducto);            
         p.setSegmentoProducto(segmentoProducto);
         p.setMarcaProducto(marcaProducto);
         p.setCasaComercial(casaComercial);
-        p.setPresentacion(presentacion);
+        //p.setPresentacion(presentacion);
         p.setProductoProveedorList(productoProveedorList);
         p.setPresentacionList(productoPresentacionList);
+        //p.setPresentacionList(productoPresentacionList);
 
         //Si no son ensables remover datos para no tener incoherencias
         if (!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProductoCodigo())) {
@@ -329,6 +302,60 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             }
         }
         
+    }
+    
+    private void grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList)
+    {
+        //grabar los detalles de  la presentacion
+        if(productoPresentacionList!=null)
+        {                                    
+            for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) 
+            {
+                if(presentacionDetalle.getId()==null)
+                {                    
+                    try {                        
+                        //Saco una copia del producto original para crear el producto empaqueteado con sus propias caracteristicas
+                        Producto productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
+                        productoEmpaquetado.setIdProducto(null);
+                        //Eliminar los detalles por que puede dar referencia un objecto que ya estaba previamente grabado
+                        productoEmpaquetado.setDetallesEnsamble(null);
+                        productoEmpaquetado.setPresentacionList(null);
+                        productoEmpaquetado.setProductoProveedorList(null);
+                        /*productoEmpaquetado.setTipoProducto(null);
+                        productoEmpaquetado.setSegmentoProducto(null);
+                        productoEmpaquetado.setCasaComercial(null);*/
+                        
+                        
+                        
+                        productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
+                        //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
+                        if(presentacionDetalle.getPvpTmp()==null)
+                        {
+                            productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
+                        }
+                        else
+                        {
+                            productoEmpaquetado.setValorUnitario(presentacionDetalle.getPvpTmp());
+                        }
+                        
+                        entityManager.persist(productoEmpaquetado);
+                        entityManager.flush();
+                        
+                        presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    
+                    entityManager.persist(presentacionDetalle);
+                }
+            }
+            
+            //Actualizar los cambios en el producto
+            entityManager.merge(producto);
+            
+        }
+
     }
     
     private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
@@ -421,66 +448,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 
                 //TODO: Por el momento copio todo el codigo para crear las presentaciones pero se deberia utilizar el mismo metodo de grabar
                 //CAMBIAR urge
-                PresentacionProducto presentacion=producto.getPresentacion();
-                producto.setPresentacion(null);
+               // PresentacionProducto presentacion=producto.getPresentacion();
+                //producto.setPresentacion(null);
 
                 List<ProductoPresentacionDetalle> productoPresentacionList = producto.getPresentacionList();
                 producto.setPresentacionList(null);
-                
-                if (productoPresentacionList != null) {
+                grabarEmpaques(producto, productoPresentacionList);
 
-                    for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) {
-                        if (presentacionDetalle.getId() == null) {
-
-                            try {
-
-                                //Agregar si existe un empaquetado
-                                Producto productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
-                                productoEmpaquetado.setIdProducto(null);
-                                productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
-                                productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
-                                productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
-                                
-                                productoEmpaquetado.setTipoProducto(null);
-                                productoEmpaquetado.setSegmentoProducto(null);
-                                productoEmpaquetado.setMarcaProducto(null);
-                                productoEmpaquetado.setCasaComercial(null);
-                                productoEmpaquetado.setPresentacion(presentacion);
-                                productoEmpaquetado.setProductoProveedorList(null);
-                                productoEmpaquetado.setPresentacionList(productoPresentacionList);
-
-                                entityManager.persist(productoEmpaquetado);
-                                entityManager.flush();
-
-                                presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);
-                            } catch (RemoteException ex) {
-                                Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
-                            entityManager.persist(presentacionDetalle);
-                        }
-                    }
-                }
-
-                if (presentacion != null) {
-                    if (presentacion.getId() == null) {
-                        ServiceFactory.getFactory().getPresentacionProductoServiceIf().grabarSinTransaccion(presentacion);
-                        entityManager.flush();
-                        presentacion = ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(producto.getEmpresa(), presentacion.getNombre());
-                    }
-
-                    //Agregar por defecto una presentacion a la lista de detalles
-                    ProductoPresentacionDetalle presentacionDetalleTmp = new ProductoPresentacionDetalle();
-                    presentacionDetalleTmp.setCantidad(new BigDecimal(1));
-                    presentacionDetalleTmp.setPresentacionProducto(presentacion);
-                    presentacionDetalleTmp.setProductoEmpaquetado(producto);
-                    presentacionDetalleTmp.setProductoOriginal(producto);
-                    entityManager.persist(presentacionDetalleTmp);
-                    entityManager.flush();
-
-                }
-
-                producto.setPresentacion(presentacion);
+                //producto.setPresentacion(presentacion);
                 producto.setPresentacionList(productoPresentacionList);
 
                 entityManager.merge(producto);

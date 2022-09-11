@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -32,6 +33,9 @@ public class ProductoPresentacionDetalle implements Serializable{
     @Column(name = "CANTIDAD")
     private BigDecimal cantidad;
     
+    @Transient
+    private BigDecimal pvpTmp;
+    
     @JoinColumn(name = "PRESENTACION_PRODUCTO_ID")
     private PresentacionProducto presentacionProducto;
     
@@ -40,6 +44,9 @@ public class ProductoPresentacionDetalle implements Serializable{
     
     @JoinColumn(name = "PRODUCTO_EMPAQUETADO_ID")
     private Producto productoEmpaquetado;
+    
+    @Column(name = "TIPO")
+    private String tipo;
     
 
     public ProductoPresentacionDetalle() 
@@ -87,7 +94,75 @@ public class ProductoPresentacionDetalle implements Serializable{
         this.presentacionProducto = presentacionProducto;
     }
 
+    public BigDecimal getPvpTmp() {
+        return pvpTmp;
+    }
+
+    public void setPvpTmp(BigDecimal pvpTmp) {
+        this.pvpTmp = pvpTmp;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
     
+    public TipoPresentacionEnum getTipoEnum() {
+        return TipoPresentacionEnum.buscarPorLetra(tipo);
+    }
+
+    public void setTipoEnum(TipoPresentacionEnum tipoEnum) {
+        this.tipo = tipoEnum.letra;
+    }
+
+    
+    
+    public enum TipoPresentacionEnum
+    {
+        ORIGINAL("O","Original"),
+        ADICIONAL("A","Adicional");
+        
+        private String letra;
+        private String nombre;
+
+        private TipoPresentacionEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+        
+        public String getLetra() {
+            return letra;
+        }
+
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static TipoPresentacionEnum buscarPorLetra(String letra)
+        {
+            for (TipoPresentacionEnum presentacion : TipoPresentacionEnum.values()) 
+            {
+                if(presentacion.getLetra().equals(letra))
+                {
+                    return presentacion ;
+                }
+            }
+            return null;
+        }
+        
+        @Override
+        public String toString() {
+            return nombre;
+        }
+
+        
+    }
+
+   
     
     
 }

@@ -95,9 +95,9 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         dato.add(t.getCodigoPersonalizado());
         
         String presentacion="";
-        if(t.getPresentacion()!=null)
+        if(t.buscarPresentacionOriginal()!=null)
         {
-            presentacion=t.getPresentacion().getNombre();
+            presentacion=t.buscarPresentacionOriginal().getNombre();
         }
         dato.add(presentacion);
         //dato.add(t.getCodigoUPC());       

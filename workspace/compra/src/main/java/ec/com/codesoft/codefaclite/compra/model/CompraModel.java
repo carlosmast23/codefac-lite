@@ -872,7 +872,7 @@ public class CompraModel extends CompraPanel{
                     getCmbIvaDetalle().setSelectedItem(compraDetalle.getPorcentajeIva());
                     
                     cargarPresentaciones(compraDetalle.getProductoProveedor().getProducto());
-                    getCmbPresentacionProducto().setSelectedItem(compraDetalle.getProductoProveedor().getProducto().getPresentacion());
+                    getCmbPresentacionProducto().setSelectedItem(compraDetalle.getProductoProveedor().getProducto().buscarPresentacionOriginal());
                     
                     String loteCodigo="";
                     if(compraDetalle.getLote()!=null)
@@ -985,7 +985,7 @@ public class CompraModel extends CompraPanel{
             //Volver a seleccionar la presentacion correcta en el caso que existe el producto
             if(productoSeleccionado!=null)
             {
-                getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.getPresentacion());
+                getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
             }
         }
     }

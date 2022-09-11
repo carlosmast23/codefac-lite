@@ -44,8 +44,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -191,10 +193,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getChkOcultarDetalleVenta().setEnabled(true);
         getChkGenerarCodigoAutomatico().setSelected(false);
+        actualizarTablaEmpaques();
         
         
-
-
+        verificarVisibleBotonEditarPresentacion();
     }
 
 //    @Override
@@ -291,11 +293,35 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     private void iniciarCombosBox() {
             
-        controlador.iniciarCombosBox();
+        try {
+            controlador.iniciarCombosBox();
+            
+            //Cambiar esta parte al controlador
+            PresentacionProductoServiceIf presentacionService = ServiceFactory.getFactory().getPresentacionProductoServiceIf();
+            List<PresentacionProducto> presentacionProductosList=presentacionService.obtenerActivosPorEmpresa(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getCmbPresentacionEmpaquetado(),presentacionProductosList);
+            UtilidadesComboBox.llenarComboBox(getCmbTipoPresentacion(), ProductoPresentacionDetalle.TipoPresentacionEnum.values());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void listenerComboBox() {
        
+        getCmbTipoPresentacion().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                getPnlPresentacionAdicional().setVisible(false);
+                ProductoPresentacionDetalle.TipoPresentacionEnum tipoPresentacion= (ProductoPresentacionDetalle.TipoPresentacionEnum) getCmbTipoPresentacion().getSelectedItem();
+                if(tipoPresentacion!=null && tipoPresentacion.equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ADICIONAL))
+                {
+                    getPnlPresentacionAdicional().setVisible(true);
+                }
+            }
+        });
         //TODO: Mejorar esta parte para que funcione con el controlador
         /*getCmbGenerarCodigoBarras().addActionListener(new ActionListener() {
             @Override
@@ -371,21 +397,52 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }
         
     }
+    
+    public ProductoPresentacionDetalle obtenerPresentacionEmpaqueVista()
+    {        
+        BigDecimal cantidad=new BigDecimal(getTxtCantidadEmpaquetado().getText());
+        
+        BigDecimal pvp=null;
+        if(!UtilidadesTextos.verificarNullOVacio(getTxtPrecioEmpaquetado().getText()))
+        {
+            pvp=new BigDecimal(getTxtPrecioEmpaquetado().getText());
+        }
+        
+        
+        PresentacionProducto presentacionEmpaquetado=(PresentacionProducto) getCmbPresentacionEmpaquetado().getSelectedItem();
+        ProductoPresentacionDetalle.TipoPresentacionEnum tipoEnum= (ProductoPresentacionDetalle.TipoPresentacionEnum) getCmbTipoPresentacion().getSelectedItem();
+        
+        ProductoPresentacionDetalle detallePresentacion=new ProductoPresentacionDetalle();
+        if(tipoEnum.equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ORIGINAL))
+        {
+            detallePresentacion.setCantidad(BigDecimal.ONE);
+            detallePresentacion.setPvpTmp(BigDecimal.ZERO);
+        }
+        else
+        {
+            detallePresentacion.setCantidad(cantidad);
+            detallePresentacion.setPvpTmp(pvp);
+        }
+
+        detallePresentacion.setTipoEnum(tipoEnum);
+        detallePresentacion.setPresentacionProducto(presentacionEmpaquetado);
+        detallePresentacion.setProductoOriginal(controlador.getProducto());
+        
+        return detallePresentacion;
+        
+    }
 
     private void listenerBotones() 
     {
-        
-        getBtnAgregarEmpaque().addActionListener(new ActionListener() {
+        getBtnEliminarEmpaque().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BigDecimal cantidad=new BigDecimal(getTxtCantidadEmpaquetado().getText());
-                PresentacionProducto presentacion= (PresentacionProducto) getCmbPresentacionEmpaquetado().getSelectedItem();
-                
-                ProductoPresentacionDetalle productoEmpaque=new ProductoPresentacionDetalle();
-                productoEmpaque.setCantidad(cantidad);
-                productoEmpaque.setPresentacionProducto(presentacion);
-                productoEmpaque.setProductoEmpaquetado(productoEnsamble);
-                
+                ProductoPresentacionDetalle productoEmpaque =(ProductoPresentacionDetalle) getTblEmpaquetado().getValueAt(getTblEmpaquetado().getSelectedRow(), 0);
+                if(productoEmpaque!=null)
+                {
+                    controlador.producto.eliminarPresentacionProducto(productoEmpaque);
+                    actualizarTablaEmpaques();
+                }
             }
         });
         
@@ -396,7 +453,12 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             {
                 if(controlador!=null && controlador.producto!=null)
                 {                
-                    ProductoPresentacionDetalle productoEmpaque =controlador.producto.obtenerProductoPresentacionPorDefecto();
+                    ProductoPresentacionDetalle productoEmpaque =(ProductoPresentacionDetalle) getTblEmpaquetado().getValueAt(getTblEmpaquetado().getSelectedRow(), 0);
+                    if(productoEmpaque==null)
+                    {
+                        return;
+                    }
+                    
                     ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() 
                     {
                         @Override
@@ -428,6 +490,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             }
         });
         
+        getBtnAgregarEmpaque().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProductoPresentacionDetalle presentacionDetalle=obtenerPresentacionEmpaqueVista();
+                controlador.getProducto().addPresentacion(presentacionDetalle);
+                actualizarTablaEmpaques();
+                limpiarPresentacionVista();
+            }
+        });
+        
         getBtnAgregarEnsamble().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -443,6 +515,12 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getBtnEditarEnsamble().addActionListener(listenerEditarEnsamble);
         getBtnEliminarEnsamble().addActionListener(listenerEliminarEnsamble);
 
+    }
+    
+    private void limpiarPresentacionVista()
+    {
+        getTxtCantidadEmpaquetado().setText("0");
+        getTxtPrecioEmpaquetado().setText("");
     }
     
     private ActionListener listenerEliminarEnsamble=new ActionListener() {
@@ -476,6 +554,27 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             }
        }
     };
+    
+    private void actualizarTablaEmpaques()
+    {
+        String[] titulo = {"","Cantidad", "Tipo", "Presentacion"};
+        UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Object.class,String.class,String.class,String.class});
+        DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
+        
+        if(controlador.producto!=null && controlador.producto.getPresentacionList()!=null)
+        {
+            for (ProductoPresentacionDetalle detalle : controlador.producto.getPresentacionList()) {
+                Vector<Object> fila = new Vector<Object>();
+                fila.add(detalle);
+                fila.add(detalle.getCantidad());
+                fila.add(detalle.getTipoEnum());
+                fila.add(detalle.getPresentacionProducto().getNombre());   
+                tableModel.addRow(fila);
+            }
+        }        
+        getTblEmpaquetado().setModel(tableModel);
+        UtilidadesTablas.definirTamanioColumnas(getTblEmpaquetado(), new Integer[]{0});
+    }
 
     private void actualizarTablaEnsamble() {
         String[] titulo = {"","Cantidad", "Nombre", "Precio Venta"};
@@ -565,6 +664,18 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getChkOcultarDetalleVenta().setSelected(controlador.producto.getOcultarDetalleVentaEnum().getBool());
         
         actualizarTablaEnsamble();
+        actualizarTablaEmpaques();
+         verificarVisibleBotonEditarPresentacion();
+        
+    }
+    
+    public void verificarVisibleBotonEditarPresentacion()
+    {
+        getBtnEditarEmpaque().setVisible(false);
+        if (getEstadoFormularioEnum() != null && getEstadoFormularioEnum().equals(EstadoFormularioEnum.EDITAR)) 
+        {
+            getBtnEditarEmpaque().setVisible(true);
+        }
     }
 
     /**

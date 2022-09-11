@@ -789,8 +789,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                  */
                 if(!frameInterface.cicloVida)
                 {
+                    UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));   
                     UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
-                    UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));                    
+                                     
                     //frameInterface.limpiar();
                     frameInterface.procesarModoForzado=false;
                     return;
@@ -841,8 +842,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
                 try
                 {
-                    UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);                    
                     UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
+                    UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);                    
+                    
                     //frameInterface.limpiar();
                     frameInterface.procesarModoForzado=false;
                 }
@@ -983,8 +985,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frameInterface.eventoCambiarEstado();
                     limpiarAnotaciones(frameInterface);
                     
-                    UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
                     UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
+                    UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
+                    
                     //frameInterface.limpiar();
                     frameInterface.procesarModoForzado=false;
                     
@@ -1181,8 +1184,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              * de vida
              */
             if (!frameInterface.cicloVida) {
-                UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
+                
                 UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
+                UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
+                
                 
                 //frameInterface.limpiar();
                 frameInterface.procesarModoForzado=false;
@@ -1196,8 +1201,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 frameInterface.eventoCambiarEstado();
                 limpiarAnotaciones(frameInterface);                
                 
-                UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
                 UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(frameInterface));
+                UtilidadesCoreCodefac.ejecutarLimpiar(frameInterface);
+                
                                 
                 limpiarCamposValidacion(frameInterface);
                 frameInterface.actualizarBindingComponent(false,true);
@@ -1525,8 +1531,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //          EJECUTAR LOS METODOS DE LIMPIAR Y NUEVO
             ////////////////////////////////////////////////////////////////////
 
-            UtilidadesCoreCodefac.ejecutarLimpiar(panel);
             UtilidadesCoreCodefac.ejecutarLimpiar(UtilidadesCoreCodefac.getControladorTodoVista(panel));
+            UtilidadesCoreCodefac.ejecutarLimpiar(panel);
+            
             
             UtilidadesCoreCodefac.ejecutarNuevo(panel);
             UtilidadesCoreCodefac.ejecutarNuevo(UtilidadesCoreCodefac.getControladorTodoVista(panel));
