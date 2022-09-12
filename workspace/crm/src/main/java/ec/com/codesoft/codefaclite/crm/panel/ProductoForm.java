@@ -152,6 +152,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel36 = new javax.swing.JLabel();
         cmbTipo = new javax.swing.JComboBox<>();
         cmbSegmento = new javax.swing.JComboBox<>();
+        btnCrearMarca = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
         cmbPresentacionEmpaquetado = new javax.swing.JComboBox<>();
@@ -757,6 +758,16 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(cmbSegmento, gridBagConstraints);
 
+        btnCrearMarca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnCrearMarca.setFocusable(false);
+        btnCrearMarca.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCrearMarca.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel5.add(btnCrearMarca, gridBagConstraints);
+
         tabMenu.addTab("Info Adicional", jPanel5);
 
         jPanel10.setLayout(new java.awt.GridBagLayout());
@@ -1260,6 +1271,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarEnsamble;
     private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnBuscarProductoEnsamble;
+    private javax.swing.JButton btnCrearMarca;
     private javax.swing.JButton btnEditarEmpaque;
     private javax.swing.JButton btnEditarEnsamble;
     private javax.swing.JButton btnEliminarEmpaque;
@@ -1870,6 +1882,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setBtnEliminarEmpaque(JButton btnEliminarEmpaque) {
         this.btnEliminarEmpaque = btnEliminarEmpaque;
+    }
+
+    public JButton getBtnCrearMarca() {
+        return btnCrearMarca;
+    }
+
+    public void setBtnCrearMarca(JButton btnCrearMarca) {
+        this.btnCrearMarca = btnCrearMarca;
     }
 
     

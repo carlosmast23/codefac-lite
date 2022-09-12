@@ -35,11 +35,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -433,6 +436,21 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     private void listenerBotones() 
     {
+        
+        getBtnCrearMarca().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<MarcaProducto>() {
+                    @Override
+                    public void updateInterface(MarcaProducto entity) {
+                        getCmbMarca().addItem(entity);
+                        getCmbMarca().setSelectedItem(entity);
+                    }
+                }, VentanaEnum.MARCA_PRODUCTO, false, formularioActual);
+            }
+        });
+        
         getBtnEliminarEmpaque().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) 
@@ -569,7 +587,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 fila.add(detalle);
                 fila.add(detalle.getCantidad());
                 fila.add(detalle.getTipoEnum());
-                fila.add(detalle.getPresentacionProducto().getNombre());   
+                fila.add((detalle.getPresentacionProducto()!=null)?detalle.getPresentacionProducto().getNombre():"");   
                 tableModel.addRow(fila);
             }
         }        

@@ -10,19 +10,24 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.MarcaProductoControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.MarcaProductoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class MarcaProductoModel extends MarcaProductoPanel implements ControladorVistaIf,MarcaProductoControlador.SwingIf{
+public class MarcaProductoModel extends MarcaProductoPanel implements DialogInterfacePanel<MarcaProducto>, ControladorVistaIf,MarcaProductoControlador.SwingIf{
     
     private MarcaProductoControlador controlador;
 
@@ -109,6 +114,29 @@ public class MarcaProductoModel extends MarcaProductoPanel implements Controlado
 
     public void setControlador(MarcaProductoControlador controlador) {
         this.controlador = controlador;
+    }
+
+    @Override
+    public MarcaProducto getResult() throws ExcepcionCodefacLite {
+        try {
+            
+            if(estadoFormularioEnum.equals(EstadoFormularioEnum.GRABAR))
+            {
+                grabar();
+            }
+            else if(estadoFormularioEnum.equals(EstadoFormularioEnum.EDITAR))
+            {
+                editar();
+            }
+            
+            return controlador.getMarcaProducto();
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(MarcaProducto.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (RemoteException ex) {
+            Logger.getLogger(MarcaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return  null;
     }
     
     
