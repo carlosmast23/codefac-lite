@@ -212,7 +212,10 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         puntoEmision.setTipoFacturacion(tipoEmisionEnum.getLetra());
         
         ComprobanteEntity.TipoEmisionEnum tipoEmisionNVIEnum=(ComprobanteEntity.TipoEmisionEnum) getCmbTipoNotaVentaIntena().getSelectedItem();
-        puntoEmision.setTipoNotaVentaInterna(tipoEmisionNVIEnum.getLetra());
+        if(tipoEmisionNVIEnum!=null)
+        {
+            puntoEmision.setTipoNotaVentaInterna(tipoEmisionNVIEnum.getLetra());
+        }
         
         
     }

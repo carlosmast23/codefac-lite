@@ -23,6 +23,8 @@
 	<parameter name="formaPagoTarjetaCred" class="java.lang.String"/>
 	<parameter name="formaPagoOtros" class="java.lang.String"/>
 	<parameter name="guiaRemision" class="java.lang.String"/>
+	<parameter name="ciudad" class="java.lang.String"/>
+	<parameter name="codigoCliente" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -94,6 +96,20 @@
 					<pen lineWidth="2.0" lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="289" y="20" width="133" height="15" uuid="9c03d4c5-858a-4a6d-9fc5-23c46cfdc718"/>
+				<textElement markup="html">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ciudad}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="289" y="5" width="133" height="15" uuid="69c5392e-b14b-4951-9c27-0e2f077f0a0f"/>
+				<textElement markup="html">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{codigoCliente}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<detail>

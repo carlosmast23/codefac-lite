@@ -57,6 +57,8 @@ public class FacturaFisicaDataMap {
         parametros.put("correoElectronico",aplicarFormato("Correo: ", (factura.getCliente().getCorreoElectronico() != null) ? factura.getCliente().getCorreoElectronico() : ""));
         parametros.put("identificacion",aplicarFormato("Identificación: ",factura.getIdentificacion()));
         parametros.put("guiaRemision",aplicarFormato("Guía Remisión: ",obtenerGuiaRemision(factura)));
+        parametros.put("codigoCliente",aplicarFormato("Código: ",factura.getSucursal().getCodigoPersonalizado()));
+        parametros.put("ciudad",aplicarFormato("Ciudad: ",factura.getSucursal().getCiudad()));
 
         //Datos cuando es una nota de venta
         if(DocumentoEnum.NOTA_VENTA.equals(documento))
