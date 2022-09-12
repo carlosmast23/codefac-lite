@@ -116,6 +116,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
@@ -391,7 +392,13 @@ public class Main {
             PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
             propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
             ArchivoConfiguracionesCodefac.getInstance().guardar();
+            
+            //eliminar el campo de forzar version por que me puede causar problemas            
+            propiedadesIniciales.clearProperty(ArchivoConfiguracionesCodefac.FORZAR_VERSION);
+            propiedadesIniciales.save();
         } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ConfigurationException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

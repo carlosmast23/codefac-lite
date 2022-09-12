@@ -1124,8 +1124,17 @@ public class CarteraModel extends CarteraPanel{
         {
             String preimpreso[]=getTxtPreimpreso().getText().split("-");
             puntoEmision=preimpreso[0];
-            puntoEstablecimiento=preimpreso[1];
-            secuencial=preimpreso[2];
+            if(preimpreso.length>1)
+            {
+                puntoEstablecimiento=preimpreso[1];
+                secuencial=preimpreso[2];
+            }
+            else
+            {
+                puntoEstablecimiento="001";
+                secuencial="001";            
+            }
+            
         }
         
         cartera.setPuntoEmision((puntoEmision.isEmpty())?"0":puntoEmision);
