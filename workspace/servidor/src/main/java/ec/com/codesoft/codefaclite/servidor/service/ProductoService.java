@@ -251,6 +251,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         grabarEmpaques(p, productoPresentacionList);
         
+        
         /*if(presentacion!=null)
         {
             if(presentacion.getId()==null)
@@ -351,11 +352,31 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 }
             }
             
+            
+            
             //Actualizar los cambios en el producto
             entityManager.merge(producto);
             
         }
 
+    }
+    
+    private void eliminarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException, RemoteException
+    {
+        //Detalle Original
+        List<ProductoPresentacionDetalle> detallesOriginales= ServiceFactory.getFactory().getProductoPresentacionDetalleServiceIf().buscarPorProducto(producto);
+        
+        for (ProductoPresentacionDetalle detalle : detallesOriginales) 
+        {
+            //Si no encuentra en la lista la presentación significa que fue eliminado
+            if(!productoPresentacionList.contains(detalle))
+            {
+                detalle= entityManager.merge(detalle);
+                //Elimino el dato que ya no voy a ocupar
+                entityManager.remove(detalle);
+            }
+        }
+        
     }
     
     private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
@@ -454,7 +475,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 List<ProductoPresentacionDetalle> productoPresentacionList = producto.getPresentacionList();
                 producto.setPresentacionList(null);
                 grabarEmpaques(producto, productoPresentacionList);
-
+                eliminarEmpaques(producto, productoPresentacionList);
                 //producto.setPresentacion(presentacion);
                 producto.setPresentacionList(productoPresentacionList);
 

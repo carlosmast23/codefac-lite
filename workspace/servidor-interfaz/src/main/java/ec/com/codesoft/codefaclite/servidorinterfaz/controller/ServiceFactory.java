@@ -80,6 +80,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaEstablecimi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoPresentacionDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
@@ -242,6 +243,7 @@ public abstract class ServiceFactory {
     public TipoProductoServiceIf getTipoProductoServiceIf(){return (TipoProductoServiceIf) getRecursosRMI(TipoProductoServiceIf.class);};
     public ObjetoMantenimientoServiceIf getObjetoMantenimientoServiceIf(){return (ObjetoMantenimientoServiceIf) getRecursosRMI(ObjetoMantenimientoServiceIf.class);};
     public CasaComercialServiceIf getCasaComercialServiceIf(){return (CasaComercialServiceIf) getRecursosRMI(CasaComercialServiceIf.class);};
+    public ProductoPresentacionDetalleServiceIf getProductoPresentacionDetalleServiceIf(){return (ProductoPresentacionDetalleServiceIf) getRecursosRMI(ProductoPresentacionDetalleServiceIf.class);};
     
     
     /**

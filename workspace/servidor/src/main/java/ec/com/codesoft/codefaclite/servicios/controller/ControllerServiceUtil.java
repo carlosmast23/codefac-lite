@@ -46,6 +46,7 @@ import ec.com.codesoft.codefaclite.servidor.service.PresentacionProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.PresupuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.PresupuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
+import ec.com.codesoft.codefaclite.servidor.service.ProductoPresentacionDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.PuntoEmisionService;
@@ -159,6 +160,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProduc
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoPresentacionDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -329,6 +331,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(ObjetoMantenimientoService.class, ObjetoMantenimientoServiceIf.class);
             mapRecursos.put(CasaComercialService.class, CasaComercialServiceIf.class);
             mapRecursos.put(PresentacionProductoService.class, PresentacionProductoServiceIf.class);
+            mapRecursos.put(ProductoPresentacionDetalleService.class, ProductoPresentacionDetalleServiceIf.class);
             
             
             

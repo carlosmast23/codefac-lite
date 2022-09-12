@@ -161,7 +161,7 @@ public class UtilidadesReflexion {
     public static void setearValorDelMetodo(Method metodo, Object context,Object value) {
         try {
             //metodo.setAccessible(true);
-            System.out.println(metodo.getName()+" =>"+value+"<=");
+            //System.out.println(metodo.getName()+" =>"+value+"<=");
             metodo.invoke(context, value);
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(UtilidadesReflexion.class.getName()).log(Level.SEVERE,"El tipo de datos recibido como ARGUMENTO es INCORRECTO");
