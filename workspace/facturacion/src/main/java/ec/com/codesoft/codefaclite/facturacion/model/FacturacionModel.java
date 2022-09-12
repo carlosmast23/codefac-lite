@@ -1428,16 +1428,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //getCmbPresentacionProducto().addItem(producto.getPresentacion());
             List<PresentacionProducto> presentacionList=producto.obtenerPresentacionesList();
             
+            
             for (PresentacionProducto detallePresentacion : presentacionList) 
             {
                 getCmbPresentacionProducto().addItem(detallePresentacion);
+                //break;
             }
             
             //Volver a seleccionar la presentacion correcta en el caso que existe el producto
-            if(productoSeleccionado!=null)
+            /*if(productoSeleccionado!=null)
             {
                 getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
-            }
+            }*/
         }
     }
     

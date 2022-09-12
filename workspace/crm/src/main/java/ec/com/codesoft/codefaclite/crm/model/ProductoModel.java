@@ -399,15 +399,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
     
     public ProductoPresentacionDetalle obtenerPresentacionEmpaqueVista()
-    {        
-        BigDecimal cantidad=new BigDecimal(getTxtCantidadEmpaquetado().getText());
-        
-        BigDecimal pvp=null;
-        if(!UtilidadesTextos.verificarNullOVacio(getTxtPrecioEmpaquetado().getText()))
-        {
-            pvp=new BigDecimal(getTxtPrecioEmpaquetado().getText());
-        }
-        
+    {   
         
         PresentacionProducto presentacionEmpaquetado=(PresentacionProducto) getCmbPresentacionEmpaquetado().getSelectedItem();
         ProductoPresentacionDetalle.TipoPresentacionEnum tipoEnum= (ProductoPresentacionDetalle.TipoPresentacionEnum) getCmbTipoPresentacion().getSelectedItem();
@@ -420,6 +412,13 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }
         else
         {
+            BigDecimal cantidad = new BigDecimal(getTxtCantidadEmpaquetado().getText());
+
+            BigDecimal pvp = null;
+            if (!UtilidadesTextos.verificarNullOVacio(getTxtPrecioEmpaquetado().getText())) {
+                pvp = new BigDecimal(getTxtPrecioEmpaquetado().getText());
+            }
+            
             detallePresentacion.setCantidad(cantidad);
             detallePresentacion.setPvpTmp(pvp);
         }
@@ -436,8 +435,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     {
         getBtnEliminarEmpaque().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                ProductoPresentacionDetalle productoEmpaque =(ProductoPresentacionDetalle) getTblEmpaquetado().getValueAt(getTblEmpaquetado().getSelectedRow(), 0);
+            public void actionPerformed(ActionEvent e) 
+            {
+                int filaTabla=getTblEmpaquetado().getSelectedRow();
+                ProductoPresentacionDetalle productoEmpaque =(ProductoPresentacionDetalle) getTblEmpaquetado().getValueAt(filaTabla, 0);
                 if(productoEmpaque!=null)
                 {
                     controlador.producto.eliminarPresentacionProducto(productoEmpaque);

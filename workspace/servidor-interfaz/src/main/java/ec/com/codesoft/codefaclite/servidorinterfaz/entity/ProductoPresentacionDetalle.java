@@ -119,12 +119,31 @@ public class ProductoPresentacionDetalle implements Serializable{
         this.tipo = tipoEnum.letra;
     }
 
-    @Override
+    /*@Override
     public int hashCode() {
         int hash = 7;
         hash = 83 * hash + Objects.hashCode(this.id);
         return hash;
+    }*/
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        if(this.id==null)
+        {
+            hash = 83 * hash + Objects.hashCode(this.cantidad);
+            hash = 83 * hash + Objects.hashCode(this.pvpTmp);
+            hash = 83 * hash + Objects.hashCode(this.presentacionProducto);
+            hash = 83 * hash + Objects.hashCode(this.tipo);
+        }
+        else
+        {
+            hash = 83 * hash + Objects.hashCode(this.id);
+        }
+        return hash;
     }
+    
+    
 
     @Override
     public boolean equals(Object obj) {
@@ -137,9 +156,24 @@ public class ProductoPresentacionDetalle implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
+                
         final ProductoPresentacionDetalle other = (ProductoPresentacionDetalle) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
+        
+        if(this.id==null && other.id==null)
+        {
+            int hashCode=hashCode();
+            int hashCodeTmp=other.hashCode();
+            if(hashCode!=hashCodeTmp)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            //Comparar cuando tiene null en el id del comparados               
+            if (!Objects.equals(this.id, other.id)) {
+                return false;
+            }
         }
         return true;
     }
