@@ -827,6 +827,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //getCmbPreciosVenta().removeAllItems();
         interfaz.limpiarComboPrecioVenta();
         interfaz.cargarEtiquetaStock(BigDecimal.ZERO);
+        interfaz.limpiarComboPresentaciones();
     }
 
     @Override
@@ -1377,6 +1378,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public Boolean obtenerCheckPorcentajeSeleccion();
         
         public void limpiarComboPrecioVenta();
+        public void limpiarComboPresentaciones();
         public void focoTxtCodigoDetalle();
         public void setearCantidadTxt(String cantidad);
         public void setearDescripcionTxt(String descripcion);

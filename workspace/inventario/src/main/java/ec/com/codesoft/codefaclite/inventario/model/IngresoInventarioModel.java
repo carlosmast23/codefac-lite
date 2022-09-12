@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -802,7 +803,9 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
                 {
                     producto=producto.buscarProductoEmpaquePrincipal();
-                    BigDecimal cantidadPorCaja= producto.obtenerCantidadPorCaja();
+                    //BigDecimal cantidadPorCaja= producto.obtenerCantidadPorCaja();
+                    ProductoPresentacionDetalle detallePresentacion=producto.buscarPresentacionDetalleProducto();
+                    BigDecimal cantidadPorCaja=detallePresentacion.getCantidad();
                     
                     if(cantidadPorCaja.compareTo(BigDecimal.ZERO)==0)
                     {

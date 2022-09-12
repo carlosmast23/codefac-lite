@@ -1189,6 +1189,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         
     }
 
+    public void limpiarComboPresentaciones() {
+        
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA

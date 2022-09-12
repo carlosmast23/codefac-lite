@@ -381,6 +381,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return correos;
     }
     
+    public void limpiarComboPresentaciones()
+    {
+        getCmbPresentacionProducto().removeAllItems();
+    }
+    
     public void cargarFacturaDesdeProforma(Factura proforma) 
     {
         //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
@@ -2337,6 +2342,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtDescripcion().setText("");
         getTxtDescuento().setText("");
         getTxtReferenciaContacto().setText("");
+        getCmbPresentacionProducto().removeAllItems();
         //getTxtClientePresupuesto().setText("");
         getCheckPorcentaje().setSelected(false);
 
