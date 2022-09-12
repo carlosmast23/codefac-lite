@@ -33,4 +33,18 @@ public class ProductoPresentacionDetalleService extends ServiceAbstract<Producto
         return getFacade().findByMap(mapParametros);
     }
     
+    public ProductoPresentacionDetalle buscarPorProductoEmpaquetado(Producto productoEmpaquetado) throws ServicioCodefacException, RemoteException 
+    {
+        //ProductoPresentacionDetalle d;
+        //d.getProductoEmpaquetado();
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("productoEmpaquetado", productoEmpaquetado);
+        List<ProductoPresentacionDetalle> detalles = getFacade().findByMap(mapParametros);
+        if(detalles.size()>0)
+        {
+            return detalles.get(0);
+        }
+        return null;
+    }
+    
 }

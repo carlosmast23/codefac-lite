@@ -475,6 +475,7 @@ public class Producto implements Serializable, Comparable<Producto> {
         }
     }
     
+    @Deprecated
     public PresentacionProducto buscarPresentacionOriginal()
     {
         if(presentacionList!=null)
@@ -488,6 +489,40 @@ public class Producto implements Serializable, Comparable<Producto> {
             }
         }
         return null;
+    }
+    
+    public ProductoPresentacionDetalle buscarPresentacionDetalleProducto()
+    {
+        try {
+            ProductoPresentacionDetalle detalle= ServiceFactory.getFactory().getProductoPresentacionDetalleServiceIf().buscarPorProductoEmpaquetado(this);
+            if(detalle!=null)
+            {
+                return detalle;
+            }
+            return null;
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null;
+    }
+    
+    public PresentacionProducto buscarPresentacionProducto()
+    {
+        try {
+            ProductoPresentacionDetalle detalle= ServiceFactory.getFactory().getProductoPresentacionDetalleServiceIf().buscarPorProductoEmpaquetado(this);
+            if(detalle!=null)
+            {
+                return detalle.getPresentacionProducto();
+            }
+            return null;
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null;
     }
     
     public void agregarPresentacionOriginal(PresentacionProducto presentacionProducto)

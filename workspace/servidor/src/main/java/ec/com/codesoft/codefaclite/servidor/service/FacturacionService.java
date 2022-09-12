@@ -879,7 +879,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //Si el producto es un empaque busco el producto original
         if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
         {
-            ProductoPresentacionDetalle presentacionDetalle =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacion(producto.buscarPresentacionOriginal(), producto);
+            //ProductoPresentacionDetalle presentacionDetalle =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacion(producto.buscarPresentacionOriginal(), producto);
+            ProductoPresentacionDetalle presentacionDetalle=producto.buscarPresentacionDetalleProducto();
             BigDecimal cantidadEquivalencia=presentacionDetalle.getCantidad();
             cantidad=detalle.getCantidad().multiply(cantidadEquivalencia);
             precioUnitario=(detalle.getPrecioUnitario().divide(cantidadEquivalencia,6,BigDecimal.ROUND_HALF_UP));

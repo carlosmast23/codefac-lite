@@ -17,4 +17,5 @@ import java.util.List;
  */
 public interface ProductoPresentacionDetalleServiceIf extends ServiceAbstractIf<ProductoPresentacionDetalle> {
     public List<ProductoPresentacionDetalle> buscarPorProducto(Producto producto) throws ServicioCodefacException, RemoteException;
+    public ProductoPresentacionDetalle buscarPorProductoEmpaquetado(Producto productoEmpaquetado) throws ServicioCodefacException, RemoteException;
 }

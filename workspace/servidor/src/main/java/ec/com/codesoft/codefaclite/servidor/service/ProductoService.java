@@ -314,33 +314,36 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             {
                 if(presentacionDetalle.getId()==null)
                 {                    
-                    try {                        
-                        //Saco una copia del producto original para crear el producto empaqueteado con sus propias caracteristicas
-                        Producto productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
-                        productoEmpaquetado.setIdProducto(null);
-                        //Eliminar los detalles por que puede dar referencia un objecto que ya estaba previamente grabado
-                        productoEmpaquetado.setDetallesEnsamble(null);
-                        productoEmpaquetado.setPresentacionList(null);
-                        productoEmpaquetado.setProductoProveedorList(null);
-                        /*productoEmpaquetado.setTipoProducto(null);
-                        productoEmpaquetado.setSegmentoProducto(null);
-                        productoEmpaquetado.setCasaComercial(null);*/
-                        
-                        
-                        
-                        productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
-                        //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
-                        if(presentacionDetalle.getPvpTmp()==null)
+                    try {
+                        Producto productoEmpaquetado =null;
+                        if(presentacionDetalle.getTipoEnum().equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ORIGINAL))
                         {
-                            productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
+                            productoEmpaquetado=producto;
                         }
                         else
                         {
-                            productoEmpaquetado.setValorUnitario(presentacionDetalle.getPvpTmp());
+                            //Saco una copia del producto original para crear el producto empaqueteado con sus propias caracteristicas
+                            productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
+                            productoEmpaquetado.setIdProducto(null);
+                            //Eliminar los detalles por que puede dar referencia un objecto que ya estaba previamente grabado
+                            productoEmpaquetado.setDetallesEnsamble(null);
+                            productoEmpaquetado.setPresentacionList(null);
+                            productoEmpaquetado.setProductoProveedorList(null);
+                            /*productoEmpaquetado.setTipoProducto(null);
+                            productoEmpaquetado.setSegmentoProducto(null);
+                            productoEmpaquetado.setCasaComercial(null);*/                        
+                            productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
+                                                    
+                            //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
+                            if (presentacionDetalle.getPvpTmp() == null) {
+                                productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
+                            } else {
+                                productoEmpaquetado.setValorUnitario(presentacionDetalle.getPvpTmp());
+                            }
+
+                            entityManager.persist(productoEmpaquetado);
+                            entityManager.flush();
                         }
-                        
-                        entityManager.persist(productoEmpaquetado);
-                        entityManager.flush();
                         
                         presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);                        
                     } catch (RemoteException ex) {

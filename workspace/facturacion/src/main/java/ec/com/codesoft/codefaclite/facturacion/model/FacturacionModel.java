@@ -207,6 +207,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.RoundingMode;
+import javax.swing.JComboBox;
 import javax.swing.event.ChangeEvent;
 import org.jdesktop.swingx.JXTaskPane;
 
@@ -1384,7 +1385,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (manejaInventario.equals(EnumSiNo.SI)) 
         {
             //controlador.agregarProductoVista(kardexSeleccionado.getProducto(), kardexSeleccionado.getLote());
-            controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexSeleccionado.getStock());
+            if(kardexSeleccionado!=null)
+            {
+                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexSeleccionado.getStock());
+            }
+            else
+            {
+                controlador.agregarProductoVista(productoSeleccionado, null,null);
+            }
+            
         } 
         else if (manejaInventario.equals(EnumSiNo.NO)) {
             controlador.agregarProductoVista(productoSeleccionado, null,BigDecimal.ZERO);
@@ -1419,10 +1428,62 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
     
+    public ActionListener listenerCmbPresentacion=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            PresentacionProducto presentacion = (PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
+
+            if (presentacion != null) {
+                //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
+                Producto productoTmp = productoSeleccionado.buscarProductoPorPresentacion(presentacion);
+                //Si la presentacion es igual al mismo producto entonces no hago nada mas
+                if (productoTmp.equals(productoSeleccionado)) {
+                    return;
+                }
+
+                productoSeleccionado = productoTmp;
+
+                try {
+                    TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
+                    EnumSiNo enumBusqueda = EnumSiNo.NO;
+                    switch (tipoDocumentoEnum) {
+                        case INVENTARIO:
+                            enumBusqueda = EnumSiNo.SI;
+
+                    }
+                    //Volver a cargar los productos pero con la nueva presentacion
+                    cargarProductoInventario(enumBusqueda);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    };
+    
+    //TODO: Poner en una clase de utilidades
+    public void eliminarTodosListener(JComboBox comboBox)    {
+        ActionListener[] listenerList= comboBox.getActionListeners();
+        for (ActionListener actionListener : listenerList) {
+            comboBox.removeActionListener(actionListener);
+        }
+    }
+    
     public void cargarPresentaciones(Producto producto)
     {
+        /*getCmbPresentacionProducto().getActionListeners()
+        //Agrego un listener vacio para evitar conflicto de redundancia de eventsos
+        getCmbPresentacionProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //vacio
+            }
+        });*/
+        eliminarTodosListener(getCmbPresentacionProducto());
+        
         getCmbPresentacionProducto().removeAllItems();
-        if(producto.getPresentacionList()!=null)
+        if(producto!=null)
         {
             //Por defecto agrego la presentacion del mismo producto            
             //getCmbPresentacionProducto().addItem(producto.getPresentacion());
@@ -1436,11 +1497,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             
             //Volver a seleccionar la presentacion correcta en el caso que existe el producto
-            /*if(productoSeleccionado!=null)
+            if(productoSeleccionado!=null)
             {
-                getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
-            }*/
+                //getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
+                PresentacionProducto presentacionProducto=productoSeleccionado.buscarPresentacionProducto();
+                getCmbPresentacionProducto().setSelectedItem(presentacionProducto);
+            }
         }
+        getCmbPresentacionProducto().addActionListener(listenerCmbPresentacion);
     }
     
     public void validacionesGrabar() throws ExcepcionCodefacLite
@@ -1613,13 +1677,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 DialogoCodefac.mensaje("Correcto", "La nota de venta interna se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                 //facturaManual(factura.getCodigoDocumentoEnum());
-                if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
-                {
-                    reporteVentaManual(factura,documentoEnum,true,false);
-                }
-                else if(factura.getTipoFacturacionEnum()==null ||  factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                if(factura.getTipoFacturacionEnum()==null ||  factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {                    
                     FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre);
+                }                
+                else if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
+                {
+                    reporteVentaManual(factura,documentoEnum,true,false);
                 }
             }
             else
@@ -3374,43 +3438,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
         
         
-        getCmbPresentacionProducto().addActionListener(new ActionListener() 
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PresentacionProducto presentacion=(PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
-                
-                if(presentacion!=null)
-                {
-                    //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
-                    Producto productoTmp= productoSeleccionado.buscarProductoPorPresentacion(presentacion);
-                    //Si la presentacion es igual al mismo producto entonces no hago nada mas
-                    if(productoTmp.equals(productoSeleccionado))
-                    {
-                        return ;
-                    }
-                    
-                    productoSeleccionado=productoTmp;
-                    
-                    try {
-                        TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
-                        EnumSiNo enumBusqueda=EnumSiNo.NO;
-                        switch(tipoDocumentoEnum)
-                        {
-                            case INVENTARIO:
-                                enumBusqueda=EnumSiNo.SI;
-                                
-                        }
-                        //Volver a cargar los productos pero con la nueva presentacion
-                        cargarProductoInventario(enumBusqueda);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
+        
         
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
