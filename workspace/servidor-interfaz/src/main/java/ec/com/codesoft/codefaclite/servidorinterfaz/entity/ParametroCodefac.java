@@ -137,6 +137,12 @@ public class ParametroCodefac implements Serializable {
     public static final String CONSTRUIR_ENSAMBLES_FACTURAR="construir_ensamble_facturar";
     
     /**
+     * Esta opcion me permite generar ensambles si no existe al momento de facturar
+     * @result EnumSiNO
+     */
+    public static final String PERMITIR_DESCUENTO_MENOR_COSTO="permitir_descuento_menor_costo";
+    
+    /**
      * Fecha inicial cuando sacaron la firma para que el sistema pueda emitir una alerta cuando falte poco tiempo para renovar
      */
     public static final String FIRMA_FECHA_EMISION="firma_fecha_emision";

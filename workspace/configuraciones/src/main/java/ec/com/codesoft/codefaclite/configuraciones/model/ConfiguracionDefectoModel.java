@@ -217,10 +217,12 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
+        
         UtilidadesComboBox.llenarComboBox(getCmbVentanasMultiples(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbAgregarLoteFactura(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbConstruirEnsamblesFacturar(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbPermitirDescuentoMenorCosto(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRideDireccionEmpledo(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbDatoAdicionalRidePuntoEmisionEmpleado(),EnumSiNo.values());
@@ -521,6 +523,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroConstruirEnsambleFacturar != null) ? parametroConstruirEnsambleFacturar.getValor() : null);
             getCmbConstruirEnsamblesFacturar().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac parametroPermitirDescuentoMenorCosto= parametrosTodos.get(ParametroCodefac.PERMITIR_DESCUENTO_MENOR_COSTO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroPermitirDescuentoMenorCosto != null) ? parametroPermitirDescuentoMenorCosto.getValor() : null);
+            getCmbPermitirDescuentoMenorCosto().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             //Parametros para agregar el ride
             ParametroCodefac parametroDatoAdicionalRide= parametrosTodos.get(ParametroCodefac.FACTURACION_RIDE_DIRECCION_EMPLEADO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroDatoAdicionalRide != null) ? parametroDatoAdicionalRide.getValor() : null);
@@ -717,6 +723,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbConstruirEnsamblesFacturar().getSelectedItem();
         agregarParametro(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR);
+        
+        enumSiNo = (EnumSiNo) getCmbPermitirDescuentoMenorCosto().getSelectedItem();
+        agregarParametro(ParametroCodefac.PERMITIR_DESCUENTO_MENOR_COSTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.PERMITIR_DESCUENTO_MENOR_COSTO);
         
         enumSiNo = (EnumSiNo) getCmbHabilitarRetencionesEnCompras().getSelectedItem();
         agregarParametro(ParametroCodefac.HABILITAR_RETENCION_COMPRAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);

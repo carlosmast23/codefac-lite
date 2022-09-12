@@ -152,7 +152,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Código","Lote","Bodega","Producto","Marca","Categoria","Ubicación", "Stock","Pvp1" ,"Cantidad Min","Costo","Utilidad"};
+                        String nombreCabeceras[] = {"Código","Lote","Bodega","Producto","Marca","Categoria","Ubicación", "Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras,listaData);
                         excel.abrirDocumento();
                     }
@@ -314,6 +314,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         BigDecimal costoPromedio=(BigDecimal)objeto[2];
                         Bodega bodega=(Bodega)objeto[3];
                         Lote lote=(Lote)objeto[4];
+                        BigDecimal ultimoCosto = (BigDecimal)objeto[5];
                         
                         //Kardex kardexTemp = (Kardex) objeto[2];
                         
@@ -348,6 +349,7 @@ public class StockReporteModel extends StockMinimoPanel{
                             data.setCantidadMinima("0");
                         }
                         data.setCosto(costoPromedio.toString());
+                        data.setUltimoCosto(ultimoCosto+"");
                         data.setBodega(bodega.getNombre());
                         data.setLote((lote!=null)?lote.getCodigo():"");
                         data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
@@ -422,7 +424,8 @@ public class StockReporteModel extends StockMinimoPanel{
             "Stock",
             "Pvp1",
             "Cantidad Minima",
-            "Costo",
+            "Último Costo",
+            "Costo Promedio",
             "Utilidad"
         };
         
@@ -441,6 +444,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 stockMinimo.getStock(),
                 stockMinimo.getPvp1()+"",
                 stockMinimo.getCantidadMinima(),
+                stockMinimo.getUltimoCosto()+"",
                 stockMinimo.getCosto(),
                 stockMinimo.getUtilidad1()+""
             };

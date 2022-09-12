@@ -596,6 +596,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return false;
         }
         
+        validacionDescuentoMenorQueElCosto(facturaDetalle, kardex);
+        
         //calcularTotalesDetalles(facturaDetalle);
         facturaDetalle.calcularTotalesDetallesFactura();
         /**
@@ -628,6 +630,28 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
     }
     
+    private void validacionDescuentoMenorQueElCosto(FacturaDetalle facturaDetalle,Kardex kardex) throws ServicioCodefacException
+    {
+        try {
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.PERMITIR_DESCUENTO_MENOR_COSTO,EnumSiNo.NO))
+            {
+                BigDecimal ultimoCosto=kardex.getPrecioUltimo();
+                if(ultimoCosto!=null && ultimoCosto.compareTo(BigDecimal.ZERO)!=0 )
+                {
+                
+                    BigDecimal subtotalMenosDescuento = facturaDetalle.getSubtotalRestadoDescuentos();
+                    System.out.println(subtotalMenosDescuento + " < " + ultimoCosto);
+                    if (subtotalMenosDescuento.compareTo(ultimoCosto) < 0) {
+                        throw new ServicioCodefacException("El precio no puede ser menor que el último costo de compra de " + ultimoCosto);
+                    }
+                }
+
+            }            
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     
     public void cargarTotales() {

@@ -666,6 +666,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado,kardexSeleccionado);
                 } catch (ServicioCodefacException ex) {
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
@@ -1190,6 +1191,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     controlador.agregarDetallesFactura(facturaDetalle, documentoSeleccionado, kardexSeleccionado);
                 } catch (ServicioCodefacException ex) {
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

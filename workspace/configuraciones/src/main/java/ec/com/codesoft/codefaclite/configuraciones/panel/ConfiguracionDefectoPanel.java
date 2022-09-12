@@ -184,6 +184,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtNumeroDecimalesProducto = new javax.swing.JSpinner();
         jLabel57 = new javax.swing.JLabel();
         cmbAgregarLoteFactura = new javax.swing.JComboBox<>();
+        jLabel64 = new javax.swing.JLabel();
+        cmbPermitirDescuentoMenorCosto = new javax.swing.JComboBox<>();
         jPanel9 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
@@ -197,7 +199,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbVentanasMultiples = new javax.swing.JComboBox<>();
         jLabel60 = new javax.swing.JLabel();
         cmbTipoNegocio = new javax.swing.JComboBox<>();
-        jLabel61 = new javax.swing.JLabel();
+        jLabel63 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -646,7 +648,6 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbConfiguracionImpresora, gridBagConstraints);
 
         jLabel33.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
         jLabel33.setText("Activar Documento Nota de  Venta Interna:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1172,7 +1173,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbFacturarInventarioNegativo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
@@ -1194,10 +1195,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbConstruirEnsamblesFacturar, gridBagConstraints);
 
         jLabel53.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel53.setText("Agregar Lote en Facturas:");
+        jLabel53.setText("Permitir descuento menor al Costo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel53, gridBagConstraints);
@@ -1224,6 +1225,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(cmbAgregarLoteFactura, gridBagConstraints);
+
+        jLabel64.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel64.setText("Agregar Lote en Facturas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel64, gridBagConstraints);
+
+        cmbPermitirDescuentoMenorCosto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(cmbPermitirDescuentoMenorCosto, gridBagConstraints);
 
         jTabbedPane1.addTab("Inventario", jPanel8);
 
@@ -1335,14 +1352,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(cmbTipoNegocio, gridBagConstraints);
 
-        jLabel61.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel61.setText("Tipo Negocio:");
+        jLabel63.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel63.setText("Tipo Negocio:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel9.add(jLabel61, gridBagConstraints);
+        jPanel9.add(jLabel63, gridBagConstraints);
 
         jTabbedPane1.addTab("General", jPanel9);
 
@@ -1389,6 +1406,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
     private javax.swing.JComboBox<OrientacionReporteEnum> cmbOrientacionReporte;
+    private javax.swing.JComboBox<EnumSiNo> cmbPermitirDescuentoMenorCosto;
     private javax.swing.JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoPedido;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta;
@@ -1458,8 +1476,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
-    private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1916,6 +1935,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbOrientacionReporte(JComboBox<OrientacionReporteEnum> cmbOrientacionReporte) {
         this.cmbOrientacionReporte = cmbOrientacionReporte;
+    }
+
+    public JComboBox<EnumSiNo> getCmbPermitirDescuentoMenorCosto() {
+        return cmbPermitirDescuentoMenorCosto;
+    }
+
+    public void setCmbPermitirDescuentoMenorCosto(JComboBox<EnumSiNo> cmbPermitirDescuentoMenorCosto) {
+        this.cmbPermitirDescuentoMenorCosto = cmbPermitirDescuentoMenorCosto;
     }
     
     

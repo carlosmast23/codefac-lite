@@ -27,6 +27,7 @@ public class StockMinimoData implements ExcelDatosInterface{
     private String categoria;
     private String ubicacion;
     private String costo;
+    private String ultimoCosto;
     private String bodega;
     private BigDecimal pvp1;
     private BigDecimal utilidad1;
@@ -202,6 +203,14 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setMarca(String marca) {
         this.marca = marca;
     }
+
+    public String getUltimoCosto() {
+        return ultimoCosto;
+    }
+
+    public void setUltimoCosto(String ultimoCosto) {
+        this.ultimoCosto = ultimoCosto;
+    }
     
     
     
@@ -222,6 +231,7 @@ public class StockMinimoData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.pvp1,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.cantidadMinima, Excel.TipoDataEnum.NUMERO));        
         tiposDatos.add(new TipoDato(this.costo,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.ultimoCosto,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.utilidad1,Excel.TipoDataEnum.NUMERO));
         
         
