@@ -10,9 +10,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.FechaCaducidadData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReporteFechaCaducidadReport;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.FechaCaducidadResult;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -25,5 +33,6 @@ public interface LoteSeviceIf extends ServiceAbstractIf<Lote>{
     public void editarSinTransaccion(Lote entity) throws ServicioCodefacException, RemoteException;
     public ReportDataAbstract reporteFechaCaducidad(Sucursal sucursal,Bodega bodega,Date fechaReferencia) throws ServicioCodefacException, RemoteException;
     public boolean existenLotesIngresados(Empresa empresa) throws ServicioCodefacException, RemoteException ;
+    public Integer reporteFechaCaducidadTotal(Sucursal sucursal,Bodega bodega,Date fechaReferencia) throws ServicioCodefacException, RemoteException;
     
 }

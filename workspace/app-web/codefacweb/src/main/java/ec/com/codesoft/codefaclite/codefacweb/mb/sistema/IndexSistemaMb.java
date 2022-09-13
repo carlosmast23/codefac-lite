@@ -56,7 +56,7 @@ public class IndexSistemaMb  extends GeneralAbstractMb implements Serializable {
         System.out.println("Cargando alertas del sistema");
         try {
              System.out.println("procesando ...");
-            alertasSistemas=ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaRapida(sessionMb.getSession().getEmpresa());
+            alertasSistemas=ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaRapida(sessionMb.getSession().getSucursal());
             System.out.println("fin procesando ...");
             detenerActualizarAlerta=true;
         } catch (RemoteException ex) {

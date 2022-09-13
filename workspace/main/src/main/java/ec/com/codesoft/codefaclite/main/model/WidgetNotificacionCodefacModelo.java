@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.main.panel.WidgetNotificacionesCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse.TipoAdvertenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -42,11 +43,11 @@ import javax.swing.table.DefaultTableModel;
 public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac{
 
     private final static String TITULO_PAGINA="Notificaciones Codefac";
-    private Empresa empresa;
-    public WidgetNotificacionCodefacModelo(JDesktopPane parentPanel,Empresa empresa) {
+    private Sucursal sucursal;
+    public WidgetNotificacionCodefacModelo(JDesktopPane parentPanel,Sucursal sucursal) {
         super(parentPanel); 
         getLblNotificaciones().setText(TITULO_PAGINA);
-        this.empresa=empresa;
+        this.sucursal=sucursal;
         listenerBotones();
         actualizarNotificaciones(ModoProcesarEnum.NORMAL);
         
@@ -72,7 +73,7 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
                     //ServiceFactory.getFactory().getParametroCodefacServiceIf().procesoBloqueadoPrueba();
                     
                     
-                    List<AlertaResponse> alertas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaRapida(empresa);
+                    List<AlertaResponse> alertas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaRapida(sucursal);
                     String[] tituloTabla = {"Tipo", "Problema", "Solución"};
                     
                     UtilidadesTablas.LlenarDatoTablaIf interfazLlenarDatos=new UtilidadesTablas.LlenarDatoTablaIf<AlertaResponse>() {
@@ -95,7 +96,7 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
                     definirFormatoTabla();
                     
                     //cargar datos lentos
-                    List<AlertaResponse> alertasLentas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaLenta(empresa,modoEnum);
+                    List<AlertaResponse> alertasLentas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaLenta(sucursal.getEmpresa(),modoEnum);
                     UtilidadesTablas.llenarTablasDatos(
                             getTblNotificaciones(),
                             alertasLentas, 
@@ -177,14 +178,15 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
         getTblNotificaciones().setModel(new DefaultTableModel());
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
+    public Sucursal getSucursal() {
+        return sucursal;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
     }
-    
+
+
     
     
 }

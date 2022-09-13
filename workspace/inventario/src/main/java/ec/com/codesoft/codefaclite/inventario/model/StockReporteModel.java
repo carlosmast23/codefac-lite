@@ -85,7 +85,7 @@ public class StockReporteModel extends StockMinimoPanel{
     
     }
     
-    private void valoresIniciales() {
+    public void valoresIniciales() {
         try {                       
             
             //Obtener bodega por defecto seleccionada

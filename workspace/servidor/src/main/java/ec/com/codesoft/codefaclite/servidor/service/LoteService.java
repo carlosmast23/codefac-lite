@@ -147,5 +147,11 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         return reporte;
     }
     
+    public Integer reporteFechaCaducidadTotal(Sucursal sucursal,Bodega bodega,Date fechaReferencia) throws ServicioCodefacException, RemoteException 
+    {
+        Integer total=getFacade().reporteFechaCaducidadTotalFacade(sucursal, bodega, fechaReferencia);
+        return total;
+    }
+    
     
 }

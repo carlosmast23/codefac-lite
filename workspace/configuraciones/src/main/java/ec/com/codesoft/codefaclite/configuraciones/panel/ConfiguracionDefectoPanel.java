@@ -186,6 +186,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbAgregarLoteFactura = new javax.swing.JComboBox<>();
         jLabel64 = new javax.swing.JLabel();
         cmbPermitirDescuentoMenorCosto = new javax.swing.JComboBox<>();
+        jLabel61 = new javax.swing.JLabel();
+        txtAlertaDiasPorCaducarProducto = new javax.swing.JSpinner();
         jPanel9 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
@@ -1173,7 +1175,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbFacturarInventarioNegativo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
@@ -1195,10 +1197,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbConstruirEnsamblesFacturar, gridBagConstraints);
 
         jLabel53.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel53.setText("Permitir descuento menor al Costo:");
+        jLabel53.setText("Alertas días por caducar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel53, gridBagConstraints);
@@ -1241,6 +1243,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(cmbPermitirDescuentoMenorCosto, gridBagConstraints);
+
+        jLabel61.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel61.setText("Permitir descuento menor al Costo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel61, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(txtAlertaDiasPorCaducarProducto, gridBagConstraints);
 
         jTabbedPane1.addTab("Inventario", jPanel8);
 
@@ -1476,6 +1494,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
@@ -1510,6 +1529,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblEspacioVertical1;
     private javax.swing.JLabel lblMensaje;
+    private javax.swing.JSpinner txtAlertaDiasPorCaducarProducto;
     private javax.swing.JTextArea txtCodigoHtml;
     private javax.swing.JTextField txtDatoAdicionalTitulo;
     private javax.swing.JSpinner txtDiasAlertaPago;
@@ -1944,7 +1964,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbPermitirDescuentoMenorCosto(JComboBox<EnumSiNo> cmbPermitirDescuentoMenorCosto) {
         this.cmbPermitirDescuentoMenorCosto = cmbPermitirDescuentoMenorCosto;
     }
-    
-    
+
+    public JSpinner getTxtAlertaDiasPorCaducarProducto() {
+        return txtAlertaDiasPorCaducarProducto;
+    }
+
+    public void setTxtAlertaDiasPorCaducarProducto(JSpinner txtAlertaDiasPorCaducarProducto) {
+        this.txtAlertaDiasPorCaducarProducto = txtAlertaDiasPorCaducarProducto;
+    }
     
 }

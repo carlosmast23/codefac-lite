@@ -103,6 +103,8 @@ public class ParametroCodefac implements Serializable {
     public static final String IMPRESORA_TICKETS_VENTAS = "impresora_tickets_venta";
     
     public static final String FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO = "formato_mensaje_comprobante_electronico";
+    
+    public static final String ALERTA_DIAS_POR_CADUCAR_PRODUCTO = "alerta_dias_por_caducar_producto";
     /**
      * Tipo de envio de los comprobantes 
      */

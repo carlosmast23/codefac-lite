@@ -2596,7 +2596,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              *              WIDGET NOTIFICACIONES CODEFAC
              * =================================================================
              */
-            widgetNotificacionCodefac = new WidgetNotificacionCodefacModelo(getjDesktopPane1(), sessionCodefac.getEmpresa());
+            widgetNotificacionCodefac = new WidgetNotificacionCodefacModelo(getjDesktopPane1(), sessionCodefac.getSucursal());
             widgetNotificacionCodefac.panelPadre = this;
             widgetNotificacionCodefac.setPreferredSize(new Dimension(500, 200));
             widgetNotificacionCodefac.setBounds(100, 0, 400, 180);
@@ -3707,7 +3707,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     @Override
     public void actualizarNotificacionesCodefac() {
-        this.widgetNotificacionCodefac.setEmpresa(sessionCodefac.getEmpresa()); //Actualizo este dato porque puede ser que esta cambiando de empresa
+        this.widgetNotificacionCodefac.setSucursal(sessionCodefac.getSucursal()); //Actualizo este dato porque puede ser que esta cambiando de empresa
         this.widgetNotificacionCodefac.actualizarNotificaciones(ModoProcesarEnum.NORMAL);
     }
     

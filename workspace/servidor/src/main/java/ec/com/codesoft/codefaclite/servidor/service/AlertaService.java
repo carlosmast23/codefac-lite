@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -27,6 +28,7 @@ import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -61,19 +63,45 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         }
     }
     
-    public List<AlertaResponse> actualizarNotificacionesCargaRapida(Empresa empresa) throws RemoteException,ServicioCodefacException
+    public List<AlertaResponse> actualizarNotificacionesCargaRapida(Sucursal sucursal) throws RemoteException,ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
-        alertas.add(obtenerNotificacionComprobantesElectronicos(empresa));
+        alertas.add(obtenerNotificacionComprobantesElectronicos(sucursal.getEmpresa()));
         //alertas.add(obtenerNotificacionComprobantesElectronicosBaseDatos(empresa));
-        alertas.add(obtenerNotificacionFechaLimiteFirma(empresa));
-        alertas.add(obtenerCantidadInventarioMinimo(empresa));
-        alertas.add(obtenerAlertaDirectorioRespaldo(empresa));
-        alertas.add(obtenerAlertaIvaSinConfigurar(empresa));
+        alertas.add(obtenerNotificacionFechaLimiteFirma(sucursal.getEmpresa()));
+        alertas.add(obtenerCantidadInventarioMinimo(sucursal.getEmpresa()));
+        alertas.add(obtenerAlertaDirectorioRespaldo(sucursal.getEmpresa()));
+        alertas.add(obtenerAlertaIvaSinConfigurar(sucursal.getEmpresa()));
+        alertas.add(obtenerAlertaStockProductosPorCaducar(sucursal));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
         
         return alertas;        
+    }
+    
+    private AlertaResponse obtenerAlertaStockProductosPorCaducar(Sucursal sucursal)
+    {
+        String diasStr=ParametroUtilidades.obtenerValorParametro(sucursal.getEmpresa(),ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);
+        if(!UtilidadesTextos.verificarNullOVacio(diasStr))
+        {
+            try {
+                Integer dias=Integer.parseInt(diasStr);
+                java.sql.Date fechaHoy=UtilidadesFecha.getFechaHoy();
+                java.sql.Date fechaComparar=UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarDiasFecha(fechaHoy,dias));
+                
+                Integer cantidadProductoCaducados=ServiceFactory.getFactory().getLoteSeviceIf().reporteFechaCaducidadTotal(sucursal,null, fechaComparar);
+                if(cantidadProductoCaducados!=null && cantidadProductoCaducados>0)
+                {
+                    AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,"Productos por caducar",cantidadProductoCaducados+" productos por caducar");
+                }                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(AlertaService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AlertaService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+        
     }
     
     private AlertaResponse obtenerAlertaIvaSinConfigurar(Empresa empresa)
@@ -132,11 +160,11 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return alertas;  
     }
     
-    public List<AlertaResponse> actualizarNotificaciones(Empresa empresa,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
+    public List<AlertaResponse> actualizarNotificaciones(Sucursal sucursal,ModoProcesarEnum modoEnum) throws RemoteException,ServicioCodefacException
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
-        alertas.addAll(actualizarNotificacionesCargaRapida(empresa));
-        alertas.addAll(actualizarNotificacionesCargaLenta(empresa,modoEnum)); 
+        alertas.addAll(actualizarNotificacionesCargaRapida(sucursal));
+        alertas.addAll(actualizarNotificacionesCargaLenta(sucursal.getEmpresa(),modoEnum)); 
         
         return alertas;        
     }

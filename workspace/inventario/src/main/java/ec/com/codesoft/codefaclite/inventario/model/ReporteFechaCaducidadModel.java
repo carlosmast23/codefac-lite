@@ -41,13 +41,14 @@ import net.sf.jasperreports.engine.JasperReport;
  *
  * @author CARLOS_CODESOFT
  */
-public class ReporteFechaCaducidadModel extends StockMinimoPanel{
+public class ReporteFechaCaducidadModel extends StockReporteModel{
 
     private ReporteFechaCaducidadReport reporte;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException 
     {
+        super.valoresIniciales();
         listenerBotones();
     }
     
@@ -66,7 +67,7 @@ public class ReporteFechaCaducidadModel extends StockMinimoPanel{
         try {
             Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
             
-            Integer diasCaducidad=(Integer) getTxtDiasCaducidad().getValue();
+            Integer diasCaducidad=(Integer) getTxtDiasCaducidad().getValue()+1;
             Date fechaHoy=UtilidadesFecha.getFechaHoy();
             Date fechaComparar=UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarDiasFecha(fechaHoy,diasCaducidad));
             System.out.println("Fecha Comparar: "+fechaComparar);

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.FechaCaducidadResult;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.sql.Date;
@@ -38,28 +39,16 @@ public class LoteFacade extends AbstractFacade<Lote>{
         return (Long) query.getSingleResult();
     }
     
+    public Integer reporteFechaCaducidadTotalFacade(Sucursal sucursal,Bodega bodega,Date fechaReferencia)
+    {
+        Query query= reporteFechaCaducidadFacadeGeneral(sucursal, bodega, fechaReferencia, TipoConsultaEnum.TAMANIO);
+        Object total= query.getSingleResult();
+        return (Integer) total;
+    }
+    
     public List<FechaCaducidadResult> reporteFechaCaducidadFacade(Sucursal sucursal,Bodega bodega,Date fechaReferencia)
     {
-        Producto producto;
-        String whereBodega="";
-        if(bodega!=null)
-        {
-           whereBodega=" AND B.BODEGA_ID = ?2 ";
-        }
-        //producto.getEstado();
-        //producto.getManejarInventario();
-        //producto.setEmpresa(empresa);
-                
-        String queryString="SELECT P.CODIGO_PERSONALIZADO,B.NOMBRE AS BODEGA,L.CODIGO,P.NOMBRE,L.FECHA_VENCIMIENTO,K.STOCK,P.VALOR_UNITARIO FROM KARDEX K INNER JOIN LOTE L ON K.LOTE_ID = L.ID INNER JOIN PRODUCTO P ON K.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID =K.BODEGA_ID WHERE P.ESTADO='A' AND B.ESTADO='A' AND K.ESTADO ='A' AND B.SUCURSAL_ID=?1 AND L.FECHA_VENCIMIENTO<?3 AND K.STOCK>0 "+whereBodega;
-        Query query = getEntityManager().createNativeQuery(queryString);
-        query.setParameter(1,sucursal.getId());
-        query.setParameter(3,fechaReferencia);
-        
-        if(bodega!=null)
-        {
-            query.setParameter(2, bodega.getIdBodega());
-        }
-        
+        Query query= reporteFechaCaducidadFacadeGeneral(sucursal, bodega, fechaReferencia, TipoConsultaEnum.TAMANIO);
         List<Object[]> resultadoOriginalList=query.getResultList();
         List<FechaCaducidadResult> resultadoList=new ArrayList<FechaCaducidadResult>();
         
@@ -71,6 +60,43 @@ public class LoteFacade extends AbstractFacade<Lote>{
         
         return resultadoList;
         
+    }
+    
+    public Query  reporteFechaCaducidadFacadeGeneral(Sucursal sucursal,Bodega bodega,Date fechaReferencia,TipoConsultaEnum tipoConsultaEnum)
+    {
+        String whereBodega="";
+        if(bodega!=null)
+        {
+           whereBodega=" AND B.BODEGA_ID = ?2 ";
+        }
+        //producto.getEstado();
+        //producto.getManejarInventario();
+        //producto.setEmpresa(empresa);
+        
+        String resultadoQuery="";
+        if(tipoConsultaEnum.equals(TipoConsultaEnum.DATOS))
+        {
+            resultadoQuery=" P.CODIGO_PERSONALIZADO,B.NOMBRE AS BODEGA,L.CODIGO,P.NOMBRE,L.FECHA_VENCIMIENTO,K.STOCK,P.VALOR_UNITARIO ";
+        }
+        else if(tipoConsultaEnum.equals(TipoConsultaEnum.TAMANIO))
+        {
+            resultadoQuery=" count(1) ";
+        }
+        
+        
+        
+        String queryString="SELECT "+resultadoQuery +" FROM KARDEX K INNER JOIN LOTE L ON K.LOTE_ID = L.ID INNER JOIN PRODUCTO P ON K.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID =K.BODEGA_ID WHERE P.ESTADO='A' AND B.ESTADO='A' AND K.ESTADO ='A' AND B.SUCURSAL_ID=?1 AND L.FECHA_VENCIMIENTO<?3 AND K.STOCK>0 "+whereBodega;
+        Query query = getEntityManager().createNativeQuery(queryString);
+        query.setParameter(1,sucursal.getId());
+        query.setParameter(3,fechaReferencia);
+        
+        if(bodega!=null)
+        {
+            query.setParameter(2, bodega.getIdBodega());
+        }
+        
+        return query;
+    
     }
     
 }

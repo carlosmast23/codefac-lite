@@ -32,7 +32,7 @@ public class FechaCaducidadResult extends AbstractResult{
         this.codigoLote=(String) dato[2];
         this.nombreProducto=(String) dato[3];
         this.fechaCaducidad=UtilidadesFecha.getFechaDeTimeStamp((Timestamp)dato[4]);
-        this.stock=new BigDecimal((Long) dato[5]);
+        this.stock=(BigDecimal)dato[5];
         this.valorUnitario=(BigDecimal) dato[6];
         
     }

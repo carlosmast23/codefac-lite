@@ -475,6 +475,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);
             getTxtNumeroDecimalesProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 2);
             
+            parametro = parametrosTodos.get(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);
+            getTxtAlertaDiasPorCaducarProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 2);
+            
             parametro = parametrosTodos.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
             getTxtCodigoHtml().setText((parametro != null) ? parametro.getValor() : "");    
             getjEditorPanelVistaPrevia().setText(getTxtCodigoHtml().getText());
@@ -817,6 +820,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, getTxtNumeroDecimalesProducto().getValue().toString());
         agregarParametroEditar(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO, getTxtAlertaDiasPorCaducarProducto().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);  
         
         agregarParametro(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS, getTxtNotaVentaInternaAlias().getText());
         agregarParametroEditar(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);    

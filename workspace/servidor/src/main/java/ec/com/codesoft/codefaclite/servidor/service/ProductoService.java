@@ -620,7 +620,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //p.getCodigoPersonalizado();
         //p.getEstado();GeneralEnumEstado
         
-        Map<String,Object> mapParametros=new HashMap<String,Object>();        
+        /*Map<String,Object> mapParametros=new HashMap<String,Object>();        
         mapParametros.put("codigoPersonalizado",codigo);
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
         
@@ -636,8 +636,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         if(productos.size()>0)
         {
             return productos.get(0);
-        }
-        return null;
+        }*/
+        return getFacade().buscarProductoActivoPorCodigoFacade(codigo, empresa);
         
     }
                 
