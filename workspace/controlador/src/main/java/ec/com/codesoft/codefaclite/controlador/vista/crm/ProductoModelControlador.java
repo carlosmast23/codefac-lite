@@ -183,8 +183,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         categoriaProductosList = catProdService.obtenerTodosPorEmpresa(session.getEmpresa()); 
         
         
-        try {
-            marcaProductoList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+        try {        
+            cargarMarcasActivas();
             casaComercialList=ServiceFactory.getFactory().getCasaComercialServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             tipoProductoList=ServiceFactory.getFactory().getTipoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             segmentoProductoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
@@ -200,6 +200,17 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         cargarDatosIce();
         cargarDatosIrbpnr();
 
+    }
+    
+    public void cargarMarcasActivas()
+    {
+        try {
+            marcaProductoList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void cargarDatosIrbpnr()

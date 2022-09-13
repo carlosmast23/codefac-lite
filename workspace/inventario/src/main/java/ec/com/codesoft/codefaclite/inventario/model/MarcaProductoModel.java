@@ -122,11 +122,11 @@ public class MarcaProductoModel extends MarcaProductoPanel implements DialogInte
             
             if(estadoFormularioEnum.equals(EstadoFormularioEnum.GRABAR))
             {
-                grabar();
+                controlador.grabar();
             }
             else if(estadoFormularioEnum.equals(EstadoFormularioEnum.EDITAR))
             {
-                editar();
+                controlador.editar();
             }
             
             return controlador.getMarcaProducto();

@@ -441,11 +441,21 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             @Override
             public void actionPerformed(ActionEvent e) {
                 
+                //controlador.cargarMarcasActivas();
+                //actualizarBindingCompontValues();
+                
                 panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<MarcaProducto>() {
                     @Override
                     public void updateInterface(MarcaProducto entity) {
-                        getCmbMarca().addItem(entity);
+                        controlador.cargarMarcasActivas();
+                        //controlador.producto.setMarcaProducto(entity);
+                        //actualizarBindingCompontValues();
                         getCmbMarca().setSelectedItem(entity);
+                        actualizarBindingComponent(true, true);
+                        //controlador.getMarcaProductoList().add(entity);
+                        //controlador.getProducto().setMarcaProducto(entity);
+                        
+                        //actualizarBindingComponent(true, true);
                     }
                 }, VentanaEnum.MARCA_PRODUCTO, false, formularioActual);
             }
