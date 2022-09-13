@@ -85,14 +85,15 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         if(!UtilidadesTextos.verificarNullOVacio(diasStr))
         {
             try {
-                Integer dias=Integer.parseInt(diasStr);
+                Integer dias=Integer.parseInt(diasStr)+1;
                 java.sql.Date fechaHoy=UtilidadesFecha.getFechaHoy();
                 java.sql.Date fechaComparar=UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarDiasFecha(fechaHoy,dias));
                 
                 Integer cantidadProductoCaducados=ServiceFactory.getFactory().getLoteSeviceIf().reporteFechaCaducidadTotal(sucursal,null, fechaComparar);
                 if(cantidadProductoCaducados!=null && cantidadProductoCaducados>0)
                 {
-                    AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,"Productos por caducar",cantidadProductoCaducados+" productos por caducar");
+                    AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ALERTA,cantidadProductoCaducados+" Productos por caducar"," productos por caducar");
+                    return alertaRespuesta;
                 }                
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(AlertaService.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,7 +142,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         Integer cantidadStockMinimo=ServiceFactory.getFactory().getKardexServiceIf().consultarCantidadStockMinimo(empresa);
         if(cantidadStockMinimo>0)
         {
-            AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,cantidadStockMinimo+" productos con STOCK BAJO","Realizar Pedido");
+            AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ALERTA,cantidadStockMinimo+" productos con STOCK BAJO","Realizar Pedido");
             return alertaRespuesta;
         }
         

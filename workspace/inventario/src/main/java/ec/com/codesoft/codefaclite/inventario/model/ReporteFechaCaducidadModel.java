@@ -65,7 +65,11 @@ public class ReporteFechaCaducidadModel extends StockReporteModel{
     private void listenerBuscar()
     {
         try {
-            Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
+            Bodega bodega=null;
+            if(!getChkTodasBodega().isSelected())
+            {
+                bodega=(Bodega) getCmbBodega().getSelectedItem();
+            }            
             
             Integer diasCaducidad=(Integer) getTxtDiasCaducidad().getValue()+1;
             Date fechaHoy=UtilidadesFecha.getFechaHoy();

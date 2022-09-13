@@ -48,7 +48,7 @@ public class LoteFacade extends AbstractFacade<Lote>{
     
     public List<FechaCaducidadResult> reporteFechaCaducidadFacade(Sucursal sucursal,Bodega bodega,Date fechaReferencia)
     {
-        Query query= reporteFechaCaducidadFacadeGeneral(sucursal, bodega, fechaReferencia, TipoConsultaEnum.TAMANIO);
+        Query query= reporteFechaCaducidadFacadeGeneral(sucursal, bodega, fechaReferencia, TipoConsultaEnum.DATOS);
         List<Object[]> resultadoOriginalList=query.getResultList();
         List<FechaCaducidadResult> resultadoList=new ArrayList<FechaCaducidadResult>();
         

@@ -53,6 +53,7 @@ public class AlertaResponse implements Serializable{
     {
         INFORMATIVO("Info"),
         ADVERTENCIA("Advertencia"),
+        ALERTA("Alerta"),
         GRAVE("Grave");
         
         private String grave;

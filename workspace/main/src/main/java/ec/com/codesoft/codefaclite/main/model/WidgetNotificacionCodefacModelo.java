@@ -151,7 +151,11 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
                             setBackground(Color.orange);
                         } else if (value.toString().equals(TipoAdvertenciaEnum.GRAVE.toString())) {
                             setBackground(Color.red);
-                        } else {
+                        } 
+                        else if (value.toString().equals(TipoAdvertenciaEnum.ALERTA.toString())) {
+                            setBackground(Color.YELLOW);
+                        } 
+                        else {
                             setBackground(Color.white);
                         }
                     }
