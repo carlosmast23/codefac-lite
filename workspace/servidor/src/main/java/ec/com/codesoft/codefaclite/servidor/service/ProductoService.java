@@ -482,6 +482,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //producto.setPresentacion(presentacion);
                 producto.setPresentacionList(productoPresentacionList);
 
+                entityManager.merge(producto.getCatalogoProducto());
                 entityManager.merge(producto);
 
                 //Crear los KARDEX CUANDO NO EXISTA
