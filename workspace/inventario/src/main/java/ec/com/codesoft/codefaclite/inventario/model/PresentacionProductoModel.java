@@ -11,20 +11,25 @@ import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.PresentacionProductoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.PresentacionProductoControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.MarcaProductoPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.PresentacionProductoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class PresentacionProductoModel extends PresentacionProductoPanel implements ControladorVistaIf,PresentacionProductoControlador.SwingIf{
+public class PresentacionProductoModel extends PresentacionProductoPanel implements DialogInterfacePanel<PresentacionProducto>, ControladorVistaIf,PresentacionProductoControlador.SwingIf{
     
     private PresentacionProductoControlador controlador;
 
@@ -111,6 +116,30 @@ public class PresentacionProductoModel extends PresentacionProductoPanel impleme
 
     public void setControlador(PresentacionProductoControlador controlador) {
         this.controlador = controlador;
+    }
+
+    @Override
+    public PresentacionProducto getResult() throws ExcepcionCodefacLite {
+        try {
+            
+            if(estadoFormularioEnum.equals(EstadoFormularioEnum.GRABAR))
+            {
+                controlador.grabar();
+            }
+            else if(estadoFormularioEnum.equals(EstadoFormularioEnum.EDITAR))
+            {
+                controlador.editar();
+            }
+            
+            return controlador.getPresentacion();
+            
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(PresentacionProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (RemoteException ex) {
+            Logger.getLogger(PresentacionProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return  null;
     }
     
     

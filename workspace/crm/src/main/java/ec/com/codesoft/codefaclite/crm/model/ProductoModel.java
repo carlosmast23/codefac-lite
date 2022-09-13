@@ -437,6 +437,20 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private void listenerBotones() 
     {
         
+        getBtnCrearPresentacion().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<PresentacionProducto>() {
+                    @Override
+                    public void updateInterface(PresentacionProducto entity) 
+                    {
+                        getCmbPresentacionEmpaquetado().addItem(entity);
+                        getCmbPresentacionEmpaquetado().setSelectedItem(entity);
+                    }
+                }, VentanaEnum.PRESENTACION_PRODUCTO, false, formularioActual);
+            }
+        });
+        
         getBtnCrearMarca().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
