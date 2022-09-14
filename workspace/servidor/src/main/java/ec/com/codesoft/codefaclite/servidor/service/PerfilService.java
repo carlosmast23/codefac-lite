@@ -146,6 +146,9 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.STOCK_MINIMO.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.STOCK_REPORTE.getCodigo()));
             ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.REFERIDO_REPORTE.getCodigo())); 
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.UTILIDAD_REPORTE.getCodigo()));      
+            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.PRESENTACION_PRODUCTO.getCodigo()));  
+            //ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto,VentanaEnum.compra.getCodigo())); 
             
             
             //ventanas.add(e)

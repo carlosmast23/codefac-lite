@@ -61,8 +61,10 @@ public class UtilidadResult extends AbstractResult{
         {
             utilidad=BigDecimal.ZERO;
         }
-        costo.setScale(2, RoundingMode.HALF_UP);
-        utilidad.setScale(2, RoundingMode.HALF_UP);
+        
+        subtotal=subtotal.setScale(2, RoundingMode.HALF_UP);
+        costo=costo.setScale(2, RoundingMode.HALF_UP);
+        utilidad=utilidad.setScale(2, RoundingMode.HALF_UP);
     }
 
     public String getSecuencial() {

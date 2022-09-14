@@ -66,6 +66,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Column(name = "COSTO_PROMEDIO")
     private BigDecimal costoPromedio;
     
+    @Column(name = "CANTIDAD_PRESENTACION")
+    private BigDecimal cantidadPresentacion;
+    
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     private CatalogoProducto catalogoProducto;
 
@@ -223,6 +226,14 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
 
     public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
         this.catalogoProducto = catalogoProducto;
+    }
+
+    public BigDecimal getCantidadPresentacion() {
+        return cantidadPresentacion;
+    }
+
+    public void setCantidadPresentacion(BigDecimal cantidadPresentacion) {
+        this.cantidadPresentacion = cantidadPresentacion;
     }
     
     

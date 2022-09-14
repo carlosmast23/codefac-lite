@@ -313,7 +313,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         setearDatosDistribuidor(venta);
     }
     
-    private void setearDatosPorDefecto(Factura factura)
+    private void setearDatosPorDefecto(Factura factura) throws RemoteException, ServicioCodefacException
     {   
         //Fecha de cuando estamos generando el documento
         factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
@@ -324,6 +324,32 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ///Agregar estado de la nota de credito
         //factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
         factura.setEstadoNotaCreditoEnum(Factura.EstadoNotaCreditoEnum.SIN_ANULAR);
+        
+        //Setear campos adicionales del detalle
+        for (FacturaDetalle detalle : factura.getDetalles()) 
+        {
+            //Por defecto solo genera un unico codigo
+            detalle.setCantidadPresentacion(BigDecimal.ONE);
+            TipoDocumentoEnum tipoReferenciaEnum=detalle.getTipoDocumentoEnum();
+            ReferenciaDetalleFacturaRespuesta respuesta = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(tipoReferenciaEnum, detalle.getReferenciaId());
+            if (respuesta.objecto != null) {
+                switch (respuesta.tipoDocumentoEnum) {
+                    case LIBRE:
+                    case INVENTARIO:
+                        Producto producto= (Producto) respuesta.objecto;
+                        ProductoPresentacionDetalle presentacionDetalle= producto.buscarPresentacionDetalleProducto();
+                        if(presentacionDetalle!=null)
+                        {
+                            detalle.setCantidadPresentacion(presentacionDetalle.getCantidad());
+                        }
+                        break;
+                    case ACADEMICO:
+                        
+                        break;
+                }
+
+            } 
+        }
     }
     
     /**
