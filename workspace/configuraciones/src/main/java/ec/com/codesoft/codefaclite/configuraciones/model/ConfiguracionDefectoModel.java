@@ -497,6 +497,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro=parametrosTodos.get(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
             getTxtNotaVentaInternaAlias().setText((parametro != null) ? parametro.getValor():"");
             
+            parametro=parametrosTodos.get(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);
+            getTxtLeyendaAdicionalComprobante().setText((parametro != null) ? parametro.getValor():"");
+            
             
             ParametroCodefac parametroEditarDescripcionFactura = parametrosTodos.get(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarDescripcionFactura != null) ? parametroEditarDescripcionFactura.getValor() : null);
@@ -826,6 +829,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS, getTxtNotaVentaInternaAlias().getText());
         agregarParametroEditar(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);    
+        
+        agregarParametro(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE, getTxtLeyendaAdicionalComprobante().getText());
+        agregarParametroEditar(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);  
 
         /**
          * @author Carlos Sanchez

@@ -129,7 +129,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         
         if(directorioEmpresa==null || directorioEmpresa.trim().isEmpty())
         {
-            AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,"Respaldos sin configurar","No se encuentra configurado los respaldos");
+            AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.GRAVE,"Respaldos sin configurar","No se encuentra configurado los respaldos");
             return alertaRespuesta;
         }
         return null;
@@ -197,12 +197,12 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         if(correo==null || correo.isEmpty() || clave==null || clave.isEmpty())
         {
             return new AlertaResponse(
-                    AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA, 
+                    AlertaResponse.TipoAdvertenciaEnum.GRAVE, 
                     "Sin configurar correo para enviar comprobantes ", 
                     "Configurar correo");
         }
         
-        AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,"Error desconocido","Verificar credenciales");
+        AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.GRAVE,"Error desconocido","Verificar credenciales");
         try {
             clave=UtilidadesEncriptar.desencriptar(clave,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
         } catch (Exception ex) {

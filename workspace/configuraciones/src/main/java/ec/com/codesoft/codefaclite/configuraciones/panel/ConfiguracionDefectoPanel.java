@@ -61,6 +61,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacio3 = new javax.swing.JLabel();
         jLabel52 = new javax.swing.JLabel();
         txtNotaVentaInternaAlias = new javax.swing.JTextField();
+        jLabel65 = new javax.swing.JLabel();
+        txtLeyendaAdicionalComprobante = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -248,18 +250,18 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoDocumentoCompra, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio3, gridBagConstraints);
 
         jLabel52.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel52.setText("Tipo Documento:");
+        jLabel52.setText("Leyenda Adicional Comprobante:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel52, gridBagConstraints);
@@ -269,6 +271,21 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtNotaVentaInternaAlias, gridBagConstraints);
+
+        jLabel65.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel65.setText("Tipo Documento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel65, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtLeyendaAdicionalComprobante, gridBagConstraints);
 
         jTabbedPane1.addTab("Documentos", jPanel1);
 
@@ -1498,6 +1515,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1533,6 +1551,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JTextArea txtCodigoHtml;
     private javax.swing.JTextField txtDatoAdicionalTitulo;
     private javax.swing.JSpinner txtDiasAlertaPago;
+    private javax.swing.JTextField txtLeyendaAdicionalComprobante;
     private javax.swing.JTextField txtLeyendaFirmaFactura1;
     private javax.swing.JTextField txtLeyendaFirmaFactura2;
     private javax.swing.JTextField txtLeyendaFirmaFactura3;
@@ -1972,5 +1991,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setTxtAlertaDiasPorCaducarProducto(JSpinner txtAlertaDiasPorCaducarProducto) {
         this.txtAlertaDiasPorCaducarProducto = txtAlertaDiasPorCaducarProducto;
     }
+
+    public JTextField getTxtLeyendaAdicionalComprobante() {
+        return txtLeyendaAdicionalComprobante;
+    }
+
+    public void setTxtLeyendaAdicionalComprobante(JTextField txtLeyendaAdicionalComprobante) {
+        this.txtLeyendaAdicionalComprobante = txtLeyendaAdicionalComprobante;
+    }
+    
     
 }
