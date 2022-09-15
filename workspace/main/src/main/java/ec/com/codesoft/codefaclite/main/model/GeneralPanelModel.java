@@ -57,6 +57,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorker;
 import ec.com.codesoft.codefaclite.controlador.dialogos.EsperaSwingWorkerIf;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.MayusculaAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.RespaldosModelUtilidades;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
@@ -183,6 +184,10 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.plaf.SplitPaneUI;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import javax.swing.text.JTextComponent;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -1455,7 +1460,36 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-
+    
+    private void agregarEtiquetaConvertirMayuscula(ControladorCodefacInterface panel)
+    {
+       ConsolaGeneral consola=new ConsolaGeneral();
+       
+       Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) 
+        {
+                        //Validacion para poner en mayuscula los campos
+            MayusculaAnotacion anotacionMayuscula= metodo.getAnnotation(MayusculaAnotacion.class);
+           
+            if(anotacionMayuscula!=null)
+            {
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    DocumentFilter f = new UppercaseJTextField();
+                    AbstractDocument doc = (AbstractDocument) componente.getDocument();
+                    doc.setDocumentFilter(f);
+                    
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
     
     
     
@@ -1525,6 +1559,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.show();
             getBtnNuevo().requestFocus();
             agregarValidadores(panel); //Agregar validadores para los campos de ingreso
+            agregarEtiquetaConvertirMayuscula(panel);
             agregarAyudas(panel);
             
             ////////////////////////////////////////////////////////////////////
@@ -1710,7 +1745,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     //Metodo que permite agregar un metodo para la pantalla de busqueda directo desde el formulario
     //TODO: Ver si se puede optimizar de mejor manera con los otros validadores porque es muchas repeticiones
-    private void agregarListenerBusqueda(ControladorCodefacInterface panel)
+    /*private void agregarListenerBusqueda(ControladorCodefacInterface panel)
     {
        boolean validado=true;
        
@@ -1734,37 +1769,56 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
+
+    }*/
+    
+    private void limpiarAnotaciones(ControladorCodefacInterface panel)
+    {
+       //boolean validado=true;
+       
+       Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) 
+        {
+            LimpiarAnotacion validacion=metodo.getAnnotation(LimpiarAnotacion.class);
+
+            if(validacion!=null)
+            {
+                //validado=false;
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.setText("");
+                    
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+
+            
         }
 
     }
     
-    private void limpiarAnotaciones(ControladorCodefacInterface panel)
+        
+    class UppercaseJTextField extends DocumentFilter 
     {
-       boolean validado=true;
-       
-       Class classVentana=panel.getClass();
-        Method[] metodos=classVentana.getMethods();
-        for (Method metodo : metodos) {
-            LimpiarAnotacion validacion=metodo.getAnnotation(LimpiarAnotacion.class);
 
-            if(validacion!=null)
-            {
-                validado=false;
-                try {
-                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
-                    componente.setText("");
-                    
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalArgumentException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvocationTargetException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+            fb.insertString(offset, text.toUpperCase(), attr);
         }
 
+
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            fb.replace(offset, length, text.toUpperCase(), attrs);
+        }
     }
+    
     //TODO: optimizar para que exista un solo meotodo para correr las validaciones para que no exista tantos recorridos de gana
     private void limpiarCamposValidacion(ControladorCodefacInterface panel)
     {
@@ -1812,6 +1866,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
+            
+
             
         }
 

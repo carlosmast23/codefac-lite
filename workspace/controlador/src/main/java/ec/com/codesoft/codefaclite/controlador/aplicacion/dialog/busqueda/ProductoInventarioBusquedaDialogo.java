@@ -41,11 +41,14 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     //private EnumSiNo isManejoInvetario;
     private Bodega bodega;
     
-    public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega) 
+    private Boolean mostrarStockNegativo;
+    
+    public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega,Boolean mostrarStockNegativo) 
     {
         //this.isManejoInvetario = isManejoInvetario;
         this.empresa = empresa;
         this.bodega = bodega;
+        this.mostrarStockNegativo=mostrarStockNegativo;
     }
 
     @Override
@@ -67,9 +70,13 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
 
     @Override
     public QueryDialog getConsulta(String filter) {
+        
+        //Kardex kardex;
         String whereManejaInventario="";
         
         String whereBodega="";
+        
+        String whereStockNegativo="";
         
         //if(isManejoInvetario!=null)
         //{
@@ -95,9 +102,15 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
             whereBodega=" and k.bodega=?5 ";
         }
         
+        
+        if(!mostrarStockNegativo)
+        {
+            whereStockNegativo=" and ( k.stock>0 and k.lote is not null or k.lote is null)  ";
+        }
+        
         String filtroMarca=" AND ( u.marcaProducto=?97 ) ";
         
-        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega;      
+        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
         
         queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado";
         

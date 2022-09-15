@@ -25,7 +25,7 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
 {
 
     public FarmaciaProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega) {
-        super(isManejoInvetario, empresa, bodega);
+        super(isManejoInvetario, empresa, bodega,false);
     }
 
     @Override

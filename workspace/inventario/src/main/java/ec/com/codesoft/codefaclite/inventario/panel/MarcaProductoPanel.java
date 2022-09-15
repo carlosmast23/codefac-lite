@@ -7,10 +7,9 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
-import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.MayusculaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -119,6 +118,7 @@ public abstract class MarcaProductoPanel extends ControladorCodefacInterface {
 
 
     //@LimpiarAnotacion
+    @MayusculaAnotacion
     @TextFieldBinding(value = "controlador.marcaProducto.nombre")
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
@@ -129,6 +129,7 @@ public abstract class MarcaProductoPanel extends ControladorCodefacInterface {
         this.txtNombre = txtNombre;
     }
 
+    @MayusculaAnotacion
     @TextFieldBinding(value = "controlador.marcaProducto.descripcion")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;

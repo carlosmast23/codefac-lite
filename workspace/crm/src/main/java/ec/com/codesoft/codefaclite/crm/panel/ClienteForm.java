@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsPan
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.MayusculaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
@@ -1108,6 +1109,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
   
+    @MayusculaAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "[^\\n]*",nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextAreaDireccion() {
@@ -1161,6 +1163,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jTextIdentificacion = jTextIdentificacion;
     }
 
+    @MayusculaAnotacion
     @CampoBuscarAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100, expresionRegular ="[^\\n]*", nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes" )
@@ -1196,6 +1199,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
+    @MayusculaAnotacion
     @ValidacionCodefacAnotacion(requerido = false, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimpleSinNumeros, nombre = "Apellidos", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextApellidos() {
         return jTextApellidos;
@@ -1205,6 +1209,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jTextApellidos = jTextApellidos;
     }
 
+    @MayusculaAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = false, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimpleSinNumeros, nombre = "Nombres", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextNombres() {
@@ -1255,6 +1260,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.lblOligadoLlevarContabilidad = lblOligadoLlevarContabilidad;
     }
 
+    @MayusculaAnotacion
     public JTextField getTxtNombreLegal() {
         return txtNombreLegal;
     }
@@ -1327,6 +1333,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         return btnEditarEstablecimiento;
     }
 
+    @MayusculaAnotacion
     @LimpiarAnotacion
     public JTextField getTxtNombreContacto() {
         return txtNombreContacto;
@@ -1404,6 +1411,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.cmbTipoCliente = cmbTipoCliente;
     }
 
+    @MayusculaAnotacion
     @LimpiarAnotacion
     public JTextField getjTextReferenciaDireccion() {
         return jTextReferenciaDireccion;
@@ -1446,6 +1454,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.cmbHabilitarCredito = cmbHabilitarCredito;
     }
 
+    @MayusculaAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=false ,nombre = "Ciudad")
     public JTextField getjTextCiudad() {

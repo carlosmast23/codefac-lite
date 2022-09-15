@@ -641,7 +641,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 DialogoCodefac.mensaje(new CodefacMsj("No existe un tipo de Bodega de Venta Configurado",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             }
             
-            ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI, session.getEmpresa(), bodegaVenta);
+            ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI, session.getEmpresa(), bodegaVenta,true);
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
             buscarDialogoModel.setVisible(true);
             Kardex kardex = (Kardex) buscarDialogoModel.getResultado();

@@ -7,14 +7,13 @@ package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
-import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
-import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.IvaOpcionEnum;
 import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.MayusculaAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
@@ -23,11 +22,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
-import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -43,6 +40,7 @@ import javax.swing.JTextField;
  */
 public abstract class ProductoForm extends ControladorCodefacInterface {
 
+    @MayusculaAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(min = 1,max = 300,requerido = true, expresionRegular = ExpresionRegular.textoSinSaltosLinea, nombre = "Nombre", expresionRegularMensaje = "No se permiten saltos de linea")
     @TextFieldBinding(value = "controlador.producto.nombre")
@@ -1561,6 +1559,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.txtStockInicial = txtStockInicial;
     }*/
 
+    @MayusculaAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Ubicacion", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtUbicacion() {
