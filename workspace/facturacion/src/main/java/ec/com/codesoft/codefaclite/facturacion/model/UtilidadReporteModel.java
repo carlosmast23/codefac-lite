@@ -33,17 +33,18 @@ import java.util.logging.Logger;
  *
  * @author DellWin10
  */
-public class UtilidadReporteModel extends FacturaReportePanel
+public class UtilidadReporteModel extends FacturaReporteModel
 {
     
     private UtilidadReport utilidadReport;
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        listenerBotones();
+    public void iniciar()  {
+        super.iniciar();
+        listenerBotones();        
     }
     
-    private void listenerBotones()
+    public void listenerBotones()
     {
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
@@ -78,27 +79,27 @@ public class UtilidadReporteModel extends FacturaReportePanel
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, RemoteException {
+    public void nuevo(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
+    public void grabar()  {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite, RemoteException {
+    public void editar(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, RemoteException {
+    public void eliminar(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void imprimir() throws ExcepcionCodefacLite, RemoteException {
+    public void imprimir(){
         
         if (utilidadReport != null) {
             InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("utilidades.jrxml");
@@ -131,7 +132,7 @@ public class UtilidadReporteModel extends FacturaReportePanel
     }
 
     @Override
-    public void actualizar() throws ExcepcionCodefacLite, RemoteException {
+    public void actualizar(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -30,8 +30,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -389,7 +391,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * Validacion de la la logica dependiendo el modulo
      * @return 
      */
-    private boolean validacionPersonalizadaPorModulos(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum) {
+    private boolean validacionPersonalizadaPorModulos(FacturaDetalle facturaDetalle,Kardex kardex,DocumentoEnum documentoEnum) {
         
         if(facturaDetalle==null)
         {
@@ -420,14 +422,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 break;
                 
             case INVENTARIO:
-                return validarAgregarInventario(facturaDetalle,documentoEnum); //Metodo que se encarga de validar el inventario
+                return validarAgregarInventario(facturaDetalle,kardex,documentoEnum); //Metodo que se encarga de validar el inventario
                 
         }
         
         return true;
     }
     
-    private boolean validarAgregarInventario(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum)
+    private boolean validarAgregarInventario(FacturaDetalle facturaDetalle,Kardex kardex,DocumentoEnum documentoEnum)
     {
         try {
             
@@ -451,7 +453,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     //Solo hago la validacion del inventario cuando es un producto diferente de proforma , por que para ese tema no deberia importar
                     if(!documentoEnum.equals(DocumentoEnum.PROFORMA))
                     {                    
-                        boolean verifadorStock = verificarExistenciaStockProducto(facturaDetalle);
+                        boolean verifadorStock = verificarExistenciaStockProducto(facturaDetalle,kardex);
                         //Verificar si agrego los datos al fomurlaro cuando no existe inventario
                         if (!verifadorStock) {
                             mostrarMensaje(new CodefacMsj("No existe stock para el producto", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -483,19 +485,34 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @throws ServicioCodefacException 
      * @author Trebor
      */
-    public boolean verificarExistenciaStockProducto(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
+    public boolean verificarExistenciaStockProducto(FacturaDetalle facturaDetalle,Kardex kardex) throws RemoteException, ServicioCodefacException
     {
         boolean verificadorStock;
         KardexServiceIf serviceKardex = ServiceFactory.getFactory().getKardexServiceIf();
         //Bodega activa de venta
-        BodegaServiceIf serviceBodega = ServiceFactory.getFactory().getBodegaServiceIf();
-        Bodega bodegaVenta = serviceBodega.obtenerBodegaVenta(session.getSucursal());
+        //BodegaServiceIf serviceBodega = ServiceFactory.getFactory().getBodegaServiceIf();
+        //Bodega bodegaVenta = serviceBodega.obtenerBodegaVenta(session.getSucursal());
         //Verifica si existe stock para el producto seleccionado
         ProductoServiceIf productoServiceIf=ServiceFactory.getFactory().getProductoServiceIf();
         Producto producto=productoServiceIf.buscarPorId(facturaDetalle.getReferenciaId());
+        BigDecimal cantidadPresentacion=BigDecimal.ONE;
+        ProductoPresentacionDetalle presentacionDetalle=  producto.buscarPresentacionDetalleProducto();
+        if(presentacionDetalle!=null)
+        {
+            cantidadPresentacion=presentacionDetalle.getCantidad();
+        }
         
         //verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,interfaz.obtenerProductoSeleccionado(), facturaDetalle.getCantidad().intValue());
-        verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,producto, facturaDetalle.getCantidad());
+        //verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,producto, facturaDetalle.getCantidad());
+        if(facturaDetalle.getCantidad().multiply(cantidadPresentacion).compareTo(kardex.getStock())<=0)
+        {
+            verificadorStock=true;
+        }
+        else
+        {
+            verificadorStock=false;
+        }
+        
         return verificadorStock;
     }
     
@@ -525,7 +542,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setLoteId((lote!=null?lote.getId():null));
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));    
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
-        if (!validacionPersonalizadaPorModulos(facturaDetalle,documentoEnum)) {
+        if (!validacionPersonalizadaPorModulos(facturaDetalle,kardex,documentoEnum)) {
                 return false;
         }
             
