@@ -23,6 +23,7 @@ import javax.persistence.Table;
 @Table(name = "FACTURA_ADICIONAL")
 public class FacturaAdicional extends ComprobanteAdicional implements Serializable,Cloneable {
     
+    public static final String NUMERO_ORDEN ="numero orden";
     /**
      * Nombre de los campos para grabar correos
      */

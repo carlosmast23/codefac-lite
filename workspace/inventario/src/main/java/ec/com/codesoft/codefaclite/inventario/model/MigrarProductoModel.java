@@ -553,7 +553,8 @@ public class MigrarProductoModel extends MigrarModel {
                         }
                         detallePresentacion.setPresentacionProducto(presentacionCaja);
                         detallePresentacion.setProductoOriginal(producto);
-                        
+                        detallePresentacion.setTipoEnum(ProductoPresentacionDetalle.TipoPresentacionEnum.ADICIONAL);
+                               
                         producto.addPresentacion(detallePresentacion);
                         
                         //Si el sistema va a utilizar unidades busco una unidad por defecto

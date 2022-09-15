@@ -476,7 +476,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             getTxtNumeroDecimalesProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 2);
             
             parametro = parametrosTodos.get(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);
-            getTxtAlertaDiasPorCaducarProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 2);
+            getTxtAlertaDiasPorCaducarProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
             
             parametro = parametrosTodos.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
             getTxtCodigoHtml().setText((parametro != null) ? parametro.getValor() : "");    

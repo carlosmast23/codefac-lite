@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -22,6 +23,13 @@ import org.apache.commons.lang3.StringUtils;
  * @author Carlos
  */
 public abstract class UtilidadesLista {
+    
+    public static <T> Set<T> buscarDuplicados(List<T> list) {
+        return list.stream().distinct()
+                .filter(i -> Collections.frequency(list, i) > 1)
+                .collect(Collectors.toSet());
+    }
+
     public static String castListToString(List lista,String caracter)
     {
         if(lista==null || lista.size()==0)

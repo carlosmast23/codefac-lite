@@ -157,10 +157,14 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("fechaEmision", "12/01/2017");
         parametros.put("razonSocial", "Nombre Apellido");
-        parametros.put("direccion", "Quito");
+        parametros.put("direccion", "Quito Av.America y Versalles");
         parametros.put("telefono", "022339281");
         parametros.put("correoElectronico", "ejemplo@hotmail.es");
         parametros.put("identificacion", "1212121212");
+        parametros.put("ciudad", "Quito");
+        parametros.put("numeroOrden", "123");
+        parametros.put("codigoCliente", "009992");
+        parametros.put("guiaRemision", "guia1234");
 
         parametros.put("subtotalImpuesto", "100");
         parametros.put("subtotalSinImpuesto", "0");
@@ -169,7 +173,8 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         parametros.put("valorIva", "10");
         parametros.put("total", "100");
         parametros.put("iva", "12");
-
+        
+        
 
 
         /*List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
@@ -213,6 +218,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         {
             DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
             detalle.setCantidad("1");
+            detalle.setCodigoPrincipal("0012345");
             detalle.setDescripcion("MOUSE OPTICO DE EJEMPLO");
             detalle.setValorTotal("12");
             detalle.setValorUnitario("12");

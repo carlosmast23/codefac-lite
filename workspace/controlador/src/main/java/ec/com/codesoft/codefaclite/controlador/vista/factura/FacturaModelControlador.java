@@ -1176,6 +1176,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 mapParametros.put("leyenda_documento",leyendaAdicional);
             }
             
+            
             return mapParametros;
             
     }

@@ -2177,7 +2177,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                 }
                 
-            }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+            }
+            else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
                 //todo: unificar para obtener el nombre desde un mismo lugar
                 //en Comprobantes service existe un metodo similar
@@ -3096,7 +3097,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 
                 //Solo hacer estas validaciones para facturas electronicas
-                if(documentoEnum.getComprobanteElectronico())
+                if(documentoEnum!=null && documentoEnum.getComprobanteElectronico())
                 {
                 
                     if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {

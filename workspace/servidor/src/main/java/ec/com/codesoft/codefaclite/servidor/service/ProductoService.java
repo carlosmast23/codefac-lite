@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
@@ -443,6 +444,52 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         if (productoDuplicado != null) {
             throw new ServicioCodefacException("Ya existe un producto ingresado con el mismo código principal");
         }
+        
+        //Verificar que no ingresen presentaciones duplicadas y que al menos tenga una presentacion principal
+        if(p.getPresentacionList()!=null && p.getPresentacionList().size()>0)
+        {
+            //Buscar datos duplicados
+            //Set<ProductoPresentacionDetalle> repetidoList= UtilidadesLista.buscarDuplicados(p.getPresentacionList());
+            for (ProductoPresentacionDetalle detalle: p.getPresentacionList()) 
+            {
+                Boolean detalleRepetido=null;
+                for (ProductoPresentacionDetalle detalleTmp : p.getPresentacionList()) 
+                {
+                    if(detalle.getPresentacionProducto().equals(detalleTmp.getPresentacionProducto()))
+                    {                        
+                        //El primer dato que encuntra no lo toma en cuenta por que siempre va a tener un dato
+                        if(detalleRepetido==null)
+                        {
+                            detalleRepetido=false;
+                        }
+                        else
+                        {
+                            // si encuentra un producto repetido por segunda vez ya no es permitido
+                            throw new ServicioCodefacException("La presentación "+detalle.getPresentacionProducto().getNombre()+" esta repetida y no se puede grabar");
+                        }
+                    }
+                }
+            
+            }
+            
+            
+            Boolean tienePresentacionPrincipal=false;
+            for (ProductoPresentacionDetalle detalle: p.getPresentacionList()) 
+            {
+                if(detalle!=null && detalle.getTipoEnum().equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ORIGINAL))
+                {
+                    tienePresentacionPrincipal=true;
+                }
+            }
+            
+            if(!tienePresentacionPrincipal)
+            {
+                throw new ServicioCodefacException("No se puede grabar el producto sin agregar una presentación original");
+            }
+            
+        }
+        
+        
 
         ///////////////////////////////////////////////////////////////////////
         ///             HACER UNAS CORRECIONES ANTES DE GRABAR

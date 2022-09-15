@@ -65,6 +65,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -92,6 +96,12 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     protected OperadorNegocioEnum operadorNegocioDefault;
 
     public ClienteModel() {
+        
+        DocumentFilter f=new UppercaseJTextField();
+        AbstractDocument doc=(AbstractDocument) getjTextNombres().getDocument();
+        doc.setDocumentFilter(f);
+        
+        
         this.personaService = ServiceFactory.getFactory().getPersonaServiceIf();
         getjTextExtension().setText("0");
         this.razonSocial = "";
@@ -105,6 +115,20 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         addListenerPopUps();
         super.mapDatosIngresadosDefault.put(getjTextExtension(),"0");
     }
+    
+    class UppercaseJTextField extends DocumentFilter 
+    {
+
+        public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+            fb.insertString(offset, text.toUpperCase(), attr);
+        }
+
+
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            fb.replace(offset, length, text.toUpperCase(), attrs);
+        }
+    }
+
     
     private void addListenerPopUps()
     {

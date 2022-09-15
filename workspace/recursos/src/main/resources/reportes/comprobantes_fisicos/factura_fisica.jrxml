@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura_fisica" pageWidth="500" pageHeight="842" whenNoDataType="BlankPage" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9b36c502-cff2-4d1a-a8f4-03d85696bb48">
 	<property name="ireport.zoom" value="1.9487171000000094"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="93"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="identificacion" class="java.lang.String"/>
 	<parameter name="razonSocial" class="java.lang.String"/>
@@ -25,6 +25,7 @@
 	<parameter name="guiaRemision" class="java.lang.String"/>
 	<parameter name="ciudad" class="java.lang.String"/>
 	<parameter name="codigoCliente" class="java.lang.String"/>
+	<parameter name="numeroOrden" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -109,6 +110,13 @@
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{codigoCliente}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="18" y="65" width="133" height="15" uuid="c8fe5904-016e-4bfd-823c-a215d0fb94d8"/>
+				<textElement markup="html">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{numeroOrden}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

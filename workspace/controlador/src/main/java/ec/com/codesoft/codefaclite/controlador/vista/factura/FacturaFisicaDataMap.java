@@ -48,6 +48,14 @@ public class FacturaFisicaDataMap {
     
     public Map<String,Object> getMap(Factura factura,DocumentoEnum documento,String ivaStr)
     {
+        
+        FacturaAdicional facturaAdicional=factura.buscarFacturaAdicional(FacturaAdicional.NUMERO_ORDEN);
+        String numeroOrden=null;
+        if(facturaAdicional!=null)
+        {
+            numeroOrden=facturaAdicional.getValor();
+        }
+        
         SimpleDateFormat sdf=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA;
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("fechaEmision",aplicarFormato("Fecha Emisión: ", sdf.format(factura.getFechaEmision())));
@@ -59,6 +67,8 @@ public class FacturaFisicaDataMap {
         parametros.put("guiaRemision",aplicarFormato("Guía Remisión: ",obtenerGuiaRemision(factura)));
         parametros.put("codigoCliente",aplicarFormato("Código: ",factura.getSucursal().getCodigoPersonalizado()));
         parametros.put("ciudad",aplicarFormato("Ciudad: ",factura.getSucursal().getCiudad()));
+        parametros.put("numeroOrden",aplicarFormato("# Orden: ",numeroOrden));
+        
 
         //Datos cuando es una nota de venta
         if(DocumentoEnum.NOTA_VENTA.equals(documento))

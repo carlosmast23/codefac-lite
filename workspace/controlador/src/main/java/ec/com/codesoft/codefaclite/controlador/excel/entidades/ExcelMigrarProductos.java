@@ -53,7 +53,7 @@ public class ExcelMigrarProductos extends ExcelMigrar{
         NOMBRE_PROVEEDOR("Nombre Proveedor",23,String.class,false),
         FECHA_CADUCIDAD("Fecha Caducidad",24,Date.class,false),
         CANTIDAD_CAJA("Cantidad Caja",25,Double.class,false),
-        NOMBRE_EMPAQUETADP("Empaquetado",26,String.class,false),
+        NOMBRE_EMPAQUETADO("Empaquetado",26,String.class,false),
         ESTADO("Estado",27,String.class,false);
 
         private Enum(String nombre,Integer posicion,Class tipoDato,Boolean requerido) {

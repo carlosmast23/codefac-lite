@@ -365,6 +365,21 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         }
         return null;
     }
+    
+    public FacturaAdicional buscarFacturaAdicional(String titulo)
+    {
+        if(this.datosAdicionales!=null)
+        {
+            for (FacturaAdicional facturaAdicional : datosAdicionales) 
+            {
+                if(facturaAdicional.getCampo().equals(titulo))
+                {
+                    return facturaAdicional;
+                }
+            }
+        }
+        return null;
+    }
 
     public List<FormaPago> buscarListaFormasPagoDistintaDeCartera() {
         List<FormaPago> formasPago = new ArrayList<FormaPago>();
