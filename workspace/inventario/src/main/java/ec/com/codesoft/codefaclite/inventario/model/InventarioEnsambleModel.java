@@ -196,7 +196,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                         //Buscar el Kardex o crear un Kardex nuevo si no existes
                         KardexServiceIf kardexService = ServiceFactory.getFactory().getKardexServiceIf();
                         Bodega bodega = (Bodega) getCmbBodegaOrigen().getSelectedItem();
-                        Kardex kardex = kardexService.buscarKardexPorProductoyBodega(bodega, productoEnsamble);
+                        Kardex kardex = kardexService.buscarKardexPorProductoyBodegayLote(bodega, productoEnsamble,null);
                         if(kardex!=null)
                         {
                             getLblStockActual().setText(kardex.getStock()+"");
@@ -336,7 +336,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 mapParametros.put("producto",componente);
                 mapParametros.put("bodega",bodega);*/
                 KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
-                Kardex kardexResultado= servicioKardex.buscarKardexPorProductoyBodega(bodega,componente);
+                Kardex kardexResultado= servicioKardex.buscarKardexPorProductoyBodegayLote(bodega,componente,null);
                 if(kardexResultado!=null)
                 {
                     Kardex kardexComponente=kardexResultado;

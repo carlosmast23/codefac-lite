@@ -3771,7 +3771,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         //Todo: Mejorar esta parte
                         BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
                         Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
-                        Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodegaVenta, producto);
+                        Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
                         
                         
                         if (producto == null) {

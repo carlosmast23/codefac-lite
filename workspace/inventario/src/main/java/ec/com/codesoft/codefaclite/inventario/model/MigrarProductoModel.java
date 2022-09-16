@@ -464,9 +464,28 @@ public class MigrarProductoModel extends MigrarModel {
                     stock = (Double) campoResultado.valor;
                 }
                 
+                //Verificar si tiene una fecha de caducidad para crear un lote por defecto
+                Lote lote = new Lote();
+                Date fechaCaducidad = getValorDate(ExcelMigrarProductos.Enum.FECHA_CADUCIDAD, fila);
+                if (fechaCaducidad != null) {
+                    //Si el producto ya existe entonces busco el lote del producto previamente creado
+                    if (productoTmp != null) {
+                        lote = ServiceFactory.getFactory().getLoteSeviceIf().buscarPorProductoYFechaCaducidad(productoTmp, UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
+                    } else {
+
+                        lote.setCodigo(producto.getCodigoPersonalizado());
+                        lote.setEmpresa(session.getEmpresa());
+                        lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                        lote.setFechaVencimiento(UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
+                        lote.setProducto(producto);
+                        lote.setUsuarioCreacion(session.getUsuario());
+                    }
+                    //kardex.setLote(lote);
+                }
+                
                 //Crear siempre un kardex aunque no tenga movimientos
                 Kardex kardex = null;
-                kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodega, productoTmp);
+                kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodega, productoTmp,lote);
                 if (kardex == null) {
                     kardex = new Kardex();
                     kardex.setStock(BigDecimal.ZERO);
@@ -513,7 +532,7 @@ public class MigrarProductoModel extends MigrarModel {
                         
                         if(kardex==null)
                         {
-                            kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodega(bodega, productoTmp);
+                            kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodega, productoTmp,lote);
                         }
                         
                         BigDecimal stockActual=kardex.getStock();
@@ -521,23 +540,34 @@ public class MigrarProductoModel extends MigrarModel {
                         //cuando tengo que hacer un ajuste inventario envio los nuevos datos
                         kardexDetalle.setCantidad(stockAjuste);
                     }
-                    
-
-                    kardex.setProducto(producto);
+                    else
+                    {
+                        kardex.setProducto(producto);
+                    }
                     
                     //Verificar si tiene una fecha de caducidad para crear un lote por defecto
-                    Date fechaCaducidad=getValorDate(ExcelMigrarProductos.Enum.FECHA_CADUCIDAD, fila);
+                    /*Date fechaCaducidad=getValorDate(ExcelMigrarProductos.Enum.FECHA_CADUCIDAD, fila);
                     if(fechaCaducidad!=null)
                     {
                         Lote lote=new Lote();
-                        lote.setCodigo(producto.getCodigoPersonalizado());
-                        lote.setEmpresa(session.getEmpresa());
-                        lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-                        lote.setFechaVencimiento(UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
-                        lote.setProducto(producto);
-                        lote.setUsuarioCreacion(session.getUsuario());
+                        //Si el producto ya existe entonces busco el lote del producto previamente creado
+                        if (productoTmp != null) 
+                        {
+                            lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorProductoYFechaCaducidad(productoTmp,UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
+                        }
+                        else
+                        {
+
+                            lote.setCodigo(producto.getCodigoPersonalizado());
+                            lote.setEmpresa(session.getEmpresa());
+                            lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                            lote.setFechaVencimiento(UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
+                            lote.setProducto(producto);
+                            lote.setUsuarioCreacion(session.getUsuario());                            
+                        }
                         kardex.setLote(lote);
-                    }
+                    }*/
+                    kardex.setLote(lote);
                     
                     //Crear un ensamble o combo cuando lo requiera el sistema
                     Double cantidadPorCaja = getValorDouble(ExcelMigrarProductos.Enum.CANTIDAD_CAJA, fila);

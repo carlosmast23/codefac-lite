@@ -245,7 +245,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     private void validacionGrabar() throws ExcepcionCodefacLite
     {
         for (CompraDetalle detalle : compra.getDetalles()) {
-            if(detalle.getProductoProveedor()==null)
+            if(detalle.getProductoProveedor()==null || detalle.getProductoProveedor().getCodigoProveedor()==null)
             {
                 throw new ExcepcionCodefacLite("El producto con código: "+detalle.getCodigoProveedor()+" no tiene un ENLACE con un PRODUCTO INTERNO ");
             }

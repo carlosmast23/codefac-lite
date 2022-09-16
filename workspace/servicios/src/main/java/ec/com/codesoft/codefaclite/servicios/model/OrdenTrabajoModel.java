@@ -738,6 +738,14 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     }
 
     private void agregarListener() {
+        
+        getBtnAgregarObjecto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+        
         getTxtCliente().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}

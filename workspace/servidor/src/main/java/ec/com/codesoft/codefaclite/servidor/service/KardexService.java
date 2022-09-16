@@ -76,7 +76,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @return 
      */
     //TODO:Analizar para poder mostrar el listado de todos los karde 
-    @Deprecated
+    /*@Deprecated
     public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
@@ -91,7 +91,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
         
         return null;
-    }
+    }*/
     
     public List<Kardex> buscarPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException
     {
@@ -116,6 +116,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         if(listaKardex!=null && listaKardex.size()>0)
         {
+            Kardex kardex=listaKardex.get(0);
+            System.out.println(kardex.getStock());
             return listaKardex.get(0);
         }
         
@@ -213,7 +215,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //mapParametros.put("producto",componente);
                 //mapParametros.put("bodega",bodega);
                 KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
-                Kardex kardexComponente= servicioKardex.buscarKardexPorProductoyBodega(bodega,componente);
+                Kardex kardexComponente= servicioKardex.buscarKardexPorProductoyBodegayLote(bodega,componente,null);
                 
                 //Si no existe el kardex del componente que intento facturar lo debo crear
                 if(kardexComponente==null)
@@ -431,7 +433,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         {
             Producto componente=componenteProducto.getComponenteEnsamble();
             KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
-            Kardex kardexResultado= servicioKardex.buscarKardexPorProductoyBodega(bodega,componente);
+            Kardex kardexResultado= servicioKardex.buscarKardexPorProductoyBodegayLote(bodega,componente,null);
             
             if(kardexResultado==null)
             {

@@ -8,6 +8,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.LoteFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -25,7 +26,9 @@ import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -77,6 +80,23 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
             entity.setStock(BigDecimal.ZERO);
             entity.setTotal(BigDecimal.ZERO);
         }*/
+    }
+    
+    public Lote buscarPorProductoYFechaCaducidad(Producto producto,java.sql.Date fechaVencimiento) throws ServicioCodefacException, RemoteException 
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put("empresa", empresa);
+        mapParametros.put("producto", producto);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());  
+        mapParametros.put("producto.estado", GeneralEnumEstado.ACTIVO.getEstado());  
+        mapParametros.put("fechaVencimiento",fechaVencimiento);
+        
+        List<Lote> loteList= getFacade().findByMap(mapParametros);
+        if(loteList.size()>0)
+        {
+            return loteList.get(0);
+        }
+        return null;
     }
     
     @Override

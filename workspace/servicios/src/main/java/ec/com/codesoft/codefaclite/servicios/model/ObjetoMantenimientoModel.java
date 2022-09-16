@@ -12,21 +12,25 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbs
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.MarcaProductoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.SegmentoProductoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.servicio.ObjetoMantenimientoControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 //import ec.com.codesoft.codefaclite.inventario.panel.MarcaProductoPanel;
 //import ec.com.codesoft.codefaclite.inventario.panel.SegmentoProductoPanel;
 import ec.com.codesoft.codefaclite.servicios.panel.ObjetoMantenimientoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class ObjetoMantenimientoModel extends ObjetoMantenimientoPanel implements ControladorVistaIf,ObjetoMantenimientoControlador.SwingIf{
+public class ObjetoMantenimientoModel extends ObjetoMantenimientoPanel implements DialogInterfacePanel<ObjetoMantenimiento>, ControladorVistaIf,ObjetoMantenimientoControlador.SwingIf{
     
     private ObjetoMantenimientoControlador controlador;
 
@@ -113,6 +117,30 @@ public class ObjetoMantenimientoModel extends ObjetoMantenimientoPanel implement
 
     public void setControlador(ObjetoMantenimientoControlador controlador) {
         this.controlador = controlador;
+    }
+
+    @Override
+    public ObjetoMantenimiento getResult() throws ExcepcionCodefacLite {
+        try {
+            
+            if(estadoFormularioEnum.equals(EstadoFormularioEnum.GRABAR))
+            {
+                controlador.grabar();
+            }
+            else if(estadoFormularioEnum.equals(EstadoFormularioEnum.EDITAR))
+            {
+                controlador.editar();
+            }
+            
+            return controlador.getObjetoMantenimiento();
+            
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ObjetoMantenimientoModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ObjetoMantenimientoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return  null;
     }
     
     

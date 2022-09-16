@@ -811,7 +811,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 if(kardexDetalle!=null)
                 {
                     KardexService kardexService=new KardexService();
-                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle,null,true);
+                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle,kardexDetalle.getKardex().getLote(),true);
                 }
                 
             }
