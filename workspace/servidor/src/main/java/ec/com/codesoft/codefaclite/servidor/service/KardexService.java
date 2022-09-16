@@ -39,12 +39,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +125,60 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         return null;
     }
-    
+
+
+    /**
+     * Este metodo me va a servir por defecto el kardex de menor caducidad o e su defecto el que no tenga lote
+     * @param bodega
+     * @param producto
+     * @return
+     * @throws java.rmi.RemoteException 
+     */
+    public Kardex buscarKardexPorDefectoVenta(Bodega bodega,Producto producto) throws java.rmi.RemoteException
+        {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("bodega", bodega);
+            map.put("producto", producto);            
+
+            List<Kardex> listaKardex=getFacade().findByMap(map);
+            
+            UtilidadesLista.ordenarLista(listaKardex,new Comparator<Kardex>() {
+                @Override
+                public int compare(Kardex o1, Kardex o2) {
+                    
+                    //Verificar primero cuando tengan referencias en null o no trabajen con lotes
+                    if(o1.getLote()==null && o2.getLote()==null)
+                    {
+                        return 0;
+                    }
+                    
+                    if(o1.getLote()==null)
+                    {
+                        return -1;
+                    }
+                    
+                    if(o2.getLote()==null)
+                    {
+                        return 1;
+                    }
+                    
+                    //Verificar referencias cuando no tengan asignado fecha de caducidad
+                    
+                    
+                    return 0;
+                }
+            });
+            //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
+
+            if(listaKardex!=null && listaKardex.size()>0)
+            {
+                Kardex kardex=listaKardex.get(0);
+                System.out.println(kardex.getStock());
+                return listaKardex.get(0);
+            }
+
+            return null;
+        }    
     /**
      * @deprecated 
      * TODO: Este metodo solo es temporal hasta solucionar un problema con el reporte de factura con costos
@@ -685,6 +740,24 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //movimientoOrigen.setPuntoEmision("");
         movimientoOrigen.setReferenciaDocumentoId(null);
         return movimientoOrigen;
+    }
+    
+    public Kardex buscarKardexPorBodegaDefecto(Producto producto,Sucursal sucursal) throws RemoteException, ServicioCodefacException
+    {
+        Bodega bodegaVenta= ServiceFactory.getFactory().getBodegaServiceIf().obtenerBodegaVenta(sucursal);
+        
+        List<Kardex> kardexList=buscarPorProductoYBodega(producto, bodegaVenta);
+        UtilidadesLista.ordenarLista(kardexList,new Comparator<Kardex>() 
+        {
+            @Override
+            public int compare(Kardex o1, Kardex o2) 
+            {
+                return 0;
+            }
+        });
+        
+        
+        return null;
     }
     
     public void anularInventario(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException
