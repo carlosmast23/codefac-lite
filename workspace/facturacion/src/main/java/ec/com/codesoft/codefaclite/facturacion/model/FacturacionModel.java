@@ -3782,8 +3782,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         
                         Lote lote=null;
                         java.sql.Date fechaCaducidad=null;
+                        BigDecimal ultimoCosto=BigDecimal.ZERO;
                         if(kardexSeleccionado!=null)
                         {
+                            ultimoCosto=kardexSeleccionado.getPrecioUltimo();
                             lote=kardexSeleccionado.getLote();
                             if(lote!=null)
                             {
@@ -3796,7 +3798,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 btnListenerCrearProducto();
                             }
                         } else {
-                            controlador.agregarProductoVista(producto,lote,(kardexSeleccionado!=null)?kardexSeleccionado.getStock():BigDecimal.ZERO,kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
+                            controlador.agregarProductoVista(producto,lote,(kardexSeleccionado!=null)?kardexSeleccionado.getStock():BigDecimal.ZERO,ultimoCosto,fechaCaducidad);
                         }
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
