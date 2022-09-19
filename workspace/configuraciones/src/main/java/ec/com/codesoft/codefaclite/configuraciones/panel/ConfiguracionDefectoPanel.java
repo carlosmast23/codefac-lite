@@ -204,6 +204,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel60 = new javax.swing.JLabel();
         cmbTipoNegocio = new javax.swing.JComboBox<>();
         jLabel63 = new javax.swing.JLabel();
+        jLabel66 = new javax.swing.JLabel();
+        cmbIngresoMayusculas = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -1388,13 +1390,30 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.add(cmbTipoNegocio, gridBagConstraints);
 
         jLabel63.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel63.setText("Tipo Negocio:");
+        jLabel63.setText("Ingreso Mayusculas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel63, gridBagConstraints);
+
+        jLabel66.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel66.setText("Tipo Negocio:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel9.add(jLabel63, gridBagConstraints);
+        jPanel9.add(jLabel66, gridBagConstraints);
+
+        cmbIngresoMayusculas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(cmbIngresoMayusculas, gridBagConstraints);
 
         jTabbedPane1.addTab("General", jPanel9);
 
@@ -1437,6 +1456,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
     private javax.swing.JComboBox<EnumSiNo> cmbImprimirCodigoInternoProducto;
+    private javax.swing.JComboBox<EnumSiNo> cmbIngresoMayusculas;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbModoFacturasGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
@@ -1516,6 +1536,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
+    private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1999,6 +2020,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setTxtLeyendaAdicionalComprobante(JTextField txtLeyendaAdicionalComprobante) {
         this.txtLeyendaAdicionalComprobante = txtLeyendaAdicionalComprobante;
     }
+
+    public JComboBox<EnumSiNo> getCmbIngresoMayusculas() {
+        return cmbIngresoMayusculas;
+    }
+
+    public void setCmbIngresoMayusculas(JComboBox<EnumSiNo> cmbIngresoMayusculas) {
+        this.cmbIngresoMayusculas = cmbIngresoMayusculas;
+    }
+    
+    
     
     
 }

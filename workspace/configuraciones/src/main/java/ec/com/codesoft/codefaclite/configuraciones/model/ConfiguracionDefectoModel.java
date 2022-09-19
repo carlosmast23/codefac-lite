@@ -7,11 +7,9 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.ConfiguracionDefectoPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FormatoReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -31,9 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
-import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.rmi.RemoteException;
@@ -152,6 +148,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbProformaFacturarVariasVeces(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbFiltroRapidoBusqueda(), EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbIngresoMayusculas(), EnumSiNo.values());
 
         //Agregar los tipos de documentos disponibles
         UtilidadesComboBox.llenarComboBox(getCmbTipoDocumento(), TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION));
@@ -376,6 +373,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroFiltroBusquedaRapido = parametrosTodos.get(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroFiltroBusquedaRapido != null) ? parametroFiltroBusquedaRapido.getValor() : null);
             getCmbFiltroRapidoBusqueda().setSelectedItem(enumSiNo);
+            
+            ParametroCodefac parametroIngresoMayusculas = parametrosTodos.get(ParametroCodefac.INGRESO_MAYUSCULAS);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroIngresoMayusculas != null) ? parametroIngresoMayusculas.getValor() : null);
+            getCmbIngresoMayusculas().setSelectedItem(enumSiNo);
             
             ParametroCodefac parametroMostrarTituloFactFisica = parametrosTodos.get(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarTituloFactFisica != null) ? parametroMostrarTituloFactFisica.getValor() : null);
@@ -749,6 +750,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbFiltroRapidoBusqueda().getSelectedItem();
         agregarParametro(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA);
+        
+        enumSiNo = (EnumSiNo) getCmbIngresoMayusculas().getSelectedItem();
+        agregarParametro(ParametroCodefac.INGRESO_MAYUSCULAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.INGRESO_MAYUSCULAS);
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {

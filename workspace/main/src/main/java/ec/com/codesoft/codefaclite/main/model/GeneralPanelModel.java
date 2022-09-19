@@ -1463,7 +1463,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void agregarEtiquetaConvertirMayuscula(ControladorCodefacInterface panel)
     {
-       ConsolaGeneral consola=new ConsolaGeneral();
+        //Verificar si tiene activo la opcion de configuracion en el sistema
+        //Obtendo de la sesión temporal por que tiene que hacer muchas consultas de forma locals
+        //ParametroCodefac parametroCodefa= sessionCodefac.getParametrosCodefac().get(ParametroCodefac.INGRESO_MAYUSCULAS);
+        try {
+            //Si no tiene configuracion para mayusculas entonces no hace nada en ese caso
+            if(!ParametroUtilidades.comparar(ParametroCodefac.INGRESO_MAYUSCULAS,EnumSiNo.SI ,sessionCodefac.getParametrosCodefac()))
+            {
+                return;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       //ConsolaGeneral consola=new ConsolaGeneral();
        
        Class classVentana=panel.getClass();
         Method[] metodos=classVentana.getMethods();

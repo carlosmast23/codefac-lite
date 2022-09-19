@@ -13,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,6 +45,40 @@ public abstract class ParametroUtilidades {
     public static <T extends ComparadorInterface> Boolean comparar(Empresa empresa,String nombreParametro,T valorComparar) throws RemoteException
     {
         String valorParametro=obtenerValorParametro(empresa, nombreParametro);
+        return compararParametro(valorParametro, valorComparar);
+        /*if(valorParametro!=null)
+        {
+            T resultadoValor=(T) valorComparar.
+                    consultarParametro(valorParametro);
+            
+            if(resultadoValor!=null && resultadoValor.equals(valorComparar))
+            {
+                return true;
+            }        
+        }
+        return false; */
+    }
+    
+    public static <T extends ComparadorInterface> Boolean comparar(String nombreParametro,T valorComparar, Map<String,ParametroCodefac> mapParametros) throws RemoteException
+    {
+        String valorParametro=obtenerValorParametro(mapParametros, nombreParametro);
+        return compararParametro(valorParametro, valorComparar);
+        /*if(valorParametro!=null)
+        {
+            T resultadoValor=(T) valorComparar.
+                    consultarParametro(valorParametro);
+            
+            if(resultadoValor!=null && resultadoValor.equals(valorComparar))
+            {
+                return true;
+            }        
+        }
+        return false; */
+    }
+    
+    public static <T extends ComparadorInterface> Boolean compararParametro(String valorParametro,T valorComparar) throws RemoteException
+    {
+        //String valorParametro=obtenerValorParametro(empresa, nombreParametro);
         if(valorParametro!=null)
         {
             T resultadoValor=(T) valorComparar.
@@ -73,6 +108,23 @@ public abstract class ParametroUtilidades {
         return false; 
     }
 
+        
+    private static String obtenerDatoParametro(ParametroCodefac parametroCodefac) {
+        if (parametroCodefac != null) {
+            //Solo si tiene parametro positivo intento construir el ensamble
+            if (parametroCodefac.getValor() != null) {
+                return parametroCodefac.getValor();
+            }
+
+        }
+        return null;
+    }
+    
+    private static String obtenerValorParametro(Map<String,ParametroCodefac> parametrosMap, String nombreParametro)
+    {
+         ParametroCodefac parametroCodefac = parametrosMap.get(nombreParametro);
+         return obtenerDatoParametro(parametroCodefac);
+    }
     
     /**
      * 
@@ -85,14 +137,7 @@ public abstract class ParametroUtilidades {
     {
         try {
             ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(nombreParametro,empresa);
-            if (parametroCodefac != null) {
-                //Solo si tiene parametro positivo intento construir el ensamble
-                if(parametroCodefac.getValor()!=null)
-                {
-                    return parametroCodefac.getValor();
-                }
-                
-            }
+            return obtenerDatoParametro(parametroCodefac);
                
         } catch (RemoteException ex) {
             Logger.getLogger(ParametroUtilidades.class.getName()).log(Level.SEVERE, null, ex);
