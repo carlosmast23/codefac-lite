@@ -457,7 +457,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("Metodo ejecutando seleccionar producto");
         System.out.println("Documento seleccionado : "+documentoSeleccionado.getNombre());
         productoSeleccionado = (Producto) event.getObject(); 
-        controlador.agregarProductoVista(productoSeleccionado,null,BigDecimal.ZERO);
+        controlador.agregarProductoVista(productoSeleccionado,null,BigDecimal.ZERO,null,null);
         //cargarDetalleFacturaAgregar(productoSeleccionado); 
     }
     
@@ -1190,6 +1190,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
 
     public void limpiarComboPresentaciones() {
+        
+    }
+
+    public void setearCostoDetalleTxt(String cantidad) {
+        
+    }
+
+    public void setearFechaCaducidadTxt(String fechaCaducidad) {
         
     }
 

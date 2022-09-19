@@ -111,6 +111,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bodega", bodega);
         map.put("producto", producto);
+        map.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         map.put("lote", lote);
         
         List<Kardex> listaKardex=getFacade().findByMap(map);
@@ -136,48 +137,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      */
     public Kardex buscarKardexPorDefectoVenta(Bodega bodega,Producto producto) throws java.rmi.RemoteException
         {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("bodega", bodega);
-            map.put("producto", producto);            
-
-            List<Kardex> listaKardex=getFacade().findByMap(map);
+            Kardex kardexMinimoLote= getFacade().buscarKardexMenorPorLote(producto, bodega);
             
-            UtilidadesLista.ordenarLista(listaKardex,new Comparator<Kardex>() {
-                @Override
-                public int compare(Kardex o1, Kardex o2) {
-                    
-                    //Verificar primero cuando tengan referencias en null o no trabajen con lotes
-                    if(o1.getLote()==null && o2.getLote()==null)
-                    {
-                        return 0;
-                    }
-                    
-                    if(o1.getLote()==null)
-                    {
-                        return -1;
-                    }
-                    
-                    if(o2.getLote()==null)
-                    {
-                        return 1;
-                    }
-                    
-                    //Verificar referencias cuando no tengan asignado fecha de caducidad
-                    
-                    
-                    return 0;
-                }
-            });
-            //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
-
-            if(listaKardex!=null && listaKardex.size()>0)
+            if(kardexMinimoLote!=null)
             {
-                Kardex kardex=listaKardex.get(0);
-                System.out.println(kardex.getStock());
-                return listaKardex.get(0);
+                return kardexMinimoLote;
             }
-
-            return null;
+            
+            //Si no encontro un kardex minimo disponible con Stock entonces devuelvo el producto por defecto sin LOTE
+            Kardex kardexDefectoSinLote= buscarKardexPorProductoyBodegayLote(bodega,producto,null);
+            
+            //Si no tiene mas datos por defecto devuelvo el mismo campo
+            return kardexDefectoSinLote;
         }    
     /**
      * @deprecated 

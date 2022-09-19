@@ -71,7 +71,8 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     @Override
     public QueryDialog getConsulta(String filter) {
         
-        //Kardex kardex;
+        Kardex kardex;
+        //kardex.getLote().getFechaVencimiento();
         String whereManejaInventario="";
         
         String whereBodega="";
@@ -112,7 +113,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
         
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado";
+        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
         
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());

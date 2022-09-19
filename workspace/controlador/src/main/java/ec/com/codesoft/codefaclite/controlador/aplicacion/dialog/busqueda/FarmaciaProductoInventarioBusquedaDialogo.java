@@ -34,7 +34,8 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
         titulo.add(new ColumnaDialogo("Codigo", 0.2d));
         titulo.add(new ColumnaDialogo("Nombre", 0.4d));
         titulo.add(new ColumnaDialogo("Nombre generico", 0.4d));
-        titulo.add(new ColumnaDialogo("Lote", 0.2d));                
+        titulo.add(new ColumnaDialogo("Lote", 0.2d));    
+        titulo.add(new ColumnaDialogo("F.Exp", 0.15d)); 
         titulo.add(new ColumnaDialogo("Ubicación", 0.3d));
         titulo.add(new ColumnaDialogo("Pvp+iva", 0.10d));
         //titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
@@ -54,6 +55,7 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
         vector.add(producto.getNombre());
         vector.add(producto.getNombreGenerico());
         vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
+        vector.add((kardex.getLote()!=null)?kardex.getLote().getFechaVencimiento():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         //vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));

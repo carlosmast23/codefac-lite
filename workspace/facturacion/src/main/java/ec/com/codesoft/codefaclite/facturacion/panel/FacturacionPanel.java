@@ -272,8 +272,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel50 = new javax.swing.JLabel();
-        lblStockDetalle1 = new javax.swing.JLabel();
+        lblCostoDetalle = new javax.swing.JLabel();
         asdadsasd = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel51 = new javax.swing.JLabel();
+        lblFechaCaducidadDetalle = new javax.swing.JLabel();
 
         btnCargarPedido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnCargarPedido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/buscar.png"))); // NOI18N
@@ -1639,9 +1642,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel50.setText("Costo");
         jPanel9.add(jLabel50);
 
-        lblStockDetalle1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblStockDetalle1.setText("0");
-        jPanel9.add(lblStockDetalle1);
+        lblCostoDetalle.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblCostoDetalle.setText("0");
+        jPanel9.add(lblCostoDetalle);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1654,6 +1657,23 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel8.add(asdadsasd, gridBagConstraints);
+
+        jPanel10.setBorder(new javax.swing.border.MatteBorder(null));
+        jPanel10.setForeground(new java.awt.Color(255, 255, 204));
+
+        jLabel51.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel51.setText("Fecha Caducidad:");
+        jPanel10.add(jLabel51);
+
+        lblFechaCaducidadDetalle.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblFechaCaducidadDetalle.setText("  ");
+        jPanel10.add(lblFechaCaducidadDetalle);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel8.add(jPanel10, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1798,11 +1818,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1823,6 +1845,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JToolBar jToolBar4;
+    private javax.swing.JLabel lblCostoDetalle;
     private javax.swing.JLabel lblDireccionCliente;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio1234;
@@ -1832,12 +1855,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel lblEspacioVertical;
     private javax.swing.JLabel lblEstablecimiento;
     private javax.swing.JLabel lblEstadoFactura;
+    private javax.swing.JLabel lblFechaCaducidadDetalle;
     private javax.swing.JLabel lblIva12;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblPropina10;
     private javax.swing.JLabel lblSecuencial;
     private javax.swing.JLabel lblStockDetalle;
-    private javax.swing.JLabel lblStockDetalle1;
     private javax.swing.JLabel lblSubTotalDescuentoConImpuesto;
     private javax.swing.JLabel lblSubTotalDescuentoSinImpuesto;
     private javax.swing.JLabel lblSubtotal0;
@@ -2434,6 +2457,22 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setLblStockDetalle(JLabel lblStockDetalle) {
         this.lblStockDetalle = lblStockDetalle;
+    }
+
+    public JLabel getLblCostoDetalle() {
+        return lblCostoDetalle;
+    }
+
+    public void setLblCostoDetalle(JLabel lblCostoDetalle) {
+        this.lblCostoDetalle = lblCostoDetalle;
+    }
+
+    public JLabel getLblFechaCaducidadDetalle() {
+        return lblFechaCaducidadDetalle;
+    }
+
+    public void setLblFechaCaducidadDetalle(JLabel lblFechaCaducidadDetalle) {
+        this.lblFechaCaducidadDetalle = lblFechaCaducidadDetalle;
     }
     
     

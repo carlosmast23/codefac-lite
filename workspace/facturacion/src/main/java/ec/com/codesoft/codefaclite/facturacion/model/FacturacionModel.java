@@ -1304,7 +1304,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             buscarDialogoModel.setVisible(true);
             productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
             getCmbIva().setSelectedItem(EnumSiNo.NO);    
-            controlador.agregarProductoVista(productoSeleccionado,null,null);
+            controlador.agregarProductoVista(productoSeleccionado,null,null,null,null);
     }
     
     private void agregarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
@@ -1394,16 +1394,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //controlador.agregarProductoVista(kardexSeleccionado.getProducto(), kardexSeleccionado.getLote());
             if(kardexSeleccionado!=null)
             {
-                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexSeleccionado.getStock());
+                java.sql.Date fechaCaducidad=null;
+                if(kardexSeleccionado.getLote()!=null)
+                {
+                    fechaCaducidad=kardexSeleccionado.getLote().getFechaVencimiento();
+                }
+                
+                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
             }
             else
             {
-                controlador.agregarProductoVista(productoSeleccionado, null,null);
+                controlador.agregarProductoVista(productoSeleccionado, null,null,null,null);
             }
             
         } 
         else if (manejaInventario.equals(EnumSiNo.NO)) {
-            controlador.agregarProductoVista(productoSeleccionado, null,BigDecimal.ZERO);
+            controlador.agregarProductoVista(productoSeleccionado, null,BigDecimal.ZERO,null,null);
         }
     }
     
@@ -3771,15 +3777,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         //Todo: Mejorar esta parte
                         BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
                         Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
-                        Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
+                        //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
+                        kardexSeleccionado=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);
                         
+                        Lote lote=null;
+                        java.sql.Date fechaCaducidad=null;
+                        if(kardexSeleccionado!=null)
+                        {
+                            lote=kardexSeleccionado.getLote();
+                            if(lote!=null)
+                            {
+                                fechaCaducidad=lote.getFechaVencimiento();
+                            }
+                        }
                         
                         if (producto == null) {
                             if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
                                 btnListenerCrearProducto();
                             }
                         } else {
-                            controlador.agregarProductoVista(producto,null,(kardex!=null)?kardex.getStock():BigDecimal.ZERO);
+                            controlador.agregarProductoVista(producto,lote,(kardexSeleccionado!=null)?kardexSeleccionado.getStock():BigDecimal.ZERO,kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
                         }
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -4329,6 +4346,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         setearValorUnitarioTxt("");
         setearDescuentoTxt("0");
         setearCodigoDetalleTxt("");
+        setearCostoDetalleTxt("0");
+        setearFechaCaducidadTxt("");
         
     }
 
@@ -4346,6 +4365,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void cargarEtiquetaStock(BigDecimal stock) {
         
         getLblStockDetalle().setText(stock+"");
+    }
+
+    @Override
+    public void setearCostoDetalleTxt(String cantidad) {
+        getLblCostoDetalle().setText(cantidad);
+    }
+
+    @Override
+    public void setearFechaCaducidadTxt(String fechaCaducidad) {
+        getLblFechaCaducidadDetalle().setText(fechaCaducidad);
     }
 
 }

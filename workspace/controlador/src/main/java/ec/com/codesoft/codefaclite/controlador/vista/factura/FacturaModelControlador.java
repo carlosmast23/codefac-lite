@@ -186,7 +186,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return tiposDocumento;
     }
     
-    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,BigDecimal stock) {
+    /**
+     * TODO: Ver si en este mismo metodo se puede hacer para tener seleccionado el kardex del producto para no tener en el modelo de la vista
+     * @param productoSeleccionado
+     * @param lote
+     * @param stock 
+     */
+    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad) {
         if (productoSeleccionado == null) {
             return;
         }
@@ -202,6 +208,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             stock=stock.setScale(2, RoundingMode.HALF_UP);
         }
         interfaz.cargarEtiquetaStock(stock);
+        
+        //cargar datos del costo
+        interfaz.setearCostoDetalleTxt("");
+        if(costo!=null)
+        {
+            interfaz.setearCostoDetalleTxt(costo+"");
+        }
+        
+        interfaz.setearFechaCaducidadTxt("");
+        if(fechaCaducidad!=null)
+        {
+            interfaz.setearFechaCaducidadTxt(fechaCaducidad+"");
+        }
+        
         
         String descripcion=productoSeleccionado.getNombre();
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
@@ -1446,6 +1466,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public void limpiarIngresoDetalleVista();
         public Boolean isPagoConCartera();
         public Estudiante getEStudiante();
+        
+        //Cargar datos del costo y de la fecha de caducidad
+        public void setearCostoDetalleTxt(String cantidad);
+        public void setearFechaCaducidadTxt(String fechaCaducidad);
         
         
     }

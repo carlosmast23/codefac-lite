@@ -46,6 +46,31 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         super(Kardex.class);
     }
     
+    public Kardex buscarKardexMenorPorLote(Producto producto,Bodega bodega) throws java.rmi.RemoteException
+    {
+        //Kardex k;
+        //k.getStock();
+        //k.getLote().getFechaVencimiento();
+        String queryString = "SELECT k  "
+                + "FROM Kardex k "
+                + "WHERE k.producto=?1 AND k.bodega=?2 AND k.stock>0 "
+                + "ORDER BY k.lote.fechaVencimiento asc ";
+        
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1,producto);
+        query.setParameter(2,bodega);
+        query.setMaxResults(1);
+        
+        List<Kardex> kardexList= query.getResultList();
+        if(kardexList.size()>0)
+        {
+            return kardexList.get(0);
+        }
+        
+        return null;
+        
+    }
+    
     public Kardex buscarPorProductoFacade(Producto producto)
     {
         //Kardex k;
