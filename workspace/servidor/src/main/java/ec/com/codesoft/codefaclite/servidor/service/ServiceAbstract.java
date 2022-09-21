@@ -10,11 +10,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.EntityAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -378,5 +383,37 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
                 throw new ServicioCodefacException("No se puede editar un registro sin USUARIO DE EDICION");
             }
         }
+    }
+    
+    /**
+     * Metodo que me va a permitir identificar cuando un atributo con respecto al original fue modificado
+     * @param producto
+     * @throws ServicioCodefacException
+     * @throws RemoteException 
+     */
+    public void validarEdicionCampo(Empresa empresa,CrudEnum estadoEnum,ValidarEdicionCampoIf validarEdicionCampoIf) throws ServicioCodefacException, RemoteException
+    {
+        //Si no esta en modo editar no hago ninguna validacion
+        if(!estadoEnum.equals(CrudEnum.EDITAR))
+        {
+            return;
+        }
+        
+        if(ParametroUtilidades.comparar(empresa,ParametroCodefac.PERMITIR_EDITAR_CODIGO,EnumSiNo.NO))
+        {
+            Object objectoOriginal=buscarPorId(validarEdicionCampoIf.getId());
+            //Verificar que no edite el código principal del producto        
+            //Producto productoOriginal = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(), producto.getEmpresa());
+            if (!validarEdicionCampoIf.compararCampos(objectoOriginal)) {
+                throw new ServicioCodefacException("No se puede editar el código principal");
+            }
+        }
+        
+    }
+    
+    public interface ValidarEdicionCampoIf<T>
+    {
+        public Object getId();
+        public Boolean compararCampos(T dato);
     }
 }

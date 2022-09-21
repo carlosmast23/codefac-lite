@@ -383,7 +383,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
-    private void validarEdicionCodigoPrincipal(Producto producto) throws ServicioCodefacException, RemoteException
+    /*private void validarEdicionCodigoPrincipal(Producto producto) throws ServicioCodefacException, RemoteException
     {
         if(ParametroUtilidades.comparar(producto.getEmpresa(),ParametroCodefac.PERMITIR_EDITAR_CODIGO,EnumSiNo.NO))
         {
@@ -394,10 +394,23 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             }
         }
         
-    }
+    }*/
     
     private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
     {
+        validarEdicionCampo(p.getEmpresa(), estadoEnum, new ValidarEdicionCampoIf<Producto>() {
+            @Override
+            public Object getId() {
+                return p.getIdProducto();
+            }
+
+            @Override
+            public Boolean compararCampos(Producto dato) {
+                return p.getCodigoPersonalizado().equals(dato.getCodigoPersonalizado());
+            }
+        });
+        
+        
         if(p.getCodigoPersonalizado()==null || p.getCodigoPersonalizado().trim().isEmpty())
         {
             throw new ServicioCodefacException("El Código principal del producto no puede estar vacio ");
@@ -445,7 +458,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
          */
         if(estadoEnum.equals(CrudEnum.EDITAR))
         {
-            validarEdicionCodigoPrincipal(p);
+            //validarEdicionCodigoPrincipal(p);
             
             Producto productoTmp=getFacade().find(p.getIdProducto());
             if(productoTmp.getCodigoPersonalizado().equals(p.getCodigoPersonalizado()))

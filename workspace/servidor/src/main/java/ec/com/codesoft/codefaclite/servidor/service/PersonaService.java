@@ -115,6 +115,18 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
 
     private void validarCliente(Persona persona, Boolean validarCedula, CrudEnum crudEnum,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException {
+        
+        validarEdicionCampo(persona.getEmpresa(), crudEnum, new ValidarEdicionCampoIf<Persona>() {
+            @Override
+            public Object getId() {
+                return persona.getIdCliente();
+            }
+
+            @Override
+            public Boolean compararCampos(Persona dato) {
+                return persona.getIdentificacion().equals(dato.getIdentificacion());
+            }
+        });
         /**
          * Validaciones previas de los datos
          */
@@ -180,7 +192,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     }
     
-    private void validarEdicionCodigoPrincipal(Persona persona) throws ServicioCodefacException, RemoteException
+    /*private void validarEdicionCodigoPrincipal(Persona persona) throws ServicioCodefacException, RemoteException
     {
         if(ParametroUtilidades.comparar(persona.getEmpresa(),ParametroCodefac.PERMITIR_EDITAR_CODIGO,EnumSiNo.SI))
         {
@@ -193,7 +205,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             
         }
         
-    }
+    }*/
 
     public void editar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
         personaFacade.edit(p);
