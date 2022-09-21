@@ -77,6 +77,8 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
             ComponenteFiltro componenteFiltroSegmento=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"Segmento: ",94,segmentoList);
             filtroList.add(componenteFiltroSegmento);
             
+            
+            
             //filtroList.add(e);
             return filtroList;
         } catch (ServicioCodefacException ex) {
@@ -115,6 +117,29 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         return "";
     }
     
-    
+    public enum TipoStockEnum
+    {
+        TODOS("Todos"),
+        CON_STOCK("Con Stock"),
+        SIN_STOCK("Sin Stock");
+        
+        private String nombre;
+
+        private TipoStockEnum(String nombre) {
+            this.nombre = nombre;
+        }        
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        
+        
+    }
     
 }
