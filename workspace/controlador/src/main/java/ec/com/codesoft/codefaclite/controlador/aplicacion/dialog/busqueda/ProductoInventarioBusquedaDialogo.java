@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  */
 public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kardex> , InterfacesPropertisFindWeb,FiltroDialogoIf  {
     
-    private Empresa empresa;
+    protected Empresa empresa;
     //private EnumSiNo isManejoInvetario;
     private Bodega bodega;
     
@@ -113,7 +113,11 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         String filtroCodigo=getFiltroPorCodigo();
         
-        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+filtroCodigo+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        String filtroAplicacion=getFiltroPorAplicacion();
+        
+        String filtroSegmento=getFiltroPorSegmento();
+        
+        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+filtroCodigo+filtroAplicacion+filtroSegmento+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
         
         queryString+=" and (  LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
         
@@ -142,6 +146,11 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         return queryDialog;
     }
     
+    public String getFiltroPorSegmento()
+    {
+        return "";
+    }
+    
     public String getFiltroPorCodigo()
     {
         return "";
@@ -150,6 +159,11 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     public String getFiltroPorMarca()
     {
         return " AND ( u.marcaProducto=?97 ) ";
+    }
+    
+    public String getFiltroPorAplicacion()
+    {
+        return "";
     }
     
     

@@ -7,14 +7,22 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -55,13 +63,28 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
 
     @Override
     public Vector<ComponenteFiltro> getfiltrosList() {
-        Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();         
-        
-        ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.TEXTO,"Código: ",96);
-        filtroList.add(componenteFiltro);
-        //filtroList.add(e);
-        return filtroList;
-                
+        try {
+            Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();
+            
+            ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.TEXTO,"Código: ",96);
+            filtroList.add(componenteFiltro);
+            
+            ComponenteFiltro componenteFiltroAplicacion=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.TEXTO,"Aplicación: ",95);
+            filtroList.add(componenteFiltroAplicacion);
+            
+            
+            List<SegmentoProducto> segmentoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(empresa);
+            ComponenteFiltro componenteFiltroSegmento=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"Segmento: ",94,segmentoList);
+            filtroList.add(componenteFiltroSegmento);
+            
+            //filtroList.add(e);
+            return filtroList;
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TallerMecanicoInventarioBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(TallerMecanicoInventarioBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -70,6 +93,22 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         
         return " AND LOWER(u.codigoPersonalizado) like ?96 ";
     }
+    
+    @Override
+    public String getFiltroPorAplicacion()
+    {
+        return " AND LOWER(u.aplicacionProducto) like ?95 ";
+    }
+    
+    @Override
+    public String getFiltroPorSegmento()
+    {
+        //Producto p;
+        //p.getSegmentoProducto().;
+        return " AND ( u.segmentoProducto=?94 ) ";
+    }
+    
+    
 
     @Override
     public String getFiltroPorMarca() {
