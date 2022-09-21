@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.inventario.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -39,7 +39,7 @@ public class BodegaBusquedaDialogo implements InterfaceModelFind<Bodega> {
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         String queryString = "SELECT u FROM Bodega u WHERE (u.empresa=?3 or u.empresa=NULL) and (u.estado=?1) and";
         queryString += " ( LOWER(u.nombre) LIKE ?2 )";
         QueryDialog queryDialog = new QueryDialog(queryString);

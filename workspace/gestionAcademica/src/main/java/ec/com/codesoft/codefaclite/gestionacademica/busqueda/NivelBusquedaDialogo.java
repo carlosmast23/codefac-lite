@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
@@ -28,7 +28,7 @@ public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         String queryString = "SELECT u FROM Nivel u WHERE (u.estado=?1) and";
         queryString += " ( LOWER(u.nombre) LIKE ?2 )";
         QueryDialog queryDialog = new QueryDialog(queryString);

@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 
 /**
  *
@@ -36,7 +36,7 @@ public class GuiaRemisionBusqueda implements InterfaceModelFind<GuiaRemision>
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         
         String queryString = "SELECT u FROM GuiaRemision u WHERE u.estado<>?1 ";
         queryString+="AND ( LOWER(u.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";

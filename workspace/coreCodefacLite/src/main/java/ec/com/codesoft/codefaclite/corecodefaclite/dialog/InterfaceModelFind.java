@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -24,7 +25,7 @@ public interface InterfaceModelFind<T>
      * @param AliasParam parametro de busqueda del dialogo para armar el query
      * @return 
      */
-    public abstract QueryDialog getConsulta(String filter);
+    public abstract QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro);
     
     
     public abstract void agregarObjeto(T t,Vector dato);

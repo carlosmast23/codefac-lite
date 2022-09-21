@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 
 /**
  *
@@ -47,7 +47,7 @@ public class FacturaBusquedaPresupuesto implements InterfaceModelFind<Presupuest
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Presupuesto p;
         //p.getOrdenTrabajoDetalle().getOrdenTrabajo().getCliente().getRazonSocial();
         String queryString = "SELECT u FROM Presupuesto u WHERE ( u.estado=?1 ) AND ";

@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorRe
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaReportePanel;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ReporteFacturaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;

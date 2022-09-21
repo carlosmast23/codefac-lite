@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.CalculadoraPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.utilidades.calculos.UtilidadesCalculo;
 import java.awt.event.ActionEvent;

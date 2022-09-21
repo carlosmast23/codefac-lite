@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaPedidoLoteMo
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.UtilidadPrecioModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.UtilidadPrecioPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;

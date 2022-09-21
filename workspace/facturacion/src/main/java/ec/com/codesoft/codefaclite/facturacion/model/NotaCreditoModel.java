@@ -22,7 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSiste
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador.NotaCreditoModelInterface;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;

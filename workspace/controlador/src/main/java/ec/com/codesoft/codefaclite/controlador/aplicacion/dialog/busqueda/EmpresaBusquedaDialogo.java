@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 
 /**
@@ -53,7 +53,7 @@ public class EmpresaBusquedaDialogo implements InterfaceModelFind<Empresa>
     }*/
 
     @Override
-    public QueryDialog getConsulta(String filter) {       
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {       
         String queryString = "SELECT u FROM Empresa u WHERE ";
         queryString+=" ( LOWER(u.razonSocial) like ?1 ) and u.estado=?2 ";
         QueryDialog queryDialog=new QueryDialog(queryString);

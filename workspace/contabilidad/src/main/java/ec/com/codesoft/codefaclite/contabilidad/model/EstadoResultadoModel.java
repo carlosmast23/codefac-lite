@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.contabilidad.model;
 
 import ec.com.codesoft.codefaclite.contabilidad.panel.EstadoResultadoPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import java.rmi.RemoteException;
 import java.util.List;

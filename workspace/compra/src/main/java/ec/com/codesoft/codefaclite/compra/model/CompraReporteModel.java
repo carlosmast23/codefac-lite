@@ -19,7 +19,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.CompraDataRep
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteCompra;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;

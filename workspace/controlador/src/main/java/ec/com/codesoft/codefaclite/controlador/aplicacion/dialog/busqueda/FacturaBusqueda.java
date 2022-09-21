@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -74,7 +74,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Factura f;
         //f.getEstado();
         //f.getSucursalEmpresa().gete

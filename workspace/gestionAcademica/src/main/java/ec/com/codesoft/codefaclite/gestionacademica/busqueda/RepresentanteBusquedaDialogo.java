@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class RepresentanteBusquedaDialogo implements InterfaceModelFind<Persona>
     }*/
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Persona p;
         //p.getIdentificacion();
         String queryString = "SELECT u FROM Persona u WHERE ";

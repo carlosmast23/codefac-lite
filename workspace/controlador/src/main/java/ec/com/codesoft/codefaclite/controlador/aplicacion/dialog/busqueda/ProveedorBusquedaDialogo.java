@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -74,7 +74,7 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<PersonaEstab
         }       
     }*/
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //PersonaEstablecimiento p;
         //p.getPersona().getEstadoEnum();
         //p.getTipo();

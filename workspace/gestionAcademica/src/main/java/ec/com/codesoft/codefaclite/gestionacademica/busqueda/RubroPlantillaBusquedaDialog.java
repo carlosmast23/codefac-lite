@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -36,7 +36,7 @@ public class RubroPlantillaBusquedaDialog implements InterfaceModelFind<RubroPla
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         
         String queryString = "SELECT u FROM RubroPlantilla u WHERE u.estado=?3 and u.periodo=?2 AND ";
         queryString += " ( LOWER(u.nombre) like ?1 )";

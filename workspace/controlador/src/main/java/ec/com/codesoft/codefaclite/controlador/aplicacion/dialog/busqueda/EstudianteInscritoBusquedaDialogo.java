@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 
 /**
  *
@@ -42,7 +42,7 @@ public class EstudianteInscritoBusquedaDialogo implements InterfaceModelFind<Est
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {    
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {    
 
         //EstudianteInscrito ei;
         //ei.getEstado()

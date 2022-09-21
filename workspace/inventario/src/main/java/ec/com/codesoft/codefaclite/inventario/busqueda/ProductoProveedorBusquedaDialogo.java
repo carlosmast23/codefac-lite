@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.inventario.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -54,7 +54,7 @@ public class ProductoProveedorBusquedaDialogo implements InterfaceModelFind<Prod
     }*/
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         /*ProductoProveedor productoProveedor;
         productoProveedor.getProducto().getNombre();*/
         String queryString = "SELECT u FROM ProductoProveedor u WHERE ";

@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFin
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -114,7 +114,7 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         
         String queryFiltroEmpresa=" AND u.persona.empresa=?2 ";
         

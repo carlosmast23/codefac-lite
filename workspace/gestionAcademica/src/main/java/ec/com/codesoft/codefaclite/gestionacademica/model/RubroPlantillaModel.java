@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteInscritoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.NivelBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.RubroPlantillaBusquedaDialog;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.AgregarDescuentoDialog;

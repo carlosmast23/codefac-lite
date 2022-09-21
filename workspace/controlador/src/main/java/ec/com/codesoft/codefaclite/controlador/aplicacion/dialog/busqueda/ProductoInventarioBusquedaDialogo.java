@@ -5,10 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo.TipoStockEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -27,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +38,8 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kardex> , InterfacesPropertisFindWeb,FiltroDialogoIf  {
+    
+    public static final int PARAMETRO_FILTRO_STOCK=-93;
     
     protected Empresa empresa;
     //private EnumSiNo isManejoInvetario;
@@ -69,7 +73,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         
         Kardex kardex;
         //kardex.getLote().getFechaVencimiento();
@@ -109,6 +113,25 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
             whereStockNegativo=" and ( k.stock>0 and k.lote is not null or k.lote is null)  ";
         }
         
+        TipoStockEnum tipoStockEnum= (TipoStockEnum) mapFiltro.get(PARAMETRO_FILTRO_STOCK);
+        String whereFiltroStock="";
+        if(tipoStockEnum!=null)
+        {
+            if(tipoStockEnum.equals(TipoStockEnum.CON_STOCK))
+            {
+                whereFiltroStock=" AND k.stock>0 ";
+            }
+            else if(tipoStockEnum.equals(TipoStockEnum.SIN_STOCK))
+            {
+                whereFiltroStock=" AND k.stock<=0 ";
+            }
+            else if(tipoStockEnum.equals(TipoStockEnum.TODOS))
+            {
+                whereFiltroStock=" ";
+            }            
+        }
+         
+        
         String filtroMarca=getFiltroPorMarca();
         
         String filtroCodigo=getFiltroPorCodigo();
@@ -117,7 +140,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         String filtroSegmento=getFiltroPorSegmento();
         
-        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+filtroCodigo+filtroAplicacion+filtroSegmento+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
         
         queryString+=" and (  LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
         

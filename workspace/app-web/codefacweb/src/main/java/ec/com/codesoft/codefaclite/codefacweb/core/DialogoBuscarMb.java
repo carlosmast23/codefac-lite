@@ -33,7 +33,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PrimeFaces;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -85,7 +85,7 @@ public class DialogoBuscarMb implements Serializable {
                         filtroConsulta="%"+filters.get(filters.keySet().toArray()[0])+"%";
                         filtroConsulta=filtroConsulta.toLowerCase();
                     }
-                    QueryDialog queryDialog = controller.getConsulta(filtroConsulta);
+                    QueryDialog queryDialog = controller.getConsulta(filtroConsulta,null);
                     String queryTamanio= UtilidadSql.convertirConsultaEnConsultaTamanio(queryDialog.query);
                     Long tamanioConsulta=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryTamanio, queryDialog.getParametros());                    
                     setRowCount(tamanioConsulta.intValue());
@@ -145,7 +145,7 @@ public class DialogoBuscarMb implements Serializable {
 
     public void buscarDatos(InterfaceModelFind busquedaClase,List<Object> datosBusqueda) {
         InterfaceModelFind busquedaDialogo = busquedaClase;
-        QueryDialog queryDialog = busquedaDialogo.getConsulta("%%");
+        QueryDialog queryDialog = busquedaDialogo.getConsulta("%%",null);
         //datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(), 0, 10000);
         //Setear datos al controlador
         columnasConsulta = busquedaDialogo.getColumnas();

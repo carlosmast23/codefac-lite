@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -36,7 +36,7 @@ public class EstudianteInscritoDialogo implements InterfaceModelFind<EstudianteI
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //EstudianteInscrito e;
         //e.getNivelAcademico().getPeriodo();
         String queryString = "SELECT u FROM EstudianteInscrito u WHERE (u.estado=?1) AND u.nivelAcademico.periodo=?3 AND";

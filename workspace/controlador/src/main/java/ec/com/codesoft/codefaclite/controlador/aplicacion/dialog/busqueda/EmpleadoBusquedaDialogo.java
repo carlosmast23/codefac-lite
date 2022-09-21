@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 
 /**
  *
@@ -44,7 +44,7 @@ public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>,Int
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Empleado empleado;
         //empleado.getDepartamento().getTipo();
         String queryString = "SELECT e FROM Empleado e WHERE ((LOWER(e.nombres) like ?1) or ";

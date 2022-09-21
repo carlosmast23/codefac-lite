@@ -15,7 +15,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.inventario.SegmentoProducto
 import ec.com.codesoft.codefaclite.controlador.vista.servicio.ObjetoMantenimientoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.servicio.TareaPendienteOrdenTrabajoControlador;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 //import ec.com.codesoft.codefaclite.inventario.panel.MarcaProductoPanel;
 //import ec.com.codesoft.codefaclite.inventario.panel.SegmentoProductoPanel;

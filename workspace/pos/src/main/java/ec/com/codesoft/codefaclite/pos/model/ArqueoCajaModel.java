@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControl
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.ArqueoCajaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.pos.panel.ArqueoCajaPanel;

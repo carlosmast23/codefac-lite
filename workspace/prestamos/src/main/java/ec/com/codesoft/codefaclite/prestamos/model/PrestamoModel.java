@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.prestamos.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.PrestamoDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.prestamos.panel.PrestamoPanel;

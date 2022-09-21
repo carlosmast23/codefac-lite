@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFin
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 
 /**
@@ -49,7 +49,7 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>, Inte
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Persona p;
         //p.getIdentificacion();
         String queryString = "SELECT u FROM Persona u WHERE ";

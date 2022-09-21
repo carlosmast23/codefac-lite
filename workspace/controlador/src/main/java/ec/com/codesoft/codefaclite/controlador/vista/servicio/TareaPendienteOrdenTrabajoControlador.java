@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.controlador.vista.transporte.GuiaRemisionLoteControlador;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.TableBindingImp;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;

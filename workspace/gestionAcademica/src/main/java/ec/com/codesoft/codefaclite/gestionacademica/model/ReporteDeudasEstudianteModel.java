@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteInscritoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasEstudiantePanel;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasPanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasData;

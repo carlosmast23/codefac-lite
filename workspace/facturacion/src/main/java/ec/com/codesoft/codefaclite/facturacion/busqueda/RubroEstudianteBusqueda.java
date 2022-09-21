@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 
 /**
  *
@@ -41,7 +41,7 @@ public class RubroEstudianteBusqueda implements InterfaceModelFind<RubroEstudian
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado=?5 and u.estudianteInscrito.estudiante=?1 and ( u.estadoFactura=?2 OR  u.estadoFactura=?3) and ";
         queryString += " ( LOWER(u.rubroNivel.nombre) like ?4 )";
         QueryDialog queryDialog = new QueryDialog(queryString);

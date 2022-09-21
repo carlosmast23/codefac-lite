@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbs
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.PresentacionProductoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.PresentacionProductoControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.MarcaProductoPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.PresentacionProductoPanel;

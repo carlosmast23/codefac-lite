@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
@@ -45,7 +45,7 @@ public class CajaSessionBusquedaDialogo implements InterfaceModelFind<CajaSessio
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         String queryString = "";
         
         queryString += "Select cs from CajaSession cs Where cs.estadoCierreCaja = ?2 ";

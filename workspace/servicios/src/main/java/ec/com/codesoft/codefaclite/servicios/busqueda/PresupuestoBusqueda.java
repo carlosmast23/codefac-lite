@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 
 /**
  *
@@ -32,7 +32,7 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //String queryString = "SELECT p FROM Presupuesto p WHERE ";
         //String queryString = "SELECT p FROM Presupuesto p WHERE CAST(p.id CHAR(64) ) like ?1 and p.estado=?2 ";
         String queryString = "SELECT p FROM Presupuesto p WHERE CAST(p.id CHAR(64) ) like ?1 order by p.id desc ";

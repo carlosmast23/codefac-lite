@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -32,7 +32,7 @@ public class TurnoAsignadoBusquedaDialogo implements InterfaceModelFind<TurnoAsi
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         String queryString = "SELECT ta FROM TurnoAsignado ta WHERE ";
         queryString+=" ((ta.cajaPermiso.caja.nombre) like ?1 ) and (ta.estado) like ?2 and (ta.cajaPermiso.estado) like ?3";
         QueryDialog queryDialog=new QueryDialog(queryString);

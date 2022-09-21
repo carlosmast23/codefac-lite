@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.inventario.MarcaProductoCon
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.SegmentoProductoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.servicio.ObjetoMantenimientoControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 //import ec.com.codesoft.codefaclite.inventario.panel.MarcaProductoPanel;

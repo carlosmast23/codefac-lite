@@ -5,7 +5,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -35,7 +35,7 @@ public class DepartamentoBusquedaDialogo implements InterfaceModelFind<Departame
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Departamento d;
         //d.setEstado(estado);
         String queryString = "SELECT d FROM Departamento d WHERE ( (LOWER(d.codigo) like ?1) or ";

@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
@@ -38,7 +38,7 @@ public class ProductoInventarioEspecificoDialogo implements InterfaceModelFind<K
     }
 
     @Override
-    public QueryDialog getConsulta(String filter) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         String queryConsulta="SELECT kie FROM Kardex k,KardexDetalle kd,KardexItemEspecifico kie where kie.kardexDetalle=kd and kd.kardex=k and k.producto=?1 ";
         QueryDialog queryDialog=new QueryDialog(queryConsulta);
         queryDialog.agregarParametro(1,producto);

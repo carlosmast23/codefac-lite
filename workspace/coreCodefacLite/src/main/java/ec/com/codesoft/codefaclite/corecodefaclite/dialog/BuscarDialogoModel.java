@@ -272,8 +272,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 }
             }
             
-            
-            QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
+            Map<Integer,Object> mapFiltro=obtenerDatosFiltro();
+            QueryDialog queryDialog=this.model.getConsulta(filtroConsuta,mapFiltro);
             agregarParametrosFiltros(queryDialog,this.model);
             
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
@@ -307,13 +307,17 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 Integer numeroParametro = entry.getKey();
                 Object valor = entry.getValue();
                 
-                if(valor==null)
+                //No tomar en cuenta parametros con simbolo negativo que solo se deben usar para hacer alguna logica dentrode las consultas pero no agregar como parametro
+                if(numeroParametro>=0)
                 {
-                    query=remplazarParametroVerdadero(query, numeroParametro);
-                }
-                else
-                {
-                    queryDialog.agregarParametro(numeroParametro, valor);
+                    if(valor==null)
+                    {
+                        query=remplazarParametroVerdadero(query, numeroParametro);
+                    }
+                    else
+                    {
+                        queryDialog.agregarParametro(numeroParametro, valor);
+                    }
                 }
                 
             }
@@ -411,7 +415,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                     filtroConsuta="%"+filtroConsuta+"%";
                 }
             }
-            QueryDialog queryDialog=this.model.getConsulta(filtroConsuta);
+            Map<Integer,Object> mapFiltro=obtenerDatosFiltro();
+            QueryDialog queryDialog=this.model.getConsulta(filtroConsuta,mapFiltro);
             agregarParametrosFiltros(queryDialog,this.model);
             
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");

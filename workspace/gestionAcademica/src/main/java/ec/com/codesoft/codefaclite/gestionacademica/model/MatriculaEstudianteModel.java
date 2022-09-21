@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteInscritoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteMatriculaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.MatriculaEstudiantePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;

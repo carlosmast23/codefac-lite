@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.vista.producto;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GestionRetencionRentaDialogo;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;

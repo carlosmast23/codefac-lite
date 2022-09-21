@@ -168,7 +168,7 @@ import javax.swing.table.TableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.collections4.map.HashedMap;
 import org.jdesktop.swingx.prompt.PromptSupport;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;

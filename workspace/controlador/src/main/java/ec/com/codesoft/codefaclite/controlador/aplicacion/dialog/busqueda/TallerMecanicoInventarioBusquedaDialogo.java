@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -29,6 +30,8 @@ import java.util.logging.Logger;
  * @author CARLOS_CODESOFT
  */
 public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioBusquedaDialogo{
+    
+    
     
     public TallerMecanicoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega) {
         super(isManejoInvetario, empresa, bodega, true);
@@ -76,6 +79,10 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
             List<SegmentoProducto> segmentoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(empresa);
             ComponenteFiltro componenteFiltroSegmento=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"Segmento: ",94,segmentoList);
             filtroList.add(componenteFiltroSegmento);
+            
+            List<TipoStockEnum> tipoStockList=UtilidadesLista.arrayToList(TipoStockEnum.values());
+            ComponenteFiltro tipoStockSegmento=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"Tipo Stock: ",PARAMETRO_FILTRO_STOCK,tipoStockList);
+            filtroList.add(tipoStockSegmento);
             
             
             

@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbs
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.pos.panel.CajaSessionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
