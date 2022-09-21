@@ -109,11 +109,13 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
             whereStockNegativo=" and ( k.stock>0 and k.lote is not null or k.lote is null)  ";
         }
         
-        String filtroMarca=" AND ( u.marcaProducto=?97 ) ";
+        String filtroMarca=getFiltroPorMarca();
         
-        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        String filtroCodigo=getFiltroPorCodigo();
         
-        queryString+=" and ( LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
+        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 "+filtroMarca+filtroCodigo+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        
+        queryString+=" and (  LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
         
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
@@ -140,6 +142,15 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         return queryDialog;
     }
     
+    public String getFiltroPorCodigo()
+    {
+        return "";
+    }
+    
+    public String getFiltroPorMarca()
+    {
+        return " AND ( u.marcaProducto=?97 ) ";
+    }
     
     
     @Override

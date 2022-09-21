@@ -55,13 +55,25 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
 
     @Override
     public Vector<ComponenteFiltro> getfiltrosList() {
-        Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();            
+        Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();         
         
+        ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.TEXTO,"Código: ",96);
+        filtroList.add(componenteFiltro);
         //filtroList.add(e);
-        return null;
+        return filtroList;
+                
+    }
+
+    @Override
+    public String getFiltroPorCodigo() {
+        //Producto p;p.getCodigoPersonalizado()
         
-                
-                
+        return " AND LOWER(u.codigoPersonalizado) like ?96 ";
+    }
+
+    @Override
+    public String getFiltroPorMarca() {
+        return "";
     }
     
     

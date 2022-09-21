@@ -27,6 +27,13 @@ public class ComponenteFiltro {
         this.listaDatos = listaDatos;
     }
     
+    public ComponenteFiltro(TipoFiltroEnum tipoFiltroEnum, String titulo,Integer numeroParametro) 
+    {
+        this.tipoFiltroEnum = tipoFiltroEnum;
+        this.titulo = titulo;
+        this.numeroParametro=numeroParametro;
+    }
+    
     /*public ComponenteFiltro(TipoFiltroEnum tipoFiltroEnum, String titulo,Integer numeroParametro, List[] listaDatos) 
     {
         this.tipoFiltroEnum = tipoFiltroEnum;

@@ -182,7 +182,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             }
             
             //Verificar si tiene permiso para editar la cedula
-            validarEdicionCodigoPrincipal(persona);
+            //validarEdicionCodigoPrincipal(persona);
             
         }
 

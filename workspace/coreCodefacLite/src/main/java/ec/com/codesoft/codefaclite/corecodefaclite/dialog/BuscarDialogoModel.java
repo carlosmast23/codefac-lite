@@ -38,9 +38,11 @@ import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -135,6 +137,11 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                     JPanel panelCompontenteFiltro=crearComboxBox(componenteFiltro, componenteFiltroList);
                     agregarPanelFiltro(panelCompontenteFiltro, componenteFiltroList);
                 }
+                else if(componenteFiltro.tipoFiltroEnum.equals(ComponenteFiltro.TipoFiltroEnum.TEXTO))
+                {
+                    JPanel panelCompontenteFiltro=crearTextField(componenteFiltro);
+                    agregarPanelFiltro(panelCompontenteFiltro, componenteFiltroList);
+                }
             }
         }        
     }
@@ -154,6 +161,12 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         pack();
     }
     
+    private JPanel crearTextField(ComponenteFiltro componenteFiltro)
+    {
+        JTextField textField=new JTextField();
+        return agregarComponente(componenteFiltro, textField);
+    }
+    
     private JPanel crearComboxBox(ComponenteFiltro componenteFiltro,List<ComponenteFiltro> componenteFiltroList)
     {
         JComboBox cmbFiltro=new JComboBox();
@@ -163,15 +176,33 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             cmbFiltro.addItem(dato);
         }
         cmbFiltro.setSelectedItem(null);
-        JPanel pnlNuevo=new JPanel();
+        /*JPanel pnlNuevo=new JPanel();
         pnlNuevo.setLayout(new BoxLayout(pnlNuevo, BoxLayout.X_AXIS));
         pnlNuevo.add(new JLabel(componenteFiltro.titulo));
         pnlNuevo.add(Box.createRigidArea(new Dimension(5, 0)));
-        pnlNuevo.add(cmbFiltro);
+        pnlNuevo.add(cmbFiltro);*/
+        /*JPanel pnlNuevo=crearComponentePanel(componenteFiltro.titulo,cmbFiltro);
         componenteFiltro.componenteVista=cmbFiltro;
-        componenteFiltroList.add(componenteFiltro);
-        //panelPadre.add(pnlNuevo);
+        componenteFiltroList.add(componenteFiltro);*/
         
+        return agregarComponente(componenteFiltro, cmbFiltro);
+    }
+    
+    private JPanel agregarComponente(ComponenteFiltro componenteFiltro,JComponent componente)
+    {
+        JPanel pnlNuevo=crearComponentePanel(componenteFiltro.titulo,componente);
+        componenteFiltro.componenteVista=componente;
+        componenteFiltroList.add(componenteFiltro);
+        return pnlNuevo;
+    }
+    
+    private JPanel crearComponentePanel(String titulo,JComponent componente)
+    {
+        JPanel pnlNuevo=new JPanel();
+        pnlNuevo.setLayout(new BoxLayout(pnlNuevo, BoxLayout.X_AXIS));
+        pnlNuevo.add(new JLabel(titulo));
+        pnlNuevo.add(Box.createRigidArea(new Dimension(5, 0)));
+        pnlNuevo.add(componente);
         return pnlNuevo;
     }
     
@@ -201,6 +232,14 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 }
                 
                 mapFiltro.put(componenteFiltro.numeroParametro, valor);
+            }
+            else if(componenteFiltro.tipoFiltroEnum.equals(ComponenteFiltro.TipoFiltroEnum.TEXTO))
+            {
+                JTextField textField=(JTextField) componenteFiltro.componenteVista;
+                
+                Object valor=textField.getText();
+                //TODO: Por el momento aumento el comodin de busqueda pero eso creo que se debe configurar por cada parametro
+                mapFiltro.put(componenteFiltro.numeroParametro,"%"+valor+"%");                
             }
         }
         
