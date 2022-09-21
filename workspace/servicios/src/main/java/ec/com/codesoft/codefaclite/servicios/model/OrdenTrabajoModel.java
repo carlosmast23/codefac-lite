@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servicios.reportdata.OrdenTrabajoDataReporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -742,7 +743,21 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getBtnAgregarObjecto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                Object[] paramPostConstruct = new Object[1];
+                paramPostConstruct[0] = ordenTrabajo.getCliente();
+
+                ObserverUpdateInterface observerCreate = new ObserverUpdateInterface<ObjetoMantenimiento>() {
+                    @Override
+                    public void updateInterface(ObjetoMantenimiento entity) {
+                        if (entity != null) 
+                        {
+                            getCmbObjetoMantenimiento().addItem(entity);
+                            getCmbObjetoMantenimiento().setSelectedItem(entity);
+                        }
+
+                    }
+                };
+                panelPadre.crearDialogoCodefac(observerCreate, VentanaEnum.OBJETO_MANTENIMIENTO, false, paramPostConstruct, formularioActual);
             }
         });
         

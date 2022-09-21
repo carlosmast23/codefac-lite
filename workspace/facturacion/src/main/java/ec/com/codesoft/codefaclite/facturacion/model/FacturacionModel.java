@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Produc
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
@@ -629,7 +630,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) 
+            {
                 cargarDetalleProducto();                
             }
         });
@@ -1326,6 +1328,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.FARMACIA))
             {
                 productoInventarioBusquedaDialogo=new FarmaciaProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(), bodegaVenta);
+            }
+            else if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
+            {
+                productoInventarioBusquedaDialogo=new TallerMecanicoInventarioBusquedaDialogo(manejaInventario,session.getEmpresa(), bodegaVenta);
             }
             
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);            

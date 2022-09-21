@@ -260,6 +260,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String DATO_ADICIONAL_TITULO="dato_adicional_titulo";
     
+    public static final String PERMITIR_EDITAR_CODIGO="permitir_editar_codigo";
+    
     public static final String LEYENDA_ADICIONAL_COMPROBANTE="leyenda_adicional_comprobante";
     
 

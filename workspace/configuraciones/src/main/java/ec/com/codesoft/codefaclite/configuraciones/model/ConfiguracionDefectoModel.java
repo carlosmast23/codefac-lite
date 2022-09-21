@@ -216,6 +216,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbVentanasMultiples(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbPermitirEditarCodigo(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbAgregarLoteFactura(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbConstruirEnsamblesFacturar(),EnumSiNo.values());
@@ -522,6 +523,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroVentasMultiples != null) ? parametroVentasMultiples.getValor() : null);
             getCmbVentanasMultiples().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac permitirEditarCodigo = parametrosTodos.get(ParametroCodefac.PERMITIR_EDITAR_CODIGO);
+            enumSiNo = EnumSiNo.getEnumByLetra((permitirEditarCodigo != null) ? permitirEditarCodigo.getValor() : null);
+            getCmbPermitirEditarCodigo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             ParametroCodefac parametroAgregarLoteFactura = parametrosTodos.get(ParametroCodefac.AGREGAR_LOTE_FACTURA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroAgregarLoteFactura != null) ? parametroAgregarLoteFactura.getValor() : null);
             getCmbAgregarLoteFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -722,6 +727,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbVentanasMultiples().getSelectedItem();
         agregarParametro(ParametroCodefac.VENTANAS_MULTIPLES, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.VENTANAS_MULTIPLES);
+        
+        enumSiNo = (EnumSiNo) getCmbPermitirEditarCodigo().getSelectedItem();
+        agregarParametro(ParametroCodefac.PERMITIR_EDITAR_CODIGO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.PERMITIR_EDITAR_CODIGO);
         
         enumSiNo = (EnumSiNo) getCmbAgregarLoteFactura().getSelectedItem();
         agregarParametro(ParametroCodefac.AGREGAR_LOTE_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);

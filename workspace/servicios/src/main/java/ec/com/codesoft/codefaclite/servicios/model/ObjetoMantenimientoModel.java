@@ -15,10 +15,12 @@ import ec.com.codesoft.codefaclite.controlador.vista.servicio.ObjetoMantenimient
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 //import ec.com.codesoft.codefaclite.inventario.panel.MarcaProductoPanel;
 //import ec.com.codesoft.codefaclite.inventario.panel.SegmentoProductoPanel;
 import ec.com.codesoft.codefaclite.servicios.panel.ObjetoMantenimientoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +32,7 @@ import java.util.logging.Logger;
  *
  * @author CARLOS_CODESOFT
  */
-public class ObjetoMantenimientoModel extends ObjetoMantenimientoPanel implements DialogInterfacePanel<ObjetoMantenimiento>, ControladorVistaIf,ObjetoMantenimientoControlador.SwingIf{
+public class ObjetoMantenimientoModel extends ObjetoMantenimientoPanel implements DialogInterfacePanel<ObjetoMantenimiento>,InterfazPostConstructPanel, ControladorVistaIf,ObjetoMantenimientoControlador.SwingIf{
     
     private ObjetoMantenimientoControlador controlador;
 
@@ -141,6 +143,18 @@ public class ObjetoMantenimientoModel extends ObjetoMantenimientoPanel implement
             Logger.getLogger(ObjetoMantenimientoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return  null;
+    }
+
+    @Override
+    public void postConstructorExterno(Object[] parametros) 
+    {
+        if(parametros[0]!=null)
+        {
+            Persona cliente=(Persona) parametros[0];
+            controlador.cargarClienteVista(cliente);
+        }
+        
+        actualizarBindingCompontValues();
     }
     
     

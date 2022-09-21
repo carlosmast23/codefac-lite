@@ -164,8 +164,14 @@ public class ObjetoMantenimientoControlador extends ModelControladorAbstract<Obj
         if (buscarDialogoModel.getResultado() != null) 
         {
             PersonaEstablecimiento personaEstablecimiento= (PersonaEstablecimiento) buscarDialogoModel.getResultado();
-            objetoMantenimiento.setPropietario(personaEstablecimiento.getPersona());
+            //objetoMantenimiento.setPropietario(personaEstablecimiento.getPersona());
+            cargarClienteVista(personaEstablecimiento.getPersona());
         }
+    }
+    
+    public void cargarClienteVista(Persona persona)
+    {        
+        objetoMantenimiento.setPropietario(persona);
     }
     
     ///////////////////////////////////////////////////////////////////////////

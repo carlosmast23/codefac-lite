@@ -383,6 +383,19 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
+    private void validarEdicionCodigoPrincipal(Producto producto) throws ServicioCodefacException, RemoteException
+    {
+        if(ParametroUtilidades.comparar(producto.getEmpresa(),ParametroCodefac.PERMITIR_EDITAR_CODIGO,EnumSiNo.NO))
+        {
+            //Verificar que no edite el código principal del producto        
+            Producto productoOriginal = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(), producto.getEmpresa());
+            if (productoOriginal == null) {
+                throw new ServicioCodefacException("No se puede editar el código principal");
+            }
+        }
+        
+    }
+    
     private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
     {
         if(p.getCodigoPersonalizado()==null || p.getCodigoPersonalizado().trim().isEmpty())
@@ -432,6 +445,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
          */
         if(estadoEnum.equals(CrudEnum.EDITAR))
         {
+            validarEdicionCodigoPrincipal(p);
+            
             Producto productoTmp=getFacade().find(p.getIdProducto());
             if(productoTmp.getCodigoPersonalizado().equals(p.getCodigoPersonalizado()))
             {

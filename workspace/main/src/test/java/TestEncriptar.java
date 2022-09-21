@@ -22,7 +22,7 @@ public class TestEncriptar {
             //System.out.println(UtilidadesEncriptar.desencriptar("5gdOfWztXqM\\=", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             //String datosSinEncriptar=UtilidadesEncriptar.desencriptar("5gdOfWztXqM\\=", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
 
-            String datosSinEncriptar=UtilidadesEncriptar.desencriptar("Nom7s5samFc3Td2YvjKv3A==", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            String datosSinEncriptar=UtilidadesEncriptar.desencriptar("DJ0F8kO0oXKodCm4FPuZFQ==", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             System.out.println(datosSinEncriptar);
         } catch (Exception ex) {
             Logger.getLogger(TestEncriptar.class.getName()).log(Level.SEVERE, null, ex);

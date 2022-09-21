@@ -206,6 +206,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel63 = new javax.swing.JLabel();
         jLabel66 = new javax.swing.JLabel();
         cmbIngresoMayusculas = new javax.swing.JComboBox<>();
+        jLabel67 = new javax.swing.JLabel();
+        cmbPermitirEditarCodigo = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -1302,7 +1304,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.add(cmbDatosCompartidosEmpresas, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel9.add(lblEspacio637, gridBagConstraints);
@@ -1399,10 +1401,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.add(jLabel63, gridBagConstraints);
 
         jLabel66.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel66.setText("Tipo Negocio:");
+        jLabel66.setText("Permitir Editar Códigos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(jLabel66, gridBagConstraints);
@@ -1414,6 +1416,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(cmbIngresoMayusculas, gridBagConstraints);
+
+        jLabel67.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel67.setText("Tipo Negocio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel67, gridBagConstraints);
+
+        cmbPermitirEditarCodigo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(cmbPermitirEditarCodigo, gridBagConstraints);
 
         jTabbedPane1.addTab("General", jPanel9);
 
@@ -1462,6 +1481,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
     private javax.swing.JComboBox<OrientacionReporteEnum> cmbOrientacionReporte;
     private javax.swing.JComboBox<EnumSiNo> cmbPermitirDescuentoMenorCosto;
+    private javax.swing.JComboBox<EnumSiNo> cmbPermitirEditarCodigo;
     private javax.swing.JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoPedido;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta;
@@ -1537,6 +1557,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;
+    private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -2028,7 +2049,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbIngresoMayusculas(JComboBox<EnumSiNo> cmbIngresoMayusculas) {
         this.cmbIngresoMayusculas = cmbIngresoMayusculas;
     }
-    
+
+    public JComboBox<EnumSiNo> getCmbPermitirEditarCodigo() {
+        return cmbPermitirEditarCodigo;
+    }
+
+    public void setCmbPermitirEditarCodigo(JComboBox<EnumSiNo> cmbPermitirEditarCodigo) {
+        this.cmbPermitirEditarCodigo = cmbPermitirEditarCodigo;
+    }
+
+
     
     
     

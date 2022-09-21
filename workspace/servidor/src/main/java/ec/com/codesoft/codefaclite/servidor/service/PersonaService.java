@@ -15,14 +15,18 @@ import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona.TipoIdentificacionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -158,17 +162,37 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
         //NOTA: Esta validacion siempre debe ir al ultimo de este metodo
         //Si es un crud verifico sin los datos editados y consultados son los mismos
-        if (crudEnum.equals(CrudEnum.EDITAR)) {
+        if (crudEnum.equals(CrudEnum.EDITAR)) 
+        {
             Persona personaTmp = getFacade().find(persona.getIdCliente());
             if (personaTmp.getIdentificacion().equals(persona.getIdentificacion())) {
                 return;
             }
+            
+            //Verificar si tiene permiso para editar la cedula
+            validarEdicionCodigoPrincipal(persona);
+            
         }
 
         if (buscarPorIdentificacion(persona.getIdentificacion(), persona.getEmpresa()) != null) {
             throw new ServicioCodefacException("Ya existe ingresado un cliente con la misma identificación");
         }
 
+    }
+    
+    private void validarEdicionCodigoPrincipal(Persona persona) throws ServicioCodefacException, RemoteException
+    {
+        if(ParametroUtilidades.comparar(persona.getEmpresa(),ParametroCodefac.PERMITIR_EDITAR_CODIGO,EnumSiNo.SI))
+        {
+            //Verificar que no edite el código principal del producto        
+            Persona personaOriginal = ServiceFactory.getFactory().getPersonaServiceIf().buscarPorId(persona.getIdCliente());
+            if (personaOriginal == null) 
+            {
+                throw new ServicioCodefacException("No se puede editar el código principal");
+            }
+            
+        }
+        
     }
 
     public void editar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
