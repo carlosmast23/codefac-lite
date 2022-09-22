@@ -35,7 +35,7 @@ create table COMPRA
     RAZON_SOCIAL varchar(256),
     IDENTIFICACION varchar(15),
     DIRECCION varchar(1024),
-    TELEFONO varchar(10),
+    TELEFONO varchar(64),
     TIPO_FACTURACION varchar(1),
     CODIGO_DOCUMENTO varchar(3),
     CODIGO_TIPO_DOCUMENTO varchar(3),
