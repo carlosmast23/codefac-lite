@@ -764,6 +764,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         return this.listaResultados.get(indice);
     }
     
+    @Deprecated
     private void convertirMinusculasParametros(QueryDialog queryDialog)
     {
         for (Map.Entry<Integer, Object> en : queryDialog.getParametros().entrySet()) {

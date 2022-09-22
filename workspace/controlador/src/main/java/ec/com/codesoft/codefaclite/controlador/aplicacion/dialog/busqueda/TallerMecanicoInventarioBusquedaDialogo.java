@@ -48,6 +48,10 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         titulo.add(new ColumnaDialogo("Stock", 0.05d));        
         titulo.add(new ColumnaDialogo("Reserva", 0.05d));        
         titulo.add(new ColumnaDialogo("Disp", 0.05d));        
+        titulo.add(new ColumnaDialogo("Pvp1", 0.05d));
+        titulo.add(new ColumnaDialogo("Pvp2", 0.05d));
+        titulo.add(new ColumnaDialogo("Pvp3", 0.05d));
+        titulo.add(new ColumnaDialogo("Pvp4", 0.05d));
         return titulo;
     }
     
@@ -62,6 +66,11 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         vector.add(kardex.getStock().setScale(0,RoundingMode.HALF_UP));
         vector.add("0");
         vector.add(kardex.getStock().setScale(0,RoundingMode.HALF_UP));
+        vector.add((producto.getValorUnitario()!=null)?producto.getValorUnitario():"0");
+        vector.add((producto.getPrecioDistribuidor()!=null)?producto.getPrecioDistribuidor():"0");
+        vector.add((producto.getPrecioTarjeta()!=null)?producto.getPrecioTarjeta():"0");
+        vector.add((producto.getPvp4()!=null)?producto.getPvp4():"0");
+        
     }
 
     @Override
