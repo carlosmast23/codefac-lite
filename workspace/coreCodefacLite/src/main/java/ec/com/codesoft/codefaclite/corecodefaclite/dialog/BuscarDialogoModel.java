@@ -282,7 +282,9 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             int limiteSuperior=CANTIDAD_FILAS*(paginaActual);
             //Limpiar los resutados anteriores
             if(listaResultados!=null)
+            {
                 listaResultados.clear();
+            }
             
             convertirMinusculasParametros(queryDialog);
             listaResultados=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),limiteInferior,CANTIDAD_FILAS);
@@ -771,6 +773,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             //Solo aplicar esta opcion cuando el tipo de dato enviado es String
             if(valor!=null && valor.getClass().equals(String.class))
             {
+                //valor=valor.toString().toLowerCase();
                 queryDialog.getParametros().put(numero, valor); //Remplazo el antiguo valor por el nuevo con minusculas
             }
             

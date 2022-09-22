@@ -106,7 +106,7 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
     @Override
     public String getFiltroPorAplicacion()
     {
-        return " AND LOWER(u.aplicacionProducto) like ?95 ";
+        return " AND LOWER(u.aplicacionProducto) like LOWER(?95) ";
     }
     
     @Override
