@@ -1351,7 +1351,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         cargarProductoInventario(manejaInventario);
-                
+        //ParametroCodefac.        
     }
     
     private void cargarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException

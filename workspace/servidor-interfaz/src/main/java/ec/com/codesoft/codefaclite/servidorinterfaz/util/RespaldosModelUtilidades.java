@@ -21,9 +21,11 @@ import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -53,21 +55,32 @@ public class RespaldosModelUtilidades {
                     if(!ubicacionRespaldo.equals(""))
                     {
                         String nombreCarpetaRelpaldo=crearNombreCarpetaRespaldo();
+                        String nombreCarpetaFirma=crearNombreCarpetaRespaldo("firma");
                         
                         RecursosServiceIf service=ServiceFactory.getFactory().getRecursosServiceIf();                        
                         InputStream inputDb = RemoteInputStreamClient.wrap(service.getDataBaseResources());                        
-                        
+                        InputStream inputFirma = RemoteInputStreamClient.wrap(service.getFirmaElectronicaResources(empresa));
                         
                         Path destinoPath = FileSystems.getDefault().getPath(ubicacionRespaldo+"\\"+nombreCarpetaRelpaldo+".zip");
+                        Path firmaPath = FileSystems.getDefault().getPath(ubicacionRespaldo+"\\"+nombreCarpetaFirma+".zip");
                         //File recursosDirectorio = origenPath.toFile();
                         File destinoDirectorio = destinoPath.toFile();
+                        
+                        List<File> destinarioList=new ArrayList<File>();
+                        destinarioList.add(destinoDirectorio);
+                        destinarioList.add(firmaPath.toFile());
                         //Utilizar una funciona estandar en utilidades
                         copiarDirectorio(inputDb, destinoDirectorio);
+                        copiarDirectorio(inputFirma, firmaPath.toFile());
+                        
+                        //List<File> destinoDirectorioList=new ArrayList<File>();
+                        //destinoDirectorioList.add(destinoDirectorio);
+                        
                         
                         if(enviarCorreo)
                         {
                             
-                            enviarRespaldoCorreoEmpresa(destinoDirectorio,empresa,correo,cuentaInternaSistema);
+                            enviarRespaldoCorreoEmpresa(destinarioList,empresa,correo,cuentaInternaSistema);
                         }
                     }
                     else
@@ -83,12 +96,12 @@ public class RespaldosModelUtilidades {
                 }
     }
     
-    public static void enviarRespaldoCorreoEmpresa(File fileRespaldo,Empresa empresa,String correoEmpresa,Boolean cuentaInternaSistema) throws ServicioCodefacException
+    public static void enviarRespaldoCorreoEmpresa(List<File> fileRespaldoList,Empresa empresa,String correoEmpresa,Boolean cuentaInternaSistema) throws ServicioCodefacException
     {
         try {
             String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(UtilidadesFecha.getFechaHoy());
             CorreoCodefac correoCodefac = new CorreoCodefac();
-            String tituloCorreo="Respaldo BaseDatos "+fechaStr;
+            String tituloCorreo="Respaldo BaseDatos "+fechaStr+" [ "+empresa.getIdentificacion()+" - "+empresa.obtenerNombreEmpresa()+" ]" ;
             String mensajeCorreo="El respaldo de la base de datos de Codefac de la fecha "+fechaStr+" lo puede descargar como archivo adjunto";
             
             if(correoEmpresa==null)
@@ -99,7 +112,14 @@ public class RespaldosModelUtilidades {
             //String correoEmpresa=parametroCorreo.valor;
             //String correoEmpresa=session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).valor;
             List correosList=Arrays.asList(correoEmpresa);
-            Map<String,String> mapArchivosAdjuntos=Collections.singletonMap(fileRespaldo.getName(),fileRespaldo.getPath());
+            
+            //Map<String,String> mapArchivosAdjuntos=Collections.singletonMap(fileRespaldo.getName(),fileRespaldo.getPath());}
+            
+            Map<String,String> mapArchivosAdjuntos=new HashMap<String,String>();
+            for (File file : fileRespaldoList) 
+            {
+                mapArchivosAdjuntos.put(file.getName(),file.getPath());
+            }
             
             if(cuentaInternaSistema)
             {
@@ -125,7 +145,12 @@ public class RespaldosModelUtilidades {
     
     private static String crearNombreCarpetaRespaldo()
     {
-        String nombreCarpetaRelpaldo = "" + new Date();
+        return crearNombreCarpetaRespaldo("");
+    }
+    
+    private static String crearNombreCarpetaRespaldo(String nombre)
+    {
+        String nombreCarpetaRelpaldo = nombre + new Date();
         nombreCarpetaRelpaldo = nombreCarpetaRelpaldo.replaceAll(" ","");
         nombreCarpetaRelpaldo = nombreCarpetaRelpaldo.replaceAll(":","");
         return nombreCarpetaRelpaldo;

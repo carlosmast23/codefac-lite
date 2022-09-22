@@ -11,10 +11,13 @@ import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesZip;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -86,6 +89,34 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         }
         return null; //Si falla el servidor devuelve null        
     }
+    
+    public RemoteInputStream getFirmaElectronicaResources(Empresa empresa) throws RemoteException
+    {
+        InputStream input=null;
+        try {
+            String directorioRecursos=ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.DIRECTORIO_RECURSOS);
+            String directorioFirma="";
+            if(directorioRecursos!=null)
+            {
+                directorioFirma=directorioRecursos+"/"+DirectorioCodefac.CONFIGURACION.getNombre();
+            }   
+            input = UtilidadesZip.comprimirToInputStream(directorioFirma);
+            RemoteInputStreamServer istream =new SimpleRemoteInputStream(input);
+            RemoteInputStream result = istream.export();
+            return result;
+        } catch (IOException ex) {
+            Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                input.close();
+            } catch (IOException ex) {
+                Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return null;
+    }
+            
     
     public RemoteInputStream getDataBaseResources() throws RemoteException
     {

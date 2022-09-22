@@ -185,6 +185,12 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String FECHA_VALIDACION_CORREO="fecha_validacion_correo";
     
+    /**
+     * Variable que me va a permitir llevar el control para que el sistema automaticamenta saque respaldos cada determinado tiempo y se manden a nuestro correo para siempre tener un respaldo
+     */
+    public static final String FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA="fecha_ultimo_envio_respaldo_sistema";
+    
+    
     public static final String DOCUMENTO_DEFECTO_VISTA_FACTURA="documento_defecto_vista_factura";
     
     /**

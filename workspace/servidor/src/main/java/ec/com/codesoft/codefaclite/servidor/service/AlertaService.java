@@ -187,6 +187,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
                 }
 
             }
+            
         }
          
         String correo=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.CORREO_USUARIO);

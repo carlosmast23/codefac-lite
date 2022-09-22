@@ -431,8 +431,53 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.INFO, "Liberando memoria GC...");
     }
     
+    /**
+     * Este metodo sirve para ejecutar de forma automatica el envio cada cierto tiempo
+     */
+    private void generarRespaldoAutomaticoSistema()
+    {
+        Boolean generarRespaldo=false;
+        String fechaStr = ParametroUtilidades.obtenerValorParametro(sessionCodefac.getEmpresa(), ParametroCodefac.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
+        if (fechaStr != null && !fechaStr.isEmpty()) {
+            java.util.Date fechaUltimaVerificacion = UtilidadesFecha.castStringToDate(fechaStr, ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA);
+            int diasDiferencia = UtilidadesFecha.obtenerDistanciaConLaFechaActual(fechaUltimaVerificacion);
+            
+            //Si la fecha del último respaldo es inferior a la fecha actual entonces intento hacer un respaldo
+            if (diasDiferencia >= 7) 
+            {
+                generarRespaldo=true;
+            }
+
+        }
+        else
+        {
+            //Si no tiene ingresado ninguna fecha anterior entonces hago que el sistema genere un respaldo automatico
+            generarRespaldo=true;
+        }
+        
+        if(generarRespaldo)
+        {
+            try {        
+                RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa(),ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO,true);
+                
+                //Si termina de enviar el correo sin novedades grabo la nueva fecha de respaldo del dia de hoy                
+                ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
+                    sessionCodefac.getEmpresa(),
+                    ParametroCodefac.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA,
+                    UtilidadesFecha.formatDate(UtilidadesFecha.hoy(),ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA));
+                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+    
     private void generarRespaldoBaseDatosPorCorreo()
     {
+        generarRespaldoAutomaticoSistema();
         try {
             //Respaldar solo cuando tiene configurado el parametro de grabar la base de datos
             if(ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,EnumSiNo.SI))
