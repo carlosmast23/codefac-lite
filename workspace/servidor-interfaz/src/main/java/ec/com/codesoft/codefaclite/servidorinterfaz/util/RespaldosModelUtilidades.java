@@ -102,13 +102,16 @@ public class RespaldosModelUtilidades {
             String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(UtilidadesFecha.getFechaHoy());
             CorreoCodefac correoCodefac = new CorreoCodefac();
             String tituloCorreo="Respaldo BaseDatos "+fechaStr+" [ "+empresa.getIdentificacion()+" - "+empresa.obtenerNombreEmpresa()+" ]" ;
-            String mensajeCorreo="El respaldo de la base de datos de Codefac de la fecha "+fechaStr+" lo puede descargar como archivo adjunto";
+            String mensajeCorreo="El respaldo de la base de datos de Codefac de la fecha "+fechaStr+" lo puede descargar como archivo adjunto.";
+            mensajeCorreo=mensajeCorreo+"\n Versión: "+ParametrosSistemaCodefac.VERSION;
+            
             
             if(correoEmpresa==null)
             {
                 ParametroCodefac parametroCorreo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO, empresa);
                 correoEmpresa=parametroCorreo.valor;
             }
+            
             //String correoEmpresa=parametroCorreo.valor;
             //String correoEmpresa=session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).valor;
             List correosList=Arrays.asList(correoEmpresa);
