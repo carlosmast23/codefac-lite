@@ -160,6 +160,10 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
     
+    private String actualizarPrecio;
+    
+    private Date fechaUltimaActualizacionPrecio;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra",fetch = FetchType.EAGER)
     private List<CompraFacturaReembolso> facturaReembolsoList;
     
@@ -520,6 +524,23 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     public void setIce(BigDecimal ice) {
         this.ice = ice;
     }
+
+    public String getActualizarPrecio() {
+        return actualizarPrecio;
+    }
+
+    public void setActualizarPrecio(String actualizarPrecio) {
+        this.actualizarPrecio = actualizarPrecio;
+    }
+
+    public Date getFechaUltimaActualizacionPrecio() {
+        return fechaUltimaActualizacionPrecio;
+    }
+
+    public void setFechaUltimaActualizacionPrecio(Date fechaUltimaActualizacionPrecio) {
+        this.fechaUltimaActualizacionPrecio = fechaUltimaActualizacionPrecio;
+    }
+    
     
     public TipoDocumentoEnum getCodigoTipoDocumentoEnum() {
         return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
