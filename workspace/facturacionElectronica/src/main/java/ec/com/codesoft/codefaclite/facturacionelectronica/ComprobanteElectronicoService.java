@@ -1013,28 +1013,31 @@ public class ComprobanteElectronicoService implements Runnable {
     private Map<String, Object> getMapCopyAdicionalReporte()
     {
         Map<String,Object> mapCopy=new HashMap<String,Object>();
-        for (Map.Entry<String, Object> entry : mapAdicionalReporte.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            
-            //Si tiene un valor null no lo tomo en cuenta y continuo con el siguiente
-            if(value==null)
-            {
-                continue;
-            }
-            
-            if(value.getClass().equals(URL.class))
-            {
-                try {
-                    URL url=(URL) value;
-                    mapCopy.put(key,url.openStream());
-                } catch (IOException ex) {
-                    Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        if(mapAdicionalReporte!=null)
+        {
+            for (Map.Entry<String, Object> entry : mapAdicionalReporte.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                //Si tiene un valor null no lo tomo en cuenta y continuo con el siguiente
+                if(value==null)
+                {
+                    continue;
                 }
-            }
-            else
-            {
-                mapCopy.put(key, value);
+
+                if(value.getClass().equals(URL.class))
+                {
+                    try {
+                        URL url=(URL) value;
+                        mapCopy.put(key,url.openStream());
+                    } catch (IOException ex) {
+                        Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                else
+                {
+                    mapCopy.put(key, value);
+                }
             }
         }
         return mapCopy;

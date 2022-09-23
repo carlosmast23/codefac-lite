@@ -738,19 +738,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         try {
             //Metodos para obtener la empresa para hacer el pie de pagina con esos datos
             ClaveAcceso claveAccesoObj=new ClaveAcceso(claveAcceso);
-            EmpresaService empresaService=new EmpresaService();
+            //EmpresaService empresaService=new EmpresaService();
             //Empresa empresa=empresaService.buscarPorIdentificacion( claveAccesoObj.identificacion);
             //Empresa empresa=empresaService.buscarPorId(empresa.getId());
             
-            ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
-            //Cargar recursos para el reporte
-            cargarDatosRecursos(comprobanteElectronico,empresa);
-            //mapReportePlantilla(empresa);
-            cargarConfiguraciones(comprobanteElectronico,empresa);
-            comprobanteElectronico.setClaveAcceso(claveAcceso);
+
             //JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
             ComprobanteEntity comprobanteEntity=obtenerComprobantePorClaveAcceso(claveAccesoObj);
-            ComprobanteDataInterface comprobanteDataIf=convertirComprobanteEntityToDataFacturacionElectronica(comprobanteEntity);
+            return getReporteComprobante(comprobanteEntity, claveAcceso,empresa);
+            /*ComprobanteDataInterface comprobanteDataIf=convertirComprobanteEntityToDataFacturacionElectronica(comprobanteEntity);
             if(comprobanteDataIf!=null)
             {
                 ComprobanteElectronico comprobanteElectronicoData=convertirComprobanteDatoToComprobateElectronico(comprobanteDataIf);
@@ -767,6 +763,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 return UtilidadesRmi.serializar(jasperPrint);
             }
             //JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
+            */
             
             
         } catch (IOException ex) {
@@ -775,7 +772,40 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         return null;
     }
     
+    public byte[] getReporteComprobante(ComprobanteEntity comprobanteEntity,String claveAcceso,Empresa empresa) throws RemoteException
+    {        
+        ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
+        
+        //Cargar recursos para el reporte
+        cargarDatosRecursos(comprobanteElectronico, empresa);
+        //mapReportePlantilla(empresa);
+        cargarConfiguraciones(comprobanteElectronico, empresa);
+        comprobanteElectronico.setClaveAcceso(claveAcceso);
+
+        
+        ComprobanteDataInterface comprobanteDataIf=convertirComprobanteEntityToDataFacturacionElectronica(comprobanteEntity);
+        if (comprobanteDataIf != null) {
+            try 
+            {
+                ComprobanteElectronico comprobanteElectronicoData = convertirComprobanteDatoToComprobateElectronico(comprobanteDataIf);
+
+                String fechaAutorizacionStr = "";
+                if (comprobanteEntity.getFechaAutorizacionSri() != null) 
+                {
+                    fechaAutorizacionStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA.format(comprobanteEntity.getFechaAutorizacionSri());
+                }
+
+                //TODO: Optimizar para ver si se puede setear este dato desde una etapa previa para tener mejor organizado el codigo
+                comprobanteElectronicoData.getInformacionTributaria().setClaveAcceso(claveAcceso);
+                JasperPrint jasperPrint = comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronicoData, claveAcceso, fechaAutorizacionStr);
+                return UtilidadesRmi.serializar(jasperPrint);
+            } catch (IOException ex) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
     
+    }
     
     /**
      * TODO: Remplazar este metodo por uno similar que actualmente esta en ControladorFacturacion

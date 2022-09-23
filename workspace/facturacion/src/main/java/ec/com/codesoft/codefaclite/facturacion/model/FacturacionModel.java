@@ -2135,26 +2135,38 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void imprimir() {
-        if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {
-            
+        
+        
+        if (this.factura != null && estadoFormulario.equals(ESTADO_GRABAR)) {        
+            if(!DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea previsualizar la venta ?", CodefacMsj.TipoMensajeEnum.CORRECTO)))
+            {  
+               return ;
+            }
+        }
+        
+        //if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {        
+        if (true)         
+        {
+            setearValoresDefaultFactura(CrudEnum.CREAR);
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
             {
                 if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
                     try {
                         String claveAcceso = this.factura.getClaveAcceso();
-                        if(claveAcceso==null)
+                        /*if(claveAcceso==null)
                         {
                             DialogoCodefac.mensaje("Advertencia","No se puede generar el reporte porque no tiene clave de acceso",DialogoCodefac.MENSAJE_ADVERTENCIA);
                             return;
-                        }
+                        }*/
                         
                         String[] opciones = {"Ride", "Comprobante Venta", "Cancelar"};
                         int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
                         switch (opcionSeleccionada) 
                         {
                             case 0: //opcion para RIDE
-                                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
+                                //byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
+                                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura,claveAcceso,factura.getEmpresa());
                                 JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                                 
                                 panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
@@ -2905,9 +2917,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setPuntoEmisionId(getPuntoEmisionSeleccionado().getId());
         factura.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
         
-        //Cuando la facturacion es electronica
-        PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();
-
         /**
          * TODO: Seteado los valores temporales pero toca cambiar esta parte y setear
          * los valores directamente en la factura
@@ -2925,6 +2934,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
             factura.setCodigoDocumento(documentoEnum.getCodigo());
         }
+        
+        //Cuando la facturacion es electronica
+        PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();
+        
+        //Setea para saber si es facturacion fisica o electronica el código
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoNotaVentaInterna());
+        }
+        else
+        {
+            factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoFacturacion());
+        }
+        
+        //Datos temporales para establecer el secuencial
+        Integer secuencial=puntoEmisionSeleccionada.getSecuencialPorDocumento(factura.getCodigoDocumentoEnum());
+        factura.setSecuencial(secuencial);
                 
         factura.setContribuyenteEspecial(session.getEmpresa().getContribuyenteEspecial());
         
@@ -2941,6 +2967,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setCodigoOrigenTransaccionEnum(Factura.OrigenTransaccionEnum.ESCRITORIO);
         //factura.setVendedor(vendedor);
         
+        factura.setRazonSocial(factura.getCliente().getRazonSocial());
+        factura.setIdentificacion(factura.getCliente().getIdentificacion());
+        factura.setDireccion(factura.getSucursal().getDireccion());
+        factura.setTelefono(factura.getSucursal().getTelefonoCelular());
         //factura.setIvaSriId(session.get;
         
         /**

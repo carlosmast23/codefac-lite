@@ -52,6 +52,7 @@ public interface ComprobanteServiceIf extends Remote {
     public Integer getComprobantesObjectByFolderCantidad(String carpetaConfiguracion,Empresa empresa) throws RemoteException;
     
     public byte[] getReporteComprobante(String claveAcceso,Empresa empresa) throws RemoteException;
+    public byte[] getReporteComprobante(ComprobanteEntity comprobanteEntity,String claveAcceso,Empresa empresa) throws RemoteException;
 
     public void procesarComprobante(ComprobanteDataInterface comprobanteData,ComprobanteEntity comprobante, Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;
 
@@ -109,6 +110,8 @@ public interface ComprobanteServiceIf extends Remote {
     public void generarRideComprobanteNoLegal(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante,ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException;
     
     public byte[] getReporteComprobanteComprobante(ComprobanteDataInterface comprobanteData,Usuario usuario,String claveAccesoPersonalizada) throws RemoteException;
+    
+    
     
     
 }
