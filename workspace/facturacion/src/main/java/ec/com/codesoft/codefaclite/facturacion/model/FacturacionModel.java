@@ -1920,7 +1920,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 detalle.setCantidad(detalleFactura.getCantidad().setScale(numeroDecimalesCantidad, RoundingMode.HALF_UP) + "");
                 String descripcionConSaltosDeLinea=detalleFactura.getDescripcion().replace("\n", "<br>");
                 detalle.setDescripcion(descripcionConSaltosDeLinea);                
-                detalle.setValorTotal(detalleFactura.getTotal().setScale(numeroDecimales, RoundingMode.HALF_UP) + "");
+                detalle.setValorTotal(detalleFactura.getSubtotalSinDescuentos().setScale(numeroDecimales, RoundingMode.HALF_UP) + "");
                 detalle.setValorUnitario(detalleFactura.getPrecioUnitario().setScale(numeroDecimales,RoundingMode.HALF_UP) + "");
                 detalle.setCodigoPrincipal(obtenerCodigoProducto(detalleFactura));
                 detalle.setDescuentoDetalle(detalleFactura.getDescuento().toString()); 

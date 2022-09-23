@@ -15,7 +15,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
+import java.awt.DefaultKeyboardFocusManager;
 import java.awt.Dimension;
+import java.awt.KeyEventPostProcessor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +42,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -63,6 +66,11 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     /**
      * Setear la pagina actual de la consulta
      */
+    private BuscarDialogoModel instancia=this;
+    /**
+     * Evento que controla cerrar la ventana utilizando la tecla de escape
+     */
+    private KeyEventPostProcessor eventoCerrarVentana;
     private int paginaActual;
     private int tamanioConsulta;
     
@@ -118,6 +126,34 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();        
         normalizarTextoBusqueda=false;
+        agregarOyenteParaCerrarElDialogo();
+        
+    }
+    
+    /**
+     * Metodo que permite asignar una forma de cerrar el dialogo con la tecla de escape
+     * se utiliza la referencia del evento agregado para luego quitarle por que luego genera problemas
+     * TODO: Ver como se puede mejorar esta parte
+     */
+    private void agregarOyenteParaCerrarElDialogo()
+    {
+        eventoCerrarVentana = new KeyEventPostProcessor() 
+        {
+            public boolean postProcessKeyEvent(KeyEvent e) 
+            {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) 
+                {
+                    //instancia.setVisible(false);
+                    instancia.dispose();
+                    //JOptionPane.showMessageDialog(null,"Cerrando ventana");                    
+                    DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor(eventoCerrarVentana);
+                }
+                //System.out.println(e);
+                return true;
+            }
+        };
+
+        DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(eventoCerrarVentana);        
         
     }
     
