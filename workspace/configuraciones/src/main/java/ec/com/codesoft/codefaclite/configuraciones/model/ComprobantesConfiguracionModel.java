@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac.Tipo
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.email.PropiedadCorreo;
@@ -97,6 +98,15 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     public ComprobantesConfiguracionModel() {
         
+    }
+    
+    private void permisosVerContrasenias()
+    {
+        if(!session.getUsuario().isRoot)
+        {
+            getBtnVerContrasenia().setVisible(false);
+            getBtnVerContraseniaCorreo().setVisible(false);
+        }        
     }
 
     @Override
@@ -478,6 +488,38 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     private void addListenerButtons() {
         
+        getBtnVerContraseniaCorreo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ParametroCodefac parametro = parametros.get(ParametroCodefac.CORREO_CLAVE);
+                if(parametro!=null && parametro.getValor()!=null)
+                {
+                    try {
+                        String clave=UtilidadesEncriptar.desencriptar(parametro.valor, ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+                        DialogoCodefac.mensaje(new CodefacMsj(clave, CodefacMsj.TipoMensajeEnum.CORRECTO));
+                    } catch (Exception ex) {
+                        Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        
+        getBtnVerContrasenia().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ParametroCodefac parametro = parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA);
+                if(parametro!=null && parametro.getValor()!=null)
+                {
+                    try {
+                        String clave=UtilidadesEncriptar.desencriptar(parametro.valor, ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+                        DialogoCodefac.mensaje(new CodefacMsj(clave, CodefacMsj.TipoMensajeEnum.CORRECTO));
+                    } catch (Exception ex) {
+                        Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        
         getBtnBuscarDirectorio().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) 
@@ -719,6 +761,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         super.validacionDatosIngresados=false;
         
         listenerTextos();
+        permisosVerContrasenias();
     }
 
     @Override

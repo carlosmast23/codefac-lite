@@ -61,6 +61,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         cmbFechaEmisionFirma = new org.jdesktop.swingx.JXDatePicker();
         jLabel30 = new javax.swing.JLabel();
         txtDuracionFirma = new javax.swing.JSpinner();
+        btnVerContrasenia = new javax.swing.JButton();
         panelConfiguracionesGenerales = new javax.swing.JPanel();
         cmbIvaDefault = new javax.swing.JComboBox<>();
         txtDirectorioRecurso = new javax.swing.JTextField();
@@ -80,6 +81,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         jLabel15 = new javax.swing.JLabel();
         txtSmtpPuerto = new javax.swing.JSpinner();
         btnBuscarDirectorio = new javax.swing.JButton();
+        btnVerContraseniaCorreo = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
@@ -227,6 +229,14 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelFacturacionElectronica.add(txtDuracionFirma, gridBagConstraints);
+
+        btnVerContrasenia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/Document.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelFacturacionElectronica.add(btnVerContrasenia, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -385,6 +395,14 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelConfiguracionesGenerales.add(btnBuscarDirectorio, gridBagConstraints);
 
+        btnVerContraseniaCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/Document.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelConfiguracionesGenerales.add(btnVerContraseniaCorreo, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -438,6 +456,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JButton btnBuscarDirectorio;
     private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnFirmaElectronica;
+    private javax.swing.JButton btnVerContrasenia;
+    private javax.swing.JButton btnVerContraseniaCorreo;
     private org.jdesktop.swingx.JXDatePicker cmbFechaEmisionFirma;
     private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
     private javax.swing.JComboBox<String> cmbModoFacturacion;
@@ -616,5 +636,23 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     public void setTxtDuracionFirma(JSpinner txtDuracionFirma) {
         this.txtDuracionFirma = txtDuracionFirma;
     }
+
+    public JButton getBtnVerContrasenia() {
+        return btnVerContrasenia;
+    }
+
+    public void setBtnVerContrasenia(JButton btnVerContrasenia) {
+        this.btnVerContrasenia = btnVerContrasenia;
+    }
+
+    public JButton getBtnVerContraseniaCorreo() {
+        return btnVerContraseniaCorreo;
+    }
+
+    public void setBtnVerContraseniaCorreo(JButton btnVerContraseniaCorreo) {
+        this.btnVerContraseniaCorreo = btnVerContraseniaCorreo;
+    }
+    
+    
     
 }
