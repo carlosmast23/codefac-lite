@@ -1423,7 +1423,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(max = 25,min=1, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
+    //@ValidacionCodefacAnotacion(max = 25,min=1, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(max = 25,min=1, expresionRegular = "[^\n]*", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
     @TextFieldBinding(value = "controlador.producto.codigoPersonalizado")
     public JTextField getTxtCodigoPersonalizado() {
         return txtCodigoPersonalizado;
