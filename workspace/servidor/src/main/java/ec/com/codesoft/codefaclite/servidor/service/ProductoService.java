@@ -88,9 +88,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return producto;
     }
     
-    public List<Producto> reporteProducto(Producto producto) throws RemoteException,ServicioCodefacException
+    public List<Producto> reporteProducto(Producto producto,Boolean pendienteActualizarPrecio) throws RemoteException,ServicioCodefacException
     {
-        return  getFacade().reporteProductoFacade(producto);
+        return  getFacade().reporteProductoFacade(producto,pendienteActualizarPrecio);
     }
     
     public List<PresentacionProducto> obtenerPresentacionesProducto(Producto producto) throws RemoteException,ServicioCodefacException
@@ -763,6 +763,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         producto.setPvp4(productoData.calcularPvp4());
                         producto.setPvp5(productoData.calcularPvp5());
                         producto.setPvp6(productoData.calcularPvp6());
+                        producto.setActualizarPrecioEnum(EnumSiNo.NO);
 
                         entityManager.merge(producto);
                     }

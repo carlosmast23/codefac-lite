@@ -798,11 +798,6 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
          */
         validarDetallesKardex(detalle,forzarGrabarCantidadCero);
         
-        //Buscar si ya existe el kardex o si no existe los creamos
-        //Map<String, Object> map = new HashMap<String, Object>();
-        //map.put("bodega", detalle.getKardex().getBodega());
-        //map.put("producto", detalle.getKardex().getProducto());
-        //map.put("lote", detalle.getKardex().getProducto());
         Kardex kardex =buscarKardexPorProductoyBodegayLote(detalle.getKardex().getBodega(), detalle.getKardex().getProducto(), lote);
 
         //List<Kardex> kardexList = getFacade().findByMap(map);
@@ -849,6 +844,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //    kardex = kardexList.get(0);
         //}
         
+        verificarActualizacionCostoProductos(kardex, detalle);
+        
         //Cuando hago una modificacion de este tema guardo la fecha de edicion
         //TODO: Ver si mejor la fecha de debe recalcular al momento de hacer la edicion global
         kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
@@ -868,7 +865,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardex = em.merge(kardex);
 
         //Actualizar la compra de referencia para saber que ya fue ingresada
-        switch (detalle.getCodigoTipoDocumentoEnum()) {
+        switch (detalle.getCodigoTipoDocumentoEnum()) 
+        {
             case COMPRA_INVENTARIO:
                 //Actualizar referencia de la compra para que sepa que ya fue ingresado la mercaderia
                 //TODO:Mejorar esta parte porque esta grabando muchas veces lo mismo cuando hay varios detalles apuntando a la misma compra
@@ -881,6 +879,33 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
     }
     
+    /**
+     * Este metodo me va a permitir grabar los productos que tiene que actualizar el precio por que el costo se modifico
+     * para que los usuarios puedan luego llevar ese control
+     * @param kardex
+     * @param kardexDetalle 
+     */
+    public void verificarActualizacionCostoProductos(Kardex kardex, KardexDetalle kardexDetalle)
+    {
+        if(kardex.getPrecioUltimo()!=null && kardexDetalle.getPrecioUnitario()!=null)
+        {
+            //TODO: Falta tomar el cuento de los descuentos por que en ese caso no nesariamente se debe cambiar el precio
+            if(kardex.getPrecioUltimo().compareTo(kardexDetalle.getPrecioUnitario())!=0)
+            {
+                Producto producto=kardex.getProducto();
+                producto.setActualizarPrecioEnum(EnumSiNo.SI);
+                producto.setFechaUltimaActualizacionPrecio(UtilidadesFecha.getFechaHoy());
+                entityManager.merge(producto);
+            }        
+        }
+    }
+    
+    
+    /**
+     * Metodo que me permite hacer el calculo cuando se quiere hacer un AJUSTE EXACTO en el kardex
+     * @param kardex
+     * @param kardexDetalle 
+     */
     public void verificarCuadreExactoKardex(Kardex kardex, KardexDetalle kardexDetalle)
     {
         if(kardexDetalle.getCodigoTipoDocumentoEnum().equals(TipoDocumentoEnum.AJUSTE_EXACTO_INVENTARIO))

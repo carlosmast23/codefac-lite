@@ -251,5 +251,10 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Controla
     {
         return controlador;
     }
+
+    @Override
+    public Boolean pendientesActualizarPrecio() {
+        return getChkPendientesActualizar().isSelected();
+    }
     
 }

@@ -68,7 +68,7 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public void listenerConsultarProductos()
     {
         try {
-            List<Producto> productoTmpList= ServiceFactory.getFactory().getProductoServiceIf().reporteProducto(productoFiltro);
+            List<Producto> productoTmpList= ServiceFactory.getFactory().getProductoServiceIf().reporteProducto(productoFiltro,getInterfaz().pendientesActualizarPrecio());
             castListDataTable(productoTmpList);
             
         } catch (RemoteException ex) {
@@ -296,6 +296,7 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     ///////////////////////////////////////////////////////////////////////////
     public interface CommonIf {
         //TODO: Implementacion de todas las interfaces comunes
+        public Boolean pendientesActualizarPrecio();
         
     }
 

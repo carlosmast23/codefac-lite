@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -149,6 +150,12 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @Column(name = "NOMBRE_GENERICO")    
     private String nombreGenerico;
+    
+    @Column(name = "ACTUALIZAR_PRECIO")     
+    private String actualizarPrecio;
+    
+    @Column(name = "FECHA_ULTIMA_ACTUALIZACION_PRECIO") 
+    private Date fechaUltimaActualizacionPrecio;
     
     /*@JoinColumn(name = "PRESENTACION_ID")
     private PresentacionProducto presentacion;*/
@@ -664,8 +671,34 @@ public class Producto implements Serializable, Comparable<Producto> {
     }
 
 
+    public String getActualizarPrecio() {
+        return actualizarPrecio;
+    }
+
+    public void setActualizarPrecio(String actualizarPrecio) {
+        this.actualizarPrecio = actualizarPrecio;
+    }
     
-    
+   
+    public EnumSiNo getActualizarPrecioEnum() 
+    {
+        return EnumSiNo.valueOf(actualizarPrecio);
+    }
+
+    public void setActualizarPrecioEnum(EnumSiNo actualizarPrecioEnum) {
+        this.actualizarPrecio = actualizarPrecioEnum.getLetra();
+    }
+
+
+    public Date getFechaUltimaActualizacionPrecio() {
+        return fechaUltimaActualizacionPrecio;
+    }
+
+    public void setFechaUltimaActualizacionPrecio(Date fechaUltimaActualizacionPrecio) {
+        this.fechaUltimaActualizacionPrecio = fechaUltimaActualizacionPrecio;
+    }
+
+
     
     
 

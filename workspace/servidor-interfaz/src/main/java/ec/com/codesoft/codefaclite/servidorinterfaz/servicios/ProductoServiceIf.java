@@ -49,7 +49,7 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     
     public void actualizarPrecios(List<ProductoPrecioDataTable> productos ) throws RemoteException, ServicioCodefacException;
     
-    public List<Producto> reporteProducto(Producto producto) throws RemoteException,ServicioCodefacException;
+    public List<Producto> reporteProducto(Producto producto,Boolean pendienteActualizarPrecio) throws RemoteException,ServicioCodefacException;
     
     public List<PresentacionProducto> obtenerPresentacionesProducto(Producto producto) throws RemoteException,ServicioCodefacException;
     

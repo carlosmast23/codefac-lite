@@ -81,9 +81,16 @@ public class ProductoFacade extends AbstractFacade<Producto>
         return null;
     }
     
-    public List<Producto> reporteProductoFacade(Producto producto) throws RemoteException,ServicioCodefacException
+    public List<Producto> reporteProductoFacade(Producto producto,Boolean pendienteActualizarPrecio) throws RemoteException,ServicioCodefacException
     {
         //producto.getIdProducto()
+        
+        String wherePendienteActualizar = "";
+
+        if (pendienteActualizarPrecio) 
+        {
+            wherePendienteActualizar = " AND p.actualizarPrecio=?3 ";
+        }
         
         String whereProducto="";
         if(producto!=null)
@@ -91,11 +98,16 @@ public class ProductoFacade extends AbstractFacade<Producto>
             whereProducto=" AND p.idProducto=?2 ";
         }
         
-        String queryString = "SELECT p FROM Producto p WHERE p.estado=?1 "+whereProducto ;
+        String queryString = "SELECT p FROM Producto p WHERE p.estado=?1 "+whereProducto+wherePendienteActualizar ;
         
         Query query = getEntityManager().createQuery(queryString);
         
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
+        
+        if (pendienteActualizarPrecio) 
+        {
+            query.setParameter(3,EnumSiNo.SI.getLetra());
+        }
         
         if(producto!=null)
         {
