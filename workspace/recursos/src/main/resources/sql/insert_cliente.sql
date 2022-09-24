@@ -25,9 +25,9 @@ CORREO_ELECTRONICO,
 ESTADO) VALUES (
 'Consumidor',
 'Final',
-'Consumidor Final',
+'CONSUMIDOR FINAL',
 'A',
-'Consumidor Final',
+'CONSUMIDOR FINAL',
 5,
 '9999999999999',
 'F',
@@ -48,5 +48,6 @@ TELEFONO_CONVENCIONAL ,
 EXTENSION_TELEFONO ,
 TELEFONO_CELULAR, 
 CORREO_ELECTRONICO, 
-TIPO_SUCURSAL) 
-VALUES (1,'1','Consumidor Final','','','','','','m');
+TIPO_SUCURSAL,
+ESTADO) 
+VALUES (1,'1','Consumidor Final','','','','','','m','A');

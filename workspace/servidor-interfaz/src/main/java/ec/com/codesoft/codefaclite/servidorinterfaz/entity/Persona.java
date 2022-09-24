@@ -449,6 +449,16 @@ public class Persona implements Serializable, Comparable<Persona> {
         }
         return establecimientosList;
     }
+    
+    public PersonaEstablecimiento getEstablecimientoActivoPorDefecto()
+    {
+        List<PersonaEstablecimiento> lista= getEstablecimientosActivos();
+        if(lista.size()>0)
+        {
+            return lista.get(0);
+        }
+        return null;
+    }
 
     public void setEstablecimientos(List<PersonaEstablecimiento> establecimientos) {
         this.establecimientos = establecimientos;
@@ -539,8 +549,8 @@ public class Persona implements Serializable, Comparable<Persona> {
     
     
     public String getCorreoElectronico()
-    {
-        PersonaEstablecimiento establecimientoDefecto=getEstablecimientosActivos().get(0);
+    {   
+        PersonaEstablecimiento establecimientoDefecto=getEstablecimientoActivoPorDefecto();
         if(establecimientoDefecto!=null && establecimientoDefecto.getCorreoElectronico()!=null)
         {
             return establecimientoDefecto.getCorreoElectronico();
