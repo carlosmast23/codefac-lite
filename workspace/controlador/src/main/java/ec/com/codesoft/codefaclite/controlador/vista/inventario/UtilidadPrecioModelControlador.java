@@ -81,7 +81,7 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     
     
     
-    private void castListDataTable(List<Producto> productoTmpList)
+    public void castListDataTable(List<Producto> productoTmpList)
     {
         productoList=new ArrayList<ProductoPrecioDataTable>();
         for (Producto producto : productoTmpList) 

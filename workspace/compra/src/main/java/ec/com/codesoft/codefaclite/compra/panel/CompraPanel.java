@@ -1383,11 +1383,13 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
 
     //@ValidacionCodefacAnotacion(requerido = true)
+    @ValidacionCodefacAnotacion(max = 3)
     public JTextField getTxtEstablecimientoCompra() {
         return txtEstablecimientoCompra;
     }
 
     //@ValidacionCodefacAnotacion(requerido = true)
+    @ValidacionCodefacAnotacion(max = 3)
     public JTextField getTxtPuntoEmisionCompra() {
         return txtPuntoEmisionCompra;
     }

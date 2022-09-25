@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CompraBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
@@ -32,7 +33,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -122,7 +126,9 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             if (validarKardexGrabar()) //Validación para ver que todos los datos esten ingresados para grabar
             {
                 ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(detallesKardexFinal);
+                
                 DialogoCodefac.mensaje("Correcto", "El producto fue ingresado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                verificarActualizarPreciosVenta();
             }
             else
             {
@@ -138,6 +144,30 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         }
 
     }   
+    
+    /**
+     * Metodo que me permite saber si se quieren actualizar los precios de venta por que se han modificado los costos
+     */
+    private void verificarActualizarPreciosVenta()
+    {
+        try {
+            List<Producto> productoList= ServiceFactory.getFactory().getCompraServiceIf().obtenerProductosActualizarPrecios(compraInventario);
+            if(productoList.size()>0)
+            {
+                Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("La compra tiene cambios en los costos, desea actualizar los precios de venta ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                if(respuesta)
+                {
+                    Object[] parametros = {productoList};
+                    panelPadre.crearVentanaCodefac(VentanaEnum.UTILIDAD_PRECIO, true, parametros);
+                }
+            }
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     @Override
     public void editar() throws ExcepcionCodefacLite {

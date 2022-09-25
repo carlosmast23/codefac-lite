@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.inventario.UtilidadPrecioMo
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.UtilidadPrecioPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -37,7 +38,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author CARLOS_CODESOFT
  */
-public class UtilidadPrecioModel extends UtilidadPrecioPanel implements ControladorVistaIf,UtilidadPrecioModelControlador.SwingIf{
+public class UtilidadPrecioModel extends UtilidadPrecioPanel implements InterfazPostConstructPanel, ControladorVistaIf,UtilidadPrecioModelControlador.SwingIf{
 
     
     private UtilidadPrecioModelControlador controlador;
@@ -255,6 +256,21 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Controla
     @Override
     public Boolean pendientesActualizarPrecio() {
         return getChkPendientesActualizar().isSelected();
+    }
+
+    @Override
+    public void postConstructorExterno(Object[] parametros) {
+        if(parametros==null)
+        {
+            return ;
+        }
+        
+        if(parametros.length>0)
+        {
+            List<Producto> productoListTmp=(List<Producto>) parametros[0];
+            this.controlador.castListDataTable(productoListTmp);
+            actualizarBindingCompontValues();
+        }
     }
     
 }

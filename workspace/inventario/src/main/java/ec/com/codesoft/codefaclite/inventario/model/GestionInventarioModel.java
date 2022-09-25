@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
@@ -37,6 +38,7 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,10 +85,31 @@ public class GestionInventarioModel extends GestionInventarioPanel{
             setearVariables();
             ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(kardexDetalle,lote);
             DialogoCodefac.mensaje("Correcto","El proceso de grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            verificarActualizarPreciosVenta();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error");
+        }
+    }
+    
+    private void verificarActualizarPreciosVenta()
+    {
+        try {
+            Producto productoActualizado= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(kardexDetalle.getKardex().getProducto().getIdProducto());
+            if(productoActualizado!=null)
+            {
+                Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("El producto tiene cambios en los costos, desea actualizar los precios de venta ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                if(respuesta)
+                {
+                    List<Producto> productoList=new ArrayList<Producto>();
+                    productoList.add(productoActualizado);
+                    Object[] parametros = {productoList};
+                    panelPadre.crearVentanaCodefac(VentanaEnum.UTILIDAD_PRECIO, true, parametros);
+                }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

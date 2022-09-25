@@ -711,4 +711,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     {
         return compraFacade.getCompraRetencionDisenable();
     }
+    
+    public List<Producto> obtenerProductosActualizarPrecios(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        return getFacade().obtenerProductosActualizarPrecios(compra);
+    }
+    
 }

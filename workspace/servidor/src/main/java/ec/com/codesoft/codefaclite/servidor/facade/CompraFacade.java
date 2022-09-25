@@ -6,10 +6,14 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
@@ -173,6 +177,20 @@ public class CompraFacade extends AbstractFacade<Compra>{
             return secuencialMaximo.intValue()+1;
         }        
         return 1;        
+    }
+    
+    public List<Producto> obtenerProductosActualizarPrecios(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        //Compra compra;
+        //compra.getDetalles().
+        //CompraDetalle compradetalle;
+        //compradetalle.getProductoProveedor().getProducto();
+        
+        String queryString="SELECT cd.productoProveedor.producto FROM Compra u LEFT JOIN u.detalles cd  WHERE u=?1 AND cd.productoProveedor.producto.actualizarPrecio=?2 ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1,compra);
+        query.setParameter(2,EnumSiNo.SI.getLetra());
+        return query.getResultList();
     }
     
 }
