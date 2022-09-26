@@ -73,7 +73,7 @@ public class Kardex implements Serializable,Cloneable {
      * ensambles
      */
     @Column(name = "RESERVA")            
-    private Integer reserva;
+    private BigDecimal reserva;
     
     @JoinColumn(name = "BODEGA_ID")
     @ManyToOne  
@@ -176,11 +176,11 @@ public class Kardex implements Serializable,Cloneable {
         this.detallesKardex = detallesKardex;
     }
 
-    public Integer getReserva() {
+    public BigDecimal getReserva() {
         return reserva;
     }
 
-    public void setReserva(Integer reserva) {
+    public void setReserva(BigDecimal reserva) {
         this.reserva = reserva;
     }
 
