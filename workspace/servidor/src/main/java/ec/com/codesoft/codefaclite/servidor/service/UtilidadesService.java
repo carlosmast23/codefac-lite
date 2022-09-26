@@ -286,7 +286,8 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                     //DialogoCodefac.mensaje("Error", "No se puede validar la licencia, Posibles causas:\n - La licencia esta desactualizada \n - El archivo de la licencia fue modificado", DialogoCodefac.MENSAJE_INCORRECTO);
                     existeLicencia=true;
                 }
-            } catch (ValidacionLicenciaExcepcion ex) {
+            } catch (ValidacionLicenciaExcepcion ex) 
+            {
                 Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NoExisteLicenciaException ex) {
                 Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);

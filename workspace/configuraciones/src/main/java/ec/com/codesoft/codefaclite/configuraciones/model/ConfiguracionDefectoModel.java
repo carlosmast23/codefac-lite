@@ -481,6 +481,27 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro = parametrosTodos.get(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);
             getTxtAlertaDiasPorCaducarProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
             
+            parametro = parametrosTodos.get(ParametroCodefac.PVP1_MARGEN_UTILIDAD);
+            getTxtPvp1MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP2_MARGEN_UTILIDAD);
+            getTxtPvp2MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP3_MARGEN_UTILIDAD);
+            getTxtPvp3MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP4_MARGEN_UTILIDAD);
+            getTxtPvp4MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP5_MARGEN_UTILIDAD);
+            getTxtPvp5MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP6_MARGEN_UTILIDAD);
+            getTxtPvp6MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            
+            
+            
             parametro = parametrosTodos.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
             getTxtCodigoHtml().setText((parametro != null) ? parametro.getValor() : "");    
             getjEditorPanelVistaPrevia().setText(getTxtCodigoHtml().getText());
@@ -849,6 +870,25 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO, getTxtAlertaDiasPorCaducarProducto().getValue().toString());
         agregarParametroEditar(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.PVP1_MARGEN_UTILIDAD, getTxtPvp1MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP1_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP2_MARGEN_UTILIDAD, getTxtPvp2MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP2_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP3_MARGEN_UTILIDAD, getTxtPvp3MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP3_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP4_MARGEN_UTILIDAD, getTxtPvp4MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP4_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP5_MARGEN_UTILIDAD, getTxtPvp5MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP5_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP6_MARGEN_UTILIDAD, getTxtPvp6MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP6_MARGEN_UTILIDAD);
+
         
         agregarParametro(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS, getTxtNotaVentaInternaAlias().getText());
         agregarParametroEditar(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);    

@@ -275,6 +275,13 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String ADVERTENCIA_ACTUALIZAR_COSTO="advertencia_actualizar_costo";
     
+    public static final String PVP1_MARGEN_UTILIDAD = "pvp1_margen_utilidad";
+    public static final String PVP2_MARGEN_UTILIDAD = "pvp2_margen_utilidad";
+    public static final String PVP3_MARGEN_UTILIDAD = "pvp3_margen_utilidad";
+    public static final String PVP4_MARGEN_UTILIDAD = "pvp4_margen_utilidad";
+    public static final String PVP5_MARGEN_UTILIDAD = "pvp5_margen_utilidad";
+    public static final String PVP6_MARGEN_UTILIDAD = "pvp6_margen_utilidad";
+    
 
     @Id
     @Column(name = "ID")
