@@ -270,6 +270,11 @@ public class ParametroCodefac implements Serializable {
     
     public static final String LEYENDA_ADICIONAL_COMPROBANTE="leyenda_adicional_comprobante";
     
+    /**
+     * Metodo que me permite activar o desactivar la opcion para poder actualizar los precios de venta cuando se modifican los costos
+     */
+    public static final String ADVERTENCIA_ACTUALIZAR_COSTO="advertencia_actualizar_costo";
+    
 
     @Id
     @Column(name = "ID")

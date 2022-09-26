@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -37,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -149,16 +151,20 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
      * Metodo que me permite saber si se quieren actualizar los precios de venta por que se han modificado los costos
      */
     private void verificarActualizarPreciosVenta()
-    {
+    {       
         try {
-            List<Producto> productoList= ServiceFactory.getFactory().getCompraServiceIf().obtenerProductosActualizarPrecios(compraInventario);
-            if(productoList.size()>0)
+            //Verificar si tiene permisos para actualizar los costos
+            if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO, EnumSiNo.SI)) 
             {
-                Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("La compra tiene cambios en los costos, desea actualizar los precios de venta ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                if(respuesta)
+                List<Producto> productoList= ServiceFactory.getFactory().getCompraServiceIf().obtenerProductosActualizarPrecios(compraInventario);
+                if(productoList.size()>0)
                 {
-                    Object[] parametros = {productoList};
-                    panelPadre.crearVentanaCodefac(VentanaEnum.UTILIDAD_PRECIO, true, parametros);
+                    Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("La compra tiene cambios en los costos, desea actualizar los precios de venta ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    if(respuesta)
+                    {
+                        Object[] parametros = {productoList};
+                        panelPadre.crearVentanaCodefac(VentanaEnum.UTILIDAD_PRECIO, true, parametros);
+                    }
                 }
             }
         } catch (ServicioCodefacException ex) {

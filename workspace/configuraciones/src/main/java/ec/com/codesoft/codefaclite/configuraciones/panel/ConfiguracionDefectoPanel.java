@@ -190,6 +190,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbPermitirDescuentoMenorCosto = new javax.swing.JComboBox<>();
         jLabel61 = new javax.swing.JLabel();
         txtAlertaDiasPorCaducarProducto = new javax.swing.JSpinner();
+        jLabel68 = new javax.swing.JLabel();
+        cmbAdvertenciaActualizarCostos = new javax.swing.JComboBox<>();
         jPanel9 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
@@ -1196,16 +1198,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbFacturarInventarioNegativo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel21.setText("Facturar con inventario negativo");
+        jLabel21.setText("Advertencia actualizar costos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel21, gridBagConstraints);
@@ -1280,6 +1282,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(txtAlertaDiasPorCaducarProducto, gridBagConstraints);
+
+        jLabel68.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel68.setText("Facturar con inventario negativo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel68, gridBagConstraints);
+
+        cmbAdvertenciaActualizarCostos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(cmbAdvertenciaActualizarCostos, gridBagConstraints);
 
         jTabbedPane1.addTab("Inventario", jPanel8);
 
@@ -1452,6 +1470,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbActivarModuloCartera;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarNotaVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
+    private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarLoteFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbCargarProductoIvaFactura;
     private javax.swing.JComboBox<ConfiguracionImpresoraEnum> cmbConfiguracionImpresora;
@@ -1558,6 +1577,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -2058,7 +2078,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.cmbPermitirEditarCodigo = cmbPermitirEditarCodigo;
     }
 
+    public JComboBox<EnumSiNo> getCmbAdvertenciaActualizarCostos() {
+        return cmbAdvertenciaActualizarCostos;
+    }
 
+    public void setCmbAdvertenciaActualizarCostos(JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos) {
+        this.cmbAdvertenciaActualizarCostos = cmbAdvertenciaActualizarCostos;
+    }
+
+    
     
     
     
