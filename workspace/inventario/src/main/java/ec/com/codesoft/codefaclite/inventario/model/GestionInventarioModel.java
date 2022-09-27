@@ -97,7 +97,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     {
         try {
             Producto productoActualizado= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(kardexDetalle.getKardex().getProducto().getIdProducto());
-            if(productoActualizado!=null)
+            if(productoActualizado!=null && productoActualizado.getActualizarPrecioEnum()!=null && productoActualizado.getActualizarPrecioEnum().equals(EnumSiNo.SI))
             {
                 Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("El producto tiene cambios en los costos, desea actualizar los precios de venta ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                 if(respuesta)
