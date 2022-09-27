@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
@@ -156,6 +157,22 @@ public class OrdenTrabajo implements Serializable
         this.detalles.add(detalle);
         
     }
+     
+    public String obtenerCorreosStr()
+    {        
+        List<OrdenTrabajoDetalle> resultadoDetalle=getDetalles();
+        return  UtilidadesLista.castListToString(resultadoDetalle,",",new UtilidadesLista.CastListInterface<OrdenTrabajoDetalle>() {
+                @Override
+                public String getString(OrdenTrabajoDetalle dato) {
+                    if(dato.getEmpleado()!=null)
+                    {
+                        return dato.getEmpleado().getCorreoElectronico();
+                    }
+                    return null;
+                }
+            });
+    }
+
      
     /**
      * Metodos Personalizados

@@ -56,7 +56,11 @@ public abstract class UtilidadesLista {
         List<String> datos=new ArrayList<String>();
         for (Object object : lista) {
             String textoNuevo=interfaz.getString(object);
-            datos.add(textoNuevo);
+            //Si el texto es null entonces no le agrego a la lista
+            if(textoNuevo!=null)
+            {
+                datos.add(textoNuevo);
+            }
         }
         return StringUtils.join(datos,caracter);
     }
