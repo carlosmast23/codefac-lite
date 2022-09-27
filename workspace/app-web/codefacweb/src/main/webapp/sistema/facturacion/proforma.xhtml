@@ -62,7 +62,7 @@
                             </div>
                         </div>
                         
-                        <div class="p-col-12 p-md-6 p-lg-3" >
+                       <!--<div class="p-col-12 p-md-6 p-lg-3" >
                             <div class="p-grid" style="text-align: left" >
                                 <div class="p-col-12 p-md-3 p-lg-6" >
                                     <p:outputLabel value="Mesa:" />
@@ -75,7 +75,7 @@
                                     </p:selectOneMenu>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         
                         <div class="p-col-12 p-md-6 p-lg-3" style="#{(proformaMb.visualizarCargarProforma)?'':'display: none;'}" >
                             <div class="p-grid" style="text-align: left" >
@@ -144,7 +144,7 @@
                                         <p:inputText id="txtProducto" placeholder="Código" value="#{proformaMb.productoSeleccionado.codigoPersonalizado}" style="width: 100%" />
                                     </div>
                                     <div class="p-col-3 p-md-4 p-lg-2" >
-                                        <p:commandButton  process="@this,:formulario:acordionCabecera:cmbDocumento" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 100%"  >
+                                        <p:commandButton  process="@this,:formulario:acordionCabecera:cmbDocumento" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 100%" title="Buscar Producto"  >
                                             <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle,cmbPreciosVenta"  />
                                         </p:commandButton>                                        
                                     </div>

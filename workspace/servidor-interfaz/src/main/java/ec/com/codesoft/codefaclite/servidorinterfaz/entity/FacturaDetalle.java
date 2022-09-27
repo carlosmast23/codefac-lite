@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 //import com.sun.imageio.plugins.common.BogusColorSpace;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.io.Serializable;
@@ -47,6 +48,9 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
 
     @Column(name = "PRECIO_SIN_SUBSIDIO")
     private BigDecimal precioSinSubsidio; 
+    
+    @Column(name = "RESERVADO")
+    private String reservado;
 
 
     public FacturaDetalle() {
@@ -85,7 +89,25 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public String getReservado() {
+        return reservado;
+    }
 
+    public void setReservado(String reservado) {
+        this.reservado = reservado;
+    }
+    
+    public EnumSiNo getReservadoEnum() 
+    {
+        return EnumSiNo.getEnumByLetra(reservado);
+    }
+
+    public void setReservadoEnum(EnumSiNo reservadoEnum) 
+    {
+        this.reservado = reservadoEnum.getLetra();
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 3;

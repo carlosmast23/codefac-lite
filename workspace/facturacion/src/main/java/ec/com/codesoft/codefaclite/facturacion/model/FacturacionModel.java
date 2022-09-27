@@ -2365,6 +2365,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Limpiar campos de los detalles de la factura
         getTxtCodigoDetalle().setText("");
         getTxtValorUnitario().setText("");
+        getChkReserva().setSelected(false);
         getTxtCantidad().setText("");
         getTxtDescripcion().setText("");
         getTxtDescuento().setText("");
@@ -4413,6 +4414,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void setearFechaCaducidadTxt(String fechaCaducidad) {
         getLblFechaCaducidadDetalle().setText(fechaCaducidad);
+    }
+
+    @Override
+    public Boolean obtenerChkReservado() {
+        return getChkReserva().isSelected();
+    }
+
+    @Override
+    public Long obtenerKardexId() {
+        if(kardexSeleccionado!=null)
+        {
+            return kardexSeleccionado.getId();
+        }
+        return null;
     }
 
 }

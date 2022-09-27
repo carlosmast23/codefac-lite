@@ -26,7 +26,7 @@
 
                 <div class="p-col-12 p-md-6 p-lg-4 p-lg-offset-4"  >
                     <div><h:outputLabel for="password" value="Empresa:" /></div>
-                    <p:selectOneMenu id="cmbEmpresa" value="#{loginMb.empresaSeleccionada}" style="width: 100%" converter="empresaConverter"  >
+                    <p:selectOneMenu id="cmbEmpresa" value="#{loginMb.empresaSeleccionada}" style="width: 100%" converter="empresaConverter" filter="true" filterMatchMode="startsWith"  >
                         <f:selectItems value="#{loginMb.empresas}" var="empresa" itemValue="#{empresa.id.toString()}"/>                        
                         <p:ajax event="itemSelect" listener="#{loginMb.cargarSucursalEvento()}" update=":formulario:cmbSucursal"  />
                     </p:selectOneMenu> 

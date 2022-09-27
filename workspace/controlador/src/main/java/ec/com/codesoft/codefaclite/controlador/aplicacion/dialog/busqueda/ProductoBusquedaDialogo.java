@@ -51,6 +51,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     private EnumSiNo isManejoInvetario;
     
     private Integer numeroDecimales=2;
+    
+    /**
+     * TODO: Variable temporal por que los filtros estan dando problemas con la parte web
+     */
+    @Deprecated
+    private Boolean buscarFiltroMarca=true;
 
     public ProductoBusquedaDialogo(Empresa empresa) 
     {
@@ -166,7 +172,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         //p.getMarcaProducto().getNombre();
         String filtroMarca="";
         
-        if(filtroMarca!=null)
+        if(buscarFiltroMarca)
         {
             filtroMarca=" AND ( u.marcaProducto=?97 ) ";
         }
@@ -259,6 +265,15 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         }
         return null;
     }
+
+    public Boolean getBuscarFiltroMarca() {
+        return buscarFiltroMarca;
+    }
+
+    public void setBuscarFiltroMarca(Boolean buscarFiltroMarca) {
+        this.buscarFiltroMarca = buscarFiltroMarca;
+    }
+    
     
     
     
