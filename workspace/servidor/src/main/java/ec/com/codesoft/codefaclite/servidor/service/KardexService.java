@@ -259,12 +259,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     
                     if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.AGREGAR)  || accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA))
                     {
-                        kardexComponente.setReserva(new BigDecimal(kardexComponente.getReserva()).add(cantidadTotal).intValue());
+                        kardexComponente.setReserva(kardexComponente.getReserva().add(cantidadTotal));
                         kardexComponente.setStock(kardexComponente.getStock().subtract(cantidadTotal));
                     }
                     else
                     {
-                        kardexComponente.setReserva(new BigDecimal(kardexComponente.getReserva()).subtract(cantidadTotal).intValue());
+                        kardexComponente.setReserva(kardexComponente.getReserva().subtract(cantidadTotal));
                         kardexComponente.setStock(kardexComponente.getStock().add(cantidadTotal));
                     }
                     
@@ -815,7 +815,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex.setPrecioUltimo(detalle.getPrecioUnitario());
             //kardex.setProducto(value.getProductoProveedor().getProducto());
             kardex.setStock(BigDecimal.ZERO);
-            kardex.setReserva(0);
+            kardex.setReserva(BigDecimal.ZERO);
             kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
             
             if(lote==null && kardex.getLote()!=null)
@@ -1254,7 +1254,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardex.setPrecioTotal(BigDecimal.ZERO);
         kardex.setPrecioUltimo(BigDecimal.ZERO);
         kardex.setProducto(producto);
-        kardex.setReserva(0);
+        kardex.setReserva(BigDecimal.ZERO);
         kardex.setStock(BigDecimal.ZERO);
         kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         return kardex;

@@ -1,6 +1,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -297,6 +298,33 @@ public class Kardex implements Serializable,Cloneable {
             }
         }
         return stock;
+    }
+    
+    public void procesarReserva(BigDecimal cantidadReserva,SignoEnum sigEnum)
+    {
+            BigDecimal stockActual=BigDecimal.ZERO;
+            if(stock!=null)
+            {
+                stockActual=stock;
+            }
+            
+            BigDecimal reservaActual=BigDecimal.ZERO;
+            if(reserva!=null)
+            {
+                reservaActual=reserva;
+            }
+            
+            if(sigEnum.equals(SignoEnum.POSITIVO))
+            {
+                stock=stockActual.subtract(cantidadReserva);
+                reserva=reservaActual.add(cantidadReserva);
+            }
+            else if(sigEnum.equals(SignoEnum.NEGATIVO))
+            {
+                stock=stockActual.add(cantidadReserva);
+                reserva=reservaActual.subtract(cantidadReserva);
+            }
+            
     }
 
     @Override

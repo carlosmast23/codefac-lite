@@ -169,13 +169,16 @@ public class CorreoElectronico {
         Multipart multipart = new MimeMultipart();
 
         // Agregar Archivos
-        for (Map.Entry<String, String> entry : pathFiles.entrySet()) {
-            BodyPart messageBodyPart = new MimeBodyPart();
-            //String filename = "E:\\ejemplo3.xml";
-            DataSource source = new FileDataSource(entry.getValue());
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName(entry.getKey());
-            multipart.addBodyPart(messageBodyPart);
+        if(pathFiles!=null)
+        {
+            for (Map.Entry<String, String> entry : pathFiles.entrySet()) {
+                BodyPart messageBodyPart = new MimeBodyPart();
+                //String filename = "E:\\ejemplo3.xml";
+                DataSource source = new FileDataSource(entry.getValue());
+                messageBodyPart.setDataHandler(new DataHandler(source));
+                messageBodyPart.setFileName(entry.getKey());
+                multipart.addBodyPart(messageBodyPart);
+            }
         }
 
         /**

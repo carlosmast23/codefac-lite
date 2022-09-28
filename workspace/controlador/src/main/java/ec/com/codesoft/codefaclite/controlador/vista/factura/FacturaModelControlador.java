@@ -560,7 +560,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         facturaDetalle.setLoteId((lote!=null?lote.getId():null));
-        facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));    
+        facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));   
+        facturaDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(interfaz.obtenerChkReservado()));
+        facturaDetalle.setKardexId(interfaz.obtenerKardexId());
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
         if (!validacionPersonalizadaPorModulos(facturaDetalle,kardex,documentoEnum)) {
                 return false;
@@ -1441,9 +1443,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public String obtenerTxtCantidad();
         public String obtenerTxtDescripcion();
         public String obtenerTxtValorUnitario();
+        public Boolean obtenerChkReservado();
         public EnumSiNo obtenerComboIva();
         public Factura obtenerFactura();
         public Boolean obtenerCheckPorcentajeSeleccion();
+        public Long obtenerKardexId();
         
         public void limpiarComboPrecioVenta();
         public void limpiarComboPresentaciones();

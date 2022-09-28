@@ -5,12 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.OrdenTrabajoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.OrdenTrabajoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -18,8 +22,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDet
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +34,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -101,8 +109,15 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                     ordenTrabajoDetalle.setEstadoEnum(OrdenTrabajoDetalle.EstadoEnum.RECIBIDO);
                 }
                 entityManager.persist(ordenTrabajo);
+                entityManager.flush();
+                
+                /**
+                 * Enviar una alerta por correo a los trabajadores avisando que se genere una nueva orden de trabajo
+                 */
+                enviarCorreoOrdenTrabajo(ordenTrabajo);
+                //enviarOTOrdenTrabajoSms(ordenTrabajo);
 
-                SmsService smsService = new SmsService();
+                /*SmsService smsService = new SmsService();
                 for (OrdenTrabajoDetalle detalle : ordenTrabajo.getDetalles()) {
                     if (detalle.getEmpleado() != null) {
                         if (detalle.getEmpleado().getTelefonoCelular() != null && !detalle.getEmpleado().getTelefonoCelular().equals("")) {
@@ -116,12 +131,73 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                         }
 
                     }
-                }
+                }*/
 
             }
            
         });
         return ordenTrabajo;
+    }
+    
+    public void enviarOTOrdenTrabajoSms(OrdenTrabajo ordenTrabajo)
+    {
+        try {
+            SmsService smsService = new SmsService();
+            for (OrdenTrabajoDetalle detalle : ordenTrabajo.getDetalles()) {
+                if (detalle.getEmpleado() != null) {
+                    if (detalle.getEmpleado().getTelefonoCelular() != null && !detalle.getEmpleado().getTelefonoCelular().equals("")) {
+                        try {
+                            smsService.enviarMensaje(detalle.getEmpleado().getTelefonoCelular(), "Nueva orden " + ordenTrabajo.getId() + "," + detalle.getTitulo() + ", Cliente:" + ordenTrabajo.getCliente().getNombreSimple());
+                        } catch (ServicioCodefacException se) {
+                            se.printStackTrace();
+                        }
+                    }
+                    
+                }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void enviarCorreoOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws RemoteException,ServicioCodefacException
+    {
+        //TODO: Agregar para poner un validacion previa para evitar construir un reporte cuando no tenga correos a donde enviar
+        try {
+            
+            List<String> destinatarios = Arrays.asList(ordenTrabajo.obtenerCorreosStr());            
+            //Si no existen destinarios cancelo el envio a los correos
+            if(destinatarios.size()==0 || destinatarios.get(0).trim().isEmpty())
+            {
+                return;
+            }
+            
+            //String secuencialStr=proforma.getSecuencial()+"";
+            Map<String, String> mapParametro = new HashMap<String, String>();
+            mapParametro.put("numeroOrden",ordenTrabajo.getId()+"");
+            //mapParametro.put("nombreCliente", proforma.getRazonSocial());
+            //mapParametro.put("empresa", proforma.getEmpresa().obtenerNombreEmpresa());
+            //mapParametro
+            CodefacMsj mensaje = MensajeCodefacSistema.OrdenTrabajoMensajes.ORDEN_TRABAJO_ENVIADA_CORREO.agregarParametros(mapParametro);
+            //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
+                      
+            //Controlador
+            /*JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
+            String pathReporte = UtilidadReportes.grabarArchivoJasperTemporal(jasperReporte);
+            Map<String, String> mapPathFiles = new HashMap<String, String>();
+            mapPathFiles.put("proforma #" + secuencialStr+".pdf", pathReporte);*/
+            
+            CorreoCodefac correoCodefac = new CorreoCodefac();
+            correoCodefac.enviarCorreo(
+                    ordenTrabajo.getCliente().getEmpresa(),
+                    mensaje.getMensaje(),
+                    mensaje.getTitulo(),
+                    destinatarios,
+                    null);
+            
+        } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**

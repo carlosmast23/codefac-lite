@@ -31,6 +31,7 @@ public class StockMinimoData implements ExcelDatosInterface{
     private String bodega;
     private BigDecimal pvp1;
     private BigDecimal utilidad1;
+    private BigDecimal reserva;
     
     private String aplicacion;
     private TipoProducto tipo;
@@ -210,6 +211,14 @@ public class StockMinimoData implements ExcelDatosInterface{
 
     public void setUltimoCosto(String ultimoCosto) {
         this.ultimoCosto = ultimoCosto;
+    }
+
+    public BigDecimal getReserva() {
+        return reserva;
+    }
+
+    public void setReserva(BigDecimal reserva) {
+        this.reserva = reserva;
     }
     
     

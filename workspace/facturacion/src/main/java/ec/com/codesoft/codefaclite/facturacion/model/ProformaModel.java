@@ -78,6 +78,7 @@ public class ProformaModel extends FacturacionModel{
         getBtnCargarProforma().setEnabled(false);
         getCmbPuntoEmision().setVisible(false);
         getLblEstablecimiento().setVisible(false);
+        getChkReserva().setVisible(true);
         
         //Deshabilitiar componentes de comprobantes electronicos
         super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_COMP_ELECTRONICOS).setVisible(false);

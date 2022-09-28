@@ -315,6 +315,12 @@ public class StockReporteModel extends StockMinimoPanel{
                         Bodega bodega=(Bodega)objeto[3];
                         Lote lote=(Lote)objeto[4];
                         BigDecimal ultimoCosto = (BigDecimal)objeto[5];
+                        BigDecimal reserva = (BigDecimal)objeto[6];
+                        
+                        if(reserva==null)
+                        {
+                            reserva=BigDecimal.ZERO;
+                        }
                         
                         //Kardex kardexTemp = (Kardex) objeto[2];
                         
@@ -337,6 +343,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         data.setCodigo(codigoPersonalizado);
                         data.setProducto(producto.getNombre());
                         data.setStock(cantidad.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP)+"");
+                        data.setReserva(reserva.setScale(obtenerCantidadDecimales(),RoundingMode.HALF_UP));
                         
                         data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
                         data.setUbicacion(producto.getUbicacion());
@@ -422,6 +429,7 @@ public class StockReporteModel extends StockMinimoPanel{
             "Categoria",
             "Ubicación",
             "Stock",
+            "Reserva",
             "Pvp1",
             "Cantidad Minima",
             "Último Costo",
@@ -442,6 +450,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 stockMinimo.getCategoria(),
                 stockMinimo.getUbicacion(),
                 stockMinimo.getStock(),
+                stockMinimo.getReserva()+"",
                 stockMinimo.getPvp1()+"",
                 stockMinimo.getCantidadMinima(),
                 stockMinimo.getUltimoCosto()+"",

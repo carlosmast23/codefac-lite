@@ -73,6 +73,11 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj PROFORMA_ENVIADA_CORREO = new CodefacMsj("La proforma ?numeroProforma fue generada correctamente", "Estimado ?nombreCliente, ?empresa le informa que su Proforma esta generada correctamente y puede descargar como archivo adjunto. Saludos", MENSAJE_CORRECTO);
     }
     
+    public static abstract class OrdenTrabajoMensajes
+    {
+        public static final CodefacMsj ORDEN_TRABAJO_ENVIADA_CORREO = new CodefacMsj("La Orden de Trabajo ?numeroOrden tiene tareas asignadas a su persona", "Estimado Codefac le informa que la Orden de Trabajo ?numeroOrden tiene tareas asignadas a su persona . Saludos", MENSAJE_CORRECTO);
+    }
+    
     public static abstract  class ErrorComunicacion
     {
         public static final CodefacMsj ERROR_COMUNICACION_SERVIDOR = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Error de comunicación con el servidor",MENSAJE_INCORRECTO);

@@ -51,6 +51,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public FacturacionPanel() {
         initComponents();    
         setTitle(VentanaEnum.FACTURACION.getNombre());        
+        getChkReserva().setVisible(false);
     }
     
    
@@ -138,6 +139,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jPanel7 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         lblStockDetalle = new javax.swing.JLabel();
+        chkReserva = new javax.swing.JCheckBox();
         PanelFormasPago = new javax.swing.JPanel();
         btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -541,6 +543,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         pnlDetalles.add(jPanel7, gridBagConstraints);
+
+        chkReserva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkReserva.setText("Reservar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        pnlDetalles.add(chkReserva, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1761,6 +1772,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkOTDetalleUnico;
     private javax.swing.JCheckBox chkPagoConCartera;
     private javax.swing.JCheckBox chkPorcentajeDescuentoGlobal;
+    private javax.swing.JCheckBox chkReserva;
     private javax.swing.JCheckBox cmbConsumidorFinal;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private org.jdesktop.swingx.JXDatePicker cmbFechaVencimiento;
@@ -2474,6 +2486,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setLblFechaCaducidadDetalle(JLabel lblFechaCaducidadDetalle) {
         this.lblFechaCaducidadDetalle = lblFechaCaducidadDetalle;
     }
+
+    public JCheckBox getChkReserva() {
+        return chkReserva;
+    }
+
+    public void setChkReserva(JCheckBox chkReserva) {
+        this.chkReserva = chkReserva;
+    }
+    
     
     
     

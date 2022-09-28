@@ -416,6 +416,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void abrirDialogoBusquedaProducto() {
         ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa());
+        dialogModel.setBuscarFiltroMarca(false);
         //abrirDialogoBusqueda(dialogModel);
         UtilidadesDialogo.abrirDialogoBusqueda(dialogModel);
     }
@@ -1199,6 +1200,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void setearFechaCaducidadTxt(String fechaCaducidad) {
         
+    }
+
+    public Boolean obtenerChkReservado() {
+        return false;
+    }
+
+    public Long obtenerKardexId() {
+        return null;
     }
 
     /**

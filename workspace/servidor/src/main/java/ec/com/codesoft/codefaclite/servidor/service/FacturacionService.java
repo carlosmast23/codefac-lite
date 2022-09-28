@@ -65,6 +65,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -186,6 +187,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         setearDatosClienteYDistribuidor(proforma);
                         grabarDetallesFacturaSinTransaccion(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
+                        
+                        /**
+                         * Gestionar el tema de reservas en el INVENTARIO
+                         */
+                        grabarProductosReservados(proforma);
                     
                         /**
                         * Informar por CORREO que la proforma fue enviada
@@ -197,6 +203,29 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
         
         return proforma;
+    }
+    
+    /**
+     * Metodo que permite grabar las cantidades reservadas en los kardex
+     * @param factura 
+     */
+    private void grabarProductosReservados(Factura factura)
+    {
+        List<FacturaDetalle> detalles=factura.getDetalles();
+        for (FacturaDetalle detalle : detalles) 
+        {
+            if(detalle.getReservadoEnum()!=null && detalle.getReservadoEnum().equals(EnumSiNo.SI))
+            {
+                Kardex kardex=detalle.getKardex();                
+                kardex.procesarReserva(detalle.getCantidad(),SignoEnum.POSITIVO);
+                //kardex.setStock(kardex.getStock().subtract(detalle.getCantidad()));
+                //kardex.setReserva(kardex.getReserva().add(detalle.getCantidad()));
+                
+                entityManager.merge(kardex);
+            }
+            
+        }
+        
     }
     
     public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException
@@ -914,6 +943,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             producto=presentacionDetalle.getProductoOriginal();
         }
         
+        Kardex kardex=null;
+        //Si el detalle del producto era con reserva entonces regreso los valores al stock original para que haga el proceso normal
+        if(detalle.getReservadoEnum()!=null && detalle.getReservadoEnum().equals(EnumSiNo.SI))
+        {
+            kardex= detalle.getKardex();
+            kardex.procesarReserva(detalle.getCantidad(), SignoEnum.NEGATIVO);
+            //kardex.setStock(kardex.getStock().add(detalle.getCantidad()));
+            //kardex.setReserva(kardex.getReserva().subtract(detalle.getCantidad()));
+            
+            
+        }
+        
         //Buscar el lote si no tiene un datos
         Lote lote=null;
         if(detalle.getLoteId()!=null)
@@ -921,8 +962,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorId(detalle.getLoteId());
         }
 
-        //ServiceFactory.getFactory().getKardexServiceIf().
-        Kardex kardex =ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega,lote);
+        if(kardex==null)
+        {
+            kardex =ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega,lote);
+        }
         //Kardex kardex = consultarOCrearStock(producto, bodega);
 
         /**
@@ -976,10 +1019,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
         //Actualizar los valores del kardex
         kardexService.recalcularValoresKardex(kardex, kardexDetalle);
-        //kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
-        //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-        //kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
-        //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
         entityManager.persist(kardexDetalle); //Grabo el kardex detalle
         kardex.addDetalleKardex(kardexDetalle);
         

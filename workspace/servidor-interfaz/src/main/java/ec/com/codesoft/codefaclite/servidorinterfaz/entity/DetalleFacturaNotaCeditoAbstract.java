@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -13,6 +14,9 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
@@ -71,6 +75,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     private CatalogoProducto catalogoProducto;
+    
+    @Column(name = "KARDEX_ID")
+    private Long kardexId;
 
     public DetalleFacturaNotaCeditoAbstract() {
         this.valorIce = BigDecimal.ZERO;
@@ -209,6 +216,14 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void setLoteId(Long loteId) {
         this.loteId = loteId;
     }
+
+    public Long getKardexId() {
+        return kardexId;
+    }
+
+    public void setKardexId(Long kardexId) {
+        this.kardexId = kardexId;
+    }
     
     
 
@@ -237,7 +252,19 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
     
     
-    
+    public Kardex getKardex()
+    {
+        if(kardexId!=null)
+        {
+            try {
+                return ServiceFactory.getFactory().getKardexServiceIf().buscarPorId(kardexId);
+            } catch (RemoteException ex) {
+                Logger.getLogger(DetalleFacturaNotaCeditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        return null;
+    }
     /**
      * PrecioUnitario*cantidad
      *
