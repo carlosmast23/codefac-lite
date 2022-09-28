@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -91,6 +92,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     private List<TipoDocumentoEnum> tipoDocumentoList;
     
+    private List<Mesa> mesaList;
+    
     private FacturaModelControlador.FacturaModelInterface interfaz;
     
         /**
@@ -114,6 +117,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Obtener la forma de pago
             formaPagoDefecto=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoDefecto();
             formaPagoConCartera=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoConCartera();
+            /**
+             * TODO: Filtrar luego solo las mesas que esten activas
+             */
+            mesaList=ServiceFactory.getFactory().getMesaSeviceIf().obtenerTodos();
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -674,14 +681,17 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         try {
             if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.PERMITIR_DESCUENTO_MENOR_COSTO,EnumSiNo.NO))
             {
-                BigDecimal ultimoCosto=kardex.getPrecioUltimo();
-                if(ultimoCosto!=null && ultimoCosto.compareTo(BigDecimal.ZERO)!=0 )
+                if(kardex!=null)
                 {
-                
-                    BigDecimal subtotalMenosDescuento = facturaDetalle.getSubtotalRestadoDescuentos();
-                    System.out.println(subtotalMenosDescuento + " < " + ultimoCosto);
-                    if (subtotalMenosDescuento.compareTo(ultimoCosto) < 0) {
-                        throw new ServicioCodefacException("El precio no puede ser menor que el último costo de compra de " + ultimoCosto);
+                    BigDecimal ultimoCosto=kardex.getPrecioUltimo();
+                    if(ultimoCosto!=null && ultimoCosto.compareTo(BigDecimal.ZERO)!=0 )
+                    {
+
+                        BigDecimal subtotalMenosDescuento = facturaDetalle.getSubtotalRestadoDescuentos();
+                        System.out.println(subtotalMenosDescuento + " < " + ultimoCosto);
+                        if (subtotalMenosDescuento.compareTo(ultimoCosto) < 0) {
+                            throw new ServicioCodefacException("El precio no puede ser menor que el último costo de compra de " + ultimoCosto);
+                        }
                     }
                 }
 
@@ -928,6 +938,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
     public void setTipoDocumentoList(List<TipoDocumentoEnum> tipoDocumentoList) {
         this.tipoDocumentoList = tipoDocumentoList;
+    }
+
+    public List<Mesa> getMesaList() {
+        return mesaList;
+    }
+
+    public void setMesaList(List<Mesa> mesaList) {
+        this.mesaList = mesaList;
     }
     
     

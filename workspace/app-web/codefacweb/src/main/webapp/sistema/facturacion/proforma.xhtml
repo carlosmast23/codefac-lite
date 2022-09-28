@@ -36,7 +36,7 @@
             </p:commandButton>
 
             <p:accordionPanel multiple="true" id="acordionCabecera">
-                <p:tab title="Datos Cabecera">
+                <p:tab title="Datos Cabecera" rendered="#{!proformaMb.visualizarComanda}">
                     <div class="p-grid" style="text-align: left" >
                         <div class="p-col-12 p-md-6 p-lg-3" >
                             <p:selectOneMenu id="cmbDocumento" value="#{proformaMb.documentoSeleccionado}" converter="documentoEnumConverter" style="width: 70%" >
@@ -126,6 +126,20 @@
 
                         </div>
                     </p:panel>
+                </p:tab>
+                
+                <p:tab title="Restaurante" rendered="#{proformaMb.visualizarComanda}">
+                        <div class="p-grid" style="text-align: left" >
+                            <div class="p-col-6 p-md-2 p-lg-2" >
+                                <h:outputLabel style="font-weight: bold">Seleccione la mesa:  </h:outputLabel>
+                            </div>
+                            <div class="p-col-6 p-md-4 p-lg-4" >
+                                <p:selectOneMenu id="console1" value="#{proformaMb.factura.mesa}"  style="width:125px" converter="mesaConverter">
+                                    <f:selectItems var="mesa" value="#{proformaMb.controlador.mesaList}" itemValue="#{mesa.id.toString()}"    />
+                                </p:selectOneMenu>
+                            </div>
+                        </div>   
+
                 </p:tab>
 
             </p:accordionPanel>
@@ -334,7 +348,7 @@
                         </div>
                         
                     </p:tab>
-                    <p:tab title="Académico">
+                    <p:tab title="Académico" rendered="#{!proformaMb.visualizarComanda}">
                         
                         <div class="p-grid" style="text-align: left" >
                             <div class="p-col-12 p-md-6 p-lg-3" >

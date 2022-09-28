@@ -121,6 +121,13 @@ public class Mesa extends EntityAbstract<Mesa.MesaEstadoEnum>{
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Mesa " + numero;
+    }
+    
+    
     
     public enum MesaEstadoEnum 
     {

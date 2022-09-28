@@ -145,6 +145,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      */
     private Boolean visualizarCargarProforma;
     
+    /**
+     * Variable temporal para clasificar la vista como comanda
+     */
+    private Boolean visualizarComanda=false;
+    
     private Boolean descuentoPorcentaje;
     //private String tipoPagina;
     //private String tituloPagina;
@@ -188,6 +193,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         if(tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA))
         {
             visualizarCargarProforma=false;
+        }
+        else if(tipoPaginaEnum.equals(TipoPaginaEnum.COMANDA))
+        {
+            visualizarComanda=true;
+            documentoSeleccionado=DocumentoEnum.PROFORMA;
         }
         
         limpiar();
@@ -533,7 +543,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      * @return
      */
     private boolean validar() {
-        if (factura.getCliente() != null) {
+        if (factura.getCliente() != null && !visualizarComanda) {
             if (factura.getCliente().getIdCliente() == null) {
                 MensajeMb.mostrarMensajeDialogo("Error Validación", "Seleccione un cliente", FacesMessage.SEVERITY_WARN);
                 return false;
@@ -555,9 +565,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
 
     private void setearDatosAdicionales() {
-        Persona.TipoIdentificacionEnum tipoIdentificacionEnum = factura.getCliente().getTipoIdentificacionEnum();
-        String codigoSri = tipoIdentificacionEnum.getCodigoSriVenta();
-        factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
+        if (factura.getCliente() != null && factura.getCliente().getIdCliente() != null) 
+        {
+            Persona.TipoIdentificacionEnum tipoIdentificacionEnum = factura.getCliente().getTipoIdentificacionEnum();
+            String codigoSri = tipoIdentificacionEnum.getCodigoSriVenta();
+            factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
+            //todo: Solucion temporal
+            factura.getCliente().setIdentificacion(factura.getIdentificacion());
+        }
 
         factura.setEmpresa(sessionMb.getSession().getEmpresa());
         factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
@@ -583,8 +598,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             factura.setCodigoDocumento(documentoSeleccionado.getCodigo());
         }
         
-        //todo: Solucion temporal
-        factura.getCliente().setIdentificacion(factura.getIdentificacion());
+        
         
         
         /**
@@ -1217,7 +1231,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      */
     public enum TipoPaginaEnum {  
         FACTURA("Factura", "factura"),
-        PROFORMA("Proforma", "proforma");
+        PROFORMA("Proforma", "proforma"),
+        COMANDA("Comanda","comanda");
 
         private String nombre;
         private String nombreParametro;
@@ -1489,6 +1504,15 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void setFormaPagoSeleccionada(FormaPago formaPagoSeleccionada) {
         this.formaPagoSeleccionada = formaPagoSeleccionada;
     }
+
+    public Boolean getVisualizarComanda() {
+        return visualizarComanda;
+    }
+
+    public void setVisualizarComanda(Boolean visualizarComanda) {
+        this.visualizarComanda = visualizarComanda;
+    }
+    
     
     
 

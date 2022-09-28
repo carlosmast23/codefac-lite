@@ -119,6 +119,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     @Column(name = "DIAS_CREDITO")
     private Integer diasCredito;
+    
+    @JoinColumn(name = "MESA_ID")
+    private Mesa mesa;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -443,6 +446,17 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setRutaNombre(String rutaNombre) {
         this.rutaNombre = rutaNombre;
     }
+
+    public Mesa getMesa() {
+        return mesa;
+    }
+
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
+    }
+
+    
+    
 
     @Override
     public int hashCode() {
