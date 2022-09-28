@@ -286,7 +286,8 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                     //DialogoCodefac.mensaje("Error", "No se puede validar la licencia, Posibles causas:\n - La licencia esta desactualizada \n - El archivo de la licencia fue modificado", DialogoCodefac.MENSAJE_INCORRECTO);
                     existeLicencia=true;
                 }
-            } catch (ValidacionLicenciaExcepcion ex) {
+            } catch (ValidacionLicenciaExcepcion ex) 
+            {
                 Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NoExisteLicenciaException ex) {
                 Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -303,11 +304,11 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         /**
          * Dias Limite para verificar la licencia en ese periodo de tiempo
          */
-        int diasLimiteVerificacion=14;
+        int diasLimiteVerificacion=30;
         /**
          * Numero de dias antes de empezar a verificar la licencia
          */
-        int diasToleraciaVerificacion=5;
+        int diasToleraciaVerificacion=3;
         
         try {
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
@@ -338,6 +339,8 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                                 
                         
                         int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, fechaRevisar);//Esta fecha 
+                        
+                        Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null,"Comprobando licencia, días desde la última validación: "+dias+" , le última fecha fue en : "+fechaUltimaRevision);
 
                         //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha poniendo una fecha superior
                         if (dias < 0) {
@@ -361,13 +364,14 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                             }
                         }
 
-                        //Si execede los dias limite sin validar por internet ya no permite el acceso
+                        //Si execede los dias limite sin validar por internet ya no permite el acceso, la única opción es validar por internet
                         if (dias >= diasLimiteVerificacion) {
                             if (verificarLicenciaOnline(validacion)) {
                                 grabarFechaRevision(parametroFechaValidacion,empresa, false);
                             } else {
                                 //Si no se logro validar la licencia durante 30 dias ya no se abre el software
                                 //throw new ServicioCodefacException("No se puede validar su licencia , verifique su conexión a internet");                                
+                                Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null,"Error de Licencia, se supero la fecha maxima por "+dias+" días, le última fecha fue en : "+fechaUltimaRevision);
                                 validacionRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.LICENCIA_ERROR_FECHAS;
                                 return validacionRespuesta;
                             }

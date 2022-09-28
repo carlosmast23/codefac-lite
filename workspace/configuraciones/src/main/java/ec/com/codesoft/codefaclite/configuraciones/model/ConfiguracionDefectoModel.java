@@ -214,6 +214,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbAdvertenciaActualizarCostos(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbVentanasMultiples(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbPermitirEditarCodigo(),EnumSiNo.values());
@@ -480,6 +481,27 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro = parametrosTodos.get(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);
             getTxtAlertaDiasPorCaducarProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
             
+            parametro = parametrosTodos.get(ParametroCodefac.PVP1_MARGEN_UTILIDAD);
+            getTxtPvp1MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP2_MARGEN_UTILIDAD);
+            getTxtPvp2MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP3_MARGEN_UTILIDAD);
+            getTxtPvp3MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP4_MARGEN_UTILIDAD);
+            getTxtPvp4MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP5_MARGEN_UTILIDAD);
+            getTxtPvp5MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.PVP6_MARGEN_UTILIDAD);
+            getTxtPvp6MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
+            
+            
+            
             parametro = parametrosTodos.get(ParametroCodefac.FORMATO_MENSAJE_COMPROBANTE_ELECTRONICO);
             getTxtCodigoHtml().setText((parametro != null) ? parametro.getValor() : "");    
             getjEditorPanelVistaPrevia().setText(getTxtCodigoHtml().getText());
@@ -518,6 +540,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroFacturarInventarioNegativo = parametrosTodos.get(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroFacturarInventarioNegativo != null) ? parametroFacturarInventarioNegativo.getValor() : null);
             getCmbFacturarInventarioNegativo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            ParametroCodefac parametroAdvertenciaActualizarCosto = parametrosTodos.get(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroAdvertenciaActualizarCosto != null) ? parametroAdvertenciaActualizarCosto.getValor() : null);
+            getCmbAdvertenciaActualizarCostos().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
             
             ParametroCodefac parametroVentasMultiples = parametrosTodos.get(ParametroCodefac.VENTANAS_MULTIPLES);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroVentasMultiples != null) ? parametroVentasMultiples.getValor() : null);
@@ -724,6 +750,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
         
+        enumSiNo = (EnumSiNo) getCmbAdvertenciaActualizarCostos().getSelectedItem();
+        agregarParametro(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO);
+        
         enumSiNo = (EnumSiNo) getCmbVentanasMultiples().getSelectedItem();
         agregarParametro(ParametroCodefac.VENTANAS_MULTIPLES, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.VENTANAS_MULTIPLES);
@@ -840,6 +870,25 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO, getTxtAlertaDiasPorCaducarProducto().getValue().toString());
         agregarParametroEditar(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.PVP1_MARGEN_UTILIDAD, getTxtPvp1MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP1_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP2_MARGEN_UTILIDAD, getTxtPvp2MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP2_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP3_MARGEN_UTILIDAD, getTxtPvp3MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP3_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP4_MARGEN_UTILIDAD, getTxtPvp4MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP4_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP5_MARGEN_UTILIDAD, getTxtPvp5MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP5_MARGEN_UTILIDAD);
+
+        agregarParametro(ParametroCodefac.PVP6_MARGEN_UTILIDAD, getTxtPvp6MargenUtilidad().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.PVP6_MARGEN_UTILIDAD);
+
         
         agregarParametro(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS, getTxtNotaVentaInternaAlias().getText());
         agregarParametroEditar(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);    

@@ -330,20 +330,23 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     private boolean verificarMenuUsuario(VentanaEnum ventanaEnum,SessionCodefac sessionCodefac)
     {
         List<Perfil> perfiles=sessionCodefac.getPerfiles();
-        for (Perfil perfil : perfiles) {
-            //Verificar si tiene permisos dentro de cada perfil asignado al usuario
-            for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
-                
-                if(permisoVentana.getNombreClase().equals("ARQUEO_CAJA"))
-                {
-                    System.out.println("ERRO VENTANA:" + permisoVentana.getNombreClase());    
+        if(perfiles!=null)
+        {
+            for (Perfil perfil : perfiles) {
+                //Verificar si tiene permisos dentro de cada perfil asignado al usuario
+                for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
+
+                    if(permisoVentana.getNombreClase().equals("ARQUEO_CAJA"))
+                    {
+                        System.out.println("ERRO VENTANA:" + permisoVentana.getNombreClase());    
+                    }
+                    if(permisoVentana.getVentanaEnum().equals(ventanaEnum))
+                    {
+                        return true;
+                    }
                 }
-                if(permisoVentana.getVentanaEnum().equals(ventanaEnum))
-                {
-                    return true;
-                }
+
             }
- 
         } 
         return false;
     }

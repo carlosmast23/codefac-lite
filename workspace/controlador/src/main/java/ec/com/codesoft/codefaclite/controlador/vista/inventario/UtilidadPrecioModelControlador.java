@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -24,7 +25,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades.obtenerValorBaseDatos;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -132,6 +136,43 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         costoCalculoList=UtilidadesLista.arrayToList(CostoCalculoEnum.values());
         costoCalculoEnum=CostoCalculoEnum.ULTIMO_COSTO;
+        cargarValorPorDefectoMargenUtilidades();
+    }
+    
+    private void cargarValorPorDefectoMargenUtilidades()
+    {
+        try {
+            ParametroUtilidades.ComparadorInterface<Integer>comparador=new ParametroUtilidades.ComparadorInterface<Integer>() {
+                @Override
+                public Integer consultarParametro(String nombreParametro) 
+                {
+                    if(!UtilidadesTextos.verificarNullOVacio(nombreParametro))
+                    {
+                        try
+                        {
+                            return Integer.parseInt(nombreParametro+"");
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }                        
+                    }
+                    return 0; //Si no tiene valores por defecto devuelvo cero
+                }
+            };
+            
+            
+            pvp1Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP1_MARGEN_UTILIDAD,comparador);
+            pvp2Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP2_MARGEN_UTILIDAD,comparador);
+            pvp3Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP3_MARGEN_UTILIDAD,comparador);
+            pvp4Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP4_MARGEN_UTILIDAD,comparador);
+            pvp5Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP5_MARGEN_UTILIDAD,comparador);
+            pvp6Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP6_MARGEN_UTILIDAD,comparador);
+            
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -31,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
@@ -96,16 +98,24 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     private void verificarActualizarPreciosVenta()
     {
         try {
+            /*
+<<<<<<< HEAD
             Producto productoActualizado= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(kardexDetalle.getKardex().getProducto().getIdProducto());
             if(productoActualizado!=null && productoActualizado.getActualizarPrecioEnum()!=null && productoActualizado.getActualizarPrecioEnum().equals(EnumSiNo.SI))
+=======*/
+            if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO, EnumSiNo.SI)) 
             {
-                Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("El producto tiene cambios en los costos, desea actualizar los precios de venta ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                if(respuesta)
+                Producto productoActualizado= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(kardexDetalle.getKardex().getProducto().getIdProducto());
+                if(productoActualizado!=null)
                 {
-                    List<Producto> productoList=new ArrayList<Producto>();
-                    productoList.add(productoActualizado);
-                    Object[] parametros = {productoList};
-                    panelPadre.crearVentanaCodefac(VentanaEnum.UTILIDAD_PRECIO, true, parametros);
+                    Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("El producto tiene cambios en los costos, desea actualizar los precios de venta ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    if(respuesta)
+                    {
+                        List<Producto> productoList=new ArrayList<Producto>();
+                        productoList.add(productoActualizado);
+                        Object[] parametros = {productoList};
+                        panelPadre.crearVentanaCodefac(VentanaEnum.UTILIDAD_PRECIO, true, parametros);
+                    }
                 }
             }
         } catch (RemoteException ex) {

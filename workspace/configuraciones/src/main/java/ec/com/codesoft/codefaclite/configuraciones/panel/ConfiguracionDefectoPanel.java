@@ -184,12 +184,27 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbConstruirEnsamblesFacturar = new javax.swing.JComboBox<>();
         jLabel53 = new javax.swing.JLabel();
         txtNumeroDecimalesProducto = new javax.swing.JSpinner();
-        jLabel57 = new javax.swing.JLabel();
         cmbAgregarLoteFactura = new javax.swing.JComboBox<>();
         jLabel64 = new javax.swing.JLabel();
         cmbPermitirDescuentoMenorCosto = new javax.swing.JComboBox<>();
         jLabel61 = new javax.swing.JLabel();
         txtAlertaDiasPorCaducarProducto = new javax.swing.JSpinner();
+        jLabel68 = new javax.swing.JLabel();
+        cmbAdvertenciaActualizarCostos = new javax.swing.JComboBox<>();
+        jLabel69 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel57 = new javax.swing.JLabel();
+        txtPvp2MargenUtilidad = new javax.swing.JSpinner();
+        jLabel70 = new javax.swing.JLabel();
+        jLabel71 = new javax.swing.JLabel();
+        jLabel72 = new javax.swing.JLabel();
+        jLabel73 = new javax.swing.JLabel();
+        jLabel74 = new javax.swing.JLabel();
+        txtPvp3MargenUtilidad = new javax.swing.JSpinner();
+        txtPvp4MargenUtilidad = new javax.swing.JSpinner();
+        txtPvp5MargenUtilidad = new javax.swing.JSpinner();
+        txtPvp6MargenUtilidad = new javax.swing.JSpinner();
+        txtPvp1MargenUtilidad = new javax.swing.JSpinner();
         jPanel9 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
@@ -1192,20 +1207,21 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(cmbFacturarInventarioNegativo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel21.setText("Facturar con inventario negativo");
+        jLabel21.setText("Advertencia actualizar costos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel21, gridBagConstraints);
@@ -1214,6 +1230,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(cmbConstruirEnsamblesFacturar, gridBagConstraints);
 
@@ -1233,19 +1250,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(txtNumeroDecimalesProducto, gridBagConstraints);
 
-        jLabel57.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel57.setText("Construir ensambles al facturar:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel8.add(jLabel57, gridBagConstraints);
-
         cmbAgregarLoteFactura.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(cmbAgregarLoteFactura, gridBagConstraints);
 
@@ -1262,6 +1271,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(cmbPermitirDescuentoMenorCosto, gridBagConstraints);
 
@@ -1280,6 +1290,139 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(txtAlertaDiasPorCaducarProducto, gridBagConstraints);
+
+        jLabel68.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel68.setText("Facturar con inventario negativo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel68, gridBagConstraints);
+
+        cmbAdvertenciaActualizarCostos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(cmbAdvertenciaActualizarCostos, gridBagConstraints);
+
+        jLabel69.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel69.setText("Construir ensambles al facturar:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel69, gridBagConstraints);
+
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Porcentaje Margen de Utilidad por Defecto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
+        jPanel12.setLayout(new java.awt.GridBagLayout());
+
+        jLabel57.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel57.setText("Pvp2 Utilidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jLabel57, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(txtPvp2MargenUtilidad, gridBagConstraints);
+
+        jLabel70.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel70.setText("Pvp4 Utilidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jLabel70, gridBagConstraints);
+
+        jLabel71.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel71.setText("Pvp3 Utilidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jLabel71, gridBagConstraints);
+
+        jLabel72.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel72.setText("Pvp5 Utilidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jLabel72, gridBagConstraints);
+
+        jLabel73.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel73.setText("Pvp6 Utilidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jLabel73, gridBagConstraints);
+
+        jLabel74.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel74.setText("Pvp1 Utilidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jLabel74, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(txtPvp3MargenUtilidad, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(txtPvp4MargenUtilidad, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(txtPvp5MargenUtilidad, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(txtPvp6MargenUtilidad, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(txtPvp1MargenUtilidad, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
+        jPanel8.add(jPanel12, gridBagConstraints);
 
         jTabbedPane1.addTab("Inventario", jPanel8);
 
@@ -1452,6 +1595,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbActivarModuloCartera;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarNotaVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
+    private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarLoteFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbCargarProductoIvaFactura;
     private javax.swing.JComboBox<ConfiguracionImpresoraEnum> cmbConfiguracionImpresora;
@@ -1558,12 +1702,20 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1603,6 +1755,12 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JSpinner txtNumeroDecimalesRide;
     private javax.swing.JTextField txtNumeroMaximoDetalleFactura;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
+    private javax.swing.JSpinner txtPvp1MargenUtilidad;
+    private javax.swing.JSpinner txtPvp2MargenUtilidad;
+    private javax.swing.JSpinner txtPvp3MargenUtilidad;
+    private javax.swing.JSpinner txtPvp4MargenUtilidad;
+    private javax.swing.JSpinner txtPvp5MargenUtilidad;
+    private javax.swing.JSpinner txtPvp6MargenUtilidad;
     private javax.swing.JTextField txtVariableGeneralComprobantes;
     // End of variables declaration//GEN-END:variables
 
@@ -2058,7 +2216,63 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.cmbPermitirEditarCodigo = cmbPermitirEditarCodigo;
     }
 
+    public JComboBox<EnumSiNo> getCmbAdvertenciaActualizarCostos() {
+        return cmbAdvertenciaActualizarCostos;
+    }
 
+    public void setCmbAdvertenciaActualizarCostos(JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos) {
+        this.cmbAdvertenciaActualizarCostos = cmbAdvertenciaActualizarCostos;
+    }
+
+    public JSpinner getTxtPvp1MargenUtilidad() {
+        return txtPvp1MargenUtilidad;
+    }
+
+    public void setTxtPvp1MargenUtilidad(JSpinner txtPvp1MargenUtilidad) {
+        this.txtPvp1MargenUtilidad = txtPvp1MargenUtilidad;
+    }
+
+    public JSpinner getTxtPvp2MargenUtilidad() {
+        return txtPvp2MargenUtilidad;
+    }
+
+    public void setTxtPvp2MargenUtilidad(JSpinner txtPvp2MargenUtilidad) {
+        this.txtPvp2MargenUtilidad = txtPvp2MargenUtilidad;
+    }
+
+    public JSpinner getTxtPvp3MargenUtilidad() {
+        return txtPvp3MargenUtilidad;
+    }
+
+    public void setTxtPvp3MargenUtilidad(JSpinner txtPvp3MargenUtilidad) {
+        this.txtPvp3MargenUtilidad = txtPvp3MargenUtilidad;
+    }
+
+    public JSpinner getTxtPvp4MargenUtilidad() {
+        return txtPvp4MargenUtilidad;
+    }
+
+    public void setTxtPvp4MargenUtilidad(JSpinner txtPvp4MargenUtilidad) {
+        this.txtPvp4MargenUtilidad = txtPvp4MargenUtilidad;
+    }
+
+    public JSpinner getTxtPvp5MargenUtilidad() {
+        return txtPvp5MargenUtilidad;
+    }
+
+    public void setTxtPvp5MargenUtilidad(JSpinner txtPvp5MargenUtilidad) {
+        this.txtPvp5MargenUtilidad = txtPvp5MargenUtilidad;
+    }
+
+    public JSpinner getTxtPvp6MargenUtilidad() {
+        return txtPvp6MargenUtilidad;
+    }
+
+    public void setTxtPvp6MargenUtilidad(JSpinner txtPvp6MargenUtilidad) {
+        this.txtPvp6MargenUtilidad = txtPvp6MargenUtilidad;
+    }
+
+    
     
     
     
