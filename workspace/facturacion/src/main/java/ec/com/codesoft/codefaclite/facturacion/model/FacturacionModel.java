@@ -2936,14 +2936,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //factura.setIva(new BigDecimal(getLblIva12().getText()));
         //factura.setSubtotalSinImpuestos(factura.getSubtotalSinImpuestos().add(factura.getSubtotalImpuestos()));
        
-        
-        //Solo debe modificar el documento de la factura cuando esta creando por primera vez
-        if(crudEnum.equals(CrudEnum.CREAR))
-        {
-            DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-            factura.setCodigoDocumento(documentoEnum.getCodigo());
-        }
-        
         //Cuando la facturacion es electronica
         PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();
         
@@ -2957,9 +2949,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoFacturacion());
         }
         
-        //Datos temporales para establecer el secuencial
-        Integer secuencial=puntoEmisionSeleccionada.getSecuencialPorDocumento(factura.getCodigoDocumentoEnum());
-        factura.setSecuencial(secuencial);
+        //Solo debe modificar el documento de la factura cuando esta creando por primera vez
+        if(crudEnum.equals(CrudEnum.CREAR))
+        {
+            DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+            factura.setCodigoDocumento(documentoEnum.getCodigo());
+            
+            //Datos temporales para establecer el secuencial
+            Integer secuencial = puntoEmisionSeleccionada.getSecuencialPorDocumento(factura.getCodigoDocumentoEnum());
+            factura.setSecuencial(secuencial);
+        }
+        
+        
                 
         factura.setContribuyenteEspecial(session.getEmpresa().getContribuyenteEspecial());
         
