@@ -197,7 +197,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         else if(tipoPaginaEnum.equals(TipoPaginaEnum.COMANDA))
         {
             visualizarComanda=true;
-            documentoSeleccionado=DocumentoEnum.PROFORMA;
+            //documentoSeleccionado=DocumentoEnum.PROFORMA;
+            documentoSeleccionado=DocumentoEnum.COMANDA;
         }
         
         limpiar();
@@ -255,10 +256,16 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
 
-            if (tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA)) {
+            if (tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA)) 
+            {
                 factura = servicio.grabarProforma(factura);
                 mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
 
+            }
+            else if(tipoPaginaEnum.equals(TipoPaginaEnum.COMANDA))
+            {
+                factura = servicio.grabarComanda(factura);
+                mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             }
             else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
                 factura = servicio.grabar(factura);
@@ -364,6 +371,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             return new ProformaBusqueda(sessionMb.getSession().getEmpresa(),true);
         } else if (tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA)) {
             return new FacturaBusqueda(sessionMb.getSession().getSucursal(),sessionMb.getSession().getUsuario());
+        } else if (tipoPaginaEnum.equals(tipoPaginaEnum.COMANDA)) {
+            return new ProformaBusqueda(sessionMb.getSession().getEmpresa(),true);
         }
         return null;
     }
@@ -543,7 +552,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      * @return
      */
     private boolean validar() {
-        if (factura.getCliente() != null && !visualizarComanda) {
+        if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
             if (factura.getCliente().getIdCliente() == null) {
                 MensajeMb.mostrarMensajeDialogo("Error Validación", "Seleccione un cliente", FacesMessage.SEVERITY_WARN);
                 return false;
@@ -573,7 +582,18 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             //todo: Solucion temporal
             factura.getCliente().setIdentificacion(factura.getIdentificacion());
         }
+        
+        //TODO: Por el momento cuando no tiene datos mando null por que luego genera problemas al momento de grabar por que quiere generar un cliente nuevo con datos vacios
+        if(factura.getCliente()!=null && factura.getCliente().getIdCliente()==null)
+        {
+            factura.setCliente(null);
+        }
 
+        if(tipoPaginaEnum.equals(TipoPaginaEnum.COMANDA))
+        {
+            puntoEmisionSeleccionado=puntosEmision.get(0);
+        }
+        
         factura.setEmpresa(sessionMb.getSession().getEmpresa());
         factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
         factura.setFechaEmision(new java.sql.Date(fechaEmision.getTime()));
@@ -615,7 +635,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     @Override
     public void imprimir() {
-        if(tipoPaginaEnum.equals(tipoPaginaEnum.PROFORMA))
+        if(tipoPaginaEnum.equals(tipoPaginaEnum.PROFORMA) || tipoPaginaEnum.equals(tipoPaginaEnum.COMANDA))
         {
             imprimirProforma();
         }else if(tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA))
@@ -633,6 +653,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         }
     }
     
+    //TODO: Unificar con el metodo de escritorio para tener en un solo lugar la lógica de impresión
     private void imprimirProforma()
     {
         System.out.println("Imprimir ...");
@@ -640,6 +661,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
         InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("proforma.jrxml");
         JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);
+        
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
+        {
+            path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comanda_ticket_40.jrxml");
+            jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Comanda", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
+            
+            //ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion);
+        }
         //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
         UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,"Presupuesto "+factura.getSecuencial()+".pdf");
         /*mapParametros = ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4, sessionMb.getSession());
@@ -773,6 +802,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         mapParametros.put("descuento", facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos()).toString());
         mapParametros.put("iva_porcentaje", sessionMb.getSession().obtenerIvaActual().toString());
         mapParametros.put("informacionAdicionalList", obtenerDatosAdicionales());
+        mapParametros.put("mesero", facturaProcesando.getUsuario().getNick());
+        mapParametros.put("mesa",(facturaProcesando.getMesa()!=null)?facturaProcesando.getMesa().toString():"");
         
         JasperReport reportDatosAdicionales =buscarReporteDatosAdicionales(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml");
         mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);

@@ -1545,10 +1545,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             throw new ExcepcionCodefacLite("No se puede facturar sin un punto de venta configurado");
         }
 
-        if (factura.getCliente() == null) {
+        /*if (factura.getCliente() == null) {
             DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
-        }
+        }*/
         
         /*if(!factura.getCliente().validarIdentificacion().equals(Persona.ValidacionCedulaEnum.VALIDACION_CORRECTA))
         {
@@ -1561,33 +1561,36 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
         }
         
-        //Verificar que si consumidor final no permita facturar un valor superior a 200 dolares
-        if (Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getIdentificacion().equals(factura.getCliente().getIdentificacion()))
+        if(factura.getCliente()!=null)
         {
-            //Validacion movida al momento de guardar en el servicio
-           //if(Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getMontoMaximo().compareTo(factura.getTotal())<0)
-           //{
-           //    DialogoCodefac.mensaje("Alerta","El Monto no puede ser superior a 200$ para el CLIENTE FINAL",DialogoCodefac.MENSAJE_ADVERTENCIA);
-           //    throw new ExcepcionCodefacLite("El Monto no puede ser superior a 200$ para el CLIENTE FINAL");
-           //}
-           
-        }
-        else
-        {
-            DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-            //Advertir cuando no exista ningun correo para que el usuario pueda ingresar antes de enviar al cliente
-            if (!factura.verificarExistenCorreosIngresados() && !documentoEnum.equals(documentoEnum.NOTA_VENTA_INTERNA)) {
-                if (!DialogoCodefac.dialogoPregunta("Advertencia", "No esta ningun correo ingresado para informar al cliente.\nDesea continuar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
-                    throw new ExcepcionCodefacLite("Cancelado por el usuario");
+            //Verificar que si consumidor final no permita facturar un valor superior a 200 dolares
+            if (Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getIdentificacion().equals(factura.getCliente().getIdentificacion()))
+            {
+                //Validacion movida al momento de guardar en el servicio
+               //if(Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getMontoMaximo().compareTo(factura.getTotal())<0)
+               //{
+               //    DialogoCodefac.mensaje("Alerta","El Monto no puede ser superior a 200$ para el CLIENTE FINAL",DialogoCodefac.MENSAJE_ADVERTENCIA);
+               //    throw new ExcepcionCodefacLite("El Monto no puede ser superior a 200$ para el CLIENTE FINAL");
+               //}
+
+            }
+            else
+            {
+                DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                //Advertir cuando no exista ningun correo para que el usuario pueda ingresar antes de enviar al cliente
+                if (!factura.verificarExistenCorreosIngresados() && !documentoEnum.equals(documentoEnum.NOTA_VENTA_INTERNA)) {
+                    if (!DialogoCodefac.dialogoPregunta("Advertencia", "No esta ningun correo ingresado para informar al cliente.\nDesea continuar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                        throw new ExcepcionCodefacLite("Cancelado por el usuario");
+                    }
                 }
             }
-        }
-        
-        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
-        if(tipoIdentificacionEnum==null)
-        {
-            DialogoCodefac.mensaje("Alerta", "Cliente no configurado el tipo de identificación", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            throw new ExcepcionCodefacLite("Cliente no configurado el tipo de identificación");
+
+            Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
+            if(tipoIdentificacionEnum==null)
+            {
+                DialogoCodefac.mensaje("Alerta", "Cliente no configurado el tipo de identificación", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Cliente no configurado el tipo de identificación");
+            }
         }
                
 
@@ -2906,9 +2909,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         /**
          * Todo: Carlos 
          */
-        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
-        String codigoSri=tipoIdentificacionEnum.getCodigoSriVenta();
-        factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
+        if(factura.getCliente()!=null)
+        {
+            Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
+            String codigoSri=tipoIdentificacionEnum.getCodigoSriVenta();
+            factura.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
+            factura.setRazonSocial(factura.getCliente().getRazonSocial());
+            factura.setIdentificacion(factura.getCliente().getIdentificacion());
+        }
         factura.setEmpresa(session.getEmpresa());
         //factura.setEstado(Factura.ESTADO_FACTURADO);
         //factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
@@ -2968,10 +2976,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setCodigoOrigenTransaccionEnum(Factura.OrigenTransaccionEnum.ESCRITORIO);
         //factura.setVendedor(vendedor);
         
-        factura.setRazonSocial(factura.getCliente().getRazonSocial());
-        factura.setIdentificacion(factura.getCliente().getIdentificacion());
-        factura.setDireccion(factura.getSucursal().getDireccion());
-        factura.setTelefono(factura.getSucursal().getTelefonoCelular());
+
+        
+        if(factura.getSucursal()!=null)
+        {
+            factura.setDireccion(factura.getSucursal().getDireccion());
+            factura.setTelefono(factura.getSucursal().getTelefonoCelular());
+        }
         //factura.setIvaSriId(session.get;
         
         /**

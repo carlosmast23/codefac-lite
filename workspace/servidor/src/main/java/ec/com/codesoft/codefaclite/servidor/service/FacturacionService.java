@@ -168,15 +168,35 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
     }
     
+    public Factura grabarProformaYComandaSinTransaccion(Factura proforma) throws RemoteException,ServicioCodefacException
+    {
+        validacionInicialFacturar(proforma, null, CrudEnum.CREAR);
+        //Agregado vendedor de forma automatica si el usuario tiene relacionado un empleado con departamento de ventas
+        asignarVendedorProforma(proforma);
+
+        proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa()).intValue());
+        proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+
+        //proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
+        setearDatosClienteYDistribuidor(proforma);
+        grabarDetallesFacturaSinTransaccion(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
+        //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
+
+        /**
+         * Gestionar el tema de reservas en el INVENTARIO
+         */
+        grabarProductosReservados(proforma);
+        return proforma;
+    }
     
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {            
-            validacionInicialFacturar(proforma,null,CrudEnum.CREAR);
+            //validacionInicialFacturar(proforma,null,CrudEnum.CREAR);
         
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws RemoteException, ServicioCodefacException {
-                        validacionInicialFacturar(proforma,null, CrudEnum.CREAR);
+                       /* validacionInicialFacturar(proforma,null, CrudEnum.CREAR);
                         //Agregado vendedor de forma automatica si el usuario tiene relacionado un empleado con departamento de ventas
                         asignarVendedorProforma(proforma);
                     
@@ -187,21 +207,35 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         setearDatosClienteYDistribuidor(proforma);
                         grabarDetallesFacturaSinTransaccion(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
-                        
+                        */
                         /**
                          * Gestionar el tema de reservas en el INVENTARIO
                          */
-                        grabarProductosReservados(proforma);
+                        /*grabarProductosReservados(proforma);*/
                     
                         /**
                         * Informar por CORREO que la proforma fue enviada
                         * correctamente
                         */
+                        proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
+                        grabarProformaYComandaSinTransaccion(proforma);
                         enviarCorreoProforma(proforma);
                }
             });
             
         
+        return proforma;
+    }
+    
+    public Factura grabarComanda(Factura proforma) throws RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                proforma.setCodigoDocumento(DocumentoEnum.COMANDA.getCodigo());
+                grabarProformaYComandaSinTransaccion(proforma);
+            }
+        });
         return proforma;
     }
     
@@ -274,7 +308,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     private void setearDatosDistribuidor(Factura venta) throws RemoteException, ServicioCodefacException
     {
         //Si la proforma tiene una zona la grabo con los datos de la oficina del cliente
-        if(venta.getSucursal().getZona()!=null)
+        if(venta.getSucursal()!=null && venta.getSucursal().getZona()!=null)
         {
             venta.setZonaId(venta.getSucursal().getZona().getId());
             venta.setZonaNombre(venta.getSucursal().getZona().getNombre());
@@ -334,10 +368,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      */
     private void setearDatosClienteYDistribuidor(Factura venta) throws RemoteException, ServicioCodefacException
     {
-        venta.setRazonSocial(venta.getCliente().getRazonSocial());
-        venta.setIdentificacion(venta.getCliente().getIdentificacion());
-        venta.setDireccion(venta.getSucursal().getDireccion());
-        venta.setTelefono(venta.getSucursal().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos 
+        if(venta.getCliente()!=null)
+        {
+            venta.setRazonSocial(venta.getCliente().getRazonSocial());
+            venta.setIdentificacion(venta.getCliente().getIdentificacion());
+        }
+            
+        if(venta.getSucursal()!=null)
+        {
+            venta.setDireccion(venta.getSucursal().getDireccion());
+            venta.setTelefono(venta.getSucursal().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos 
+        }
         
         setearDatosDistribuidor(venta);
     }
@@ -487,45 +528,51 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     public void validacionInicialFacturar(Factura factura,CarteraParametro carteraParametro,CrudEnum modo) throws ServicioCodefacException, RemoteException
     { 
         
-        if(factura.getCliente()==null)
+        //Solo valido los datos de clientes cuando es un DOCUMENTO diferente de proforma, por que si se puede grabar sin datos para proforma en especial para las comandas
+        if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) && !factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
         {
-            throw new ServicioCodefacException("La factura tiene que tener un cliente asignado");
-        }
-        
-        if(factura.getCliente().getRazonSocial()==null || factura.getCliente().getRazonSocial().trim().isEmpty())
-        {
-            throw new ServicioCodefacException("No se puede emitir una factura sin la razón social del cliente ");
-        }
-        
-        if(!factura.getCliente().validarIdentificacion().equals(Persona.ValidacionCedulaEnum.VALIDACION_CORRECTA))
-        {
-            //DialogoCodefac.mensaje("Error con el cliente", factura.getCliente().validarIdentificacion().getMensaje(), DialogoCodefac.MENSAJE_ADVERTENCIA);
-            throw new ServicioCodefacException("Error con la identificacion del cliente seleccionado");
-        }
-        
-        //Fecha:15/11/2021 agregada validacion de la direccion por que el sri no permite
-        if(factura.getSucursal().getDireccion()==null || factura.getSucursal().getDireccion().trim().isEmpty())
-        {
-            throw new ServicioCodefacException("No se puede emitir una factura sin dirección");
-        }
-        
-        //Validacion de MONTOS SUPERIORES A $200 PARA CONSUMIDORES FINALES EN DOCUMENTOS LEGALES
-        if(factura.getCliente().isClienteFinal() && factura.getCodigoDocumentoEnum().getDocumentoLegal())        
-        {
-            if(factura.getTotal().compareTo(ParametrosSistemaCodefac.MONTO_MAXIMO_VENTAS_CONSUMIDOR_FINAL)>0)
+            if(factura.getCliente()==null)
             {
-                throw new ServicioCodefacException("El Monto no puede ser superior a $200 para el CLIENTES FINALES");
+                throw new ServicioCodefacException("La factura tiene que tener un cliente asignado");
             }
+
+            if(factura.getCliente().getRazonSocial()==null || factura.getCliente().getRazonSocial().trim().isEmpty())
+            {
+                throw new ServicioCodefacException("No se puede emitir una factura sin la razón social del cliente ");
+            }
+            
+            if(!factura.getCliente().validarIdentificacion().equals(Persona.ValidacionCedulaEnum.VALIDACION_CORRECTA))
+            {
+                //DialogoCodefac.mensaje("Error con el cliente", factura.getCliente().validarIdentificacion().getMensaje(), DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ServicioCodefacException("Error con la identificacion del cliente seleccionado");
+            }
+            
+            //Validacion de MONTOS SUPERIORES A $200 PARA CONSUMIDORES FINALES EN DOCUMENTOS LEGALES
+            if (factura.getCliente().isClienteFinal() && factura.getCodigoDocumentoEnum().getDocumentoLegal()) 
+            {
+                if (factura.getTotal().compareTo(ParametrosSistemaCodefac.MONTO_MAXIMO_VENTAS_CONSUMIDOR_FINAL) > 0) {
+                    throw new ServicioCodefacException("El Monto no puede ser superior a $200 para el CLIENTES FINALES");
+                }
+            }
+
+            Persona.TipoIdentificacionEnum tipoIdentificacionEnum = factura.getCliente().getTipoIdentificacionEnum();
+            if (tipoIdentificacionEnum == null) 
+            {
+                throw new ServicioCodefacException("Cliente no configurado el tipo de identificación");
+            }
+
+            //Fecha:15/11/2021 agregada validacion de la direccion por que el sri no permite
+            if (factura.getSucursal().getDireccion() == null || factura.getSucursal().getDireccion().trim().isEmpty()) 
+            {
+                throw new ServicioCodefacException("No se puede emitir una factura sin dirección");
+            }
+
         }
         
-        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=factura.getCliente().getTipoIdentificacionEnum();
-        if(tipoIdentificacionEnum==null)
-        {
-            throw new ServicioCodefacException("Cliente no configurado el tipo de identificación");
-        }
+
         
         //Validar el punto de emision para cualquier tipo de documento que no sea una proforma
-        if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) && factura.getPuntoEmisionId()==null)
+        if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) && !factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA) && factura.getPuntoEmisionId()==null)
         {
             throw new ServicioCodefacException("No se puede grabar sin tener un punto de emisión configurado");
         }
@@ -622,6 +669,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             {
                 throw new ServicioCodefacException("El producto "+detalle.getDescripcion()+" tiene un tipo de documento invalido");
             }
+            
+            //validar que si tiene un documento de tipo de IDENTIFICACION SIN DEFINIR solo permita realizar procesos INTERNOS        
+            if (factura.getCliente()!=null && factura.getCliente().getTipoIdentificacionEnum()!=null && factura.getCliente().getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.SIN_DEFINIR)) 
+            {
+                Boolean isDocumentoLegal = factura.getCodigoDocumentoEnum().getDocumentoLegal();
+
+                if (isDocumentoLegal) {
+                    throw new ServicioCodefacException("No se puede emitir DOCUMENTOS LEGALES al cliente con el tipo de IDENTIFICACIÓN SIN DEFINIR");
+                }
+            }
+            
         }   
         
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
@@ -637,18 +695,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
         }
         
-        //validar que si tiene un documento de tipo de IDENTIFICACION SIN DEFINIR solo permita realizar procesos INTERNOS
-        
-        if(factura.getCliente().getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.SIN_DEFINIR))
-        {
-            Boolean isDocumentoLegal=factura.getCodigoDocumentoEnum().getDocumentoLegal();
-            
-            if(isDocumentoLegal)
-            {
-                throw new ServicioCodefacException("No se puede emitir DOCUMENTOS LEGALES al cliente con el tipo de IDENTIFICACIÓN SIN DEFINIR");
-            }
-        }
-
         
         //TODO: Por el momento dejo desctivado por que consume muchos recursos
         //validacion especial cuanod tiene problemas en la base de datos
@@ -754,6 +800,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         factura.setFormaPagos(null);
         factura.setDetalles(null);
         factura.setDatosAdicionales(null);
+        //factura.setMesa(null);
         entityManager.persist(factura);
         entityManager.flush();
         

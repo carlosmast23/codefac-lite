@@ -104,6 +104,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnGenerarCartera = new javax.swing.JButton();
         btnArqueoCaja = new javax.swing.JButton();
         btnEnviarCorreoProforma = new javax.swing.JButton();
+        btnCargarComanda = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -308,6 +309,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnEnviarCorreoProforma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/email.png"))); // NOI18N
         btnEnviarCorreoProforma.setToolTipText("Reenviar Proforma Correos");
 
+        btnCargarComanda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/buscarDocumento.png"))); // NOI18N
+        btnCargarComanda.setToolTipText("Buscar Comanda");
+
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -344,7 +348,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         PanelDetalleFactura.add(jScrollPane2, gridBagConstraints);
 
         jToolBar2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 0));
-        jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -465,7 +468,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         pnlDetalles.add(lblEspacio1, gridBagConstraints);
 
-        jToolBar4.setFloatable(false);
         jToolBar4.setRollover(true);
 
         btnCrearProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/mas-ico.png"))); // NOI18N
@@ -1287,7 +1289,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         panelDatosEmpresa.add(lblTelefonoCliente, gridBagConstraints);
 
         jToolBar1.setBorder(null);
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
@@ -1756,6 +1757,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarEstudiante;
     private javax.swing.JButton btnBuscarReferenciaContacto;
     private javax.swing.JButton btnBuscarVendedor;
+    private javax.swing.JButton btnCargarComanda;
     private javax.swing.JButton btnCargarPedido;
     private javax.swing.JButton btnCargarProforma;
     private javax.swing.JButton btnCrearProducto;
@@ -2494,6 +2496,16 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setChkReserva(JCheckBox chkReserva) {
         this.chkReserva = chkReserva;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Comida",visible = false)
+    public JButton getBtnCargarComanda() {
+        return btnCargarComanda;
+    }
+
+    public void setBtnCargarComanda(JButton btnCargarComanda) {
+        this.btnCargarComanda = btnCargarComanda;
+    }
+    
     
     
     
