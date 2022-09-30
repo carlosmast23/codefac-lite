@@ -9,6 +9,7 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ComandaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -410,6 +411,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerButtons() { 
+        
+        getBtnCargarComanda().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Cargar la comanda para facturar
+                ComandaBusquedaDialogo comandaBusqueda = new ComandaBusquedaDialogo(session.getEmpresa());
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(comandaBusqueda);
+                buscarDialogoModel.setVisible(true);
+                if(buscarDialogoModel.getResultado()!=null)
+                {
+                    Factura proforma = (Factura) buscarDialogoModel.getResultado();
+                    cargarFacturaDesdeProforma(proforma);
+                }
+            }
+        });
         
         //formularioActual;
         getBtnEditarCliente().addActionListener(new ActionListener() {
@@ -2936,28 +2952,30 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //factura.setIva(new BigDecimal(getLblIva12().getText()));
         //factura.setSubtotalSinImpuestos(factura.getSubtotalSinImpuestos().add(factura.getSubtotalImpuestos()));
        
-        //Cuando la facturacion es electronica
-        PuntoEmision puntoEmisionSeleccionada=getPuntoEmisionSeleccionado();
-        
-        //Setea para saber si es facturacion fisica o electronica el código
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
-        {
-            factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoNotaVentaInterna());
-        }
-        else
-        {
-            factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoFacturacion());
-        }
         
         //Solo debe modificar el documento de la factura cuando esta creando por primera vez
         if(crudEnum.equals(CrudEnum.CREAR))
         {
+            //Cuando la facturacion es electronica
+            PuntoEmision puntoEmisionSeleccionada = getPuntoEmisionSeleccionado();
+            
             DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
             factura.setCodigoDocumento(documentoEnum.getCodigo());
+
+            //Setea para saber si es facturacion fisica o electronica el código
+            if (factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
+                factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoNotaVentaInterna());
+            } else {
+                factura.setTipoFacturacion(puntoEmisionSeleccionada.getTipoFacturacion());
+            }
+
+            
+           
             
             //Datos temporales para establecer el secuencial
             Integer secuencial = puntoEmisionSeleccionada.getSecuencialPorDocumento(factura.getCodigoDocumentoEnum());
             factura.setSecuencial(secuencial);
+            
         }
         
         

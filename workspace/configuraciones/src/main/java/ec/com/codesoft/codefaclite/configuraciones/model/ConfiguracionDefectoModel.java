@@ -482,22 +482,22 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             getTxtAlertaDiasPorCaducarProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
             
             parametro = parametrosTodos.get(ParametroCodefac.PVP1_MARGEN_UTILIDAD);
-            getTxtPvp1MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            getTxtPvp1MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : -1);
             
             parametro = parametrosTodos.get(ParametroCodefac.PVP2_MARGEN_UTILIDAD);
-            getTxtPvp2MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            getTxtPvp2MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : -1);
             
             parametro = parametrosTodos.get(ParametroCodefac.PVP3_MARGEN_UTILIDAD);
-            getTxtPvp3MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            getTxtPvp3MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : -1);
             
             parametro = parametrosTodos.get(ParametroCodefac.PVP4_MARGEN_UTILIDAD);
-            getTxtPvp4MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            getTxtPvp4MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : -1);
             
             parametro = parametrosTodos.get(ParametroCodefac.PVP5_MARGEN_UTILIDAD);
-            getTxtPvp5MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            getTxtPvp5MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : -1);
             
             parametro = parametrosTodos.get(ParametroCodefac.PVP6_MARGEN_UTILIDAD);
-            getTxtPvp6MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            getTxtPvp6MargenUtilidad().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : -1);
             
             
             

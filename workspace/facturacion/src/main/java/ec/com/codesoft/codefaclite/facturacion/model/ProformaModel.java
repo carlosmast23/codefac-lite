@@ -120,6 +120,7 @@ public class ProformaModel extends FacturacionModel{
 
     @Override
     protected void setearValoresDefaultFactura(CrudEnum crudEnum) {
+        //TODO: Por el momento dejo en esta parte aunque debe estar unificado con la factura
         super.setearValoresDefaultFactura(crudEnum); //To change body of generated methods, choose Tools | Templates.
         factura.setSecuencial(Integer.parseInt(getLblSecuencial().getText())); //TODO: Revisar que este de tema de setar el secuencial ya lo estoy haciendo desde el servicio
         

@@ -47,6 +47,7 @@ public class ProductoPrecioDataTable implements Serializable{
             return porcentajeCalculo.multiply(costoCalculo);
         }
         
+        
         public BigDecimal calcularPvp1()
         {
             return calcularPrecio(porcentajePvp1);

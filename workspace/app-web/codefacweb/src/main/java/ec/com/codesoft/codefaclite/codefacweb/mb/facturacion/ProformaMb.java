@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesDialogo;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadesReporteWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ComandaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
@@ -372,7 +373,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         } else if (tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA)) {
             return new FacturaBusqueda(sessionMb.getSession().getSucursal(),sessionMb.getSession().getUsuario());
         } else if (tipoPaginaEnum.equals(tipoPaginaEnum.COMANDA)) {
-            return new ProformaBusqueda(sessionMb.getSession().getEmpresa(),true);
+            return new ComandaBusquedaDialogo(sessionMb.getSession().getEmpresa(),true);
         }
         return null;
     }

@@ -169,6 +169,30 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
             pvp5Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP5_MARGEN_UTILIDAD,comparador);
             pvp6Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP6_MARGEN_UTILIDAD,comparador);
             
+            if (pvp1Porcentaje == null) {
+                pvp1Porcentaje = -1;
+            }
+
+            if (pvp2Porcentaje == null) {
+                pvp2Porcentaje = -1;
+            }
+
+            if (pvp3Porcentaje == null) {
+                pvp3Porcentaje = -1;
+            }
+
+            if (pvp4Porcentaje == null) {
+                pvp4Porcentaje = -1;
+            }
+
+            if (pvp5Porcentaje == null) {
+                pvp5Porcentaje = -1;
+            }
+            if (pvp6Porcentaje == null) {
+                pvp6Porcentaje = -1;
+            }
+                                                            
+            
             
         } catch (RemoteException ex) {
             Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);

@@ -756,15 +756,40 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                     //Solo calcular el precio de venta si tiene un costo mayor que cero
                     if(productoData.costoCalculo.compareTo(BigDecimal.ZERO)>0)
                     {
-                        Producto producto= productoData.producto;                    
-                        producto.setValorUnitario(productoData.calcularPvp1());
-                        producto.setPrecioDistribuidor(productoData.calcularPvp2());
-                        producto.setPrecioTarjeta(productoData.calcularPvp3());
-                        producto.setPvp4(productoData.calcularPvp4());
-                        producto.setPvp5(productoData.calcularPvp5());
-                        producto.setPvp6(productoData.calcularPvp6());
+                        Producto producto= productoData.producto;        
+                        
+                        if(productoData.porcentajePvp1!=null && productoData.porcentajePvp1.compareTo(BigDecimal.ZERO)>=0)
+                        {
+                            producto.setValorUnitario(productoData.calcularPvp1());
+                        }
+                        
+                        if(productoData.porcentajePvp2!=null && productoData.porcentajePvp2.compareTo(BigDecimal.ZERO)>=0)
+                        {
+                            producto.setPrecioDistribuidor(productoData.calcularPvp2());
+                        }
+                        
+                        if(productoData.porcentajePvp3!=null && productoData.porcentajePvp3.compareTo(BigDecimal.ZERO)>=0)
+                        {
+                            producto.setPrecioTarjeta(productoData.calcularPvp3());                            
+                        }
+                        
+                        if(productoData.porcentajePvp4!=null && productoData.porcentajePvp4.compareTo(BigDecimal.ZERO)>=0)
+                        {
+                            producto.setPvp4(productoData.calcularPvp4());
+                        }
+                        
+                        if(productoData.porcentajePvp5!=null && productoData.porcentajePvp5.compareTo(BigDecimal.ZERO)>=0)
+                        {
+                            producto.setPvp5(productoData.calcularPvp5());
+                        }
+                        
+                        if(productoData.porcentajePvp6!=null && productoData.porcentajePvp6.compareTo(BigDecimal.ZERO)>=0)
+                        {
+                            producto.setPvp6(productoData.calcularPvp6());
+                        }
+                        
+                        
                         producto.setActualizarPrecioEnum(EnumSiNo.NO);
-
                         entityManager.merge(producto);
                     }
                     
