@@ -465,7 +465,7 @@ public class MigrarProductoModel extends MigrarModel {
                 }
                 
                 //Verificar si tiene una fecha de caducidad para crear un lote por defecto
-                Lote lote = new Lote();
+                Lote lote = null;
                 Date fechaCaducidad = getValorDate(ExcelMigrarProductos.Enum.FECHA_CADUCIDAD, fila);
                 if (fechaCaducidad != null) {
                     //Si el producto ya existe entonces busco el lote del producto previamente creado
@@ -545,6 +545,8 @@ public class MigrarProductoModel extends MigrarModel {
                         kardex.setProducto(producto);
                     }
                     
+                    kardex.setLote(lote);
+                    
                     //Verificar si tiene una fecha de caducidad para crear un lote por defecto
                     /*Date fechaCaducidad=getValorDate(ExcelMigrarProductos.Enum.FECHA_CADUCIDAD, fila);
                     if(fechaCaducidad!=null)
@@ -567,7 +569,7 @@ public class MigrarProductoModel extends MigrarModel {
                         }
                         kardex.setLote(lote);
                     }*/
-                    kardex.setLote(lote);
+                    
                     
                     //Crear un ensamble o combo cuando lo requiera el sistema
                     Double cantidadPorCaja = getValorDouble(ExcelMigrarProductos.Enum.CANTIDAD_CAJA, fila);
