@@ -222,9 +222,10 @@ public class ActualizarVersionCodefac {
         conjuntoOnline.add("recursosWeb-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("impuestos-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("pos-1.0-SNAPSHOT.jar");
-        conjuntoOnline.add("codefac.war");
+        conjuntoOnline.add("pos-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("restaurante-1.0-SNAPSHOT.jar");
        
-        //Crear el map con los datos para descargar
+        //Crear el map con los dators para descargar
         List<ArchivoDescarga> listLibreriasDescargar=new ArrayList<ArchivoDescarga>();
         for (Iterator<String> iterator = conjuntoOnline.iterator(); iterator.hasNext();) {
             String nombreLibreria = iterator.next();

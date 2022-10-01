@@ -88,12 +88,18 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         //factura.getEmpresa();
         String queryString = "SELECT u FROM Factura u WHERE u.empresa=?4 and ( u.estado=?1 "+mostrarFacturadosStr+" ) ";
         
-        //String queryBuscarCliente="";
+        String queryBuscarCliente="";
+        
+        if(documentoEnum.equals(DocumentoEnum.PROFORMA))
+        {
+            queryBuscarCliente=" OR LOWER(u.cliente.razonSocial) like ?2 ";
+        }
 
         //TODO: Por el momento utilizo el codigoDocumento para mostrar las comandas
         queryString += " AND ( u.codigoDocumento=?3) ";
+        
 
-        queryString += "AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
+        queryString += " AND ( CONCAT(u.secuencial, '') like ?2 "+queryBuscarCliente+" )";
         queryString += " ORDER BY u.id DESC ";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, ComprobanteEnumEstado.AUTORIZADO.getEstado());

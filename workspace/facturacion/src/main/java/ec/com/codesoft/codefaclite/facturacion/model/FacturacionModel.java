@@ -2861,10 +2861,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             case ACADEMICO:
             case INVENTARIO:
             case LIBRE:
-                getTxtCliente().setText(factura.getCliente().getIdentificacion());
-                getLblNombreCliente().setText(factura.getCliente().getRazonSocial());
-                getLblDireccionCliente().setText(factura.getSucursal().getDireccion());
-                getLblTelefonoCliente().setText(factura.getSucursal().getTelefonoConvencional());
+                if(factura.getCliente()!=null)
+                {
+                    getTxtCliente().setText(factura.getCliente().getIdentificacion());
+                    getLblNombreCliente().setText(factura.getCliente().getRazonSocial());
+                    getLblDireccionCliente().setText(factura.getSucursal().getDireccion());
+                    getLblTelefonoCliente().setText(factura.getSucursal().getTelefonoConvencional());
+                }
                 break;
                 
                 //getTxtClientePresupuesto().setText(factura.getCliente().toString());
@@ -2887,7 +2890,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(estadoFormulario.equals(ESTADO_GRABAR))
         {
             FacturaAdicional datoAdicional=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
-            if(factura.getCliente().getDiasCreditoCliente()!=null && !factura.getCliente().getDiasCreditoCliente().equals(0))
+            if(factura.getCliente()!=null && factura.getCliente().getDiasCreditoCliente()!=null && !factura.getCliente().getDiasCreditoCliente().equals(0))
             {
                 //Eliminar dato anterior si ya fue ingresado
 
@@ -2912,7 +2915,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         //Agregar datos adicionales de los días de credito si tienen asignado
-        if(factura.getCliente().getDiasCreditoCliente()!=null)
+        if(factura.getCliente()!=null && factura.getCliente().getDiasCreditoCliente()!=null)
         {
             getTxtDiasCredito().setValue(factura.getCliente().getDiasCreditoCliente());
         }

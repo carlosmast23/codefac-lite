@@ -52,7 +52,7 @@ public class ComandaBusquedaDialogo extends ProformaBusqueda{
     
     @Override
     public void agregarObjeto(Factura t, Vector dato) {
-        dato.add(t.getSecuencial());
+        dato.add(t.getId());
         dato.add((t.getMesa()!=null)?t.getMesa().toString():"");
         dato.add((t.getUsuario()!=null)?t.getUsuario().getNick():"");
         if(t.getFechaEmision()!=null)
