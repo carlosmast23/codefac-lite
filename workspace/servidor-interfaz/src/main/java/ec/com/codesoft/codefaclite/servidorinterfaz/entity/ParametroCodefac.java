@@ -230,6 +230,11 @@ public class ParametroCodefac implements Serializable {
     public static final String NOTA_VENTA_INTERNA_IVA="NOTA_VENTA_INTERNA_IVA";
     
     /**
+     * Variable que me permite controlar si se debe tomar en cuenta el valor del iva cuando se hacen notas de venta interna
+     */
+    public static final String NVI_TOTAL_CON_IVA="NVI_TOTAL_CON_IVA";
+    
+    /**
      * Filtro rapido que me permite hacer la busqueda de forma rapida
      */
     public static final String FILTRO_RAPIDO_BUSQUEDA="FILTRO_RAPIDO_BUSQUEDA";

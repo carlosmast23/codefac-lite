@@ -325,7 +325,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      */
     public void verificarProductoConNotaVentaInterna(Producto producto)
     {
-        DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
+        /*DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
         BigDecimal valorUnitario=producto.getValorUnitario();
         
         Boolean agregarIva=false;
@@ -336,11 +336,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && !agregarIva)        
-        {
+        {*/
             /**
              * Si el producto tiene ice calculo el nuevo subtotal
              */
-            CatalogoProducto catalogoProducto=producto.getCatalogoProducto();
+        /*    CatalogoProducto catalogoProducto=producto.getCatalogoProducto();
             if(catalogoProducto.getIce()!=null && catalogoProducto.getIce().getPorcentaje()!=null)
             {
                 BigDecimal porcentajeIce = (catalogoProducto.getIce() != null) ? catalogoProducto.getIce().getPorcentaje() : null;
@@ -361,7 +361,99 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
                 producto.setValorUnitario(nuevoValorUnitario);
             }
+        }*/
+        SetearDatosNVI interfazSetearDatos=new SetearDatosNVI() {
+            @Override
+            public void setValores(BigDecimal valorUnitario, BigDecimal iva) {
+                producto.setValorUnitario(valorUnitario);
+            }
+        };
+        verificarProductoConNotaVentaInternaGenerico(producto.getCatalogoProducto(), producto.getValorUnitario(),interfazSetearDatos);
+        //producto.setValorUnitario(valorUnitario);
+    
+    }
+    public void verificarFacturaConNotaVentaInterna(Factura factura)
+    {
+        for (FacturaDetalle detalle : factura.getDetalles()) 
+        {
+            verificarFacturaDetalleConNotaVentaInterna(detalle);
         }
+        factura.calcularTotalesDesdeDetalles();
+    }
+    
+    public void verificarFacturaDetalleConNotaVentaInterna(FacturaDetalle facturaDetalle)
+    {
+        SetearDatosNVI interfazSetearDatos=new SetearDatosNVI() {
+            @Override
+            public void setValores(BigDecimal valorUnitario, BigDecimal iva) {
+                facturaDetalle.setPrecioUnitario(valorUnitario);
+                facturaDetalle.setIva(iva);
+                facturaDetalle.setIvaPorcentaje(0);
+            }
+        };
+        verificarProductoConNotaVentaInternaGenerico(facturaDetalle.getCatalogoProducto(), facturaDetalle.getPrecioUnitario(),interfazSetearDatos);
+        //facturaDetalle.setPrecioUnitario(valorUnitario);
+        facturaDetalle.calcularTotalesDetallesFactura();
+    }
+    
+    private void verificarProductoConNotaVentaInternaGenerico(CatalogoProducto catalogoProducto,BigDecimal valorUnitario,SetearDatosNVI setearDatosNVI)
+    {
+        DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
+        //BigDecimal valorUnitario=producto.getValorUnitario();
+        
+        Boolean agregarIva=false;
+        EnumSiNo agregarIvaSiNo=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.NOTA_VENTA_INTERNA_IVA, EnumSiNo.SI);
+        if(agregarIvaSiNo!=null)
+        {
+            agregarIva=agregarIvaSiNo.getBool();
+        }
+        
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && !agregarIva)        
+        {
+            /**
+             * Si el producto tiene ice calculo el nuevo subtotal
+             */
+            //CatalogoProducto catalogoProducto=producto.getCatalogoProducto();
+            if(catalogoProducto.getIce()!=null && catalogoProducto.getIce().getPorcentaje()!=null)
+            {
+                BigDecimal porcentajeIce = (catalogoProducto.getIce() != null) ? catalogoProducto.getIce().getPorcentaje() : null;
+                valorUnitario = UtilidadIva.calcularValorConIce(
+                        porcentajeIce,
+                        valorUnitario).setScale(5,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
+                
+                catalogoProducto.setIce(null);//Pongo el null para que posteriormente no realice este calculo
+
+            }
+            
+            //Si el producto es distinto de 0 convierto a producto sin iva y cambio el costo
+            if(catalogoProducto.getIva().getTarifa()!=0)
+            {
+                try {
+                    catalogoProducto.getIva().setTarifa(0);
+                    catalogoProducto.getIva().setPorcentaje(BigDecimal.ZERO);
+                    //producto.getCatalogoProducto().getIva().setTarifa(0);
+                    //producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
+                    
+                    BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
+                    //Por defecto si no tiene configurada ninguna opcion asume que el valor de la nota de venta interna debe ser con el valor
+                    if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.NVI_TOTAL_CON_IVA,EnumSiNo.NO))
+                    {
+                        nuevoValorUnitario=valorUnitario;
+                    }                    
+                    //producto.setValorUnitario(nuevoValorUnitario);
+                    if(setearDatosNVI!=null)
+                    {
+                        setearDatosNVI.setValores(nuevoValorUnitario,BigDecimal.ZERO);
+                        
+                    }
+                    //return nuevoValorUnitario;
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        //return valorUnitario;
     }
     
     public  void setearValoresProducto(FacturaDetalle facturaDetalle) {
@@ -1537,6 +1629,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return FormatoReporteEnum.findByName(nombreParametro);
         }
         
+    }
+    
+    public interface SetearDatosNVI
+    {
+        public void setValores(BigDecimal valorUnitario,BigDecimal iva);
     }
 
     

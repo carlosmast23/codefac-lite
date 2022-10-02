@@ -144,6 +144,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbCreditoDefectoFacturas(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbNotaVentaInternaIva(), EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbNVITotalConIva(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbProformaFacturarVariasVeces(), EnumSiNo.values());
         
@@ -394,6 +395,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((notaVentaInternaIva != null) ? notaVentaInternaIva.getValor() : null);
             getCmbNotaVentaInternaIva().setSelectedItem(enumSiNo);
             
+            ParametroCodefac nviTotalConIva = parametrosTodos.get(ParametroCodefac.NVI_TOTAL_CON_IVA);
+            enumSiNo = EnumSiNo.getEnumByLetra((nviTotalConIva != null) ? nviTotalConIva.getValor() : null);
+            getCmbNVITotalConIva().setSelectedItem(enumSiNo);
             
             //getTxtOrdenTrabajoReporte().setText((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():"");
             
@@ -781,6 +785,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbNotaVentaInternaIva().getSelectedItem();
         agregarParametro(ParametroCodefac.NOTA_VENTA_INTERNA_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA);
+
+        enumSiNo = (EnumSiNo) getCmbNVITotalConIva().getSelectedItem();
+        agregarParametro(ParametroCodefac.NVI_TOTAL_CON_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.NVI_TOTAL_CON_IVA);
         
         enumSiNo = (EnumSiNo) getCmbProformaFacturarVariasVeces().getSelectedItem();
         agregarParametro(ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES, (enumSiNo != null) ? enumSiNo.getLetra() : null);

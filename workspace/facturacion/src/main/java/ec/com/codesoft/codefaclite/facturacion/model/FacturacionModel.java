@@ -403,6 +403,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         factura.setProforma(proforma);
 
+        controlador.verificarFacturaConNotaVentaInterna(factura);
         //Todo: revisar que el cambio sea correcto
         //Actualizo con los nuevo valores del cliente si se modifico y viene de un presupuesto
         //setearValoresCliente();

@@ -6,13 +6,17 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 //import com.sun.imageio.plugins.common.BogusColorSpace;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Singleton;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -144,6 +148,24 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
             return precioSinSubsidio.subtract(getPrecioUnitario()).multiply(getCantidad());
         }
         return BigDecimal.ZERO;
+    }
+    
+    /**
+     * Metodos adicionales
+     */
+    
+    public Producto consultarProductoEnlazado()
+    {
+        TipoDocumentoEnum tipoDocumentoEnum=getTipoDocumentoEnum();
+        if(tipoDocumentoEnum!=null && (tipoDocumentoEnum.equals(tipoDocumentoEnum.INVENTARIO) || tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE)))
+        {
+            try {
+                return ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(getReferenciaId());
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaDetalle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
     }
 
     /**

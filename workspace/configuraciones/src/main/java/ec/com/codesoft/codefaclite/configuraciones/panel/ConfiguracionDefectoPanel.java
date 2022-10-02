@@ -135,11 +135,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel47 = new javax.swing.JLabel();
         txtNumeroDecimalesRide = new javax.swing.JSpinner();
         jLabel49 = new javax.swing.JLabel();
-        cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
         jLabel50 = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
         cmbProformaFacturarVariasVeces = new javax.swing.JComboBox<>();
-        jLabel55 = new javax.swing.JLabel();
         cmbImprimirCodigoInternoProducto = new javax.swing.JComboBox<>();
         jLabel56 = new javax.swing.JLabel();
         cmbRideNombrePrincipal = new javax.swing.JComboBox<>();
@@ -147,6 +145,12 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtDatoAdicionalTitulo = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
         cmbOrientacionReporte = new javax.swing.JComboBox<>();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel55 = new javax.swing.JLabel();
+        cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
+        lblEspacio3345 = new javax.swing.JLabel();
+        jLabel75 = new javax.swing.JLabel();
+        cmbNVITotalConIva = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -884,14 +888,6 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel49, gridBagConstraints);
 
-        cmbNotaVentaInternaIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(cmbNotaVentaInternaIva, gridBagConstraints);
-
         jLabel50.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel50.setText("Habilitar Campos Facturación");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -919,15 +915,6 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbProformaFacturarVariasVeces, gridBagConstraints);
-
-        jLabel55.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel55.setText("Nota de Venta Interna con iva:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(jLabel55, gridBagConstraints);
 
         cmbImprimirCodigoInternoProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -990,6 +977,51 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbOrientacionReporte, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
+
+        jPanel13.setLayout(new java.awt.GridBagLayout());
+
+        jLabel55.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel55.setText("Total con Iva:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel13.add(jLabel55, gridBagConstraints);
+
+        cmbNotaVentaInternaIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel13.add(cmbNotaVentaInternaIva, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel13.add(lblEspacio3345, gridBagConstraints);
+
+        jLabel75.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel75.setText("Nota de Venta Interna con iva:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel13.add(jLabel75, gridBagConstraints);
+
+        cmbNVITotalConIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel13.add(cmbNVITotalConIva, gridBagConstraints);
+
+        jTabbedPane1.addTab("NVI", jPanel13);
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1579,7 +1611,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("General", jPanel9);
 
-        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1622,6 +1654,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbIngresoMayusculas;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbModoFacturasGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
+    private javax.swing.JComboBox<EnumSiNo> cmbNVITotalConIva;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
     private javax.swing.JComboBox<OrientacionReporteEnum> cmbOrientacionReporte;
     private javax.swing.JComboBox<EnumSiNo> cmbPermitirDescuentoMenorCosto;
@@ -1710,12 +1743,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jLabel73;
     private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1731,6 +1766,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio3;
+    private javax.swing.JLabel lblEspacio3345;
     private javax.swing.JLabel lblEspacio42;
     private javax.swing.JLabel lblEspacio6;
     private javax.swing.JLabel lblEspacio637;
@@ -2272,8 +2308,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.txtPvp6MargenUtilidad = txtPvp6MargenUtilidad;
     }
 
-    
-    
-    
+    public JComboBox<EnumSiNo> getCmbNVITotalConIva() {
+        return cmbNVITotalConIva;
+    }
+
+    public void setCmbNVITotalConIva(JComboBox<EnumSiNo> cmbNVITotalConIva) {
+        this.cmbNVITotalConIva = cmbNVITotalConIva;
+    }
+
     
 }
