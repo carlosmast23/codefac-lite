@@ -410,6 +410,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         cargarDatosBuscar();
         //DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)
     }
+    
 
     private void addListenerButtons() { 
         
@@ -422,8 +423,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 buscarDialogoModel.setVisible(true);
                 if(buscarDialogoModel.getResultado()!=null)
                 {
-                    Factura proforma = (Factura) buscarDialogoModel.getResultado();
-                    cargarFacturaDesdeProforma(proforma);
+                    List<Object> resultadoLista= buscarDialogoModel.getResultados();
+                    if(resultadoLista!=null)
+                    {
+                        Factura proforma =null;
+                        if(resultadoLista.size()>0)
+                        {
+                            proforma = (Factura) resultadoLista.get(0);
+                            List<Factura> facturasList = (List<Factura>) (List<?>) resultadoLista;
+                            proforma.agregarDetalleDesdeVariasFacturas(facturasList);
+                            cargarFacturaDesdeProforma(proforma);
+                        }
+                    }
+                    
                 }
             }
         });

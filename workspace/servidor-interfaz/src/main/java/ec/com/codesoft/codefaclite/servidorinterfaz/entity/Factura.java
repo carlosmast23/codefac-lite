@@ -825,6 +825,30 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         return "";
     }
     
+    public void agregarDetalleDesdeVariasFacturas(List<Factura> facturaList)
+    {
+        for (Factura factura : facturaList) 
+        {
+            //Solo agregar para facturas distintas de la misma
+            if(!this.equals(factura))
+            {
+                agregarDetalleDesdeOtraFactura(factura);
+            }
+        }
+    }
+    
+    public void agregarDetalleDesdeOtraFactura(Factura facturaAdicional)
+    {
+        List<FacturaDetalle> detalles= facturaAdicional.getDetalles();
+        
+        for (FacturaDetalle detalle : detalles) 
+        {
+            this.addDetalle(detalle);
+        }
+        this.calcularTotalesDesdeDetalles();
+        
+    }
+    
     public List<FacturaDetalle> getDetallesOrdenados()
     {
         List<FacturaDetalle> facturaDetalleList=detalles;

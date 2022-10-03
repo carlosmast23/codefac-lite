@@ -78,7 +78,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     private DefaultTableModel modeloTablaBuscar;
     private InterfaceModelFind model;
-    private Object resultado;
+    private List<Object> resultadosSeleccionados;
     private List<Object> listaResultados;
     private List<ComponenteFiltro> componenteFiltroList=new ArrayList<ComponenteFiltro>();
     
@@ -542,9 +542,21 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     public Object getResultado()
     {
-        if(resultado!=null)
+        if(resultadosSeleccionados!=null && resultadosSeleccionados.size()>0)
         {
-            return resultado;
+            return resultadosSeleccionados.get(0);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    public List<Object> getResultados()
+    {
+        if(resultadosSeleccionados!=null)
+        {
+            return resultadosSeleccionados;
         }
         else
         {
@@ -585,6 +597,18 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         
         
     }*/
+    
+    private List<Object> obtenerDatosSeleccionados()
+    {
+        int[] filas = getTblTabla().getSelectedRows();
+        List<Object> datosSeleccionados=new ArrayList<Object>();
+        
+        for (int filaSeleccionada : filas) 
+        {
+            datosSeleccionados.add(listaResultados.get(filaSeleccionada));
+        }
+        return datosSeleccionados;
+    }
     
     private void initListener()
     {        
@@ -670,8 +694,10 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         getBtnAceptar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int fila=getTblTabla().getSelectedRow();
-                resultado=listaResultados.get(fila);
+                //int fila=getTblTabla().getSelectedRow();
+                //getTblTabla().getSelectedRows();
+                //resultado=listaResultados.get(fila);
+                resultadosSeleccionados=obtenerDatosSeleccionados();
                 dispose();
             }
         });
@@ -679,7 +705,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         getBtnCancelar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resultado=null;
+                resultadosSeleccionados=null;
                 dispose();
             }
         });
@@ -725,8 +751,9 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 Point point = mouseEvent.getPoint();
                 int row = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2) {
-                    int fila=getTblTabla().getSelectedRow();
-                    resultado=listaResultados.get(fila);
+                    //int fila=getTblTabla().getSelectedRow();
+                    //resultado=listaResultados.get(fila);
+                    resultadosSeleccionados=obtenerDatosSeleccionados();
                     dispose();
                     // your valueChanged overridden method 
                 }
@@ -745,7 +772,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                    int filaSeleccionada=getTblTabla().getSelectedRow();
                    if(filaSeleccionada>=0)   //
                    {
-                       resultado=listaResultados.get(filaSeleccionada);
+                       //resultado=listaResultados.get(filaSeleccionada);
+                       resultadosSeleccionados=obtenerDatosSeleccionados();
                        dispose();
                    }
                 }
