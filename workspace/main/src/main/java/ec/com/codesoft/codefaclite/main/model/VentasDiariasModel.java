@@ -6,36 +6,36 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
-import ec.com.codesoft.codefaclite.facturacion.model.ProformaModel;
-import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,15 +46,12 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -136,16 +133,39 @@ public class VentasDiariasModel extends WidgetVentasDiarias
      */
     private void buscarProductoDialogo(TipoDocumentoEnum tipoDocumentoEnum )
     {
-        EnumSiNo manejaInventario=EnumSiNo.NO;
-        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
-        {
-            manejaInventario=EnumSiNo.SI;
+        try {
+            EnumSiNo manejaInventario=EnumSiNo.NO;
+            if(tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
+            {
+                manejaInventario=EnumSiNo.SI;
+            }
+            
+            InterfaceModelFind productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
+            if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
+            {
+                //TODO: Ver si esta parte de las bodegas de venta se pueden agregar dentro del metodo de busqueda
+                BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+                Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+                productoBusquedaDialogo=new TallerMecanicoInventarioBusquedaDialogo(manejaInventario,session.getEmpresa(), bodegaVenta);
+                
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
+                agregarProductoVista(kardex.getProducto());
+                
+            }
+            else
+            {
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                agregarProductoVista((Producto) buscarDialogoModel.getResultado());
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
-        agregarProductoVista((Producto) buscarDialogoModel.getResultado());
     }
     
     private void agregarProductoVista(Producto productoAgregar)
@@ -160,7 +180,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
 
         setearValoresProducto();
     }
-    
+        
     private void agregarListenerBotones() {
         
         getBtnBuscarProducto().addActionListener(new ActionListener() {

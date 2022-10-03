@@ -109,7 +109,7 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
     public String getFiltroPorCodigo() {
         //Producto p;p.getCodigoPersonalizado()
         
-        return " AND LOWER(u.codigoPersonalizado) like ?96 ";
+        return " AND LOWER(u.codigoPersonalizado) like LOWER(?96) ";
     }
     
     @Override

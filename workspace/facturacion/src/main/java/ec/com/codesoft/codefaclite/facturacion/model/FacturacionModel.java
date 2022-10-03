@@ -1329,6 +1329,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void agregarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
     {
         //Bodega activa de venta
+        //TODO: Ver si esta parte de las bodegas de venta se pueden agregar dentro del metodo de busqueda
         BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
         Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
         
