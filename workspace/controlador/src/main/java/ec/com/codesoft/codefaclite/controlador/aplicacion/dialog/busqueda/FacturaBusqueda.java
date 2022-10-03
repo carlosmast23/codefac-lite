@@ -38,6 +38,8 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     private Sucursal sucursal;
     private Usuario usuario;
     
+    private static final int INDICE_FILTRO_DOCUMENTO=97;
+    private static final int INDICE_FILTRO_ESTADO=96;
 
     public FacturaBusqueda(Persona cliente,Sucursal sucursal) {
         this.cliente = cliente;
@@ -109,7 +111,18 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         
         queryString+=getQueryDocumentos();
         
-        String filtroStr=" AND ( u.codigoDocumento=?97 AND u.estado=?96 ) ";
+        String filtroStr="";
+        if(mapFiltro.get(INDICE_FILTRO_DOCUMENTO)!=null)
+        {
+            filtroStr+=" AND u.codigoDocumento=?97 ";
+        }
+        
+        if(mapFiltro.get(INDICE_FILTRO_ESTADO)!=null)
+        {
+            filtroStr+=" AND u.estado=?96 ";
+        }
+        
+        //String filtroStr=" AND ( u.codigoDocumento=?97 AND u.estado=?96 ) ";
         
         queryString+=filtroStr;
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
@@ -121,6 +134,15 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         //queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
         setParameterQuery(queryDialog);
         
+        if(mapFiltro.get(INDICE_FILTRO_DOCUMENTO)!=null)
+        {
+            queryDialog.agregarParametro(INDICE_FILTRO_DOCUMENTO,mapFiltro.get(INDICE_FILTRO_DOCUMENTO));
+        }
+        
+        if(mapFiltro.get(INDICE_FILTRO_ESTADO)!=null)
+        {
+            queryDialog.agregarParametro(INDICE_FILTRO_ESTADO,mapFiltro.get(INDICE_FILTRO_ESTADO));
+        }
         
         if (sucursal != null) {
             queryDialog.agregarParametro(13,sucursal);

@@ -52,11 +52,13 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     
     private Integer numeroDecimales=2;
     
+    private static final int INDICE_FILTRO_MARCA=97;
+    
     /**
      * TODO: Variable temporal por que los filtros estan dando problemas con la parte web
      */
-    @Deprecated
-    private Boolean buscarFiltroMarca=true;
+    //@Deprecated
+    //private Boolean buscarFiltroMarca=true;
 
     public ProductoBusquedaDialogo(Empresa empresa) 
     {
@@ -172,9 +174,9 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         //p.getMarcaProducto().getNombre();
         String filtroMarca="";
         
-        if(buscarFiltroMarca)
+        if(mapFiltro.get(INDICE_FILTRO_MARCA)!=null)
         {
-            filtroMarca=" AND ( u.marcaProducto=?97 ) ";
+            filtroMarca=" AND ( u.marcaProducto=?"+INDICE_FILTRO_MARCA+" ) ";
         }
                 
         String queryString = "SELECT u FROM Producto u WHERE 1=1 "+filtroMarca+queryFiltroEmpresa+" and (u.estado=?1) "+queryExtra+whereManejaInventario;        
@@ -210,6 +212,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         {
             queryDialog.agregarParametro(4,empresa);
         }
+        
+        if(mapFiltro.get(INDICE_FILTRO_MARCA)!=null)
+        {
+             queryDialog.agregarParametro(INDICE_FILTRO_MARCA,mapFiltro.get(INDICE_FILTRO_MARCA));
+        }
+        
         return queryDialog;
     }
 
@@ -252,7 +260,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
                         
             //UtilidadesLista.castListToString(marcaList, caracter, interfaz);
             
-            ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"marca",97,marcaList);
+            ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"marca",INDICE_FILTRO_MARCA,marcaList);
             
             filtroList.add(componenteFiltro);
             
@@ -266,14 +274,14 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         return null;
     }
 
-    public Boolean getBuscarFiltroMarca() {
+    /*public Boolean getBuscarFiltroMarca() {
         return buscarFiltroMarca;
     }
 
     public void setBuscarFiltroMarca(Boolean buscarFiltroMarca) {
         this.buscarFiltroMarca = buscarFiltroMarca;
     }
-    
+    */
     
     
     

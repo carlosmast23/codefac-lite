@@ -436,7 +436,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void abrirDialogoBusquedaProducto() {
         ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa());
-        dialogModel.setBuscarFiltroMarca(false);
+        //dialogModel.setBuscarFiltroMarca(false);
         //abrirDialogoBusqueda(dialogModel);
         UtilidadesDialogo.abrirDialogoBusqueda(dialogModel);
     }
