@@ -17,6 +17,8 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.ProformaDetalleData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
@@ -59,6 +61,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.util.Vector;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -358,7 +361,6 @@ public class ProformaModel extends FacturacionModel{
     public void eventoCambiarEstado() {
         getBtnCargarProforma().setEnabled(false);
     }
-
-    
+   
     
 }

@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -22,6 +24,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,10 +33,11 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class ProformaBusqueda implements InterfaceModelFind<Factura>, InterfacesPropertisFindWeb,Serializable {
+public class ProformaBusqueda implements InterfaceModelFind<Factura>, InterfacesPropertisFindWeb, FiltroDialogoIf {
     
     private Empresa empresa;
     private static final long serialVersionUID = -1238278914412853685L;
+    private static final int INDICE_FILTRO_ESTADO=97;
     
     private Boolean mostrarFacturados;
 
@@ -75,7 +80,10 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
     }
 
     @Override
-    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) 
+    {
+        //Factura f;
+        //f.setEstado(;);
         
         String mostrarFacturadosStr="";
         if(mostrarFacturados)
@@ -83,10 +91,16 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
             mostrarFacturadosStr=" or u.estado=?5 ";
         }
         
+        String filtroEstado="";
+        if(mapFiltro.get(INDICE_FILTRO_ESTADO)!=null)
+        {
+            filtroEstado=" AND u.estado=?"+INDICE_FILTRO_ESTADO ;
+        }
+        
         DocumentoEnum documentoEnum=getDocumentoBuscar();
         //Factura factura;
         //factura.getEmpresa();
-        String queryString = "SELECT u FROM Factura u WHERE u.empresa=?4 and ( u.estado=?1 "+mostrarFacturadosStr+" ) ";
+        String queryString = "SELECT u FROM Factura u WHERE u.empresa=?4 "+filtroEstado+" and ( u.estado=?1 "+mostrarFacturadosStr+" ) ";
         
         String queryBuscarCliente="";
         
@@ -94,6 +108,8 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         {
             queryBuscarCliente=" OR LOWER(u.cliente.razonSocial) like ?2 ";
         }
+        
+        
 
         //TODO: Por el momento utilizo el codigoDocumento para mostrar las comandas
         queryString += " AND ( u.codigoDocumento=?3) ";
@@ -107,6 +123,11 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         if(mostrarFacturados)
         {
             queryDialog.agregarParametro(5, ComprobanteEnumEstado.FACTURADO_PROFORMA.getEstado());
+        }
+        
+        if(mapFiltro.get(INDICE_FILTRO_ESTADO)!=null)
+        {
+            queryDialog.agregarParametro(INDICE_FILTRO_ESTADO, mapFiltro.get(INDICE_FILTRO_ESTADO));
         }
         
         queryDialog.agregarParametro(2, filter);
@@ -154,6 +175,29 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         propiedades.add("fechaEmision");
         propiedades.add("total");
         return propiedades;
+    }
+    
+    @Override
+    public Vector<ComponenteFiltro> getfiltrosList() {
+        //Factura f;
+        //f.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI);
+        List<ComprobanteEntity.ComprobanteEnumEstado> documentoList = new ArrayList<ComprobanteEntity.ComprobanteEnumEstado>();
+        documentoList.add(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
+        documentoList.add(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
+
+        Vector<ComponenteFiltro> filtroList = new Vector<ComponenteFiltro>();
+
+        ComponenteFiltro componenteFiltro = new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX, "documento: ", INDICE_FILTRO_ESTADO, documentoList);
+        componenteFiltro.filtroParametroIf=new ComponenteFiltro.FiltroParametroIf<ComprobanteEntity.ComprobanteEnumEstado>() {
+            @Override
+            public Object getValor(ComprobanteEntity.ComprobanteEnumEstado dato) {
+                return dato.getEstado();
+            }
+        };
+                
+        filtroList.add(componenteFiltro);
+        return filtroList;
+
     }
 
 }

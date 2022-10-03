@@ -371,22 +371,28 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     {
         //Dividir el query en 2 textos antes y despues del caracteres que estoy buscando
         Integer posicionParametro=query.indexOf("?"+numeroParametro.toString());
-        String queryPrimeraParte=query.substring(0,posicionParametro);
-        String querySegundaParte=query.substring(posicionParametro,query.length());
         
-        //Buscar en la parte derecha el tramo que debo eliminar hasta encontrar el primer espacio        
-        Integer primerEspacio=querySegundaParte.indexOf(" ");        
-        querySegundaParte=querySegundaParte.substring(primerEspacio,querySegundaParte.length());
-        
-        
-        //Buscar en la parte izquierda el primer tramo antes de un espacio
-        String textoInvertido=new StringBuilder(queryPrimeraParte).reverse().toString();
-        Integer posicionCorte = textoInvertido.indexOf(" ");
-        queryPrimeraParte=queryPrimeraParte.substring(0,queryPrimeraParte.length()-posicionCorte);
-        
-        //unificar el query total para retornar
-        String queryModificado=queryPrimeraParte+" 1=1 "+querySegundaParte;
-        return queryModificado;
+        //Solo ejecutar el codigo  de remplazo si encuentra el numero de parametro en el query, por que no puede aparecer por que puede ser que esta condicionado
+        if(posicionParametro>=0)
+        {
+            String queryPrimeraParte=query.substring(0,posicionParametro);
+            String querySegundaParte=query.substring(posicionParametro,query.length());
+
+            //Buscar en la parte derecha el tramo que debo eliminar hasta encontrar el primer espacio        
+            Integer primerEspacio=querySegundaParte.indexOf(" ");        
+            querySegundaParte=querySegundaParte.substring(primerEspacio,querySegundaParte.length());
+
+
+            //Buscar en la parte izquierda el primer tramo antes de un espacio
+            String textoInvertido=new StringBuilder(queryPrimeraParte).reverse().toString();
+            Integer posicionCorte = textoInvertido.indexOf(" ");
+            queryPrimeraParte=queryPrimeraParte.substring(0,queryPrimeraParte.length()-posicionCorte);
+
+            //unificar el query total para retornar
+            String queryModificado=queryPrimeraParte+" 1=1 "+querySegundaParte;
+            return queryModificado;
+        }
+        return query;
     }
     
     private void imprimirTexto()
