@@ -209,6 +209,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtPvp5MargenUtilidad = new javax.swing.JSpinner();
         txtPvp6MargenUtilidad = new javax.swing.JSpinner();
         txtPvp1MargenUtilidad = new javax.swing.JSpinner();
+        jLabel76 = new javax.swing.JLabel();
+        txtMargenDescuentoMinimoVenta = new javax.swing.JSpinner();
         jPanel9 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
@@ -1244,7 +1246,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbFacturarInventarioNegativo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
@@ -1253,7 +1255,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel21.setText("Advertencia actualizar costos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel21, gridBagConstraints);
@@ -1270,7 +1272,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel53.setText("Alertas días por caducar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel53, gridBagConstraints);
@@ -1308,16 +1310,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbPermitirDescuentoMenorCosto, gridBagConstraints);
 
         jLabel61.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel61.setText("Permitir descuento menor al Costo:");
+        jLabel61.setText("Margen descuento minimo venta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel61, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1335,7 +1337,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbAdvertenciaActualizarCostos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(cmbAdvertenciaActualizarCostos, gridBagConstraints);
@@ -1450,11 +1452,27 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
         jPanel8.add(jPanel12, gridBagConstraints);
+
+        jLabel76.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel76.setText("Permitir descuento menor al Costo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel76, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(txtMargenDescuentoMinimoVenta, gridBagConstraints);
 
         jTabbedPane1.addTab("Inventario", jPanel8);
 
@@ -1744,6 +1762,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel73;
     private javax.swing.JLabel jLabel74;
     private javax.swing.JLabel jLabel75;
+    private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -1785,6 +1804,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JTextField txtLeyendaFirmaFactura1;
     private javax.swing.JTextField txtLeyendaFirmaFactura2;
     private javax.swing.JTextField txtLeyendaFirmaFactura3;
+    private javax.swing.JSpinner txtMargenDescuentoMinimoVenta;
     private javax.swing.JTextField txtMotivoTrasladoGuiaRemision;
     private javax.swing.JTextField txtNotaVentaInternaAlias;
     private javax.swing.JSpinner txtNumeroDecimalesProducto;
@@ -2315,6 +2335,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbNVITotalConIva(JComboBox<EnumSiNo> cmbNVITotalConIva) {
         this.cmbNVITotalConIva = cmbNVITotalConIva;
     }
+
+    public JSpinner getTxtMargenDescuentoMinimoVenta() {
+        return txtMargenDescuentoMinimoVenta;
+    }
+
+    public void setTxtMargenDescuentoMinimoVenta(JSpinner txtMargenDescuentoMinimoVenta) {
+        this.txtMargenDescuentoMinimoVenta = txtMargenDescuentoMinimoVenta;
+    }
+    
+    
 
     
 }

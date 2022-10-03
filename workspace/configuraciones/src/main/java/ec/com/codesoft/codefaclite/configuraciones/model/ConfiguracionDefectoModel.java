@@ -482,6 +482,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);
             getTxtNumeroDecimalesProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 2);
             
+            parametro = parametrosTodos.get(ParametroCodefac.MARGEN_MINIMO_DESCUENTO_VENTA);
+            getTxtMargenDescuentoMinimoVenta().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
+            
             parametro = parametrosTodos.get(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);
             getTxtAlertaDiasPorCaducarProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 0);
             
@@ -875,6 +878,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, getTxtNumeroDecimalesProducto().getValue().toString());
         agregarParametroEditar(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.MARGEN_MINIMO_DESCUENTO_VENTA, getTxtMargenDescuentoMinimoVenta().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.MARGEN_MINIMO_DESCUENTO_VENTA);  
         
         agregarParametro(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO, getTxtAlertaDiasPorCaducarProducto().getValue().toString());
         agregarParametroEditar(ParametroCodefac.ALERTA_DIAS_POR_CADUCAR_PRODUCTO);  

@@ -62,8 +62,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -781,8 +783,18 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
                         BigDecimal subtotalMenosDescuento = facturaDetalle.getSubtotalRestadoDescuentos();
                         System.out.println(subtotalMenosDescuento + " < " + ultimoCosto);
+                        
+                        //Si tiene configurada la opcion de margen minimo de venta, le aumento el porcentaje minimo al ultimo costo antes de comparar
+                        String margenMinimoStr=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.MARGEN_MINIMO_DESCUENTO_VENTA);
+                        if(!UtilidadesTextos.verificarNullOVacio(margenMinimoStr))
+                        {
+                            BigDecimal margenMinimo=new BigDecimal(margenMinimoStr);
+                            BigDecimal valorAdicional=UtilidadesPorcentajes.calcularPorcentaje(margenMinimo,ultimoCosto);                            
+                            ultimoCosto=ultimoCosto.add(valorAdicional);
+                        }
+                        
                         if (subtotalMenosDescuento.compareTo(ultimoCosto) < 0) {
-                            throw new ServicioCodefacException("El precio no puede ser menor que el último costo de compra de " + ultimoCosto);
+                            throw new ServicioCodefacException("El precio no puede ser menor que " + ultimoCosto);
                         }
                     }
                 }

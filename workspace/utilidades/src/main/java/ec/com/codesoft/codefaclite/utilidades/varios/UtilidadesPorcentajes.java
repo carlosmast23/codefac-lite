@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -51,5 +52,17 @@ public class UtilidadesPorcentajes {
         }
         
         return valorConDescuento.multiply(CIEN).divide(CIEN.subtract(porcentajeDescuentoEntero),2,MODO_REDONDEO);
+    }
+    
+    /**
+     * Metodo que permite calcular el porcentaje de un valor asumiendo que me pasa un valor entero sobre el 100 por ciento
+     * @param porcentajeEntero
+     * @param valor
+     * @return 
+     */
+    public static BigDecimal calcularPorcentaje(BigDecimal porcentajeEntero,BigDecimal valor)
+    {
+        BigDecimal porcentajeDecimal=porcentajeEntero.divide(UtilidadBigDecimal.CIEN,2,BigDecimal.ROUND_HALF_UP);
+        return valor.multiply(porcentajeDecimal);
     }
 }

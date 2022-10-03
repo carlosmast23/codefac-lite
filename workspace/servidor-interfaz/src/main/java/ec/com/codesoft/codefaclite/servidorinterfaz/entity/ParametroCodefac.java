@@ -258,6 +258,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String NUMERO_DECIMAL_PRODUCTO = "numero_decimal_producto";
     
+    public static final String MARGEN_MINIMO_DESCUENTO_VENTA = "margen_minimo_descuento_venta";
+    
     public static final String VERSION_SISTEMA="version_sistema";
     
     /**
