@@ -107,7 +107,12 @@ public class ProformaReporteModel extends ProformaReportePanel {
                 
                 ReporteProformaData dato=new ReporteProformaData();
                 dato.setNumeroFactura((proforma.getSecuencial()!=null)?proforma.getSecuencial().toString():"");
-                dato.setFechaFactura(dateFormat.format(proforma.getFechaEmision()));
+                String fechaEmisionStr="";
+                if(proforma.getFechaEmision()!=null)
+                {
+                    fechaEmisionStr=dateFormat.format(proforma.getFechaEmision());
+                }
+                dato.setFechaFactura(fechaEmisionStr);
                 dato.setIdentificacionCliente(proforma.getIdentificacion());
                 dato.setRazonSocialCliente(proforma.getRazonSocial());
                 dato.setNombreLegalCliente((proforma.getCliente().getEstablecimientos().get(0).getNombreComercial()!=null)?proforma.getCliente().getEstablecimientos().get(0).getNombreComercial():"");
