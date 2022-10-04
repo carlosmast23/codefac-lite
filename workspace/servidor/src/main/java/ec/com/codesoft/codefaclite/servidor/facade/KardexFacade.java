@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
@@ -176,7 +177,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         return (Long) query.getSingleResult();
     }
 
-    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException {
 
         String whereBodega="";
         if(bodega!=null)
@@ -194,8 +195,33 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         
         String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+" "
                 + " group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
-        Query query = getEntityManager().createQuery(queryString);
         
+        String orderBy="";
+        
+        //Producto p;
+        //p.getUbicacion();
+        /*k.get*/
+        
+        if(ordenEnum!=null)
+        {
+            switch (ordenEnum) 
+            {
+                case CODIGO:
+                    orderBy=" order by k.producto.nombre ";
+                    break;
+                case NOMBRE:
+                    orderBy=" order by k.producto.codigoPersonalizado ";
+                    break;
+                case UBICACION:
+                    orderBy=" order by k.producto.ubicacion ";
+                    break;
+                    
+                default:
+                    orderBy="";
+            }
+        }
+        
+        Query query = getEntityManager().createQuery(queryString);        
         if(bodega!=null)
         {
             query.setParameter(1,bodega);

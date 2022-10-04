@@ -29,12 +29,15 @@ import javax.xml.bind.annotation.XmlType;
     "secuencial",
     "direcionMatriz",
     "regimenMicroempresas",
-    "agenteRetencion"}
+    "agenteRetencion",
+    "contribuyenteRimpe"}
 )
 
 public class InformacionTributaria implements Serializable{
     
     private static final String REGIMEN_MICROEMPRESAS="CONTRIBUYENTE RÉGIMEN MICROEMPRESAS";
+    public static final String RIMPE_EMPRENDEDORES="CONTRIBUYENTE RÉGIMEN RIMPE";
+    public static final String RIMPE_NEGOCIO_POPULAR="CONTRIBUYENTE NEGOCIO POPULAR - RÉGIMEN RIMPE";
     
     private String ambiente;
     private String tipoEmision;
@@ -50,6 +53,7 @@ public class InformacionTributaria implements Serializable{
     
     private String regimenMicroempresas;
     private String agenteRetencion;
+    private String contribuyenteRimpe;
 
     public InformacionTributaria() {
     }
@@ -170,6 +174,17 @@ public class InformacionTributaria implements Serializable{
     public void setAgenteRetencion(String agenteRetencion) {
         this.agenteRetencion = agenteRetencion;
     }
+
+    public String getContribuyenteRimpe() {
+        return contribuyenteRimpe;
+    }
+
+    @XmlElement(name="contribuyenteRimpe")
+    public void setContribuyenteRimpe(String contribuyenteRimpe) {
+        this.contribuyenteRimpe = contribuyenteRimpe;
+    }
+    
+    
     
     
     
@@ -190,6 +205,16 @@ public class InformacionTributaria implements Serializable{
     public void asignarRegimenMicroempresas()
     {
         this.regimenMicroempresas=REGIMEN_MICROEMPRESAS;
+    }
+    
+    public void asignarRegimenRIMPEEmprendedor()
+    {
+        this.contribuyenteRimpe=RIMPE_EMPRENDEDORES;
+    }
+    
+    public void asignarRegimenRIMPENegocioPopular()
+    {
+        this.contribuyenteRimpe=RIMPE_NEGOCIO_POPULAR;
     }
     
 

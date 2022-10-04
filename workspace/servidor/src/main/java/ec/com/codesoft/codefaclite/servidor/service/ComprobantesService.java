@@ -1655,6 +1655,16 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             infoTributaria.asignarRegimenMicroempresas();
         }
         
+        //Asigar datos cuando el contribuyente es rimpe
+        if(empresa.getRimpeEmprendedoresEnum().equals(EnumSiNo.SI))
+        {
+            infoTributaria.asignarRegimenRIMPEEmprendedor();
+        }
+        else if(empresa.getRimpeNegociosPopularesEnum().equals(EnumSiNo.SI))
+        {
+            infoTributaria.asignarRegimenRIMPENegocioPopular();
+        }
+        
         //Asignar dato cuando es agente de retencion
         if(empresa.getAgenteRetencionResolucion()!=null && !empresa.getAgenteRetencionResolucion().trim().isEmpty())
         {
