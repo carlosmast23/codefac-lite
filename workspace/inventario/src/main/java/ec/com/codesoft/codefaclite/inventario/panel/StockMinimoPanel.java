@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.inventario.model.StockReporteModel.TipoReporteStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -28,7 +30,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
      * Creates new form StockMinimoPanel
      */
     public StockMinimoPanel() {
-        initComponents();
+        initComponents();        
         
     }
 
@@ -79,6 +81,10 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         lblEspacio33434 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         cmbOrdenar = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
+        cmbTipoStock = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        cmbTipoReporte = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -91,7 +97,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         lblMostrarDetalle.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblMostrarDetalle.setText("Mostrar Detalle:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -117,7 +123,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridx = 14;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -128,7 +134,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridwidth = 15;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -138,7 +144,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         lblDiasCaducidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblDiasCaducidad.setText("Días Caducidad Tolerancia:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -186,13 +192,13 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbFechaFinal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -201,13 +207,13 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Fecha Inicial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -223,7 +229,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -238,7 +244,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -257,7 +263,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Fecha Final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -300,16 +306,17 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.add(chkTodosTipo, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText("Segmento:");
+        jLabel10.setText("Tipo Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 200;
         gridBagConstraints.weightx = 0.1;
@@ -327,14 +334,15 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtNombreProducto1, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Ordenar Por:");
+        jLabel12.setText("Tipo Stock:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -342,6 +350,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtNombreProducto2, gridBagConstraints);
@@ -353,7 +362,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(lblEspacio123123, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
@@ -375,6 +384,38 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbOrdenar, gridBagConstraints);
 
+        jLabel14.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel14.setText("Ordenar Por:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel14, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbTipoStock, gridBagConstraints);
+
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel15.setText("Segmento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel15, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbTipoReporte, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -395,10 +436,14 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<KardexOrdenarEnum> cmbOrdenar;
     private javax.swing.JComboBox<Bodega> cmbSegmento;
     private javax.swing.JComboBox<Bodega> cmbTipo;
+    private javax.swing.JComboBox<TipoReporteStockEnum> cmbTipoReporte;
+    private javax.swing.JComboBox<TipoStockEnum> cmbTipoStock;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -572,9 +617,22 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     public void setCmbOrdenar(JComboBox<KardexOrdenarEnum> cmbOrdenar) {
         this.cmbOrdenar = cmbOrdenar;
     }
-    
-    
-    
+
+    public JComboBox<TipoStockEnum> getCmbTipoStock() {
+        return cmbTipoStock;
+    }
+
+    public void setCmbTipoStock(JComboBox<TipoStockEnum> cmbTipoStock) {
+        this.cmbTipoStock = cmbTipoStock;
+    }
+
+    public JComboBox<TipoReporteStockEnum> getCmbTipoReporte() {
+        return cmbTipoReporte;
+    }
+
+    public void setCmbTipoReporte(JComboBox<TipoReporteStockEnum> cmbTipoReporte) {
+        this.cmbTipoReporte = cmbTipoReporte;
+    }
     
     
     

@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo.TipoStockEnum;
+
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.math.RoundingMode;

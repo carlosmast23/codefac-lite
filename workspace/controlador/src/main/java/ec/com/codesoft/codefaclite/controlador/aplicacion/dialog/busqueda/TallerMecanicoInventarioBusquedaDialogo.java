@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -131,31 +132,6 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
     @Override
     public String getFiltroPorMarca() {
         return "";
-    }
-    
-    public enum TipoStockEnum
-    {
-        TODOS("Todos"),
-        CON_STOCK("Con Stock"),
-        SIN_STOCK("Sin Stock");
-        
-        private String nombre;
-
-        private TipoStockEnum(String nombre) {
-            this.nombre = nombre;
-        }        
-
-        public String getNombre() {
-            return nombre;
-        }
-
-        @Override
-        public String toString() {
-            return nombre;
-        }
-        
-        
-        
     }
     
 }

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
@@ -33,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -89,7 +91,10 @@ public class StockReporteModel extends StockMinimoPanel{
     //TODO: Unificar el funcionamiento con la pantalla de Stock minimo por que son bastante similares
     public void valoresIniciales() {
         try {                       
+            
+            UtilidadesComboBox.llenarComboBox(getCmbTipoStock(),TipoStockEnum.values());
             UtilidadesComboBox.llenarComboBox(getCmbOrdenar(), KardexOrdenarEnum.values());
+            UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),TipoReporteStockEnum.values());
             //Obtener bodega por defecto seleccionada
             bodegaSeleccionada=ServiceFactory.getFactory().getBodegaServiceIf().obtenerUnicaBodegaPorSucursal(session.getSucursal());
             //getCmbBodega().removeAllItems();
@@ -171,7 +176,8 @@ public class StockReporteModel extends StockMinimoPanel{
                     JasperReport reportDatosAdicionales= obtenerSubReporte();
                     Map<String,Object> mapParametros=new HashMap<String,Object>();
                     mapParametros.put("pl_detalle_item",reportDatosAdicionales);
-                    ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_INVENTARIO,"stockMinimo.jrxml", mapParametros, listaData, panelPadre, "Reporte Stock", OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
+                    TipoReporteStockEnum tipoReporteStockEnum=(TipoReporteStockEnum) getCmbTipoReporte().getSelectedItem();
+                    ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_INVENTARIO,tipoReporteStockEnum.getNombreReporte(), mapParametros, listaData, panelPadre, "Reporte Stock", OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
                     //ReporteCodefac.generarReporteInternalFramePlantilla(path,mapParametros, listaData, panelPadre, "Reporte Stock");
                     //dispose();
                     //setVisible(false);
@@ -306,7 +312,8 @@ public class StockReporteModel extends StockMinimoPanel{
                     }
                     
                     KardexOrdenarEnum ordenarEnum=(KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum);
+                    TipoStockEnum tipoStockEnum=(TipoStockEnum) getCmbTipoStock().getSelectedItem();
+                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum,tipoStockEnum);
                     
                     listaData=new ArrayList<StockMinimoData>();
                     
@@ -481,6 +488,24 @@ public class StockReporteModel extends StockMinimoPanel{
             }
         });
     
+    }
+    
+    public enum TipoReporteStockEnum
+    {
+        DETALLADO("stockMinimo.jrxml"),
+        SIMPLE("stockMinimoModelo2.jrxml");
+        
+        private String nombreReporte;
+
+        private TipoReporteStockEnum(String nombreReporte) {
+            this.nombreReporte = nombreReporte;
+        }
+
+        public String getNombreReporte() {
+            return nombreReporte;
+        }
+        
+        
     }
     
 }

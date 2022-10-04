@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
@@ -20,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
@@ -245,7 +247,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum) throws java.rmi.RemoteException {
          //Kardex k;
          //k.getReserva();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
@@ -310,8 +312,26 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             orderBy=" ORDER BY k.producto.ubicacion asc ";
         }
         
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+orderBy;
+        String tipoStockWhere="";
+        //Filtrar por el tipo de stock        
+        if(tipoStockEnum==null)
+        {
+            //TODO: no hace nada
+        }else if(tipoStockEnum.equals(TipoStockEnum.TODOS))
+        {
+            //TODO: no hace nada
+        }else if(tipoStockEnum.equals(TipoStockEnum.CON_STOCK))
+        {
+            tipoStockWhere=" AND k.stock>0 ";
+        }else if(tipoStockEnum.equals(TipoStockEnum.SIN_STOCK))
+        {
+            tipoStockWhere=" AND k.stock<=0 ";
+        }        
+        
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+orderBy;
         Query query = getEntityManager().createQuery(queryString);
+        
+        
         
         
         query.setParameter(6,GeneralEnumEstado.ACTIVO.getEstado());
