@@ -245,7 +245,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException {
          //Kardex k;
          //k.getReserva();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
@@ -292,10 +292,25 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         
         
         //Kardex kardex;
+        //kardex.getProducto().getUbicacion();
         //kardex.getPrecioUltimo();
         //kardex.getBodega().getEstado()
         //Talvez agregar condicion para buscar solo por kardex activos
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+" ORDER BY k.producto.nombre asc";
+        String orderBy="";
+        if(ordenEnum.equals(KardexOrdenarEnum.CODIGO))
+        {
+            orderBy=" ORDER BY k.producto.codigoPersonalizado asc ";
+        }
+        else if(ordenEnum.equals(KardexOrdenarEnum.NOMBRE))
+        {
+            orderBy=" ORDER BY k.producto.nombre asc ";
+        }
+        else if(ordenEnum.equals(KardexOrdenarEnum.UBICACION))
+        {
+            orderBy=" ORDER BY k.producto.ubicacion asc ";
+        }
+        
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+orderBy;
         Query query = getEntityManager().createQuery(queryString);
         
         
@@ -348,7 +363,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
     {
         try {
             //ordenar por producto y por nombre para no afectar en el orden final del resultado
-            UtilidadesLista.ordenarLista(resultadoList,new Comparator<Object[]>() {
+            /*UtilidadesLista.ordenarLista(resultadoList,new Comparator<Object[]>() {
                 @Override
                 public int compare(Object[] o1, Object[] o2) {
                     Producto producto = (Producto) o1[0];
@@ -366,7 +381,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                     return comparador;
                     
                 }
-            });
+            });*/
                        
             if(ServiceFactory.getFactory().getLoteSeviceIf().existenLotesIngresados(empresa))
             {

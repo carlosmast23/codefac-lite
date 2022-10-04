@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -85,9 +86,10 @@ public class StockReporteModel extends StockMinimoPanel{
     
     }
     
+    //TODO: Unificar el funcionamiento con la pantalla de Stock minimo por que son bastante similares
     public void valoresIniciales() {
         try {                       
-            
+            UtilidadesComboBox.llenarComboBox(getCmbOrdenar(), KardexOrdenarEnum.values());
             //Obtener bodega por defecto seleccionada
             bodegaSeleccionada=ServiceFactory.getFactory().getBodegaServiceIf().obtenerUnicaBodegaPorSucursal(session.getSucursal());
             //getCmbBodega().removeAllItems();
@@ -303,7 +305,8 @@ public class StockReporteModel extends StockMinimoPanel{
                         nombreProducto="%"+nombreProducto+"%";
                     }
                     
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa());
+                    KardexOrdenarEnum ordenarEnum=(KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();
+                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum);
                     
                     listaData=new ArrayList<StockMinimoData>();
                     

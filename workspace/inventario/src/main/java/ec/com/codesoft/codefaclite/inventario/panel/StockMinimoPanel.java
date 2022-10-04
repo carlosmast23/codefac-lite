@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -77,7 +78,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         lblEspacio123123 = new javax.swing.JLabel();
         lblEspacio33434 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbOrdenar = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -367,13 +368,12 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel13, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        jPanel1.add(cmbOrdenar, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -392,9 +392,9 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarDetalle;
+    private javax.swing.JComboBox<KardexOrdenarEnum> cmbOrdenar;
     private javax.swing.JComboBox<Bodega> cmbSegmento;
     private javax.swing.JComboBox<Bodega> cmbTipo;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -564,6 +564,15 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     public void setLblMostrarDetalle(JLabel lblMostrarDetalle) {
         this.lblMostrarDetalle = lblMostrarDetalle;
     }
+
+    public JComboBox<KardexOrdenarEnum> getCmbOrdenar() {
+        return cmbOrdenar;
+    }
+
+    public void setCmbOrdenar(JComboBox<KardexOrdenarEnum> cmbOrdenar) {
+        this.cmbOrdenar = cmbOrdenar;
+    }
+    
     
     
     

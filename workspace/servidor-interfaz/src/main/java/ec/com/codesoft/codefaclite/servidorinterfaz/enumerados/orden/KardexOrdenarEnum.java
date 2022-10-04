@@ -10,7 +10,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden;
  */
 public enum KardexOrdenarEnum 
 {
-    CODIGO,
     NOMBRE,
+    CODIGO,
     UBICACION;
 }

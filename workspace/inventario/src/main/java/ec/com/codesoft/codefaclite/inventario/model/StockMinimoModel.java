@@ -152,7 +152,7 @@ public class StockMinimoModel extends StockMinimoPanel{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void valoresIniciales() {
+    public void valoresIniciales() {
         try {                       
             getCmbBodega().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
@@ -160,7 +160,8 @@ public class StockMinimoModel extends StockMinimoPanel{
             UtilidadesComboBox.llenarComboBox(getCmbBodega(), bodegas);
             //for (Bodega bodega : bodegas) {
             //    getCmbBodega().addItem(bodega);                
-            //}
+            //}            
+           UtilidadesComboBox.llenarComboBox(getCmbOrdenar(), KardexOrdenarEnum.values());
             
             getChkTodasCategoria().setSelected(true);
             getBtnBuscarCategoria().setEnabled(false);
@@ -195,7 +196,8 @@ public class StockMinimoModel extends StockMinimoPanel{
     {
         try {
             Bodega bodegaSeleccionada = (Bodega) getCmbBodega().getSelectedItem();
-            listaStock = ServiceFactory.getFactory().getKardexServiceIf().consultarStockMinimo(bodegaSeleccionada, categoriaProducto, session.getEmpresa(),KardexOrdenarEnum.NOMBRE);
+            KardexOrdenarEnum ordenarEnum=(KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();            
+            listaStock = ServiceFactory.getFactory().getKardexServiceIf().consultarStockMinimo(bodegaSeleccionada, categoriaProducto, session.getEmpresa(),ordenarEnum);
             listaData = new ArrayList<StockMinimoData>();
 
             for (Object[] objeto : listaStock) 
