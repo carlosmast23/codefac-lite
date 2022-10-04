@@ -48,12 +48,29 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
         
     }
     
+    private void validar(ObjetoMantenimiento objetoMantenimiento,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException
+    {
+                validarEdicionCampo(objetoMantenimiento.getEmpresa(), crudEnum, new ValidarEdicionCampoIf<ObjetoMantenimiento>() {
+            @Override
+            public Object getId() {
+                return objetoMantenimiento.getId();
+            }
+
+            @Override
+            public Boolean compararCampos(ObjetoMantenimiento dato) {
+                return objetoMantenimiento.getCodigo().equals(dato.getCodigo());
+            }
+        });
+    }
+    
+    
     @Override
     public ObjetoMantenimiento grabar(ObjetoMantenimiento entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validar(entity, CrudEnum.CREAR);
                 grabarSinTransaccion(entity, empresa, usuarioCreacion);
                 
             }

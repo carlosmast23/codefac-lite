@@ -44,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionS
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -911,6 +912,30 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     private void addListenerBotones() {
+        
+        getBtnAbriWhatsapp().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Nacionalidad nacionalidad= (Nacionalidad) getCmbNacionalidad().getSelectedItem();
+                String celular=getjTextCelular().getText();
+                String mobile = celular.replace(" ", "+");
+                if(nacionalidad==null || nacionalidad.getIso().equals("ECU"))
+                {
+                    //Si el número tiene un cero le corto
+                    if(mobile.charAt(0)=='0')
+                    {
+                        mobile=mobile.substring(1,mobile.length());
+                    }
+                    
+                    //agrego el código de pais
+                    mobile="593"+mobile;
+                }
+                
+                String linkWhatsapp="https://api.whatsapp.com/send?phone=" + mobile;                
+                UtilidadesWeb.abrirPaginaWebNavigador(linkWhatsapp);
+            }
+        });
+        
         getBtnAgregarEstablecimiento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

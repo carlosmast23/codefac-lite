@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
+import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -102,6 +103,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jTextReferenciaDireccion = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         jTextCiudad = new javax.swing.JTextField();
+        btnAbriWhatsapp = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jComboTipoCliente = new javax.swing.JComboBox<>();
@@ -460,6 +462,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanelCaracteristicasGenerales.add(jTextCiudad, gridBagConstraints);
+
+        btnAbriWhatsapp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/whatsapp.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanelCaracteristicasGenerales.add(btnAbriWhatsapp, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Principales", jPanelCaracteristicasGenerales);
 
@@ -981,6 +991,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAbriWhatsapp;
     private javax.swing.JButton btnAgregarEstablecimiento;
     private javax.swing.JButton btnEditarEstablecimiento;
     private javax.swing.JCheckBox chkContacto;
@@ -1471,6 +1482,37 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     public void setjTextCiudadEstablecimiento(JTextField jTextCiudadEstablecimiento) {
         this.jTextCiudadEstablecimiento = jTextCiudadEstablecimiento;
+    }
+
+    public JButton getBtnAbriWhatsapp() {
+        return btnAbriWhatsapp;
+    }
+
+    public void setBtnAbriWhatsapp(JButton btnAbriWhatsapp) {
+        this.btnAbriWhatsapp = btnAbriWhatsapp;
+    }
+    
+    
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ClienteForm other = (ClienteForm) obj;
+        return Objects.equals(this.btnAbriWhatsapp, other.btnAbriWhatsapp);
     }
 
     

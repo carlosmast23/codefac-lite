@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.MayusculaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoObjetoMantenimientoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
@@ -205,6 +206,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
 
 
     //@LimpiarAnotacion
+    @MayusculaAnotacion
     @TextFieldBinding(value = "controlador.segmentoProducto.nombre")
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
@@ -215,6 +217,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         this.txtNombre = txtNombre;
     }
 
+    @MayusculaAnotacion
     @TextFieldBinding(value = "controlador.segmentoProducto.descripcion")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
