@@ -199,7 +199,11 @@ public class LoginModel extends LoginFormDialog{
                         
                     case PAGOS_PENDIENTES:
                         LOG.log(Level.WARNING, "Error con las fechas de pago excedidas " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
-                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.PAGOS_PENDIENTES.getMensaje(), MENSAJE_INCORRECTO);                        
+                        Map<String,String> mapParametros=new HashMap<String,String>();
+                        mapParametros.put("?1", loginRespuesta.usuarioLicencia);
+                        mapParametros.put("?2", empresaSeleccionada.obtenerNombreEmpresa());
+                        
+                        DialogoCodefac.mensaje("Error Login",LoginRespuesta.EstadoLoginEnum.PAGOS_PENDIENTES.getMensajeConParametros(mapParametros), MENSAJE_INCORRECTO);                        
                         break;
 
                     default:

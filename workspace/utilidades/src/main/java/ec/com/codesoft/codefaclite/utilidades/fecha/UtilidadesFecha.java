@@ -62,6 +62,13 @@ public class UtilidadesFecha {
         return fechaHoy;
     }
     
+    public static String getFechaHoraHoyFormat()
+    {
+        java.util.Date fecha=getFechaHoraHoy();
+        SimpleDateFormat formato=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return formato.format(fecha);
+    }
+    
     public static Timestamp getFechaHoyTimeStamp()
     {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());

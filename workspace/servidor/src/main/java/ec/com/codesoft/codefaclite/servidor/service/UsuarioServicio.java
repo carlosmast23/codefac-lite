@@ -119,6 +119,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         {
             UtilidadesService servicioUtilidades=new UtilidadesService();
             EmpresaLicencia empresaLicencia = servicioUtilidades.obtenerLicenciaEmpresa(empresa);
+            loginRespuesta.usuarioLicencia=empresaLicencia.usuarioLicencia;
             //Si no logro validar la licencia devuelvo la respuesta que fue agregado en el metodo validacionLicencia
             if(!validacionLicencia(empresaLicencia, loginRespuesta))
             {
@@ -508,7 +509,6 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             
             //diasFaltantes=diasFaltantes+1; //Le sumo un digito porqe la distancia me devuelve con un numero menos TODO: revisar esta parte
             if (diasFaltantes <= 0) {//Validacion cuando ya no tenga dias de espera ya no permite acceder al sistema
-                //DialogoCodefac.mensaje("Error", "El sistema detecta valores pendientes de pago y no se puede abrir\n Por favor cancele los valores pendientes para continuar con el servicio.", DialogoCodefac.MENSAJE_INCORRECTO);
                 //System.exit(0);
                 respuesta.estadoEnum=FechaMaximoPagoRespuesta.EstadoEnum.FECHA_PAGO_SUPERADA;
             } else if (diasFaltantes <= diasPreviosAlerta) {

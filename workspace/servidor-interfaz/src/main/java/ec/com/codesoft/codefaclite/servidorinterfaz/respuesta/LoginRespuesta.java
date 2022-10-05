@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.respuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -26,6 +27,11 @@ public class LoginRespuesta implements Serializable{
      *  Variable que me permite imprimir alertas al usuario de cualquier tipo
      */
     public List<String> alertas;
+    
+    /**
+     * Variable para almacenar el usuario de la licencia que tenga registrada
+     */
+    public String usuarioLicencia;
 
     public LoginRespuesta(Usuario usuario, EstadoLoginEnum estadoEnum, List<String> alertas) {
         this.usuario = usuario;
@@ -84,7 +90,7 @@ public class LoginRespuesta implements Serializable{
         /**
          * Estado que me permite informar que el sistema tiene valores pendientes de pago
          */
-        LICENCIA_PAGO_VENCIDO("No puede usar el sistema porque se registran deudas pendientes"),
+        LICENCIA_PAGO_VENCIDO("No puede usar el sistema porque se registran deudas pendientes. \n licencia=?1, empresa=?2 "),
         
         /**
          * Estado que me permite informar que la licencia tiene un error con las fechas puede ser orque cambiaron en el sistema
@@ -104,7 +110,7 @@ public class LoginRespuesta implements Serializable{
         /**
          * Mensaje cuando el sistema detecta pagos pendientes
          */
-        PAGOS_PENDIENTES("El sistema detecta valores pendientes de pago y no se puede abrir\n Por favor cancele los valores pendientes para continuar con el servicio."),
+        PAGOS_PENDIENTES("El sistema detecta valores pendientes de pago y no se puede abrir\n Por favor cancele los valores pendientes para continuar con el servicio. \n\n licencia=?1\n empresa=?2"),
         
         /**
          * Estado cuando sucede algun problema pero no esta clasificado
@@ -131,7 +137,21 @@ public class LoginRespuesta implements Serializable{
             return mensaje;
         }
         
-        
+        public String getMensajeConParametros(Map<String,String> mapParametros)
+        {
+            String mensajeTmp=mensaje;
+            for (Map.Entry<String, String> entry : mapParametros.entrySet()) 
+            {
+                String titulo = entry.getKey();
+                String valor = entry.getValue();
+                
+                mensajeTmp=mensajeTmp.replace(titulo,valor);
+                
+            }
+            
+            return mensajeTmp;
+            
+        }
         
         
     }

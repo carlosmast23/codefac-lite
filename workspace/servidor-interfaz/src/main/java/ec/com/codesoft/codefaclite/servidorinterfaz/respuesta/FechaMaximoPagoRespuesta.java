@@ -21,10 +21,6 @@ public class FechaMaximoPagoRespuesta implements Serializable{
         return "El sistema registra valores pendientes por cancelar , le restan " + diasRestantes + " días para usar el sistema,\n Si no cancela los valores pendientes el sistema automáticamente se bloqueará .";
     }
     
-    public String mensajeFechaPagoSuperada()
-    {
-        return "El sistema detecta valores pendientes de pago y no se puede abrir\\n Por favor cancele los valores pendientes para continuar con el servicio.";
-    }
     
     public enum EstadoEnum
     {

@@ -1169,6 +1169,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         frameInterface.actualizarBindingComponent(false,true);
                         
                         VistaCodefacIf frameControlador= UtilidadesCoreCodefac.getControladorTodoVista(frameInterface);
+                        LOG.log(Level.INFO, "Ejecutando metodo GRABAR desde la ventana " + frameInterface.getTitle()+", usuario= "+sessionCodefac.getUsuario().getNick()+", fecha= "+UtilidadesFecha.getFechaHoraHoyFormat());                        
                         if(frameControlador!=null)
                         {
                             frameControlador.grabar();
