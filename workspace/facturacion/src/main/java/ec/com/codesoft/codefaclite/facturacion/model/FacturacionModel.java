@@ -402,6 +402,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //TODO: Este artificio sirve para poder establecer la fecha actual del sistema y no la fecha del pedido
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         factura.setProforma(proforma);
+        factura.setSecuencial(null);
 
         controlador.verificarFacturaConNotaVentaInterna(factura);
         //Todo: revisar que el cambio sea correcto
@@ -511,7 +512,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnBuscarReferenciaContacto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ReferidoBusquedaDialogo busquedaDialog = new ReferidoBusquedaDialogo();
+                ReferidoBusquedaDialogo busquedaDialog = new ReferidoBusquedaDialogo(session);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
                 buscarDialogoModel.setVisible(true);
                 Persona referidoTmp=(Persona) buscarDialogoModel.getResultado();
@@ -1708,7 +1709,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     
                 }
                 else                
-                {
+                {                    
                     factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro);
                     if(session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
                     {
@@ -1753,6 +1754,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }
             
+            actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
      
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1763,9 +1765,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error ",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);            
             throw new ExcepcionCodefacLite("Error al grabar: "+ex.getMessage());
+        } catch(Exception e)
+        {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, e);
+            DialogoCodefac.mensaje("Error ",e.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);            
+            throw new ExcepcionCodefacLite("Error al grabar: "+e.getMessage());
         }
         
-        actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
+        
     }
     
     private void mostrarErrorFacturaLote(FacturaLoteRespuesta respuestaManual) throws ExcepcionCodefacLite
@@ -2998,9 +3005,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
            
             
             //Datos temporales para establecer el secuencial
-            Integer secuencial = puntoEmisionSeleccionada.getSecuencialPorDocumento(factura.getCodigoDocumentoEnum());
-            factura.setSecuencial(secuencial);
-            
+            //Integer secuencial = puntoEmisionSeleccionada.getSecuencialPorDocumento(factura.getCodigoDocumentoEnum());
+            //factura.setSecuencial(secuencial);
         }
         
         

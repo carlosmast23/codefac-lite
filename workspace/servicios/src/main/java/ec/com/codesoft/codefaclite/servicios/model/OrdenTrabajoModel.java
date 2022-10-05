@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servicios.model;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -302,14 +303,14 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getBtnCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {               
-                ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
-                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session);
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                Persona persona = (Persona) buscarDialogo.getResultado();
-                if(persona != null)
+                PersonaEstablecimiento establecimiento = (PersonaEstablecimiento) buscarDialogo.getResultado();
+                if(establecimiento != null)
                 {
-                    ordenTrabajo.setCliente(persona);
-                    cargarDatosCliente(persona);
+                    ordenTrabajo.setCliente(establecimiento.getPersona());
+                    cargarDatosCliente(establecimiento.getPersona());
                     getTxtCategoria().requestFocus();
                     
                 }

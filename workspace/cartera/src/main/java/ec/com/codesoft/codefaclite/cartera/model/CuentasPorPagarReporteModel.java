@@ -6,7 +6,6 @@
 package ec.com.codesoft.codefaclite.cartera.model;
 
 import ec.com.codesoft.codefaclite.cartera.panel.CuentasPorPagarReportePanel;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;

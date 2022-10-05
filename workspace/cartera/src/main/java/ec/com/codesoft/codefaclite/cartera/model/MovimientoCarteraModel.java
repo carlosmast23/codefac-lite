@@ -8,7 +8,6 @@ package ec.com.codesoft.codefaclite.cartera.model;
 import ec.com.codesoft.codefaclite.cartera.panel.MovimientoCarteraPanel;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CruceCarteraData;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CuentasPorCobrarData;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;

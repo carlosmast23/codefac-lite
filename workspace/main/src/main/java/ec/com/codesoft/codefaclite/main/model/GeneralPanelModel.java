@@ -1006,6 +1006,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 try
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
+                    LOG.log(Level.INFO, "Ejecutando metodo ELIMINAR desde la ventana " + frame.getTitle()+", usuario= "+sessionCodefac.getUsuario().getNick()+", fecha= "+UtilidadesFecha.getFechaHoraHoyFormat());                        
                     ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
                     
                     /**
@@ -1206,6 +1207,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     try {
                         //Logica para alternar entre controlador y vista model
                         VistaCodefacIf frameControlador= UtilidadesCoreCodefac.getControladorTodoVista(frameInterface);
+                        LOG.log(Level.INFO, "Ejecutando metodo EDITAR desde la ventana " + frameInterface.getTitle()+", usuario= "+sessionCodefac.getUsuario().getNick()+", fecha= "+UtilidadesFecha.getFechaHoraHoyFormat());                        
                         if(frameControlador!=null)
                         {
                             frameControlador.editar();

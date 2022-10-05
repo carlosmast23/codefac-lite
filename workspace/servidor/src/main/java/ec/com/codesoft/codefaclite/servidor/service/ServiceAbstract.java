@@ -209,9 +209,18 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     {
         ejecutarTransaccionGenerico(new TransaccionIf() {
             @Override
-            public Object transaccionGenerica() throws ServicioCodefacException, RemoteException {
-                interfaz.transaccion();
-                return null;
+            public Object transaccionGenerica() throws ServicioCodefacException, RemoteException 
+            {
+                try
+                {
+                    interfaz.transaccion();                
+                }
+                catch(Exception e)
+                {
+                    Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, e);
+                    throw new ServicioCodefacException(e.getMessage());
+                }
+               return null;
             }
         });
     }

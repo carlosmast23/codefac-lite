@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servicios.model;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenTrabajoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
@@ -484,7 +484,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getBtnCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
+                ClienteEstablecimientoBusquedaDialogo buscarBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session);
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 Persona persona = (Persona) buscarDialogo.getResultado();

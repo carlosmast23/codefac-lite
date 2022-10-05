@@ -66,7 +66,7 @@ public class ObjetoMantenimientoControlador extends ModelControladorAbstract<Obj
     {
         try {
             setearDatosAdicionales();
-            ServiceFactory.getFactory().getObjetoMantenimientoServiceIf().grabar(objetoMantenimiento,session.getEmpresa(), session.getUsuario());
+            objetoMantenimiento=ServiceFactory.getFactory().getObjetoMantenimientoServiceIf().grabar(objetoMantenimiento,session.getEmpresa(), session.getUsuario());
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ObjetoMantenimientoControlador.class.getName()).log(Level.SEVERE, null, ex);

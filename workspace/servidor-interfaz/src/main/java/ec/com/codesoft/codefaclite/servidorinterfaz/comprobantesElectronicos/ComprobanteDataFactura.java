@@ -66,8 +66,14 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
     private Integer secuencial;
     //private List<FormaPago> formaPagos;
 
-    public ComprobanteDataFactura(Factura factura) {
-        String secuencialStr = factura.getSecuencial().toString();
+    public ComprobanteDataFactura(Factura factura) 
+    {
+        String secuencialStr=""; //Por defecto si no tiene secuencial dejo vacio
+        if(factura.getSecuencial()!=null)
+        {
+            secuencialStr = factura.getSecuencial().toString();
+        }
+        
         secuencialStr = UtilidadesTextos.llenarCarateresIzquierda(secuencialStr, 9, "0");
         secuencial = Integer.parseInt(secuencialStr);
 

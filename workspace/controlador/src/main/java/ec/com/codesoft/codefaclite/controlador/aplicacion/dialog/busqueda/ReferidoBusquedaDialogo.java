@@ -9,13 +9,18 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import java.util.Map;
 
 /**
  * TODO: Ver si unifico este dialogo con persona
  * @author Carlos
  */
-public class ReferidoBusquedaDialogo extends ClienteBusquedaDialogo{
+public class ReferidoBusquedaDialogo extends ClienteEstablecimientoBusquedaDialogo{
+
+    public ReferidoBusquedaDialogo(SessionCodefacInterface sessionCodefac) {
+        super(sessionCodefac);
+    }
 
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {

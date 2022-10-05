@@ -66,7 +66,7 @@ public class ReferidosReporteModel extends FacturaReporteModel{
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                ReferidoBusquedaDialogo busquedaDialogo = new ReferidoBusquedaDialogo();
+                ReferidoBusquedaDialogo busquedaDialogo = new ReferidoBusquedaDialogo(session);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 referido = (Persona) buscarDialogoModel.getResultado();

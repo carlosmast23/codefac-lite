@@ -527,6 +527,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public void validacionInicialFacturar(Factura factura,CarteraParametro carteraParametro,CrudEnum modo) throws ServicioCodefacException, RemoteException
     { 
+        if(modo.equals(CrudEnum.CREAR))
+        {
+            if(factura.getId()!=null || factura.getSecuencial()!=null || factura.getClaveAcceso()!=null)
+            {
+                throw new ServicioCodefacException("Error al grabar el documento, se va a generar un documento repetido ");
+            }
+        }
         
         //Solo valido los datos de clientes cuando es un DOCUMENTO diferente de proforma, por que si se puede grabar sin datos para proforma en especial para las comandas
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) && !factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))

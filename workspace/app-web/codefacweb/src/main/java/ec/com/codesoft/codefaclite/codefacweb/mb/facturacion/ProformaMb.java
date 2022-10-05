@@ -390,6 +390,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void seleccionarProforma(SelectEvent event) {
         Factura proforma = (Factura) event.getObject();
         proforma.setId(null); 
+        proforma.setSecuencial(null);
         //cargarDatosCliente(clienteOficina);
         //cargarDatosAdicionalesCliente();
         cargarDatosPantalla(proforma);

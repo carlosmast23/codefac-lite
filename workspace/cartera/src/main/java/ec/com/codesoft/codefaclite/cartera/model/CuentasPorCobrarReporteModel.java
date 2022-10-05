@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.cartera.model;
 
 import ec.com.codesoft.codefaclite.cartera.panel.CuentasPorCobarReportePanel;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CuentasPorCobrarData;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
@@ -203,13 +204,13 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
+                ClienteEstablecimientoBusquedaDialogo buscarBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(session);
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                Persona personaTemp = (Persona) buscarDialogo.getResultado();
+                PersonaEstablecimiento personaTemp = (PersonaEstablecimiento) buscarDialogo.getResultado();
                 if(personaTemp != null)
                 {
-                   persona = personaTemp;
+                   persona = personaTemp.getPersona();
                    getTxtCliente().setText(persona.getIdentificacion() + " - " + persona.getNombreSimple() );
                 }
             }
