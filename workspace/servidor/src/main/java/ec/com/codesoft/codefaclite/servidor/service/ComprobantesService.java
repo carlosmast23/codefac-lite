@@ -1656,11 +1656,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         
         //Asigar datos cuando el contribuyente es rimpe
-        if(empresa.getRimpeEmprendedoresEnum().equals(EnumSiNo.SI))
+        if(empresa.getRimpeEmprendedoresEnum()!=null && empresa.getRimpeEmprendedoresEnum().equals(EnumSiNo.SI))
         {
             infoTributaria.asignarRegimenRIMPEEmprendedor();
         }
-        else if(empresa.getRimpeNegociosPopularesEnum().equals(EnumSiNo.SI))
+        else if(empresa.getRimpeNegociosPopularesEnum()!=null && empresa.getRimpeNegociosPopularesEnum().equals(EnumSiNo.SI))
         {
             infoTributaria.asignarRegimenRIMPENegocioPopular();
         }

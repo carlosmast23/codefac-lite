@@ -523,4 +523,6 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
     
     
     
+    
+    
 }

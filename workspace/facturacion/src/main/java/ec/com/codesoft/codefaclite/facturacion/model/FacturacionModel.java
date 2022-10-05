@@ -2180,7 +2180,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {        
         if (true)         
         {
-            setearValoresDefaultFactura(CrudEnum.CREAR);
+            if(getEstadoFormularioEnum().equals(EstadoFormularioEnum.GRABAR))
+            {
+                setearValoresDefaultFactura(CrudEnum.CREAR);
+            }
+            else if (getEstadoFormularioEnum().equals(EstadoFormularioEnum.EDITAR))
+            {
+                setearValoresDefaultFactura(CrudEnum.EDITAR);
+            }       
+            
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
             {
                 if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
