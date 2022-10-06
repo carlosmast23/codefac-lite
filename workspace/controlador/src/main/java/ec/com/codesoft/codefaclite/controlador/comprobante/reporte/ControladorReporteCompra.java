@@ -232,6 +232,11 @@ public class ControladorReporteCompra {
         //List<CompraAgrupadoCategoriaData> resultado=new ArrayList<CompraAgrupadoCategoriaData>();
         //Agrupar todos los detalles segun el tipo de categoria en un map
         for (Compra compra : compras) {
+            if(compra.getSecuencial()==71581)
+            {
+                System.out.println("revisar ...");
+            }
+            
             for (CompraDetalle compraDetalle : compra.getDetalles()) {
                 CategoriaProducto categoria = compraDetalle.getProductoProveedor().getProducto().getCatalogoProducto().getCategoriaProducto();
                 List<CompraDetalle> detalles = mapAgrupadoCategoria.get(categoria);
@@ -298,9 +303,12 @@ public class ControladorReporteCompra {
         compraAgrupadoData.setFecha(compraDetalle.getCompra().getFechaFactura().toString());
         //System.out.println(compraDetalle.getIva());
         //compraAgrupadoData.setIva((compraDetalle.getIva() != null) ? compraDetalle.getIva() : BigDecimal.ZERO);
-        if(compraDetalle.getCompra().getSecuencial()==64573)
+        if(compraDetalle.getCompra().getSecuencial()==71581)
         {
             System.out.println("revisar ...");
+            System.out.println(compraDetalle.getDescripcion());
+            System.out.println(compraDetalle.getIva());
+            
         }
         compraAgrupadoData.setIva((compraDetalle.getIva() != null) ? compraDetalle.obtenerIvaCalculado() : BigDecimal.ZERO);
         

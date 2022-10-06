@@ -326,10 +326,13 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
-                    for (CompraDetalle compraDetalle : compra.getDetalles()) {
-                        if (compraDetalle.getProductoProveedor().getId() == null) {
+                    for (CompraDetalle compraDetalle : compra.getDetalles()) 
+                    {
+                        if (compraDetalle.getProductoProveedor().getId() == null) 
+                        {
                             entityManager.persist(compraDetalle.getProductoProveedor());
-                        } else {
+                        } else 
+                        {
                             entityManager.merge(compraDetalle.getProductoProveedor());
                         }
                     }
@@ -344,12 +347,38 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
 
                     entityManager.merge(compra);
                     
-                    
-                    
+                    //Eliminar detalles que fueron eliminados en la vista
+                    eliminarDetallesCompra(compra);
                     
             }
         });
     }
+    
+    private void eliminarDetallesCompra(Compra compra) throws RemoteException, ServicioCodefacException
+    {
+        List<CompraDetalle> detalles=ServiceFactory.getFactory().getCompraDetalleServiceIf().buscarPorCompra(compra);
+        List<CompraDetalle> detallesCompraActual=compra.getDetalles();
+        
+        List<CompraDetalle> detallesEliminar=new ArrayList<CompraDetalle>();
+        for (CompraDetalle detalleOriginal : detalles) 
+        {
+            //Si no encuentra el dato en la lista actual significa que fue eliminado
+            if(!detallesCompraActual.contains(detalleOriginal))
+            {
+                detallesEliminar.add(detalleOriginal);
+            }
+                
+        }
+        
+        //Eliminar los datos siguientes
+        for (CompraDetalle compraDetalle : detallesEliminar) {
+            compraDetalle=entityManager.merge(compraDetalle);
+            entityManager.remove(compraDetalle);
+        }
+        
+    }
+    
+    
     
     private List<CompraFacturaReembolso> obtenerDetallesEliminarReembolso(Compra compra) throws ServicioCodefacException, RemoteException
     {

@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -332,6 +333,32 @@ public class CompraDetalle implements Serializable {
         return getSubtotal().add(obtenerIvaCalculado()).setScale(2, RoundingMode.HALF_UP);
         //return getSubtotal().add(iva);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CompraDetalle other = (CompraDetalle) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
     
     
     

@@ -865,6 +865,7 @@ public class CompraModel extends CompraPanel{
                     getTxtProductoItem().setText(compraDetalle.getProductoProveedor().getProducto().getCodigoPersonalizado());
                     verificarExistenciadeProductoProveedor();
                     getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
+                    seleccionarComboTipoIva(compraDetalle.getPorcentajeIva());
                     getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
                     getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
@@ -1180,12 +1181,18 @@ public class CompraModel extends CompraPanel{
                         
                         getTxtProductoItem().setText(productoSeleccionado.getCodigoPersonalizado());
                         getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
+                        seleccionarComboTipoIva(productoSeleccionado.getCatalogoProducto().getIva().getTarifa());
                     } catch (RemoteException ex) {
                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+    }
+    
+    private void seleccionarComboTipoIva(Integer porcentajeIva)
+    {
+        getCmbIvaDetalle().setSelectedItem(porcentajeIva);
     }
     
     private void actualizarTotales()
@@ -1202,7 +1209,7 @@ public class CompraModel extends CompraPanel{
      */
     private void mostrarDatosTabla()
     {
-        String[] titulo={"Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Valor Unitario","Valor Total"};
+        String[] titulo={"Código","Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Valor Unitario","Valor Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         for (CompraDetalle detalle : detalles) {
@@ -1214,6 +1221,7 @@ public class CompraModel extends CompraPanel{
             }
             
             Vector<String> fila=new Vector<String>();
+            fila.add(detalle.getProductoProveedor().getProducto().getCodigoPersonalizado());
             fila.add(detalle.getCantidad()+"");
             fila.add(detalle.getDescripcion()+"");
             fila.add(loteCodigo);
