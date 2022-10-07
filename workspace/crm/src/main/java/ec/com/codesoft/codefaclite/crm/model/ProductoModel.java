@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.IvaOpcionEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
@@ -57,6 +58,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +67,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
@@ -197,7 +200,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getChkOcultarDetalleVenta().setEnabled(true);
         getChkGenerarCodigoAutomatico().setSelected(false);
         actualizarTablaEmpaques();
-        
+        cargarFotoFormulario();
         
         verificarVisibleBotonEditarPresentacion();
     }
@@ -227,6 +230,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public Producto getResult() throws ExcepcionCodefacLite {
         try {
+            
+            //UtilidadesImagenesCodefac.moverArchivo(controlador.producto.getPathFotoTmp(),session.getEmpresa());
             if(estadoFormularioEnum.equals(EstadoFormularioEnum.GRABAR))
             {
                 controlador.grabar();
@@ -235,6 +240,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             {
                 controlador.editar();
             }
+            
             return controlador.producto;
             
         } catch (ExcepcionCodefacLite ex) {
@@ -433,9 +439,28 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         return detallePresentacion;
         
     }
+    
+    private void cargarFotoFormulario()
+    {
+        ImageIcon imageIcon= UtilidadesImagenesCodefac.buscarImagenServidor(session.getEmpresa(),controlador.getProducto().getImagen());
+        getLblFoto().setIcon(imageIcon);
+    }
 
     private void listenerBotones() 
     {
+        
+        getBtnBuscarImagen().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                Path imagenPath=UtilidadesImagenesCodefac.buscarImagen();
+                if(imagenPath!=null)
+                {
+                    controlador.producto.setPathFotoTmp(imagenPath);
+                    getTxtImagenProducto().setText(imagenPath.getFileName().toString());
+                }
+            }
+        });
         
         getBtnCrearPresentacion().addActionListener(new ActionListener() {
             @Override
@@ -658,6 +683,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtPV4().setText("0");
         getTxtPV5().setText("0");
         getTxtPV6().setText("0");
+        getTxtImagenProducto().setText("");
         //getTxtStockInicial().setText("0");
     }
     
@@ -708,7 +734,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         actualizarTablaEnsamble();
         actualizarTablaEmpaques();
-         verificarVisibleBotonEditarPresentacion();
+        verificarVisibleBotonEditarPresentacion();
+        cargarFotoFormulario();
         
     }
     

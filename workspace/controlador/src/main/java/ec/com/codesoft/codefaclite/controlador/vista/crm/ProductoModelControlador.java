@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.controlador.vista.crm;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
@@ -281,8 +282,9 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {           
+            UtilidadesImagenesCodefac.moverArchivo(producto.getPathFotoTmp(),session.getEmpresa());
             setearValoresProducto(producto);
-            validar(producto);
+            validar(producto);            
             producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto,generarCodigoAutomatico);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             //DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -299,7 +301,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     public void editar() throws ExcepcionCodefacLite, RemoteException {
         try {
             
-            setearValoresProducto(producto);
+            UtilidadesImagenesCodefac.moverArchivo(producto.getPathFotoTmp(),session.getEmpresa());
+            setearValoresProducto(producto);            
             ServiceFactory.getFactory().getProductoServiceIf().editarProducto(producto);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             //DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -620,6 +623,11 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             getInterazEscritorio().setearValoresProducto(producto);
         }
         
+        if(producto.getPathFotoTmp()!=null)
+        {
+            producto.setImagen(producto.getPathFotoTmp().getFileName().toString());
+            producto.setPathFotoTmp(null);
+        }
         
         //Agregar el producto presentacion al producto      
         /*if(productoPresentacionDetalle!=null && productoPresentacionDetalle.getPresentacionProducto()!=null &&  productoPresentacionDetalle.getCantidad()!=null)

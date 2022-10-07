@@ -12,8 +12,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -168,6 +171,10 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoOriginal",fetch = FetchType.EAGER)
     private List<ProductoPresentacionDetalle> presentacionList;
+    
+    @Transient
+    private Path pathFotoTmp;
+    
     
     public Producto() {
     }
@@ -919,6 +926,15 @@ public class Producto implements Serializable, Comparable<Producto> {
         } 
         return BigDecimal.ZERO;
     }
+
+    public Path getPathFotoTmp() {
+        return pathFotoTmp;
+    }
+
+    public void setPathFotoTmp(Path pathFotoTmp) {
+        this.pathFotoTmp = pathFotoTmp;
+    }
+    
     
     public List<PresentacionProducto> obtenerPresentacionesList()
     {

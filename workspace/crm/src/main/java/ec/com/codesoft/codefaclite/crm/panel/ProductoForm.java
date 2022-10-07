@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -114,6 +115,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         lblEspacioBlanco = new javax.swing.JLabel();
         chkGenerarCodigoAutomatico = new javax.swing.JCheckBox();
         jLabel42 = new javax.swing.JLabel();
+        lblFoto = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -301,7 +303,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         jLabel7.setText("                    ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -469,6 +471,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel42, gridBagConstraints);
 
+        lblFoto.setText("                         ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        jPanel1.add(lblFoto, gridBagConstraints);
+
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         tabMenu.addTab("Info General", jPanel3);
@@ -525,7 +536,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel5.add(txtImagenProducto, gridBagConstraints);
 
         btnBuscarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        btnBuscarImagen.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 8;
@@ -1383,6 +1393,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio8;
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JLabel lblEstado123;
+    private javax.swing.JLabel lblFoto;
     private javax.swing.JPanel pnlPresentacionAdicional;
     private javax.swing.JTabbedPane tabMenu;
     private javax.swing.JTable tblDatosEnsamble;
@@ -1916,9 +1927,21 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.btnCrearPresentacion = btnCrearPresentacion;
     }
 
-     
-    
+    public JButton getBtnBuscarImagen() {
+        return btnBuscarImagen;
+    }
 
+    public void setBtnBuscarImagen(JButton btnBuscarImagen) {
+        this.btnBuscarImagen = btnBuscarImagen;
+    }
+
+    public JLabel getLblFoto() {
+        return lblFoto;
+    }
+
+    public void setLblFoto(JLabel lblFoto) {
+        this.lblFoto = lblFoto;
+    }
     
     
     
