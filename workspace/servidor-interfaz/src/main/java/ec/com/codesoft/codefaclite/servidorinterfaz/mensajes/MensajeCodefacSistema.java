@@ -36,6 +36,7 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj PROCESO_CORRECTO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"El proceso finalizo correctamente",MENSAJE_CORRECTO);
         public static final CodefacMsj PROCESO_EN_CURSO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"El proceso comenzó a ejecutarse",MENSAJE_CORRECTO);
         public static final CodefacMsj PROCESO_ESPERA = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Este proceso puede tardar unos minutos ...",MENSAJE_ADVERTENCIA);
+        public static final CodefacMsj REINICIAR_SISTEMA = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Para empezar con el proceso de actualización reinicie el sistema ...",MENSAJE_CORRECTO);
     }
     
     public static abstract class Preguntas
@@ -44,6 +45,8 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj ELIMINAR_COMPROBANTE_ELECTRONICO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"El comprobante electronico se encuentra autorizada en el SRI , \nPor favor elimine solo si tambien esta anulado en el SRI\nDesea eliminar el comprobante de todos modos?" ,MENSAJE_INCORRECTO);
         public static final CodefacMsj ELIMINAR_REGISTRO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea eliminar el registro ?" ,MENSAJE_INCORRECTO);
         public static final CodefacMsj CARGAR_DATOS = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"Esta seguro que desea cargar los registro ?" ,MENSAJE_INCORRECTO);
+        public static final CodefacMsj ACTUALIZAR_SISTEMA = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Esta opción solo debe ser utilizada con supervisión o autorización de una persona de soporte por que puede causar daños en sus datos. \n Esta seguro que desea ACTUALIZAR EL SISTEMA ?" ,MENSAJE_INCORRECTO);
+        public static final CodefacMsj CAMBIAR_MODO_SISTEMA = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Esta opción solo debe ser utilizada con supervisión o autorización de una persona de soporte por que puede causar daños en sus datos. \n Esta seguro que desea CAMBIAR DE MODO EN EL SISTEMA ?" ,MENSAJE_INCORRECTO);
     }
     
     public static abstract class ErroresComunes

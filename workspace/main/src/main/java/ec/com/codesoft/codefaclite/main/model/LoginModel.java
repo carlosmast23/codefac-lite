@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
@@ -21,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
@@ -77,6 +79,17 @@ public class LoginModel extends LoginFormDialog{
     }
 
     private void initListenerBotones() {
+        
+        getBtnActualizarSistema().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ACTUALIZAR_SISTEMA)) {
+                    ArchivoConfiguracionesCodefac.grabarConfiguracion(ArchivoConfiguracionesCodefac.CAMPO_MODO_ACTUALIZACION, ArchivoConfiguracionesCodefac.ModoActualizacionEnum.DESARROLLO.getNombre());
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.REINICIAR_SISTEMA);
+                    System.exit(0);
+                }
+            }
+        });
         
         getBtnSalir().addActionListener(new ActionListener() {
             @Override

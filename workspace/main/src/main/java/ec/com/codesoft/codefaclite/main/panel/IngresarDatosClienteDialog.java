@@ -41,6 +41,7 @@ public class IngresarDatosClienteDialog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         txtIpServidor = new javax.swing.JTextField();
         btnAceptar = new javax.swing.JButton();
+        btnActualizarSistema = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -51,13 +52,16 @@ public class IngresarDatosClienteDialog extends javax.swing.JDialog {
         jLabel2.setText("Tipo de Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbTipoCliente, gridBagConstraints);
 
         jLabel3.setText("Ip servidor:");
@@ -65,15 +69,16 @@ public class IngresarDatosClienteDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel3, gridBagConstraints);
 
         txtIpServidor.setColumns(12);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtIpServidor, gridBagConstraints);
 
         btnAceptar.setText("Aceptar");
@@ -85,9 +90,19 @@ public class IngresarDatosClienteDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnAceptar, gridBagConstraints);
+
+        btnActualizarSistema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/descarga.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnActualizarSistema, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -140,6 +155,7 @@ public class IngresarDatosClienteDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnActualizarSistema;
     private javax.swing.JComboBox<ParametrosClienteEscritorio.TipoClienteSwingEnum> cmbTipoCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -174,6 +190,15 @@ public class IngresarDatosClienteDialog extends javax.swing.JDialog {
     public void setBtnAceptar(JButton btnAceptar) {
         this.btnAceptar = btnAceptar;
     }
+
+    public JButton getBtnActualizarSistema() {
+        return btnActualizarSistema;
+    }
+
+    public void setBtnActualizarSistema(JButton btnActualizarSistema) {
+        this.btnActualizarSistema = btnActualizarSistema;
+    }
+    
     
     
     

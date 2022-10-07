@@ -5,9 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.main.panel;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -68,6 +70,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         cmbSucursal = new javax.swing.JComboBox<>();
         jButtonModoAplicativo = new javax.swing.JButton();
+        btnActualizarSistema = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -179,7 +182,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
         lblVersion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblVersion.setText("Versión: 1.2.3.4   ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 2;
@@ -188,13 +191,13 @@ public class LoginFormDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 0.1;
         panelPrincipal.add(lblVersion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         panelPrincipal.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.5;
@@ -233,7 +236,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/ecuador.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridheight = 6;
         panelPrincipal.add(jLabel9, gridBagConstraints);
@@ -265,10 +268,18 @@ public class LoginFormDialog extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         panelPrincipal.add(jButtonModoAplicativo, gridBagConstraints);
+
+        btnActualizarSistema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/descarga.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        panelPrincipal.add(btnActualizarSistema, gridBagConstraints);
 
         getContentPane().add(panelPrincipal, java.awt.BorderLayout.CENTER);
 
@@ -285,9 +296,12 @@ public class LoginFormDialog extends javax.swing.JDialog {
 
     private void jButtonModoAplicativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModoAplicativoActionPerformed
         // TODO add your handling code here:
-        Main.iniciarModoAplicativo(false);
-        JOptionPane.showMessageDialog(null, "Para completar la configuración necesita cerrar el aplicativo y volver abrir");
-        System.exit(0);
+        if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.CAMBIAR_MODO_SISTEMA))
+        {
+            Main.iniciarModoAplicativo(false);
+            JOptionPane.showMessageDialog(null, "Para completar la configuración necesita cerrar el aplicativo y volver abrir");
+            System.exit(0);        
+        }
         
     }//GEN-LAST:event_jButtonModoAplicativoActionPerformed
 
@@ -334,6 +348,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarSistema;
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<Empresa> cmbEmpresa;
@@ -418,6 +433,14 @@ public class LoginFormDialog extends javax.swing.JDialog {
 
     public JComboBox<Sucursal> getCmbSucursal() {
         return cmbSucursal;
+    }
+
+    public JButton getBtnActualizarSistema() {
+        return btnActualizarSistema;
+    }
+
+    public void setBtnActualizarSistema(JButton btnActualizarSistema) {
+        this.btnActualizarSistema = btnActualizarSistema;
     }
     
     

@@ -7,11 +7,17 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio.TipoClienteSwingEnum;
+import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
+import static ec.com.codesoft.codefaclite.main.init.Main.modoAplicativo;
 import ec.com.codesoft.codefaclite.main.panel.IngresarDatosClienteDialog;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
  *
@@ -24,6 +30,19 @@ public class IngresarDatosClienteModel extends IngresarDatosClienteDialog{
         setLocationRelativeTo(null);
         init();
         listenerBotones();
+        listenerVentana();
+    }
+    
+    private void listenerVentana()
+    {
+        WindowAdapter windowsAdapter=new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        };
+        
+        addWindowListener(windowsAdapter);
     }
     
     public IngresarDatosClienteModel(String ip,TipoClienteSwingEnum tipoClienteSwingEnum) {
@@ -68,6 +87,19 @@ public class IngresarDatosClienteModel extends IngresarDatosClienteDialog{
                 }
                 
                 dispose(); //Si todo va bien cierro el dialogo
+            }
+        });
+        
+        getBtnActualizarSistema().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ACTUALIZAR_SISTEMA))
+                {
+                    ArchivoConfiguracionesCodefac.grabarConfiguracion(ArchivoConfiguracionesCodefac.CAMPO_MODO_ACTUALIZACION,ArchivoConfiguracionesCodefac.ModoActualizacionEnum.DESARROLLO.getNombre());
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.REINICIAR_SISTEMA);                    
+                    System.exit(0);
+                }
             }
         });
     }

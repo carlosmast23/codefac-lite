@@ -181,6 +181,17 @@ public class ArchivoConfiguracionesCodefac {
             }
         }
     }
+    
+    public static void grabarConfiguracion(String propiedad,String valor)
+    {
+        try {
+            PropertiesConfiguration propiedadesIniciales = ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+            propiedadesIniciales.setProperty(propiedad, valor);
+            ArchivoConfiguracionesCodefac.getInstance().guardar();
+        } catch (IOException ex) {
+            Logger.getLogger(ArchivoConfiguracionesCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     ///                          CLASES E INTEFACES
