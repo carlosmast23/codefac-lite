@@ -5,45 +5,47 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpresaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
 import ec.com.codesoft.codefaclite.crm.panel.EmpresaForm;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
- ;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -333,7 +335,8 @@ public class EmpresaModel extends EmpresaForm
 
     @Override
     public void nuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.empresa=new Empresa();
+        cargarImagenEmpresa(empresa);
     }
 
     @Override
@@ -436,15 +439,23 @@ public class EmpresaModel extends EmpresaForm
         getTxtAdicional().setText(empresa.getAdicional());
         getjTextCodigoEmpresa().setText(empresa.getCodigo());
         getChkContribuyenteRegimenMicroempresas().setSelected(empresa.getContribuyenteRegimenMicroempresasEnum().getBool());
-        getChkRIMPEEmprendedores().setSelected(empresa.getRimpeEmprendedoresEnum().getBool());
-        getChkRIMPENegociosPopulares().setSelected(empresa.getRimpeNegociosPopularesEnum().getBool());
+        
+        getChkRIMPEEmprendedores().setSelected((empresa.getRimpeEmprendedoresEnum())!=null?empresa.getRimpeEmprendedoresEnum().getBool():false);
+        getChkRIMPENegociosPopulares().setSelected((empresa.getRimpeNegociosPopularesEnum())!=null?empresa.getRimpeNegociosPopularesEnum().getBool():false);
         
         if (empresa.getOrden() != null) {
             getTxtOrden().setValue(empresa.getOrden());
         }
-        
+        cargarImagenEmpresa(empresa);
+    }
+    
+    private void cargarImagenEmpresa(Empresa empresa)
+    {
+        ImageIcon imageIcon= UtilidadesImagenesCodefac.buscarImagenServidor(empresa, empresa.getImagenLogoPath());
+        getLblFoto().setIcon(imageIcon);
     }
 
+    
     
     
 }

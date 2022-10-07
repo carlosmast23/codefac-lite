@@ -1,8 +1,0 @@
-Validar que no se pueda reutilizar la misma licencia de multiempresa en la misma maquina
-Revisar que cuando se queda en formato de error al grabar en cliente , cuando al final se graba existe varios registro de lo mismo
-Hacer que se graben el codigo del usuario que hace la factura
-Agregar un reporte de facturas o filtro para que puedan saber la cantidad de ventas por usuario.
-Falta hacer por empresa las categorias
-Analizar que cuando tengo varias sucursales si el catalogo debe ser el mismo para todos y analizar que para otro tipo de bodegas como por ejemplo de produccion tiene que estar clasificado como otro tipo de producto
-eliminar las claves foraneas de los codigos de los productos porque no me deja crear productos repetidos
-verificar que cuando se crea una empresa nueva en el multiempresa no reconocio la variable de tipo de empresa

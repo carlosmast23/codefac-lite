@@ -1,2 +1,0 @@
-Ver como hacer el tema que me permita informar cuando el costo de los precios tiene una variacion muy grande por poder alertar para que modifique los campos
-Ver si se puede establecer precios en funcion de porcentajes para poder recalcular automaticamente en funcion del costo y la utilidad

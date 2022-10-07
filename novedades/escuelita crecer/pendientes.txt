@@ -1,3 +1,0 @@
-Revisar que un representante por algun motivo es tan mal ingresado con 171018245 ver si es un problema del sistema o es un dato migrado
-lo mismo pasa con 171018245 , 172302015 , 171014160
-sacar un respaldo de la base de datos para ver el problema

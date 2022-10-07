@@ -1,2 +1,0 @@
-agregar opcion para poder seleccionar desde que bodega deseo facturar
-crear una orden de entrega de mercaderia principalmente con el dato de la bodega

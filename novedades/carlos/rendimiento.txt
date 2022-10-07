@@ -1,1 +1,0 @@
-Cuando utilizan un left join para unir estudiantes con el dialog de personas tiene un rednimiento muy lento

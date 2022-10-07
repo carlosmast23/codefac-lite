@@ -1,8 +1,0 @@
-Con el señor de ibarra esta de eliminar manualmente el foreyKey de la identificación porque genera problema cuando elimina y quiere crear otro cliente
-
-------------------->SEÑOR DE IBARRA<-------------------
-Agregar campos para la ubicacion de donde es el cliente
-Hacer la programacion para poder tener items ocultos al momento de generar la factura electronica
-Seguir terminando de hacer el modulo de cartera
-
-

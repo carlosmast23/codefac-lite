@@ -1,2 +1,0 @@
-1.- Validar que el valor de la nota de credito no sea superior a la factura
-2.- Agregar validacion de stock producto en vista.

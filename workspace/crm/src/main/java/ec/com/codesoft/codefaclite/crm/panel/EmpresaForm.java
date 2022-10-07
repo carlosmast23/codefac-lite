@@ -169,6 +169,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         chkRIMPENegociosPopulares = new javax.swing.JCheckBox();
         jLabel17 = new javax.swing.JLabel();
         chkRIMPEEmprendedores = new javax.swing.JCheckBox();
+        lblFoto = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblCelular = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -409,6 +410,15 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         jPanelConfiguracionEmisor.add(chkRIMPEEmprendedores, gridBagConstraints);
 
+        lblFoto.setText("                        ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanelConfiguracionEmisor.add(lblFoto, gridBagConstraints);
+
         jTabbedPane1.addTab("Datos generales", jPanelConfiguracionEmisor);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -595,6 +605,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio23;
     private javax.swing.JLabel lblEspacio3;
+    private javax.swing.JLabel lblFoto;
     private javax.swing.JTextArea txtAdicional;
     private javax.swing.JTextField txtAgenteRetencionResolucion;
     private javax.swing.JTextField txtCelular;
@@ -663,19 +674,30 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         return chkRIMPEEmprendedores;
     }
 
-    public void setChkRIMPEEmprendedores(JCheckBox chkRIMPEEmprendedores) {
+    public void setChkRIMPEEmprendedores(JCheckBox chkRIMPEEmprendedores) 
+    {
         this.chkRIMPEEmprendedores = chkRIMPEEmprendedores;
     }
 
-    public JCheckBox getChkRIMPENegociosPopulares() {
+    public JCheckBox getChkRIMPENegociosPopulares() 
+    {
         return chkRIMPENegociosPopulares;
     }
 
-    public void setChkRIMPENegociosPopulares(JCheckBox chkRIMPENegociosPopulares) {
+    public void setChkRIMPENegociosPopulares(JCheckBox chkRIMPENegociosPopulares) 
+    {
         this.chkRIMPENegociosPopulares = chkRIMPENegociosPopulares;
     }
-    
-    
+
+    public JLabel getLblFoto() 
+    {
+        return lblFoto;
+    }
+
+    public void setLblFoto(JLabel lblFoto) 
+    {
+        this.lblFoto = lblFoto;
+    }
     
     
 }

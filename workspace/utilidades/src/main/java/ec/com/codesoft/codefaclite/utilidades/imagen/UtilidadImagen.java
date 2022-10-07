@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.imagen;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -18,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
+import javax.swing.ImageIcon;
+import org.imgscalr.Scalr;
 
 /**
  *
@@ -58,6 +61,13 @@ public abstract class UtilidadImagen {
         }
         return null;
     }
+    
+    public static ImageIcon castInputStreamToImageIcon(InputStream inputStream)
+    {
+        Image imageLogo = UtilidadImagen.castInputStreamToImage(inputStream);
+        ImageIcon imageIcon=new ImageIcon(imageLogo);
+        return imageIcon;
+    }
             
     public static ImageInputStream castBufferImputStream(InputStream input) {
         
@@ -82,4 +92,77 @@ public abstract class UtilidadImagen {
         return null;
     }
     
+    
+    
+    /**
+     * Metodo que me permite redimensionar una imagen
+     * @param imagenOriginal
+     * @param ancho
+     * @param alto
+     * @return
+     * @throws Exception 
+     */
+    public static BufferedImage resizeImage(BufferedImage imagenOriginal, int ancho, int alto) throws Exception 
+    {
+        return Scalr.resize(imagenOriginal, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, ancho, alto, Scalr.OP_ANTIALIAS);
+    }
+    
+    public static BufferedImage castInputStreamToBufferedImage(InputStream inputStream)
+    {
+        try {
+            BufferedImage imBuff = ImageIO.read(inputStream);
+            return imBuff;
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadImagen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static BufferedImage resizeImage(Image imagenOriginal, int ancho, int alto) 
+    {
+        try
+        {
+            BufferedImage bufferedImage=toBufferedImage(imagenOriginal);
+            return Scalr.resize(bufferedImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, ancho, alto, Scalr.OP_ANTIALIAS);
+        } 
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return  null;
+        
+    }
+    
+    public static BufferedImage resizeImage(InputStream inputStream, int ancho, int alto) 
+    {
+        try
+        {
+            BufferedImage bufferedImage=castInputStreamToBufferedImage(inputStream);
+            return Scalr.resize(bufferedImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, ancho, alto, Scalr.OP_ANTIALIAS);
+        } 
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return  null;
+        
+    }
+    
+    public static BufferedImage toBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
+    }
+
 }

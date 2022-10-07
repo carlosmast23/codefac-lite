@@ -1,4 +1,0 @@
-Funcionalidad: Retención
-Descripcion:
-En el reporte el dato de periodo fiscal esta relacion con la fecha de la compra o la fecha de la emisión de la reteneción
-Preguntar en las retenciones cuales son los codigos que se deben enviar al SRI , es decir de los que tienen 0% y preguntar cuales interviene en los ats

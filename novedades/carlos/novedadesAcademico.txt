@@ -1,1 +1,0 @@
-Agregar la funcionalidad de poder agregar mas rubros al momento de facturar para poder cobrar ese rato

@@ -1,3 +1,0 @@
-ordenar todos los modulos por apellido y nombre
-agregar alguna forma de poner descuentos por temporada en este caso pagos antes del 15 de cada mes
-agregar el curso del estudiante en datos adicionales

@@ -1,5 +1,0 @@
-se puede aplicar descuentos por producto seleccionados.
-se puede aplicar descuentos por productos todos.
-habilita o desvilita los otro precios 
-
-filtrar por categoria

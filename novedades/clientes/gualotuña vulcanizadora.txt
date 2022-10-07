@@ -1,2 +1,0 @@
-revisar porque exite un cliente mal ingresado con cedula 040079701 y 010101019 (esta clasificado como consumidor final) falta un digito y apesar de eso le dejo grabar revisar el porque 
-

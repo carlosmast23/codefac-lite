@@ -1,7 +1,0 @@
-Consultar que tipo de monedas acepta el SRI porque solo queda seteado el valor
-
-Consultar para que sirve el rise porque queda comentado en la nota de credito
-
-
-Implementar el metodo de prevalidacion en la facturacion electronica
-
