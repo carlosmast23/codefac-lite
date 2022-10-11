@@ -685,6 +685,7 @@ public class ReporteCodefac {
             switch(formatoReporte)
             {
                 case TICKET:
+                case A6:
                         nombreReporteEncabezado = "encabezadoTicket.jrxml";
                         nombreReportePiePagina = "pie_paginaTicket.jrxml";
                         break;

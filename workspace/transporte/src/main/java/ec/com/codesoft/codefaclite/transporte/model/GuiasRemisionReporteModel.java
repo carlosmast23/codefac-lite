@@ -190,7 +190,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getBtnBuscarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,true);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 Producto productoTmp = (Producto) buscarDialogoModel.getResultado();

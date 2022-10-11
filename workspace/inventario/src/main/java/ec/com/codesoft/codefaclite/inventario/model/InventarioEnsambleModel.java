@@ -185,7 +185,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         getBtnBuscarEnsamble().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,true);
                 buscarBusquedaDialogo.setTipoProductoEnum(TipoProductoEnum.EMSAMBLE);
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);

@@ -1331,7 +1331,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     private void agregarProductoSinInventario(EnumSiNo manejaInventario) {
-            ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
+            ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa(),true,false);
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
             buscarDialogoModel.setVisible(true);
             productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
@@ -1374,7 +1374,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         else if(manejaInventario.equals(EnumSiNo.NO))
         {   
-            ProductoBusquedaDialogo busqueda=new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa());
+            ProductoBusquedaDialogo busqueda=new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa(),true,false);
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busqueda);
             buscarDialogoModel.setVisible(true);
             productoSeleccionado=(Producto) buscarDialogoModel.getResultado();

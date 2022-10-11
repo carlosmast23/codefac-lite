@@ -1492,6 +1492,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             nombreReporte="proformaA5.jrxml";
             formatoHoja=FormatoHojaEnum.A5;
         }
+        else if (formatoEnum.equals(FacturaModelControlador.FormatoReporteEnum.A6)) 
+        {
+            nombreReporte = "proformaA6.jrxml";
+            formatoHoja = FormatoHojaEnum.A6;
+        }
         
         
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(proforma);
@@ -1605,6 +1610,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         A4("A4",""),
         A2("A2","comprobante_venta_ticket.jrxml"),
         A5("A5","comprobante_venta_ticket.jrxml"),
+        A6("A6","comprobante_venta_ticket.jrxml"),
         POS_80("POS 80","comprobante_venta_ticket.jrxml"),
         POS_50("POS 50","comprobante_venta_ticket_50.jrxml"),
         POS_40("POS 40","comprobante_venta_ticket_40.jrxml");

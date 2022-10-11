@@ -285,6 +285,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbReporteDefectoPedido().removeAllItems();
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A4);
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A5);
+        getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A6);
         
         //Agregar los tipos de negocios        
         UtilidadesComboBox.llenarComboBox(getCmbTipoNegocio(), TipoNegocioEnum.values());

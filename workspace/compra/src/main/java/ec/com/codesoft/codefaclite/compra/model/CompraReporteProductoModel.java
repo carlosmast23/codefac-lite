@@ -188,7 +188,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         switch(opcionReporte)
         {
             case "Producto":
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),false,true);
                 //buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 return productoBusquedaDialogo;
             //break;
@@ -228,7 +228,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
             {
                 
                 if(getCmbTipoReporte().getSelectedItem().equals("Producto")){
-                    ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+                    ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),false,true);
                     BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                     buscarDialogoModel.setVisible(true);
                     Producto productoTemp = (Producto) buscarDialogoModel.getResultado();

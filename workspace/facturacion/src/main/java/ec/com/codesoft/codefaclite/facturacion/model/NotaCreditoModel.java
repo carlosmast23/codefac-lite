@@ -295,7 +295,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
     
     private void agregarProducto() {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,false);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();

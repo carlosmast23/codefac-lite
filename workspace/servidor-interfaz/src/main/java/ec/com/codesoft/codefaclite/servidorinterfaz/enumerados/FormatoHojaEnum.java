@@ -10,7 +10,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  * @author Carlos
  */
 public enum FormatoHojaEnum {
-    
+    A6("A6"),
     A5("A5"),
     A4("A4"),
     @Deprecated

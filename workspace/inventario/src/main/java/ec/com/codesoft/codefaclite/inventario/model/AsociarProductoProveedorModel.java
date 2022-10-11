@@ -185,7 +185,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         getBtnProductoBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+                ProductoBusquedaDialogo productoDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),false,true);
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(productoDialogo);
                 buscarDialogo.setVisible(true);
                 producto = (Producto) buscarDialogo.getResultado();

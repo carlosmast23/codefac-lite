@@ -326,7 +326,7 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     }*/
 
     public void abrirDialogoBusquedaProducto() {
-        ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa());
+        ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa(),true,false);
         UtilidadesDialogo.abrirDialogoBusqueda(dialogModel);
         //abrirDialogoBusqueda(dialogModel);
     }

@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategori
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -43,8 +44,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -398,10 +401,13 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
         Cartera.TipoCarteraEnum tipoCarteraEnum = (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem();
         if (tipoCarteraEnum != null) {
             List<Cartera.CarteraCategoriaEnum> lista = Cartera.CarteraCategoriaEnum.buscarPorTipoCartera(tipoCarteraEnum);
-            getCmbDocumentoCategoriaCartera().removeAllItems();
+            
+            getCmbDocumentoCategoriaCartera().setModel(new DefaultComboBoxModel<Cartera.CarteraCategoriaEnum>(new Vector<Cartera.CarteraCategoriaEnum>(lista)));
+            //UtilidadesComboBox.llenarComboBox(getCmbDocumentoCategoriaCartera(), lista);
+            /*getCmbDocumentoCategoriaCartera().removeAllItems();
             for (Cartera.CarteraCategoriaEnum carteraDocumentoEnum : lista) {
                 getCmbDocumentoCategoriaCartera().addItem(carteraDocumentoEnum);
-            }
+            }*/
         }
     }
 

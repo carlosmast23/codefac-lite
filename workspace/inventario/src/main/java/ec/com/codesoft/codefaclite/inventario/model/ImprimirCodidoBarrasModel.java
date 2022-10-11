@@ -218,7 +218,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,true);
                 productoBusquedaDialogo.setGenerarCodigoBarrasEnum(EnumSiNo.SI); //Solo buscar los que tenga activa esta opcion
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);

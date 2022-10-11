@@ -383,7 +383,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),null,null);
         return productoBusquedaDialogo;
     }
 

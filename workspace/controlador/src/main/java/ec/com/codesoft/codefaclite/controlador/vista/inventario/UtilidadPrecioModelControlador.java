@@ -126,7 +126,7 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     
     public void listenerBuscarProducto()
     {
-        ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI, session.getEmpresa());
+        ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI, session.getEmpresa(),true,true);
         BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
         buscarDialogo.setVisible(true);
         productoFiltro = (Producto) buscarDialogo.getResultado();

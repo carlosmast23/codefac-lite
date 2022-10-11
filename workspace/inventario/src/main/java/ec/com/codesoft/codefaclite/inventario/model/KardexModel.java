@@ -253,7 +253,7 @@ public class KardexModel extends KardexPanel {
         getBtnProductoBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI,session.getEmpresa());
+                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI,session.getEmpresa(),true,true);
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 productoSeleccionado = (Producto) buscarDialogo.getResultado();

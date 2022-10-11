@@ -157,6 +157,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setOcultarDetalleVentaEnum(enumSiNo);
         
         producto.setEmpresa(session.getEmpresa());
+        producto.setDisponibleVentaEnum(EnumSiNo.getEnumByBoolean(getChkVentas().isSelected()));
+        producto.setDisponibleCompraEnum(EnumSiNo.getEnumByBoolean(getChkCompras().isSelected()));
         
 
     }
@@ -281,6 +283,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
         catProdService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
         iniciarCombosBox();
+        
+        getChkVentas().setSelected(true);
+        getChkCompras().setSelected(true);
         
         /*getBtnTemporal().addActionListener(new ActionListener() {
             @Override
@@ -546,7 +551,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getBtnBuscarProductoEnsamble().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa());
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),null,null);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 productoEnsamble = (Producto) buscarDialogoModel.getResultado();
@@ -685,6 +690,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtPV6().setText("0");
         getTxtImagenProducto().setText("");
         //getTxtStockInicial().setText("0");
+        getChkVentas().setSelected(true);
+        getChkCompras().setSelected(true);
+        
     }
     
     private void initModelTablaDatosEnsamble()
@@ -731,6 +739,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getChkTransportarGuiaRemision().setSelected(controlador.producto.getTransportarEnGuiaRemisionEnum().getBool());
         getChkOcultarDetalleVenta().setSelected(controlador.producto.getOcultarDetalleVentaEnum().getBool());
+        
+        getChkCompras().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getDisponibleCompra(),EnumSiNo.SI).getBool());
+        getChkVentas().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getDisponibleVenta(),EnumSiNo.SI).getBool());
         
         actualizarTablaEnsamble();
         actualizarTablaEmpaques();

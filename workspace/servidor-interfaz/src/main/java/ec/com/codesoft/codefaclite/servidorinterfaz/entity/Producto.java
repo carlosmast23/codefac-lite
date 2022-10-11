@@ -160,6 +160,12 @@ public class Producto implements Serializable, Comparable<Producto> {
     @Column(name = "FECHA_ULTIMA_ACTUALIZACION_PRECIO") 
     private Date fechaUltimaActualizacionPrecio;
     
+    @Column(name = "DISPONIBLE_VENTA") 
+    private String disponibleVenta;
+    
+    @Column(name = "DISPONIBLE_COMPRA") 
+    private String disponibleCompra;
+    
     /*@JoinColumn(name = "PRESENTACION_ID")
     private PresentacionProducto presentacion;*/
 
@@ -175,7 +181,7 @@ public class Producto implements Serializable, Comparable<Producto> {
     @Transient
     private Path pathFotoTmp;
     
-    
+        
     public Producto() {
     }
 
@@ -705,8 +711,39 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.fechaUltimaActualizacionPrecio = fechaUltimaActualizacionPrecio;
     }
 
+    public String getDisponibleVenta() {
+        return disponibleVenta;
+    }
 
-    
+    public void setDisponibleVenta(String disponibleVenta) {
+        this.disponibleVenta = disponibleVenta;
+    }
+
+    public String getDisponibleCompra() {
+        return disponibleCompra;
+    }
+
+    public void setDisponibleCompra(String disponibleCompra) {
+        this.disponibleCompra = disponibleCompra;
+    }
+
+    public EnumSiNo getDisponibleVentaEnum() {
+        return EnumSiNo.getEnumByLetra(disponibleVenta);
+    }
+
+    public void setDisponibleVentaEnum(EnumSiNo disponibleVentaEnum) {
+        this.disponibleVenta = disponibleVentaEnum.getLetra();
+    }
+
+    public EnumSiNo getDisponibleCompraEnum() {
+        return EnumSiNo.getEnumByLetra(disponibleCompra);
+    }
+
+    public void setDisponibleCompraEnum(EnumSiNo disponibleCompraEnum) {
+        this.disponibleCompra = disponibleCompraEnum.getLetra();
+    }
+
+     
     
 
     /**

@@ -136,7 +136,7 @@ public class LoteControlador extends ModelControladorAbstract<LoteControlador.IC
     }
     
     public void listenerBotonBuscarProducto() {
-        ProductoBusquedaDialogo busqueda = new ProductoBusquedaDialogo(EnumSiNo.SI, session.getEmpresa());
+        ProductoBusquedaDialogo busqueda = new ProductoBusquedaDialogo(EnumSiNo.SI, session.getEmpresa(),true,true);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busqueda);
         buscarDialogoModel.setVisible(true);
         if (buscarDialogoModel.getResultado() != null) {

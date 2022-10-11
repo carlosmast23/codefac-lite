@@ -52,6 +52,9 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     
     private Integer numeroDecimales=2;
     
+    private Boolean productosVenta;
+    private Boolean productosCompra;
+    
     private static final int INDICE_FILTRO_MARCA=97;
     
     /**
@@ -60,19 +63,23 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     //@Deprecated
     //private Boolean buscarFiltroMarca=true;
 
-    public ProductoBusquedaDialogo(Empresa empresa) 
+    public ProductoBusquedaDialogo(Empresa empresa,Boolean productosVenta,Boolean productosCompra) 
     {
         this.generarCodigoBarrasEnum = null; //Le pongo en null para que filtre todo
         this.empresa=empresa;
         this.isManejoInvetario=null;
-        
+        this.productosCompra=productosCompra;
+        this.productosVenta=productosVenta;
         
         
     }
     
-    public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa) {
+    public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa,Boolean productosVenta,Boolean productosCompra) 
+    {
         this.isManejoInvetario = isManejoInvetario;
         this.empresa = empresa;
+        this.productosCompra=productosCompra;
+        this.productosVenta=productosVenta;
     }
 
     @Override
@@ -156,6 +163,23 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             whereManejaInventario=" and u.manejarInventario=?98 ";
         }
         
+        String whereProductoVisible="";
+        if(productosCompra!=null && productosVenta!=null)
+        {
+            if(productosCompra && productosVenta)
+            {
+                whereProductoVisible=" AND ( u.disponibleVenta=?95 OR u.disponibleCompra=?94 ) ";
+            }
+            else if(productosCompra)
+            {
+                whereProductoVisible=" AND u.disponibleCompra=?94 ";
+            }
+            else if(productosVenta)
+            {
+                whereProductoVisible=" AND u.disponibleVenta=?95 ";
+            }
+        }
+        
         
         String queryFiltroEmpresa=" and u.empresa=?4";
         Boolean datosCompartidosEmpresas=false;
@@ -179,7 +203,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             filtroMarca=" AND ( u.marcaProducto=?"+INDICE_FILTRO_MARCA+" ) ";
         }
                 
-        String queryString = "SELECT u FROM Producto u WHERE 1=1 "+filtroMarca+queryFiltroEmpresa+" and (u.estado=?1) "+queryExtra+whereManejaInventario;        
+        String queryString = "SELECT u FROM Producto u WHERE 1=1 "+filtroMarca+queryFiltroEmpresa+" and (u.estado=?1) "+queryExtra+whereManejaInventario+whereProductoVisible;        
         
         if (generarCodigoBarrasEnum != null) {
             queryString+=" and  u.generarCodigoBarras=?3 ";
@@ -217,6 +241,24 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         {
              queryDialog.agregarParametro(INDICE_FILTRO_MARCA,mapFiltro.get(INDICE_FILTRO_MARCA));
         }
+        
+        if(productosCompra!=null && productosVenta!=null)
+        {
+            if(productosCompra && productosVenta)
+            {
+                queryDialog.agregarParametro(95,EnumSiNo.getEnumByBoolean(productosVenta).getLetra());
+                queryDialog.agregarParametro(94,EnumSiNo.getEnumByBoolean(productosCompra).getLetra());
+            }
+            else if(productosCompra)
+            {
+                queryDialog.agregarParametro(94,EnumSiNo.getEnumByBoolean(productosCompra).getLetra());
+            }
+            else if(productosVenta)
+            {
+                queryDialog.agregarParametro(95,EnumSiNo.getEnumByBoolean(productosVenta).getLetra());
+            }
+        }
+        
         
         return queryDialog;
     }

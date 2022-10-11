@@ -45,6 +45,16 @@ public enum EnumSiNo implements ParametroUtilidades.ComparadorInterface<EnumSiNo
         return nombre;
     }
     
+    public static EnumSiNo getEnumByLetra(String letra,EnumSiNo defaultNull)
+    {
+        EnumSiNo enumSiNo=getEnumByLetra(letra);
+        if(enumSiNo==null)
+        {
+            return defaultNull;
+        }
+        return enumSiNo;
+    }
+    
     public static EnumSiNo getEnumByLetra(String letra)
     {
         //Si la letra es nulo no hace nadasss
