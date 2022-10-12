@@ -268,14 +268,16 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             return false;
     }
     
-      public Long getSecuencialProforma(Empresa empresa) {
+      public Long getSecuencialProforma(Empresa empresa,DocumentoEnum documentoEnum) 
+      {
         try {
             //Factura f;
             //f.getEmpresa();
             String queryString="SELECT MAX(CAST (F.SECUENCIAL AS BIGINT)) FROM FACTURA F WHERE F.EMPRESA_ID=?2 AND F.CODIGO_DOCUMENTO=?1"; //TODO: Por el momento dejo una consulta nativa porque tengo un problema al evaluar el secuencial que en la base de datos esta como string pero esta mapeado como entero y al hacer casting en jpql el compilador se confunde
             //String queryString = "SELECT max( CAST(u.secuencial CHAR(64))  ) FROM Factura u WHERE  u.codigoDocumento=?1";
             Query query = getEntityManager().createNativeQuery(queryString);
-            query.setParameter(1, DocumentoEnum.PROFORMA.getCodigo());
+            //query.setParameter(1, DocumentoEnum.PROFORMA.getCodigo());
+            query.setParameter(1, documentoEnum.getCodigo());
             query.setParameter(2,empresa.getId());
             System.out.println("QueryStringNative:"+queryString);
             

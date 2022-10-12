@@ -55,7 +55,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public List<Factura> obtenerFacturasActivas() throws java.rmi.RemoteException;
     //public String getPreimpresoSiguiente() throws java.rmi.RemoteException;
     public void eliminarFactura(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
-    public Long obtenerSecuencialProformas(Empresa empresa) throws RemoteException;
+    public Long obtenerSecuencialProformas(Empresa empresa,DocumentoEnum documentoEnum) throws RemoteException;
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
     public Factura grabarComanda(Factura proforma) throws RemoteException,ServicioCodefacException;
     public void eliminarProforma(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
@@ -78,5 +78,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor) throws RemoteException,ServicioCodefacException  ;
     
     public BigDecimal obtenerFacturasReporteTotalVenta(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) throws java.rmi.RemoteException;
+    
+    public Long obtenerSecuencialComanda(Empresa empresa) throws RemoteException;
     
 }

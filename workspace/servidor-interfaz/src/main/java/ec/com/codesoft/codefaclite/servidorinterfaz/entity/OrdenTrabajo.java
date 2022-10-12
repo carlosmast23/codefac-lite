@@ -62,6 +62,9 @@ public class OrdenTrabajo implements Serializable
     @ManyToOne    
     private Persona cliente;
     
+    @JoinColumn(name = "USUARIO_ID")
+    protected Usuario usuario;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordenTrabajo",fetch = FetchType.EAGER)
     private List<OrdenTrabajoDetalle> detalles;
 
@@ -136,6 +139,15 @@ public class OrdenTrabajo implements Serializable
     public void setObjetoMantenimiento(ObjetoMantenimiento objetoMantenimiento) {
         this.objetoMantenimiento = objetoMantenimiento;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
     
     
 

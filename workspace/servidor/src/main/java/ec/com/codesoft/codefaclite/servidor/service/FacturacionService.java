@@ -174,7 +174,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //Agregado vendedor de forma automatica si el usuario tiene relacionado un empleado con departamento de ventas
         asignarVendedorProforma(proforma);
 
-        proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa()).intValue());
+        proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa(),proforma.getCodigoDocumentoEnum()).intValue());
         proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
 
         //proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
@@ -1253,9 +1253,16 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     @Override
-    public Long obtenerSecuencialProformas(Empresa empresa) throws RemoteException
+    public Long obtenerSecuencialProformas(Empresa empresa,DocumentoEnum documentoEnum) throws RemoteException
     {
-        Long secuencial=getFacade().getSecuencialProforma(empresa);
+        Long secuencial=getFacade().getSecuencialProforma(empresa,documentoEnum);
+        return (secuencial!=null)?(secuencial+1):1; //Si no existe ningun valor por defecto retorna 1
+    }
+    
+    @Override
+    public Long obtenerSecuencialComanda(Empresa empresa) throws RemoteException
+    {
+        Long secuencial=getFacade().getSecuencialProforma(empresa,DocumentoEnum.COMANDA);
         return (secuencial!=null)?(secuencial+1):1; //Si no existe ningun valor por defecto retorna 1
     }
     

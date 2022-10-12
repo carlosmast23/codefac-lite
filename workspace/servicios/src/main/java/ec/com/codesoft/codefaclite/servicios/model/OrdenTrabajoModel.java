@@ -145,20 +145,25 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
     @Override
     public void imprimir() {
+        imprimirReporte(this.ordenTrabajo);
+    }
+    
+    private void imprimirReporte(OrdenTrabajo ordenTrabajo)
+    {
         Map parametros =  new HashMap();
         List<OrdenTrabajoDataReporte> dataReportes = new ArrayList<>();
-        if(this.ordenTrabajo.getDetalles() != null)
+        if(ordenTrabajo.getDetalles() != null)
         {
-            parametros.put("codigo",this.ordenTrabajo.getId().toString());
-            parametros.put("cliente", this.ordenTrabajo.getCliente().getNombresCompletos());
-            parametros.put("descripcion", this.ordenTrabajo.getDescripcion());
+            parametros.put("codigo",ordenTrabajo.getId().toString());
+            parametros.put("cliente", ordenTrabajo.getCliente().getNombresCompletos());
+            parametros.put("descripcion", ordenTrabajo.getDescripcion());
             //GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
             parametros.put("estado",(ordenTrabajo.getEstadoEnum()!=null)?ordenTrabajo.getEstadoEnum().getNombre():"Sin estado");
-            parametros.put("fechaIngreso", ""+ this.ordenTrabajo.getFechaIngreso());
-            parametros.put("direccion", ""+ this.ordenTrabajo.getCliente().getEstablecimientos().get(0).getDireccion());
-            parametros.put("telefonos", ""+ this.ordenTrabajo.getCliente().getEstablecimientos().get(0).getTelefonoCelular());
-            parametros.put("cedula", ""+ this.ordenTrabajo.getCliente().getIdentificacion());
-            parametros.put("correo",(this.ordenTrabajo.getCliente().getCorreoElectronico()!=null)?this.ordenTrabajo.getCliente().getCorreoElectronico():"");
+            parametros.put("fechaIngreso", ""+ ordenTrabajo.getFechaIngreso());
+            parametros.put("direccion", ""+ ordenTrabajo.getCliente().getEstablecimientos().get(0).getDireccion());
+            parametros.put("telefonos", ""+ ordenTrabajo.getCliente().getEstablecimientos().get(0).getTelefonoCelular());
+            parametros.put("cedula", ""+ ordenTrabajo.getCliente().getIdentificacion());
+            parametros.put("correo",(ordenTrabajo.getCliente().getCorreoElectronico()!=null)?ordenTrabajo.getCliente().getCorreoElectronico():"");
             
             ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
             parametros.put("observacionOrdenTrabajo",(parametroCodefac!=null)?parametroCodefac.getValor():"");
@@ -169,11 +174,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             
             if(this.ordenTrabajo.getObjetoMantenimiento()!=null)
             {
-                parametros.put("codigo_objeto",this.ordenTrabajo.getObjetoMantenimiento().getCodigo());
-                parametros.put("nombre_objeto",this.ordenTrabajo.getObjetoMantenimiento().getNombre());
+                parametros.put("codigo_objeto",ordenTrabajo.getObjetoMantenimiento().getCodigo());
+                parametros.put("nombre_objeto",ordenTrabajo.getObjetoMantenimiento().getNombre());
             }
             
-            for(OrdenTrabajoDetalle otd : this.ordenTrabajo.getDetalles())
+            for(OrdenTrabajoDetalle otd : ordenTrabajo.getDetalles())
             {
                 OrdenTrabajoDataReporte dataReporte = new OrdenTrabajoDataReporte();
                 if(otd.getDepartamento()!=null){
@@ -629,6 +634,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             
             ObjetoMantenimiento objetoMantenimientoTmp= (ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
             this.ordenTrabajo.setObjetoMantenimiento(objetoMantenimientoTmp);
+            this.ordenTrabajo.setUsuario(session.getUsuario());
             //this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
     }
     
@@ -740,6 +746,23 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     }
 
     private void agregarListener() {
+        
+        getBtnBuscarUltimoMantenimiento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    OrdenTrabajo ultimaOT=ServiceFactory.getFactory().getOrdenTrabajoServiceIf().consultarUltimaOTporObjectoMantenimiento(ordenTrabajo.getObjetoMantenimiento());
+                    if(ultimaOT!=null)
+                    {
+                        imprimirReporte(ultimaOT);
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
         getBtnAgregarObjecto().addActionListener(new ActionListener() {
             @Override

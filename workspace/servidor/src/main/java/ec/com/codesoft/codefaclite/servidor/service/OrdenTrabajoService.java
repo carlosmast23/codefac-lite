@@ -275,4 +275,9 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
             entityManager.merge(ordenTrabajo);
         }
     }
+    
+    public OrdenTrabajo consultarUltimaOTporObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
+    { 
+        return getFacade().consultarUltimaOTporObjectoMantenimientoFacade(objetoMantenimiento);
+    }
 }

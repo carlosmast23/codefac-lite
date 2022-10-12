@@ -7,8 +7,11 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
@@ -82,6 +85,28 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         }
         
         return query.getResultList();
+    }
+    
+    public OrdenTrabajo consultarUltimaOTporObjectoMantenimientoFacade(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
+    {
+        //OrdenTrabajo ot;
+        //ot.getFechaIngreso();
+        //ot.getEstado();
+        //ot.getObjetoMantenimiento()
+        String queryStr="SELECT u FROM OrdenTrabajo u WHERE u.objetoMantenimiento = ?1 AND u.estado<> ?2 ORDER BY u.fechaIngreso desc ";
+        Query query = getEntityManager().createQuery(queryStr);
+        
+        query.setParameter(1, objetoMantenimiento);
+        query.setParameter(2, OrdenTrabajo.EstadoEnum.ELIMINADO.getEstado());
+        
+        query.setMaxResults(1);
+        
+        List<OrdenTrabajo> resultadoList= query.getResultList();
+        if(resultadoList.size()>0)
+        {
+            return resultadoList.get(0);
+        }
+        return null;
     }
     
 }

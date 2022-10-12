@@ -16,6 +16,7 @@ public class OrdenTrabajoData {
     private String fechaIngreso;
     private String estado;
     private String detalleStr;
+    private String empleado;
 
     public OrdenTrabajoData() {
     }
@@ -66,6 +67,14 @@ public class OrdenTrabajoData {
 
     public void setDetalleStr(String detalleStr) {
         this.detalleStr = detalleStr;
+    }
+
+    public String getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(String empleado) {
+        this.empleado = empleado;
     }
     
     

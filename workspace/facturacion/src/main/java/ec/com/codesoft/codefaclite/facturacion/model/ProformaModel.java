@@ -5,52 +5,26 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
-import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
-import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
-import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.InformacionAdicionalData;
-import ec.com.codesoft.codefaclite.facturacion.reportdata.ProformaDetalleData;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
-import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
-import java.io.IOException;
-import java.io.InputStream;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -58,10 +32,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpr
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
-import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
-import java.util.Vector;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -108,7 +80,7 @@ public class ProformaModel extends FacturacionModel{
     public void cargarSecuencial() {
         try {
             //Obtener los secuenciales para las proformas
-            Long secuencial = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerSecuencialProformas(session.getEmpresa());
+            Long secuencial = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerSecuencialProformas(session.getEmpresa(),DocumentoEnum.PROFORMA);
             getLblSecuencial().setText(secuencial.toString());
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
