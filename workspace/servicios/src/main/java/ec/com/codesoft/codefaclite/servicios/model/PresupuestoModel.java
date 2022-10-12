@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenT
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -50,6 +51,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -312,6 +314,14 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         parametros.put("fecha", presupuesto.getFechaPresupuesto().toString());
         parametros.put("correo", (presupuesto.getPersona().getCorreoElectronico()!=null)?presupuesto.getPersona().getCorreoElectronico():"");
         parametros.put("codigo", presupuesto.getId().toString());
+        
+        String objetoMantenimiento="";
+        if(presupuesto.obtenerObjectoMantenimiento()!=null)
+        {
+            objetoMantenimiento=presupuesto.toString();
+        }
+        
+        parametros.put("objectoMantenimiento", objetoMantenimiento);
         
         //Datos de la orden de trabajo
         parametros.put("ordenTrabajo", presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getId().toString());
@@ -644,13 +654,23 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 DialogoCodefac.mensaje(new CodefacMsj("No existe un tipo de Bodega de Venta Configurado",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             }
             
-            ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI, session.getEmpresa(), bodegaVenta,true);
-            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo);
+            //ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI, session.getEmpresa(), bodegaVenta,true);
+            TallerMecanicoInventarioBusquedaDialogo productoInventarioBusquedaDialogo=new TallerMecanicoInventarioBusquedaDialogo(EnumSiNo.SI, session.getEmpresa(), bodegaVenta);
+            
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);
             buscarDialogoModel.setVisible(true);
             Kardex kardex = (Kardex) buscarDialogoModel.getResultado();
             producto=kardex.getProducto();
             bodega=kardex.getBodega();
-            getTxtPrecioCompra().setText(kardex.getCostoPromedio()+"");
+            if(getChkInventarioProveedor().isSelected())
+            {
+                getTxtPrecioCompra().setText(producto.getValorUnitario()+"");
+            }
+            else
+            {
+                getTxtPrecioCompra().setText(kardex.getCostoPromedio()+"");
+            }
+            
             cargarDatosDetallePantalla(producto);
             //kardexSeleccionado = kardex;
             //productoSeleccionado = kardexSeleccionado.getProducto();
@@ -740,11 +760,21 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             {
                 try {
                     persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(session.getEmpresa().getIdentificacion(),session.getEmpresa());
+                    
+                    //Si no existe creado el dato le creo un proveedor con la misma identificación
+                    if(persona==null)
+                    {
+                        persona=ServiceFactory.getFactory().getPersonaServiceIf().crearProveedorDesdeEmpresa(session.getEmpresa());
+                    }
+                    
                     if(persona != null)
                     {
                         getTxtProveedorDetalle().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
                     }
+                    
                 } catch (RemoteException ex) {
+                    Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
@@ -959,6 +989,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     return;
                 }
                 
+                presupuestoDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(getChkReserva().isSelected()));
                 presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2, BigDecimal.ROUND_HALF_UP));                
                 presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2, BigDecimal.ROUND_HALF_UP));
                 presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2, BigDecimal.ROUND_HALF_UP));

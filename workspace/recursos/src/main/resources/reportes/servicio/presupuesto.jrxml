@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="1.3286707500000088"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="192"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -40,6 +40,7 @@
 	<parameter name="valorProveedores" class="java.lang.String"/>
 	<parameter name="produccionInterna" class="java.lang.String"/>
 	<parameter name="utilidad" class="java.lang.String"/>
+	<parameter name="objectoMantenimiento" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -241,6 +242,17 @@
 				</textElement>
 				<text><![CDATA[Detalle de Compras y Gastos]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="276" y="73" width="51" height="15" uuid="d04a52c6-7bbb-4b3f-9912-ec61d1af7105"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Objecto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="327" y="73" width="181" height="15" uuid="7fbe0e05-5960-4763-856c-d6f1f07f9061"/>
+				<textFieldExpression><![CDATA[$P{objectoMantenimiento}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

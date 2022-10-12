@@ -46,4 +46,6 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     
     public Persona grabarModoForzado(Persona p,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException;
     
+    public Persona crearProveedorDesdeEmpresa(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException;
+    
 }

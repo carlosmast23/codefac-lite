@@ -261,7 +261,20 @@ public class Presupuesto implements Serializable
         this.catalogoProducto = catalogoProducto;
     }
     
-    
+    public ObjetoMantenimiento obtenerObjectoMantenimiento()
+    {
+        if(this.getOrdenTrabajoDetalle()!=null)
+        {
+            if(this.getOrdenTrabajoDetalle().getOrdenTrabajo()!=null)
+            {
+                if(this.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento()!=null)
+                {
+                    return this.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
+                }
+            }
+        }
+        return null;
+    }
     
     
     

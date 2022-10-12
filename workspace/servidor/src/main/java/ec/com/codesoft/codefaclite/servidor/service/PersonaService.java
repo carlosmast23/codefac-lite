@@ -298,6 +298,26 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         }
         return null;
     }
+    
+    public Persona crearProveedorDesdeEmpresa(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
+    {        
+        return (Persona) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
+        {
+            @Override
+            public Object transaccion() throws ServicioCodefacException, RemoteException {
+                Persona proveedor=crearPlantillaPersona(
+                empresa, 
+                empresa.getIdentificacion(), 
+                TipoIdentificacionEnum.RUC, 
+                empresa.getRazonSocial(), 
+                "", 
+                OperadorNegocioEnum.PROVEEDOR);        
+                entityManager.persist(proveedor);
+                return proveedor;
+            }
+        });
+        
+    }
 
     //TODO: Ver si este metodo se mueve a la propia clase de PERSONA
     public Persona crearPlantillaPersona(Empresa empresa, String identificacion, TipoIdentificacionEnum tipoIdentificacionEnum, String razonSocial, String direccion, OperadorNegocioEnum operadorNegocioEnum) throws ServicioCodefacException, java.rmi.RemoteException {

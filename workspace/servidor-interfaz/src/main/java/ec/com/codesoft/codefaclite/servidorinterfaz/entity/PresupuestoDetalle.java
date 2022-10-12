@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -49,6 +50,9 @@ public class PresupuestoDetalle implements Serializable
     
     @Column(name = "ESTADO")
     private String estado;
+    
+    @Column(name = "RESERVADO")
+    private String reservado;
     
     /**
      * Variable usada para agrupar detalles que va a permanecer a una misma orden de compra
@@ -179,6 +183,25 @@ public class PresupuestoDetalle implements Serializable
     public void setBodega(Bodega bodega) {
         this.bodega = bodega;
     }
+
+    public String getReservado() {
+        return reservado;
+    }
+
+    public void setReservado(String reservado) {
+        this.reservado = reservado;
+    }
+    
+    public EnumSiNo getReservadoEnum() 
+    {
+        return EnumSiNo.getEnumByLetra(reservado);
+    }
+
+    public void setReservadoEnum(EnumSiNo reservadoEnum) 
+    {
+        this.reservado = reservadoEnum.getLetra();
+    }
+
     
     
     /**
