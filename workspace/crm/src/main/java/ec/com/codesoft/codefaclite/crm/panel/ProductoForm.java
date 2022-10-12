@@ -938,7 +938,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel10.add(lblEstado123, gridBagConstraints);
 
-        btnCrearPresentacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/mas-ico.png"))); // NOI18N
+        btnCrearPresentacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
+        btnCrearPresentacion.setText("Crear");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;

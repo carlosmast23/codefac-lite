@@ -367,6 +367,10 @@ public class Main {
             //ArchivoConfiguracionesCodefac.getInstance().guardar();
             grabarVersionNueva();
         }
+        
+        //Siempre grabar la última versión en la base de datos para no perder ese dato
+        //TODO: Organizar mejor por que se esta actalizando en 3 sitios anteriores
+        grabarVersionNueva();
         LOG.log(Level.INFO," Terminando verificarActualizacionBaseDatosVersion");
         
     }

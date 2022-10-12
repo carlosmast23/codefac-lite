@@ -1074,8 +1074,9 @@
             <Component class="javax.swing.JButton" name="btnCrearPresentacion">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/img/iconos/pequenos/mas-ico.png"/>
+                  <Image iconType="3" name="/img/iconos/FacturaCeleste.png"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="Crear"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
