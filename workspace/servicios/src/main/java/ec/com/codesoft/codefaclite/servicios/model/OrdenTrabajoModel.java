@@ -172,7 +172,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             
             parametros.put("empleado",(session.getUsuario().getEmpleado()!=null)?session.getUsuario().getEmpleado().getNombresCompletos():"");
             
-            if(this.ordenTrabajo.getObjetoMantenimiento()!=null)
+            if(ordenTrabajo.getObjetoMantenimiento()!=null)
             {
                 parametros.put("codigo_objeto",ordenTrabajo.getObjetoMantenimiento().getCodigo());
                 parametros.put("nombre_objeto",ordenTrabajo.getObjetoMantenimiento().getNombre());
@@ -615,6 +615,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getTxtDescripcion().setText("");
         getLblNombreLegal().setText("");
         getLblRazonSocial().setText("");
+        
+        getCmbObjetoMantenimiento().removeAllItems();
     }
     
     public void limpiarCamposDetalles()
@@ -751,7 +753,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    OrdenTrabajo ultimaOT=ServiceFactory.getFactory().getOrdenTrabajoServiceIf().consultarUltimaOTporObjectoMantenimiento(ordenTrabajo.getObjetoMantenimiento());
+                    ObjetoMantenimiento objetoMantenimiento=(ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
+                    OrdenTrabajo ultimaOT=ServiceFactory.getFactory().getOrdenTrabajoServiceIf().consultarUltimaOTporObjectoMantenimiento(objetoMantenimiento);
+                    
                     if(ultimaOT!=null)
                     {
                         imprimirReporte(ultimaOT);

@@ -254,6 +254,16 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         this.cmbTipo = cmbTipo;
     }
 
+    @MayusculaAnotacion
+    @TextFieldBinding(value = "controlador.objetoMantenimiento.codigo")
+    public JTextField getTxtCodigo() {
+        return txtCodigo;
+    }
+
+    public void setTxtCodigo(JTextField txtCodigo) {
+        this.txtCodigo = txtCodigo;
+    }
+
     
     
     

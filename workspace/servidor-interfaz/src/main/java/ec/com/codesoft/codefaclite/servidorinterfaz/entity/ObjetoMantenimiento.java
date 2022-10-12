@@ -140,7 +140,7 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
 
     @Override
     public String toString() {
-        return nombre;
+        return "["+codigo+"] "+ nombre;
     }
 
     
