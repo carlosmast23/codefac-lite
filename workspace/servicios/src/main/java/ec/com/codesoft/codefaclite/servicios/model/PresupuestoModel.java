@@ -415,6 +415,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getCmbDetallesOrdenTrabajo().removeAllItems();
         this.getTxtCodigo().setText("");
         this.getTxtDescripcion().setText("");
+        this.getLblObjetoMantenimiento().setText("");
         initDatosTabla();
     }
 
@@ -423,7 +424,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     }
 
     @Override
-    public String getURLAyuda() {
+    public String getURLAyuda() 
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -518,6 +520,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 {
                     presupuesto.setPersona(ordenTrabajo.getCliente());
                     getTxtCliente().setText(ordenTrabajo.getCliente().getIdentificacion()+" - "+ordenTrabajo.getCliente().getRazonSocial());
+                    getLblObjetoMantenimiento().setText((ordenTrabajo.getObjetoMantenimiento()!=null)?ordenTrabajo.getObjetoMantenimiento().toString():"");
                     cargarDetallesOrdenTrabajo(ordenTrabajo);
                 }
                 

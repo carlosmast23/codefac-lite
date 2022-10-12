@@ -52,7 +52,7 @@ public class PresentacionProductoControlador extends ModelControladorAbstract<Pr
     {
         try {
             setearDatosAdicionales();
-            ServiceFactory.getFactory().getPresentacionProductoServiceIf().grabar(presentacion);
+            presentacion= ServiceFactory.getFactory().getPresentacionProductoServiceIf().grabar(presentacion);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(PresentacionProductoControlador.class.getName()).log(Level.SEVERE, null, ex);
