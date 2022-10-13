@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.nio.file.Path;
@@ -36,6 +37,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.swing.ImageIcon;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -743,7 +745,12 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.disponibleCompra = disponibleCompraEnum.getLetra();
     }
 
-     
+    public InputStream obtenerImagenProducto()
+    {
+        //Utilidadesim
+        //ImageIcon imageIcon= UtilidadesImagenesCodefac.buscarImagenServidor(session.getEmpresa(),controlador.getProducto().getImagen());
+        return null;
+    }
     
 
     /**

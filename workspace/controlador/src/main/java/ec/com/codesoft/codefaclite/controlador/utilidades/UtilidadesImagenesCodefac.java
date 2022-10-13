@@ -83,40 +83,44 @@ public abstract class UtilidadesImagenesCodefac {
         return null;
     }
     
-    public static ImageIcon buscarImagenServidor(Empresa empresa,String nombreArchivo)
+    public static InputStream buscarImagenServidorInputStream(Empresa empresa,String nombreArchivo)
     {
-            RemoteInputStream risImagen =null;
-            if(!UtilidadesTextos.verificarNullOVacio(nombreArchivo))
-            {
+        RemoteInputStream risImagen = null;
+        if (!UtilidadesTextos.verificarNullOVacio(nombreArchivo)) {
             try {
                 RecursosServiceIf service = ServiceFactory.getFactory().getRecursosServiceIf();
                 byte[] imagenSerializada = service.obtenerRecurso(empresa, DirectorioCodefac.IMAGENES, nombreArchivo);
-                risImagen = (RemoteInputStream) UtilidadesRmi.deserializar(imagenSerializada);                
+                risImagen = (RemoteInputStream) UtilidadesRmi.deserializar(imagenSerializada);
             } catch (IOException ex) {
                 Logger.getLogger(UtilidadesImagenesCodefac.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(UtilidadesImagenesCodefac.class.getName()).log(Level.SEVERE, null, ex);
             }
-            }
-            //ImageIcon imageIcon=null;
-            InputStream inputStream =null;
-            if (risImagen != null) {
+        }
+        //ImageIcon imageIcon=null;
+        InputStream inputStream = null;
+        if (risImagen != null) {
             try {
                 inputStream = RemoteInputStreamClient.wrap(risImagen);
                 //imageIcon=UtilidadImagen.castInputStreamToImageIcon(inputStream);                
             } catch (IOException ex) {
                 Logger.getLogger(UtilidadesImagenesCodefac.class.getName()).log(Level.SEVERE, null, ex);
             }
-            }
-            else
-            {
-                inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
-                //imageIcon=UtilidadImagen.castInputStreamToImageIcon(inputStream);
-            }
-            
-            BufferedImage imagenTmp= UtilidadImagen.resizeImage(inputStream, 200, 200);
-            ImageIcon imageIcon=new ImageIcon(imagenTmp);
-            return imageIcon;
+        } else {
+            inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
+            //imageIcon=UtilidadImagen.castInputStreamToImageIcon(inputStream);
+        }
+
+        return inputStream;
+    }
+    
+    public static ImageIcon buscarImagenServidor(Empresa empresa,String nombreArchivo)
+    {
+        
+        InputStream inputStream=buscarImagenServidorInputStream(empresa, nombreArchivo);
+        BufferedImage imagenTmp= UtilidadImagen.resizeImage(inputStream, 200, 200);
+        ImageIcon imageIcon=new ImageIcon(imagenTmp);
+        return imageIcon;
     }
     
 }
