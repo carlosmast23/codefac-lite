@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
@@ -1330,6 +1331,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("total", facturaProcesando.getTotal().toString());
             mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
             mapParametros.put("descuento", facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos())+"");
+            mapParametros.put("mesero", facturaProcesando.getUsuario().getNick());
+            mapParametros.put("mesa",(facturaProcesando.getMesa()!=null)?facturaProcesando.getMesa().toString():"");
             
             String leyendaAdicional= ParametroUtilidades.obtenerValorParametro(facturaProcesando.getEmpresa(),ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);
             if(!UtilidadesTextos.verificarNullOVacio(leyendaAdicional))
@@ -1474,6 +1477,27 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             dataReporte.add(data);
         }
         return dataReporte;
+    }
+    
+    public static JasperPrint getReporteTicket(Factura factura,SessionCodefac sessionCodefac)
+    {
+        Map<String, Object> mapParametros = getMapParametrosReporte(factura);
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
+        InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
+        
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
+        {
+            path=RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comanda_ticket_40.jrxml");
+        }
+        
+        String nombreReporte = factura.getCodigoDocumentoEnum().getNombre();
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        {
+            nombreReporte="Nota de Venta";
+        }
+        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionCodefac,nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
+        return jasperPrint;
+        //UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,factura.getPreimpreso()+".pdf");
     }
     
     public static JasperPrint getReporteJasperProforma(Factura proforma,FacturaModelControlador.FormatoReporteEnum formatoEnum)

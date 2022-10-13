@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImpresora;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
@@ -70,6 +71,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
@@ -219,6 +221,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         */
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
                         grabarProformaYComandaSinTransaccion(proforma);
+                        
+                        //JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
+                        //UtilidadesImpresora.PrintReportToPrinter(jasperReporte);
+                        
                         enviarCorreoProforma(proforma);
                }
             });
@@ -227,16 +233,46 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return proforma;
     }
     
-    public Factura grabarComanda(Factura proforma) throws RemoteException,ServicioCodefacException
+    public Factura grabarComanda(Factura proforma,SessionCodefac sessionCodefac) throws RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 proforma.setCodigoDocumento(DocumentoEnum.COMANDA.getCodigo());
                 grabarProformaYComandaSinTransaccion(proforma);
+                imprimirComanda(proforma, sessionCodefac);
             }
         });
         return proforma;
+    }
+    
+    private void imprimirComanda(Factura proforma,SessionCodefac sessionCodefac)
+    {
+        String cantidadStr=ParametroUtilidades.obtenerValorParametro(sessionCodefac.getEmpresa(),ParametroCodefac.COPIAS_IMPRESORA_COMANDA);
+        if(!UtilidadesTextos.verificarNullOVacio(cantidadStr))
+        {
+            Integer cantidad=Integer.parseInt(cantidadStr);
+            if(cantidad>0)
+            {
+                //List<String> impresoraList=new ArrayList<String>();
+                JasperPrint jasperReporte = FacturaModelControlador.getReporteTicket(proforma, sessionCodefac);
+                //Impresora 1
+                String nombreImpresoraDefecto=ParametroUtilidades.obtenerValorParametro(sessionCodefac.getEmpresa(),ParametroCodefac.IMPRESORA_DEFECTO_COMANDA);
+                if(!UtilidadesTextos.verificarNullOVacio(nombreImpresoraDefecto)&& !nombreImpresoraDefecto.equals("null"))
+                {
+                    UtilidadesImpresora.printReportToPrinter(jasperReporte, cantidad,nombreImpresoraDefecto);
+                }
+                
+                //Impresora 2
+                nombreImpresoraDefecto=ParametroUtilidades.obtenerValorParametro(sessionCodefac.getEmpresa(),ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
+                if(!UtilidadesTextos.verificarNullOVacio(nombreImpresoraDefecto)&& !nombreImpresoraDefecto.equals("null"))
+                {
+                    UtilidadesImpresora.printReportToPrinter(jasperReporte, cantidad,nombreImpresoraDefecto);
+                }
+                
+
+            }
+        }
     }
     
     /**

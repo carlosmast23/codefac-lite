@@ -265,7 +265,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             }
             else if(tipoPaginaEnum.equals(TipoPaginaEnum.COMANDA))
             {
-                factura = servicio.grabarComanda(factura);
+                factura = servicio.grabarComanda(factura,sessionMb.getSession());
                 mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             }
             else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
@@ -723,7 +723,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     private void imprimirTicket(Factura factura)
     {
         //MOnitorCom
-        Map<String, Object> mapParametros = controlador.getMapParametrosReporte(factura);
+        /*Map<String, Object> mapParametros = controlador.getMapParametrosReporte(factura);
         List<ComprobanteVentaData> dataReporte = controlador.getDetalleDataReporte(factura);
         InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
         String nombreReporte = factura.getCodigoDocumentoEnum().getNombre();
@@ -731,7 +731,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         {
             nombreReporte="Nota de Venta";
         }
-        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(),nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
+        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(),nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);*/
+        JasperPrint jasperPrint=FacturaModelControlador.getReporteTicket(factura, sessionMb.getSession());
+        
         UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,factura.getPreimpreso()+".pdf");
         
     }

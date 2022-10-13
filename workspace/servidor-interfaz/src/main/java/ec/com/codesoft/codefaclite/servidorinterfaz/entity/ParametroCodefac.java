@@ -209,6 +209,11 @@ public class ParametroCodefac implements Serializable {
     
     public static final String REPORTE_DEFECTO_PEDIDO="reporte_defecto_pedido";
     
+    public static final String IMPRESORA_DEFECTO_COMANDA="impresora_defecto_comanda";
+    public static final String IMPRESORA_DEFECTO_COMANDA_2="impresora_defecto_comanda_2";
+    
+    public static final String COPIAS_IMPRESORA_COMANDA="copias_impresora_comanda";
+    
     /**
      * Activar credito por defecto para la pantalla de ventas para saber si tiene que ir las ventas a cartera o no
      */

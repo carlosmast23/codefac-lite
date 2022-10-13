@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImpresora;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FormatoReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -287,6 +288,12 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A5);
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A6);
         
+        //Agregar las impresoras disponibles
+        List<String> impresoraList= UtilidadesImpresora.obtenerNombreImpresorasDisponibles();
+        UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda(),impresoraList);
+        UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda2(),impresoraList);
+        
+        
         //Agregar los tipos de negocios        
         UtilidadesComboBox.llenarComboBox(getCmbTipoNegocio(), TipoNegocioEnum.values());
         
@@ -365,6 +372,14 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroReporteDefectoPedido = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
             FormatoReporteEnum reporteEnumPedido=FormatoReporteEnum.findByName((parametroReporteDefectoPedido != null) ? parametroReporteDefectoPedido.getValor() : null);
             getCmbReporteDefectoPedido().setSelectedItem(reporteEnumPedido);
+            
+            ParametroCodefac parametroImpresoraComanda = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA);
+            String nombreImpresora=(parametroImpresoraComanda != null) ? parametroImpresoraComanda.getValor() :null;
+            getCmbImpresoraComanda().setSelectedItem(nombreImpresora);
+            
+            ParametroCodefac parametroImpresoraComanda2 = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
+            nombreImpresora=(parametroImpresoraComanda2 != null) ? parametroImpresoraComanda2.getValor() :null;
+            getCmbImpresoraComanda2().setSelectedItem(nombreImpresora);
             
             ParametroCodefac parametroTipoNegocio = parametrosTodos.get(ParametroCodefac.TIPO_NEGOCIO);
             TipoNegocioEnum tipoNegocioEnum=TipoNegocioEnum.getEnum((parametroTipoNegocio != null) ? parametroTipoNegocio.getValor() : null);
@@ -479,6 +494,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMALES_RIDE);
             getTxtNumeroDecimalesRide().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 2);
             //getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.COPIAS_IMPRESORA_COMANDA);
+            getTxtCopiasComanda().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 0);
             
             parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);
             getTxtNumeroDecimalesProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 2);
@@ -839,6 +857,24 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.DATO_ADICIONAL_TITULO,getTxtDatoAdicionalTitulo().getText());
         agregarParametroEditar(ParametroCodefac.DATO_ADICIONAL_TITULO);
+        
+        Object impresoraComanda=getCmbImpresoraComanda().getSelectedItem();
+        String impresoraComandaTxt=null;
+        if(impresoraComanda!=null)
+        {
+            impresoraComandaTxt=impresoraComanda.toString();
+        }
+        agregarParametro(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA,impresoraComandaTxt);
+        agregarParametroEditar(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA);
+        
+        impresoraComanda=getCmbImpresoraComanda2().getSelectedItem();
+        impresoraComandaTxt=null;
+        if(impresoraComanda!=null)
+        {
+            impresoraComandaTxt=impresoraComanda.toString();
+        }
+        agregarParametro(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2,impresoraComandaTxt);
+        agregarParametroEditar(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
 
         agregarParametro(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION, getTxtMotivoTrasladoGuiaRemision().getText());
         agregarParametroEditar(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);
@@ -876,6 +912,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.NUMERO_DECIMALES_RIDE, getTxtNumeroDecimalesRide().getValue().toString());
         agregarParametroEditar(ParametroCodefac.NUMERO_DECIMALES_RIDE);    
+        
+        agregarParametro(ParametroCodefac.COPIAS_IMPRESORA_COMANDA, getTxtCopiasComanda().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.COPIAS_IMPRESORA_COMANDA);   
         
         agregarParametro(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, getTxtNumeroDecimalesProducto().getValue().toString());
         agregarParametroEditar(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);  
