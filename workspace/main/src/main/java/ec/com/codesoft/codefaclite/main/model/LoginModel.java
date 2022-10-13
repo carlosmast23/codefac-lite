@@ -320,6 +320,7 @@ public class LoginModel extends LoginFormDialog{
             @Override
             public void windowClosing(WindowEvent e) {
                 salirAplicacion=true;
+                UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web    
                 setVisible(false);
                 dispose();
                 System.exit(0);

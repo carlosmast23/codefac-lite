@@ -509,7 +509,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         String[] opciones = {"Salir", "Cambiar usuario", "Cancelar"};
         int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Por favor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
         switch (opcionSeleccionada) {
-            case 0: {
+            case 0: 
+            {
                 try {
                     //opcion de salir
                     
@@ -523,8 +524,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             //Solo detener la publicidad cuando exista
                             if (hiloPublicidadCodefac != null) {
                                 hiloPublicidadCodefac.hiloPublicidad = false;
-                            }
-                            UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web
+                            }                            
                         }
                         
                         @Override
@@ -537,15 +537,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-                
-                                            
-                
-                dispose();
-                System.exit(0);
-                break;
-
-
-
+            UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web    
+            dispose();
+            System.exit(0);
+            break;
+            
             case 1: //opcion cambiar de usuario
                 cerrarSession();
                 break;

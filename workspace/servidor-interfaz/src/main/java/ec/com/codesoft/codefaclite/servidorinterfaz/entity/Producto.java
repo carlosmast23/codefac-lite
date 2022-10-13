@@ -5,14 +5,23 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -747,9 +756,33 @@ public class Producto implements Serializable, Comparable<Producto> {
 
     public InputStream obtenerImagenProducto()
     {
-        //Utilidadesim
-        //ImageIcon imageIcon= UtilidadesImagenesCodefac.buscarImagenServidor(session.getEmpresa(),controlador.getProducto().getImagen());
-        return null;
+        RemoteInputStream risImagen = null;
+        if (!UtilidadesTextos.verificarNullOVacio(imagen)) {
+            try {
+                RecursosServiceIf service = ServiceFactory.getFactory().getRecursosServiceIf();
+                byte[] imagenSerializada = service.obtenerRecurso(empresa, DirectorioCodefac.IMAGENES, imagen);
+                risImagen = (RemoteInputStream) UtilidadesRmi.deserializar(imagenSerializada);
+            } catch (IOException ex) {
+                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        //ImageIcon imageIcon=null;
+        InputStream inputStream = null;
+        if (risImagen != null) {
+            try {
+                inputStream = RemoteInputStreamClient.wrap(risImagen);
+                //imageIcon=UtilidadImagen.castInputStreamToImageIcon(inputStream);                
+            } catch (IOException ex) {
+                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
+            //imageIcon=UtilidadImagen.castInputStreamToImageIcon(inputStream);
+        }
+
+        return inputStream;
     }
     
 
