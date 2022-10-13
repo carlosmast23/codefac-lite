@@ -84,6 +84,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     
     protected String usuario;
     
+    protected  String mesa;
+    
     public ReporteFacturaData() {
     }
     
@@ -404,6 +406,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
+
+    public String getMesa() {
+        return mesa;
+    }
+
+    public void setMesa(String mesa) {
+        this.mesa = mesa;
+    }
     
     
     
@@ -513,6 +523,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
                 return ruta;
             case AGRUPADO_POR_ZONA:
                 return zona;
+            case AGRUPADO_POR_MESA:
+                return mesa;
         }
         
         /*String nombreCampo=nombreCampoAgrupadoIf.getNombreCampoAgrupado();

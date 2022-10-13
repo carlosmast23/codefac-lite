@@ -336,7 +336,7 @@ public class ControladorReporteFactura {
                         //TODO: Analizar como debe funcionar cuando se tiene varias formas de pago , seguramente se tiene que dividir los registros en varios
                         reporteData.setFormaPago(obtenerFormaPago(factura));
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
-                        
+                        reporteData.setMesa((factura.getMesa()!=null)?factura.getMesa().getNombre():"");
                         //Agregando Zona y Ruta
                         reporteData.setZona(buscarZona(factura));
                         reporteData.setRuta((factura.getRutaNombre()!=null)?factura.getRutaNombre():"");
@@ -1146,6 +1146,14 @@ public class ControladorReporteFactura {
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
                 return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_FORMA_PAGO).toString();
                 //return dato.getFormaPago();
+            }
+        }),
+        
+        AGRUPADO_POR_MESA("Agrupado por mesa",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_MESA).toString();
+                //return dato.getVendedor();
             }
         }),
         
