@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
@@ -28,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.awt.Frame;
 import java.awt.Image;
@@ -79,6 +81,24 @@ public class LoginModel extends LoginFormDialog{
     }
 
     private void initListenerBotones() {
+                
+        //new CodefacMsj("", CodefacMsj.TipoMensajeEnum.CORRECTO);
+        getBtnUrlWeb().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                try {
+                    String urlWeb=ServiceFactory.getFactory().getUtilidadesServiceIf().getUrlServicioWeb();
+                    UtilidadesWeb.abrirPaginaWebNavigador(urlWeb);
+                    DialogoCodefac.mensaje(new CodefacMsj(urlWeb, CodefacMsj.TipoMensajeEnum.CORRECTO));
+                } catch (RemoteException ex) {
+                    Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
         getBtnActualizarSistema().addActionListener(new ActionListener() {
             @Override

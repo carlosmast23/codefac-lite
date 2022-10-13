@@ -70,7 +70,9 @@ public class LoginFormDialog extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         cmbSucursal = new javax.swing.JComboBox<>();
         jButtonModoAplicativo = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
         btnActualizarSistema = new javax.swing.JButton();
+        btnUrlWeb = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -160,7 +162,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
         lblPiePagina.setAlignmentY(0.6F);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 8;
@@ -172,7 +174,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 10;
+        gridBagConstraints.gridheight = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.weightx = 0.1;
@@ -237,8 +239,8 @@ public class LoginFormDialog extends javax.swing.JDialog {
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/ecuador.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 5;
         panelPrincipal.add(jLabel9, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
@@ -273,13 +275,27 @@ public class LoginFormDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         panelPrincipal.add(jButtonModoAplicativo, gridBagConstraints);
 
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
         btnActualizarSistema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/descarga.png"))); // NOI18N
+        btnActualizarSistema.setFocusable(false);
+        btnActualizarSistema.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnActualizarSistema.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnActualizarSistema);
+
+        btnUrlWeb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/web.png"))); // NOI18N
+        btnUrlWeb.setFocusable(false);
+        btnUrlWeb.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnUrlWeb.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnUrlWeb);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        panelPrincipal.add(btnActualizarSistema, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        panelPrincipal.add(jToolBar1, gridBagConstraints);
 
         getContentPane().add(panelPrincipal, java.awt.BorderLayout.CENTER);
 
@@ -351,6 +367,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnActualizarSistema;
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton btnUrlWeb;
     private javax.swing.JComboBox<Empresa> cmbEmpresa;
     private javax.swing.JComboBox<Sucursal> cmbSucursal;
     private javax.swing.JButton jButtonModoAplicativo;
@@ -364,6 +381,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JLabel lblVersion;
     private javax.swing.JPanel panelPrincipal;
@@ -442,11 +460,14 @@ public class LoginFormDialog extends javax.swing.JDialog {
     public void setBtnActualizarSistema(JButton btnActualizarSistema) {
         this.btnActualizarSistema = btnActualizarSistema;
     }
-    
-    
-    
 
-    
+    public JButton getBtnUrlWeb() {
+        return btnUrlWeb;
+    }
+
+    public void setBtnUrlWeb(JButton btnUrlWeb) {
+        this.btnUrlWeb = btnUrlWeb;
+    }
     
     
 }

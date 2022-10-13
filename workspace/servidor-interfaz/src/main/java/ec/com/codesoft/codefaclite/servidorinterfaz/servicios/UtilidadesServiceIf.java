@@ -63,4 +63,5 @@ public interface UtilidadesServiceIf extends Remote
     public ReportDataAbstract<DashBoardData> consultarDashboard(Empresa empresa,Date fechaInicio,Date fechaFin) throws RemoteException,ServicioCodefacException;
     
     //public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;    
+    public String getUrlServicioWeb() throws RemoteException,ServicioCodefacException;
 }

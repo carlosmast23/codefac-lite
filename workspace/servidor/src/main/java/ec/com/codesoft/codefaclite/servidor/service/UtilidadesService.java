@@ -598,6 +598,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         return reporte;
     
     }
+    
+    public String getUrlServicioWeb() throws RemoteException,ServicioCodefacException
+    {
+        String ip= ServiceFactory.getFactory().ipServidor;
+        return "http://"+ip+":8080/codefac";
+    }
 
 
 }
