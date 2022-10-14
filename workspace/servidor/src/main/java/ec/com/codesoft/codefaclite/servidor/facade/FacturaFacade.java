@@ -294,13 +294,10 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
     }
       
-      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado) 
+      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado,DocumentoEnum documentoEnum) 
       {
           Factura factura;
-          //factura.getCodigoDocumento()
-          //factura.getEstado();
-          //factura.getFechaEmision();
-          //factura.getCliente()
+          
           String queryString="SELECT F FROM Factura F WHERE F.empresa=?6 and F.codigoDocumento=?1 ";
           if(fechaInicial!=null)
           {
@@ -324,7 +321,8 @@ public class FacturaFacade extends AbstractFacade<Factura> {
                     
           //String queryString="SELECT F FROM FACTURA F WHERE F.CODIGO_DOCUMENTO=?1 AND F.cliente=?2";
           Query query=getEntityManager().createQuery(queryString);
-          query.setParameter(1,DocumentoEnum.PROFORMA.getCodigo());
+          //query.setParameter(1,DocumentoEnum.PROFORMA.getCodigo());
+          query.setParameter(1,documentoEnum.getCodigo());
           
           if(fechaInicial!=null)
           {

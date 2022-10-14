@@ -82,4 +82,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public Long obtenerSecuencialComanda(Empresa empresa) throws RemoteException;
     
+    public List<Factura> consultarComandaReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException;
+    
 }
