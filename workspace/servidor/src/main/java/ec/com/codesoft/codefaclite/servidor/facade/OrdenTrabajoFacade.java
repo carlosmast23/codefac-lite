@@ -28,9 +28,10 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         super(OrdenTrabajo.class);
     }
     
-    public List<OrdenTrabajoDetalle> consultaReporteFacade(Date fechaInicial, Date fechaFinal,Departamento  departamento,Empleado empleado,OrdenTrabajoDetalle.EstadoEnum estado)
+    public List<OrdenTrabajoDetalle> consultaReporteFacade(Date fechaInicial, Date fechaFinal,Departamento  departamento,Empleado empleado,ObjetoMantenimiento objetoMantenimiento ,OrdenTrabajoDetalle.EstadoEnum estado)
     {
-        OrdenTrabajoDetalle otd;
+        //OrdenTrabajoDetalle otd;
+        //otd.getOrdenTrabajo().getObjetoMantenimiento()
         //otd.getEmpleado();
         //otd.getDepartamento();
         //otd.getOrdenTrabajo();
@@ -63,6 +64,11 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
             queryStr=queryStr+"AND u.estado=?5 ";
         }
         
+        if(objetoMantenimiento!=null)
+        {
+            queryStr=queryStr+" AND u.ordenTrabajo.objetoMantenimiento=?6 ";
+        }
+        
         
         Query query = getEntityManager().createQuery(queryStr);
         
@@ -82,6 +88,11 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         
         if (estado != null) {
             query.setParameter(5, estado.getLetra());
+        }
+        
+        if(objetoMantenimiento!=null)
+        {
+            query.setParameter(6,objetoMantenimiento);
         }
         
         return query.getResultList();

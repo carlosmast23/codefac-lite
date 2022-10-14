@@ -29,9 +29,6 @@ public class ObjetoMantenimientoBusqueda implements InterfaceModelFind<ObjetoMan
     }
 
     
-    
-    
-    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();

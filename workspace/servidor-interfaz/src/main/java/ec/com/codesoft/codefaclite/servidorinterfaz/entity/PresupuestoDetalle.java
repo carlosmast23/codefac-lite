@@ -5,10 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -79,6 +83,9 @@ public class PresupuestoDetalle implements Serializable
     @JoinColumn(name = "PRODUCTO_PROVEEDOR_ID")
     @ManyToOne
     private ProductoProveedor productoProveedor;
+    
+    @Column(name = "KARDEX_ID")
+    private Long kardexId;
     
     public Long getId() {
         return id;
@@ -202,7 +209,33 @@ public class PresupuestoDetalle implements Serializable
         this.reservado = reservadoEnum.getLetra();
     }
 
+    public Long getKardexId() {
+        return kardexId;
+    }
+
+    public void setKardexId(Long kardexId) {
+        this.kardexId = kardexId;
+    }
+
+    public Kardex getKardex()
+    {
+        if(kardexId!=null)
+        {
+            try {
+                return ServiceFactory.getFactory().getKardexServiceIf().buscarPorId(kardexId);
+            } catch (RemoteException ex) {
+                Logger.getLogger(DetalleFacturaNotaCeditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        return null;
+    }
     
+    
+    public void setKardex(Kardex kardex)
+    {
+        this.kardexId=kardex.getId();
+    }
     
     /**
      * ==========================> METODOS PERSONALIZADOS <====================

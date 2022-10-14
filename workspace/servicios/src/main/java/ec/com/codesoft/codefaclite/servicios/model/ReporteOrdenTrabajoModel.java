@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servicios.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ObjetoMantenimientoBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -14,12 +15,15 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesDialogoBusqueda;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.data.OrdenTrabajoData;
 import ec.com.codesoft.codefaclite.servicios.panel.ReporteOrdenTrabajoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
@@ -54,6 +58,8 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
      * Referencia para buscar el empleado por el cual buscar
      */
     private Empleado empleado;
+    
+    private ObjetoMantenimiento objetoMantenimiento;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -104,6 +110,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
             ordenTrabajoData.setFechaIngreso(ordenTrabajoDetalle.getOrdenTrabajo().getFechaIngreso().toString());
             ordenTrabajoData.setIdentificacion(ordenTrabajoDetalle.getOrdenTrabajo().getCliente().getIdentificacion());     
             ordenTrabajoData.setEmpleado((ordenTrabajoDetalle.getOrdenTrabajo().getUsuario()!=null)?ordenTrabajoDetalle.getOrdenTrabajo().getUsuario().getNick():"");
+            ordenTrabajoData.setObjetoMantenimiento((ordenTrabajoDetalle.getOrdenTrabajo().getObjetoMantenimiento()!=null)?ordenTrabajoDetalle.getOrdenTrabajo().getObjetoMantenimiento().toString():"");
             listData.add(ordenTrabajoData);
         }
         
@@ -132,7 +139,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -167,6 +174,31 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
 
     private void listenerBotones() {
         
+        getBtnBuscarObjectoMantenimiento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                UtilidadesDialogoBusqueda.abrirDialogo(new ObjetoMantenimientoBusqueda(session.getEmpresa()), new UtilidadesDialogoBusqueda.DialogoBusquedaIf<ObjetoMantenimiento>() {
+                    @Override
+                    public void ejecutar(ObjetoMantenimiento objeto) {
+                        objetoMantenimiento=objeto;
+                        getTxtObjetoMantenimiento().setText(objeto.toString());
+                    }
+                });
+                
+                /*ObjetoMantenimientoBusqueda busqueda=new ObjetoMantenimientoBusqueda(session.getEmpresa());
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busqueda);
+                buscarDialogoModel.setVisible(true);
+                ObjetoMantenimiento objectoMantenimiento=(ObjetoMantenimiento) buscarDialogoModel.getResultado();
+                if(objectoMantenimiento!=null)
+                {
+                    
+                }*/
+                
+                
+            }
+        });
+        
         getBtnBuscarEmpleado().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -190,7 +222,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
                     Date fechaDateFinal=getCmbFechaFinal().getDate();
                     Departamento departamento=(Departamento) getCmbDepartamentos().getSelectedItem();
                     OrdenTrabajoDetalle.EstadoEnum estado=(OrdenTrabajoDetalle.EstadoEnum) getCmbEstado().getSelectedItem();
-                    listaResultado=serviceOrdenTrabajo.consultarReporte(fechaInicial, fechaDateFinal,departamento,empleado,estado);
+                    listaResultado=serviceOrdenTrabajo.consultarReporte(fechaInicial, fechaDateFinal,departamento,empleado,objetoMantenimiento,estado);
                     imprimir();
                 } catch (RemoteException ex) {
                     Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -278,9 +310,28 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
         getChkEstadoTodos().doClick();
         getChkDepartamentoTodos().doClick();
         getChkEmpleadoTodos().doClick();
+        getChkObjectoMantenimiento().doClick();
     }
 
     private void listenerCheck() {
+        
+        getChkObjectoMantenimiento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if(getChkObjectoMantenimiento().isSelected())
+                {
+                    objetoMantenimiento=null;
+                    getTxtObjetoMantenimiento().setText("");
+                    getBtnBuscarObjectoMantenimiento().setEnabled(false);
+                }   
+                else
+                {
+                    getBtnBuscarObjectoMantenimiento().setEnabled(true);
+                }
+            }
+        });
+        
         getChkEmpleadoTodos().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -59,6 +59,10 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         btnLimpiarFechaFinal = new javax.swing.JButton();
         lblEspacioBlanco = new javax.swing.JLabel();
         btnHoy = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        chkObjectoMantenimiento = new javax.swing.JCheckBox();
+        txtObjetoMantenimiento = new javax.swing.JTextField();
+        btnBuscarObjectoMantenimiento = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -109,10 +113,10 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         getContentPane().add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Empleado:");
+        jLabel4.setText("Objecto Mantenimiento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
@@ -215,12 +219,45 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         btnHoy.setText("Hoy");
         getContentPane().add(btnHoy, new java.awt.GridBagConstraints());
 
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Empleado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel7, gridBagConstraints);
+
+        chkObjectoMantenimiento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkObjectoMantenimiento.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        getContentPane().add(chkObjectoMantenimiento, gridBagConstraints);
+
+        txtObjetoMantenimiento.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtObjetoMantenimiento, gridBagConstraints);
+
+        btnBuscarObjectoMantenimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/icon1.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnBuscarObjectoMantenimiento, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEmpleado;
+    private javax.swing.JButton btnBuscarObjectoMantenimiento;
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnHoy;
     private javax.swing.JButton btnLimpiarFechaFinal;
@@ -228,6 +265,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
     private javax.swing.JCheckBox chkDepartamentoTodos;
     private javax.swing.JCheckBox chkEmpleadoTodos;
     private javax.swing.JCheckBox chkEstadoTodos;
+    private javax.swing.JCheckBox chkObjectoMantenimiento;
     private javax.swing.JComboBox<Departamento> cmbDepartamentos;
     private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstado;
     private com.toedter.calendar.JDateChooser cmbFechaFinal;
@@ -238,8 +276,10 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JTextField txtEmpleado;
+    private javax.swing.JTextField txtObjetoMantenimiento;
     // End of variables declaration//GEN-END:variables
 
     public JDateChooser getCmbFechaFinal() {
@@ -345,6 +385,31 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
     public void setChkEstadoTodos(JCheckBox chkEstadoTodos) {
         this.chkEstadoTodos = chkEstadoTodos;
     }
+
+    public JCheckBox getChkObjectoMantenimiento() {
+        return chkObjectoMantenimiento;
+    }
+
+    public void setChkObjectoMantenimiento(JCheckBox chkObjectoMantenimiento) {
+        this.chkObjectoMantenimiento = chkObjectoMantenimiento;
+    }
+
+    public JTextField getTxtObjetoMantenimiento() {
+        return txtObjetoMantenimiento;
+    }
+
+    public void setTxtObjetoMantenimiento(JTextField txtObjetoMantenimiento) {
+        this.txtObjetoMantenimiento = txtObjetoMantenimiento;
+    }
+
+    public JButton getBtnBuscarObjectoMantenimiento() {
+        return btnBuscarObjectoMantenimiento;
+    }
+
+    public void setBtnBuscarObjectoMantenimiento(JButton btnBuscarObjectoMantenimiento) {
+        this.btnBuscarObjectoMantenimiento = btnBuscarObjectoMantenimiento;
+    }
+    
     
     
     

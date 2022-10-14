@@ -24,15 +24,20 @@ import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
@@ -1443,6 +1448,47 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
         
         return respuestaList;
+        
+    }
+    
+    public void grabarProductosReservadosSinTransaccion(Factura factura) throws RemoteException,ServicioCodefacException
+    {
+        //ServiceFactory.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
+        List<FacturaDetalle> detalles=factura.getDetalles();
+        for (FacturaDetalle detalle : detalles) 
+        {
+            if(detalle.getReservadoEnum()!=null && detalle.getReservadoEnum().equals(EnumSiNo.SI))
+            {
+                Kardex kardex=detalle.getKardex();                
+                kardex.procesarReserva(detalle.getCantidad(),SignoEnum.POSITIVO);
+                //kardex.setStock(kardex.getStock().subtract(detalle.getCantidad()));
+                //kardex.setReserva(kardex.getReserva().add(detalle.getCantidad()));
+                
+                entityManager.merge(kardex);
+            }
+            
+        }
+        
+    }
+    
+    
+    public void grabarProductosReservadosSinTransaccion(Presupuesto presupuesto) throws RemoteException,ServicioCodefacException
+    {
+        //ServiceFactory.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
+        List<PresupuestoDetalle> detalles=presupuesto.getPresupuestoDetalles();
+        for (PresupuestoDetalle detalle : detalles) 
+        {
+            if(detalle.getReservadoEnum()!=null && detalle.getReservadoEnum().equals(EnumSiNo.SI))
+            {
+                Kardex kardex=detalle.getKardex();                
+                kardex.procesarReserva(detalle.getCantidad(),SignoEnum.POSITIVO);
+                //kardex.setStock(kardex.getStock().subtract(detalle.getCantidad()));
+                //kardex.setReserva(kardex.getReserva().add(detalle.getCantidad()));
+                
+                entityManager.merge(kardex);
+            }
+            
+        }
         
     }
 

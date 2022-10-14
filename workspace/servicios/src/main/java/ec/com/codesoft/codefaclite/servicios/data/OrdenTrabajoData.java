@@ -17,6 +17,7 @@ public class OrdenTrabajoData {
     private String estado;
     private String detalleStr;
     private String empleado;
+    private String objetoMantenimiento;
 
     public OrdenTrabajoData() {
     }
@@ -76,6 +77,16 @@ public class OrdenTrabajoData {
     public void setEmpleado(String empleado) {
         this.empleado = empleado;
     }
+
+    public String getObjetoMantenimiento() {
+        return objetoMantenimiento;
+    }
+
+    public void setObjetoMantenimiento(String objetoMantenimiento) {
+        this.objetoMantenimiento = objetoMantenimiento;
+    }
+    
+    
     
     
 }

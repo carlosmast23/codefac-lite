@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidor.facade.PresupuestoFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -44,45 +45,38 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
     {
         
-        /*if(entity.getPresupuestoDetalles()==null || entity.getPresupuestoDetalles().size()==0)
-        {
-            throw new ServicioCodefacException("Error al grabar, no existen datos en el detalle");
-        }*/
-        
-        if(entity.getTotalVenta()==null || entity.getTotalVenta().compareTo(BigDecimal.ZERO)==0)
-        {
-            throw new ServicioCodefacException("Error al grabar, el total del presupuesto no puede ser 0");
-        }
-        
-        EntityTransaction transaccion=entityManager.getTransaction();
-        try {
-            transaccion.begin();
-            /**
-             * Cambiar el estado del detalle de la Orden de trabajo
-             */
-            entity.getOrdenTrabajoDetalle().setEstado(OrdenTrabajoDetalle.EstadoEnum.PRESUPUESTADO.getLetra());
-            
-            /**
-             * Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
-             */ 
-            if(entity.getPresupuestoDetalles()!=null)
-            {
-                for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
-                    if (presupuestoDetalle.getProductoProveedor().getId() == null) {
-                        entityManager.persist(presupuestoDetalle.getProductoProveedor());
-                    } else {
-                        entityManager.merge(presupuestoDetalle.getProductoProveedor());
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                if (entity.getTotalVenta() == null || entity.getTotalVenta().compareTo(BigDecimal.ZERO) == 0) 
+                {
+                    throw new ServicioCodefacException("Error al grabar, el total del presupuesto no puede ser 0");
+                }
+                
+                entity.getOrdenTrabajoDetalle().setEstado(OrdenTrabajoDetalle.EstadoEnum.PRESUPUESTADO.getLetra());
+
+                /**
+                 * Recorro todos los detalles para verificar si existe todos los
+                 * productos proveedor o los grabo o los edito con los nuevos
+                 * valores
+                 */
+                if (entity.getPresupuestoDetalles() != null) {
+                    for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
+                        if (presupuestoDetalle.getProductoProveedor().getId() == null) {
+                            entityManager.persist(presupuestoDetalle.getProductoProveedor());
+                        } else {
+                            entityManager.merge(presupuestoDetalle.getProductoProveedor());
+                        }
                     }
                 }
+                
+                ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(entity);
+                
+                entityManager.persist(entity);
+                
             }
-
-            entityManager.persist(entity);
-            transaccion.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            transaccion.rollback();
-            throw new ServicioCodefacException("Error al grabar la compra");
-        }
+        });
+        
         return entity;
     }
     

@@ -26,7 +26,7 @@ public interface OrdenTrabajoServiceIf extends ServiceAbstractIf<OrdenTrabajo>
     public void editar(OrdenTrabajo ordenTrabajo) throws java.rmi.RemoteException;
     public List<OrdenTrabajo> obtenerTodos()throws java.rmi.RemoteException;
     public void eliminar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException;
-    public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal,Departamento  departamento,Empleado empleado,OrdenTrabajoDetalle.EstadoEnum estado) throws RemoteException;
+    public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal, Departamento departamento, Empleado empleado,ObjetoMantenimiento objetoMantenimiento, OrdenTrabajoDetalle.EstadoEnum estado) throws RemoteException;
     public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,java.rmi.RemoteException;
     public List<OrdenTrabajoDetalle> filtrarDetallesPorEstadoYEmpleado(OrdenTrabajoDetalle.EstadoEnum estadoEnum,Empleado empleado)throws ServicioCodefacException, java.rmi.RemoteException;
     public void terminarDetallesOrdenesTrabajo(Empleado empleado,List<OrdenTrabajoDetalle> detalles) throws ServicioCodefacException, java.rmi.RemoteException;

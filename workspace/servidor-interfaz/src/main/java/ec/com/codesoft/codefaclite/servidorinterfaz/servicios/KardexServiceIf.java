@@ -9,9 +9,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
@@ -92,4 +94,8 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum) throws java.rmi.RemoteException;
 
+    public void grabarProductosReservadosSinTransaccion(Factura factura) throws RemoteException,ServicioCodefacException;
+    
+    public void grabarProductosReservadosSinTransaccion(Presupuesto presupuesto) throws RemoteException,ServicioCodefacException;
+    
 }

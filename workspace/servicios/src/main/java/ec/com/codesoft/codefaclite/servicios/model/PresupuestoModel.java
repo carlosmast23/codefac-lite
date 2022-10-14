@@ -124,6 +124,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Producto producto;
     private Bodega bodega;
     private Persona persona;
+    private Kardex kardex;
     private ProductoProveedor productoProveedor;
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
@@ -210,6 +211,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
 
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
+            
             presupuesto=servicio.grabar(presupuesto);
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             imprimir();
@@ -318,7 +320,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         String objetoMantenimiento="";
         if(presupuesto.obtenerObjectoMantenimiento()!=null)
         {
-            objetoMantenimiento=presupuesto.toString();
+            objetoMantenimiento=presupuesto.obtenerObjectoMantenimiento().toString();
         }
         
         parametros.put("objectoMantenimiento", objetoMantenimiento);
@@ -659,7 +661,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);
             buscarDialogoModel.setVisible(true);
-            Kardex kardex = (Kardex) buscarDialogoModel.getResultado();
+            kardex = (Kardex) buscarDialogoModel.getResultado();
             producto=kardex.getProducto();
             bodega=kardex.getBodega();
             if(getChkInventarioProveedor().isSelected())
@@ -972,6 +974,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             presupuestoDetalle.setProducto(this.producto);
             presupuestoDetalle.setBodega(this.bodega);
             presupuestoDetalle.setPersona(this.persona);
+            presupuestoDetalle.setKardexId(this.kardex.getId());
             if (verificarCamposValidados()) {
                 
                 
@@ -995,6 +998,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
                 presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
                 presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                
                 if (estado) {
                     presupuestoDetalle.setEstado(EnumSiNo.SI.getLetra());
                 } else {
@@ -1127,6 +1131,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getTxtPrecioVenta().setText(presupuestoDetalle.getPrecioVenta()+"");
         getTxtDescuentoPrecioVenta().setText(presupuestoDetalle.getDescuentoVenta()+"");
         getTxtCantidad().setText(presupuestoDetalle.getCantidad().intValue()+"");
+        getChkReserva().setSelected((presupuestoDetalle.getReservadoEnum()!=null)?presupuestoDetalle.getReservadoEnum().getBool():false);
         
     }
     
@@ -1445,7 +1450,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoProveedorActivo(producto,persona);
                 if (resultados != null && resultados.size() > 0) {
                     productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
-                    getTxtPrecioCompra().setText(productoProveedor.getCosto() + "");
+                    //getTxtPrecioCompra().setText(productoProveedor.getCosto() + "");
                     //EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
                     //getCmbCobraIva().setSelectedItem(enumSiNo);
                 } else {//Cuando no existe crea un nuevo producto proveedor
@@ -1454,9 +1459,14 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     productoProveedor.setEstado("a");
                     productoProveedor.setProducto(this.producto);
                     productoProveedor.setProveedor(this.persona);
-                    getTxtPrecioCompra().setText("0.00"); //Seteo con el valor de 0 porque no existe el costo grabado
+                    productoProveedor.setCosto(this.producto.getValorUnitario());
+                    //getTxtPrecioCompra().setText("0.00"); //Seteo con el valor de 0 porque no existe el costo grabado
                     //getCmbCobraIva().setSelectedItem(EnumSiNo.SI); //Seteo por defecto el valor de SI cuando no existe en la base de datos
                 }
+                
+                //Setear en la pantalla el precio de producto proveedor
+                getTxtPrecioCompra().setText(productoProveedor.getCosto()+"");
+                
             } catch (RemoteException ex) {
                 Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {

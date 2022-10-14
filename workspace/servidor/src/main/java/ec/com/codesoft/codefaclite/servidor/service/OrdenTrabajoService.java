@@ -89,8 +89,8 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     }
 
     @Override
-    public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal, Departamento departamento, Empleado empleado, OrdenTrabajoDetalle.EstadoEnum estado) throws RemoteException {
-        return getFacade().consultaReporteFacade(fechaInicial, fechaFinal, departamento, empleado, estado);
+    public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal, Departamento departamento, Empleado empleado,ObjetoMantenimiento objetoMantenimiento, OrdenTrabajoDetalle.EstadoEnum estado) throws RemoteException {
+        return getFacade().consultaReporteFacade(fechaInicial, fechaFinal, departamento, empleado,objetoMantenimiento ,estado);
     }
 
     @Override

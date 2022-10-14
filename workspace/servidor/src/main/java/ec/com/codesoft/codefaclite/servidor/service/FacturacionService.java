@@ -187,7 +187,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         /**
          * Gestionar el tema de reservas en el INVENTARIO
          */
-        grabarProductosReservados(proforma);
+        //grabarProductosReservados(proforma);
+        ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(proforma);
         return proforma;
     }
     
@@ -279,8 +280,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * Metodo que permite grabar las cantidades reservadas en los kardex
      * @param factura 
      */
-    private void grabarProductosReservados(Factura factura)
+    /*private void grabarProductosReservados(Factura factura)
     {
+        //ServiceFactory.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
         List<FacturaDetalle> detalles=factura.getDetalles();
         for (FacturaDetalle detalle : detalles) 
         {
@@ -296,7 +298,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
         }
         
-    }
+    }*/
     
     public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
