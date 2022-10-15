@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -194,6 +195,86 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //}
         
         return tiposDocumento;
+    }
+    
+    private boolean verificarExistePresupuestoAgregado(Presupuesto presupuesto)
+    {
+        Factura factura= interfaz.obtenerFactura();
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
+        {
+            //Verificar solo los que son de tipo academico
+            if(facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.PRESUPUESTOS))
+            {
+                try {
+                    Presupuesto presupuestoTmp=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    
+                    if(presupuestoTmp!=null)
+                    {
+                        if(presupuestoTmp.equals(presupuesto))
+                        {
+                            return true;
+                        }
+                    }                    
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return false;
+    }
+    
+    //TODO: Ver alguna forma de unificar con el metodo de agregarProductoVista
+    @Deprecated
+    public FacturaDetalle agregarPresupuestoVista(Presupuesto presupuestoTmp,Boolean agregarAutomaticamente)
+    {
+        if (presupuestoTmp != null) {
+
+            if(verificarExistePresupuestoAgregado(presupuestoTmp))
+            {
+                mostrarMensaje(new CodefacMsj("EL presupuesto ya esta agregado, no se puede agregar nuevamente", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                //DialogoCodefac.mensaje("Advertencia","EL presupuesto ya esta agregado, no se puede agregar nuevamente",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return null;
+            }            
+            
+            //presupuestoSeleccionado=presupuestoTmp;
+            interfaz.setPresupuestoSeleccionado(presupuestoTmp);
+            
+            String descripcion="P"+presupuestoTmp.getId()+" OT"+presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoTmp.getDescripcion();
+            FacturaDetalle facturaDetalle=crearFacturaDetalle(
+                    presupuestoTmp.getTotalVenta(), 
+                    null, //No tiene valor del subsidio
+                    descripcion, 
+                    presupuestoTmp.getId().toString(), 
+                    presupuestoTmp.getCatalogoProducto(), 
+                    presupuestoTmp.getId(),
+                    null,
+                    getTipoDocumentoEnumSeleccionado(),
+                    BigDecimal.ZERO);
+            
+            this.interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
+            setearValoresProducto(facturaDetalle);
+            if(agregarAutomaticamente)
+            {
+                try {
+                    //DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                    DocumentoEnum documentoSeleccionado=interfaz.obtenerDocumentoSeleccionado();
+                    agregarDetallesFactura(facturaDetalle, documentoSeleccionado, null);
+                } catch (ServicioCodefacException ex) {
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //controlador.setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
+            for (PersonaEstablecimiento establecimiento : presupuestoTmp.getPersona().getEstablecimientos()) {
+                interfaz.cargarCliente(establecimiento);
+                break;
+            }
+            
+            return facturaDetalle;
+            
+        }
+        return null;
     }
     
     /**
@@ -661,7 +742,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             lote=kardex.getLote();
         }
         
-        facturaDetalle.setLoteId((lote!=null?lote.getId():null));
+        facturaDetalle.setLoteId((lote!=null)?lote.getId():null);
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));   
         facturaDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(interfaz.obtenerChkReservado()));
         facturaDetalle.setKardexId(interfaz.obtenerKardexId());
@@ -1626,6 +1707,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public void setearCostoDetalleTxt(String cantidad);
         public void setearFechaCaducidadTxt(String fechaCaducidad);
         
+        public void cargarCliente(PersonaEstablecimiento cliente);
+        public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado);
         
     }
     

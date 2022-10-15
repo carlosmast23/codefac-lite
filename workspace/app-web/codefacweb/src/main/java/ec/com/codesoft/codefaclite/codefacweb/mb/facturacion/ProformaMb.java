@@ -1259,6 +1259,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         return null;
     }
 
+    public void cargarCliente(PersonaEstablecimiento cliente) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA

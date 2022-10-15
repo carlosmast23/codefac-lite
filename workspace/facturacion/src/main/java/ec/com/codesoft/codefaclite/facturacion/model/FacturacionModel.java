@@ -862,7 +862,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 agregarOrdenTrabajo();
                 break;
             case INVENTARIO:
-                        try {
+            try {
                 agregarProductoInventario(EnumSiNo.SI);
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1099,7 +1099,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
     
     
-    private void cargarCliente(PersonaEstablecimiento cliente)
+    @Override
+    public void cargarCliente(PersonaEstablecimiento cliente)
     {
         if (cliente != null) {
             factura.setCliente(cliente.getPersona());
@@ -1155,14 +1156,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if(getChkOTDetalleUnico().isSelected())
                     {
                         // Si solo requiere cargar una sola vez entonces agrego solo el detalle principal
-                        agregarPresupuestoFactura(presupuesto,false);                        
+                        controlador.agregarPresupuestoVista(presupuesto,false);                        
                         setFacturaDetalleSeleccionado(facturaDetalleSeleccionado);
                         //setFacturaDetalleSeleccionado
                         break;
                     }
                     else
                     {
-                        agregarPresupuestoFactura(presupuesto,true);
+                        controlador.agregarPresupuestoVista(presupuesto,true);
                     }
                 }
             } catch (ServicioCodefacException ex) {
@@ -1189,55 +1190,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         buscarDialogoModel.setVisible(true);
 
         Presupuesto presupuestoTmp = (Presupuesto) buscarDialogoModel.getResultado();
-        agregarPresupuestoFactura(presupuestoTmp,false);
+        //agregarPresupuestoFactura(presupuestoTmp,false);
+        controlador.agregarPresupuestoVista(presupuestoTmp,false);
 
     }
     
-    private FacturaDetalle agregarPresupuestoFactura(Presupuesto presupuestoTmp,Boolean agregarAutomaticamente)
-    {
-        if (presupuestoTmp != null) {
-
-            if(verificarExistePresupuestoAgregado(presupuestoTmp))
-            {
-                 DialogoCodefac.mensaje("Advertencia","EL presupuesto ya esta agregado, no se puede agregar nuevamente",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                 return null;
-            }            
-            presupuestoSeleccionado=presupuestoTmp;
-            
-            String descripcion="P"+presupuestoSeleccionado.getId()+" OT"+presupuestoSeleccionado.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoSeleccionado.getDescripcion();
-            FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
-                    presupuestoSeleccionado.getTotalVenta(), 
-                    null, //No tiene valor del subsidio
-                    descripcion, 
-                    presupuestoSeleccionado.getId().toString(), 
-                    presupuestoSeleccionado.getCatalogoProducto(), 
-                    presupuestoSeleccionado.getId(),
-                    null,
-                    controlador.getTipoDocumentoEnumSeleccionado(),
-                    BigDecimal.ZERO);
-            
-            controlador.setearValoresProducto(facturaDetalle);
-            if(agregarAutomaticamente)
-            {
-                try {
-                    DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-                    controlador.agregarDetallesFactura(facturaDetalle, documentoSeleccionado, kardexSeleccionado);
-                } catch (ServicioCodefacException ex) {
-                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            //controlador.setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString(),presupuestoSeleccionado.getCatalogoProducto());
-            for (PersonaEstablecimiento establecimiento : presupuestoSeleccionado.getPersona().getEstablecimientos()) {
-                cargarCliente(establecimiento);
-                break;
-            }
-            
-            return facturaDetalle;
-            
-        }
-        return null;
-    }
+    
     
     private void agregarRubroAcademico() 
     {
@@ -1304,32 +1262,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return false;
     }
     
-    private boolean verificarExistePresupuestoAgregado(Presupuesto presupuesto)
-    {
-        for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
-        {
-            //Verificar solo los que son de tipo academico
-            if(facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.PRESUPUESTOS))
-            {
-                try {
-                    Presupuesto presupuestoTmp=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                    
-                    if(presupuestoTmp!=null)
-                    {
-                        if(presupuestoTmp.equals(presupuesto))
-                        {
-                            return true;
-                        }
-                    }                    
-                    
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        return false;
-    }
-    
+        
     private void agregarProductoSinInventario(EnumSiNo manejaInventario) {
             ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa(),true,false);
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
@@ -4489,6 +4422,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             return kardexSeleccionado.getId();
         }
         return null;
+    }
+
+    @Override
+    public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado) {
+        this.presupuestoSeleccionado=presupuestoSeleccionado;
     }
 
 }
