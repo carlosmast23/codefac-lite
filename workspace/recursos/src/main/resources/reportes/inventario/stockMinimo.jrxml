@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="2.1398375295825245"/>
-	<property name="ireport.x" value="224"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.1398375295825307"/>
+	<property name="ireport.x" value="96"/>
+	<property name="ireport.y" value="44"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -41,6 +41,18 @@
 	<field name="utilidad1" class="java.math.BigDecimal"/>
 	<field name="lote" class="java.lang.String"/>
 	<field name="marca" class="java.lang.String"/>
+	<variable name="TOTAL_UNIDADES" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{stock})]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_COSTO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{costo}).multiply(new BigDecimal($F{stock}))]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_VENTA" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{pvp1}.multiply(new BigDecimal($F{stock}))]]></variableExpression>
+	</variable>
+	<variable name="TOTA_UTILIDAD" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{utilidad1}.multiply(new BigDecimal($F{stock}))]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -473,6 +485,133 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="18" splitType="Stretch"/>
+		<band height="72" splitType="Stretch">
+			<textField>
+				<reportElement x="505" y="32" width="50" height="18" uuid="26626afe-3b21-421c-9fa6-a437ec3236de"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_UNIDADES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="415" y="32" width="90" height="18" uuid="c9884fd8-ba67-41a3-ad3d-0eace68503e3"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[Total Unidades:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="32" width="90" height="18" uuid="d76b8897-bd8d-41d7-a289-1c3781bf1af1"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[Total Costo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="365" y="32" width="50" height="18" uuid="ac563c96-4e38-4521-a91a-8724fc37f948"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_COSTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="365" y="50" width="50" height="18" uuid="fe0f3c4a-90a3-4cd2-99f5-41e505ac3940"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_VENTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="275" y="50" width="90" height="18" uuid="41ddbfa6-7d4b-4a83-996d-fab7a5c0e88d"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[Total Venta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="50" width="90" height="18" uuid="30696915-5923-4ef0-b259-aba809a39cb3"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[Total Utilidad:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="505" y="50" width="50" height="18" uuid="52ce1ba0-8f73-46be-b0d6-35a20e6abd51"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTA_UTILIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="275" y="18" width="280" height="15" forecolor="#FFFFFF" backcolor="#333333" uuid="bfa15732-8cff-42f6-afa1-eaba454bd962"/>
+				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valorización de Inventarios]]></text>
+			</staticText>
+		</band>
 	</summary>
 </jasperReport>
