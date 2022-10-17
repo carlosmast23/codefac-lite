@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.RepaintInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BandaComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComponenteComprobanteFisico;
@@ -45,6 +46,9 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        btnImportar = new javax.swing.JButton();
+        btnExportar = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         panelContenedor = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -95,6 +99,15 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         }
         ;
 
+        btnImportar.setText("Importar");
+        btnImportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportarActionPerformed(evt);
+            }
+        });
+
+        btnExportar.setText("Exportar");
+
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -104,6 +117,8 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
                 formComponentShown(evt);
             }
         });
+
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
         panelContenedor.setBackground(new java.awt.Color(255, 255, 255));
         panelContenedor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -127,6 +142,11 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         });
         panelContenedor.add(chkNegrita, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 489, 69, -1));
 
+        cmbSeccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSeccionActionPerformed(evt);
+            }
+        });
         panelContenedor.add(cmbSeccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 133, 261, -1));
         panelContenedor.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -209,15 +229,15 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         chkOculto.setBackground(new java.awt.Color(255, 255, 255));
         chkOculto.setText("Oculto");
         panelContenedor.add(chkOculto, new org.netbeans.lib.awtextra.AbsoluteConstraints(91, 489, -1, -1));
-        panelContenedor.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 291, -1));
+        panelContenedor.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 520, 291, 40));
 
         jLabel14.setText("Zoom:");
-        panelContenedor.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 558, -1, -1));
+        panelContenedor.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 540, -1, -1));
 
         sliderZoom.setBackground(new java.awt.Color(255, 255, 255));
         sliderZoom.setMinimum(30);
         sliderZoom.setValue(60);
-        panelContenedor.add(sliderZoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(91, 552, -1, -1));
+        panelContenedor.add(sliderZoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 535, -1, -1));
 
         jLabel13.setText("Ancho:");
         panelContenedor.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
@@ -225,13 +245,15 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         txtPPP.setValue(300);
         panelContenedor.add(txtPPP, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 50, -1));
 
-        getContentPane().add(panelContenedor, java.awt.BorderLayout.LINE_END);
+        jPanel3.add(panelContenedor, java.awt.BorderLayout.LINE_END);
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 0));
         jScrollPane1.setOpaque(false);
         jScrollPane1.setViewportView(jPanel1);
 
-        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -244,11 +266,21 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentShown
 
+    private void btnImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnImportarActionPerformed
+
+    private void cmbSeccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSeccionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSeccionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnArriba;
     private javax.swing.JButton btnDerecha;
     private javax.swing.JButton btnDown;
+    private javax.swing.JButton btnExportar;
+    private javax.swing.JButton btnImportar;
     private javax.swing.JButton btnIzquierda;
     private javax.swing.JCheckBox chkNegrita;
     private javax.swing.JCheckBox chkOculto;
@@ -272,6 +304,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -477,9 +510,26 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
 
     
 
-    
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Archivo", visible = true)
+    public JButton getBtnExportar() {
+        return btnExportar;
+    }
+
+    public void setBtnExportar(JButton btnExportar) {
+        this.btnExportar = btnExportar;
+    }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Archivo", visible = true)
+    public JButton getBtnImportar() {
+        return btnImportar;
+    }
+
+    public void setBtnImportar(JButton btnImportar) {
+        this.btnImportar = btnImportar;
+    }
     
     
 
+    
     
 }
