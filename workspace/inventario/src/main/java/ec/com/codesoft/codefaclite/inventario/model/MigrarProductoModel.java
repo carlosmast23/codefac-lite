@@ -472,7 +472,13 @@ public class MigrarProductoModel extends MigrarModel {
                     if (productoTmp != null) {
                         lote = ServiceFactory.getFactory().getLoteSeviceIf().buscarPorProductoYFechaCaducidad(productoTmp, UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
                     } else {
-
+                        
+                        //si no existe un lote anteriormente entonces creo uno
+                        if(lote==null)
+                        {
+                            lote=new Lote();
+                        }
+                        
                         lote.setCodigo(producto.getCodigoPersonalizado());
                         lote.setEmpresa(session.getEmpresa());
                         lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);
