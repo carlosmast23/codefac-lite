@@ -179,6 +179,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         lblEspacio12983 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
         cmbCasaComercial = new javax.swing.JComboBox<>();
+        jLabel47 = new javax.swing.JLabel();
+        txtRegistroSanitario = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatosEnsamble = new javax.swing.JTable();
@@ -951,23 +953,24 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
         jLabel40.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel40.setText("Casa Comercial:");
+        jLabel40.setText("Registro Sanitario:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(jLabel40, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(txtNombreGenerico, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel9.add(lblEspacio12983, gridBagConstraints);
@@ -987,6 +990,23 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(cmbCasaComercial, gridBagConstraints);
+
+        jLabel47.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel47.setText("Casa Comercial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel47, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(txtRegistroSanitario, gridBagConstraints);
 
         tabMenu.addTab("Farmacia", jPanel9);
 
@@ -1391,6 +1411,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
@@ -1454,6 +1475,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JTextField txtPrecioEmpaquetado;
     private javax.swing.JTextField txtPrecioTarjeta;
     private javax.swing.JTextField txtProductoEnsamble;
+    private javax.swing.JTextField txtRegistroSanitario;
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
     
@@ -1991,6 +2013,16 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setChkVentas(JCheckBox chkVentas) {
         this.chkVentas = chkVentas;
+    }
+
+    @LimpiarAnotacion
+    @TextFieldBinding(value = "controlador.producto.registroSanitario")
+    public JTextField getTxtRegistroSanitario() {
+        return txtRegistroSanitario;
+    }
+
+    public void setTxtRegistroSanitario(JTextField txtRegistroSanitario) {
+        this.txtRegistroSanitario = txtRegistroSanitario;
     }
     
     

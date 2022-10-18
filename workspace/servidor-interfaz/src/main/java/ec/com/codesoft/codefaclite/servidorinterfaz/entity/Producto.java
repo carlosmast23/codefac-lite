@@ -177,6 +177,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     @Column(name = "DISPONIBLE_COMPRA") 
     private String disponibleCompra;
     
+    @Column(name = "REGISTRO_SANITARIO") 
+    private String registroSanitario;
+    
     /*@JoinColumn(name = "PRESENTACION_ID")
     private PresentacionProducto presentacion;*/
 
@@ -753,6 +756,16 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setDisponibleCompraEnum(EnumSiNo disponibleCompraEnum) {
         this.disponibleCompra = disponibleCompraEnum.getLetra();
     }
+
+    public String getRegistroSanitario() {
+        return registroSanitario;
+    }
+
+    public void setRegistroSanitario(String registroSanitario) {
+        this.registroSanitario = registroSanitario;
+    }
+    
+    
 
     public InputStream obtenerImagenProducto()
     {
