@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
@@ -204,6 +205,7 @@ public class StockMinimoModel extends StockMinimoPanel{
             {
                 Producto producto = (Producto) objeto[0];
                 BigDecimal cantidad = (BigDecimal) objeto[1];
+                Kardex kardex=(Kardex) objeto[2];
                 //Lote lote=(Lote)objeto[4];
 
                 StockMinimoData data = new StockMinimoData();
@@ -216,6 +218,7 @@ public class StockMinimoModel extends StockMinimoPanel{
                 data.setLote(""); //Por el momento voy dejar que salga un stock minimo por todos los lotes
                 //Ver si este dato luego se debe poner
                 data.setBodega("");
+                data.setReserva(kardex.getReserva());
                 
                 //TODO: Optimizar este proceso para obtener toda la informacipon directamente del servidor
                 List<ProductoProveedor> productoProveedorList= ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarPorProductoActivo(producto);
