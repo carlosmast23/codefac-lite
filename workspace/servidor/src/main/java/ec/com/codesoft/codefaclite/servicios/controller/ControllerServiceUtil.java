@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidor.service.EmpleadoService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturaDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
+import ec.com.codesoft.codefaclite.servidor.service.GarantiaService;
 import ec.com.codesoft.codefaclite.servidor.service.HerramientasCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
@@ -132,6 +133,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscrito
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.GarantiaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
@@ -332,6 +334,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(CasaComercialService.class, CasaComercialServiceIf.class);
             mapRecursos.put(PresentacionProductoService.class, PresentacionProductoServiceIf.class);
             mapRecursos.put(ProductoPresentacionDetalleService.class, ProductoPresentacionDetalleServiceIf.class);
+            mapRecursos.put(GarantiaService.class,GarantiaServiceIf .class);
             
             
             

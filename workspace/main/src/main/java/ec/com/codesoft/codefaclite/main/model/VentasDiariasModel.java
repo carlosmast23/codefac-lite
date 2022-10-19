@@ -141,7 +141,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             }
             
             InterfaceModelFind productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa(),true,false);
-            if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
             {
                 //TODO: Ver si esta parte de las bodegas de venta se pueden agregar dentro del metodo de busqueda
                 BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();

@@ -1289,11 +1289,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta,true);
             
             //cambiar el tipo de buscador si tiene activo el parametro de farmacia
-            if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.FARMACIA))
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.FARMACIA))
             {
                 productoInventarioBusquedaDialogo=new FarmaciaProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(), bodegaVenta);
             }
-            else if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
+            else if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
             {
                 productoInventarioBusquedaDialogo=new TallerMecanicoInventarioBusquedaDialogo(manejaInventario,session.getEmpresa(), bodegaVenta);
             }
