@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
@@ -19,6 +20,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.GarantiaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Garantia;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import java.rmi.RemoteException;
@@ -34,6 +36,7 @@ public class GarantiaModel extends GarantiaPanel implements DialogInterfacePanel
     
     private GarantiaControlador controlador;
     private Producto producto;
+    private KardexItemEspecifico itemEspecifico;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -73,6 +76,7 @@ public class GarantiaModel extends GarantiaPanel implements DialogInterfacePanel
     @Override
     public void limpiar() {
         producto=new Producto();
+        itemEspecifico=new KardexItemEspecifico();
     }
 
     @Override
@@ -142,6 +146,14 @@ public class GarantiaModel extends GarantiaPanel implements DialogInterfacePanel
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
+
+    public KardexItemEspecifico getItemEspecifico() {
+        return itemEspecifico;
+    }
+
+    public void setItemEspecifico(KardexItemEspecifico itemEspecifico) {
+        this.itemEspecifico = itemEspecifico;
+    }
     
     
     
@@ -155,6 +167,20 @@ public class GarantiaModel extends GarantiaPanel implements DialogInterfacePanel
             this.producto=producto;
             actualizarBindingCompontValues();
         }
+    }
+    
+    public void listenerBuscarProductoEspecifico()
+    {
+        ProductoInventarioEspecificoDialogo dialogoBusqueda = new ProductoInventarioEspecificoDialogo(producto);
+        BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(dialogoBusqueda);
+        buscarDialogo.setVisible(true);
+
+        if (buscarDialogo.getResultado() != null) {
+            this.itemEspecifico = (KardexItemEspecifico) buscarDialogo.getResultado();
+            actualizarBindingCompontValues();
+
+        }
+    
     }
     
     

@@ -57,6 +57,9 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
         txtPrecio = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         cmbBodegaDestino = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        txtProductoEspecifico = new javax.swing.JTextField();
+        btnBuscarProductoEspecifico = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -66,7 +69,7 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setText("Descripción:");
+        jLabel2.setText("Producto Especifico:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -75,7 +78,7 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
         jPanel1.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -84,44 +87,44 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
         jLabel3.setText("Precio:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtCantidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         jPanel1.add(jLabel4, gridBagConstraints);
 
         jLabel5.setText("Fecha Ingreso:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbFechaIngreso, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(lblEspacio3, gridBagConstraints);
@@ -129,14 +132,14 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
         jLabel8.setText("Bodega Destino:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel8, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbBodegaOrigen, gridBagConstraints);
@@ -166,7 +169,7 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
         jPanel1.add(btnBuscarProducto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.weighty = 0.2;
@@ -175,13 +178,13 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
         jLabel6.setText("Cantidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -190,17 +193,41 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
         jLabel10.setText("Bodega Origen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel10, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbBodegaDestino, gridBagConstraints);
+
+        jLabel7.setText("Descripción:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel7, gridBagConstraints);
+
+        txtProductoEspecifico.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtProductoEspecifico, gridBagConstraints);
+
+        btnBuscarProductoEspecifico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(btnBuscarProductoEspecifico, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -210,6 +237,7 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarProducto;
+    private javax.swing.JButton btnBuscarProductoEspecifico;
     private javax.swing.JComboBox<Bodega> cmbBodegaDestino;
     private javax.swing.JComboBox<Bodega> cmbBodegaOrigen;
     private org.jdesktop.swingx.JXDatePicker cmbFechaIngreso;
@@ -219,6 +247,7 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -229,6 +258,7 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtProducto;
+    private javax.swing.JTextField txtProductoEspecifico;
     // End of variables declaration//GEN-END:variables
 
 
@@ -300,9 +330,22 @@ public abstract class TransferenciaBodegasPanel extends ControladorCodefacInterf
         this.cmbBodegaOrigen = cmbBodegaOrigen;
     }
 
-    
-    
-    
+    public JButton getBtnBuscarProductoEspecifico() {
+        return btnBuscarProductoEspecifico;
+    }
 
+    public void setBtnBuscarProductoEspecifico(JButton btnBuscarProductoEspecifico) {
+        this.btnBuscarProductoEspecifico = btnBuscarProductoEspecifico;
+    }
+
+    public JTextField getTxtProductoEspecifico() {
+        return txtProductoEspecifico;
+    }
+
+    public void setTxtProductoEspecifico(JTextField txtProductoEspecifico) {
+        this.txtProductoEspecifico = txtProductoEspecifico;
+    }
+
+    
     
 }

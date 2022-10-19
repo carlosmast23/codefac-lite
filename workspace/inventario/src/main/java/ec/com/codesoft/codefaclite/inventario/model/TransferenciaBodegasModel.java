@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
@@ -16,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -173,9 +175,28 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
     }
 
     private void listenerBotones() {
-        getBtnBuscarProducto().addActionListener(new ActionListener() {
+        
+        getBtnBuscarProductoEspecifico().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                ProductoInventarioEspecificoDialogo dialogoBusqueda=new ProductoInventarioEspecificoDialogo(productoSeleccionado);
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(dialogoBusqueda);
+                buscarDialogo.setVisible(true);
+
+                if (buscarDialogo.getResultado() != null) {
+                    KardexItemEspecifico itemEspecifico = (KardexItemEspecifico) buscarDialogo.getResultado();
+                    getTxtProductoEspecifico().setText(itemEspecifico.getCodigoEspecifico());
+
+                }
+                
+            }
+        });
+        
+        getBtnBuscarProducto().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
                 ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,true);
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
