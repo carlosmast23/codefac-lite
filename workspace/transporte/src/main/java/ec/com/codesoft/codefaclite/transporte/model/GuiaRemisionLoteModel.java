@@ -14,10 +14,13 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBind
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionLotePanel;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.rmi.RemoteException;
@@ -121,6 +124,7 @@ public class GuiaRemisionLoteModel extends GuiaRemisionLotePanel implements Cont
             "Vendedor",
             "Ruta",
             "Documento",
+            "Enviada Guia R.",
             "Total"};
         
         DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(
@@ -128,6 +132,7 @@ public class GuiaRemisionLoteModel extends GuiaRemisionLotePanel implements Cont
                 new Class[]{
                     Object.class,
                     Boolean.class,
+                    Object.class,
                     Object.class,
                     Object.class,
                     Object.class,
@@ -151,16 +156,18 @@ public class GuiaRemisionLoteModel extends GuiaRemisionLotePanel implements Cont
             public Object[] addData(Factura value) {
                 String nombreComercial=(value.getSucursal().getNombreComercial()!=null)?value.getSucursal().getNombreComercial():"";
                 String vendedor=(value.getVendedor()!=null)?value.getVendedor().getNombresCompletos():"";
+                
                 return new Object[]{
                     value,
                     value.getPreimpreso(),
-                    value.getFechaEmision(),
+                    value.getFechaEmisionFormat(),
                     value.getIdentificacion(),
                     value.getRazonSocial(),
                     nombreComercial,
                     vendedor,
                     "",//Ruta                    
                     value.getCodigoDocumentoEnum().getNombre(),
+                    (value.getEstadoEnviadoGuiaRemisionEnum()!=null)?value.getEstadoEnviadoGuiaRemisionEnum().getNombre():"",
                     value.getTotal()
                 };
             }

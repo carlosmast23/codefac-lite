@@ -156,6 +156,19 @@ create table TIPO_PRODUCTO(
     primary key (ID)
 );
 
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.9.2.4)*/
+create table PRESENTACION_PRODUCTO
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    EMPRESA_ID BIGINT, 
+    NOMBRE varchar(100),
+    DESCRIPCION varchar(100),
+    ESTADO varchar(1),
+    FECHA_CREACION TIMESTAMP,
+    FECHA_ULTIMA_MODIFICACION TIMESTAMP,
+    primary key (ID)
+);
+
 /*@AGREGAR_TABLA(VERSION_SISTEMA=1.2.9.4.6)*/
 create table GARANTIA
 (
