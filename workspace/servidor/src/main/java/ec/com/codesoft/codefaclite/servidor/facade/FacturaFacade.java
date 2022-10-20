@@ -101,7 +101,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             ordenarAgrupado=" u.referido ,";
         }
         
-        if(consultarReferidos)
+        if(consultarReferidos!=null && consultarReferidos)
         {
             filtrarReferidos=" AND u.referido IS NOT NULL ";
             if(referido!=null)
@@ -165,7 +165,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             }
         }
 
-        if (consultarReferidos) {
+        if (consultarReferidos!=null && consultarReferidos) {
             if (referido != null) {
                 query.setParameter(5, referido);
             }

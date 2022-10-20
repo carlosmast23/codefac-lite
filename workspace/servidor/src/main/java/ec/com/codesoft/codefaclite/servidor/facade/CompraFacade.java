@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -31,9 +32,104 @@ public class CompraFacade extends AbstractFacade<Compra>{
     public CompraFacade() {
         super(Compra.class);
     }
-    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa)
+    
+    public BigDecimal obtenerCompraReporteTotalValor(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa)
+    {
+        return (BigDecimal) obtenerCompraReporteAbstract(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa, TipoConsultaEnum.VALOR_TOTAL).getSingleResult();
+    }
+    
+    public Query obtenerCompraReporteAbstract(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa,TipoConsultaEnum tipoConsultaEnum)
     {        
         String cliente = "";
+        String fecha = "";
+        String documento = "";
+        String tipoDocumento = "";
+        String estadoEnumQuery= "";
+        
+        if (proveedor != null) {
+            cliente = "u.proveedor=?1";
+        } else {
+            cliente = "1=1";
+        }
+        
+        if (fechaInicial == null && fechaFin != null) {
+            fecha = " AND u.fechaFactura <= ?3";
+        } else if (fechaInicial != null && fechaFin == null) {
+            fecha = " AND u.fechaFactura <= ?2";
+        } else if (fechaInicial == null && fechaFin == null) {
+            fecha = "";
+        } else {
+            fecha = " AND (u.fechaFactura BETWEEN ?2 AND ?3)";
+        }
+        
+        if (documentoEnum != null) {
+            documento = " AND u.codigoDocumento=?4";
+        }
+        
+        if(tipoDocumentoEnum != null)
+        {
+            tipoDocumento = " AND u.codigoTipoDocumento=?5";
+        }
+        
+        if(estadoEnum!=null)
+        {
+            estadoEnumQuery=" AND u.estado=?6 ";
+        }
+        
+        String selectStr="SELECT u ";
+        if(tipoConsultaEnum.equals(TipoConsultaEnum.TAMANIO))
+        {
+            selectStr="SELECT COUNT(1) ";
+        }
+        else if(tipoConsultaEnum.equals(TipoConsultaEnum.VALOR_TOTAL))
+        {
+            selectStr="SELECT SUM(u.total) ";
+        }
+        
+        try {
+            String queryString = selectStr+ " FROM Compra u WHERE u.empresa=?7 and " + cliente + fecha + documento + tipoDocumento+estadoEnumQuery;
+            System.out.println("Script: "+queryString);
+            Query query = getEntityManager().createQuery(queryString);
+            if (proveedor != null) 
+            {
+                query.setParameter(1, proveedor);
+            }
+            if (fechaInicial != null) 
+            {
+                query.setParameter(2, fechaInicial);
+            }
+            if (fechaFin != null) 
+            {
+                query.setParameter(3, fechaFin);
+            }
+            if (documentoEnum != null) 
+            {
+                //System.out.println("---->>>>>>" + documentoEnum.getCodigo());
+                query.setParameter(4, documentoEnum.getCodigo());
+                
+            }
+            if(tipoDocumentoEnum != null)
+            {
+                query.setParameter(5, tipoDocumentoEnum.getCodigo());
+            }
+            
+            if(estadoEnum!=null)
+            {
+                query.setParameter(6,estadoEnum.getEstado());
+            }
+            
+            query.setParameter(7,empresa);
+            
+            return query;
+        } catch (NoResultException e) {
+            return null;
+        }    
+    }
+    
+    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa)
+    {        
+        return obtenerCompraReporteAbstract(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa, TipoConsultaEnum.DATOS).getResultList();
+        /*String cliente = "";
         String fecha = "";
         String documento = "";
         String tipoDocumento = "";
@@ -105,7 +201,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
-        }    
+        }    */
     }
     
      public List<Compra> getCompraRetencionDisenable() {

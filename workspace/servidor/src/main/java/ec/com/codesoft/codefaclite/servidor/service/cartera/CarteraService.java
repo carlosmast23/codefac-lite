@@ -971,6 +971,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return carteraFacade.getCarteraSaldoCero(persona,segundaReferenciaId,fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal,documento);
     }
     
+    public BigDecimal listaCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento) throws ServicioCodefacException, RemoteException {
+        BigDecimal valor=carteraFacade.getCarteraSaldoCeroValorTotal(persona,segundaReferenciaId,fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal,documento);
+        if(valor==null)
+        {
+            valor=BigDecimal.ZERO;
+        }
+        return valor;
+    }
     /*public List<Cartera> listaCartera(Empresa empresa,Date fechaInicial,Date fechaFinal,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,)
     {
         
