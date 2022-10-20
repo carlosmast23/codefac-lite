@@ -341,6 +341,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             } else {
                                 productoEmpaquetado.setValorUnitario(presentacionDetalle.getPvpTmp());
                             }
+                            
+                            if(!UtilidadesTextos.verificarNullOVacio(presentacionDetalle.getCodigoTmp()))
+                            {
+                                productoEmpaquetado.setCodigoPersonalizado(presentacionDetalle.getCodigoTmp());
+                            }
 
                             entityManager.persist(productoEmpaquetado);
                             entityManager.flush();
