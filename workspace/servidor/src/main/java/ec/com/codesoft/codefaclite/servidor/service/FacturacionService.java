@@ -1363,7 +1363,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         case LIBRE:
                         case INVENTARIO:
                             Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaId);
-                            catalogoProducto = producto.getCatalogoProducto();
+                            if(producto!=null)
+                            {
+                                catalogoProducto = producto.getCatalogoProducto();
+                            }
+                            
                             respuesta=new ReferenciaDetalleFacturaRespuesta(
                                     catalogoProducto,
                                     producto.getIdProducto(), 

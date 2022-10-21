@@ -337,6 +337,19 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
+        
+        try {
+            //Consultar valor por defecto para cargar
+            TipoDocumentoEnum tipoDocumentoEnum=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA, TipoDocumentoEnum.ACADEMICO);
+            if(tipoDocumentoEnum!=null)
+            {
+                getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         crearOCargarPedidoVentaDiaria(true);
     }
     

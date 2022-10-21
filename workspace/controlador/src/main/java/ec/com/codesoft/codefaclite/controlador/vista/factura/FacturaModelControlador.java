@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
@@ -260,6 +261,32 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     //DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     DocumentoEnum documentoSeleccionado=interfaz.obtenerDocumentoSeleccionado();
                     agregarDetallesFactura(facturaDetalle, documentoSeleccionado, null);
+                    
+                    //Cargar los productos adicionales para la factura
+                    for (PresupuestoDetalle presupuestoDetalle : presupuestoTmp.getPresupuestoDetalles()) 
+                    {
+                        Producto productoSeleccionado=presupuestoDetalle.getProducto();
+                        
+                        //TODO: Ver si puedo unir esta parte con el metodo que ya existe para poder agregar los detalles unitarios
+                        facturaDetalle = crearFacturaDetalle
+                        (
+                                productoSeleccionado.getValorUnitario(),
+                                productoSeleccionado.getPrecioSinSubsidio(),
+                                productoSeleccionado.getNombre(),
+                                productoSeleccionado.getCodigoPersonalizado(),
+                                productoSeleccionado.getCatalogoProducto(),
+                                productoSeleccionado.getIdProducto(),
+                                null, //Verificar este tema cuando vaya a trabar con varios LOTES
+                                TipoDocumentoEnum.INVENTARIO,
+                                BigDecimal.ZERO
+                        );
+                        
+                        this.setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum.INVENTARIO);
+                        this.interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
+                        setearValoresProducto(facturaDetalle);
+                        agregarDetallesFactura(facturaDetalle,documentoSeleccionado, null);
+                    }
+                    
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                     Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);

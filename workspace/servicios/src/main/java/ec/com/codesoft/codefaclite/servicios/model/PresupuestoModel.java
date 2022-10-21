@@ -406,7 +406,16 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
              */
             cargarDetallesOrdenTrabajo(this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
             getCmbFechaPresupuesto().setDate(this.presupuesto.getFechaPresupuesto());
-            getTxtDiasPresupuesto().setText("" + UtilidadesFecha.obtenerDistanciaDias(this.presupuesto.getFechaPresupuesto(), this.presupuesto.getFechaValidez()));
+            
+            if(this.presupuesto.getFechaValidez()!=null)
+            {
+                getTxtDiasPresupuesto().setText("" + UtilidadesFecha.obtenerDistanciaDias(this.presupuesto.getFechaPresupuesto(), this.presupuesto.getFechaValidez()));
+            }
+            else
+            {
+                getTxtDiasPresupuesto().setText("");
+            }
+            
             getLblIndicarFechaValidez().setText(""+this.presupuesto.getFechaValidez());
             ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
@@ -1180,14 +1189,19 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     public void limpiarDetalles()
     {
-        this.getTxtProveedorDetalle().setText("");
+        if(!getChkInventarioProveedor().isSelected())
+        {
+            this.persona = null;
+            this.getTxtProveedorDetalle().setText("");
+        }
+        
         this.getTxtProductoDetalle().setText("");
         this.getTxtPrecioCompra().setText("0.00");
         this.getTxtDescuentoPrecioCompra().setText("0.00");
         this.getTxtPrecioVenta().setText("0.00");
         this.getTxtDescuentoPrecioVenta().setText("0.00");
         this.getTxtCantidad().setText("1");
-        this.persona = null;
+        
         this.producto = null;
     }
     

@@ -325,7 +325,7 @@ public class MigrarProductoModel extends MigrarModel {
                 catch(ClassCastException ex)
                 {
                     Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-                    throw new ExcelMigrar.ExcepcionExcel("Error de conversión con el campo: "+ExcelMigrar.LOG_ULTIMO_CAMPO_LEIDO+"\nDescripción:"+ex.getMessage());
+                    throw new ExcelMigrar.ExcepcionExcel("Error de conversión con el campo: "+ExcelMigrar.LOG_ULTIMO_CAMPO_LEIDO+" => \nInfo:"+ex.getMessage());
                 }
                 catch(Exception ex)
                 {

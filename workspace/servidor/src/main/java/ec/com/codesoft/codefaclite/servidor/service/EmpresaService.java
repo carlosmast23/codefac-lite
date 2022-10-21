@@ -57,7 +57,8 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException, RemoteException 
+            {
                 grabarSinTransaccion(p,true,true);
             }
         });
