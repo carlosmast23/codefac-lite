@@ -1005,6 +1005,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if (entity != null) {
                     controlador.verificarProductoConNotaVentaInterna(entity);
                     productoSeleccionado = entity;                    
+                    
                     FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
                             productoSeleccionado.getValorUnitario(),
                             productoSeleccionado.getPrecioSinSubsidio(),
@@ -1013,6 +1014,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             productoSeleccionado.getCatalogoProducto(),
                             entity.getIdProducto(),
                             null,
+                            EnumSiNo.NO,
                             TipoDocumentoEnum.LIBRE,
                             BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
                     
@@ -1172,6 +1174,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             rubroSeleccionado=rubroEstudianteTmp;            
             BigDecimal descuentoValor=rubroEstudianteTmp.obtenerValorSaldoDescuento();
             
+            
             FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
                     rubroEstudianteTmp.obtenerSaldoIncluidoDescuento(), 
                     null, //Este tipo de valores no tienen subsidio
@@ -1180,6 +1183,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 
                     rubroEstudianteTmp.getId(), 
                     null,
+                    EnumSiNo.NO,
                     controlador.getTipoDocumentoEnumSeleccionado(),
                     descuentoValor);
             controlador.setearValoresProducto(facturaDetalle);

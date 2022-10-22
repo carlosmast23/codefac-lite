@@ -320,6 +320,7 @@ public class Presupuesto implements Serializable
         }
         return true;
     }    
+    
 
     /**
      * Metodos Personalizados
@@ -329,6 +330,23 @@ public class Presupuesto implements Serializable
         return totalVenta.subtract(descuentoVenta);
     }
     
+    /**
+     * Metodo que me permite calcular el valor de la utilidad
+     * @return 
+     */
+    public BigDecimal calcularValorServicio()
+    {
+        //TODO: por el momento obtengo dirctamente de la identificacion
+        ResultadoTotales resultadoTotal= obtenerMapReporteTotales(persona.getEmpresa().getIdentificacion());
+        return resultadoTotal.utilidad;
+        
+    }
+    
+    /**
+     * TODO: Revisar que no deberia mandar el ruc de la empresa 
+     * @param rucEmpresa
+     * @return 
+     */
     public ResultadoTotales obtenerMapReporteTotales(String rucEmpresa)
     {
         BigDecimal totalProveedores=BigDecimal.ZERO;

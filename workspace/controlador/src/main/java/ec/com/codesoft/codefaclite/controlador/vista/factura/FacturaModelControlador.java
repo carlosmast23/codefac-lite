@@ -11,15 +11,11 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
-//import ec.com.codesoft.codefaclite.facturacion.model.ProformaModel;
-//import ec.com.codesoft.codefaclite.facturacion.reportdata.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -32,12 +28,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -47,7 +41,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpr
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -56,7 +49,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
@@ -65,7 +57,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
@@ -240,18 +231,21 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             //presupuestoSeleccionado=presupuestoTmp;
             interfaz.setPresupuestoSeleccionado(presupuestoTmp);
-            
+            //EnumSiNo.SI
             String descripcion="P"+presupuestoTmp.getId()+" OT"+presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoTmp.getDescripcion();
             FacturaDetalle facturaDetalle=crearFacturaDetalle(
-                    presupuestoTmp.getTotalVenta(), 
+                    presupuestoTmp.calcularValorServicio(), 
                     null, //No tiene valor del subsidio
                     descripcion, 
                     presupuestoTmp.getId().toString(), 
                     presupuestoTmp.getCatalogoProducto(), 
                     presupuestoTmp.getId(),
                     null,
+                    EnumSiNo.NO,
                     getTipoDocumentoEnumSeleccionado(),
                     BigDecimal.ZERO);
+            
+            
             
             this.interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
             setearValoresProducto(facturaDetalle);
@@ -277,6 +271,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                                 productoSeleccionado.getCatalogoProducto(),
                                 productoSeleccionado.getIdProducto(),
                                 null, //Verificar este tema cuando vaya a trabar con varios LOTES
+                                presupuestoDetalle.getReservadoEnum(),
                                 TipoDocumentoEnum.INVENTARIO,
                                 BigDecimal.ZERO
                         );
@@ -345,7 +340,6 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
         //descripcion=descripcion.replace("\n"," ");
         
-        
         FacturaDetalle facturaDetalle=crearFacturaDetalle(
                 productoSeleccionado.getValorUnitario(), 
                 productoSeleccionado.getPrecioSinSubsidio(),
@@ -354,6 +348,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 productoSeleccionado.getCatalogoProducto(), 
                 productoSeleccionado.getIdProducto(), 
                 (lote!=null)?lote.getId():null,
+                EnumSiNo.NO,
                 interfaz.obtenerTipoDocumentoSeleccionado(),
                 BigDecimal.ZERO);
         
@@ -370,6 +365,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             CatalogoProducto catalogoProducto,
             Long referenciaId,  
             Long loteId,
+            EnumSiNo reservaEnumSiNo,
             TipoDocumentoEnum tipoDocumentoReferencia,
             BigDecimal descuento)
     {
@@ -384,6 +380,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setCodigoPrincipal(codigo);
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoReferencia);
         facturaDetalle.setPrecioSinSubsidio(valorSinSubsidio);
+        facturaDetalle.setReservadoEnum(reservaEnumSiNo);
         
         if(catalogoProducto!=null)
         {
