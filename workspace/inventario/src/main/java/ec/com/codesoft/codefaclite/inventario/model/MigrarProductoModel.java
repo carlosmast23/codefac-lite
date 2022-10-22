@@ -325,7 +325,7 @@ public class MigrarProductoModel extends MigrarModel {
                 catch(ClassCastException ex)
                 {
                     Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-                    throw new ExcelMigrar.ExcepcionExcel("Error de conversión con el campo: "+ExcelMigrar.LOG_ULTIMO_CAMPO_LEIDO+"\nDescripción:"+ex.getMessage());
+                    throw new ExcelMigrar.ExcepcionExcel("Error de conversión con el campo: "+ExcelMigrar.LOG_ULTIMO_CAMPO_LEIDO+" => \nInfo:"+ex.getMessage());
                 }
                 catch(Exception ex)
                 {
@@ -472,7 +472,13 @@ public class MigrarProductoModel extends MigrarModel {
                     if (productoTmp != null) {
                         lote = ServiceFactory.getFactory().getLoteSeviceIf().buscarPorProductoYFechaCaducidad(productoTmp, UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
                     } else {
-
+                        
+                        //si no existe un lote anteriormente entonces creo uno
+                        if(lote==null)
+                        {
+                            lote=new Lote();
+                        }
+                        
                         lote.setCodigo(producto.getCodigoPersonalizado());
                         lote.setEmpresa(session.getEmpresa());
                         lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);

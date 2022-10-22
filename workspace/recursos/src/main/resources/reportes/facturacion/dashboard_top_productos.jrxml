@@ -31,7 +31,7 @@
 	<columnHeader>
 		<band height="12">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="173" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="feee631d-f4dc-48d1-bc41-86a281fbc911"/>
+				<reportElement mode="Opaque" x="30" y="0" width="167" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="feee631d-f4dc-48d1-bc41-86a281fbc911"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
@@ -45,7 +45,7 @@
 				<text><![CDATA[Nombres]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="173" y="0" width="92" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="f730fb96-8c32-4afe-886d-1e49d943afa6"/>
+				<reportElement mode="Opaque" x="197" y="0" width="68" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="f730fb96-8c32-4afe-886d-1e49d943afa6"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
@@ -58,12 +58,26 @@
 				</textElement>
 				<text><![CDATA[Cantidad]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="30" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="2f95669a-d706-4366-966c-09cd2b82a691"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="173" height="13" uuid="307ddfdf-019b-4e57-8e9f-32b239d9bc73"/>
+				<reportElement x="30" y="0" width="167" height="13" uuid="307ddfdf-019b-4e57-8e9f-32b239d9bc73"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#666666"/>
 					<leftPen lineWidth="0.5" lineColor="#666666"/>
@@ -77,7 +91,7 @@
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="173" y="0" width="92" height="13" uuid="c9ca801a-7913-4adf-a4fd-96162c8bbf2d"/>
+				<reportElement stretchType="RelativeToBandHeight" x="197" y="0" width="68" height="13" uuid="c9ca801a-7913-4adf-a4fd-96162c8bbf2d"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#666666"/>
 					<leftPen lineWidth="0.5" lineColor="#666666"/>
@@ -89,6 +103,20 @@
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="13" uuid="c3483341-655f-4f4e-88f6-5c623deda1f5"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

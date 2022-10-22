@@ -215,11 +215,15 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
                 {
                     interfaz.transaccion();                
                 }
+                catch(ServicioCodefacException ex)
+                {
+                    throw ex;
+                }
                 catch(Exception e)
                 {
                     Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, e);
                     throw new ServicioCodefacException(e.getMessage());
-                }
+                }                
                return null;
             }
         });

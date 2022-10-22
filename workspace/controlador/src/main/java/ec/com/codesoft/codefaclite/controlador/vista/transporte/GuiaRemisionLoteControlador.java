@@ -220,7 +220,7 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
                     null,
                     null,
                     vendedorSeleccionado,
-                    EnumSiNo.NO,
+                    null,
                     true);
         } catch (RemoteException ex) {
             Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);

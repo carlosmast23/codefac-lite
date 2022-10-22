@@ -177,6 +177,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     @Column(name = "DISPONIBLE_COMPRA") 
     private String disponibleCompra;
     
+    @Column(name = "REGISTRO_SANITARIO") 
+    private String registroSanitario;
+    
     /*@JoinColumn(name = "PRESENTACION_ID")
     private PresentacionProducto presentacion;*/
 
@@ -754,6 +757,16 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.disponibleCompra = disponibleCompraEnum.getLetra();
     }
 
+    public String getRegistroSanitario() {
+        return registroSanitario;
+    }
+
+    public void setRegistroSanitario(String registroSanitario) {
+        this.registroSanitario = registroSanitario;
+    }
+    
+    
+
     public InputStream obtenerImagenProducto()
     {
         RemoteInputStream risImagen = null;
@@ -904,9 +917,46 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     public BigDecimal getValorUnitarioConIva()
     {
+        if(valorUnitario==null || valorUnitario.compareTo(BigDecimal.ZERO)==0)
+        {
+            return valorUnitario;
+        }
         BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
         return UtilidadesImpuestos.agregarValorIva(tarifa, valorUnitario);
     }
+    
+    public BigDecimal getPrecioDistribuidorConIva() {
+        
+        if(precioDistribuidor==null || precioDistribuidor.compareTo(BigDecimal.ZERO)==0)
+        {
+            return precioDistribuidor;
+        }
+        
+        BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        return UtilidadesImpuestos.agregarValorIva(tarifa, precioDistribuidor);
+    }
+    
+    public BigDecimal getPrecioTarjetaConIva() {
+
+        if (precioTarjeta == null || precioTarjeta.compareTo(BigDecimal.ZERO) == 0) 
+        {
+            return precioTarjeta;
+        }
+        
+        BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        return UtilidadesImpuestos.agregarValorIva(tarifa, precioTarjeta);
+    }
+    
+    public BigDecimal getPvp4ConIva() {
+
+        if (pvp4 == null || pvp4.compareTo(BigDecimal.ZERO) == 0) {
+            return pvp4;
+        }
+        
+        BigDecimal tarifa = new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        return UtilidadesImpuestos.agregarValorIva(tarifa, pvp4);
+    }
+
     
     public void setValorUnitarioConIva(BigDecimal valorUnitarioConIva)
     {

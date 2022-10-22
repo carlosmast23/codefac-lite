@@ -38,6 +38,28 @@ public class Perfil implements Serializable{
     
     public static final String PERFIL_DEFECTO="defecto";
     
+    public static final String PERFIL_CAJERO="cajero";
+    
+    public static final String PERFIL_CAJERO_SUPERVISOR="cajero_supervisor";
+    
+    public static final String PERFIL_VENDEDOR_SIN_CAJA="vendedor_sin_caja";
+    
+    public static final String PERFIL_CARTERA="cartera";
+    
+    public static final String PERFIL_TRANSPORTE="transporte";
+    
+    public static final String PERFIL_RESTAURANTE="restaurante";
+    
+    public static final String PERFIL_INVENTARIO_SIMPLE="inventario_simple";
+    
+    public static final String PERFIL_INVENTARIO_AVANZADO="inventario_avanzado";
+    
+    public static final String PERFIL_SERVICIOS="servicios";
+    
+    public static final String PERFIL_SIMPLE="simple";
+    
+    
+    
     private static final long serialVersionUID = 1L;
      
     @Id

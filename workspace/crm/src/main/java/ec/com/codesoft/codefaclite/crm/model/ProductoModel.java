@@ -440,6 +440,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         detallePresentacion.setTipoEnum(tipoEnum);
         detallePresentacion.setPresentacionProducto(presentacionEmpaquetado);
         detallePresentacion.setProductoOriginal(controlador.getProducto());
+        detallePresentacion.setCodigoTmp(getTxtCodigoEmpaquetado().getText());
         
         return detallePresentacion;
         
@@ -594,6 +595,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     {
         getTxtCantidadEmpaquetado().setText("0");
         getTxtPrecioEmpaquetado().setText("");
+        getTxtCodigoEmpaquetado().setText("");
     }
     
     private ActionListener listenerEliminarEnsamble=new ActionListener() {

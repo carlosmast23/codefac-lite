@@ -355,6 +355,7 @@ public abstract class GestionInventarioPanel extends ControladorCodefacInterface
         this.cmbFechaIngreso = cmbFechaIngreso;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtCodigoUnico() {
         return txtCodigoUnico;
     }

@@ -141,7 +141,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             }
             
             InterfaceModelFind productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario,session.getEmpresa(),true,false);
-            if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
             {
                 //TODO: Ver si esta parte de las bodegas de venta se pueden agregar dentro del metodo de busqueda
                 BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
@@ -337,6 +337,19 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
+        
+        try {
+            //Consultar valor por defecto para cargar
+            TipoDocumentoEnum tipoDocumentoEnum=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA, TipoDocumentoEnum.ACADEMICO);
+            if(tipoDocumentoEnum!=null)
+            {
+                getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         crearOCargarPedidoVentaDiaria(true);
     }
     

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
+import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -38,5 +39,6 @@ public interface CompraServiceIf extends ServiceAbstractIf<Compra>
     public Compra obtenerCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException;
     
     public List<Producto> obtenerProductosActualizarPrecios(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException;
+    public BigDecimal obtenerCompraReporteTotalValor(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;
     
 }

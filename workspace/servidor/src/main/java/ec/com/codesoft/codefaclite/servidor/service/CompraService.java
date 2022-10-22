@@ -44,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
@@ -745,5 +746,16 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     {
         return getFacade().obtenerProductosActualizarPrecios(compra);
     }
+    
+    public BigDecimal obtenerCompraReporteTotalValor(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa)
+    {
+        BigDecimal valor= getFacade().obtenerCompraReporteTotalValor(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa);
+        if(valor==null)
+        {
+            valor=BigDecimal.ZERO;
+        }
+        return valor;
+    }
+    
     
 }

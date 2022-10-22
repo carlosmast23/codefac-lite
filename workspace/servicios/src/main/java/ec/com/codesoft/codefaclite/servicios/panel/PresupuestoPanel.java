@@ -1131,7 +1131,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.soloNumeros2, nombre = "Dias presupuesto")
+    //@ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.soloNumeros2, nombre = "Dias presupuesto")
     public JTextField getTxtDiasPresupuesto() {
         return txtDiasPresupuesto;
     }

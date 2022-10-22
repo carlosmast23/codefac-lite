@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TopProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -154,6 +155,18 @@ public class ProductoFacade extends AbstractFacade<Producto>
             return productos.get(0);
         }
         return null;
+        
+    }
+    
+    public List<TopProductoRespuesta> topProductosMasVendidosFacade() throws ServicioCodefacException, RemoteException
+    {
+        String queryString = "SELECT FD.DESCRIPCION,SUM(CANTIDAD) AS CANTIDAD FROM FACTURA_DETALLE FD GROUP BY DESCRIPCION ORDER BY SUM(CANTIDAD) DESC " ;
+        Query query=getEntityManager().createNativeQuery(queryString);
+        //Object resultado= query.getResultList();
+        
+        List<Object[]> listaResultado= query.getResultList();
+        
+        return TopProductoRespuesta.castList(listaResultado);
         
     }
       

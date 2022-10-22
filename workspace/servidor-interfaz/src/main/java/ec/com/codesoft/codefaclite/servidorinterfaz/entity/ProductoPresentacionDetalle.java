@@ -37,6 +37,9 @@ public class ProductoPresentacionDetalle implements Serializable{
     @Transient
     private BigDecimal pvpTmp;
     
+    @Transient
+    private String codigoTmp;
+    
     @JoinColumn(name = "PRESENTACION_PRODUCTO_ID")
     private PresentacionProducto presentacionProducto;
     
@@ -102,6 +105,16 @@ public class ProductoPresentacionDetalle implements Serializable{
     public void setPvpTmp(BigDecimal pvpTmp) {
         this.pvpTmp = pvpTmp;
     }
+
+    public String getCodigoTmp() {
+        return codigoTmp;
+    }
+
+    public void setCodigoTmp(String codigoTmp) {
+        this.codigoTmp = codigoTmp;
+    }
+    
+    
 
     public String getTipo() {
         return tipo;

@@ -171,12 +171,12 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                             
                             //TODO: Por el momento dejo pendiente de validar cuando un mismo producto puede ir en partes en varias guias de remision
                             Factura facturaEditar=facturaDetalle.getFactura();
-                            if(facturaEditar.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
-                            {
-                                System.out.println("Factura editar: "+facturaEditar.getPreimpreso());
-                                facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
-                                entityManager.merge(facturaEditar);
-                            }
+                            //if(facturaEditar.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
+                            //{
+                            System.out.println("Factura enviada en guia de remision editar: "+facturaEditar.getPreimpreso());
+                            facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
+                            entityManager.merge(facturaEditar);
+                            //}
                         }
                         
                     }

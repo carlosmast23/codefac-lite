@@ -86,9 +86,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -914,8 +916,22 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         
         
         getTblGuiaRemision().setModel(modeloTabla);
+        cargarFacturasLista();
         UtilidadesTablas.ocultarColumna(getTblGuiaRemision(),0);
         
+    }
+    
+    private void cargarFacturasLista()
+    {
+        DefaultListModel<String> lista=new DefaultListModel<String>();
+        if(guiaRemision!=null && guiaRemision.getDestinatarios()!=null)
+        {
+            for (DestinatarioGuiaRemision destinatarios : guiaRemision.getDestinatarios()) {
+                lista.addElement(destinatarios.getFacturaReferencia().getSecuencial()+"");
+                
+            }            
+        }
+        getLstFacturas().setModel(lista);
     }
     
     private void cargarDestinatariosAgregados()

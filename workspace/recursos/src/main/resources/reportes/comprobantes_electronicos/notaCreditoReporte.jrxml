@@ -99,9 +99,9 @@
 			</rectangle>
 			<componentElement>
 				<reportElement x="313" y="272" width="234" height="50" uuid="40b8dc45-f9bd-4178-84ea-1fab32e8b949"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+				<jr:EAN128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
 					<jr:codeExpression><![CDATA[$P{autorizacion}]]></jr:codeExpression>
-				</jr:Code128>
+				</jr:EAN128>
 			</componentElement>
 			<staticText>
 				<reportElement x="318" y="56" width="212" height="32" uuid="f80e499f-05b1-47f6-9d9d-2328839da831"/>

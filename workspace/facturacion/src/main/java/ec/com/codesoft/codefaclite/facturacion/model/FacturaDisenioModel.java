@@ -6,46 +6,44 @@
 package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.DrawCanvas;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.DrawComponente;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.DrawDocumento;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.DrawSeccion;
-import ec.com.codesoft.codefaclite.facturacion.model.disenador.LienzoDisenador;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.RepaintInterface;
-import ec.com.codesoft.codefaclite.facturacion.panel.FacturaDisenioPanel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaDisenoPanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BandaComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComponenteComprobanteFisico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
-import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import java.awt.Color;
+import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,8 +52,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SpringLayout;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -84,7 +80,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     public FacturaDisenioModel() {
         this.repaintInterface = this;
-        cargarDatos();
+        cargarDatos(null);
         facturaDisenioModel = this;
 
         cargarComboSeccion((ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem());
@@ -267,8 +263,78 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private void listenerBtnImportar()
+    {
+        File archivo=UtilidadesDirectorios.buscarArchivo("Diseño Codefac",new String[]{"codefac"});
+        if(archivo!=null)
+        {
+            ComprobanteFisicoDisenio comprobanteFisicoDisenio = (ComprobanteFisicoDisenio) UtilidadesDirectorios.leerObjectoArchivo(archivo);
+            cargarDatos(comprobanteFisicoDisenio);
+            DialogoCodefac.mensaje(new CodefacMsj("Datos cargados correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));
+            /*FileInputStream fileInputStream = null;
+            try {
+                fileInputStream = new FileInputStream(archivo);
+                //ObjectOutputStream output = new ObjectOutputStream(fileOutputStream);
+                ObjectInputStream input = new ObjectInputStream (fileInputStream);
+                ComprobanteFisicoDisenio comprobanteFisicoDisenio = (ComprobanteFisicoDisenio) input.readObject();
+                cargarDatos(comprobanteFisicoDisenio);
+                
+                } catch (FileNotFoundException ex) {
+                Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
+            } */
+        }
+    }
+    
+    private void listenerBtnExportar()
+    {
+        String nombreArchivo=UtilidadesArchivos.generarNombreArchivoUnico("disenio","codefac");
+        File fileOriginal=UtilidadesDirectorios.crearArchivoEnDirectorio(nombreArchivo);
+        UtilidadesDirectorios.grabarObjectoArchivo(fileOriginal, getCmbDocumento().getSelectedItem());
+        DialogoCodefac.mensaje(new CodefacMsj("Datos grabados correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));
+        /*FileOutputStream file; 
+        try {
+            //file = new FileOutputStream( "desenio.codefac" );
+            File fileOriginal=UtilidadesDirectorios.crearArchivoEnDirectorio("disenio.codefac");
+            FileOutputStream archivoNuevo=new FileOutputStream(fileOriginal);
+            //file = new FileOutputStream( fileOriginal);
+            ObjectOutputStream output = new ObjectOutputStream(archivoNuevo);
+            if (output!=null)
+            {
+                ComprobanteFisicoDisenio disenio=(ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
+                output.writeObject(disenio);
+                output.close();
+            }
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+    }
 
     private void agregarListener() {
+        
+        getBtnImportar().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                listenerBtnImportar();
+            }
+        });
+        
+        getBtnExportar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerBtnExportar();
+            }
+        });
 
         getjPanel1().addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -596,15 +662,36 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         lienzo.setLayout(layout);
         getjScrollPane1().setViewportView(lienzo);
     }*/
-    private void cargarDatos() {
+    private void cargarDatos(ComprobanteFisicoDisenio remplazar) {
         try {
             getCmbDocumento().removeAllItems();
             ComprobanteFisicoDisenioServiceIf servicio = ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();
             List<ComprobanteFisicoDisenio> documentos = servicio.obtenerTodos();
-            for (ComprobanteFisicoDisenio documento : documentos) {
+            for (ComprobanteFisicoDisenio documento : documentos) 
+            {
                 //Esto sirve para desasociar la entidad y que no se reflejen los cambios directamente con la base de datos
                 //ServiceAbstract.desasociarEntidadRecursivo(documento);
-                getCmbDocumento().addItem(documento);
+                if(remplazar!=null)
+                {
+                    if(remplazar.getCodigoDocumento().equals(documento.getCodigoDocumento()))
+                    {
+                        remplazar.setId(documento.getId());
+                        getCmbDocumento().addItem(remplazar);
+                    }
+                    else
+                    {
+                        getCmbDocumento().addItem(documento);
+                    }
+                }
+                else
+                {
+                    getCmbDocumento().addItem(documento);
+                }
+            }
+            
+            if(remplazar!=null)
+            {
+                getCmbDocumento().setSelectedItem(remplazar);
             }
             //System.exit(0);
         } catch (RemoteException ex) {

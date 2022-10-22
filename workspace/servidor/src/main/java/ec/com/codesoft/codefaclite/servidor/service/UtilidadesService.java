@@ -17,10 +17,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -31,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.DashBoardData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.DashBoardReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TopProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ValidacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
@@ -39,6 +45,7 @@ import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.RemoteServer;
@@ -556,14 +563,16 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     {
         java.sql.Date fechaHoy= UtilidadesFecha.getFechaHoy();
         ReportDataAbstract<DashBoardData> reporte=new DashBoardReport("DashBoard");
-        //Agregar parametros
-        BigDecimal totalVentas= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTotalVenta
+        
+        //////////// CONSULTAR EL TOTAL DE VENTAS ///////////////////////////
+        // TODO: Ver si mejor se puede poner un metodo simplificado en el servidor para evitar hacer tanta consulta
+        BigDecimal totalVentasDiarias= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTotalVenta
         (
                 null, 
                 fechaHoy, 
                 fechaHoy, 
                 ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO, 
-                Boolean.TRUE, 
+                null, 
                 null, 
                 Boolean.TRUE, 
                 null, 
@@ -575,19 +584,71 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                 null, 
                 Boolean.TRUE);
         
-        reporte.agregarParametro("ventasDiarias",totalVentas);
+        reporte.agregarParametro("ventasDiarias",totalVentasDiarias+"");
+        
+        //////////// CONSULTAR EL TOTAL DE COMPRAS ///////////////////////////
+        BigDecimal totalComprasDiarias=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraReporteTotalValor(
+                null, 
+                fechaHoy, 
+                fechaHoy, 
+                null, 
+                null, 
+                GeneralEnumEstado.ACTIVO, 
+                empresa
+        );
+        reporte.agregarParametro("comprasDiarias",totalComprasDiarias+"");
+        
+        /////////// CONSULTAR EL TOTAL DE LAS CUENTAS POR COBRAR ///////////////////
+        BigDecimal totalCuentaPorCobrar= ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCeroValorTotal(
+                            null, 
+                            null,
+                            fechaHoy, 
+                            fechaHoy,
+                            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+                            Cartera.TipoCarteraEnum.CLIENTE,
+                            Cartera.TipoSaldoCarteraEnum.CON_SALDO,
+                            Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO, 
+                            CarteraEstadoReporteEnum.TODO,
+                            null,
+                            null);
+        
+        reporte.agregarParametro("cuentasPorCobrar",totalCuentaPorCobrar+"");
+        
+        
+        /////////// CONSULTAR EL TOTAL DE LAS CUENTAS POR COBRAR ///////////////////
+        BigDecimal totalCuentaPorPagar= ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCeroValorTotal(
+                            null, 
+                            null,
+                            fechaHoy, 
+                            fechaHoy,
+                            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+                            Cartera.TipoCarteraEnum.PROVEEDORES,
+                            Cartera.TipoSaldoCarteraEnum.CON_SALDO,
+                            Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO, 
+                            CarteraEstadoReporteEnum.TODO,
+                            null,
+                            null);
+        
+        reporte.agregarParametro("cuentasPorPagar",totalCuentaPorPagar+"");
+        
         
         DashBoardData dashBoardData=new DashBoardData();
-                
-        DashBoardData.DashboardProductoTopData producto1=new DashBoardData.DashboardProductoTopData("Producto 1", "10");
-        DashBoardData.DashboardProductoTopData producto2=new DashBoardData.DashboardProductoTopData("Producto 2", "10");
-        DashBoardData.DashboardProductoTopData producto3=new DashBoardData.DashboardProductoTopData("Producto 3", "10");
         
+        ////////////////// CONSULTAR EL TOP DE LOS PRODUCTOS MÁS VENDIDOS /////////////////////////////
+        List<TopProductoRespuesta> topProductoRespuestaList=ServiceFactory.getFactory().getProductoServiceIf().topProductosMasVendidosService();
         List<DashBoardData.DashboardProductoTopData> listaDetalle=new ArrayList<DashBoardData.DashboardProductoTopData>();
-        
-        listaDetalle.add(producto1);
-        listaDetalle.add(producto2);
-        listaDetalle.add(producto3);
+        int cantidad=10;
+        int acumulador=0;
+        for (TopProductoRespuesta productoTop : topProductoRespuestaList) 
+        {
+            DashBoardData.DashboardProductoTopData producto1=new DashBoardData.DashboardProductoTopData(productoTop.descripcion, productoTop.cantidad.setScale(0, RoundingMode.HALF_UP)+"");            
+            listaDetalle.add(producto1);
+            
+            if((acumulador++)>10)
+            {
+                break;
+            }
+        }        
         
         reporte.agregarParametro("productosList",listaDetalle);
         

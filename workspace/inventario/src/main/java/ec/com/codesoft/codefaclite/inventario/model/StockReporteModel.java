@@ -188,6 +188,8 @@ public class StockReporteModel extends StockMinimoPanel{
     
     private JasperReport obtenerSubReporte()
     {
+        BigDecimal b1=BigDecimal.ONE;
+        b1.multiply(b1);
         InputStream inputStream = null;
         try {
             RecursosServiceIf service = ServiceFactory.getFactory().getRecursosServiceIf();

@@ -62,6 +62,7 @@ public enum VentanaEnum implements Serializable{
     ASOCIAR_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel", "ASOP", "Asociar Producto", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,null),
     BODEGA("ec.com.codesoft.codefaclite.inventario.model.BodegaModel", "BODG", "Bodega", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
     LOTE("ec.com.codesoft.codefaclite.inventario.model.LoteModel", "LOTE", "Lote", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
+    GARANTIA("ec.com.codesoft.codefaclite.inventario.model.GarantiaModel", "GARA", "Garantia", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO},TipoLicenciaEnum.PRO,null,null),
     TIPO_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.TipoProductoModel", "TIPO", "Tipo", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     SEGMENTO_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.SegmentoProductoModel", "SEGM", "Segmento", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     UTILIDAD_PRECIO("ec.com.codesoft.codefaclite.inventario.model.UtilidadPrecioModel", "UTPM", "Utilidades Precios", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS,null,null),
@@ -164,7 +165,8 @@ public enum VentanaEnum implements Serializable{
     REPORTE_CAJA_SESSION("ec.com.codesoft.codefaclite.pos.model.CajaSessionReporteModel", "CAJR", "Reporte Caja Sesion", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null),
     REPORTE_ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaReporteModel", "ACRT", "Reporte Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null),
     MESA("ec.com.codesoft.codefaclite.restaurante.model.MesaModel", "MESA", "Mesa", ModuloCodefacEnum.RESTAURANTE, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO},TipoLicenciaEnum.PRO,null,null),
-    PRODUCCION("ec.com.codesoft.codefaclite.inventario.model.ProduccionModel", "PROD", "Producción", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO},TipoLicenciaEnum.GRATIS,null,null),;
+    PRODUCCION("ec.com.codesoft.codefaclite.inventario.model.ProduccionModel", "PROD", "Producción", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO},TipoLicenciaEnum.GRATIS,null,null),    
+    ;
     
 
     

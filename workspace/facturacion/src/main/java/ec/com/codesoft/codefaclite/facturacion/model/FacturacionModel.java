@@ -5,17 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
-import com.healthmarketscience.rmiio.RemoteInputStream; 
-import com.healthmarketscience.rmiio.RemoteInputStreamClient;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ComandaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
-import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
-import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
@@ -37,39 +31,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
-import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_GRABAR;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.controlador.model.LoginArqueoCajalModel;
-import ec.com.codesoft.codefaclite.controlador.panel.LoginArqueoCajaDialog;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
-import ec.com.codesoft.codefaclite.facturacion.other.RenderPersonalizadoCombo;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaFisicaDataMap;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FormatoReporteEnum;
-import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.obtenerDecimalesRedondeo;
-import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
-import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
-import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_AUTORIZAR;
-import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_ENVIAR;
-import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_FIRMAR;
-import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_PRE_VALIDAR;
-import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_RIDE;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
-import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
-import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
-import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
@@ -97,34 +71,23 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
-import static ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
-import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
-import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.tabla.ButtonColumn;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
-import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
-import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
-import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
-import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -133,23 +96,17 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -167,8 +124,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.apache.commons.collections4.map.HashedMap;
-import org.jdesktop.swingx.prompt.PromptSupport;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
@@ -696,7 +651,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 try {
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                    
                     controlador.agregarDetallesFactura(facturaDetalleSeleccionado,documentoSeleccionado,kardexSeleccionado);
+                    
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1048,6 +1005,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if (entity != null) {
                     controlador.verificarProductoConNotaVentaInterna(entity);
                     productoSeleccionado = entity;                    
+                    
                     FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
                             productoSeleccionado.getValorUnitario(),
                             productoSeleccionado.getPrecioSinSubsidio(),
@@ -1056,6 +1014,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             productoSeleccionado.getCatalogoProducto(),
                             entity.getIdProducto(),
                             null,
+                            EnumSiNo.NO,
                             TipoDocumentoEnum.LIBRE,
                             BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
                     
@@ -1191,7 +1150,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         Presupuesto presupuestoTmp = (Presupuesto) buscarDialogoModel.getResultado();
         //agregarPresupuestoFactura(presupuestoTmp,false);
-        controlador.agregarPresupuestoVista(presupuestoTmp,false);
+        controlador.agregarPresupuestoVista(presupuestoTmp,true);
 
     }
     
@@ -1215,6 +1174,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             rubroSeleccionado=rubroEstudianteTmp;            
             BigDecimal descuentoValor=rubroEstudianteTmp.obtenerValorSaldoDescuento();
             
+            
             FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
                     rubroEstudianteTmp.obtenerSaldoIncluidoDescuento(), 
                     null, //Este tipo de valores no tienen subsidio
@@ -1223,6 +1183,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 
                     rubroEstudianteTmp.getId(), 
                     null,
+                    EnumSiNo.NO,
                     controlador.getTipoDocumentoEnumSeleccionado(),
                     descuentoValor);
             controlador.setearValoresProducto(facturaDetalle);
@@ -1289,11 +1250,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta,true);
             
             //cambiar el tipo de buscador si tiene activo el parametro de farmacia
-            if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.FARMACIA))
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.FARMACIA))
             {
                 productoInventarioBusquedaDialogo=new FarmaciaProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(), bodegaVenta);
             }
-            else if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
+            else if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
             {
                 productoInventarioBusquedaDialogo=new TallerMecanicoInventarioBusquedaDialogo(manejaInventario,session.getEmpresa(), bodegaVenta);
             }
@@ -1314,11 +1275,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
         }
         
-        cargarProductoInventario(manejaInventario);
+        cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado);
         //ParametroCodefac.        
     }
     
-    private void cargarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
+    private void cargarProductoInventario(EnumSiNo manejaInventario,Kardex kardexSeleccionado,Producto productoSeleccionado) throws RemoteException, ServicioCodefacException
     {
         /**
          * ==========================================================================
@@ -1435,7 +1396,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                     }
                     //Volver a cargar los productos pero con la nueva presentacion
-                    cargarProductoInventario(enumBusqueda);
+                    cargarProductoInventario(enumBusqueda,kardexSeleccionado,productoSeleccionado);
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {

@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscrito
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.GarantiaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
@@ -244,6 +245,7 @@ public abstract class ServiceFactory {
     public ObjetoMantenimientoServiceIf getObjetoMantenimientoServiceIf(){return (ObjetoMantenimientoServiceIf) getRecursosRMI(ObjetoMantenimientoServiceIf.class);};
     public CasaComercialServiceIf getCasaComercialServiceIf(){return (CasaComercialServiceIf) getRecursosRMI(CasaComercialServiceIf.class);};
     public ProductoPresentacionDetalleServiceIf getProductoPresentacionDetalleServiceIf(){return (ProductoPresentacionDetalleServiceIf) getRecursosRMI(ProductoPresentacionDetalleServiceIf.class);};
+    public GarantiaServiceIf getGarantiaServiceIf(){return (GarantiaServiceIf) getRecursosRMI(GarantiaServiceIf.class);};
     
     
     /**
