@@ -509,7 +509,7 @@ public class Producto implements Serializable, Comparable<Producto> {
         }
     }
     
-    @Deprecated
+    /*@Deprecated
     public PresentacionProducto buscarPresentacionOriginal()
     {
         if(presentacionList!=null)
@@ -523,7 +523,7 @@ public class Producto implements Serializable, Comparable<Producto> {
             }
         }
         return null;
-    }
+    }*/
     
     public ProductoPresentacionDetalle buscarPresentacionDetalleProducto()
     {

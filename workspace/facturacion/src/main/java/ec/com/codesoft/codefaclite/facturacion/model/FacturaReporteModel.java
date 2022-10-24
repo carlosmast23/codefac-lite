@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
@@ -26,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -69,6 +71,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
     private PersonaEstablecimiento persona;
     protected Persona referido;
     //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    
+    private Producto productoFiltro;
     
     private List<ReporteFacturaData> data;
     
@@ -149,6 +153,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
         controladorReporte.setPuntoEmision(puntoEmisionReporte);
         controladorReporte.setAgregarCostos(getChkAgregarCostos().isSelected());
+        
+        controladorReporte.setProductoFiltro(productoFiltro);
+        
 
         //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
         TipoReporteEnum tipoReporteEnum = (TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
@@ -449,6 +456,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
         //Actualiza la tabla de los datos adicionales
         //cargarDatosAdicionales();
     }
+    
+    private void setearValoresProducto() {
+
+        getTxtProducto().setText(productoFiltro.getNombre());
+    }
 
     @Override
     public void iniciar() {
@@ -560,6 +572,19 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     protected void listenerBotones() {
         
+        getBtnBuscarProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),null,null);
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                productoFiltro = ((Producto) buscarDialogoModel.getResultado());
+                if(productoFiltro!=null)
+                {
+                    setearValoresProducto();
+                }
+            }
+        });
        
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
@@ -619,6 +644,20 @@ public class FacturaReporteModel extends FacturaReportePanel {
     }
 
     protected void listenerChecks() {
+        
+        getChkTodosProducto().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    productoFiltro = null;
+                    getTxtProducto().setText("...");
+                    //getLblNombreCliente().setText("..");
+                    getBtnBuscarProducto().setEnabled(false);
+                } else {
+                    getBtnBuscarProducto().setEnabled(true);
+                }
+            }
+        });
         
         
         //String texto= session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;

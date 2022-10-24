@@ -873,7 +873,8 @@ public class CompraModel extends CompraPanel{
                     getCmbIvaDetalle().setSelectedItem(compraDetalle.getPorcentajeIva());
                     
                     cargarPresentaciones(compraDetalle.getProductoProveedor().getProducto());
-                    getCmbPresentacionProducto().setSelectedItem(compraDetalle.getProductoProveedor().getProducto().buscarPresentacionOriginal());
+                    //getCmbPresentacionProducto().setSelectedItem(compraDetalle.getProductoProveedor().getProducto().buscarPresentacionOriginal());
+                    getCmbPresentacionProducto().setSelectedItem(compraDetalle.getProductoProveedor().getProducto().buscarPresentacionProducto());
                     
                     String loteCodigo="";
                     if(compraDetalle.getLote()!=null)
@@ -986,7 +987,8 @@ public class CompraModel extends CompraPanel{
             //Volver a seleccionar la presentacion correcta en el caso que existe el producto
             if(productoSeleccionado!=null)
             {
-                getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
+                //getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
+                getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionProducto());
             }
         }
     }
@@ -1264,16 +1266,26 @@ public class CompraModel extends CompraPanel{
     
     private void mostrarDatosTablaSinRetencion()
     {
-        String[] titulo={"Cantidad","Descripción","Valor Unitario","Valor Total"};
+        String[] titulo={"Cantidad","Descripción","Presentación","Valor Unitario","Valor Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         
         if(detalles!=null)
-        {
-            for (CompraDetalle detalle : detalles) {
+        {            
+            for (CompraDetalle detalle : detalles) 
+            {
+                String presentacionProductoStr="";
+                PresentacionProducto presentacionProducto=detalle.getProductoProveedor().getProducto().buscarPresentacionProducto();
+                
+                if(presentacionProducto!=null)
+                {
+                    presentacionProductoStr=presentacionProducto.getNombre();
+                }
+                
                 Vector<String> fila=new Vector<String>();
                 fila.add(detalle.getCantidad()+"");
                 fila.add(detalle.getDescripcion()+"");
+                fila.add(presentacionProductoStr);
                 fila.add(detalle.getPrecioUnitario()+"");
                 fila.add(detalle.getSubtotal()+"");
                 this.modeloTablaDetallesCompra.addRow(fila);

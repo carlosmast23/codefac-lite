@@ -90,6 +90,7 @@ public class ControladorReporteFactura {
     private List<Factura> datafact;
     
     private Boolean agregarCostos;
+    private Producto productoFiltro;
     
 
     public ControladorReporteFactura(Empresa empresa) {
@@ -343,7 +344,7 @@ public class ControladorReporteFactura {
                         
                         if(reporteConDetallesFactura)
                         {
-                            List<ReporteFacturaData> respuesta=convertirDatosReportePorProducto(factura, reporteData);
+                            List<ReporteFacturaData> respuesta=convertirDatosReportePorProducto(factura, reporteData,productoFiltro);
                             data.addAll(respuesta);
                         }
                         else
@@ -458,12 +459,20 @@ public class ControladorReporteFactura {
      * @param factura
      * @param reporteData 
      */
-    private List<ReporteFacturaData> convertirDatosReportePorProducto(Factura factura,ReporteFacturaData reporteData)
+    private List<ReporteFacturaData> convertirDatosReportePorProducto(Factura factura,ReporteFacturaData reporteData,Producto productoFiltro)
     {
         List<ReporteFacturaData> resultados=new ArrayList<ReporteFacturaData>();
         try {            
             for (FacturaDetalle detalle : factura.getDetalles()) 
             {
+                if(productoFiltro!=null)
+                {
+                    //Si no coincide con el filtro entonces busco el siguiente producto
+                    if(!detalle.getReferenciaId().equals(productoFiltro.getIdProducto()))
+                    {
+                        continue;
+                    }
+                }
                 //detalle.getIva()
                 ReporteFacturaData dataFacturaCopia=(ReporteFacturaData) reporteData.clone();
                 dataFacturaCopia.setCantidad(detalle.getCantidad()+"");
@@ -485,8 +494,10 @@ public class ControladorReporteFactura {
                 //TODO: Por el momento se realiza la consulta directa del producto pero esta parte tiene que estar en el servidor
                 String nombreCategoria="Sin asignar";
                 ReferenciaDetalleFacturaRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId());
-                if (respuesta.objecto != null) {
-                    switch (respuesta.tipoDocumentoEnum) {
+                if (respuesta.objecto != null) 
+                {
+                    switch (respuesta.tipoDocumentoEnum) 
+                    {
                         case LIBRE:
                         case INVENTARIO:
                             Producto producto=(Producto) respuesta.objecto;
@@ -1095,6 +1106,16 @@ public class ControladorReporteFactura {
     public void setAgregarCostos(Boolean agregarCostos) {
         this.agregarCostos = agregarCostos;
     }
+
+    public Producto getProductoFiltro() {
+        return productoFiltro;
+    }
+
+    public void setProductoFiltro(Producto productoFiltro) {
+        this.productoFiltro = productoFiltro;
+    }
+    
+    
     
     
     public enum TipoReporteEnum implements EnumReporteAgruparIf
@@ -1201,6 +1222,8 @@ public class ControladorReporteFactura {
         public void setNombre(String nombre) {
             this.nombre = nombre;
         }
+        
+        
         
         @Override
         public CampoAgruparIf getCampoAgrupar() {

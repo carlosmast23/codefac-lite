@@ -366,7 +366,9 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 KardexDetalleTmp kardexDetalle = entry.getKey();
                 CompraDetalle compraDetalle = entry.getValue();
                 Producto producto= compraDetalle.getProductoProveedor().getProducto();
-                String presentacionStr=(producto.buscarPresentacionOriginal()!=null)?producto.buscarPresentacionOriginal().getNombre():"";
+                //producto.buscarProductoEmpaquePrincipal()
+                //String presentacionStr=(producto.buscarPresentacionOriginal()!=null)?producto.buscarPresentacionOriginal().getNombre():"";
+                String presentacionStr=(producto.buscarPresentacionProducto()!=null)?producto.buscarPresentacionProducto().getNombre():"";
 
                 Object[] fila=
                 {
