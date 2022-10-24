@@ -103,6 +103,12 @@ public class UtilidadesFecha {
  * @return dias
  */
     public static int obtenerDistanciaDias(java.util.Date fechaMenor, java.util.Date fechaMayor) {
+        
+        if(fechaMenor==null || fechaMayor==null)
+        {
+            return 0;
+        }
+        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); //todo: Ver si estos dates format se hace un formato global
         //Formatear sin tiempo la fecha para evitar problemas en los calculos por las horas
         //fechaMenor=formato.parse(formato.format(fechaMenor)); //Revisar si no hay problema porque estoy quitando
