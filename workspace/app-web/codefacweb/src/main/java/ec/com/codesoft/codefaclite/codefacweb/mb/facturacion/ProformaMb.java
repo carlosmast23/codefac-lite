@@ -92,6 +92,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -175,6 +176,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      * Referencia para saber si estan en modo de editar un detalle o no 
      */
     private Boolean modoEdicionDetalle;
+    
+    /*
+    Variable temporal que me permite saber cual fue el precio original seleccionado para poder realizar otras validaciones
+    */
+    private BigDecimal precioVentaOriginalSeleccionada;
 
     @PostConstruct
     public void init() {
@@ -479,6 +485,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("Metodo ejecutando seleccionar producto");
         System.out.println("Documento seleccionado : "+documentoSeleccionado.getNombre());
         productoSeleccionado = (Producto) event.getObject(); 
+        precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();
         controlador.agregarProductoVista(productoSeleccionado,null,BigDecimal.ZERO,null,null);
         //cargarDetalleFacturaAgregar(productoSeleccionado); 
     }
@@ -503,23 +510,12 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void agregarProducto() {
 
         try {
-            /*if (facturaDetalle.getCantidad().compareTo(BigDecimal.ZERO) <= 0) {
-            MensajeMb.mostrarMensajeDialogo("Error", "Por favor ingrese un valor valido", FacesMessage.SEVERITY_WARN);
-            return;
-            }
-            //facturaDetalle.
-            facturaDetalle.calcularTotalDetalle();
-            facturaDetalle.calculaIva();
-            
-            facturaDetalle.calcularValorIce();
-            
-            factura.addDetalle(facturaDetalle);
-            factura.calcularTotalesDesdeDetalles();
-            facturaDetalle = new FacturaDetalle();
-            productoSeleccionado = new Producto();*/
-            controlador.agregarDetallesFactura(facturaDetalle,documentoSeleccionado,null);
+
+            controlador.agregarDetallesFactura(facturaDetalle,precioVentaOriginalSeleccionada,documentoSeleccionado,null);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+            MensajeMb.mostrarMensajeDialogo("Error ",ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            //mostrarDialogoResultado(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
         }
 
     }
@@ -1445,6 +1441,13 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         this.puntoEmisionSeleccionado = puntoEmisionSeleccionado;
     }
     
+    public void modificarPrecioVenta()
+    {
+        System.out.println("modificarPrecioVenta ...");
+        precioVentaOriginalSeleccionada=facturaDetalle.getPrecioUnitario();
+        //System.out.println("valor: "+facturaDetalle.getPrecioUnitario());
+    }
+    
     ///////////////////////////////////////////////////////////////////////////
     //                       METODOS GET AND SET
     ///////////////////////////////////////////////////////////////////////////
@@ -1554,6 +1557,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void setVisualizarComanda(Boolean visualizarComanda) {
         this.visualizarComanda = visualizarComanda;
+    }
+
+    public BigDecimal getPrecioVentaOriginalSeleccionada() {
+        return precioVentaOriginalSeleccionada;
+    }
+
+    public void setPrecioVentaOriginalSeleccionada(BigDecimal precioVentaOriginalSeleccionada) {
+        this.precioVentaOriginalSeleccionada = precioVentaOriginalSeleccionada;
     }
     
     

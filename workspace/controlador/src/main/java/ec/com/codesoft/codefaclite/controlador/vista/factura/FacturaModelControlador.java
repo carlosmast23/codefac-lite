@@ -254,7 +254,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 try {
                     //DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     DocumentoEnum documentoSeleccionado=interfaz.obtenerDocumentoSeleccionado();
-                    agregarDetallesFactura(facturaDetalle, documentoSeleccionado, null);
+                    agregarDetallesFactura(facturaDetalle,null, documentoSeleccionado, null);
                     
                     //Cargar los productos adicionales para la factura
                     for (PresupuestoDetalle presupuestoDetalle : presupuestoTmp.getPresupuestoDetalles()) 
@@ -279,7 +279,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         this.setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum.INVENTARIO);
                         this.interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
                         setearValoresProducto(facturaDetalle);
-                        agregarDetallesFactura(facturaDetalle,documentoSeleccionado, null);
+                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null);
                     }
                     
                 } catch (ServicioCodefacException ex) {
@@ -743,13 +743,34 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return verificadorStock;
     }
     
+    public void agregarDetallesFacturaValidacion(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal) throws ServicioCodefacException
+    {
+        try {
+            if(precioVentaOriginal!=null)
+            {
+                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MODIFICAR_PRECIO_MENOR,EnumSiNo.NO))
+                {
+                    if(facturaDetalle.getPrecioUnitario().compareTo(precioVentaOriginal)<0)
+                    {
+                        throw new ServicioCodefacException("No se puede ingresar un valor menor al precio de venta");
+                    }
+                }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * TODO: VER SIS ESTE METODO SE PUEDE UNIR CON EL DE ABAJO PORQUE EISTE 2 SIMILARES !IMPORTANTE!
      * @param facturaDetalle
      * @return 
      */
-    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,DocumentoEnum documentoEnum,Kardex kardex) throws ServicioCodefacException {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex) throws ServicioCodefacException {
 
+        
+        agregarDetallesFacturaValidacion(facturaDetalle, precioVentaOriginal);
+        
         //Validacion de los datos ingresados para ver si puedo agregar al detalle
         if (!interfaz.validarIngresoDetalle()) 
         {

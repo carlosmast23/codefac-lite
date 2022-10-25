@@ -166,7 +166,7 @@
                                         <!-- Combo box para seleccionar cuando tiene varios listado de precios -->
                                         <p:selectOneMenu  id="cmbPreciosVenta" value="#{proformaMb.facturaDetalle.precioUnitario}" converter="precioVentaConverter"   >
                                             <f:selectItems value="#{proformaMb.precioVentaList}" var="precio" itemValue="#{precio.precio}" itemLabel="#{precio.alias}" />
-                                            <p:ajax event="itemSelect"  update="txtValorUnitario"  />
+                                            <p:ajax event="itemSelect"  update="txtValorUnitario" listener="#{proformaMb.modificarPrecioVenta()}"  />
                                         </p:selectOneMenu>
                                     </div>
                                 </div>

@@ -240,6 +240,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbEditarDescuentoFactura(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbEditarPrecioUnitFactura(),EnumSiNo.values());
         
+        UtilidadesComboBox.llenarComboBox(getCmbModificarPrecioMenor(), EnumSiNo.values());
+        
         UtilidadesComboBox.llenarComboBox(getCmbDatosCompartidosEmpresas(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbDocumentoDefectoVistaFactura(),new DocumentoEnum[]{DocumentoEnum.FACTURA,DocumentoEnum.NOTA_VENTA_INTERNA,DocumentoEnum.NOTA_VENTA});
@@ -563,6 +565,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarDescuentoFactura != null) ? parametroEditarDescuentoFactura.getValor() : null);
             getCmbEditarDescuentoFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac parametroModificarPrecioMenor = parametrosTodos.get(ParametroCodefac.MODIFICAR_PRECIO_MENOR);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroModificarPrecioMenor != null) ? parametroModificarPrecioMenor.getValor() : null);
+            getCmbModificarPrecioMenor().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             ParametroCodefac parametroFacturarInventarioNegativo = parametrosTodos.get(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroFacturarInventarioNegativo != null) ? parametroFacturarInventarioNegativo.getValor() : null);
             getCmbFacturarInventarioNegativo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -763,6 +769,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbEditarDescuentoFactura().getSelectedItem();
         agregarParametro(ParametroCodefac.EDITAR_DESCUENTO_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.EDITAR_DESCUENTO_FACTURA);
+        
+        
+        enumSiNo = (EnumSiNo) getCmbModificarPrecioMenor() .getSelectedItem();
+        agregarParametro(ParametroCodefac.MODIFICAR_PRECIO_MENOR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.MODIFICAR_PRECIO_MENOR);
         
         enumSiNo = (EnumSiNo) getCmbEditarPrecioUnitFactura().getSelectedItem();
         agregarParametro(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
