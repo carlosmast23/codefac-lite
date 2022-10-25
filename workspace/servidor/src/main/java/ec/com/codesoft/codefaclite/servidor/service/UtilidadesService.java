@@ -665,6 +665,16 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         String ip= ServiceFactory.getFactory().ipServidor;
         return "http://"+ip+":8080/codefac";
     }
+    
+    public Boolean verificarVersionSistema(String versionCliente) throws RemoteException,ServicioCodefacException
+    {
+        String versionServidor=ParametrosSistemaCodefac.VERSION;
+        if(versionServidor.equals(versionCliente))
+        {
+            return true;
+        }
+        return false;
+    }
 
 
 }

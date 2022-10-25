@@ -64,4 +64,6 @@ public interface UtilidadesServiceIf extends Remote
     
     //public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;    
     public String getUrlServicioWeb() throws RemoteException,ServicioCodefacException;
+    
+    public Boolean verificarVersionSistema(String versionCliente) throws RemoteException,ServicioCodefacException;
 }

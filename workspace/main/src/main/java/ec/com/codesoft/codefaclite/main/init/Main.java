@@ -72,6 +72,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
@@ -438,7 +439,6 @@ public class Main {
             
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) 
             {
-                    //System.setProperty("java.rmi.server.hostname","192.168.100.2"); 
                     //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
                     PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
                     String ipServidorDefecto=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
@@ -451,6 +451,11 @@ public class Main {
                     cargarRecursosRmiCliente(respuesta.ipPublica);
                     ParametrosClienteEscritorio.tipoClienteEnum=respuesta.tipoClienteEnum;
                     //verificarConexionesPermitidas();
+                    if(!ServiceFactory.getFactory().getUtilidadesServiceIf().verificarVersionSistema(ParametrosSistemaCodefac.VERSION))
+                    {
+                        DialogoCodefac.mensaje(new CodefacMsj("El cliente tiene una diferente versión que el servidor y eso puede generar mal funcionamiento del sistema, primero actualice su equipo para continuar ", CodefacMsj.TipoMensajeEnum.ERROR));
+                        System.exit(0);
+                    }
                     
                     //Grabar la ip del ultimo servidor accedido para no ingresar nuevamente el dato
                     propiedadesIniciales.setProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, respuesta.ipPublica + "");
@@ -604,6 +609,8 @@ public class Main {
         } catch (UnknownHostException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
