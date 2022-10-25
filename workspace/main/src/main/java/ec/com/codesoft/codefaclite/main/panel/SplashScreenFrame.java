@@ -38,6 +38,7 @@ public class SplashScreenFrame extends javax.swing.JFrame {
         jBarraProgreso = new javax.swing.JProgressBar();
         jLabel2 = new javax.swing.JLabel();
         lblEtiquetas = new javax.swing.JLabel();
+        lblVersion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -56,6 +57,10 @@ public class SplashScreenFrame extends javax.swing.JFrame {
         lblEtiquetas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEtiquetas.setText("jLabel3");
 
+        lblVersion.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
+        lblVersion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblVersion.setText("jLabel3");
+
         javax.swing.GroupLayout panelContenedorLayout = new javax.swing.GroupLayout(panelContenedor);
         panelContenedor.setLayout(panelContenedorLayout);
         panelContenedorLayout.setHorizontalGroup(
@@ -73,11 +78,17 @@ public class SplashScreenFrame extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jBarraProgreso, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelContenedorLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelContenedorLayout.setVerticalGroup(
             panelContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelContenedorLayout.createSequentialGroup()
-                .addGap(95, 95, 95)
+                .addContainerGap()
+                .addComponent(lblVersion)
+                .addGap(70, 70, 70)
                 .addComponent(jLabel2)
                 .addGap(33, 33, 33)
                 .addComponent(jBarraProgreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -141,6 +152,7 @@ public class SplashScreenFrame extends javax.swing.JFrame {
     private javax.swing.JProgressBar jBarraProgreso;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblEtiquetas;
+    private javax.swing.JLabel lblVersion;
     private javax.swing.JPanel panelContenedor;
     // End of variables declaration//GEN-END:variables
 
@@ -167,7 +179,14 @@ public class SplashScreenFrame extends javax.swing.JFrame {
     public void setPanelContenedor(JPanel panelContenedor) {
         this.panelContenedor = panelContenedor;
     }
-    
+
+    public JLabel getLblVersion() {
+        return lblVersion;
+    }
+
+    public void setLblVersion(JLabel lblVersion) {
+        this.lblVersion = lblVersion;
+    }
     
     
     

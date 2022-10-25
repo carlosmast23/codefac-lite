@@ -39,6 +39,12 @@ public class SplashScreenModel extends SplashScreenFrame implements Runnable {
         
         //setear icono
         setIconImage(ParametrosSistemaCodefac.iconoSistema);
+        cargarVersion();
+    }
+    
+    private void cargarVersion()
+    {
+        getLblVersion().setText("Versión:"+ParametrosSistemaCodefac.VERSION+"   ");  
     }
 
     public void agregarPorcentaje(Integer porcentaje, String mensaje) {
