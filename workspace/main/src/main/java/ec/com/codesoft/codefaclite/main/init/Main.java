@@ -453,7 +453,7 @@ public class Main {
                     //verificarConexionesPermitidas();
                     if(!ServiceFactory.getFactory().getUtilidadesServiceIf().verificarVersionSistema(ParametrosSistemaCodefac.VERSION))
                     {
-                        DialogoCodefac.mensaje(new CodefacMsj("El cliente tiene una diferente versión que el servidor y eso puede generar mal funcionamiento del sistema, primero actualice su equipo para continuar ", CodefacMsj.TipoMensajeEnum.ERROR));
+                        DialogoCodefac.mensaje(new CodefacMsj("El cliente tiene una DIFERENTE VERSIÓN que el servidor y eso puede generar mal funcionamiento del sistema, primero actualice su equipo para continuar ", CodefacMsj.TipoMensajeEnum.ERROR));
                         System.exit(0);
                     }
                     
