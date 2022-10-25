@@ -76,6 +76,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
@@ -1027,12 +1028,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
         {
             //ProductoPresentacionDetalle presentacionDetalle =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacion(producto.buscarPresentacionOriginal(), producto);
-            ProductoPresentacionDetalle presentacionDetalle=producto.buscarPresentacionDetalleProducto();
+            /*ProductoPresentacionDetalle presentacionDetalle=producto.buscarPresentacionDetalleProducto();
             BigDecimal cantidadEquivalencia=presentacionDetalle.getCantidad();
             cantidad=detalle.getCantidad().multiply(cantidadEquivalencia);
             precioUnitario=(detalle.getPrecioUnitario().divide(cantidadEquivalencia,6,BigDecimal.ROUND_HALF_UP));
             //Finalmente dejo seleccionado el producto principal para que continue con el proceso
-            producto=presentacionDetalle.getProductoOriginal();
+            producto=presentacionDetalle.getProductoOriginal();*/
+            ProductoConversionPresentacionRespuesta respuesta=ServiceFactory.getFactory().getProductoServiceIf().convertirProductoEmpaqueSecundarioEnPrincipal(producto, detalle.getCantidad(), detalle.getPrecioUnitario());
+            
+            producto=respuesta.productoPresentacionPrincipal;
+            precioUnitario=respuesta.precioUnitario;
+            cantidad=respuesta.cantidad;            
         }
         
         Kardex kardex=null;

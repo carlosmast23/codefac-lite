@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TopProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -74,6 +75,17 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         Producto productoPrincipal= buscarProductoEmpaquePrincipal(producto);
         return getFacade().buscarProductoPorPresentacionFacade(presentacion, productoPrincipal);
         
+    }
+    
+    public ProductoConversionPresentacionRespuesta convertirProductoEmpaqueSecundarioEnPrincipal(Producto productoEmpaqueSecundario,BigDecimal cantidad,BigDecimal precioUnitario) throws RemoteException,ServicioCodefacException
+    {
+        ProductoPresentacionDetalle presentacionDetalle = productoEmpaqueSecundario.buscarPresentacionDetalleProducto();
+        BigDecimal cantidadEquivalencia = presentacionDetalle.getCantidad();
+        cantidad = cantidad.multiply(cantidadEquivalencia);
+        precioUnitario = (precioUnitario.divide(cantidadEquivalencia, 6, BigDecimal.ROUND_HALF_UP));
+        //Finalmente dejo seleccionado el producto principal para que continue con el proceso
+        ProductoConversionPresentacionRespuesta respuesta=new ProductoConversionPresentacionRespuesta(productoEmpaqueSecundario, presentacionDetalle.getProductoOriginal(), cantidad, precioUnitario);
+        return  respuesta;
     }
         
     
@@ -335,6 +347,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             productoEmpaquetado.setSegmentoProducto(null);
                             productoEmpaquetado.setCasaComercial(null);*/                        
                             productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
+                            productoEmpaquetado.setPresentacionList(productoPresentacionList);
                                                     
                             //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
                             if (presentacionDetalle.getPvpTmp() == null) {

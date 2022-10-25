@@ -14,7 +14,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TopProductoRespuesta;
+import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -60,4 +62,5 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     
     public List<TopProductoRespuesta> topProductosMasVendidosService() throws ServicioCodefacException, RemoteException;
     
+    public ProductoConversionPresentacionRespuesta convertirProductoEmpaqueSecundarioEnPrincipal(Producto productoEmpaqueSecundario,BigDecimal cantidad,BigDecimal precioUnitario) throws RemoteException,ServicioCodefacException;
 }

@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -821,7 +822,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
      * Funcion que me permite generar solo los detalles del kardex seleccionados
      * @return devuelve el numero de items no seleccionados
      */
-    private int generarKardexDetalleSeleccionados() throws ServicioCodefacException
+    private int generarKardexDetalleSeleccionados() throws ServicioCodefacException, RemoteException
     {
         int datosEliminados=0; //TODO: Optimizar como contar los datos eliminados porque por ejemplo en los productos que tienen garantia solo debe contar una vez por los detalles especificos
         detallesKardexFinal=new ArrayList<KardexDetalle>();
@@ -840,7 +841,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 Producto producto=compraDetalle.getProductoProveedor().getProducto();
                 if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
                 {
-                    producto=producto.buscarProductoEmpaquePrincipal();
+                    /*producto=producto.buscarProductoEmpaquePrincipal();
                     //BigDecimal cantidadPorCaja= producto.obtenerCantidadPorCaja();
                     ProductoPresentacionDetalle detallePresentacion=producto.buscarPresentacionDetalleProducto();
                     BigDecimal cantidadPorCaja=detallePresentacion.getCantidad();
@@ -848,10 +849,12 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                     if(cantidadPorCaja.compareTo(BigDecimal.ZERO)==0)
                     {
                         throw new ServicioCodefacException("Las cantidades de las conversiones no pueden ser CERO, producto: "+producto.getNombre());
-                    }
-                                        
-                    kardexDetalle.setCantidad(kardexDetalle.getCantidad().multiply(cantidadPorCaja));
-                    kardexDetalle.setPrecioUnitario(kardexDetalle.getPrecioUnitario().divide(cantidadPorCaja,6,BigDecimal.ROUND_HALF_UP));
+                    }*/
+                    ProductoConversionPresentacionRespuesta respuesta  = ServiceFactory.getFactory().getProductoServiceIf().convertirProductoEmpaqueSecundarioEnPrincipal(producto,kardexDetalle.getCantidad(), kardexDetalle.getPrecioUnitario());
+                    
+                    producto=respuesta.productoPresentacionPrincipal;
+                    kardexDetalle.setCantidad(respuesta.cantidad);
+                    kardexDetalle.setPrecioUnitario(respuesta.precioUnitario);
                 }
                 
                 
