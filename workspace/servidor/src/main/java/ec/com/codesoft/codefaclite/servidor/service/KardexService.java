@@ -952,11 +952,31 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         if(!forzarCantidadCero)
         {
-            if(detalle.getCantidad()==null || detalle.getCantidad().compareTo(BigDecimal.ZERO)==0)
-            //if(detalle.getCantidad()==null || detalle.getCantidad()==0)
+            //if(detalle.getCantidad()==null || detalle.getCantidad().compareTo(BigDecimal.ZERO)==0)            
+            if(detalle.getCantidad()==null)            
             {
-                throw new ServicioCodefacException("No se puede ingresar cantidad negativas de stock o que sean 0");
+                //throw new ServicioCodefacException("No se puede ingresar cantidad negativas de stock o que sean 0");
+                throw new ServicioCodefacException("No se puede ingresar sin tener ninguna cantidad");
             }
+            else
+            {
+                //Solo para el ajuste exacto tomo en cuenta el valor de CERO
+                if(!detalle.getCodigoTipoDocumentoEnum().equals(TipoDocumentoEnum.AJUSTE_EXACTO_INVENTARIO))
+                {
+                    if(detalle.getCantidad().compareTo(BigDecimal.ZERO)==0)           
+                    {
+                        throw new ServicioCodefacException("No se puede ingresar una cantidad con CERO");
+                    }
+                }
+                
+                //Valido que en ningun caso pueda tener valores negativos
+                if (detalle.getCantidad().compareTo(BigDecimal.ZERO) < 0) 
+                {
+                    throw new ServicioCodefacException("No se puede ingresar cantidades NEGATIVAS");
+                }
+            
+            }
+            
         }
         
         if(detalle.getFechaDocumento()==null)
