@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.PresupuestoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PresupuestoFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
@@ -14,11 +15,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -67,17 +74,51 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                         } else {
                             entityManager.merge(presupuestoDetalle.getProductoProveedor());
                         }
+                        entityManager.flush();
+                        crearActividadesPresupuesto(presupuestoDetalle);
                     }
                 }
                 
                 ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(entity);
                 
                 entityManager.persist(entity);
+                //entity=entityManager.merge(entity);
                 
             }
         });
         
         return entity;
+    }
+    
+    private void crearActividadesPresupuesto(PresupuestoDetalle presupuestoDetalle)throws ServicioCodefacException
+    {
+        Producto producto=presupuestoDetalle.getProducto();
+        if(producto.getTipoProductoEnum().equals(TipoProductoEnum.SERVICIO))
+        {
+            List<PresupuestoDetalleActividad> productoActividadList=new ArrayList<PresupuestoDetalleActividad>();
+            for (ProductoActividad actividad : producto.getActividadList()) 
+            {
+                
+                PresupuestoDetalleActividad actividadPresupuesto=new PresupuestoDetalleActividad();
+                //presupuestoDetalle=entityManager.merge(presupuestoDetalle);
+                //actividadPresupuesto.setPresupuestoDetalle(presupuestoDetalle);
+                actividadPresupuesto.setProductoActividad(actividad);
+                actividadPresupuesto.setTerminado(EnumSiNo.NO);
+                entityManager.persist(actividadPresupuesto);
+                //entityManager.flush();
+                
+                actividadPresupuesto.setPresupuestoDetalle(presupuestoDetalle);
+                entityManager.merge(actividadPresupuesto);
+                //entityManager.flush();
+                
+                productoActividadList.add(actividadPresupuesto);
+            }
+           
+            //Agregar toda la lista al presupuesto detalle
+             presupuestoDetalle.setActividadList(productoActividadList);
+           entityManager.merge(presupuestoDetalle);
+            
+        }
     }
     
     public void editar(Presupuesto p)

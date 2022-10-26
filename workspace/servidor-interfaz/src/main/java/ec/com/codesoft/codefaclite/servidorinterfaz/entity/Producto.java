@@ -192,6 +192,9 @@ public class Producto implements Serializable, Comparable<Producto> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoOriginal",fetch = FetchType.EAGER)
     private List<ProductoPresentacionDetalle> presentacionList;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
+    private List<ProductoActividad> actividadList;
+    
     @Transient
     private Path pathFotoTmp;
     
@@ -764,6 +767,15 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setRegistroSanitario(String registroSanitario) {
         this.registroSanitario = registroSanitario;
     }
+
+    public List<ProductoActividad> getActividadList() {
+        return actividadList;
+    }
+
+    public void setActividadList(List<ProductoActividad> actividadList) {
+        this.actividadList = actividadList;
+    }
+    
     
     
 

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servicios.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenTrabajoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
@@ -53,6 +54,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -124,6 +126,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Producto producto;
     private Bodega bodega;
     private Persona persona;
+    private Empleado empleadoDetalle;
     private Kardex kardex;
     private ProductoProveedor productoProveedor;
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
@@ -150,6 +153,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         presupuesto = new Presupuesto();
+        getPnlDatosAdicionalesDetalle().setVisible(false);
         getTxtCodigo().setText("");
         cargarCombos();
         addListenerBotones();
@@ -185,25 +189,29 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         }*/
 
     }
+    
+    private void validarDatos() throws ExcepcionCodefacLite
+    {
+        if (presupuesto.getPersona() == null) {
+            DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+        }
+        if (presupuesto.getOrdenTrabajoDetalle() == null) {
+            DialogoCodefac.mensaje("Alerta", "Necesita seleccionar una Orden de Trabajo y seleccionar un detalle de la Orden", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Necesita seleccionar una Orden de Trabajo y seleccionar un detalle de la Orden");
+        }
+        if (presupuesto.getFechaPresupuesto() == null) {
+            DialogoCodefac.mensaje("Alerta", "Necesita seleccionar una fecha para presupuestar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Necesita seleccionar una fecha para presupuestar");
+        }
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
+            
             setearDatos();
-            if (presupuesto.getPersona() == null) {
-                DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
-            }
-            if(presupuesto.getOrdenTrabajoDetalle() == null)
-            {
-                DialogoCodefac.mensaje("Alerta", "Necesita seleccionar una Orden de Trabajo y seleccionar un detalle de la Orden", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar una Orden de Trabajo y seleccionar un detalle de la Orden");
-            }
-            if(presupuesto.getFechaPresupuesto() == null)
-            {
-                DialogoCodefac.mensaje("Alerta", "Necesita seleccionar una fecha para presupuestar", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar una fecha para presupuestar");
-            }
+            validarDatos();
                        
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea realizar el presupuesto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
@@ -470,6 +478,13 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     public void cargarCombos()
     {
         /**
+         * Cargar los tipos de documentos para cargar del inventario
+         */
+        getCmbTipoDocumento().removeAllItems();
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.INVENTARIO);
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
+        
+        /**
          * Estado general de Presupuesto
          */
         getCmbEstadoPresupuesto().removeAllItems();
@@ -501,8 +516,48 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
     }
     
-    public void addListenerBotones()
+    private void cargarVistaEmpleado(Empleado empleado)
     {
+        TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        
+        if(producto!=null && producto.getTipoProductoEnum().equals(TipoProductoEnum.SERVICIO))
+        {
+            getPnlDatosAdicionalesDetalle().setVisible(true);
+            if(empleado!=null)
+            {
+                getTxtEmpleadoDetalle().setText(empleado.getNombresCompletos());
+            }
+            else
+            {
+                getTxtEmpleadoDetalle().setText("");
+            }
+        }
+        else
+        {
+            getPnlDatosAdicionalesDetalle().setVisible(false);
+        }
+        
+    }
+    
+    public void addListenerBotones()
+    {        
+        
+        getBtnEmpleadoBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                EmpleadoBusquedaDialogo empleadosBusquedaDialogo = new EmpleadoBusquedaDialogo();
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(empleadosBusquedaDialogo);
+                buscarDialogo.setVisible(true);
+                Empleado empleado = (Empleado) buscarDialogo.getResultado();
+                if(empleado!=null)
+                {
+                    empleadoDetalle=empleado;
+                    cargarVistaEmpleado(empleado);
+                }
+            }
+        });
+        
         
         getBtnCliente().addActionListener(new ActionListener() {
             @Override
@@ -585,11 +640,14 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             {
                 if(persona!=null)
                 {
-                    if(persona.getIdentificacion().equals(session.getEmpresa().getIdentificacion()))
+                    //if(persona.getIdentificacion().equals(session.getEmpresa().getIdentificacion()))
+                    TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                    
+                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
                     {
                         buscarProductosConInventario();
                     }
-                    else
+                    else if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
                     {
                         //Buscar el producto sin inventario
                         buscarProductoSinInventario();
@@ -650,6 +708,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         buscarDialogoModel.setVisible(true);
         producto = (Producto) buscarDialogoModel.getResultado();
         if (producto != null) {
+            cargarVistaEmpleado(empleado);
             cargarDatosDetallePantalla(producto);
         }
     }
@@ -999,7 +1058,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             presupuestoDetalle.setProducto(this.producto);
             presupuestoDetalle.setBodega(this.bodega);
             presupuestoDetalle.setPersona(this.persona);
-            presupuestoDetalle.setKardexId(this.kardex.getId());
+            presupuestoDetalle.setEmpleado(this.empleadoDetalle);
+            presupuestoDetalle.setKardexId((this.kardex!=null)?this.kardex.getId():null);
             if (verificarCamposValidados()) {
                 
                 
@@ -1148,6 +1208,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     {
         this.producto = presupuestoDetalle.getProducto();
         this.persona = presupuestoDetalle.getPersona();
+        this.empleadoDetalle=presupuestoDetalle.getEmpleado();
         this.productoProveedor = presupuestoDetalle.getProductoProveedor();
         getTxtProveedorDetalle().setText(presupuestoDetalle.getPersona().getIdentificacion()+" - "+presupuestoDetalle.getPersona().getRazonSocial() );
         getTxtProductoDetalle().setText(presupuestoDetalle.getProducto().getCodigoEAN()+" - "+presupuestoDetalle.getProducto().getNombre());
@@ -1156,6 +1217,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getTxtPrecioVenta().setText(presupuestoDetalle.getPrecioVenta()+"");
         getTxtDescuentoPrecioVenta().setText(presupuestoDetalle.getDescuentoVenta()+"");
         getTxtCantidad().setText(presupuestoDetalle.getCantidad().intValue()+"");
+        cargarVistaEmpleado(empleado);
         getChkReserva().setSelected((presupuestoDetalle.getReservadoEnum()!=null)?presupuestoDetalle.getReservadoEnum().getBool():false);
         
     }
@@ -1219,6 +1281,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getTxtCantidad().setText("1");
         
         this.producto = null;
+        cargarVistaEmpleado(empleadoDetalle);
     }
     
     public void limpiarTotales()

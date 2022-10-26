@@ -14,6 +14,8 @@
         <Property name="text" type="java.lang.String" value="Importar"/>
       </Properties>
     </Component>
+    <Component class="ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona" name="persona1">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="closable" type="boolean" value="true"/>

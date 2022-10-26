@@ -89,6 +89,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jSeparator1 = new javax.swing.JSeparator();
         btnExportar = new javax.swing.JButton();
         btnImportar = new javax.swing.JButton();
+        persona1 = new ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona();
         jPanel11 = new javax.swing.JPanel();
         tabMenu = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
@@ -1494,6 +1495,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JLabel lblEstado123;
     private javax.swing.JLabel lblFoto;
+    private ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona persona1;
     private javax.swing.JPanel pnlPresentacionAdicional;
     private javax.swing.JTabbedPane tabMenu;
     private javax.swing.JTable tblDatosEnsamble;

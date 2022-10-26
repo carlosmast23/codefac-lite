@@ -1500,12 +1500,15 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         {
             if(detalle.getReservadoEnum()!=null && detalle.getReservadoEnum().equals(EnumSiNo.SI))
             {
-                Kardex kardex=detalle.getKardex();                
-                kardex.procesarReserva(detalle.getCantidad(),SignoEnum.POSITIVO);
-                //kardex.setStock(kardex.getStock().subtract(detalle.getCantidad()));
-                //kardex.setReserva(kardex.getReserva().add(detalle.getCantidad()));
-                
-                entityManager.merge(kardex);
+                Kardex kardex=detalle.getKardex();        
+                if(kardex!=null)
+                {
+                    kardex.procesarReserva(detalle.getCantidad(),SignoEnum.POSITIVO);
+                    //kardex.setStock(kardex.getStock().subtract(detalle.getCantidad()));
+                    //kardex.setReserva(kardex.getReserva().add(detalle.getCantidad()));
+
+                    entityManager.merge(kardex);
+                }
             }
             
         }

@@ -10,16 +10,20 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -84,8 +88,17 @@ public class PresupuestoDetalle implements Serializable
     @ManyToOne
     private ProductoProveedor productoProveedor;
     
+    @JoinColumn(name = "EMPLEADO_ID")
+    @ManyToOne
+    private Empleado empleado;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestoDetalle",fetch = FetchType.EAGER)
+    private List<PresupuestoDetalleActividad> actividadList;
+    
     @Column(name = "KARDEX_ID")
     private Long kardexId;
+    
+    
     
     public Long getId() {
         return id;
@@ -209,6 +222,15 @@ public class PresupuestoDetalle implements Serializable
         this.reservado = reservadoEnum.getLetra();
     }
 
+    public List<PresupuestoDetalleActividad> getActividadList() {
+        return actividadList;
+    }
+
+    public void setActividadList(List<PresupuestoDetalleActividad> actividadList) {
+        this.actividadList = actividadList;
+    }
+    
+
     public Long getKardexId() {
         return kardexId;
     }
@@ -216,6 +238,16 @@ public class PresupuestoDetalle implements Serializable
     public void setKardexId(Long kardexId) {
         this.kardexId = kardexId;
     }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+    
+    
 
     public Kardex getKardex()
     {

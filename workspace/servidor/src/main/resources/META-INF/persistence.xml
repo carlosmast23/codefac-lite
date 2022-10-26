@@ -113,6 +113,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Garantia</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>
