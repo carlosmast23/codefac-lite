@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UtilidadFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.dataExport.ProductoExportar;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
@@ -924,6 +925,35 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     public List<TopProductoRespuesta> topProductosMasVendidosService() throws ServicioCodefacException, RemoteException
     {
         return getFacade().topProductosMasVendidosFacade();
+    }
+    
+    
+    public String actualizarProductoExportados(ProductoExportar productoExportar,Empresa empresa) throws  ServicioCodefacException, RemoteException
+    {        
+        Integer cantidadActualizada=0;
+        Integer cantidadGrabado=0;
+        for (Producto productoImportar : productoExportar.getProductoList()) 
+        {
+            
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, productoImportar.getNombre());
+            Producto productoBuscado=buscarProductoActivoPorCodigo(productoImportar.getCodigoPersonalizado(), empresa);
+            //Si encuentra el producto lo que tengo que hacer es actualiar en el sistema
+            if(productoBuscado!=null)
+            {
+                editarProducto(productoImportar);
+                cantidadActualizada++;
+            }
+            else
+            {
+                //Si no existe el producto lo que tenemos que hacer es grabar el nuevo producto
+                productoImportar.setIdProducto(null);
+                productoImportar.getCatalogoProducto().setId(null);
+                grabar(productoImportar, Boolean.FALSE);
+                cantidadGrabado++;
+            }            
+            
+        }
+        return "Proceso Terminando:\nActualizados: "+cantidadActualizada+"\nGrabados: "+cantidadGrabado;
     }
 
 }

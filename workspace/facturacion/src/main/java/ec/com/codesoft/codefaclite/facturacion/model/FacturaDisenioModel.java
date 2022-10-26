@@ -25,6 +25,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema.Exportacion;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import java.awt.Dimension;
@@ -295,7 +297,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         String nombreArchivo=UtilidadesArchivos.generarNombreArchivoUnico("disenio","codefac");
         File fileOriginal=UtilidadesDirectorios.crearArchivoEnDirectorio(nombreArchivo);
         UtilidadesDirectorios.grabarObjectoArchivo(fileOriginal, getCmbDocumento().getSelectedItem());
-        DialogoCodefac.mensaje(new CodefacMsj("Datos grabados correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));
+        DialogoCodefac.mensaje(Exportacion.EXPORTACION_DATOS_CORRECTO);
         /*FileOutputStream file; 
         try {
             //file = new FileOutputStream( "desenio.codefac" );

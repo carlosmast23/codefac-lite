@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecim
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.CheckBoxBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.MayusculaAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
@@ -86,6 +87,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jSeparator1 = new javax.swing.JSeparator();
+        btnExportar = new javax.swing.JButton();
+        btnImportar = new javax.swing.JButton();
+        jPanel11 = new javax.swing.JPanel();
         tabMenu = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -226,6 +230,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jDateFechaEmision = new org.jdesktop.swingx.JXDatePicker();
         jDateFechaEmision1 = new org.jdesktop.swingx.JXDatePicker();
 
+        btnExportar.setText("Exportar");
+
+        btnImportar.setText("Importar");
+
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -235,7 +243,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         setMaximumSize(new java.awt.Dimension(800, 650));
         setMinimumSize(new java.awt.Dimension(200, 150));
         setPreferredSize(new java.awt.Dimension(900, 450));
-        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel11.setLayout(new java.awt.GridBagLayout());
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
@@ -1340,7 +1349,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        getContentPane().add(tabMenu, gridBagConstraints);
+        jPanel11.add(tabMenu, gridBagConstraints);
+
+        getContentPane().add(jPanel11, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1379,6 +1390,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnEditarEnsamble;
     private javax.swing.JButton btnEliminarEmpaque;
     private javax.swing.JButton btnEliminarEnsamble;
+    private javax.swing.JButton btnExportar;
+    private javax.swing.JButton btnImportar;
     private javax.swing.JCheckBox chkCompras;
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
@@ -1451,6 +1464,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2063,6 +2077,24 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setTxtCodigoEmpaquetado(JTextField txtCodigoEmpaquetado) {
         this.txtCodigoEmpaquetado = txtCodigoEmpaquetado;
+    }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Datos",visible = false)
+    public JButton getBtnExportar() {
+        return btnExportar;
+    }
+
+    public void setBtnExportar(JButton btnExportar) {
+        this.btnExportar = btnExportar;
+    }
+    
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Datos",visible = false)
+    public JButton getBtnImportar() {
+        return btnImportar;
+    }
+
+    public void setBtnImportar(JButton btnImportar) {
+        this.btnImportar = btnImportar;
     }
     
     

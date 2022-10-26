@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.dataExport.ProductoExportar;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
@@ -63,4 +64,6 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public List<TopProductoRespuesta> topProductosMasVendidosService() throws ServicioCodefacException, RemoteException;
     
     public ProductoConversionPresentacionRespuesta convertirProductoEmpaqueSecundarioEnPrincipal(Producto productoEmpaqueSecundario,BigDecimal cantidad,BigDecimal precioUnitario) throws RemoteException,ServicioCodefacException;
+    
+    public String actualizarProductoExportados(ProductoExportar productoExportar,Empresa empresa) throws  ServicioCodefacException, RemoteException;
 }

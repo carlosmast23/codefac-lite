@@ -90,5 +90,10 @@ public abstract class MensajeCodefacSistema {
     {
         public static final CodefacMsj ERROR_VALIDAR_NUMEROS = new CodefacMsj(CodefacMsj.TITULO_ERROR,"El formato es incorrecto para el ingreso de números",MENSAJE_INCORRECTO);
     }
+    
+    public static abstract  class Exportacion
+    {
+        public static final CodefacMsj EXPORTACION_DATOS_CORRECTO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Los datos fueron exportados ",MENSAJE_CORRECTO);
+    }
    
 }

@@ -13,18 +13,15 @@ import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlado
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
-import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.IvaOpcionEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -35,20 +32,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.dataExport.ProductoExportar;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema.Exportacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -56,11 +48,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +59,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -451,9 +441,58 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         ImageIcon imageIcon= UtilidadesImagenesCodefac.buscarImagenServidor(session.getEmpresa(),controlador.getProducto().getImagen());
         getLblFoto().setIcon(imageIcon);
     }
+    
+    private ProductoExportar crearDatosExportacion()
+    {
+        try {
+            List<Producto> productoList= ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(session.getEmpresa());
+            ProductoExportar productoExportar=new ProductoExportar(productoList);
+            return productoExportar;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    private void exportarDatos() {
+        String nombreArchivo = UtilidadesArchivos.generarNombreArchivoUnico("productos", "codefac");
+        File fileOriginal = UtilidadesDirectorios.crearArchivoEnDirectorio(nombreArchivo);
+        UtilidadesDirectorios.grabarObjectoArchivo(fileOriginal, crearDatosExportacion());
+        DialogoCodefac.mensaje(Exportacion.EXPORTACION_DATOS_CORRECTO);
+    }
+
+    private void importarDatos() {
+        File archivo = UtilidadesDirectorios.buscarArchivo("Diseño Codefac", new String[]{"codefac"});
+        if (archivo != null) {
+            try {
+                ProductoExportar datosExportacion = (ProductoExportar) UtilidadesDirectorios.leerObjectoArchivo(archivo);
+                String mensaje = ServiceFactory.getFactory().getProductoServiceIf().actualizarProductoExportados(datosExportacion, session.getEmpresa());
+                DialogoCodefac.mensaje(new CodefacMsj(mensaje, CodefacMsj.TipoMensajeEnum.CORRECTO));
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+            } catch (RemoteException ex) {
+                Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
 
     private void listenerBotones() 
     {
+        getBtnExportar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                exportarDatos();
+            }
+        });
+
+        getBtnImportar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                importarDatos();
+            }
+        });
         
         getBtnBuscarImagen().addActionListener(new ActionListener() {
             @Override

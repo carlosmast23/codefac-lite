@@ -147,7 +147,7 @@ public class Producto implements Serializable, Comparable<Producto> {
     private BigDecimal pvp6;
     
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
-    @ManyToOne    
+    //@ManyToOne    
     private CatalogoProducto catalogoProducto;
     
     @Column(name = "APLICACION_PRODUCTO")    
