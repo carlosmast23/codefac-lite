@@ -11,6 +11,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
@@ -80,19 +82,31 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         return query.getResultList();
     }
     
-    public List<PresupuestoDetalleActividad> consultarActividadesPorEmpleado(Empleado empleado)
+    public List<PresupuestoDetalleActividad> consultarActividadesPorEmpleado(Empleado empleado,Boolean actividadesPendientes)
     {
         //Presupuesto p;
         //p.getEstadoEnum()
-        //PresupuestoDetalleActividad actividad;
+        PresupuestoDetalleActividad actividad;
+        //Sactividad.getTerminado()
         //actividad.getPresupuestoDetalle().getPresupuesto().getEstado();
         //actividad.getPresupuestoDetalle().getEmpleado();
+        String whereActividadesPendiente="";
+        if(actividadesPendientes!=null)
+        {
+            whereActividadesPendiente=" AND p.terminado = ?3 ";
+        }
         
-        String queryString = " Select DISTINCT p FROM PresupuestoDetalleActividad p WHERE p.presupuestoDetalle.empleado=?1 AND p.presupuestoDetalle.presupuesto.estado<>?2 ";
+        String queryString = " Select DISTINCT p FROM PresupuestoDetalleActividad p WHERE p.presupuestoDetalle.empleado=?1 AND p.presupuestoDetalle.presupuesto.estado<>?2 "+whereActividadesPendiente;
         
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1,empleado);
         query.setParameter(2,Presupuesto.EstadoEnum.FACTURADO.getLetra());
+        
+        if(whereActividadesPendiente!=null)
+        {
+            query.setParameter(3,EnumSiNo.NO.getLetra());
+        }
+        
         return query.getResultList();
     }
 }

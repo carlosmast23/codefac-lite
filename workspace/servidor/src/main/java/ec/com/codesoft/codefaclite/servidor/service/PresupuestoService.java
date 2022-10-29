@@ -168,8 +168,14 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     
     public List<PresupuestoDetalleActividad> consultarActividadPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException
     {
-        return getFacade().consultarActividadesPorEmpleado(empleado);
+        return getFacade().consultarActividadesPorEmpleado(empleado,null);
     }
+    
+    public List<PresupuestoDetalleActividad> consultarActividadesPendientesPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException
+    {
+        return getFacade().consultarActividadesPorEmpleado(empleado,true);
+    }
+    
     
     public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList) throws ServicioCodefacException,RemoteException
     {

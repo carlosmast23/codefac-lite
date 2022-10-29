@@ -27,5 +27,6 @@ public interface PresupuestoServiceIf  extends ServiceAbstractIf<Presupuesto> {
    public List<Presupuesto> consultarPorOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,RemoteException;
    public List<PresupuestoDetalleActividad> consultarActividadPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException;
    public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList) throws ServicioCodefacException,RemoteException;
+   public List<PresupuestoDetalleActividad> consultarActividadesPendientesPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException;
    
 }

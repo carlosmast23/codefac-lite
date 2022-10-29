@@ -62,7 +62,8 @@ public class TareaPendienteOrdenTrabajoControlador extends ModelControladorAbstr
 {
     //private List<OrdenTrabajoDetalleDataTable> detallesOTList;
     private List<PresupuestoDetalleActividad> actividadList;
-    private OrdenTrabajoDetalle ordenDetalleSeleccionada;
+    private PresupuestoDetalleActividad ordenDetalleSeleccionada;
+    private List<PresupuestoDetalleActividad> actividadListSeleccionada;
     //private List<OrdenTrabajoDetalleDataTable> detallesOTSeleccionadaList;
     
     private TableBindingImp tableBindingControlador;
@@ -85,9 +86,15 @@ public class TareaPendienteOrdenTrabajoControlador extends ModelControladorAbstr
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException 
     {   
-        //ServiceFactory.getFactory().getPresupuestoServiceIf().actualizarActividadesPresupuestos(detallesOTSeleccionadaList);
-        //ServiceFactory.getFactory().getOrdenTrabajoServiceIf().terminarDetallesOrdenesTrabajo(session.getUsuario().getEmpleado(),getDetallesModificar());
-        mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
+        try {
+            ServiceFactory.getFactory().getPresupuestoServiceIf().actualizarActividadesPresupuestos(actividadListSeleccionada);
+            //ServiceFactory.getFactory().getOrdenTrabajoServiceIf().terminarDetallesOrdenesTrabajo(session.getUsuario().getEmpleado(),getDetallesModificar());
+            mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
+            limpiar();
+        } catch (ServicioCodefacException ex) {
+            mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+            Logger.getLogger(TareaPendienteOrdenTrabajoControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
@@ -162,7 +169,8 @@ public class TareaPendienteOrdenTrabajoControlador extends ModelControladorAbstr
         try {
             Empleado empleado= session.getUsuario().getEmpleado();
             
-            return ServiceFactory.getFactory().getPresupuestoServiceIf().consultarActividadPresupuesto(empleado);
+            resultadoList= ServiceFactory.getFactory().getPresupuestoServiceIf().consultarActividadesPendientesPresupuesto(empleado);
+            return resultadoList;
             /*List<OrdenTrabajoDetalle>detallesOTList=ServiceFactory.getFactory().getOrdenTrabajoServiceIf().filtrarDetallesPorEstadoYEmpleado(OrdenTrabajoDetalle.EstadoEnum.RECIBIDO, empleado);
             for (OrdenTrabajoDetalle ordenTrabajoDetalle : detallesOTList) 
             {
@@ -215,15 +223,25 @@ public class TareaPendienteOrdenTrabajoControlador extends ModelControladorAbstr
         this.actividadList = actividadList;
     }
 
-    
-
-    public OrdenTrabajoDetalle getOrdenDetalleSeleccionada() {
+    public PresupuestoDetalleActividad getOrdenDetalleSeleccionada() {
         return ordenDetalleSeleccionada;
     }
 
-    public void setOrdenDetalleSeleccionada(OrdenTrabajoDetalle ordenDetalleSeleccionada) {
+    public void setOrdenDetalleSeleccionada(PresupuestoDetalleActividad ordenDetalleSeleccionada) {
         this.ordenDetalleSeleccionada = ordenDetalleSeleccionada;
     }
+
+    public List<PresupuestoDetalleActividad> getActividadListSeleccionada() {
+        return actividadListSeleccionada;
+    }
+
+    public void setActividadListSeleccionada(List<PresupuestoDetalleActividad> actividadListSeleccionada) {
+        this.actividadListSeleccionada = actividadListSeleccionada;
+    }
+
+    
+
+    
 
     /*public List<OrdenTrabajoDetalleDataTable> getDetallesOTSeleccionadaList() {
         return detallesOTSeleccionadaList;

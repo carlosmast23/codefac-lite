@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -121,11 +122,10 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
     {
         String titulo[]=new String[]{
             "Objecto",
-            "Selección",
+            "Seleccionado",
             "Código",
             "Fecha Ingreso",
-            "Detalle",
-            "Estado",
+            "Detalle",            
             "Descripción",};
         
         DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(
@@ -133,7 +133,6 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
                 new Class[]{
                     Object.class,
                     Boolean.class,
-                    Object.class,
                     Object.class,
                     Object.class,
                     Object.class,
@@ -153,15 +152,14 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
             public Object[] addData(PresupuestoDetalleActividad valueTmp) {
                 PresupuestoDetalle presupuestoDetalle=valueTmp.getPresupuestoDetalle();
                 String detalle=valueTmp.getProductoActividad().getNombre();
-                String estado=valueTmp.getTerminadoEnum().getNombre();
+                Boolean terminadoBool=valueTmp.getTerminadoEnum().getBool();
                 
                 return new Object[]
                 {
-                    valueTmp,
+                    valueTmp,                    
                     presupuestoDetalle.getPresupuesto().getCodigo(),
                     presupuestoDetalle.getPresupuesto().getFechaPresupuesto(),
-                    detalle,
-                    estado,
+                    detalle,                    
                     "Sin Novedad"
                 };
             }
@@ -169,11 +167,15 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
             @Override
             public void setData(PresupuestoDetalleActividad objetoOriginal, Object objetoModificado, Integer columnaModificada) {
                 final int COLUMNA_OBJETO=0;
-                //final int COLUMNA_APROBAR=1;
-                final int COLUMNA_NOVEDADES=4;
+                final int COLUMNA_TERMINAR=1;
+                //final int COLUMNA_NOVEDADES=4;
                 
                 switch (columnaModificada) {
                     case COLUMNA_OBJETO:
+                        break;
+                    
+                    case COLUMNA_TERMINAR:
+                        objetoOriginal.setTerminado(EnumSiNo.getEnumByBoolean((Boolean) objetoModificado));
                         break;
 
                     //case COLUMNA_APROBAR:

@@ -149,7 +149,7 @@ public abstract class TareaPendienteOrdenTrabajoPanel extends ControladorCodefac
             source = "controlador.actividadList",
             tableAddDataInterface = "tableBindingAddData",
             selectValue = "controlador.ordenDetalleSeleccionada",
-            listSelected = "controlador.detallesOTSeleccionadaList",
+            listSelected = "controlador.actividadListSeleccionada",
             componenteCheckSelect = "cmbSeleccionarTodo",
             modeCheck = true,
             controlador = "controlador.tableBindingControlador")    
