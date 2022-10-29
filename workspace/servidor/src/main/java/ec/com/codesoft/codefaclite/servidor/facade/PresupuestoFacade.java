@@ -5,10 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
@@ -75,6 +77,22 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         if (estadoEnum != null) {
             query.setParameter(4, estadoEnum.getLetra());
         }
+        return query.getResultList();
+    }
+    
+    public List<PresupuestoDetalleActividad> consultarActividadesPorEmpleado(Empleado empleado)
+    {
+        //Presupuesto p;
+        //p.getEstadoEnum()
+        //PresupuestoDetalleActividad actividad;
+        //actividad.getPresupuestoDetalle().getPresupuesto().getEstado();
+        //actividad.getPresupuestoDetalle().getEmpleado();
+        
+        String queryString = " Select DISTINCT p FROM PresupuestoDetalleActividad p WHERE p.presupuestoDetalle.empleado=?1 AND p.presupuestoDetalle.presupuesto.estado<>?2 ";
+        
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1,empleado);
+        query.setParameter(2,Presupuesto.EstadoEnum.FACTURADO.getLetra());
         return query.getResultList();
     }
 }

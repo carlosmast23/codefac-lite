@@ -146,7 +146,7 @@ public abstract class TareaPendienteOrdenTrabajoPanel extends ControladorCodefac
     }
 
     @TableBinding(
-            source = "controlador.detallesOTList",
+            source = "controlador.actividadList",
             tableAddDataInterface = "tableBindingAddData",
             selectValue = "controlador.ordenDetalleSeleccionada",
             listSelected = "controlador.detallesOTSeleccionadaList",

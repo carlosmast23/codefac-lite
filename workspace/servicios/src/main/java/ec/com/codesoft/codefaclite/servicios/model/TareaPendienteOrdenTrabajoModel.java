@@ -24,6 +24,8 @@ import ec.com.codesoft.codefaclite.servicios.panel.TareaPendienteOrdenTrabajoPan
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -120,7 +122,7 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
         String titulo[]=new String[]{
             "Objecto",
             "Selección",
-            "Código OT",
+            "Código",
             "Fecha Ingreso",
             "Detalle",
             "Estado",
@@ -146,18 +148,18 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
     
     public ITableBindingAddData getTableBindingAddData()
     {        
-        return new ITableBindingAddData<TareaPendienteOrdenTrabajoControlador.OrdenTrabajoDetalleDataTable>() {
+        return new ITableBindingAddData<PresupuestoDetalleActividad>() {
             @Override
-            public Object[] addData(TareaPendienteOrdenTrabajoControlador.OrdenTrabajoDetalleDataTable valueTmp) {
-                OrdenTrabajoDetalle value=valueTmp.detalleOrdenTrabajo;
-                String detalle=value.getTitulo();
-                String estado=value.getEstadoEnum().getNombre();
+            public Object[] addData(PresupuestoDetalleActividad valueTmp) {
+                PresupuestoDetalle presupuestoDetalle=valueTmp.getPresupuestoDetalle();
+                String detalle=valueTmp.getProductoActividad().getNombre();
+                String estado=valueTmp.getTerminadoEnum().getNombre();
                 
                 return new Object[]
                 {
                     valueTmp,
-                    value.getOrdenTrabajo().getCodigo(),
-                    value.getOrdenTrabajo().getFechaIngreso(),
+                    presupuestoDetalle.getPresupuesto().getCodigo(),
+                    presupuestoDetalle.getPresupuesto().getFechaPresupuesto(),
                     detalle,
                     estado,
                     "Sin Novedad"
@@ -165,7 +167,7 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
             }
 
             @Override
-            public void setData(TareaPendienteOrdenTrabajoControlador.OrdenTrabajoDetalleDataTable objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+            public void setData(PresupuestoDetalleActividad objetoOriginal, Object objetoModificado, Integer columnaModificada) {
                 final int COLUMNA_OBJETO=0;
                 //final int COLUMNA_APROBAR=1;
                 final int COLUMNA_NOVEDADES=4;
@@ -178,9 +180,9 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
                     //    objetoOriginal.aprobar=(Boolean) objetoModificado;
                     //    break;
 
-                    case COLUMNA_NOVEDADES:
+                    /*case COLUMNA_NOVEDADES:
                         objetoOriginal.novedades=(String) objetoModificado;
-                        break;
+                        break;*/
 
                 }
                 

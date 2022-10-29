@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.PresupuestoFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -165,5 +166,22 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         return presupuestoList;
     }
     
+    public List<PresupuestoDetalleActividad> consultarActividadPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException
+    {
+        return getFacade().consultarActividadesPorEmpleado(empleado);
+    }
+    
+    public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList) throws ServicioCodefacException,RemoteException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                for (PresupuestoDetalleActividad actividad : actividadList) 
+                {
+                    entityManager.merge(actividad);
+                }
+            }
+        });
+    }
     
 }
