@@ -133,6 +133,10 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         cmbFechaPresupuesto = new org.jdesktop.swingx.JXDatePicker();
         jLabel21 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableDetallesServicio = new javax.swing.JTable();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -239,8 +243,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -450,7 +454,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -845,6 +849,38 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel23, gridBagConstraints);
 
+        jScrollPane3.setViewportView(tableDetallesServicio);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jScrollPane3, gridBagConstraints);
+
+        jLabel26.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel26.setText("Servicios");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        getContentPane().add(jLabel26, gridBagConstraints);
+
+        jLabel28.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel28.setText("Productos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        getContentPane().add(jLabel28, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -887,7 +923,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -901,6 +939,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
@@ -919,6 +958,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel llblEspacio50;
     private javax.swing.JPanel pnlDatosAdicionalesDetalle;
     private javax.swing.JTable tableDetallesPresupuesto;
+    private javax.swing.JTable tableDetallesServicio;
     private javax.swing.JTextArea txtAreaObservaciones;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCliente;
@@ -1289,6 +1329,15 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setTxtEmpleadoDetalle(JTextField txtEmpleadoDetalle) {
         this.txtEmpleadoDetalle = txtEmpleadoDetalle;
     }
+
+    public JTable getTableDetallesServicio() {
+        return tableDetallesServicio;
+    }
+
+    public void setTableDetallesServicio(JTable tableDetallesServicio) {
+        this.tableDetallesServicio = tableDetallesServicio;
+    }
+
     
     
     

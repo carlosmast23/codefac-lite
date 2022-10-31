@@ -514,6 +514,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     {
         DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
+        
+        DefaultTableModel modeloTablaDetallesPresupuesto2 = UtilidadesTablas.crearModeloTabla(new String[]{"#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
+        getTableDetallesServicio().setModel(modeloTablaDetallesPresupuesto);
     }
     
     private void cargarVistaEmpleado(Empleado empleado)
@@ -1382,6 +1385,11 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         Vector<Object> fila;
         DefaultTableModel modeloTablaDetallesPresupuesto = 
         UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
+        
+        DefaultTableModel modeloTablaDetallesProductos = 
+        UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
+        
+        
         for(Map.Entry<Integer,List<PresupuestoDetalle>> datoMap : mapOrden.entrySet())
         {
             boolean b = true; 
@@ -1406,11 +1414,21 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     //fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
                     fila.add(""+detalle.getDescuentoVenta());
                     fila.add(detalle.getCantidad().toString());
-                    modeloTablaDetallesPresupuesto.addRow(fila);
+                    
+                    if(detalle.getProducto().getTipoProductoEnum().equals(TipoProductoEnum.PRODUCTO))
+                    {
+                        modeloTablaDetallesProductos.addRow(fila);
+                    }
+                    else if(detalle.getProducto().getTipoProductoEnum().equals(TipoProductoEnum.SERVICIO))
+                    {
+                        modeloTablaDetallesPresupuesto.addRow(fila);
+                    }
             }
         }
         
-        getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
+        
+        getTableDetallesPresupuesto().setModel(modeloTablaDetallesProductos);
+        getTableDetallesServicio().setModel(modeloTablaDetallesPresupuesto);
         /**
          * Agregar PopupMenu en Tabla
          */        
@@ -1438,6 +1456,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         PopupMenuTabla menuTabla = new PopupMenuTabla(getTableDetallesPresupuesto(), jMenuItems);
         UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 0);
         UtilidadesTablas.cambiarColorFila(getTableDetallesPresupuesto());
+        
+        UtilidadesTablas.ocultarColumna(getTableDetallesServicio(), 0);
+        UtilidadesTablas.cambiarColorFila(getTableDetallesServicio());
     }
     
     private boolean verificarCamposValidados() {
