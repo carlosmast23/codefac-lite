@@ -39,6 +39,8 @@ public class PresupuestoReporteDetalleData extends PresupuestoReporteData{
         setCompras(presupuestoReporteData.getCompras());
         setProduccionInterna(presupuestoReporteData.getProduccionInterna());
         setUtilidad(presupuestoReporteData.getUtilidad());
+        setTipo(presupuestoReporteData.getTipo());
+        setObjetoMantenimiento(presupuestoReporteData.getObjetoMantenimiento());
     }
     
     

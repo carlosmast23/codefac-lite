@@ -400,8 +400,11 @@ public class Persona implements Serializable, Comparable<Persona> {
         return nombresTmp + " " + apellidosTmp;
     }
 
-    public String getNombreSimple() {
-        return apellidos.split(" ")[0] + " " + nombres.split(" ")[0];
+    public String getNombreSimple() 
+    {
+        String nombresTmp = (nombres != null) ? nombres : "";
+        String apellidosTmp = (apellidos != null) ? apellidos : "";
+        return apellidosTmp.split(" ")[0] + " " + nombresTmp.split(" ")[0];
     }
 
     /*

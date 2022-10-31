@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servicios.data.PresupuestoReporteData;
 import ec.com.codesoft.codefaclite.servicios.data.PresupuestoReporteDetalleData;
 import ec.com.codesoft.codefaclite.servicios.panel.ReportePresupuestosPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -121,6 +122,9 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
         List<PresupuestoReporteDetalleData> detalleReporteData=new  ArrayList<PresupuestoReporteDetalleData>();
         for (PresupuestoReporteData data : presupuestosData) {
             for (PresupuestoDetalle presupuestoDetalle : data.getPresupuesto().getPresupuestoDetalles()) {
+                
+                ObjetoMantenimiento objetoMantenimiento=presupuestoDetalle.getPresupuesto().getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
+                
                 PresupuestoReporteDetalleData dataDetalle=new PresupuestoReporteDetalleData(data);
                 dataDetalle.setProveedor(presupuestoDetalle.getPersona().getNombreSimple());
                 dataDetalle.setProducto(presupuestoDetalle.getProducto().getNombre());
@@ -128,6 +132,9 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 dataDetalle.setDescuentoCompra(presupuestoDetalle.getDescuentoCompra());
                 dataDetalle.setCantidadCompra(presupuestoDetalle.getCantidad());
                 dataDetalle.setTotalCompra(presupuestoDetalle.calcularTotalCompra());
+                dataDetalle.setTipo(presupuestoDetalle.getProducto().getTipoProductoEnum().getNombre());                
+                dataDetalle.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre():"");
+                
                 detalleReporteData.add(dataDetalle);
             }
         }

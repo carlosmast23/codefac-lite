@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoUbicacionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -93,6 +94,7 @@ public class StockReporteModel extends StockMinimoPanel{
         try {                       
             
             UtilidadesComboBox.llenarComboBox(getCmbTipoStock(),TipoStockEnum.values());
+            UtilidadesComboBox.llenarComboBox(getCmbUbicacion(),TipoUbicacionEnum.values());
             UtilidadesComboBox.llenarComboBox(getCmbOrdenar(), KardexOrdenarEnum.values());
             UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),TipoReporteStockEnum.values());
             //Obtener bodega por defecto seleccionada
@@ -315,6 +317,7 @@ public class StockReporteModel extends StockMinimoPanel{
                     
                     KardexOrdenarEnum ordenarEnum=(KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();
                     TipoStockEnum tipoStockEnum=(TipoStockEnum) getCmbTipoStock().getSelectedItem();
+                    TipoUbicacionEnum tipoUbicacionEnum=(TipoUbicacionEnum) getCmbUbicacion().getSelectedItem();
                     listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum,tipoStockEnum);
                     
                     listaData=new ArrayList<StockMinimoData>();

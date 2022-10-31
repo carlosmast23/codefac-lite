@@ -129,8 +129,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Empleado empleadoDetalle;
     private Kardex kardex;
     private ProductoProveedor productoProveedor;
-    private Map<Persona,List<PresupuestoDetalle>> mapClientes;
-    private Map<Integer,List<PresupuestoDetalle>> mapOrden;
+    //private Map<Persona,List<PresupuestoDetalle>> mapClientes;
+    //private Map<Integer,List<PresupuestoDetalle>> mapOrden;
     private List<OrdenCompra> ordenesCompra;
     private Empleado empleado;
     
@@ -425,7 +425,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
             
             getLblIndicarFechaValidez().setText(""+this.presupuesto.getFechaValidez());
-            ordenarDetallesEnFuncionDeOrdenCompra();
+            //ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
             calcularTotales();
         }
@@ -1109,9 +1109,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
         if(agregar )
         {
-            buscarNumeroOrdenPresupuestoDetalle(presupuestoDetalle);
+            //buscarNumeroOrdenPresupuestoDetalle(presupuestoDetalle);
             this.presupuesto.addDetalle(presupuestoDetalle);            
-            ordenarDetallesEnFuncionDeOrdenCompra();
+            //ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
             limpiarDetalles();
         }
@@ -1124,7 +1124,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     /**
      * Funcion que me permite buscar el numero de una orden de compra o la creaa
      */
-    private void buscarNumeroOrdenPresupuestoDetalle(PresupuestoDetalle presupuestoDetalle)
+    /*private void buscarNumeroOrdenPresupuestoDetalle(PresupuestoDetalle presupuestoDetalle)
     {
         int numeroOrdenMaximo=0;
         
@@ -1151,7 +1151,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         
         //Si no encuentra ningun proveedor anterior que coincida creo una nueva orden con un numero nuevo
         presupuestoDetalle.setNumeroOrdenCompra(numeroOrdenMaximo+1); //seteo el maximo numero de orden +1 
-    }
+    }*/
     
     private int obtenerNumeroOrdenPresupuesto()
     {
@@ -1235,29 +1235,43 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         BigDecimal totalCompra = new BigDecimal(BigInteger.ZERO);
         BigDecimal totalVenta = new BigDecimal(BigInteger.ZERO);
         
+        //BigDecimal totalCompra=BigDecimal.ZERO;
         for (PresupuestoDetalle detalle : detalles) {
-            subtotalCompra = subtotalCompra.add(detalle.getPrecioCompra()).multiply(detalle.getCantidad());
-            descuentoCompra = descuentoCompra.add(detalle.getDescuentoCompra());
-            //subtotalVenta = subtotalVenta.add(detalle.getPrecioVenta()).multiply(detalle.getCantidad());
-            //descuentoVenta = descuentoVenta.add(detalle.getDescuentoVenta());
-            totalCompra = subtotalCompra.subtract(descuentoCompra);
+            
+            Producto producto=detalle.getProducto();
+            TipoProductoEnum tipoProducto=producto.getTipoProductoEnum();
+            
+            subtotalVenta = subtotalVenta.add(detalle.getPrecioCompra()).multiply(detalle.getCantidad());
+            descuentoVenta = descuentoVenta.add(detalle.getDescuentoCompra());
+            
+            if(tipoProducto.equals(TipoProductoEnum.PRODUCTO))
+            {
+                subtotalCompra = subtotalCompra.add(detalle.getPrecioCompra()).multiply(detalle.getCantidad());
+                descuentoCompra = descuentoCompra.add(detalle.getDescuentoCompra());
+            }
+            
             //totalVenta = subtotalVenta.subtract(descuentoVenta);
         }
+        
+        totalVenta=subtotalVenta.subtract(descuentoVenta);
+        totalCompra=subtotalCompra.subtract(descuentoCompra);
         /**
          * Mostrar valores en pantalla
          */
         getLblSubtotalCompra().setText(subtotalCompra.toString());
         getLblDescuentoCompra().setText(descuentoCompra.toString());
+        getLblTotalCompra().setText(totalCompra.toString());
+        
         //getTxtSubtotalVentas().setText(subtotalVenta.toString());
         //getTxtDescuentoVentas().setText(descuentoVenta.toString());
         
-        BigDecimal subtotalVentas=(presupuesto.getTotalVenta()!=null)?presupuesto.getTotalVenta():BigDecimal.ZERO;
-        BigDecimal descuentoVentas=(presupuesto.getDescuentoVenta()!=null)?presupuesto.getDescuentoVenta():BigDecimal.ZERO;
+        //BigDecimal subtotalVentas=(presupuesto.getTotalVenta()!=null)?presupuesto.getTotalVenta():BigDecimal.ZERO;
+        //BigDecimal descuentoVentas=(presupuesto.getDescuentoVenta()!=null)?presupuesto.getDescuentoVenta():BigDecimal.ZERO;
         
-        getTxtSubtotalVentas().setText(subtotalVentas.toString());
-        getTxtDescuentoVentas().setText(descuentoVentas.toString());        
-        getLblTotalCompra().setText(totalCompra.toString());
-        getLblTotalVenta().setText(subtotalVentas.subtract(descuentoVentas).toString());
+        getTxtSubtotalVentas().setText(subtotalVenta.toString());
+        getTxtDescuentoVentas().setText(descuentoVenta.toString());        
+        
+        getLblTotalVenta().setText(totalVenta.toString());
         
         /**
          * Cargar valores en Presupuesto}
@@ -1329,7 +1343,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         //this.presupuesto.setTotalVenta(totalVenta);
     }
     
-    public void ordenarDetallesEnFuncionDeCliente()
+    /*public void ordenarDetallesEnFuncionDeCliente()
     {  
         //Metodo que permite ordentar los maps por las proveedores
         mapClientes = new TreeMap<Persona,List<PresupuestoDetalle>>(new Comparator<Persona>() {
@@ -1353,9 +1367,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 mapClientes.get(pd.getPersona()).add(pd);
             }
         }
-    }
+    }*/
     
-    public void ordenarDetallesEnFuncionDeOrdenCompra()
+    /*public void ordenarDetallesEnFuncionDeOrdenCompra()
     {
         //int c = 0;
         ordenarDetallesEnFuncionDeCliente();
@@ -1377,7 +1391,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
             
         }
-    }
+    }*/
     
     public void mostrarDatosTabla()
     {
@@ -1390,18 +1404,19 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
         
         
-        for(Map.Entry<Integer,List<PresupuestoDetalle>> datoMap : mapOrden.entrySet())
-        {
-            boolean b = true; 
-            List<PresupuestoDetalle> detallesPorProveedor = datoMap.getValue();
-            String titulo = "Orden " + detallesPorProveedor.get(0).getNumeroOrdenCompra() + " :";
-            for (PresupuestoDetalle detalle : detallesPorProveedor) {
-                if(b){
-                    fila=new Vector<>();
-                    fila.add(null);fila.add(titulo+"");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");
-                    b = false;
-                    modeloTablaDetallesPresupuesto.addRow(fila);
-                }
+        //for(Map.Entry<Integer,List<PresupuestoDetalle>> datoMap : mapOrden.entrySet())
+        //{
+            //boolean b = true; 
+            //List<PresupuestoDetalle> detallesPorProveedor = datoMap.getValue();
+            //String titulo = "Orden " + detallesPorProveedor.get(0).getNumeroOrdenCompra() + " :";
+            for (PresupuestoDetalle detalle : presupuesto.getPresupuestoDetalles()) 
+            {
+                //if(b){
+                    //fila=new Vector<>();
+                    //fila.add(null);fila.add(titulo+"");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");
+                    //b = false;
+                    //modeloTablaDetallesPresupuesto.addRow(fila);
+                //}
                     fila = new Vector<>();
                     fila.add(detalle);
                     fila.add("");
@@ -1424,7 +1439,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                         modeloTablaDetallesPresupuesto.addRow(fila);
                     }
             }
-        }
+        //}
         
         
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesProductos);
@@ -1442,23 +1457,27 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         nuevo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                opcionMenuCambiarOrdenCompra();
+                //opcionMenuCambiarOrdenCompra();
             }
         });
         
         ordenCompra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                opcionMenuGenerarOrdenCompra();
+                //opcionMenuGenerarOrdenCompra();
             }
         });
         
         PopupMenuTabla menuTabla = new PopupMenuTabla(getTableDetallesPresupuesto(), jMenuItems);
         UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 0);
-        UtilidadesTablas.cambiarColorFila(getTableDetallesPresupuesto());
+        //UtilidadesTablas.cambiarColorFila(getTableDetallesPresupuesto());
         
         UtilidadesTablas.ocultarColumna(getTableDetallesServicio(), 0);
-        UtilidadesTablas.cambiarColorFila(getTableDetallesServicio());
+        //UtilidadesTablas.cambiarColorFila(getTableDetallesServicio());
+        
+        UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 1);
+        UtilidadesTablas.ocultarColumna(getTableDetallesServicio(), 1);
+        
     }
     
     private boolean verificarCamposValidados() {
@@ -1490,26 +1509,20 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     /**
      * Opciones de PopupMenu
      */
-    public void opcionMenuCambiarOrdenCompra()
+    /*public void opcionMenuCambiarOrdenCompra()
     {
         boolean respuesta =  DialogoCodefac.dialogoPregunta("Advertencia", "Desea colocar el detalle en una nueva orden de compra?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-        /**
-         * Permite saber si elegi la orden de compra
-        */
+
         int n = -1;
         if(respuesta){
-            /**
-             * Permite obtener el numero de orden de compra actual
-             */
+
             int numeroOrden = obtenerNumeroOrdenPresupuesto() + 1;
             int fila = getTableDetallesPresupuesto().getSelectedRow();
             PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
             if(presupuestoDetalle != null)
             {
                 if(obtenerNumeroOrdenCompraPorProveedor(presupuestoDetalle)>0){
-                    /**
-                     * Me permite obtener el numero de ordenes de compra existentes por el Proveedor seleccionado
-                     */
+
                     List ordenes = obtenerNumerosOrdenCompra(presupuestoDetalle);
                     
                     String menu = "Ordenes: \n";
@@ -1527,16 +1540,15 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     
                 }
             }
-            /**
-             * Orden los detalles del map en funcion del numero de la orden de compra
-             */
+            
+            //Orden los detalles del map en funcion del numero de la orden de compra
             ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
         }
         
-    }
+    }*/
    
-    public void opcionMenuGenerarOrdenCompra()
+    /*public void opcionMenuGenerarOrdenCompra()
     {
         for (Map.Entry<Integer, List<PresupuestoDetalle>> entry : this.mapOrden.entrySet()) {
             Integer key = entry.getKey();
@@ -1544,7 +1556,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             
         }
        
-    }
+    }*/
     
     /**
      * Verifcar Producto Proveedor
@@ -1624,7 +1636,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     presupuesto.getPresupuestoDetalles().remove(presupuestoDetalle);
                     getBtnAgregarDetalle().setEnabled(true);
                     limpiarDetalles();
-                    ordenarDetallesEnFuncionDeOrdenCompra();
+                    //ordenarDetallesEnFuncionDeOrdenCompra();
                     mostrarDatosTabla();
                     calcularTotales();
             }

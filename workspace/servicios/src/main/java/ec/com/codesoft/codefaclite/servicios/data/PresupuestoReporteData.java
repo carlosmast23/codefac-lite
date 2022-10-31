@@ -33,8 +33,12 @@ public class PresupuestoReporteData implements ExcelDatosInterface {
     private BigDecimal compras;
     private BigDecimal produccionInterna;
     private BigDecimal utilidad;
+    private String tipo;
+    private String objetoMantenimiento;
 
-    public PresupuestoReporteData() {
+    public PresupuestoReporteData() 
+    {
+        
     }
 
     public String getCodigo() {
@@ -131,6 +135,22 @@ public class PresupuestoReporteData implements ExcelDatosInterface {
 
     public void setPresupuesto(Presupuesto presupuesto) {
         this.presupuesto = presupuesto;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getObjetoMantenimiento() {
+        return objetoMantenimiento;
+    }
+
+    public void setObjetoMantenimiento(String objetoMantenimiento) {
+        this.objetoMantenimiento = objetoMantenimiento;
     }
     
     
