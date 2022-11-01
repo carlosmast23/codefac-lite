@@ -12,8 +12,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 public enum TipoUbicacionEnum 
 {
     TODOS("Todos"),
-    CON_INVENTARIO("Con Ubicación"),
-    SIN_INVENTARIO("Sin Ubicación");
+    CON_UBICACION("Con Ubicación"),
+    SIN_UBICACION("Sin Ubicación");
 
     private String nombre;
 

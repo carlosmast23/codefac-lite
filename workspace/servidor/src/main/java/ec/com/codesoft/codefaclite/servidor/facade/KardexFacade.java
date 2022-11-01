@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoUbicacionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
@@ -247,8 +248,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum) throws java.rmi.RemoteException {
-         //Kardex k;
+    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
+        //Kardex k;
+        //k.getProducto().getUbicacion();
          //k.getReserva();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
         //k.getProducto().getNombre()
@@ -326,9 +328,21 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }else if(tipoStockEnum.equals(TipoStockEnum.SIN_STOCK))
         {
             tipoStockWhere=" AND k.stock<=0 ";
-        }        
+        } 
         
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+orderBy;
+        String tipoUbicacionWhere="";
+        if(tipoUbicacionEnum==null)
+        {
+            //TODO: no hace nada
+        }else if(tipoUbicacionEnum.equals(TipoUbicacionEnum.CON_UBICACION))
+        {
+            tipoUbicacionWhere=" AND k.producto.ubicacion IS NOT NULL ";
+        }else if(tipoUbicacionEnum.equals(TipoUbicacionEnum.SIN_UBICACION))
+        {
+            tipoUbicacionWhere=" AND k.producto.ubicacion IS NULL  ";
+        }
+        
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+orderBy;
         Query query = getEntityManager().createQuery(queryString);
         
         

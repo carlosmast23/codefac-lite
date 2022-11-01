@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.inventario.*;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.MarcaProductoDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ObjetoMantenimientoBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.SegmentoProductoBusqueda;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.crm.RutaModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -45,6 +46,8 @@ public class ObjetoMantenimientoControlador extends ModelControladorAbstract<Obj
 
     private List<TipoObjetoMantenimientoEnum> tipoList;
     
+    private List<MarcaProducto> marcaProductoList;
+    
     private ObjetoMantenimiento objetoMantenimiento;
     
     public ObjetoMantenimientoControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
@@ -54,11 +57,23 @@ public class ObjetoMantenimientoControlador extends ModelControladorAbstract<Obj
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         tipoList=UtilidadesLista.arrayToList(TipoObjetoMantenimientoEnum.values());
+        cargarMarcasActivas();
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void cargarMarcasActivas()
+    {
+        try {
+            marcaProductoList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -194,8 +209,16 @@ public class ObjetoMantenimientoControlador extends ModelControladorAbstract<Obj
         this.tipoList = tipoList;
     }
 
-    
+    public List<MarcaProducto> getMarcaProductoList() {
+        return marcaProductoList;
+    }
 
+    public void setMarcaProductoList(List<MarcaProducto> marcaProductoList) {
+        this.marcaProductoList = marcaProductoList;
+    }
+
+    
+    
     
     
     
