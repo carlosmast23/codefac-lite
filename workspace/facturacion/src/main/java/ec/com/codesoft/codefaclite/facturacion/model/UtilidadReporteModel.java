@@ -44,8 +44,12 @@ public class UtilidadReporteModel extends FacturaReporteModel
     public void iniciar()  
     {
         super.iniciar();
+        //Poner estos campos en un mejor lugar
         getPnlUtilidades().setVisible(true);
         getPanelValores().setVisible(false);
+        getLblSubtotalUtilidad().setText("0");
+        getLblCostoUtilidad().setText("0");
+        getTxtUtilidad().setText("0");
         listenerBotones();        
     }
     
