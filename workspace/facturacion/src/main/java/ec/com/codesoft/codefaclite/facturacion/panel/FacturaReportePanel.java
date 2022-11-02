@@ -98,6 +98,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         txtProducto = new javax.swing.JTextField();
         btnBuscarProducto = new javax.swing.JButton();
         chkTodosProducto = new javax.swing.JCheckBox();
+        pnlUtilidades = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        lblValorTotal1 = new javax.swing.JLabel();
+        lblCostoUtilidad = new javax.swing.JLabel();
+        txtUtilidad = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        lblSubtotalUtilidad = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -620,6 +628,91 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(chkTodosProducto, gridBagConstraints);
 
+        pnlUtilidades.setLayout(new java.awt.GridBagLayout());
+
+        jLabel20.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel20.setText("Costo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        pnlUtilidades.add(jLabel20, gridBagConstraints);
+
+        lblValorTotal1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblValorTotal1.setText("Utilidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        pnlUtilidades.add(lblValorTotal1, gridBagConstraints);
+
+        lblCostoUtilidad.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblCostoUtilidad.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCostoUtilidad.setText("0.00");
+        lblCostoUtilidad.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 51, 255), null));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        pnlUtilidades.add(lblCostoUtilidad, gridBagConstraints);
+
+        txtUtilidad.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        txtUtilidad.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtUtilidad.setText("0.00");
+        txtUtilidad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
+        txtUtilidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUtilidadActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        pnlUtilidades.add(txtUtilidad, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.001;
+        pnlUtilidades.add(jLabel3, gridBagConstraints);
+
+        jLabel22.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel22.setText("Subtotal:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        pnlUtilidades.add(jLabel22, gridBagConstraints);
+
+        lblSubtotalUtilidad.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblSubtotalUtilidad.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSubtotalUtilidad.setText("0.00");
+        lblSubtotalUtilidad.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 51, 255), null));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        pnlUtilidades.add(lblSubtotalUtilidad, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(pnlUtilidades, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -638,6 +731,10 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private void txtProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtProductoActionPerformed
+
+    private void txtUtilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUtilidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUtilidadActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelValores;
@@ -672,7 +769,10 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -680,6 +780,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblCliente1;
     private javax.swing.JLabel lblCliente2;
+    private javax.swing.JLabel lblCostoUtilidad;
     private javax.swing.JLabel lblFechaFin;
     private javax.swing.JLabel lblFechaInicio;
     private javax.swing.JLabel lblIva12;
@@ -688,13 +789,17 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSubtotal0;
     private javax.swing.JLabel lblSubtotal12;
     private javax.swing.JLabel lblSubtotalSinImpuesto;
+    private javax.swing.JLabel lblSubtotalUtilidad;
     private javax.swing.JLabel lblTotalDescuento;
     private javax.swing.JLabel lblValorTotal;
+    private javax.swing.JLabel lblValorTotal1;
     private javax.swing.JPanel panelOpciones;
+    private javax.swing.JPanel pnlUtilidades;
     private javax.swing.JTable tblDocumentos;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtProducto;
     private javax.swing.JTextField txtReferido;
+    private javax.swing.JTextField txtUtilidad;
     private javax.swing.JTextField txtValorTotal;
     // End of variables declaration//GEN-END:variables
 
@@ -922,7 +1027,48 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     public void setTxtProducto(JTextField txtProducto) {
         this.txtProducto = txtProducto;
     }
+
+    public JPanel getPnlUtilidades() {
+        return pnlUtilidades;
+    }
+
+    public void setPnlUtilidades(JPanel pnlUtilidades) {
+        this.pnlUtilidades = pnlUtilidades;
+    }
+
+    public JPanel getPanelValores() {
+        return PanelValores;
+    }
+
+    public void setPanelValores(JPanel PanelValores) {
+        this.PanelValores = PanelValores;
+    }
+
+    public JLabel getLblCostoUtilidad() {
+        return lblCostoUtilidad;
+    }
+
+    public void setLblCostoUtilidad(JLabel lblCostoUtilidad) {
+        this.lblCostoUtilidad = lblCostoUtilidad;
+    }
+
+    public JLabel getLblSubtotalUtilidad() {
+        return lblSubtotalUtilidad;
+    }
+
+    public void setLblSubtotalUtilidad(JLabel lblSubtotalUtilidad) {
+        this.lblSubtotalUtilidad = lblSubtotalUtilidad;
+    }
+
+    public JTextField getTxtUtilidad() {
+        return txtUtilidad;
+    }
+
+    public void setTxtUtilidad(JTextField txtUtilidad) {
+        this.txtUtilidad = txtUtilidad;
+    }
     
     
 
+    
 }

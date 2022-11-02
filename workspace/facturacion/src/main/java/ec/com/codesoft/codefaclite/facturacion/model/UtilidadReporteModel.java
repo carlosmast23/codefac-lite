@@ -4,6 +4,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -20,6 +21,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -39,8 +41,11 @@ public class UtilidadReporteModel extends FacturaReporteModel
     private UtilidadReport utilidadReport;
 
     @Override
-    public void iniciar()  {
+    public void iniciar()  
+    {
         super.iniciar();
+        getPnlUtilidades().setVisible(true);
+        getPanelValores().setVisible(false);
         listenerBotones();        
     }
     
@@ -75,6 +80,18 @@ public class UtilidadReporteModel extends FacturaReporteModel
         if(utilidadReport!=null)
         {
             getTblDocumentos().setModel(utilidadReport.obtenerModeloTabla());
+            
+            getLblSubtotalUtilidad().setText(utilidadReport.getTotalFormatStr(UtilidadReport.DatoEnum.SUBTOTAL));
+            getLblCostoUtilidad().setText(utilidadReport.getTotalFormatStr(UtilidadReport.DatoEnum.COSTO));
+            getTxtUtilidad().setText(utilidadReport.getTotalFormatStr(UtilidadReport.DatoEnum.UTILIDAD));
+            //llenar utilidades
+            /*ControladorReporteFactura.TotalSumatoria totalSumatoria=new ControladorReporteFactura.TotalSumatoria(
+                    BigDecimal.ZERO, 
+                    utilidadReport.getTotal(UtilidadReport.DatoEnum.), 
+                    BigDecimal.ONE, 
+                    BigDecimal.ONE
+            );*/
+            
        }
     }
 
@@ -111,6 +128,7 @@ public class UtilidadReporteModel extends FacturaReporteModel
                         Excel excel = new Excel();
                         String[] titulos={"Código","Bodega","Lote","Nombre Producto","Fecha Vencimiento","Stock","Valor Unitario"};
                         excel.gestionarIngresoInformacionExcel(titulos, new ArrayList());
+                        
                         excel.abrirDocumento();
                     } catch (Exception exc) {
                         exc.printStackTrace();
@@ -162,7 +180,8 @@ public class UtilidadReporteModel extends FacturaReporteModel
     }
 
     @Override
-    public Map<Integer, Boolean> permisosFormulario() {
+    public Map<Integer, Boolean> permisosFormulario() 
+    {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);

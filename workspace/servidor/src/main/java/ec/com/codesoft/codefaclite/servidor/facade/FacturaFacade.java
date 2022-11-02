@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -395,6 +396,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
                         ") FD ON F.ID =FD.FACTURA_ID WHERE 1=1  "+whereFechaMayor+whereFechaMenor ;
       
           Query query=getEntityManager().createNativeQuery(queryString);
+          Logger.getLogger(FacturaFacade.class.getName()).log(Level.INFO,queryString);
           
           if(fechaMayor!=null)
           {

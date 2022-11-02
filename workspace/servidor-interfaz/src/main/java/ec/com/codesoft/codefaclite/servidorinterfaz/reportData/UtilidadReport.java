@@ -23,18 +23,19 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
     @Override
     public String[] getTitulos() {
         return new String[]{
-            "Secuencial",
-            "Fecha",
-            "Razón Social",
-            "Identificación",
-            "Subtotal",
-            "Costo",
-            "Utilidad"
+            DatoEnum.SECUENCIAL.nombre,
+            DatoEnum.FECHA.nombre,
+            DatoEnum.RAZON_SOCIAL.nombre,
+            DatoEnum.IDENTIFICACION.nombre,
+            DatoEnum.SUBTOTAL.nombre,
+            DatoEnum.COSTO.nombre,
+            DatoEnum.UTILIDAD.nombre,
         };
     }
 
     @Override
     public void construirFilaTabla(UtilidadResult dato, Vector<Object> fila) {
+        
         fila.add(dato.getSecuencial());
         fila.add(dato.getFechaEmision());
         fila.add(dato.getRazonSocial());
@@ -42,6 +43,43 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         fila.add(dato.getSubtotal().setScale(2, RoundingMode.HALF_UP));
         fila.add(dato.getCosto().setScale(2, RoundingMode.HALF_UP));
         fila.add(dato.getUtilidad().setScale(2, RoundingMode.HALF_UP));
+        
+        //sumarTotal(DatoEnum.SUBTOTAL, dato.getSubtotal());
+        sumarTotal(DatoEnum.SUBTOTAL,dato.getSubtotal());
+        sumarTotal(DatoEnum.COSTO,dato.getCosto());
+        sumarTotal(DatoEnum.UTILIDAD,dato.getUtilidad());
+        
+    }
+    
+        
+    public enum DatoEnum implements DataReportIf
+    {
+        SECUENCIAL("Secuencial"),
+        FECHA("Fecha"),
+        RAZON_SOCIAL("Razón Social"),
+        IDENTIFICACION("Identificación"),
+        SUBTOTAL("Subtotal"),
+        COSTO("Costo"),
+        UTILIDAD("Utilidad");
+        
+        private String nombre;
+
+        private DatoEnum(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        public String getNombre() 
+        {
+            return nombre;
+        }
+
+        @Override
+        public String getNombreDato() 
+        {
+            return nombre;
+        }
+
+        
     }
     
 }
