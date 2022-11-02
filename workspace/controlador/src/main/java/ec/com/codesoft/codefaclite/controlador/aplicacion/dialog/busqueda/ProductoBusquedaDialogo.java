@@ -55,6 +55,11 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     private Boolean productosVenta;
     private Boolean productosCompra;
     
+    /**
+     * Solución temporal para agregar o quitar una columna
+     */
+    private Boolean aplicacionColumna;
+    
     private static final int INDICE_FILTRO_MARCA=97;
     
     /**
@@ -70,7 +75,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         this.isManejoInvetario=null;
         this.productosCompra=productosCompra;
         this.productosVenta=productosVenta;
-        
+        this.aplicacionColumna=false;
         
     }
     
@@ -80,6 +85,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         this.empresa = empresa;
         this.productosCompra=productosCompra;
         this.productosVenta=productosVenta;
+        this.aplicacionColumna=false;
     }
 
     @Override
@@ -89,6 +95,10 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Código", 0.2d));        
         titulo.add(new ColumnaDialogo("Unidad", 0.2d));
+        if(aplicacionColumna)
+        {
+            titulo.add(new ColumnaDialogo("Aplicación",0.2d));
+        }
         titulo.add(new ColumnaDialogo("Pvp1 ", 0.1d));
         titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.1d));
         titulo.add(new ColumnaDialogo("IVA", 0.1d));        
@@ -109,6 +119,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         dato.add(t.getNombre());
         dato.add(t.getCodigoPersonalizado());
         
+        
         String presentacion="";
         if(t.buscarPresentacionProducto()!=null)
         {
@@ -116,6 +127,11 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         }
         dato.add(presentacion);
         //dato.add(t.getCodigoUPC());       
+        
+        if(aplicacionColumna)
+        {
+            dato.add(t.getAplicacionProducto());
+        }
         
         
         dato.add(t.getValorUnitario().setScale(numeroDecimales, RoundingMode.HALF_UP));
@@ -324,6 +340,16 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         this.buscarFiltroMarca = buscarFiltroMarca;
     }
     */
+
+    public Boolean getAplicacionColumna() {
+        return aplicacionColumna;
+    }
+
+    public void setAplicacionColumna(Boolean aplicacionColumna) {
+        this.aplicacionColumna = aplicacionColumna;
+    }
+    
+    
     
     
     

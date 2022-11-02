@@ -709,6 +709,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private void buscarProductoSinInventario()
     {
         ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,true);
+        productoBusquedaDialogo.setAplicacionColumna(true);
+        
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         producto = (Producto) buscarDialogoModel.getResultado();
