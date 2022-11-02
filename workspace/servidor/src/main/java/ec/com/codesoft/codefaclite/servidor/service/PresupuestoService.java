@@ -52,10 +52,11 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     
     public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
     {
-        
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        return (Presupuesto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
+        {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public Object transaccion() throws ServicioCodefacException, RemoteException 
+            {
                 if (entity.getTotalVenta() == null || entity.getTotalVenta().compareTo(BigDecimal.ZERO) == 0) 
                 {
                     throw new ServicioCodefacException("Error al grabar, el total del presupuesto no puede ser 0");
@@ -83,12 +84,15 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                 ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(entity);
                 
                 entityManager.persist(entity);
-                //entity=entityManager.merge(entity);
+                entityManager.flush();
+                Presupuesto presupuestoEdit=entityManager.merge(entity);
                 
-            }
+                //entity=entityManager.merge(presupuestoEdit);
+                return presupuestoEdit;
+            } 
         });
+         
         
-        return entity;
     }
     
     private void crearActividadesPresupuesto(PresupuestoDetalle presupuestoDetalle)throws ServicioCodefacException

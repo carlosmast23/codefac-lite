@@ -102,7 +102,7 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         query.setParameter(1,empleado);
         query.setParameter(2,Presupuesto.EstadoEnum.FACTURADO.getLetra());
         
-        if(whereActividadesPendiente!=null)
+        if(actividadesPendientes!=null)
         {
             query.setParameter(3,EnumSiNo.NO.getLetra());
         }

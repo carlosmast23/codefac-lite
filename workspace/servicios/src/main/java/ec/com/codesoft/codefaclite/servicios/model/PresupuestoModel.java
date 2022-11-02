@@ -220,7 +220,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
             
+            servicio.consultarActividadPresupuesto(empleado);
             presupuesto=servicio.grabar(presupuesto);
+            
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             imprimir();
             
