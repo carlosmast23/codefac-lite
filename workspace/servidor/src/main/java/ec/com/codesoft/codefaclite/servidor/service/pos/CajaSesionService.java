@@ -44,6 +44,10 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
+                if (entity.getValorApertura() == null) {
+                    throw new ServicioCodefacException("El valor de apertura  no puede estar vacio");
+                }
+      
                 if(entity.getCaja() == null)
                 {
                     throw new ServicioCodefacException("El inicio de sesión de caja debe tener una caja asignada");
@@ -118,6 +122,11 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     
     private void validarCierreCaja(CajaSession caja) throws ServicioCodefacException
     {
+        if(caja.getValorApertura()==null)
+        {
+            throw new ServicioCodefacException("El valor de apertura  no puede estar vacio");
+        }
+        
         if(caja.getValorCierreReal()==BigDecimal.ZERO)
         {
             throw new ServicioCodefacException("El valor de cierre real no puede estar vacio");

@@ -111,6 +111,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         {
             mostrarMensaje(new CodefacMsj("Error", e.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));
             Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, e);
+            throw new ExcepcionCodefacLite(e.getMessage());
         }      
     }
 

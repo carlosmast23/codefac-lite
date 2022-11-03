@@ -123,7 +123,7 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         getjTextValorCierreReal().setText(cajaSession.getValorCierreReal()+"");
         getTxtObservacionesCierreCaja().setText(cajaSession.getObservacionCierreCaja());
        
-        if(cajaSession.getIngresosCaja().isEmpty())
+        if(cajaSession.getIngresosCaja()==null || cajaSession.getIngresosCaja().isEmpty())
         {
             getjTextValorCierreTeorico().setText("" + cajaSession.getValorApertura());
         }
@@ -131,6 +131,11 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         {    
             BigDecimal totalVentas = BigDecimal.ZERO;
             totalVentas = cajaSession.getValorApertura();
+            
+            if(totalVentas==null)
+            {
+                totalVentas=BigDecimal.ZERO;
+            }
 
             //Total mejorar esta parte
             for(IngresoCaja ingresoCaja: cajaSession.getIngresosCaja())
