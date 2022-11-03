@@ -294,7 +294,7 @@ public class PresupuestoDetalle implements Serializable
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 23 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -310,10 +310,8 @@ public class PresupuestoDetalle implements Serializable
             return false;
         }
         final PresupuestoDetalle other = (PresupuestoDetalle) obj;
-        if (!Objects.equals(this.estado, other.estado)) {
-            return false;
-        }
-        
-        return true;
+        return Objects.equals(this.id, other.id);
     }
+
+    
 }

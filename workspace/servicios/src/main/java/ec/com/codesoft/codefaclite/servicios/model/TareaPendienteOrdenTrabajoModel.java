@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servicios.panel.ObjetoMantenimientoPanel;
 import ec.com.codesoft.codefaclite.servicios.panel.TareaPendienteOrdenTrabajoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
@@ -122,8 +123,9 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
     {
         String titulo[]=new String[]{
             "Objecto",
-            "Seleccionado",
-            "Código",
+            "Finalizar",
+            "Objeto Mantenimiento",
+            "Código OT",
             "Fecha Ingreso",
             "Detalle",            
             "Descripción",};
@@ -133,6 +135,7 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
                 new Class[]{
                     Object.class,
                     Boolean.class,
+                    Object.class,
                     Object.class,
                     Object.class,
                     Object.class,
@@ -154,10 +157,18 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
                 String detalle=valueTmp.getProductoActividad().getNombre();
                 Boolean terminadoBool=valueTmp.getTerminadoEnum().getBool();
                 
+                ObjetoMantenimiento objetoMantenimiento=presupuestoDetalle.getPresupuesto().getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
+                String objetoMantenimientoStr="";
+                if(objetoMantenimiento!=null)
+                {
+                    objetoMantenimientoStr=objetoMantenimiento.getNombre();
+                }
+                
                 return new Object[]
                 {
                     valueTmp,                    
-                    presupuestoDetalle.getPresupuesto().getCodigo(),
+                    objetoMantenimientoStr,
+                    presupuestoDetalle.getPresupuesto().getOrdenTrabajoDetalle().getOrdenTrabajo().getId(),
                     presupuestoDetalle.getPresupuesto().getFechaPresupuesto(),
                     detalle,                    
                     "Sin Novedad"

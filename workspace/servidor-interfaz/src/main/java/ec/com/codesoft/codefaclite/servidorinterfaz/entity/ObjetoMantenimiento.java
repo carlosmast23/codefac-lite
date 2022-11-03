@@ -46,6 +46,12 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
     @JoinColumn(name = "PROPIETARIO_ID")
     private Persona propietario;
     
+    @JoinColumn(name = "MARCA_ID")
+    private MarcaProducto marca;
+
+    @Column(name = "TIPO_COMBUSTIBLE")
+    private String tipoCombustible;
+    
 
     public ObjetoMantenimiento() {
     }
@@ -116,6 +122,22 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public MarcaProducto getMarca() {
+        return marca;
+    }
+
+    public void setMarca(MarcaProducto marca) {
+        this.marca = marca;
+    }
+
+    public String getTipoCombustible() {
+        return tipoCombustible;
+    }
+
+    public void setTipoCombustible(String tipoCombustible) {
+        this.tipoCombustible = tipoCombustible;
     }
  
     

@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoUbicacionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TransferenciaBodegaRespuesta;
@@ -92,7 +93,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public Kardex buscarKardexPorDefectoVenta(Bodega bodega,Producto producto) throws java.rmi.RemoteException;
     
-    public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum) throws java.rmi.RemoteException;
+    public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException;
 
     public void grabarProductosReservadosSinTransaccion(Factura factura) throws RemoteException,ServicioCodefacException;
     

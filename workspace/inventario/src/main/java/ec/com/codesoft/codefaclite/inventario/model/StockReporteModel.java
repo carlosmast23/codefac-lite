@@ -318,7 +318,7 @@ public class StockReporteModel extends StockMinimoPanel{
                     KardexOrdenarEnum ordenarEnum=(KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();
                     TipoStockEnum tipoStockEnum=(TipoStockEnum) getCmbTipoStock().getSelectedItem();
                     TipoUbicacionEnum tipoUbicacionEnum=(TipoUbicacionEnum) getCmbUbicacion().getSelectedItem();
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum,tipoStockEnum);
+                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum,tipoStockEnum,tipoUbicacionEnum);
                     
                     listaData=new ArrayList<StockMinimoData>();
                     

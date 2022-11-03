@@ -568,8 +568,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     { 
         if(modo.equals(CrudEnum.CREAR))
         {
-            if(factura.getId()!=null || factura.getSecuencial()!=null || factura.getClaveAcceso()!=null)
+            //TODO: Temporalmente usa esta solucion por que aveces viene con un secuencial con cero cuando hago una preimpresion pero no se a que momento se setea ese valor
+            if(factura.getSecuencial()!=null && factura.getSecuencial()==0)
             {
+                factura.setSecuencial(null);
+            }
+            
+            if(factura.getId()!=null ||  factura.getSecuencial()!=null && factura.getSecuencial()==0 || factura.getClaveAcceso()!=null)
+            {                
                 throw new ServicioCodefacException("Error al grabar el documento, se va a generar un documento repetido ");
             }
         }

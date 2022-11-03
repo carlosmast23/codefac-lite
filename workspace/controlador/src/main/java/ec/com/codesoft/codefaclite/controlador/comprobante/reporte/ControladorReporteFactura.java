@@ -862,7 +862,7 @@ public class ControladorReporteFactura {
     
 
     
-    public class TotalSumatoria
+    public static class TotalSumatoria
     {
         private BigDecimal subtotalSinImpuesto;
         private BigDecimal subtotalConImpuesto;

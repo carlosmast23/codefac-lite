@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBi
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.MayusculaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoObjetoMantenimientoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
@@ -55,6 +56,10 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         btnBuscarPropietario = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         cmbTipo = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cmbMarca = new javax.swing.JComboBox<>();
+        txtCombustible = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -81,10 +86,10 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         getContentPane().add(txtNombre, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Descripcion:");
+        jLabel2.setText("Tipo Combustible:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -96,7 +101,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         getContentPane().add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -167,6 +172,39 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbTipo, gridBagConstraints);
 
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Marca:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        getContentPane().add(jLabel7, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Descripcion:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        getContentPane().add(jLabel8, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbMarca, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtCombustible, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -177,6 +215,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarPropietario;
+    private javax.swing.JComboBox<MarcaProducto> cmbMarca;
     private javax.swing.JComboBox<TipoObjetoMantenimientoEnum> cmbTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -184,8 +223,11 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtCombustible;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPropietario;
@@ -264,6 +306,26 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         this.txtCodigo = txtCodigo;
     }
 
+    @ComboBoxBinding(source ="controlador.marcaProductoList" , valueSelect ="controlador.objetoMantenimiento.marca" )
+    public JComboBox<MarcaProducto> getCmbMarca() {
+        return cmbMarca;
+    }
+
+    public void setCmbMarca(JComboBox<MarcaProducto> cmbMarca) {
+        this.cmbMarca = cmbMarca;
+    }
+
+    @TextFieldBinding(value = "controlador.objetoMantenimiento.tipoCombustible")
+    public JTextField getTxtCombustible() {
+        return txtCombustible;
+    }
+
+    public void setTxtCombustible(JTextField txtCombustible) {
+        this.txtCombustible = txtCombustible;
+    }
+
+    
+    
     
     
     

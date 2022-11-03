@@ -83,6 +83,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     public FacturaReporteModel() {        
         initListener();
+        getPnlUtilidades().setVisible(false);
+        getPanelValores().setVisible(true);
         super.validacionDatosIngresados=false;
     }
 
@@ -310,14 +312,24 @@ public class FacturaReporteModel extends FacturaReportePanel {
         UtilidadesTablas.definirTamanioColumnasPorMap(getTblDocumentos(), mapTamanios);
         
         ControladorReporteFactura.TotalSumatoria total=controladorReporte.totalSinNotaCredito();
+        cargarTotalesVista(total);
+        /*getLblSubtotal0().setText(total.getSubtotalSinImpuestoMenosDescuento().toString());
+        getLblSubtotal12().setText(total.getSubtotalConImpuestoMenosDescuento().toString());
+        getLblSubtotalSinImpuesto().setText(total.obtenerSubtotal().toString());
+        getLblTotalDescuento().setText(total.obtenerTotalDescuentos().toString());
+        getLblIva12().setText(total.getValorImpuesto().toString());
+        getTxtValorTotal().setText(total.obtenerTotal().toString());*/
+    }
+    
+    private void cargarTotalesVista(ControladorReporteFactura.TotalSumatoria total)
+    {
         getLblSubtotal0().setText(total.getSubtotalSinImpuestoMenosDescuento().toString());
         getLblSubtotal12().setText(total.getSubtotalConImpuestoMenosDescuento().toString());
         getLblSubtotalSinImpuesto().setText(total.obtenerSubtotal().toString());
         getLblTotalDescuento().setText(total.obtenerTotalDescuentos().toString());
         getLblIva12().setText(total.getValorImpuesto().toString());
         getTxtValorTotal().setText(total.obtenerTotal().toString());
-
-       
+        
     }
 
     private NotaCredito verificarPorFactura(Factura factura,List<NotaCredito> notasCredito) {

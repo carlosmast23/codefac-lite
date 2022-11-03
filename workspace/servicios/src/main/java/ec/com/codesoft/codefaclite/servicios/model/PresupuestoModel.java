@@ -220,7 +220,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
             
+            servicio.consultarActividadPresupuesto(empleado);
             presupuesto=servicio.grabar(presupuesto);
+            
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             imprimir();
             
@@ -707,6 +709,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private void buscarProductoSinInventario()
     {
         ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,true);
+        productoBusquedaDialogo.setAplicacionColumna(true);
+        
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         producto = (Producto) buscarDialogoModel.getResultado();
@@ -931,7 +935,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 getBtnAgregarDetalle().setEnabled(false);
                 try{
                     PresupuestoDetalle presupuestoDetalle =  (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
-                    if(presupuestoDetalle != null){
+                    
+                    if(presupuestoDetalle != null)
+                    {
                         cargarInformacionDetallePresupuesto( presupuestoDetalle);
                     }else
                     {
@@ -1629,8 +1635,24 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private void eliminarDetallePresupuesto()
     {
         try{
+            PresupuestoDetalle presupuestoDetalle = null;
             int fila = getTableDetallesPresupuesto().getSelectedRow();
-            PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila,0);
+            
+            if(fila>0)
+            {
+                presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila,0);
+                
+            }
+            else
+            {
+                fila = getTableDetallesServicio().getSelectedRow();
+                if(fila>0)
+                {
+                    presupuestoDetalle=(PresupuestoDetalle) getTableDetallesServicio().getValueAt(fila,0);
+                }
+            }
+            
+            
             if(presupuestoDetalle != null){
                 
                     presupuesto.getPresupuestoDetalles().remove(presupuestoDetalle);
