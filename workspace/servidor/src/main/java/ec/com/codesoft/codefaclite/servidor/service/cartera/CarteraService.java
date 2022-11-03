@@ -430,7 +430,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     {
         //Por el momento solo compara los saldo con 2 decimales, por que los detalles de las carteras pueden ttener varios decimales, pero finalmente la cartera solo tiene 2 decimales
         //TODO:
-        saldo=saldo.setScale(2, RoundingMode.HALF_UP);
+        saldo=saldo.setScale(2, RoundingMode.DOWN);
         if(saldo.compareTo(BigDecimal.ZERO)<0)
         {
             throw new ServicioCodefacException("Error al procesar la cartera por que el movimiento va a generar saldos negativos . Saldo negativo [ "+saldo+" ]");
