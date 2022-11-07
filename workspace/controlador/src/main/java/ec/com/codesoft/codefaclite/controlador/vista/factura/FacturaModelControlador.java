@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -232,7 +233,16 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //presupuestoSeleccionado=presupuestoTmp;
             interfaz.setPresupuestoSeleccionado(presupuestoTmp);
             //EnumSiNo.SI
-            String descripcion="P"+presupuestoTmp.getId()+" OT"+presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoTmp.getDescripcion();
+            
+            String objetoVehiculoTxt="";
+            ObjetoMantenimiento objetoMantenimiento=presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
+            
+            if(objetoMantenimiento!=null)
+            {
+                objetoVehiculoTxt= " "+objetoMantenimiento.toString()+" ";
+            }
+            
+            String descripcion="P "+presupuestoTmp.getId()+objetoMantenimiento+" OT"+presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoTmp.getDescripcion();
             FacturaDetalle facturaDetalle=crearFacturaDetalle(
                     presupuestoTmp.calcularValorServicio(), 
                     null, //No tiene valor del subsidio
