@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -398,6 +399,18 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         }
     }
     
+    public void validarDatoRepetido(Map<String,Object> mapParametros) throws ServicioCodefacException, RemoteException
+    {
+        //Map<String,Object> mapParametros=new HashMap<String,Object>();
+        //mapParametros.put(campo,datoComparacion);
+        List resultadoList=obtenerPorMap(mapParametros);        
+        if(resultadoList.size()>0)
+        {
+            throw new ServicioCodefacException("No se puede crear DATOS REPETIDOS ");
+        }
+        //return false;
+    }
+    
     /**
      * Metodo que me va a permitir identificar cuando un atributo con respecto al original fue modificado
      * @param producto
@@ -429,4 +442,6 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         public Object getId();
         public Boolean compararCampos(T dato);
     }
+    
+    
 }

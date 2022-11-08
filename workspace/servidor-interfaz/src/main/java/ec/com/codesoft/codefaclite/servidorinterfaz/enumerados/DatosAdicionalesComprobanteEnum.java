@@ -10,6 +10,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  * @author Carlos
  */
 public enum DatosAdicionalesComprobanteEnum {    
+    VEHICULO("Vehiculo"),
     NOMBRE_ESTUDIANTE("Estudiante"),
     CODIGO_ESTUDIANTE("CodEstudiante"),
     FECHA_VENCIMIENTO("FechaVencimiento"),

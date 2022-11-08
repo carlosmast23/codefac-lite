@@ -17,7 +17,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ObjetoMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -48,9 +50,22 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
         
     }
     
+    private void validarDatoRepetidoObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
+    {
+        //Verificar que no pueda ingresar datos duplicados
+        Map<String,Object> mapParametro=new HashMap<String, Object>();
+        mapParametro.put("empresa",objetoMantenimiento.getEmpresa());
+        mapParametro.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametro.put("codigo",objetoMantenimiento.getCodigo());
+        validarDatoRepetido(mapParametro);
+    }
+    
     private void validar(ObjetoMantenimiento objetoMantenimiento,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException
     {
-                validarEdicionCampo(objetoMantenimiento.getEmpresa(), crudEnum, new ValidarEdicionCampoIf<ObjetoMantenimiento>() {
+       validarDatoRepetidoObjectoMantenimiento(objetoMantenimiento);
+       
+        //Verificar que al momento de editar no pueda editar los códigos de los datos
+        validarEdicionCampo(objetoMantenimiento.getEmpresa(), crudEnum, new ValidarEdicionCampoIf<ObjetoMantenimiento>() {
             @Override
             public Object getId() {
                 return objetoMantenimiento.getId();

@@ -32,6 +32,7 @@ public class ObjetoMantenimientoBusqueda implements InterfaceModelFind<ObjetoMan
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
+        titulo.add(new ColumnaDialogo("Código", 0.2d));
         titulo.add(new ColumnaDialogo("Nombre", 0.2d));
         titulo.add(new ColumnaDialogo("Descripción", 0.2d));
         //titulo.add(new ColumnaDialogo("Stock", 0.3d));
@@ -56,6 +57,7 @@ public class ObjetoMantenimientoBusqueda implements InterfaceModelFind<ObjetoMan
 
     @Override
     public void agregarObjeto(ObjetoMantenimiento t, Vector dato) {
+        dato.add(t.getCodigo());        
         dato.add(t.getNombre());        
         dato.add(t.getDescripcion());
     }

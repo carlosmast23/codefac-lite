@@ -1150,7 +1150,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         Presupuesto presupuestoTmp = (Presupuesto) buscarDialogoModel.getResultado();
         //agregarPresupuestoFactura(presupuestoTmp,false);
-        controlador.agregarPresupuestoVista(presupuestoTmp,true);
+        controlador.agregarPresupuestoVista(presupuestoTmp,true);        
+        cargarTablaDatosAdicionales();
+
 
     }
     

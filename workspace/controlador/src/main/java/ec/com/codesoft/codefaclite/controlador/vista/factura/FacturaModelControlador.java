@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
@@ -228,7 +229,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 mostrarMensaje(new CodefacMsj("EL presupuesto ya esta agregado, no se puede agregar nuevamente", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                 //DialogoCodefac.mensaje("Advertencia","EL presupuesto ya esta agregado, no se puede agregar nuevamente",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 return null;
-            }            
+            }
             
             //presupuestoSeleccionado=presupuestoTmp;
             interfaz.setPresupuestoSeleccionado(presupuestoTmp);
@@ -239,8 +240,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             if(objetoMantenimiento!=null)
             {
-                objetoVehiculoTxt= " "+objetoMantenimiento.toString()+" ";
+                objetoVehiculoTxt= " "+objetoMantenimiento.toString()+" ";                
             }
+            
             
             String descripcion="P "+presupuestoTmp.getId()+objetoMantenimiento+" OT"+presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoTmp.getDescripcion();
             FacturaDetalle facturaDetalle=crearFacturaDetalle(
@@ -301,6 +303,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             for (PersonaEstablecimiento establecimiento : presupuestoTmp.getPersona().getEstablecimientos()) {
                 interfaz.cargarCliente(establecimiento);
                 break;
+            }
+            
+            if(objetoMantenimiento!=null)
+            {
+                Factura factura=interfaz.obtenerFactura();
+                factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.VEHICULO.getNombre(), objetoVehiculoTxt,ComprobanteAdicional.Tipo.TIPO_OTRO));
+                //Factura facturaTmp= interfaz.obtenerFactura();
+                //System.out.println(facturaTmp.getDatosAdicionales().size());
             }
             
             return facturaDetalle;
@@ -1146,7 +1156,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
     @Override
     public ComprobanteAdicional crearComprobanteAdicional(String correo, ComprobanteAdicional.Tipo tipoCorreo, ComprobanteAdicional.CampoDefectoEnum campoDefecto) {
-        return new FacturaAdicional(correo, FacturaAdicional.Tipo.TIPO_CORREO, ComprobanteAdicional.CampoDefectoEnum.CORREO);
+        return new FacturaAdicional(correo, tipoCorreo, ComprobanteAdicional.CampoDefectoEnum.CORREO);
     }
 
     public SriFormaPago getFormaPagoDefecto() {
