@@ -52,6 +52,9 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
     @Column(name = "TIPO_COMBUSTIBLE")
     private String tipoCombustible;
     
+    @Column(name = "KILOMETRAJE")
+    private Integer kilometraje;
+    
 
     public ObjetoMantenimiento() {
     }
@@ -138,6 +141,14 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
 
     public void setTipoCombustible(String tipoCombustible) {
         this.tipoCombustible = tipoCombustible;
+    }
+
+    public Integer getKilometraje() {
+        return kilometraje;
+    }
+
+    public void setKilometraje(Integer kilometraje) {
+        this.kilometraje = kilometraje;
     }
  
     

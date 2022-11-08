@@ -36,6 +36,10 @@ public enum TipoObjetoMantenimientoEnum {
     
     public static TipoObjetoMantenimientoEnum getEnumByLetra(String letra)
     {
+        if(letra==null)
+        {
+            return null;
+        }
 
         for (TipoObjetoMantenimientoEnum enumerador : TipoObjetoMantenimientoEnum.values())
         {

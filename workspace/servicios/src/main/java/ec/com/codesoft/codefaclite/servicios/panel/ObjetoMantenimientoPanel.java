@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servicios.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
@@ -17,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoObjetoManteni
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -60,6 +62,8 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         jLabel8 = new javax.swing.JLabel();
         cmbMarca = new javax.swing.JComboBox<>();
         txtCombustible = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        txtKilometraje = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -86,10 +90,10 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         getContentPane().add(txtNombre, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Tipo Combustible:");
+        jLabel2.setText("Kilometraje:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -101,7 +105,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         getContentPane().add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -132,7 +136,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         getContentPane().add(txtCodigo, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Código:");
+        jLabel5.setText("PLACA (Código):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -176,7 +180,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         jLabel7.setText("Marca:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel7, gridBagConstraints);
@@ -192,7 +196,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbMarca, gridBagConstraints);
@@ -204,6 +208,22 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtCombustible, gridBagConstraints);
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText("Tipo Combustible:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        getContentPane().add(jLabel9, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtKilometraje, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -225,10 +245,12 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtCombustible;
     private javax.swing.JTextField txtDescripcion;
+    private javax.swing.JSpinner txtKilometraje;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPropietario;
     // End of variables declaration//GEN-END:variables
@@ -324,9 +346,14 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         this.txtCombustible = txtCombustible;
     }
 
-    
-    
-    
+    @SpinnerBinding(value = "controlador.objetoMantenimiento.kilometraje")
+    public JSpinner getTxtKilometraje() {
+        return txtKilometraje;
+    }
+
+    public void setTxtKilometraje(JSpinner txtKilometraje) {
+        this.txtKilometraje = txtKilometraje;
+    }
     
     
 

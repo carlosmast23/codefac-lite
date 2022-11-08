@@ -41,7 +41,7 @@ public class ObjetoMantenimientoBusqueda implements InterfaceModelFind<ObjetoMan
 
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
-        String queryString=" SELECT u FROM ObjetoMantenimiento u where u.estado=?1 and u.empresa=?2 and u.nombre like ?3 ";
+        String queryString=" SELECT u FROM ObjetoMantenimiento u where u.estado=?1 AND u.empresa=?2 AND ( LOWER(u.nombre) like ?3 OR LOWER(u.codigo) like ?3 ) ";
         
 
         
