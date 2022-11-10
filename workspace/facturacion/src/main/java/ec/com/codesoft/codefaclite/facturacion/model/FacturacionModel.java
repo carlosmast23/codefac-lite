@@ -1090,46 +1090,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void agregarOrdenTrabajo()
     {
         OrdenTrabajoBusquedaDialogo ordenTrabajoDialog=null;
-        /*if(getChkFiltroPresupuestoCliente().isSelected())
-        {
-            ordenTrabajoDialog = new FacturaBusquedaPresupuesto(factura.getCliente());
-        }
-        else
-        {
-            ordenTrabajoDialog = new FacturaBusquedaPresupuesto();
-        }*/
+        
+        
         ordenTrabajoDialog = new OrdenTrabajoBusquedaDialogo();
         
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(ordenTrabajoDialog);
         buscarDialogoModel.setVisible(true);
 
         OrdenTrabajo ordenTrabajoTmp = (OrdenTrabajo) buscarDialogoModel.getResultado();
+        
+        TipoDocumentoEnum tipoDocumentoEnum=null;
+        //tipoDocumentoEnum.PRESUPUESTOS;
 
         if (ordenTrabajoTmp != null) 
-        {
-            try {
-                List<Presupuesto> presupuestoList=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarPorOrdenTrabajo(ordenTrabajoTmp);
-                for (Presupuesto presupuesto : presupuestoList)
-                {
-                    presupuesto.setDescripcion(presupuesto.getOrdenTrabajoDetalle().getDescripcion());
-                    if(getChkOTDetalleUnico().isSelected())
-                    {
-                        // Si solo requiere cargar una sola vez entonces agrego solo el detalle principal
-                        controlador.agregarPresupuestoVista(presupuesto,false);                        
-                        setFacturaDetalleSeleccionado(facturaDetalleSeleccionado);
-                        //setFacturaDetalleSeleccionado
-                        break;
-                    }
-                    else
-                    {
-                        controlador.agregarPresupuestoVista(presupuesto,true);
-                    }
-                }
-            } catch (ServicioCodefacException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        {            
+            //ordenTrabajoTmp.get
+            FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
+                    BigDecimal.ZERO, 
+                    null, //Este tipo de valores no tienen subsidio
+                    ordenTrabajoTmp.getDescripcion(), 
+                    ordenTrabajoTmp.getId().toString(), 
+                    ordenTrabajoTmp.getCatalogoProducto(), 
+                    ordenTrabajoTmp.getId(), 
+                    null,
+                    EnumSiNo.NO,
+                    tipoDocumentoEnum.PRESUPUESTOS,
+                    BigDecimal.ZERO);
+            controlador.setearValoresProducto(facturaDetalle);
+            setFacturaDetalleSeleccionado(facturaDetalle);
         }
     }
     

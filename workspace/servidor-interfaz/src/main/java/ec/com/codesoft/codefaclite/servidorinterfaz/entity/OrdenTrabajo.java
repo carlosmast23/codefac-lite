@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
@@ -61,6 +62,10 @@ public class OrdenTrabajo implements Serializable
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
     private Persona cliente;
+    
+    @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
+    @ManyToOne
+    private CatalogoProducto catalogoProducto; 
     
     @JoinColumn(name = "USUARIO_ID")
     protected Usuario usuario;
@@ -147,10 +152,16 @@ public class OrdenTrabajo implements Serializable
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    
-    
-    
 
+    public CatalogoProducto getCatalogoProducto() {
+        return catalogoProducto;
+    }
+
+    public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
+        this.catalogoProducto = catalogoProducto;
+    }
+    
+    
     /*public String getEstadoDetalles() {
         return estadoDetalles;
     }

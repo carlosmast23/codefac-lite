@@ -1472,6 +1472,17 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
+    public void actualizarKardex(Kardex kardex) throws RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() 
+        {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(kardex);
+            }
+        });
+    }
+    
     public void grabarProductosReservadosSinTransaccion(Factura factura) throws RemoteException,ServicioCodefacException
     {
         //ServiceFactory.getFactory().getKardexServiceIf().buscarPorBodega(bodega);

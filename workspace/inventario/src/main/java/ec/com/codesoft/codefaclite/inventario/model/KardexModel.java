@@ -40,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -54,6 +55,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -109,10 +111,34 @@ public class KardexModel extends KardexPanel {
     public void nuevo() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private void setearValores()
+    {
+        BigDecimal costoPromedio=new BigDecimal(getTxtCostoPromedio().getText());
+        kardex.setCostoPromedio(costoPromedio);
+        
+        BigDecimal ultimoCosto=new BigDecimal(getTxtUltimoCosto().getText());
+        kardex.setPrecioUltimo(ultimoCosto);
+        
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try 
+        {
+            setearValores();
+            ServiceFactory.getFactory().getKardexServiceIf().actualizarKardex(kardex);
+            DialogoCodefac.mensaje(new CodefacMsj("Datos Actualizados Correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));
+        } catch (RemoteException ex) {
+            Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
+        
     }
 
     @Override
@@ -126,19 +152,23 @@ public class KardexModel extends KardexPanel {
         {
             if(DialogoCodefac.dialogoPregunta("Esta seguro que desea anular el Kardex ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
             {
-                try {
+                try 
+                {
                     ServiceFactory.getFactory().getKardexServiceIf().anularInventario(kardex);
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
-                } catch (RemoteException ex) {
+                } 
+                catch (RemoteException ex) 
+                {
                     Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
                     throw new ExcepcionCodefacLite("Cancelar eliminar");
-                } catch (ServicioCodefacException ex) {
+                } 
+                catch (ServicioCodefacException ex) 
+                {
                     Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                     throw new ExcepcionCodefacLite("Cancelar eliminar");
                 }
             }
-            
         }
         else
         {
@@ -236,7 +266,7 @@ public class KardexModel extends KardexPanel {
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_NUEVO, false);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
@@ -302,6 +332,9 @@ public class KardexModel extends KardexPanel {
                         kardex = detalleKardex.get(detalleKardex.size()-1).getKardex();
                         cargarTablaKardex();
                         UtilidadesTablas.ubicarFinalTabla(getTblKardexDetalle());
+                        
+                        getTxtCostoPromedio().setText(kardex.getCostoPromedio()+"");
+                        getTxtUltimoCosto().setText(kardex.getPrecioUltimo()+"");
                     }
                     else
                     {

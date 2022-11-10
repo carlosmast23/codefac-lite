@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
@@ -301,6 +302,8 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         cmbObjetoMantenimiento = new javax.swing.JComboBox<>();
         btnAgregarObjecto = new javax.swing.JButton();
         btnBuscarUltimoMantenimiento = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        cmbTipoFacturacion = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -677,10 +680,10 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         getContentPane().add(jPanel2, gridBagConstraints);
 
         jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel15.setText("Detalles");
+        jLabel15.setText("Tipo Facturación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel15, gridBagConstraints);
@@ -726,6 +729,22 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarUltimoMantenimiento, gridBagConstraints);
 
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel18.setText("Detalles:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel18, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbTipoFacturacion, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -745,6 +764,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<OrdenTrabajo.EstadoEnum> cmbEstadoOrdenTrabajo;
     private javax.swing.JComboBox<ObjetoMantenimiento> cmbObjetoMantenimiento;
     private javax.swing.JComboBox<PrioridadEnumEstado> cmbPrioridadDetalle;
+    private javax.swing.JComboBox<CatalogoProducto> cmbTipoFacturacion;
     private javax.swing.JComboBox<Departamento> cmbTipoOrdenDetalle;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -755,6 +775,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -791,6 +812,15 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.btnBuscarUltimoMantenimiento = btnBuscarUltimoMantenimiento;
     }
 
+    public JComboBox<CatalogoProducto> getCmbTipoFacturacion() {
+        return cmbTipoFacturacion;
+    }
+
+    public void setCmbTipoFacturacion(JComboBox<CatalogoProducto> cmbTipoFacturacion) {
+        this.cmbTipoFacturacion = cmbTipoFacturacion;
+    }
+
+    
     
 
 

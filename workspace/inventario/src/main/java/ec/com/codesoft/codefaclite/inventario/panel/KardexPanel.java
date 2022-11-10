@@ -65,6 +65,10 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         cmbBodega = new javax.swing.JComboBox<>();
         txtMovimientos = new javax.swing.JSpinner();
         chkTodosMovimientos = new javax.swing.JCheckBox();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtCostoPromedio = new javax.swing.JTextField();
+        txtUltimoCosto = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -113,15 +117,15 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         getContentPane().add(jLabel2, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Fecha Inicial:");
+        jLabel3.setText("Último Costo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 20;
@@ -131,12 +135,12 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Fecha Final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 20;
@@ -156,7 +160,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -166,7 +170,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel11.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel11.setText("Total:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -175,14 +179,13 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         lblTotal.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         lblTotal.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblTotal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         getContentPane().add(lblEspacioBlanco2, gridBagConstraints);
@@ -267,6 +270,40 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(chkTodosMovimientos, gridBagConstraints);
 
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Costo Promedio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel8, gridBagConstraints);
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Fecha Inicial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel10, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtCostoPromedio, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtUltimoCosto, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -279,6 +316,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private com.toedter.calendar.JDateChooser cmbFechaFinal;
     private com.toedter.calendar.JDateChooser cmbFechaInicial;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -286,6 +324,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
@@ -295,8 +334,10 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblPrecioUltimo;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblKardexDetalle;
+    private javax.swing.JTextField txtCostoPromedio;
     private javax.swing.JSpinner txtMovimientos;
     private javax.swing.JTextField txtProducto;
+    private javax.swing.JTextField txtUltimoCosto;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnConsultar() {
@@ -403,6 +444,22 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
 
     public void setTxtMovimientos(JSpinner txtMovimientos) {
         this.txtMovimientos = txtMovimientos;
+    }
+
+    public JTextField getTxtCostoPromedio() {
+        return txtCostoPromedio;
+    }
+
+    public void setTxtCostoPromedio(JTextField txtCostoPromedio) {
+        this.txtCostoPromedio = txtCostoPromedio;
+    }
+
+    public JTextField getTxtUltimoCosto() {
+        return txtUltimoCosto;
+    }
+
+    public void setTxtUltimoCosto(JTextField txtUltimoCosto) {
+        this.txtUltimoCosto = txtUltimoCosto;
     }
     
     

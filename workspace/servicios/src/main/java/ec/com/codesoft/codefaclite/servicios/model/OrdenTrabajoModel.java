@@ -30,10 +30,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -252,6 +254,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             getCmbEstadoOrdenTrabajo().setSelectedItem(ordenTrabajo.getEstadoEnum());
             OrdenTrabajo.EstadoEnum generalEstadoEnum = this.ordenTrabajo.getEstadoEnum();
             getCmbEstadoDetallesOrdenTrabajo().setSelectedItem(generalEstadoEnum);
+            getCmbTipoFacturacion().setSelectedItem(this.ordenTrabajo.getCatalogoProducto());
+                        
             mostrarDatosTabla();           
         }
         else
@@ -449,6 +453,20 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     public void cargarCombos()
     {
         /**
+         * Cargando los tipos de catalogos disponibles para los servicios
+        */
+        getCmbTipoFacturacion().removeAllItems();        
+        try {
+            List<CatalogoProducto> listaCatalogos = ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerPorModulo(ModuloCodefacEnum.SERVICIOS);
+            for (CatalogoProducto listaCatalogo : listaCatalogos) {
+                getCmbTipoFacturacion().addItem(listaCatalogo);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        /**
          * Estado general de orden trabajo
          */
         getCmbEstadoOrdenTrabajo().removeAllItems();
@@ -637,6 +655,10 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             ObjetoMantenimiento objetoMantenimientoTmp= (ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
             this.ordenTrabajo.setObjetoMantenimiento(objetoMantenimientoTmp);
             this.ordenTrabajo.setUsuario(session.getUsuario());
+            
+            CatalogoProducto catalogoProducto=(CatalogoProducto) getCmbTipoFacturacion().getSelectedItem();
+            this.ordenTrabajo.setCatalogoProducto(catalogoProducto);
+            
             //this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
     }
     

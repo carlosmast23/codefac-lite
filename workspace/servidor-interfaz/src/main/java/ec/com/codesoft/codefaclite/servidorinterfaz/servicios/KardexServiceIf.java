@@ -99,4 +99,6 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public void grabarProductosReservadosSinTransaccion(Presupuesto presupuesto) throws RemoteException,ServicioCodefacException;
     
+    public void actualizarKardex(Kardex kardex) throws RemoteException,ServicioCodefacException;
+    
 }

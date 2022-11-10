@@ -197,7 +197,10 @@ public class MigrarProductoModel extends MigrarModel {
                         producto.setPrecioTarjeta(BigDecimal.ZERO);
                         producto.setPvp4(BigDecimal.ZERO);
                         producto.setPvp5(BigDecimal.ZERO);
-                        producto.setPvp6(BigDecimal.ZERO);                        
+                        producto.setPvp6(BigDecimal.ZERO);   
+                        
+                        producto.setDisponibleVentaEnum(EnumSiNo.SI);
+                        producto.setDisponibleCompraEnum(EnumSiNo.SI);
                         
 
                         Object precioVentaOfertaObj=fila.getByEnum(ExcelMigrarProductos.Enum.PRECIO_VENTA_OFERTA).valor;
