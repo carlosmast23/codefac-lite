@@ -99,6 +99,11 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         else if (formatoImpresion.equals("POS"))
         {
             nombreJasper="codigosBarrasMini.jrxml";
+            //nombreJasper="codigosBarrasZebra10x15.jrxml";
+        }
+        else if(formatoImpresion.equals("ZEBRA"))
+        {
+            nombreJasper="codigosBarrasZebra10x15.jrxml";
         }
         
         InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream(nombreJasper);
@@ -130,6 +135,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                 codigoBarraData.setImagen(imagenCodigoBarras);
                 codigoBarraData.setCodigo(producto.getCodigoPersonalizado());
                 codigoBarraData.setNombre(producto.getNombre());
+                codigoBarraData.setDescripcion(producto.getCaracteristicas());
                 codigoBarraData.setPrecio("");
                 
                 //Solo agregar el precio si esta activa la opcion

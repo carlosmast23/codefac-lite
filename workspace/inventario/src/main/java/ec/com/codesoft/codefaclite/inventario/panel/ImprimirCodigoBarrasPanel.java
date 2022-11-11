@@ -105,7 +105,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         gridBagConstraints.gridy = 6;
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        cmbFormatoImpresion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A4", "POS" }));
+        cmbFormatoImpresion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A4", "POS", "ZEBRA" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
