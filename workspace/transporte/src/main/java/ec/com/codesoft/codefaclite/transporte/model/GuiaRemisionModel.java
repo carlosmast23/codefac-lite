@@ -807,7 +807,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 else
                     facturaBusqueda = new FacturaBusqueda(destinatario,session.getSucursal());
                     
-                facturaBusqueda.setEstadoEnviadoGuiaRemision(EnumSiNo.NO);
+                //facturaBusqueda.setEstadoEnviadoGuiaRemision(EnumSiNo.NO);
                 
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
                 buscarDialogoModel.setVisible(true);

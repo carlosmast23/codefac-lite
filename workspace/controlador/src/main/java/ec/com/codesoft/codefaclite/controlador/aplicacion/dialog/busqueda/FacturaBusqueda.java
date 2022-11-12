@@ -241,6 +241,8 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         };
         
         filtroList.add(componenteFiltro);
+        
+        
         //Factura f;
         //f.
         //Agregar Estados de la factura
