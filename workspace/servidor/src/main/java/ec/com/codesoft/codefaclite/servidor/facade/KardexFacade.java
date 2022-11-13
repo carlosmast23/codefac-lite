@@ -536,13 +536,13 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         String fechaInicialWhere="";
         if(fechaInicial!=null)
         {
-            fechaInicialWhere=" AND kd.fechaCreacion>=?2  ";
+            fechaInicialWhere=" AND CAST(kd.fechaCreacion AS date ) >= CAST(?2 AS date )  ";
         }
         
         String fechaFinalWhere="";
         if(fechaFinal!=null)
         {
-            fechaFinalWhere=" AND kd.fechaCreacion<=?3  ";
+            fechaFinalWhere=" AND CAST(kd.fechaCreacion AS date )<= CAST(?3 AS date )  ";
         }
         
         
