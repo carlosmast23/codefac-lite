@@ -867,10 +867,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                     
                     //Calcular el descuento individual por cada producto
-                    System.out.println(factura.getSubtotalImpuestos());
-                    System.out.println(factura.getDescuentoSinImpuestos());
                     
-                    BigDecimal subtotalFactura=factura.getSubtotalImpuestos().add(factura.getDescuentoSinImpuestos());
+                    //BigDecimal subtotalFactura=factura.getSubtotalImpuestos().add(factura.getDescuentoSinImpuestos());
+                    BigDecimal subtotalFactura=factura.getSubtotalImpuestosMenosDescuento().add(factura.getSubtotalSinImpuestosMenosDescuento());
                     BigDecimal porcentajeDecimalDescuentoGeneral=descuentoValorGlobal.divide(subtotalFactura,6,BigDecimal.ROUND_HALF_UP);
                     
                     descuentoValor = porcentajeDecimalDescuentoGeneral.multiply(detalle.getSubtotalSinDescuentos());
