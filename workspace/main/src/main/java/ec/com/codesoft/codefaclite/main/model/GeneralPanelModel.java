@@ -2365,11 +2365,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             if(respuesta)
                             {                                
                                 ControladorCodefacInterface panel = (ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
+                                
                                 panel.formularioCerrando = true;
                                 //cargarAyuda();
                                 mostrarPanelSecundario(false);
                                 e.getInternalFrame().dispose();
                                 getjDesktopPane1().remove(panel);
+                                
                                 //quitarVentanaAbierta(panelCerrando); //
                             }                                                        
                         }
@@ -2381,15 +2383,31 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             quitarVentanaAbierta(panelCerrando); //
                             //if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
                             habilitarBotones(false);
+                            
+                            //Si la ventana tiene una ventana padre solo selecciono esa ventana,
+                            //Si no tiene selecciono cualquier por defecto
+                            GeneralPanelInterface panelPadre= panelCerrando.formOwnerFocus;
+                                                        
                             //}
                             //Seleccionar la siguiente ventana por defecto
                             JInternalFrame[] ventanas=getjDesktopPane1().getAllFrames();
                             for (JInternalFrame ventana : ventanas) {
                                     try {
-                                        //Seleccionar la ventana si no esta como icono y no es la misma que se esta eliminando
-                                        if(!ventana.isIcon() && !panelCerrando.equals(ventana))
+                                        if(panelPadre!=null)
                                         {
-                                            ventana.setSelected(true);
+                                            if(panelPadre.equals(ventana))
+                                            {
+                                                ventana.setSelected(true);
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //Seleccionar la ventana si no esta como icono y no es la misma que se esta eliminando
+                                            if(!ventana.isIcon() && !panelCerrando.equals(ventana))
+                                            {
+                                                ventana.setSelected(true);
+                                            }
                                         }
                                     } catch (PropertyVetoException ex) {
                                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);

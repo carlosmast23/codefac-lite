@@ -812,6 +812,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void postConstructorExterno(Object[] parametros) {
       
+        if(parametros==null)
+        {
+            return;
+        }
+        
         //EnumSiNo enumSiNo=(EnumSiNo) parametros[0];
         //getCmbManejaInventario().setSelectedItem(enumSiNo);
         
