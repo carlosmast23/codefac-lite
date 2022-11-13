@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -309,6 +310,11 @@ public enum TipoDocumentoEnum implements ParametroUtilidades.ComparadorInterface
     public Integer getSignoInventarioNumero()
     {
         return (signoInventario.equals("+"))?1:-1;
+    }
+    
+    public BigDecimal getSignoInventarioBigDecimal()
+    {   
+        return (signoInventario.equals("+"))?BigDecimal.ONE:new BigDecimal("-1");
     }
 
     public Boolean getAfectaCostoInventario() {

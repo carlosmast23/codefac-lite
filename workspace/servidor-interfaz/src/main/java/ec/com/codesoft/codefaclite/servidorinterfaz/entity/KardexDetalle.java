@@ -337,6 +337,14 @@ public class KardexDetalle implements Serializable ,Cloneable {
         this.precioTotal=precioUnitario.multiply(cantidad);
     }
     
+    /*
+    Metodo que me permite obtener la cantidad con signo positivo o negativo dependiendo que operacion se haga
+    */
+    public BigDecimal obtenerCantidadConSigno()
+    {
+        return this.cantidad.multiply(getCodigoTipoDocumentoEnum().getSignoInventarioBigDecimal());
+    }
+    
     
 
     @Override

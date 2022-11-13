@@ -1425,9 +1425,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 kardex.addDetalleKardex(kardexDetalle);
                 
                 //Actualizar los valores del kardex
-                kardex.setStock(kardex.getStock().add(kardexDetalle.getCantidad()));
+                //kardex.setStock(kardex.getStock().add(kardexDetalle.getCantidad()));
+                //TODO
+                kardex.setStock(kardex.recalcularStock());
+                //kardex.setStock(kardex.getStock().add(kardexDetalle.obtenerCantidadConSigno()));
                 //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-                kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
+                //kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
+                kardex.calcularPrecioTotal();
+                //kardex.
                 //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
                 
                 entityManager.merge(kardex);
