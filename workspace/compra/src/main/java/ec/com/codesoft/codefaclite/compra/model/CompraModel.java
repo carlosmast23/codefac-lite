@@ -738,10 +738,11 @@ public class CompraModel extends CompraPanel{
                     @Override
                     public void updateInterface(Producto entity) {
                         if (entity != null) {
-                            String identificacion = compra.getProveedor().getIdentificacion();
+                            /*String identificacion = compra.getProveedor().getIdentificacion();
                             String nombre = compra.getProveedor().getRazonSocial();
                             getTxtProveedor().setText(identificacion + " - " + nombre);
-                            desbloquearIngresoDetalleProducto();
+                            desbloquearIngresoDetalleProducto();*/
+                            cargarProductoVistaAgregar(entity);
                         }
                     }
                 };
