@@ -64,6 +64,10 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         txtCombustible = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtKilometraje = new javax.swing.JSpinner();
+        jLabel10 = new javax.swing.JLabel();
+        txtAño = new javax.swing.JSpinner();
+        jLabel11 = new javax.swing.JLabel();
+        txtColor = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -90,10 +94,10 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         getContentPane().add(txtNombre, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Kilometraje:");
+        jLabel2.setText("Color:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -105,7 +109,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         getContentPane().add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -225,6 +229,39 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtKilometraje, gridBagConstraints);
 
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Kilometraje:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        getContentPane().add(jLabel10, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtAño, gridBagConstraints);
+
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setText("Año:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        getContentPane().add(jLabel11, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtColor, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -238,6 +275,8 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
     private javax.swing.JComboBox<MarcaProducto> cmbMarca;
     private javax.swing.JComboBox<TipoObjetoMantenimientoEnum> cmbTipo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -247,7 +286,9 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblEspacio;
+    private javax.swing.JSpinner txtAño;
     private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtColor;
     private javax.swing.JTextField txtCombustible;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JSpinner txtKilometraje;
@@ -354,6 +395,23 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
     public void setTxtKilometraje(JSpinner txtKilometraje) {
         this.txtKilometraje = txtKilometraje;
     }
+
+    public JSpinner getTxtAño() {
+        return txtAño;
+    }
+
+    public void setTxtAño(JSpinner txtAño) {
+        this.txtAño = txtAño;
+    }
+
+    public JTextField getTxtColor() {
+        return txtColor;
+    }
+
+    public void setTxtColor(JTextField txtColor) {
+        this.txtColor = txtColor;
+    }
+    
     
     
 
