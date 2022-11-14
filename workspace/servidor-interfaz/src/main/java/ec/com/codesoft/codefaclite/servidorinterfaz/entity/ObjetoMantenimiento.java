@@ -55,6 +55,12 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
     @Column(name = "KILOMETRAJE")
     private Integer kilometraje;
     
+    @Column(name = "ANIO")
+    private Integer anio;
+    
+    @Column(name = "COLOR")
+    private String color;
+    
 
     public ObjetoMantenimiento() {
     }
@@ -150,7 +156,24 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
     public void setKilometraje(Integer kilometraje) {
         this.kilometraje = kilometraje;
     }
+
+    public Integer getAnio() {
+        return anio;
+    }
+
+    public void setAnio(Integer anio) {
+        this.anio = anio;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
  
+    
     
     
     

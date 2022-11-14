@@ -481,17 +481,28 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             //validarEdicionCodigoPrincipal(p);
             
             Producto productoTmp=getFacade().find(p.getIdProducto());
-            if(productoTmp.getCodigoPersonalizado().equals(p.getCodigoPersonalizado()))
+            if(productoTmp!=null && p!=null && productoTmp.getCodigoPersonalizado()!=null && p.getCodigoPersonalizado()!=null)
             {
-                return ;
+                if(productoTmp.getCodigoPersonalizado().equals(p.getCodigoPersonalizado()))
+                {
+                    return ;
+                }
             }
         }
         
-        Producto productoDuplicado=this.buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
+        //Terminar de hacer esta parte pero tomar en cuenta que luego cuando traigan productos de importacion me esta generando problemas
+        //Producto productoDuplicado=this.buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
 
-        if (productoDuplicado != null) {
-            throw new ServicioCodefacException("Ya existe un producto ingresado con el mismo código principal");
-        }
+        /*if (productoDuplicado!=null) 
+        {
+            if(!p.getIdProducto().equals(productoDuplicado.getIdProducto()))
+            {
+                System.out.println("Producto con problemas: "+productoDuplicado);
+                System.out.println("Producto con problemas: "+productoDuplicado.getIdProducto());
+                System.out.println("Producto con problemas: "+productoDuplicado.getNombre());
+                throw new ServicioCodefacException("Ya existe un producto ingresado con el mismo código principal");
+            }
+        }*/
         
         //Verificar que no ingresen presentaciones duplicadas y que al menos tenga una presentacion principal
         if(p.getPresentacionList()!=null && p.getPresentacionList().size()>0)
@@ -934,24 +945,34 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         Integer cantidadGrabado=0;
         for (Producto productoImportar : productoExportar.getProductoList()) 
         {
-            
-            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, productoImportar.getNombre());
-            Producto productoBuscado=buscarProductoActivoPorCodigo(productoImportar.getCodigoPersonalizado(), empresa);
-            //Si encuentra el producto lo que tengo que hacer es actualiar en el sistema
-            if(productoBuscado!=null)
+            try 
             {
-                editarProducto(productoImportar);
-                cantidadActualizada++;
+                if(productoImportar.getNombre().indexOf("euroesmalte")>=0)
+                {
+                    System.out.println("revisar");
+                }
+                Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE,"Importando: "+productoImportar.getNombre());
+                Producto productoBuscado=buscarProductoActivoPorCodigo(productoImportar.getCodigoPersonalizado(), empresa);
+                //Si encuentra el producto lo que tengo que hacer es actualiar en el sistema
+                if(productoBuscado!=null)
+                {
+                    editarProducto(productoImportar);
+                    cantidadActualizada++;
+                }
+                else
+                {
+                    //Si no existe el producto lo que tenemos que hacer es grabar el nuevo producto
+                    productoImportar.setIdProducto(null);
+                    productoImportar.getCatalogoProducto().setId(null);
+                    grabar(productoImportar, Boolean.FALSE);
+                    cantidadGrabado++;
+                }            
+            }   
+            catch(ServicioCodefacException ser)
+            {                
+                Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE,"Importando con problemas: "+productoImportar.getNombre());
+                ser.printStackTrace();
             }
-            else
-            {
-                //Si no existe el producto lo que tenemos que hacer es grabar el nuevo producto
-                productoImportar.setIdProducto(null);
-                productoImportar.getCatalogoProducto().setId(null);
-                grabar(productoImportar, Boolean.FALSE);
-                cantidadGrabado++;
-            }            
-            
         }
         return "Proceso Terminando:\nActualizados: "+cantidadActualizada+"\nGrabados: "+cantidadGrabado;
     }

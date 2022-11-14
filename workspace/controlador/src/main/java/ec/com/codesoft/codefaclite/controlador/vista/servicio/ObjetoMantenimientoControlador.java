@@ -132,6 +132,7 @@ public class ObjetoMantenimientoControlador extends ModelControladorAbstract<Obj
     public void limpiar() {
         objetoMantenimiento=new ObjetoMantenimiento();   
         objetoMantenimiento.setKilometraje(0);
+        objetoMantenimiento.setAnio(0);
     }
 
     @Override

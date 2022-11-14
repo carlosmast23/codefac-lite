@@ -224,7 +224,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtKilometraje, gridBagConstraints);
@@ -240,7 +240,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtAño, gridBagConstraints);
@@ -257,8 +257,8 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtColor, gridBagConstraints);
 
@@ -396,6 +396,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         this.txtKilometraje = txtKilometraje;
     }
 
+    @SpinnerBinding(value = "controlador.objetoMantenimiento.anio")
     public JSpinner getTxtAño() {
         return txtAño;
     }
@@ -404,6 +405,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
         this.txtAño = txtAño;
     }
 
+    @TextFieldBinding(value = "controlador.objetoMantenimiento.color")
     public JTextField getTxtColor() {
         return txtColor;
     }
@@ -411,6 +413,7 @@ public abstract class ObjetoMantenimientoPanel extends ControladorCodefacInterfa
     public void setTxtColor(JTextField txtColor) {
         this.txtColor = txtColor;
     }
+    
     
     
     
