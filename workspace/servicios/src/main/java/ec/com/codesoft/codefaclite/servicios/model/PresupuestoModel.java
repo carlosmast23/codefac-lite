@@ -99,6 +99,7 @@ import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
@@ -122,6 +123,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     public static final String ETIQUETA_NOMBRE_EMPLEADO = "[nombre_empleado]";
     
     private Presupuesto presupuesto;
+    private PresupuestoDetalle detalleSeleccionado;
     
     private Producto producto;
     private Bodega bodega;
@@ -926,28 +928,39 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         
     }
     
+    private void cargarDetalleSeleccionado(JTable tablaSeleccionada)
+    {
+        getBtnAgregarDetalle().setEnabled(false);
+        try {
+            int fila = tablaSeleccionada.getSelectedRow();
+            if(fila>=0)
+            {
+                PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) tablaSeleccionada.getValueAt(fila, 0);
+
+                if (presupuestoDetalle != null) {
+                    cargarInformacionDetallePresupuesto(presupuestoDetalle);
+                } else {
+                    limpiarDetalles();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void addListenerTablas()
     {
-        getTableDetallesPresupuesto().addMouseListener(new MouseAdapter() {
+        getTableDetallesServicio().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int fila = getTableDetallesPresupuesto().getSelectedRow();
-                getBtnAgregarDetalle().setEnabled(false);
-                try{
-                    PresupuestoDetalle presupuestoDetalle =  (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
-                    
-                    if(presupuestoDetalle != null)
-                    {
-                        cargarInformacionDetallePresupuesto( presupuestoDetalle);
-                    }else
-                    {
-                        limpiarDetalles();
-                    }
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }                
+                cargarDetalleSeleccionado(getTableDetallesServicio());
+            }
+        });
+        
+        getTableDetallesPresupuesto().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {                
+                cargarDetalleSeleccionado(getTableDetallesPresupuesto());
             }
         });
         
@@ -1215,6 +1228,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     public void cargarInformacionDetallePresupuesto(PresupuestoDetalle presupuestoDetalle)
     {
+        this.detalleSeleccionado=presupuestoDetalle;
         this.producto = presupuestoDetalle.getProducto();
         this.persona = presupuestoDetalle.getPersona();
         this.empleadoDetalle=presupuestoDetalle.getEmpleado();
@@ -1609,18 +1623,19 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     private void editarDetallePresupuesto()
     {
-
-        int fila = getTableDetallesPresupuesto().getSelectedRow();
-        if (fila >= 0) {
+        
+        //int fila = getTableDetallesPresupuesto().getSelectedRow();
+        //if (fila >= 0) {
+        //if (detalleSeleccionado!=null) {
             try {
-                PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
-                if (presupuestoDetalle != null) {
-                    agregarDetallesPresupuesto(presupuestoDetalle, false);
+                //PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+                if (detalleSeleccionado != null) {
+                    agregarDetallesPresupuesto(detalleSeleccionado, false);
                     limpiarDetalles();
                     mostrarDatosTabla();
                     calcularTotales();
                     getBtnAgregarDetalle().setEnabled(true);
-
+                    detalleSeleccionado=null;
                 } else {
                     limpiarDetalles();
                     getBtnAgregarDetalle().setEnabled(true);
@@ -1628,7 +1643,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
-        }
+        //}
                 
     }
     
