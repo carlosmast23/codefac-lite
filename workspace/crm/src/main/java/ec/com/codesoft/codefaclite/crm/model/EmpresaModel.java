@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -394,7 +395,16 @@ public class EmpresaModel extends EmpresaForm
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de ruc")
     public boolean validarRuc()
     {
-        return UtilidadesJuridicas.validarTodosRuc(getjTextRuc().getText());
+        Boolean respuesta= UtilidadesJuridicas.validarTodosRuc(getjTextRuc().getText());
+        //Cuando no valida 
+        if(!respuesta)
+        {
+            if(DialogoCodefac.dialogoPregunta(new CodefacMsj("El RUC ingresado no es valido, desea continuar de todos modos? ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
+            {
+                return true;
+            }
+        }
+        return respuesta;
     }
     
     public void moverArchivo() {
