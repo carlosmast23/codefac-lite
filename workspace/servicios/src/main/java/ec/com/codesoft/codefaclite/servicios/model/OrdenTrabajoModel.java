@@ -831,7 +831,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                             if(persona==null)
                             {
                                 if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
-                                {
+                                { 
                                     Object[] parametros = {OperadorNegocioEnum.CLIENTE, getTxtCliente().getText()};
                                     panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
                                         @Override

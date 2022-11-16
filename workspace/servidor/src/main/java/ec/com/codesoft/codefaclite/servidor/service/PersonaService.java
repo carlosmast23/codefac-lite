@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -261,14 +262,31 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
      */
     @Override
     public Persona buscarPorIdentificacion(String identificacion, Empresa empresa) throws java.rmi.RemoteException {
+        
+       // String queryFiltroEmpresa=" AND u.persona.empresa=?2 ";
+        
+        Boolean datosCompartidosEmpresas=false;
+        
+        try {
+            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteEstablecimientoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         PersonaEstablecimientoFacade personaEstablecimientoFacade = new PersonaEstablecimientoFacade();
         PersonaEstablecimiento personaEstablecimiento;
         //Persona p;
         //p.getIdentificacion();
         Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("persona.identificacion", identificacion);
-        mapParametros.put("persona.empresa", empresa);
+        mapParametros.put("persona.identificacion", identificacion);        
         mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
+        
+        //Si los datos son campartidos entre empresas no hago ningun filtro
+        if (!datosCompartidosEmpresas) 
+        {
+            //Si los datos son compratidos entre empresas entoces no hago ningun filtro
+            mapParametros.put("persona.empresa", empresa);
+        }
 
         List<PersonaEstablecimiento> establecimientos = personaEstablecimientoFacade.findByMap(mapParametros);
 
