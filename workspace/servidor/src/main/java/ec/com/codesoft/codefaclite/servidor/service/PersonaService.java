@@ -303,7 +303,10 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     @Override
     public Persona buscarConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException {
-        PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
+        
+        Persona consumidorFinal=buscarPorIdentificacion(Persona.IDENTIFICACION_CONSUMIDOR_FINAL, empresa);
+        
+        /*PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
         Map<String, Object> clienteMap = new HashMap<String, Object>();
         //Persona p;
         //p.getIdentificacion();
@@ -313,8 +316,10 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         List<Persona> resultados = getFacade().findByMap(clienteMap);
         if (resultados.size() > 0) {
             return resultados.get(0);
-        }
-        return null;
+        }*/
+        
+        
+        return consumidorFinal;
     }
     
     public Persona crearProveedorDesdeEmpresa(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
