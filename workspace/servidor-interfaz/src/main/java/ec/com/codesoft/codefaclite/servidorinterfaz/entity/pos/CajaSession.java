@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
@@ -274,4 +275,27 @@ public class CajaSession implements Serializable
         return caja.getNombre()+" - "+usuario.getNick();
     }
     
+    /**
+     * Metodos Personalizados
+     */
+    public BigDecimal calcularValorCierreTeorico()
+    {
+        BigDecimal totalVentas = BigDecimal.ZERO;
+        totalVentas = getValorApertura();
+
+        if (totalVentas == null) {
+            totalVentas = BigDecimal.ZERO;
+        }
+
+        //Todo: mejorar esta parte 
+        for (IngresoCaja ingresoCaja : getIngresosCaja()) 
+        {
+            if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )
+            {
+                totalVentas = totalVentas.add(ingresoCaja.getValor());
+            }
+        }
+        
+        return totalVentas;
+    }
 }

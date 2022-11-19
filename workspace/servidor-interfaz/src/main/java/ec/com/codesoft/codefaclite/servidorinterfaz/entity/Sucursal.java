@@ -43,6 +43,9 @@ public class Sucursal implements Serializable{
     @Column(name = "DIRECCION")
     private String direcccion;
     
+    @Column(name = "DIRECCION_MATRIZ")
+    private String direccionMatriz;
+    
     @Column(name = "TELEFONO")
     private String telefono;
     
@@ -162,6 +165,14 @@ public class Sucursal implements Serializable{
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public String getDireccionMatriz() {
+        return direccionMatriz;
+    }
+
+    public void setDireccionMatriz(String direccionMatriz) {
+        this.direccionMatriz = direccionMatriz;
     }
     
     

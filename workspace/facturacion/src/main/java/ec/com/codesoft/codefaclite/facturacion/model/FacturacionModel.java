@@ -160,6 +160,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -2901,10 +2902,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         factura.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         factura.setDireccionEstablecimiento(session.getSucursal().getDirecccion());
-        factura.setDireccionMatriz(session.getMatriz().getDirecccion());
+        
         factura.setEmpresa(session.getEmpresa());
         factura.setUsuario(session.getUsuario());
         factura.setSucursalEmpresa(session.getSucursal());
+        
+        //Para configurar rapidamente cuando solo se requiere configurar el establecimiento
+        if(!UtilidadesTextos.verificarNullOVacio(factura.getSucursalEmpresa().getDireccionMatriz()))
+        {
+            factura.setDireccionMatriz(factura.getSucursalEmpresa().getDireccionMatriz());
+        }
+        else
+        {
+            factura.setDireccionMatriz(session.getMatriz().getDirecccion());
+        }
         
         factura.setVentaCreditoEnum(EnumSiNo.getEnumByBoolean(getChkHabilitarCredito().isSelected()));
         factura.setDiasCredito((Integer) getTxtDiasCredito().getValue());

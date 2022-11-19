@@ -158,7 +158,12 @@ public class CerrarCajaModel extends CajaSessionModel
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         CajaSession cajaSession=getControlador().getCajaSession();
         String fechaAperturaStr= format.format(cajaSession.getFechaHoraApertura());
-        String fechaCierreStr= format.format(cajaSession.getFechaHoraCierre());
+        
+        String fechaCierreStr="";
+        if(cajaSession.getFechaHoraCierre()!=null)
+        {
+            fechaCierreStr=format.format(cajaSession.getFechaHoraCierre());
+        }
         
         //Cargar los datos de los parametros
         
@@ -180,7 +185,8 @@ public class CerrarCajaModel extends CajaSessionModel
                     ingresoCaja.getFactura().getSecuencial()+"", 
                     ingresoCaja.getFactura().getIdentificacion(), 
                     ingresoCaja.getFactura().getRazonSocial(), 
-                    ingresoCaja.getFactura().getTotal()+"");
+                    ingresoCaja.getFactura().getTotal()+"",
+                    ingresoCaja.getFactura().getEstadoEnum().getNombre());
             
             detalleData.add(reporteData);            
         }

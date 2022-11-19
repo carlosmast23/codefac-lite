@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servicios.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ObjetoMantenimientoBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -307,6 +308,13 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
        
     }
     
+    private void cargarDireccionCliente(PersonaEstablecimiento establecimiento)
+    {
+        ordenTrabajo.setCliente(establecimiento.getPersona());
+        cargarDatosCliente(establecimiento.getPersona());
+        getTxtCategoria().requestFocus();
+    }
+    
     public void addListenerBotones()
     {
         getBtnCliente().addActionListener(new ActionListener() {
@@ -318,9 +326,10 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 PersonaEstablecimiento establecimiento = (PersonaEstablecimiento) buscarDialogo.getResultado();
                 if(establecimiento != null)
                 {
-                    ordenTrabajo.setCliente(establecimiento.getPersona());
-                    cargarDatosCliente(establecimiento.getPersona());
-                    getTxtCategoria().requestFocus();
+                    cargarDireccionCliente(establecimiento);
+                    //ordenTrabajo.setCliente(establecimiento.getPersona());
+                    //cargarDatosCliente(establecimiento.getPersona());
+                    //getTxtCategoria().requestFocus();
                     
                 }
             }
@@ -768,8 +777,33 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             }
         }
     }
+    
+    private void agregarObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento)
+    {
+        getCmbObjetoMantenimiento().addItem(objetoMantenimiento);
+        getCmbObjetoMantenimiento().setSelectedItem(objetoMantenimiento);
+        cargarDireccionCliente(objetoMantenimiento.getPropietario().getEstablecimientoActivoPorDefecto());
+
+    }
 
     private void agregarListener() {
+        
+        getBtnBuscarVehiculo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ObjetoMantenimientoBusqueda objetoMantenimientoBusqueda=new ObjetoMantenimientoBusqueda(session.getEmpresa());
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(objetoMantenimientoBusqueda);
+                buscarDialogo.setVisible(true);
+                ObjetoMantenimiento objetoMantenimiento = (ObjetoMantenimiento) buscarDialogo.getResultado();
+                if(objetoMantenimiento!=null)
+                {
+                    agregarObjectoMantenimiento(objetoMantenimiento);
+                    //empleadoDetalle=empleado;
+                    //cargarVistaEmpleado(empleado);
+                }
+                
+            }
+        });
         
         getBtnBuscarUltimoMantenimiento().addActionListener(new ActionListener() {
             @Override
@@ -801,8 +835,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                     public void updateInterface(ObjetoMantenimiento entity) {
                         if (entity != null) 
                         {
-                            getCmbObjetoMantenimiento().addItem(entity);
-                            getCmbObjetoMantenimiento().setSelectedItem(entity);
+                            agregarObjectoMantenimiento(entity);
+                            //getCmbObjetoMantenimiento().addItem(entity);
+                            //getCmbObjetoMantenimiento().setSelectedItem(entity);
                         }
 
                     }

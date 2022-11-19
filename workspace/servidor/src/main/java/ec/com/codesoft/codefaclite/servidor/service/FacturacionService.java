@@ -603,7 +603,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             if (factura.getCliente().isClienteFinal() && factura.getCodigoDocumentoEnum().getDocumentoLegal()) 
             {
                 if (factura.getTotal().compareTo(ParametrosSistemaCodefac.MONTO_MAXIMO_VENTAS_CONSUMIDOR_FINAL) > 0) {
-                    throw new ServicioCodefacException("El Monto no puede ser superior a $200 para el CLIENTES FINALES");
+                    throw new ServicioCodefacException("El Monto no puede ser superior a $50 para el CLIENTES FINALES");
                 }
             }
 

@@ -84,6 +84,7 @@
 	<parameter name="campoFirma1" class="java.lang.String"/>
 	<parameter name="campoFirma2" class="java.lang.String"/>
 	<parameter name="campoFirma3" class="java.lang.String"/>
+	<parameter name="tipoRegimen" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -323,19 +324,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion_comprador}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="6" y="238" width="292" height="12" uuid="0246c355-91f2-4a2f-818c-79ac219c483b">
-					<printWhenExpression><![CDATA[new Boolean($P{pl_contribuyenteRegimenMicroempresas}.equals("s"))]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.5" lineStyle="Dashed"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[CONTRIBUYENTE RÉGIMEN RIMPE]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="319" y="238" width="229" height="13" uuid="5409c158-a50e-49ac-aa60-6837ba292c83">
 					<printWhenExpression><![CDATA[new Boolean(!$P{pl_agenteRetencionResolucion}.equals(""))]]></printWhenExpression>
@@ -356,6 +344,16 @@
 				</textElement>
 				<text><![CDATA[Identificación:]]></text>
 			</staticText>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="5" y="237" width="293" height="12" uuid="328a0557-ebee-4ae4-8604-ec8a43bd98e8"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tipoRegimen}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>

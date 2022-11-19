@@ -56,6 +56,8 @@ create table SUCURSAL
     COD_SUCURSAL BIGINT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.1)*/
     CODIGO varchar(3),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.5.4)*/
+    DIRECCION_MATRIZ varchar(100),
     primary key (ID)
 );
 

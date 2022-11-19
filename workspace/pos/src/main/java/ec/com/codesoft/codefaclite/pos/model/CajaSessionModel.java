@@ -103,7 +103,8 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
     }
 
     @Override
-    public void cargarDatosPantalla(Object entidad) {
+    public void cargarDatosPantalla(Object entidad) 
+    {
         CajaSession cajaSession = (CajaSession)entidad;
         
         getjTextFechaApertura().setText("" + UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())));
@@ -129,7 +130,7 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         }
         else
         {    
-            BigDecimal totalVentas = BigDecimal.ZERO;
+            /*BigDecimal totalVentas = BigDecimal.ZERO;
             totalVentas = cajaSession.getValorApertura();
             
             if(totalVentas==null)
@@ -141,11 +142,14 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
             for(IngresoCaja ingresoCaja: cajaSession.getIngresosCaja())
             {
                 totalVentas = totalVentas.add(ingresoCaja.getValor());
-            }
+            }*/
+            BigDecimal totalVentas =cajaSession.calcularValorCierreTeorico();
             
             getjTextValorCierreTeorico().setText("" + totalVentas);
             getjTextValorCierreReal().setText(totalVentas+"");
+            
         }
+        
     }
 
     @Override

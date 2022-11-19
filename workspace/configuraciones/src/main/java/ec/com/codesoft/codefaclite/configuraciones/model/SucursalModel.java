@@ -143,7 +143,8 @@ public class SucursalModel extends SucursalPanel {
         getTxtNombre().setText(sucursal.getNombre());
         getTxtTelefono().setText(sucursal.getTelefono());
         getTxtCelular().setText(sucursal.getCelular());
-       getTxtDireccion().setText(sucursal.getDirecccion());
+        getTxtDireccion().setText(sucursal.getDirecccion());
+        getTxtDireccionMatriz().setText(sucursal.getDireccionMatriz());
         getTxtEmail().setText(sucursal.getEmail());
         getTxtCodigoEstablecimiento().setValue(sucursal.getCodigoSucursal());
         
@@ -162,6 +163,7 @@ public class SucursalModel extends SucursalPanel {
         sucursal.setDirecccion(getTxtDireccion().getText());
         sucursal.setEmail(getTxtEmail().getText());
         sucursal.setCodigo(getTxtCodigo().getText());
+        sucursal.setDireccionMatriz(getTxtDireccionMatriz().getText());
 
         sucursal.setCodigoSucursal((Integer) getTxtCodigoEstablecimiento().getValue());
         Sucursal.TipoSucursalEnum tipoSucursalEnum=(Sucursal.TipoSucursalEnum) getCmbTipo().getSelectedItem();

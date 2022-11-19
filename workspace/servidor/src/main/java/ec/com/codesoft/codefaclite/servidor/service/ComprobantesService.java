@@ -91,6 +91,7 @@ import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
@@ -1624,6 +1625,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
     
         //Si existe seteada grabada una direccion la ingreso
+        //if(UtilidadesTextos.verificarNullOVacio(comprobanteData))
         if(comprobanteData.getDireccionMatriz()!=null && !comprobanteData.getDireccionMatriz().isEmpty())
         {
             infoTributaria.setDirecionMatriz(comprobanteData.getDireccionMatriz());
@@ -1992,6 +1994,25 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         {
             parametros.put("pl_agenteRetencionResolucion", empresa.getAgenteRetencionResolucion());
         }
+        
+        //voy a definir que tipo de regimen pertenece
+        String leyendaRegimen="CONTRIBUYENTE REGIMEN GENERAL";
+        if(empresa.getRimpeEmprendedoresEnum()!=null || empresa.getRimpeNegociosPopularesEnum()!=null)
+        {
+            if(empresa.getRimpeEmprendedoresEnum().equals(EnumSiNo.SI))
+            {
+                leyendaRegimen="CONTRIBUYENTE RÉGIMEN RIMPE";
+            }
+            
+            if(empresa.getRimpeNegociosPopularesEnum().equals(EnumSiNo.SI))
+            {
+                leyendaRegimen="CONTRIBUYENTE RÉGIMEN RIMPE";
+            }
+            
+        }
+        
+        
+        parametros.put("tipoRegimen", leyendaRegimen);
         
 
         InputStream input=null;

@@ -21,12 +21,14 @@ public class VentaReporteData implements ExcelDatosInterface{
     private String identificacion;
     private String cliente;
     private String total;    
+    private String estado;
 
-    public VentaReporteData(String secuencial, String identificacion, String cliente, String total) {
+    public VentaReporteData(String secuencial, String identificacion, String cliente, String total,String estado) {
         this.secuencial = secuencial;
         this.identificacion = identificacion;
         this.cliente = cliente;
         this.total = total;
+        this.estado=estado;
     }
     
     
@@ -62,7 +64,14 @@ public class VentaReporteData implements ExcelDatosInterface{
     public void setTotal(String total) {
         this.total = total;
     }
-    
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
     
     
     @Override
