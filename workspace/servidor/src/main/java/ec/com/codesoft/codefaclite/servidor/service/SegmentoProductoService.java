@@ -4,20 +4,26 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidor.facade.SegmentoProductoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -104,9 +110,16 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
         return (List<SegmentoProducto>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException {
-                Map<String,Object> mapParameros=new HashMap<String, Object>();
-                mapParameros.put("empresa", empresa);
+                Map<String,Object> mapParameros=new HashMap<String, Object>();                
                 mapParameros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+         
+                //Verificar si son datos compartidos
+                Boolean datosCompartidosEmpresas = ParametroUtilidades.comparar(empresa, ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA, EnumSiNo.SI);
+
+                if (!datosCompartidosEmpresas) {
+                    //Si los datos son compratidos entre empresas entoces no hago ningun filtro
+                    mapParameros.put("empresa", empresa);
+                }
                 return getFacade().findByMap(mapParameros);
             }
         } );
