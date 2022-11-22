@@ -288,7 +288,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         CompraService compraService=new CompraService();
         List<Compra> compras=compraService.obtenerCompraReporte(null, fechaInicial, fechaFinal,null,null,GeneralEnumEstado.ACTIVO,empresa);
         
-        for (Compra compra : compras) {
+        for (Compra compra : compras) 
+        {
             CompraAts compraAts=new CompraAts();
             
             String identificacion=(compra.getIdentificacion()!=null && !compra.getIdentificacion().isEmpty() )?compra.getIdentificacion():compra.getProveedor().getIdentificacion();

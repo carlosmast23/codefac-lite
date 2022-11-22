@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.panel.TallerMecanicoDialogoInfo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogPanelAuxIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
@@ -19,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -33,12 +36,14 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Carlos
  */
-public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kardex> , InterfacesPropertisFindWeb,FiltroDialogoIf  {
+public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kardex> , InterfacesPropertisFindWeb,FiltroDialogoIf,DialogPanelAuxIf<Kardex>  
+{
     
     public static final int PARAMETRO_FILTRO_STOCK=-93;
     
@@ -235,6 +240,26 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
             Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public JPanel getPanelAuxiliar(Kardex dato) {
+        
+        TallerMecanicoDialogoInfo panelAux=new TallerMecanicoDialogoInfo();
+        
+        if(dato!=null)
+        {        
+            panelAux.getLblNombreProducto().setText(dato.getProducto().getNombre());
+            SegmentoProducto segmento=dato.getProducto().getSegmentoProducto();
+            if(segmento!=null)
+            {
+                panelAux.getLblSegmento().setText(segmento.getNombre());
+            }
+            
+            panelAux.getLblAplicacion().setText(dato.getProducto().getAplicacionProducto());
+        }
+        
+        return panelAux;
     }
     
 }

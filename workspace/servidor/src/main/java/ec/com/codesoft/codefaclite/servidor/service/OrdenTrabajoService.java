@@ -95,12 +95,19 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
 
     @Override
     public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException {
-
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        
+        return (OrdenTrabajo) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public Object transaccion() throws ServicioCodefacException, RemoteException 
+            {
                 OrdenTrabajo.EstadoEnum estadoEnum = OrdenTrabajo.EstadoEnum.GENERADO;
                 ordenTrabajo.setEstadoEnum(estadoEnum);
+                
+                //Actualizar los datos de Objeto Mantenimiento
+                if(ordenTrabajo.getObjetoMantenimiento()!=null)
+                {
+                    entityManager.merge(ordenTrabajo);
+                }
 
                 for (OrdenTrabajoDetalle ordenTrabajoDetalle : ordenTrabajo.getDetalles()) {
                     /**
@@ -111,32 +118,17 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                 entityManager.persist(ordenTrabajo);
                 entityManager.flush();
                 
+                
                 /**
                  * Enviar una alerta por correo a los trabajadores avisando que se genere una nueva orden de trabajo
                  */
                 enviarCorreoOrdenTrabajo(ordenTrabajo);
-                //enviarOTOrdenTrabajoSms(ordenTrabajo);
-
-                /*SmsService smsService = new SmsService();
-                for (OrdenTrabajoDetalle detalle : ordenTrabajo.getDetalles()) {
-                    if (detalle.getEmpleado() != null) {
-                        if (detalle.getEmpleado().getTelefonoCelular() != null && !detalle.getEmpleado().getTelefonoCelular().equals("")) {
-                            try
-                            {
-                                smsService.enviarMensaje(detalle.getEmpleado().getTelefonoCelular(), "Nueva orden " + ordenTrabajo.getId() + "," + detalle.getTitulo() + ", Cliente:" + ordenTrabajo.getCliente().getNombreSimple());
-                            }catch(ServicioCodefacException se)
-                            {
-                                se.printStackTrace();
-                            }
-                        }
-
-                    }
-                }*/
-
+                return entityManager.merge(ordenTrabajo);
             }
-           
         });
-        return ordenTrabajo;
+
+        
+        //return ordenTrabajo;
     }
     
     public void enviarOTOrdenTrabajoSms(OrdenTrabajo ordenTrabajo)

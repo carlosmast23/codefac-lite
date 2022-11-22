@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBusquedaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -46,6 +47,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -604,6 +609,31 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         
     }*/
     
+    private void cargarDatoSeleccionadoPanelAuxiliar(int filaSeleccionada)
+    {
+        if(filaSeleccionada>=0)
+        {
+            Object datoSeleccionado= listaResultados.get(filaSeleccionada);
+            if(model instanceof DialogPanelAuxIf)
+            {
+                DialogPanelAuxIf panelAux=(DialogPanelAuxIf) model;
+                // JPanel pnlNuevo=new JPanel();
+                //pnlNuevo.setLayout(new BoxLayout(pnlNuevo, BoxLayout.X_AXIS));
+                //pnlNuevo.add(new JLabel("ejemplo ..."));
+                //getPnlAuxiliarInfo().add(pnlNuevo);
+                //getPnlAuxiliarInfo().removeAll();
+                
+                getPnlAuxiliarInfo().removeAll();
+                getPnlAuxiliarInfo().add(panelAux.getPanelAuxiliar(datoSeleccionado));
+                getPnlAuxiliarInfo().repaint();
+                //this.setAltoVentana(Integer.parseInt(this.dimensionVentana.getHeight()+"")+100);
+                //System.out.println(getPnlAuxiliarInfo().getHeight());
+                //this.setAltoVentana(this.getHeight()+getPnlAuxiliarInfo().getHeight());
+                pack();
+            }
+        }
+    }
+    
     private List<Object> obtenerDatosSeleccionados()
     {
         int[] filas = getTblTabla().getSelectedRows();
@@ -751,6 +781,22 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         /**
          * Agregar listener para que devuelva un resultado cuando el usuario ejecute doble click
          */
+        
+        getTblTabla().getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+        
+        getTblTabla().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                //JOptionPane.showMessageDialog(null,"evento click");
+                cargarDatoSeleccionadoPanelAuxiliar(getTblTabla().getSelectedRow());
+            }
+        });
+        
         getTblTabla().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent mouseEvent) {
                 JTable table =(JTable) mouseEvent.getSource();
@@ -812,6 +858,16 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
 
     private void establecerPropiedadesIniciales() {
+        
+        //Verificar si tiene una ventana de datos adicionales se tiene que sumar el alto de esa ventana
+        if(model instanceof DialogPanelAuxIf)
+        {
+            DialogPanelAuxIf panelAux=(DialogPanelAuxIf) model;
+            //System.out.println("Alto: "+panelAux.getPanelAuxiliar(null).getPreferredSize().getHeight());
+            dimensionVentana.height=dimensionVentana.height+panelAux.getPanelAuxiliar(null).getPreferredSize().height;
+        }
+        
+        //sad
         //Centrar el dialogo
         
         setPreferredSize(dimensionVentana);
@@ -848,6 +904,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 queryDialog.getParametros().put(numero, valor); //Remplazo el antiguo valor por el nuevo con minusculas
             }
             
+            
+            
         }
 
     }
@@ -871,6 +929,11 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     public void setAnchoVentana(int ancho)
     {
         this.dimensionVentana.setSize(ancho,this.dimensionVentana.getHeight());
+    }
+    
+    public void setAltoVentana(int alto)
+    {
+        this.dimensionVentana.setSize(this.dimensionVentana.getWidth(),alto);
     }
 
     

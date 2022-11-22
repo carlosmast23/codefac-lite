@@ -42,8 +42,8 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Item", 0.2d));
-        titulo.add(new ColumnaDialogo("Descripción", 0.4d));
-        titulo.add(new ColumnaDialogo("Aplicación", 0.4d));
+        titulo.add(new ColumnaDialogo("Descripción", 0.5d));
+        //titulo.add(new ColumnaDialogo("Aplicación", 0.4d));
         titulo.add(new ColumnaDialogo("Marca", 0.2d));            
         titulo.add(new ColumnaDialogo("Ubicación", 0.3d));       
         titulo.add(new ColumnaDialogo("Stock", 0.05d));        
@@ -61,7 +61,7 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         Producto producto=kardex.getProducto();
         vector.add(producto.getCodigoPersonalizado());
         vector.add(producto.getNombre());
-        vector.add(producto.getAplicacionProducto());
+        //vector.add(producto.getAplicacionProducto());
         vector.add(producto.getMarcaProducto());
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         vector.add(kardex.getStock().setScale(0,RoundingMode.HALF_UP));

@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -305,6 +306,8 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel18 = new javax.swing.JLabel();
         cmbTipoFacturacion = new javax.swing.JComboBox<>();
         btnBuscarVehiculo = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
+        spnKilometraje = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -322,10 +325,10 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Vehiculo:");
+        jLabel2.setText("Kilometraje:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -343,7 +346,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel3.setText("Descripción:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel3, gridBagConstraints);
@@ -384,7 +387,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         getContentPane().add(btnCliente, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -412,7 +415,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -596,7 +599,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -618,14 +621,14 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         lblTotalDetalles.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         getContentPane().add(lblTotalDetalles, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("TOTAL:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         getContentPane().add(jLabel7, gridBagConstraints);
 
         lblCodigo.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -674,7 +677,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -691,7 +694,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.05;
@@ -734,7 +737,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel18.setText("Detalles:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel18, gridBagConstraints);
@@ -754,6 +757,22 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarVehiculo, gridBagConstraints);
+
+        jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel19.setText("Vehiculo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel19, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(spnKilometraje, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -787,6 +806,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -807,6 +827,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel lblNombreLegal;
     private javax.swing.JLabel lblRazonSocial;
     private javax.swing.JLabel lblTotalDetalles;
+    private javax.swing.JSpinner spnKilometraje;
     private javax.swing.JTable tableDetallesOrdenTrabajo;
     private javax.swing.JTextArea txtAreaDescripcion;
     private javax.swing.JTextArea txtAreaNotas;
@@ -837,6 +858,14 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
     public void setBtnBuscarVehiculo(JButton btnBuscarVehiculo) {
         this.btnBuscarVehiculo = btnBuscarVehiculo;
+    }
+
+    public JSpinner getSpnKilometraje() {
+        return spnKilometraje;
+    }
+
+    public void setSpnKilometraje(JSpinner spnKilometraje) {
+        this.spnKilometraje = spnKilometraje;
     }
 
     

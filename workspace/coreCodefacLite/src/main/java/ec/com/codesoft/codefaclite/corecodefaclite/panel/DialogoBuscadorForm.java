@@ -38,8 +38,9 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        pnlBotonesNavegacion = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -61,8 +62,11 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         pnlFiltroParametrosA = new javax.swing.JPanel();
         pnlFiltroParametrosB = new javax.swing.JPanel();
         lblEspacio = new javax.swing.JLabel();
+        pnlAuxiliarInfo = new javax.swing.JPanel();
 
         jLabel2.setText("jLabel1");
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Buscar");
@@ -70,8 +74,8 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        pnlBotonesNavegacion.setBackground(new java.awt.Color(255, 255, 255));
+        pnlBotonesNavegacion.setLayout(new java.awt.GridBagLayout());
 
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -86,7 +90,7 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        jPanel1.add(jPanel2, gridBagConstraints);
+        pnlBotonesNavegacion.add(jPanel2, gridBagConstraints);
 
         lblPiePagina.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblPiePagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -96,7 +100,7 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 0.1;
-        jPanel1.add(lblPiePagina, gridBagConstraints);
+        pnlBotonesNavegacion.add(lblPiePagina, gridBagConstraints);
 
         btnPrimero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flecha_primero.png"))); // NOI18N
         btnPrimero.setToolTipText("Inicio");
@@ -117,14 +121,14 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        jPanel1.add(jPanel4, gridBagConstraints);
+        pnlBotonesNavegacion.add(jPanel4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel5.add(jPanel1, gridBagConstraints);
+        jPanel5.add(pnlBotonesNavegacion, gridBagConstraints);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -225,6 +229,16 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     gridBagConstraints.weightx = 0.1;
     jPanel5.add(lblEspacio, gridBagConstraints);
 
+    pnlAuxiliarInfo.setBackground(new java.awt.Color(255, 51, 51));
+    pnlAuxiliarInfo.setLayout(new java.awt.BorderLayout());
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 5;
+    gridBagConstraints.gridwidth = 5;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 0.1;
+    jPanel5.add(pnlAuxiliarInfo, gridBagConstraints);
+
     getContentPane().add(jPanel5);
 
     pack();
@@ -286,9 +300,9 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnUltimo;
     private javax.swing.JComboBox<TipoBusquedaEnum> cmbTipoBusqueda;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -297,6 +311,8 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JLabel lblTextoBuscar;
+    private javax.swing.JPanel pnlAuxiliarInfo;
+    private javax.swing.JPanel pnlBotonesNavegacion;
     private javax.swing.JPanel pnlFiltroParametrosA;
     private javax.swing.JPanel pnlFiltroParametrosB;
     private javax.swing.JPanel pnlFiltros;
@@ -431,8 +447,14 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     public void setPnlFiltroParametrosB(JPanel pnlFiltroParametrosB) {
         this.pnlFiltroParametrosB = pnlFiltroParametrosB;
     }
-        
-    
+
+    public JPanel getPnlAuxiliarInfo() {
+        return pnlAuxiliarInfo;
+    }
+
+    public void setPnlAuxiliarInfo(JPanel pnlAuxiliarInfo) {
+        this.pnlAuxiliarInfo = pnlAuxiliarInfo;
+    }
     
 
 }

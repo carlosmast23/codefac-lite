@@ -662,6 +662,12 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
             
             ObjetoMantenimiento objetoMantenimientoTmp= (ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
+            
+            if(objetoMantenimientoTmp!=null)
+            {
+                objetoMantenimientoTmp.setKilometraje((Integer) getSpnKilometraje().getValue());
+            }
+            
             this.ordenTrabajo.setObjetoMantenimiento(objetoMantenimientoTmp);
             this.ordenTrabajo.setUsuario(session.getUsuario());
             
@@ -762,6 +768,20 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         }
     }
     
+    private void cargarKilometraje()
+    {
+        int indiceSeleccionado=getCmbObjetoMantenimiento().getSelectedIndex();
+        if(indiceSeleccionado>=0)
+        {
+            ObjetoMantenimiento objetoMantenimiento=(ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
+            getSpnKilometraje().setValue(objetoMantenimiento.getKilometraje());
+        }
+        else
+        {
+            getSpnKilometraje().setValue(0);
+        }
+    }
+    
     private void cargarObjectosMantenimiento(Persona cliente)
     {
         getCmbObjetoMantenimiento().removeAllItems();
@@ -770,6 +790,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             try {
                 List<ObjetoMantenimiento> resultado= ServiceFactory.getFactory().getObjetoMantenimientoServiceIf().buscarPorPropietario(session.getEmpresa(),cliente);
                 UtilidadesComboBox.llenarComboBox(getCmbObjetoMantenimiento(), resultado);
+                cargarKilometraje();
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex) {
@@ -783,6 +804,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getCmbObjetoMantenimiento().addItem(objetoMantenimiento);
         getCmbObjetoMantenimiento().setSelectedItem(objetoMantenimiento);
         cargarDireccionCliente(objetoMantenimiento.getPropietario().getEstablecimientoActivoPorDefecto());
+        cargarKilometraje();
 
     }
 
