@@ -253,9 +253,10 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
             SegmentoProducto segmento=dato.getProducto().getSegmentoProducto();
             if(segmento!=null)
             {
-                panelAux.getLblSegmento().setText(segmento.getNombre());
+                panelAux.getLblSegmento().setText(segmento.getNombre());                
             }
             
+            panelAux.getLblUbicacion().setText(dato.getProducto().getUbicacion());
             panelAux.getLblAplicacion().setText(dato.getProducto().getAplicacionProducto());
         }
         

@@ -38,6 +38,8 @@ public class TallerMecanicoDialogoInfo extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         lblAplicacion = new javax.swing.JLabel();
         lblEspacio738 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblUbicacion = new javax.swing.JLabel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -79,9 +81,9 @@ public class TallerMecanicoDialogoInfo extends javax.swing.JPanel {
         add(lblEspacio349, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Aplicación:");
+        jLabel3.setText("Ubicación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -101,6 +103,23 @@ public class TallerMecanicoDialogoInfo extends javax.swing.JPanel {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         add(lblEspacio738, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel4.setText("Aplicación:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(jLabel4, gridBagConstraints);
+
+        lblUbicacion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(lblUbicacion, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -108,11 +127,13 @@ public class TallerMecanicoDialogoInfo extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblAplicacion;
     private javax.swing.JLabel lblEspacio349;
     private javax.swing.JLabel lblEspacio738;
     private javax.swing.JLabel lblNombreProducto;
     private javax.swing.JLabel lblSegmento;
+    private javax.swing.JLabel lblUbicacion;
     // End of variables declaration//GEN-END:variables
 
     public JLabel getLblNombreProducto() {
@@ -137,6 +158,14 @@ public class TallerMecanicoDialogoInfo extends javax.swing.JPanel {
 
     public void setLblAplicacion(JLabel lblAplicacion) {
         this.lblAplicacion = lblAplicacion;
+    }
+
+    public JLabel getLblUbicacion() {
+        return lblUbicacion;
+    }
+
+    public void setLblUbicacion(JLabel lblUbicacion) {
+        this.lblUbicacion = lblUbicacion;
     }
     
     

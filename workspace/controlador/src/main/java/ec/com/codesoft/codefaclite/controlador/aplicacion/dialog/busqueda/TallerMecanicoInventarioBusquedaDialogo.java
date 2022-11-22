@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
-import java.math.BigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -45,10 +45,10 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         titulo.add(new ColumnaDialogo("Descripción", 0.5d));
         //titulo.add(new ColumnaDialogo("Aplicación", 0.4d));
         titulo.add(new ColumnaDialogo("Marca", 0.2d));            
-        titulo.add(new ColumnaDialogo("Ubicación", 0.3d));       
-        titulo.add(new ColumnaDialogo("Stock", 0.05d));        
-        titulo.add(new ColumnaDialogo("Reserva", 0.05d));        
-        titulo.add(new ColumnaDialogo("Disp", 0.05d));        
+        //titulo.add(new ColumnaDialogo("Ubicación", 0.3d));       
+        titulo.add(new ColumnaDialogo("Stock", 0.1d));        
+        titulo.add(new ColumnaDialogo("Reserva", 0.1d));        
+        titulo.add(new ColumnaDialogo("Disp", 0.1d));        
         titulo.add(new ColumnaDialogo("Pvp1", 0.1d));
         titulo.add(new ColumnaDialogo("Pvp2", 0.1d));
         titulo.add(new ColumnaDialogo("Pvp3", 0.1d));
@@ -63,14 +63,15 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         vector.add(producto.getNombre());
         //vector.add(producto.getAplicacionProducto());
         vector.add(producto.getMarcaProducto());
-        vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
+        //vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         vector.add(kardex.getStock().setScale(0,RoundingMode.HALF_UP));
         vector.add("0");
         vector.add(kardex.getStock().setScale(0,RoundingMode.HALF_UP));
-        vector.add((producto.getValorUnitario()!=null)?producto.getValorUnitarioConIva():"0");
-        vector.add((producto.getPrecioDistribuidor()!=null)?producto.getPrecioDistribuidorConIva():"0");
-        vector.add((producto.getPrecioTarjeta()!=null)?producto.getPrecioTarjetaConIva():"0");
-        vector.add((producto.getPvp4()!=null)?producto.getPvp4ConIva():"0");
+            
+        vector.add((producto.getValorUnitario()!=null)?UtilidadBigDecimal.redondearDosDecimales(producto.getValorUnitarioConIva()):"0");
+        vector.add((producto.getPrecioDistribuidor()!=null)?UtilidadBigDecimal.redondearDosDecimales(producto.getPrecioDistribuidorConIva()):"0");
+        vector.add((producto.getPrecioTarjeta()!=null)?UtilidadBigDecimal.redondearDosDecimales(producto.getPrecioTarjetaConIva()):"0");
+        vector.add((producto.getPvp4()!=null)?UtilidadBigDecimal.redondearDosDecimales(producto.getPvp4ConIva()):"0");
         
     }
 
@@ -108,8 +109,6 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
 
     @Override
     public String getFiltroPorCodigo() {
-        //Producto p;p.getCodigoPersonalizado()
-        
         return " AND LOWER(u.codigoPersonalizado) like LOWER(?96) ";
     }
     
@@ -130,7 +129,8 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
     
 
     @Override
-    public String getFiltroPorMarca() {
+    public String getFiltroPorMarca() 
+    {
         return "";
     }
     

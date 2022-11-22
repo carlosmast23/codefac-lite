@@ -35,4 +35,14 @@ public class UtilidadBigDecimal {
         
     }
     
+    public static BigDecimal redondearDosDecimales(BigDecimal valor)
+    {
+        if(valor==null)
+        {
+            return BigDecimal.ZERO;
+        }
+        
+        return valor.setScale(2, RoundingMode.HALF_UP);
+    }
+    
 }
