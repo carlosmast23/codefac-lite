@@ -42,6 +42,7 @@
 	<parameter name="cedula" class="java.lang.String"/>
 	<parameter name="codigo_objeto" class="java.lang.String"/>
 	<parameter name="nombre_objeto" class="java.lang.String"/>
+	<parameter name="kilometraje" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -86,7 +87,7 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="84" splitType="Stretch">
+		<band height="81" splitType="Stretch">
 			<staticText>
 				<reportElement x="469" y="0" width="86" height="15" uuid="86856508-a120-4b5e-a3ea-bcf478f218f4"/>
 				<box>
@@ -108,28 +109,28 @@
 				<textFieldExpression><![CDATA[$P{fechaIngreso}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="64" width="79" height="15" uuid="91d28f19-2434-44bb-b0bf-8ce28adee36a"/>
+				<reportElement x="0" y="49" width="79" height="15" uuid="91d28f19-2434-44bb-b0bf-8ce28adee36a"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="79" y="64" width="385" height="15" uuid="263bac5b-b2ca-4791-b69c-9cb004446882"/>
+				<reportElement x="79" y="49" width="385" height="15" uuid="263bac5b-b2ca-4791-b69c-9cb004446882"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="79" y="34" width="187" height="15" uuid="9bd673cf-e60f-4e4a-a3b4-299329a95e0b"/>
+				<reportElement x="79" y="34" width="162" height="15" uuid="9bd673cf-e60f-4e4a-a3b4-299329a95e0b"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{telefonos}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="469" y="15" width="86" height="39" uuid="8371e6ed-6cbb-4b05-93d4-adbd60f2d739"/>
+				<reportElement x="469" y="15" width="86" height="34" uuid="8371e6ed-6cbb-4b05-93d4-adbd60f2d739"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -149,14 +150,14 @@
 				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="277" y="4" width="54" height="15" uuid="df34970a-e390-442e-8bc6-985128740cef"/>
+				<reportElement x="278" y="4" width="54" height="15" uuid="df34970a-e390-442e-8bc6-985128740cef"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="79" y="19" width="187" height="15" uuid="5f603c69-4924-4a2f-a92c-b1d5610591c8"/>
+				<reportElement x="79" y="19" width="162" height="15" uuid="5f603c69-4924-4a2f-a92c-b1d5610591c8"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -170,7 +171,7 @@
 				<text><![CDATA[Telefonos:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="277" y="19" width="54" height="15" uuid="e35047d6-5098-4294-b4ab-4f0d0366aada"/>
+				<reportElement x="278" y="19" width="54" height="15" uuid="e35047d6-5098-4294-b4ab-4f0d0366aada"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -191,14 +192,14 @@
 				<text><![CDATA[Identificación:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="79" y="4" width="187" height="15" uuid="e6755b0d-6a5c-42f0-a17f-1b0a910cb4ab"/>
+				<reportElement x="79" y="4" width="162" height="15" uuid="e6755b0d-6a5c-42f0-a17f-1b0a910cb4ab"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cedula}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="277" y="34" width="54" height="15" uuid="2893842a-0170-4bf0-85b6-84c3f3483504"/>
+				<reportElement x="278" y="34" width="54" height="15" uuid="2893842a-0170-4bf0-85b6-84c3f3483504"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -212,32 +213,46 @@
 				<textFieldExpression><![CDATA[$P{correo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="49" width="79" height="15" uuid="1fd3b786-a340-45be-b850-ce7241504487"/>
+				<reportElement x="0" y="64" width="79" height="15" uuid="1fd3b786-a340-45be-b850-ce7241504487"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Código Objeto:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="79" y="49" width="187" height="15" uuid="7c172b89-9681-41a4-9bf8-c8eb7747df74"/>
+				<reportElement x="79" y="64" width="162" height="15" uuid="7c172b89-9681-41a4-9bf8-c8eb7747df74"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{codigo_objeto}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="277" y="49" width="54" height="15" uuid="7d5678d8-8038-4339-b631-7821c88b7ff5"/>
+				<reportElement x="277" y="64" width="54" height="15" uuid="7d5678d8-8038-4339-b631-7821c88b7ff5"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="331" y="49" width="123" height="15" uuid="d1065aea-4ac9-4281-900c-3c60c438b159"/>
+				<reportElement x="332" y="64" width="82" height="15" uuid="d1065aea-4ac9-4281-900c-3c60c438b159"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombre_objeto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="428" y="64" width="57" height="15" uuid="a51b3a36-4b3c-42fa-9309-8cac797c763d"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kilometraje:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="485" y="64" width="69" height="15" uuid="b0513c6d-275f-4bbc-8036-46cebd3edfef"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{kilometraje}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

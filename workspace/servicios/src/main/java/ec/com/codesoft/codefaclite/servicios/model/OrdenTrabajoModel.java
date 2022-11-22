@@ -168,6 +168,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             parametros.put("cedula", ""+ ordenTrabajo.getCliente().getIdentificacion());
             parametros.put("correo",(ordenTrabajo.getCliente().getCorreoElectronico()!=null)?ordenTrabajo.getCliente().getCorreoElectronico():"");
             
+            
             ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
             parametros.put("observacionOrdenTrabajo",(parametroCodefac!=null)?parametroCodefac.getValor():"");
             
@@ -179,6 +180,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             {
                 parametros.put("codigo_objeto",ordenTrabajo.getObjetoMantenimiento().getCodigo());
                 parametros.put("nombre_objeto",ordenTrabajo.getObjetoMantenimiento().getNombre());
+                parametros.put("kilometraje",ordenTrabajo.getObjetoMantenimiento().getKilometraje()+"");
             }
             
             for(OrdenTrabajoDetalle otd : ordenTrabajo.getDetalles())
