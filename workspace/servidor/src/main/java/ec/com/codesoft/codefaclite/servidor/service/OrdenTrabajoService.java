@@ -106,7 +106,7 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                 //Actualizar los datos de Objeto Mantenimiento
                 if(ordenTrabajo.getObjetoMantenimiento()!=null)
                 {
-                    entityManager.merge(ordenTrabajo);
+                    entityManager.merge(ordenTrabajo.getObjetoMantenimiento());
                 }
 
                 for (OrdenTrabajoDetalle ordenTrabajoDetalle : ordenTrabajo.getDetalles()) {

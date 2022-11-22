@@ -642,6 +642,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getTxtDescripcion().setText("");
         getLblNombreLegal().setText("");
         getLblRazonSocial().setText("");
+        getSpnKilometraje().setValue(0);
         
         getCmbObjetoMantenimiento().removeAllItems();
     }
