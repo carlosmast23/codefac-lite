@@ -17,6 +17,10 @@ public class PresupuestoData {
     private String subtotal;
     private String descuento;
     private String total;
+    /**
+     * Este campo va a ser para identificar el tipo de producto o servicio
+     */
+    private String categoria;
 
     public PresupuestoData() {
     }
@@ -76,7 +80,14 @@ public class PresupuestoData {
     public void setTotal(String total) {
         this.total = total;
     }
-    
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
         
     
 }

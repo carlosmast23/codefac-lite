@@ -64,6 +64,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
@@ -375,8 +376,19 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 presupuestoData.setProducto(presupuestoDetalle.getProductoProveedor().getProducto().getNombre());
                 presupuestoData.setSubtotal(presupuestoDetalle.calcularSubtotalCompra().toString());
                 presupuestoData.setTotal(presupuestoDetalle.calcularTotalCompra().toString());
+                presupuestoData.setCategoria(presupuestoDetalle.getProducto().getTipoProductoEnum().getNombre());
+                
                 datos.add(presupuestoData);
             }
+            
+            //Ordenar los datos en función del tipo de servicio
+            UtilidadesLista.ordenarLista(datos, new Comparator<PresupuestoData>() {
+                @Override
+                public int compare(PresupuestoData dato1, PresupuestoData dato2) {
+                    return dato1.getCategoria().compareTo(dato2.getCategoria());
+                }
+            });
+            
         }
         return datos;
         

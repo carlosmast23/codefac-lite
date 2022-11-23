@@ -378,7 +378,7 @@ public class KardexModel extends KardexPanel {
             
             kardexData.setFechaDocumento((kardexDetalle.getFechaDocumento()!=null)?kardexDetalle.getFechaDocumento().toString():"");
             
-            kardexData.setDescripcion("");
+            kardexData.setDescripcion(kardexDetalle.getDescripcion());
 
             //Restar o sumar la cantidad segun omo afecte el detalle en los kardex
             if (!kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.NO_AFECTA_INVETARIO)) {
