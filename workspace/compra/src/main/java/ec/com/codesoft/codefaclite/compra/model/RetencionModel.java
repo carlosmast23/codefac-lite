@@ -806,7 +806,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             
             ///Agregar los tipos de datos para emitir las retenciones
             getCmbTipoDocumento().removeAllItems();
-            getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
+            //getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
             getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA);
             
             
