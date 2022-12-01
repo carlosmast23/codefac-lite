@@ -618,6 +618,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             {
                 throw new ServicioCodefacException("No se puede emitir una factura sin dirección");
             }
+            
+            //
 
         }
         

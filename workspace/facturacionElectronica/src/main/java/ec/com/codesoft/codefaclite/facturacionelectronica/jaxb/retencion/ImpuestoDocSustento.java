@@ -3,19 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
+package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- *
- * @author Carlos
+ * //TODO: Ver si luego se puede unir con ImpuestoComprobante
+ * @author CARLOS_CODESOFT
  */
-@XmlType(propOrder = {"codigo","codigoPorcentaje","tarifa","baseImponible","valor"})
-public class ImpuestoComprobante implements Serializable{
+@XmlType(propOrder = {"codigo","codigoPorcentaje","baseImponible","tarifa","valor"})
+public class ImpuestoDocSustento implements Serializable {
+
+    public ImpuestoDocSustento() 
+    {
+        
+    }
+    
+    public ImpuestoDocSustento(ImpuestoComprobante impuesto) 
+    {
+        this.setCodigo(impuesto.getCodigo());
+        this.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
+        this.setTarifa(impuesto.getTarifa());
+        this.setBaseImponible(impuesto.getBaseImponible());
+        this.setValor(impuesto.getValor());        
+    }
     
     //Este codigo esta relacionado con IMPUESTO GENERAL (IVA,ICE...)
     private String codigo;
@@ -26,11 +43,8 @@ public class ImpuestoComprobante implements Serializable{
     private BigDecimal baseImponible;
     private BigDecimal valor;
 
-    public ImpuestoComprobante() {
-    }
-    
 
-    @XmlElement(name="codigo")
+    @XmlElement(name="codImpuestoDocSustento")
     public String getCodigo() {
         return codigo;
     }
@@ -66,7 +80,7 @@ public class ImpuestoComprobante implements Serializable{
         this.baseImponible = baseImponible;
     }
 
-    @XmlElement(name="valor")
+    @XmlElement(name="valorImpuesto")
     public BigDecimal getValor() {
         return valor;
     }
@@ -74,6 +88,17 @@ public class ImpuestoComprobante implements Serializable{
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
+            
+    public static List<ImpuestoDocSustento> castList(List<ImpuestoComprobante> impuestoComprobanteList)
+    {
+        List<ImpuestoDocSustento> resultadoList=new ArrayList<ImpuestoDocSustento>();
+        for (ImpuestoComprobante impuestoComprobante : impuestoComprobanteList) 
+        {
+            ImpuestoDocSustento impuesto=new ImpuestoDocSustento(impuestoComprobante);
+            resultadoList.add(impuesto);
+        }
+        return resultadoList;
+    }
     
-
+    
 }

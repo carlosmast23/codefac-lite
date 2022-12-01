@@ -6,7 +6,9 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -14,13 +16,14 @@ import javax.xml.bind.annotation.XmlType;
  * @author DellWin10
  */
 @XmlType(propOrder = {
-    "codSustento",
-    "codDocSustento",
-    "fechaEmisionDocSustento",
-    "fechaRegistroContable",
-    "numAutDocSustento",
-    "pagoLocExt",
-    "tipoRegi",
+    "codSustento", //REQUERIDO
+    "codDocSustento", //REQUERIDO
+    "numDocSustento", //REQUERIDO
+    "fechaEmisionDocSustento", //REQUERIDO
+    "fechaRegistroContable", //REQUERIDO
+    "numAutDocSustento", //REQUERIDO
+    "pagoLocExt", //REQUERIDO
+    "tipoRegi", 
     "paisEfecPago",
     "aplicConvDobTrib",
     "pagExtSujRetNorLeg",
@@ -28,13 +31,17 @@ import javax.xml.bind.annotation.XmlType;
     "totalComprobantesReembolso",
     "totalBaseImponibleReembolso",
     "totalImpuestoReembolso",
-    "totalSinImpuestos",
-    "importeTotal",
+    "totalSinImpuestos", //REQUERIDO
+    "importeTotal", //REQUERIDO
+    "impuestosDocSustento",
+    "retenciones",
+    "pagos",
 })
 public class DocumentoSustento implements Serializable{
     
     private String codSustento;
     private String codDocSustento;
+    private String numDocSustento;
     private String fechaEmisionDocSustento;
     private String fechaRegistroContable;
     private String numAutDocSustento;
@@ -49,6 +56,10 @@ public class DocumentoSustento implements Serializable{
     private BigDecimal totalImpuestoReembolso;
     private BigDecimal totalSinImpuestos;
     private BigDecimal importeTotal;
+    
+    private List<ImpuestoDocSustento> impuestosDocSustento;
+    private List<DetalleRetencionComprobante> retenciones;
+    private List<Pago> pagos;
 
     public DocumentoSustento() {
     }
@@ -70,6 +81,16 @@ public class DocumentoSustento implements Serializable{
     public void setCodDocSustento(String codDocSustento) {
         this.codDocSustento = codDocSustento;
     }
+
+    @XmlElement(name="numDocSustento")  
+    public String getNumDocSustento() {
+        return numDocSustento;
+    }
+
+    public void setNumDocSustento(String numDocSustento) {
+        this.numDocSustento = numDocSustento;
+    }
+    
 
     @XmlElement(name="fechaEmisionDocSustento")  
     public String getFechaEmisionDocSustento() {
@@ -196,6 +217,38 @@ public class DocumentoSustento implements Serializable{
     public void setImporteTotal(BigDecimal importeTotal) {
         this.importeTotal = importeTotal;
     }
+    
+    @XmlElementWrapper(name = "retenciones")
+    @XmlElement(name = "retencion")
+    public List<DetalleRetencionComprobante> getRetenciones() {
+        return retenciones;
+    }
+
+    public void setRetenciones(List<DetalleRetencionComprobante> retenciones) {
+        this.retenciones = retenciones;
+    }
+    
+    @XmlElementWrapper(name = "impuestosDocSustento")
+    @XmlElement(name = "impuestoDocSustento")
+    public List<ImpuestoDocSustento> getImpuestosDocSustento() {
+        return impuestosDocSustento;
+    }
+
+    public void setImpuestosDocSustento(List<ImpuestoDocSustento> impuestosDocSustento) {
+        this.impuestosDocSustento = impuestosDocSustento;
+    }
+
+    @XmlElementWrapper(name = "pagos")
+    @XmlElement(name = "pago")
+    public List<Pago> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(List<Pago> pagos) {
+        this.pagos = pagos;
+    }
+    
+    
     
     
     

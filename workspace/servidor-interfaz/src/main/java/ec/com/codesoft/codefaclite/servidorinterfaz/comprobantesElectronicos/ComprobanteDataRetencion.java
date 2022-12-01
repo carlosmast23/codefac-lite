@@ -8,22 +8,31 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.DetalleRetencionComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.DocumentoSustento;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.ImpuestoDocSustento;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.InformacionRetencion;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.Pago;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.RetencionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.CompraAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,37 +137,113 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
         
         //Todo: Revisar este caso porque en los clientes coincide pero para las proveedores ya no coincide el codigo de tipo de identifiacion
         info.setTipoIdentificacionSujetoRetenido(sriIdentificacion.getCodigo());
-
-        /**
-         * Llenar los detalles de las retenciones
-         */
-        List<DetalleRetencionComprobante> detalles=new ArrayList<DetalleRetencionComprobante>();
         
-        for (RetencionDetalle detalle : retencion.getDetalles()) {
-            
-            DetalleRetencionComprobante detalleComprobante=new DetalleRetencionComprobante();
-            
-            detalleComprobante.setCodigo(detalle.getCodigoSri());
-            detalleComprobante.setCodigoRetencion(detalle.getCodigoRetencionSri());
-            
-            detalleComprobante.setBaseImponible(detalle.getBaseImponible());
-            detalleComprobante.setPorcentajeRetener(detalle.getPorcentajeRetener());
-            detalleComprobante.setValorRetenido(detalle.getValorRetenido());
-            
-            //Todo: por el momento solo guardo el 001 porque solo se emiten retenciones de facturas, pero este campo deberia guardarse para los ats supongo
-            detalleComprobante.setCodDocSustento("01");
-            detalleComprobante.setNumDocSustento(retencion.getPreimpresoDocumento());
-            //detalleComprobante.setNumDocSustento(retencion.getCompra().getPreimpreso().replace("-",""));
-            detalleComprobante.setFechaEmisionDocSustento(UtilidadesFecha.formatDate(retencion.getFechaEmisionDocumento(),"dd/MM/yyyy"));
-            //detalleComprobante.setFechaEmisionDocSustento(UtilidadesFecha.formatDate(retencion.getCompra().getFechaFactura(),"dd/MM/yyyy"));
-            
-            detalles.add(detalleComprobante);                                
-        }
+        //TODO: Por el momento este dato queda seteado
+        info.setParteRel("NO");
+        
+        
+        //TODO: Por el momento solo creo un solo documento asumiendo que siempre voy a hacer retenciones de una sola compra
+        DocumentoSustento documentoSustento=crearDocumentoSustento();
+
+        List<DocumentoSustento>  documentoSustentoList=new ArrayList<DocumentoSustento>();
+        documentoSustentoList.add(documentoSustento);
+        
+        retencionComprobante.setDocsSustento(documentoSustentoList);
 
         retencionComprobante.setInfoRetencion(info);
-        retencionComprobante.setDetalles(detalles);
+        
+        //Agregar el impuestosDocSustento
+        
+        
+        //retencionComprobante.setDetalles(detalles);
         
         return retencionComprobante;
+    }
+    
+    /**
+     * Crear los datos de la compra para hacer la retencion
+     * @return 
+     */
+    private DocumentoSustento crearDocumentoSustento()
+    {
+        try {
+            Compra compra=retencion.getCompra();
+            DocumentoSustento documento=new DocumentoSustento();
+            CompraAts compraAts = ServiceFactory.getFactory().getAtsServiceIf().crearCompraAtsInfoGeneral(compra);
+            
+            documento.setCodSustento(compraAts.getCodSustento());
+            documento.setCodDocSustento("01"); //TODO: Por el momento dejo seteado 1
+            documento.setNumDocSustento(retencion.getPreimpresoDocumento());
+            documento.setFechaEmisionDocSustento(UtilidadesFecha.formatDate(retencion.getFechaEmisionDocumento(),"dd/MM/yyyy"));
+            documento.setFechaRegistroContable(UtilidadesFecha.formatDate(retencion.getFechaEmisionDocumento(),"dd/MM/yyyy"));
+            documento.setNumAutDocSustento(compraAts.getAutorizacion());
+            documento.setPagoLocExt("01"); //TODO: Revisar como debe funcioanar correctamente cuando sean productos que no graban iva
+            documento.setTotalSinImpuestos(compraAts.getBaseImpGrav());
+            documento.setImporteTotal(compraAts.getBaseImpGrav().add(compraAts.getMontoIva())); //todo: revisar
+            
+            List<ImpuestoComprobante> impuestoList=new ArrayList<ImpuestoComprobante>();
+            //Agregar los detalles de los impuestos de las compras       
+            for (CompraDetalle detalle : compra.getDetalles())             
+            {
+                
+                List<ImpuestoComprobante> impuestoListTemp= ComprobanteDataFacturaNotaCreditoAbstract.crearImpuestoDetalles(
+                    detalle.getProductoProveedor().getProducto().getCatalogoProducto(), 
+                    detalle.getTotalCalculado(),  //Falta tomar en cuenta el iva revisar en ComprobanteDataFacturaNotaCreditoAbstract
+                    detalle.obtenerIvaCalculado(), 
+                    detalle.getTotal(), 
+                    detalle.getValorIce()
+                );
+                
+                impuestoList.addAll(impuestoListTemp);
+            }            
+            documento.setImpuestosDocSustento(ImpuestoDocSustento.castList(impuestoList));
+            
+            /**
+            * Llenar los detalles de las retenciones
+            */
+            List<DetalleRetencionComprobante> detalles=new ArrayList<DetalleRetencionComprobante>();
+            
+            //Agregar los datos de las retenciones
+            for (RetencionDetalle detalle : retencion.getDetalles()) {
+
+                DetalleRetencionComprobante detalleComprobante = new DetalleRetencionComprobante();
+
+                detalleComprobante.setCodigo(detalle.getCodigoSri());
+                detalleComprobante.setCodigoRetencion(detalle.getCodigoRetencionSri());
+
+                detalleComprobante.setBaseImponible(detalle.getBaseImponible());
+                detalleComprobante.setPorcentajeRetener(detalle.getPorcentajeRetener());
+                detalleComprobante.setValorRetenido(detalle.getValorRetenido());
+
+                //Todo: por el momento solo guardo el 001 porque solo se emiten retenciones de facturas, pero este campo deberia guardarse para los ats supongo
+                //detalleComprobante.setCodDocSustento("01");
+                //detalleComprobante.setNumDocSustento(retencion.getPreimpresoDocumento());
+                //detalleComprobante.setNumDocSustento(retencion.getCompra().getPreimpreso().replace("-",""));
+                //detalleComprobante.setFechaEmisionDocSustento(UtilidadesFecha.formatDate(retencion.getFechaEmisionDocumento(),"dd/MM/yyyy"));
+                //detalleComprobante.setFechaEmisionDocSustento(UtilidadesFecha.formatDate(retencion.getCompra().getFechaFactura(),"dd/MM/yyyy"));
+                detalles.add(detalleComprobante);
+            }
+            
+            //TODO: Por el momento crear una sola forma de pago en la compra por que ese dato no estoy grabando
+            List<Pago> pagoList=new ArrayList<Pago>();
+            Pago pago=new Pago();
+            pago.setFormaPago("20");
+            pago.setTotal(documento.getImporteTotal());
+            pagoList.add(pago);
+            documento.setPagos(pagoList);
+            
+            
+             
+            documento.setRetenciones(detalles);
+            
+            
+            return documento;
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataRetencion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobanteDataRetencion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override

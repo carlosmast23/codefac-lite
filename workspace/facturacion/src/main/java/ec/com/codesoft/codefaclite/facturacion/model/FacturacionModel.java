@@ -708,10 +708,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if(puntoEmision.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
                     {                    
                         java.util.Date fecha = getjDateFechaEmision().getDate();
-                        if (!ComprobarRangoDeFechaPermitido(fecha)) 
+                        if (!comprobarRangoDeFechaPermitido(fecha)) 
                         {
-                            DialogoCodefac.mensaje("Advertencia fecha", "La fecha seleccionada esta fuera del rango de autorizaciòn del SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                            getjDateFechaEmision().setDate(UtilidadesFecha.getFechaHoy()); //volver a setear la fecha de hoy para que no puedan grabar con un fecha incorrecta
+                            //DialogoCodefac.mensaje("Advertencia fecha", "La fecha seleccionada esta fuera del rango de autorizaciòn del SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            //getjDateFechaEmision().setDate(UtilidadesFecha.getFechaHoy()); //volver a setear la fecha de hoy para que no puedan grabar con un fecha incorrecta
                         }
                     }
                 }
@@ -2975,7 +2975,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
 
-    public boolean ComprobarRangoDeFechaPermitido(java.util.Date fecha) {
+    public boolean comprobarRangoDeFechaPermitido(java.util.Date fecha) {
         //if(fecha!=null && fechaMin!=null && fechaMax!=null)
         //{
             boolean fechaDespues = fecha.after(fechaMin);

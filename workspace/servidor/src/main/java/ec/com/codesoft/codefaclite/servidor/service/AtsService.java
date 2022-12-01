@@ -290,146 +290,280 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
         for (Compra compra : compras) 
         {
-            CompraAts compraAts=new CompraAts();
-            
-            String identificacion=(compra.getIdentificacion()!=null && !compra.getIdentificacion().isEmpty() )?compra.getIdentificacion():compra.getProveedor().getIdentificacion();
-                    
-            if(compra.getCodigoSustentoSri()==null)
-            {
-                if(compra.getDetalles().get(0).getCodigoSustentoSriEnum()==null) //Si tampoco en el detalle tiene un dato definido lo pongo como null 
-                {
-                    compraAts.setCodSustento(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA.getCodigo()); //TODO: Por defecto dejo este valor para tener retrocompatiblidad con datos anteriores
-                }
-                else
-                {
-                    //TODO: Esta parte toca revisar porque solo estoy seleccionado por el momento el primer item para obtener ekl codigo de sustento tributario
-                    //TODO: Pero lo correcto es si tiene distintos valores por cada detalle hacer varios registros agrupando los similares
-                    compraAts.setCodSustento((compra.getDetalles().get(0).getCodigoSustentoSri()));
-                }
-            }else
-            {
-                compraAts.setCodSustento(compra.getCodigoSustentoSri());
-            }
-            
-            String codigoSri=getCodigoSri(compra);        
-            compraAts.setTpIdProv(codigoSri);
-            compraAts.setIdProv(identificacion);
-            
-            if(compra.getCodigoComprobanteSri()==null)
-            {
-                compraAts.setTipoComprobante(DocumentoEnum.FACTURA.getCodigoSri());
-            }else
-            {
-                compraAts.setTipoComprobante(compra.getCodigoComprobanteSri());
-            }
-            
-            compraAts.setParteRel("SI"); //Todo: Me parece que esta parte toca implementar cuando es cliente final
-            SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
-            
-            //Fecha de registro contable del comprobante de venta
-            //compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
-            compraAts.setFechaRegistro(dateFormat.format(compra.getFechaFactura())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
-            compraAts.setEstablecimiento(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEstablecimiento().toString(),3,"0"));
-            compraAts.setPuntoEmision(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEmision().toString(),3,"0"));
-            compraAts.setSecuencial(compra.getSecuencial().toString());
-            compraAts.setFechaEmision(dateFormat.format(compra.getFechaFactura()));
-            
-            String autorizacion=(compra.getAutorizacion()!=null && !compra.getAutorizacion().isEmpty())?compra.getAutorizacion():"0000000000";
-            compraAts.setAutorizacion(autorizacion.trim()); //todo: En caso de que los comprobantes con código 11, 19 y 20 no posean numeración, así como en convenios de débito y recaudación deberán completar sus datos con nueves (9999999999)
-            compraAts.setBaseNoGraIva(BigDecimal.ZERO);
-            compraAts.setBaseImponible(compra.getSubtotalSinImpuestos().setScale(2, RoundingMode.HALF_UP));
-            compraAts.setBaseImpGrav(compra.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
-            compraAts.setBaseImpExe(BigDecimal.ZERO);//TODO: Revisar cuando se aplica este campo , el manula dice que son Base imponible exenta de IVA
-            compraAts.setMontoIce(BigDecimal.ZERO);
-            compraAts.setMontoIva(compra.getIva().setScale(2, RoundingMode.HALF_UP));
-            
-            Map<BigDecimal,BigDecimal> mapRetenciones=consultarRetencionesIva(compra,sriRetencionIva);
-            ///=======> DATOS DE LAS RETENCIONES <============///
-            compraAts.setValRetBien10(obtenerValorMapRetenciones(mapRetenciones,10).setScale(2,RoundingMode.HALF_UP)); //10% TODO:completar
-            compraAts.setValRetServ20(obtenerValorMapRetenciones(mapRetenciones,20).setScale(2,RoundingMode.HALF_UP)); //20% TODO:completar
-            compraAts.setValorRetBienes(obtenerValorMapRetenciones(mapRetenciones,30).setScale(2,RoundingMode.HALF_UP)); //30% TODO:completar 
-            compraAts.setValRetServ50(obtenerValorMapRetenciones(mapRetenciones,50).setScale(2,RoundingMode.HALF_UP)); //50% TODO:completar
-            compraAts.setValorRetServicios(obtenerValorMapRetenciones(mapRetenciones,70).setScale(2,RoundingMode.HALF_UP));//70% //TODO:completar
-            compraAts.setValRetServ100(obtenerValorMapRetenciones(mapRetenciones,100).setScale(2,RoundingMode.HALF_UP)); //100% TODO:completar
-            
-            //========> COMPRAS DE REEMBOLSO <=================//
-            //compraAts.setTotbasesImpReemb(BigDecimal.ZERO); //TODO: Esto queda pendiente de programar
-            //TODO: Falta programar para pagos en el exterior
-            
-            //========> PAGO EXTERIOR <========================//
-            PagoExteriorAts pagoExteriorAts=new PagoExteriorAts();
-            pagoExteriorAts.setPagoLocExt("01"); //Todo:por el momento dejo seteado solo para personas locales , el codigo para personas del exterior es 02
-            pagoExteriorAts.setPaisEfecPagoGen("NA");
-            pagoExteriorAts.setPaisEfecPago("NA");
-            pagoExteriorAts.setAplicConvDobTrib("NA");
-            pagoExteriorAts.setPagExtSujRetNorLeg("NA");
-            compraAts.setPagoExteriorAts(pagoExteriorAts);
-            
-            
-             //Agregar solo formas de pago que no esten ya registrados en el cliente //Solo deben aparecer las formas de pago cuando la base imponible es superior a 1000 dolares
-            List<FormaDePagoAts> formasPago = new ArrayList<FormaDePagoAts>();
-            FormaDePagoAts formaPago=new FormaDePagoAts();
-            formaPago.setFormaPago("01"); //Todo: Por defecto queda setear pago en efectivo(Sin utuizacion del sistema financiero)
-            formasPago.add(formaPago);
-            
-            //Solo informar el tema de retenciones para documentos diferentes de Facturas de Reembolso
-            if(!compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
-            {
-                List<RetencionDetalle> retencionesRenta=consultarRetencionesRenta(compra, sriRetencionRenta);
-                List<AirAts> retencionesAts=new ArrayList<AirAts>();
-                for (RetencionDetalle retencionRenta : retencionesRenta) {
-                    AirAts retencionRentaAts=new AirAts();
-                    retencionRentaAts.setBaseImpAir(retencionRenta.getBaseImponible().setScale(2,BigDecimal.ROUND_UP));
-                    retencionRentaAts.setCodRetAir(retencionRenta.getCodigoRetencionSri());
-                    retencionRentaAts.setPorcentajeAir(retencionRenta.getPorcentajeRetener().setScale(2,BigDecimal.ROUND_UP));
-                    retencionRentaAts.setValRetAir(retencionRenta.getValorRetenido().setScale(2,BigDecimal.ROUND_UP));
-                    //retencionesAts.add(retencionRentaAts);
-                    agregarAirAts(retencionesAts,retencionRentaAts);
-                }
-                compraAts.setDetalleAir(retencionesAts);
-            }
-            
-            //solo agregar las formas de pago cuando la base imponible superio los 1000
-            //la suma de las BASES IMPONIBLES y los MONTOS de IVA e ICE exceden los USD. 1000.00.
-            if(compraAts.getBaseImpGrav()
-                    .add(compraAts.getBaseImpExe().setScale(2,RoundingMode.HALF_UP))
-                    .add(compraAts.getBaseImponible().setScale(2,RoundingMode.HALF_UP))
-                    .add(compraAts.getBaseNoGraIva().setScale(2,RoundingMode.HALF_UP))
-                    .add(compraAts.getMontoIva().setScale(2,RoundingMode.HALF_UP))
-                    .add(compraAts.getMontoIce().setScale(2,RoundingMode.HALF_UP))
-                    .compareTo(new BigDecimal("1000"))>0)
-            {
-                compraAts.setFormasDePago(formasPago);
-            }
-            
-            //Agregar las FACTURAS DE REEMBOLSO
-            System.out.println(compra.getSecuencial() +"-"+compra.getCodigoDocumentoEnum().getNombre());
-            if(compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
-            {
-                List<ReembolsoAts> reembolsoList=obtenerDetalleReembolso(compra, alertas);            
-                compraAts.setReembolsos(reembolsoList);
-            }
-            
-            compraAts.setTotbasesImpReemb(compra.obtenerTotalBaseReembolso().setScale(2,RoundingMode.HALF_UP));
-            
-            //TODO Falta completar los detalles de los impuestos a la renta
-            
-            //compraAts.setEstabRetencion1("");
-            //compraAts.setPtoEmiRetencion1("");
-            //compraAts.setSecRetencion1(codigoSri); //Secuecual de la retencion
-            //compraAts.setAutRetencion1("");
-            //compraAts.setFechaEmiRet1("");
-            if(validarCompraAts(compraAts, alertas))
+            CompraAts compraAts= crearCompraAts(compra, sriRetencionIva, sriRetencionRenta,alertas);
+            if (validarCompraAts(compraAts, alertas)) 
             {
                 comprasAts.add(compraAts);
             }
-            
-            
         }
         
         return comprasAts;
         
     }
+    
+    public CompraAts crearCompraAts(Compra compra,SriRetencion sriRetencionIva,SriRetencion sriRetencionRenta,List<String> alertas) throws RemoteException, ServicioCodefacException
+    {
+       CompraAts compraAts=crearCompraAtsInfoGeneral(compra);
+       compraAtsDatosAdicionales(compra, compraAts, sriRetencionIva, sriRetencionRenta, alertas);
+       return compraAts;
+    }
+    
+    public CompraAts crearCompraAtsInfoGeneral(Compra compra) throws RemoteException, ServicioCodefacException
+    {
+        CompraAts compraAts = new CompraAts();
+
+        String identificacion = (compra.getIdentificacion() != null && !compra.getIdentificacion().isEmpty()) ? compra.getIdentificacion() : compra.getProveedor().getIdentificacion();
+
+        if (compra.getCodigoSustentoSri() == null) {
+            if (compra.getDetalles().get(0).getCodigoSustentoSriEnum() == null) //Si tampoco en el detalle tiene un dato definido lo pongo como null 
+            {
+                compraAts.setCodSustento(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA.getCodigo()); //TODO: Por defecto dejo este valor para tener retrocompatiblidad con datos anteriores
+            } else {
+                //TODO: Esta parte toca revisar porque solo estoy seleccionado por el momento el primer item para obtener ekl codigo de sustento tributario
+                //TODO: Pero lo correcto es si tiene distintos valores por cada detalle hacer varios registros agrupando los similares
+                compraAts.setCodSustento((compra.getDetalles().get(0).getCodigoSustentoSri()));
+            }
+        } else {
+            compraAts.setCodSustento(compra.getCodigoSustentoSri());
+        }
+
+        String codigoSri = getCodigoSri(compra);
+        compraAts.setTpIdProv(codigoSri);
+        compraAts.setIdProv(identificacion);
+
+        if (compra.getCodigoComprobanteSri() == null) {
+            compraAts.setTipoComprobante(DocumentoEnum.FACTURA.getCodigoSri());
+        } else {
+            compraAts.setTipoComprobante(compra.getCodigoComprobanteSri());
+        }
+
+        compraAts.setParteRel("SI"); //Todo: Me parece que esta parte toca implementar cuando es cliente final
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        //Fecha de registro contable del comprobante de venta
+        //compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
+        compraAts.setFechaRegistro(dateFormat.format(compra.getFechaFactura())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
+        compraAts.setEstablecimiento(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEstablecimiento().toString(), 3, "0"));
+        compraAts.setPuntoEmision(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEmision().toString(), 3, "0"));
+        compraAts.setSecuencial(compra.getSecuencial().toString());
+        compraAts.setFechaEmision(dateFormat.format(compra.getFechaFactura()));
+
+        String autorizacion = (compra.getAutorizacion() != null && !compra.getAutorizacion().isEmpty()) ? compra.getAutorizacion() : "0000000000";
+        compraAts.setAutorizacion(autorizacion.trim()); //todo: En caso de que los comprobantes con código 11, 19 y 20 no posean numeración, así como en convenios de débito y recaudación deberán completar sus datos con nueves (9999999999)
+        compraAts.setBaseNoGraIva(BigDecimal.ZERO);
+        compraAts.setBaseImponible(compra.getSubtotalSinImpuestos().setScale(2, RoundingMode.HALF_UP));
+        compraAts.setBaseImpGrav(compra.getSubtotalImpuestos().setScale(2, RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
+        compraAts.setBaseImpExe(BigDecimal.ZERO);//TODO: Revisar cuando se aplica este campo , el manula dice que son Base imponible exenta de IVA
+        compraAts.setMontoIce(BigDecimal.ZERO);
+        compraAts.setMontoIva(compra.getIva().setScale(2, RoundingMode.HALF_UP));
+
+        
+
+        //========> COMPRAS DE REEMBOLSO <=================//
+        //compraAts.setTotbasesImpReemb(BigDecimal.ZERO); //TODO: Esto queda pendiente de programar
+        //TODO: Falta programar para pagos en el exterior
+        //========> PAGO EXTERIOR <========================//
+        PagoExteriorAts pagoExteriorAts = new PagoExteriorAts();
+        pagoExteriorAts.setPagoLocExt("01"); //Todo:por el momento dejo seteado solo para personas locales , el codigo para personas del exterior es 02
+        pagoExteriorAts.setPaisEfecPagoGen("NA");
+        pagoExteriorAts.setPaisEfecPago("NA");
+        pagoExteriorAts.setAplicConvDobTrib("NA");
+        pagoExteriorAts.setPagExtSujRetNorLeg("NA");
+        compraAts.setPagoExteriorAts(pagoExteriorAts);
+
+        //Agregar solo formas de pago que no esten ya registrados en el cliente //Solo deben aparecer las formas de pago cuando la base imponible es superior a 1000 dolares
+        List<FormaDePagoAts> formasPago = new ArrayList<FormaDePagoAts>();
+        FormaDePagoAts formaPago = new FormaDePagoAts();
+        formaPago.setFormaPago("01"); //Todo: Por defecto queda setear pago en efectivo(Sin utuizacion del sistema financiero)
+        formasPago.add(formaPago);
+
+
+        //solo agregar las formas de pago cuando la base imponible superio los 1000
+        //la suma de las BASES IMPONIBLES y los MONTOS de IVA e ICE exceden los USD. 1000.00.
+        if (compraAts.getBaseImpGrav()
+                .add(compraAts.getBaseImpExe().setScale(2, RoundingMode.HALF_UP))
+                .add(compraAts.getBaseImponible().setScale(2, RoundingMode.HALF_UP))
+                .add(compraAts.getBaseNoGraIva().setScale(2, RoundingMode.HALF_UP))
+                .add(compraAts.getMontoIva().setScale(2, RoundingMode.HALF_UP))
+                .add(compraAts.getMontoIce().setScale(2, RoundingMode.HALF_UP))
+                .compareTo(new BigDecimal("1000")) > 0) {
+            compraAts.setFormasDePago(formasPago);
+        }
+
+
+
+        compraAts.setTotbasesImpReemb(compra.obtenerTotalBaseReembolso().setScale(2, RoundingMode.HALF_UP));
+
+        //TODO Falta completar los detalles de los impuestos a la renta
+        //compraAts.setEstabRetencion1("");
+        //compraAts.setPtoEmiRetencion1("");
+        //compraAts.setSecRetencion1(codigoSri); //Secuecual de la retencion
+        //compraAts.setAutRetencion1("");
+        //compraAts.setFechaEmiRet1("");
+       
+        
+        return compraAts;
+    }
+    
+    public void compraAtsDatosAdicionales(Compra compra,CompraAts compraAts,SriRetencion sriRetencionIva,SriRetencion sriRetencionRenta,List<String> alertas) throws RemoteException, ServicioCodefacException
+    {
+        Map<BigDecimal, BigDecimal> mapRetenciones = consultarRetencionesIva(compra, sriRetencionIva);
+        ///=======> DATOS DE LAS RETENCIONES <============///
+        compraAts.setValRetBien10(obtenerValorMapRetenciones(mapRetenciones, 10).setScale(2, RoundingMode.HALF_UP)); //10% TODO:completar
+        compraAts.setValRetServ20(obtenerValorMapRetenciones(mapRetenciones, 20).setScale(2, RoundingMode.HALF_UP)); //20% TODO:completar
+        compraAts.setValorRetBienes(obtenerValorMapRetenciones(mapRetenciones, 30).setScale(2, RoundingMode.HALF_UP)); //30% TODO:completar 
+        compraAts.setValRetServ50(obtenerValorMapRetenciones(mapRetenciones, 50).setScale(2, RoundingMode.HALF_UP)); //50% TODO:completar
+        compraAts.setValorRetServicios(obtenerValorMapRetenciones(mapRetenciones, 70).setScale(2, RoundingMode.HALF_UP));//70% //TODO:completar
+        compraAts.setValRetServ100(obtenerValorMapRetenciones(mapRetenciones, 100).setScale(2, RoundingMode.HALF_UP)); //100% TODO:completar*/
+        
+        //Solo informar el tema de retenciones para documentos diferentes de Facturas de Reembolso
+        if (!compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO)) {
+            List<RetencionDetalle> retencionesRenta = consultarRetencionesRenta(compra, sriRetencionRenta);
+            List<AirAts> retencionesAts = new ArrayList<AirAts>();
+            for (RetencionDetalle retencionRenta : retencionesRenta) {
+                AirAts retencionRentaAts = new AirAts();
+                retencionRentaAts.setBaseImpAir(retencionRenta.getBaseImponible().setScale(2, BigDecimal.ROUND_UP));
+                retencionRentaAts.setCodRetAir(retencionRenta.getCodigoRetencionSri());
+                retencionRentaAts.setPorcentajeAir(retencionRenta.getPorcentajeRetener().setScale(2, BigDecimal.ROUND_UP));
+                retencionRentaAts.setValRetAir(retencionRenta.getValorRetenido().setScale(2, BigDecimal.ROUND_UP));
+                //retencionesAts.add(retencionRentaAts);
+                agregarAirAts(retencionesAts, retencionRentaAts);
+            }
+            compraAts.setDetalleAir(retencionesAts);
+        }
+        
+        //Agregar las FACTURAS DE REEMBOLSO
+        System.out.println(compra.getSecuencial() + "-" + compra.getCodigoDocumentoEnum().getNombre());
+        if (compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO)) {
+            List<ReembolsoAts> reembolsoList = obtenerDetalleReembolso(compra, alertas);
+            compraAts.setReembolsos(reembolsoList);
+        }
+        
+    }
+    
+    /*public CompraAts crearCompraAts(Compra compra,SriRetencion sriRetencionIva,SriRetencion sriRetencionRenta,List<String> alertas) throws RemoteException
+    {
+        CompraAts compraAts = new CompraAts();
+
+        String identificacion = (compra.getIdentificacion() != null && !compra.getIdentificacion().isEmpty()) ? compra.getIdentificacion() : compra.getProveedor().getIdentificacion();
+
+        if (compra.getCodigoSustentoSri() == null) {
+            if (compra.getDetalles().get(0).getCodigoSustentoSriEnum() == null) //Si tampoco en el detalle tiene un dato definido lo pongo como null 
+            {
+                compraAts.setCodSustento(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA.getCodigo()); //TODO: Por defecto dejo este valor para tener retrocompatiblidad con datos anteriores
+            } else {
+                //TODO: Esta parte toca revisar porque solo estoy seleccionado por el momento el primer item para obtener ekl codigo de sustento tributario
+                //TODO: Pero lo correcto es si tiene distintos valores por cada detalle hacer varios registros agrupando los similares
+                compraAts.setCodSustento((compra.getDetalles().get(0).getCodigoSustentoSri()));
+            }
+        } else {
+            compraAts.setCodSustento(compra.getCodigoSustentoSri());
+        }
+
+        String codigoSri = getCodigoSri(compra);
+        compraAts.setTpIdProv(codigoSri);
+        compraAts.setIdProv(identificacion);
+
+        if (compra.getCodigoComprobanteSri() == null) {
+            compraAts.setTipoComprobante(DocumentoEnum.FACTURA.getCodigoSri());
+        } else {
+            compraAts.setTipoComprobante(compra.getCodigoComprobanteSri());
+        }
+
+        compraAts.setParteRel("SI"); //Todo: Me parece que esta parte toca implementar cuando es cliente final
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        //Fecha de registro contable del comprobante de venta
+        //compraAts.setFechaRegistro(dateFormat.format(compra.getFechaCreacion())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
+        compraAts.setFechaRegistro(dateFormat.format(compra.getFechaFactura())); //Todo: este dato por defecto voy a dejar como fecha de registro la fecha de la compra
+        compraAts.setEstablecimiento(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEstablecimiento().toString(), 3, "0"));
+        compraAts.setPuntoEmision(UtilidadesTextos.llenarCarateresIzquierda(compra.getPuntoEmision().toString(), 3, "0"));
+        compraAts.setSecuencial(compra.getSecuencial().toString());
+        compraAts.setFechaEmision(dateFormat.format(compra.getFechaFactura()));
+
+        String autorizacion = (compra.getAutorizacion() != null && !compra.getAutorizacion().isEmpty()) ? compra.getAutorizacion() : "0000000000";
+        compraAts.setAutorizacion(autorizacion.trim()); //todo: En caso de que los comprobantes con código 11, 19 y 20 no posean numeración, así como en convenios de débito y recaudación deberán completar sus datos con nueves (9999999999)
+        compraAts.setBaseNoGraIva(BigDecimal.ZERO);
+        compraAts.setBaseImponible(compra.getSubtotalSinImpuestos().setScale(2, RoundingMode.HALF_UP));
+        compraAts.setBaseImpGrav(compra.getSubtotalImpuestos().setScale(2, RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
+        compraAts.setBaseImpExe(BigDecimal.ZERO);//TODO: Revisar cuando se aplica este campo , el manula dice que son Base imponible exenta de IVA
+        compraAts.setMontoIce(BigDecimal.ZERO);
+        compraAts.setMontoIva(compra.getIva().setScale(2, RoundingMode.HALF_UP));
+
+        Map<BigDecimal, BigDecimal> mapRetenciones = consultarRetencionesIva(compra, sriRetencionIva);
+        ///=======> DATOS DE LAS RETENCIONES <============///
+        compraAts.setValRetBien10(obtenerValorMapRetenciones(mapRetenciones, 10).setScale(2, RoundingMode.HALF_UP)); //10% TODO:completar
+        compraAts.setValRetServ20(obtenerValorMapRetenciones(mapRetenciones, 20).setScale(2, RoundingMode.HALF_UP)); //20% TODO:completar
+        compraAts.setValorRetBienes(obtenerValorMapRetenciones(mapRetenciones, 30).setScale(2, RoundingMode.HALF_UP)); //30% TODO:completar 
+        compraAts.setValRetServ50(obtenerValorMapRetenciones(mapRetenciones, 50).setScale(2, RoundingMode.HALF_UP)); //50% TODO:completar
+        compraAts.setValorRetServicios(obtenerValorMapRetenciones(mapRetenciones, 70).setScale(2, RoundingMode.HALF_UP));//70% //TODO:completar
+        compraAts.setValRetServ100(obtenerValorMapRetenciones(mapRetenciones, 100).setScale(2, RoundingMode.HALF_UP)); //100% TODO:completar
+
+        //========> COMPRAS DE REEMBOLSO <=================//
+        //compraAts.setTotbasesImpReemb(BigDecimal.ZERO); //TODO: Esto queda pendiente de programar
+        //TODO: Falta programar para pagos en el exterior
+        //========> PAGO EXTERIOR <========================//
+        PagoExteriorAts pagoExteriorAts = new PagoExteriorAts();
+        pagoExteriorAts.setPagoLocExt("01"); //Todo:por el momento dejo seteado solo para personas locales , el codigo para personas del exterior es 02
+        pagoExteriorAts.setPaisEfecPagoGen("NA");
+        pagoExteriorAts.setPaisEfecPago("NA");
+        pagoExteriorAts.setAplicConvDobTrib("NA");
+        pagoExteriorAts.setPagExtSujRetNorLeg("NA");
+        compraAts.setPagoExteriorAts(pagoExteriorAts);
+
+        //Agregar solo formas de pago que no esten ya registrados en el cliente //Solo deben aparecer las formas de pago cuando la base imponible es superior a 1000 dolares
+        List<FormaDePagoAts> formasPago = new ArrayList<FormaDePagoAts>();
+        FormaDePagoAts formaPago = new FormaDePagoAts();
+        formaPago.setFormaPago("01"); //Todo: Por defecto queda setear pago en efectivo(Sin utuizacion del sistema financiero)
+        formasPago.add(formaPago);
+
+        //Solo informar el tema de retenciones para documentos diferentes de Facturas de Reembolso
+        if (!compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO)) {
+            List<RetencionDetalle> retencionesRenta = consultarRetencionesRenta(compra, sriRetencionRenta);
+            List<AirAts> retencionesAts = new ArrayList<AirAts>();
+            for (RetencionDetalle retencionRenta : retencionesRenta) {
+                AirAts retencionRentaAts = new AirAts();
+                retencionRentaAts.setBaseImpAir(retencionRenta.getBaseImponible().setScale(2, BigDecimal.ROUND_UP));
+                retencionRentaAts.setCodRetAir(retencionRenta.getCodigoRetencionSri());
+                retencionRentaAts.setPorcentajeAir(retencionRenta.getPorcentajeRetener().setScale(2, BigDecimal.ROUND_UP));
+                retencionRentaAts.setValRetAir(retencionRenta.getValorRetenido().setScale(2, BigDecimal.ROUND_UP));
+                //retencionesAts.add(retencionRentaAts);
+                agregarAirAts(retencionesAts, retencionRentaAts);
+            }
+            compraAts.setDetalleAir(retencionesAts);
+        }
+
+        //solo agregar las formas de pago cuando la base imponible superio los 1000
+        //la suma de las BASES IMPONIBLES y los MONTOS de IVA e ICE exceden los USD. 1000.00.
+        if (compraAts.getBaseImpGrav()
+                .add(compraAts.getBaseImpExe().setScale(2, RoundingMode.HALF_UP))
+                .add(compraAts.getBaseImponible().setScale(2, RoundingMode.HALF_UP))
+                .add(compraAts.getBaseNoGraIva().setScale(2, RoundingMode.HALF_UP))
+                .add(compraAts.getMontoIva().setScale(2, RoundingMode.HALF_UP))
+                .add(compraAts.getMontoIce().setScale(2, RoundingMode.HALF_UP))
+                .compareTo(new BigDecimal("1000")) > 0) {
+            compraAts.setFormasDePago(formasPago);
+        }
+
+        //Agregar las FACTURAS DE REEMBOLSO
+        System.out.println(compra.getSecuencial() + "-" + compra.getCodigoDocumentoEnum().getNombre());
+        if (compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO)) {
+            List<ReembolsoAts> reembolsoList = obtenerDetalleReembolso(compra, alertas);
+            compraAts.setReembolsos(reembolsoList);
+        }
+
+        compraAts.setTotbasesImpReemb(compra.obtenerTotalBaseReembolso().setScale(2, RoundingMode.HALF_UP));
+
+        //TODO Falta completar los detalles de los impuestos a la renta
+        //compraAts.setEstabRetencion1("");
+        //compraAts.setPtoEmiRetencion1("");
+        //compraAts.setSecRetencion1(codigoSri); //Secuecual de la retencion
+        //compraAts.setAutRetencion1("");
+        //compraAts.setFechaEmiRet1("");
+       
+        
+        return compraAts;
+    }*/
     
     private List<ReembolsoAts> obtenerDetalleReembolso(Compra compra,List<String> alertas) throws  RemoteException,ServicioCodefacException
     {

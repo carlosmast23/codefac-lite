@@ -11,14 +11,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(propOrder = 
-        {"codigo",
+        {   "codigo",
             "codigoRetencion",
             "baseImponible",
             "porcentajeRetener",
-            "valorRetenido",
-            "codDocSustento",
-            "numDocSustento",
-            "fechaEmisionDocSustento"})
+            "valorRetenido"
+        })
 /**
  *
  * @author Carlos
@@ -36,9 +34,9 @@ public class DetalleRetencionComprobante implements Serializable{
     private BigDecimal baseImponible;
     private BigDecimal porcentajeRetener;
     private BigDecimal valorRetenido;
-    private String codDocSustento;
-    private String numDocSustento;
-    private String fechaEmisionDocSustento;
+    //private String codDocSustento;
+    //private String numDocSustento;
+    //private String fechaEmisionDocSustento;
 
     public DetalleRetencionComprobante() {
     }
@@ -88,7 +86,7 @@ public class DetalleRetencionComprobante implements Serializable{
         this.valorRetenido = valorRetenido;
     }
 
-    @XmlElement(name="codDocSustento")    
+    /*@XmlElement(name="codDocSustento")    
     public String getCodDocSustento() {
         return codDocSustento;
     }
@@ -113,7 +111,7 @@ public class DetalleRetencionComprobante implements Serializable{
 
     public void setFechaEmisionDocSustento(String fechaEmisionDocSustento) {
         this.fechaEmisionDocSustento = fechaEmisionDocSustento;
-    }
+    }*/
     
     
     

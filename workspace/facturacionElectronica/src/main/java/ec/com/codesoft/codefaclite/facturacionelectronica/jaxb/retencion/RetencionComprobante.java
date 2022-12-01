@@ -19,10 +19,11 @@ import javax.xml.bind.annotation.XmlType;
  * @author Carlos
  */
 @XmlRootElement(name = ComprobanteElectronico.RETENCION)
-@XmlType(propOrder = {"informacionTributaria","infoRetencion","detalles","informacionAdicional"})
+@XmlType(propOrder = {"informacionTributaria","infoRetencion","docsSustento","informacionAdicional"})
 public class RetencionComprobante extends ComprobanteElectronico {
     private InformacionRetencion infoRetencion;
-    private List<DetalleRetencionComprobante> detalles;
+    //private List<DetalleRetencionComprobante> detalles;
+    private List<DocumentoSustento> docsSustento;
 
     public RetencionComprobante() {
     }
@@ -36,7 +37,7 @@ public class RetencionComprobante extends ComprobanteElectronico {
         this.infoRetencion = infoRetencion;
     }
 
-    @XmlElementWrapper(name = "impuestos")
+    /*@XmlElementWrapper(name = "impuestos")
     @XmlElement(name = "impuesto")
     public List<DetalleRetencionComprobante> getDetalles() {
         return detalles;
@@ -44,6 +45,16 @@ public class RetencionComprobante extends ComprobanteElectronico {
 
     public void setDetalles(List<DetalleRetencionComprobante> detalles) {
         this.detalles = detalles;
+    }*/
+
+    @XmlElementWrapper(name = "docsSustento")
+    @XmlElement(name = "docSustento")
+    public List<DocumentoSustento> getDocsSustento() {
+        return docsSustento;
+    }
+
+    public void setDocsSustento(List<DocumentoSustento> docsSustento) {
+        this.docsSustento = docsSustento;
     }
     
     
@@ -65,7 +76,7 @@ public class RetencionComprobante extends ComprobanteElectronico {
     
     @XmlAttribute(name = "version")
     public String getVersionAttribute() {
-        return "1.0.0";
+        return "2.0.0";
     }
 
     @Override

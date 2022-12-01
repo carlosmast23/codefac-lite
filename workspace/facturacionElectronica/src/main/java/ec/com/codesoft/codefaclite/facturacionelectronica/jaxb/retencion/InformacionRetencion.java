@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
     "contribuyenteEspecial",
     "obligadoContabilidad",
     "tipoIdentificacionSujetoRetenido",
+    "parteRel",
     "razonSocialSujetoRetenido",
     "identificacionSujetoRetenido",
     "periodoFiscal",})
@@ -27,6 +28,7 @@ public class InformacionRetencion implements Serializable {
     private String contribuyenteEspecial;
     private String obligadoContabilidad;
     private String tipoIdentificacionSujetoRetenido;
+    private String parteRel;
     private String razonSocialSujetoRetenido;
     private String identificacionSujetoRetenido;
     /**
@@ -80,6 +82,15 @@ public class InformacionRetencion implements Serializable {
 
     public void setTipoIdentificacionSujetoRetenido(String tipoIdentificacionSujetoRetenido) {
         this.tipoIdentificacionSujetoRetenido = tipoIdentificacionSujetoRetenido;
+    }
+
+    @XmlElement(name = "parteRel")   
+    public String getParteRel() {
+        return parteRel;
+    }
+
+    public void setParteRel(String parteRel) {
+        this.parteRel = parteRel;
     }
 
     @XmlElement(name = "razonSocialSujetoRetenido")   

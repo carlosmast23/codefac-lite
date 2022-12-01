@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.reporte;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.DetalleRetencionComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.DocumentoSustento;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.RetencionComprobante;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,22 +33,26 @@ public class RetencionElectronicaReporte extends ComprobanteElectronicoReporte{
     @Override
     public List<Object> getDetalles() {
         List<Object> detalles=new ArrayList<Object>();
-        for (DetalleRetencionComprobante detalleComprobante : retencionComprobante.getDetalles()) {
+        for (DocumentoSustento documentoSustento : retencionComprobante.getDocsSustento()) {
             
-            DetalleRetencionReporteData reporteData=new DetalleRetencionReporteData();
+            for (DetalleRetencionComprobante detalleComprobante : documentoSustento.getRetenciones()) 
+            {            
+                DetalleRetencionReporteData reporteData=new DetalleRetencionReporteData();
+
+                reporteData.setComprobante(mapCodeAndNameTipoDocumento.get(documentoSustento.getCodDocSustento()));
+                reporteData.setNumero(documentoSustento.getNumDocSustento());
+                reporteData.setFechaEmision(documentoSustento.getFechaEmisionDocSustento());
+                reporteData.setEjercicioFiscal(retencionComprobante.getInfoRetencion().getPeriodoFiscal());
+                reporteData.setBaseImponible(detalleComprobante.getBaseImponible().toString());
+                reporteData.setImpuesto(mapCodeAndNameTipoRetecion.get(detalleComprobante.getCodigo()));
+                reporteData.setCodigo(detalleComprobante.getCodigoRetencion());
+                reporteData.setPorcentajeRetencion(detalleComprobante.getPorcentajeRetener().toString());
+                reporteData.setValorRetenido(detalleComprobante.getValorRetenido().toString());
+
+                detalles.add(reporteData);
+            }
             
-            reporteData.setComprobante(mapCodeAndNameTipoDocumento.get(detalleComprobante.getCodDocSustento()));
-            reporteData.setNumero(detalleComprobante.getNumDocSustento());
-            reporteData.setFechaEmision(detalleComprobante.getFechaEmisionDocSustento());
-            reporteData.setEjercicioFiscal(retencionComprobante.getInfoRetencion().getPeriodoFiscal());
-            reporteData.setBaseImponible(detalleComprobante.getBaseImponible().toString());
-            reporteData.setImpuesto(mapCodeAndNameTipoRetecion.get(detalleComprobante.getCodigo()));
-            reporteData.setCodigo(detalleComprobante.getCodigoRetencion());
-            reporteData.setPorcentajeRetencion(detalleComprobante.getPorcentajeRetener().toString());
-            reporteData.setValorRetenido(detalleComprobante.getValorRetenido().toString());
-            
-            detalles.add(reporteData);
-        }
+        }        
         return detalles;
     }
 

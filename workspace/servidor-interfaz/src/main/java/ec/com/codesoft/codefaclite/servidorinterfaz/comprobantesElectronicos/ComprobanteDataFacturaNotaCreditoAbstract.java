@@ -104,17 +104,18 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             //TODO: Corregir esta parte por que cuando modifico un producto el iva , se va a modificar los reportes de la factura y eso debe ser datos fijos
             respuesta = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(comprobanteDetalle.getTipoDocumentoEnum(), comprobanteDetalle.getReferenciaId());
             CatalogoProducto catalogoProducto = respuesta.catalogoProducto;            
-            List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
+            /*List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
             ImpuestoComprobante impuesto = new ImpuestoComprobante();
             impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
             impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo() + "");
             impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa() + ""));
-            impuesto.setBaseImponible(comprobanteDetalle.totalSinImpuestosConIce());
+            impuesto.setBaseImponible(comprobanteDetalle.totalSinImpuestosConIce());*/
             
             //Obtengo nuevamente el iva calculado por que necesito todos los decimales para tener el valor exacto y en la base de datos esta grabado solo con 2 decimales y eso puede generar problemas
             //TODO: Analizar si tengo que mandar este dato del valor redondeado o del valor origina
-            impuesto.setValor(comprobanteDetalle.recalcularIva());
-            System.out.println("valor: "+impuesto.getValor());
+            
+            //impuesto.setValor(comprobanteDetalle.recalcularIva());
+            //System.out.println("valor: "+impuesto.getValor());
             
             /**
              * Verificar valores para el total de impuesto
@@ -124,26 +125,20 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             /**
              * Redondedo los impuestos despues de hacer los calculos por que el Sri solo acepta con 2 decimales
              */
-            impuesto.setValor(impuesto.getValor().setScale(2, RoundingMode.HALF_UP));
+            /*impuesto.setValor(impuesto.getValor().setScale(2, RoundingMode.HALF_UP));
             impuesto.setBaseImponible(impuesto.getBaseImponible().setScale(2, RoundingMode.HALF_UP));
             
             
-            listaComprobantes.add(impuesto);
+            listaComprobantes.add(impuesto);*/
+            List<ImpuestoComprobante> listaComprobantes = crearImpuestoDetalles(
+                    catalogoProducto, 
+                    comprobanteDetalle.totalSinImpuestosConIce(), 
+                    comprobanteDetalle.recalcularIva(), 
+                    comprobanteDetalle.getTotal(),
+                    comprobanteDetalle.getValorIce()
+            );
 
-            /**
-             * Agregando el valor del ICE
-             */
-            if (catalogoProducto.getIce() != null) {
-                ImpuestoComprobante impuestoIce = new ImpuestoComprobante();
-                impuestoIce.setCodigo(catalogoProducto.getIce().getImpuesto().getCodigoSri());
-                impuestoIce.setCodigoPorcentaje(catalogoProducto.getIce().getCodigo() + "");
-                impuestoIce.setTarifa(new BigDecimal(catalogoProducto.getIce().getPorcentaje() + ""));
-                impuestoIce.setBaseImponible(comprobanteDetalle.getTotal().setScale(2, RoundingMode.HALF_UP));
-                impuestoIce.setValor(comprobanteDetalle.getValorIce().setScale(2, RoundingMode.HALF_UP));
-                //sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIce(), impuestoIce);
-                listaComprobantes.add(impuestoIce);
-
-            }
+            
             return listaComprobantes;
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
@@ -151,6 +146,48 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public static List<ImpuestoComprobante> crearImpuestoDetalles(CatalogoProducto catalogoProducto,BigDecimal totalSinImpuestosConIce,BigDecimal ivaRecalculado,BigDecimal total,BigDecimal valorIce)
+    {
+        List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
+        ImpuestoComprobante impuesto = new ImpuestoComprobante();
+        impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
+        impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo() + "");
+        impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa() + ""));
+        impuesto.setBaseImponible(totalSinImpuestosConIce);
+        
+        //Obtengo nuevamente el iva calculado por que necesito todos los decimales para tener el valor exacto y en la base de datos esta grabado solo con 2 decimales y eso puede generar problemas
+        //TODO: Analizar si tengo que mandar este dato del valor redondeado o del valor origina
+        impuesto.setValor(ivaRecalculado);
+        System.out.println("valor: " + impuesto.getValor());
+        
+        /**
+         * Redondedo los impuestos despues de hacer los calculos por que el Sri
+         * solo acepta con 2 decimales
+         */
+        impuesto.setValor(impuesto.getValor().setScale(2, RoundingMode.HALF_UP));
+        impuesto.setBaseImponible(impuesto.getBaseImponible().setScale(2, RoundingMode.HALF_UP));
+
+        listaComprobantes.add(impuesto);
+        
+        /**
+         * Agregando el valor del ICE
+         */
+        if (catalogoProducto.getIce() != null) {
+            ImpuestoComprobante impuestoIce = new ImpuestoComprobante();
+            impuestoIce.setCodigo(catalogoProducto.getIce().getImpuesto().getCodigoSri());
+            impuestoIce.setCodigoPorcentaje(catalogoProducto.getIce().getCodigo() + "");
+            impuestoIce.setTarifa(new BigDecimal(catalogoProducto.getIce().getPorcentaje() + ""));
+            impuestoIce.setBaseImponible(total.setScale(2, RoundingMode.HALF_UP));
+            impuestoIce.setValor(valorIce.setScale(2, RoundingMode.HALF_UP));
+            //sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIce(), impuestoIce);
+            listaComprobantes.add(impuestoIce);
+
+        }
+        
+        return listaComprobantes;
+        
     }
    
    
