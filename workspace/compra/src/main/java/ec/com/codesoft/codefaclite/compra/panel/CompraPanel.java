@@ -370,6 +370,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel11, gridBagConstraints);
 
+        txtDescuentoImpuestos.setEditable(false);
         txtDescuentoImpuestos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtDescuentoImpuestos.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtDescuentoImpuestos.setText("0.00");
@@ -442,6 +443,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel19, gridBagConstraints);
 
+        txtDescuentoSinImpuestos.setEditable(false);
         txtDescuentoSinImpuestos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtDescuentoSinImpuestos.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtDescuentoSinImpuestos.setText("0.00");

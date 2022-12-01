@@ -77,6 +77,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -445,6 +446,7 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().setText("");
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
+        getTxtDescuentoItem().setText("0");
         getTxtCantidadItem().setText("");
         getTxtLoteNombre().setText("");
         getCmbPresentacionProducto().removeAllItems();
@@ -869,6 +871,7 @@ public class CompraModel extends CompraPanel{
                     seleccionarComboTipoIva(compraDetalle.getPorcentajeIva());
                     getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
                     getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
+                    getTxtDescuentoItem().setText(compraDetalle.getDescuento()+"");
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
                     getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
                     getCmbIvaDetalle().setSelectedItem(compraDetalle.getPorcentajeIva());
@@ -1048,6 +1051,7 @@ public class CompraModel extends CompraPanel{
         BigDecimal costo = new BigDecimal(getTxtPrecionUnitarioItem().getText());
         BigDecimal cantidad = new BigDecimal(getTxtCantidadItem().getText());
         BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText());
+        BigDecimal descuento=new BigDecimal(getTxtDescuentoItem().getText());
         //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
         Integer porcentajeIva=(Integer) getCmbIvaDetalle().getSelectedItem();
         
@@ -1059,7 +1063,7 @@ public class CompraModel extends CompraPanel{
         //TODO:Verificar por que existen 2 validaciones para la vista
         if(verificarCamposValidados())
         {
-            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario, getTxtDescripcionItem().getText(),porcentajeIva);
+            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario,descuento,getTxtDescripcionItem().getText(),porcentajeIva);
         }
         
     }
@@ -1106,8 +1110,8 @@ public class CompraModel extends CompraPanel{
                 //compra.setDetalles(null);
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {
-                    //TODO:Mejorar esta parte para no pasar los mismos datos
-                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(), compraDetalle.getDescripcion(),compraDetalle.getPorcentajeIva());
+                    //TODO:Mejorar esta parte para no pasar los mismos datos                    
+                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getDescripcion(),compraDetalle.getPorcentajeIva());
                     
                 }
                 
@@ -1212,7 +1216,7 @@ public class CompraModel extends CompraPanel{
      */
     private void mostrarDatosTabla()
     {
-        String[] titulo={"Código","Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Valor Unitario","Valor Total"};
+        String[] titulo={"Código","Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Desc","Val Unit","Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         for (CompraDetalle detalle : detalles) {
@@ -1230,6 +1234,7 @@ public class CompraModel extends CompraPanel{
             fila.add(loteCodigo);
             fila.add(detalle.getValorSriRetencionIVA()+"");
             fila.add(detalle.getValorSriRetencionRenta()+"");
+            fila.add(detalle.getDescuento()+"");
             fila.add(detalle.getPrecioUnitario()+"");
             fila.add(detalle.getSubtotal()+"");
             this.modeloTablaDetallesCompra.addRow(fila);
@@ -1348,6 +1353,7 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().setEnabled(true);
         getTxtCantidadItem().setEnabled(true);
         getTxtPrecionUnitarioItem().setEnabled(true);
+        getTxtDescuentoItem().setEnabled(true);
         
     }
     
@@ -1357,13 +1363,14 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().setEnabled(false);
         getTxtCantidadItem().setEnabled(false);
         getTxtPrecionUnitarioItem().setEnabled(false);
-        
+        getTxtDescuentoItem().setEnabled(false);
     }
     
     private void limpiarCampos()
     {
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
+        getTxtDescuentoItem().setText("0");
         getTxtProductoItem().setText("");
         getTxtCantidadItem().setText("");
         getTxtLoteNombre().setText("");
@@ -1379,7 +1386,7 @@ public class CompraModel extends CompraPanel{
     }
    
     //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
-    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,String descripcion,Integer porcentajeIva)
+    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,BigDecimal descuento,String descripcion,Integer porcentajeIva)
     {
         Boolean agregar = true;
         
@@ -1404,7 +1411,7 @@ public class CompraModel extends CompraPanel{
             compraDetalle.setCompra(compra);
             compraDetalle.setDescripcion(descripcion);
             //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
-            compraDetalle.setDescuento(BigDecimal.ZERO);
+            compraDetalle.setDescuento(descuento);
             compraDetalle.setLote(lote);
             /*if(productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
             {
