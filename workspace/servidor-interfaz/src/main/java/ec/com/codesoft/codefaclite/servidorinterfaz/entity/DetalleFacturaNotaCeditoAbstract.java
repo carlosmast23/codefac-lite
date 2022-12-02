@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -292,10 +293,22 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void calcularDescuentoConPorcentaje(BigDecimal porcentajeDescuento,EnumSiNo incluidoIvaSiNo,BigDecimal ivaDefecto)
     {
         porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-        BigDecimal total = getCantidad().multiply(getPrecioUnitario().setScale(5, BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
-        descuento = total.multiply(porcentajeDescuento).setScale(2,BigDecimal.ROUND_HALF_UP); //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
+        BigDecimal precioUnitario=getPrecioUnitario();
+        BigDecimal total = getCantidad().multiply(precioUnitario.setScale(5, BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
+        
+        //descuento = total.multiply(porcentajeDescuento).setScale(2,BigDecimal.ROUND_HALF_UP); //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
         if (incluidoIvaSiNo.equals(EnumSiNo.SI)) {
+            
+            //Para el caso que incluya iva le hago que calcule el porcentaje de descuento del total inlcuido iva
+            total=UtilidadesImpuestos.agregarValorIva(ivaDefecto, total);
+            
+            descuento = total.multiply(porcentajeDescuento).setScale(2,BigDecimal.ROUND_HALF_UP); //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
+            
             descuento = UtilidadesImpuestos.quitarValorIva(ivaDefecto, descuento, 6);
+        }
+        else
+        {
+            descuento = total.multiply(porcentajeDescuento).setScale(2,BigDecimal.ROUND_HALF_UP); //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
         }
 
         //facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));

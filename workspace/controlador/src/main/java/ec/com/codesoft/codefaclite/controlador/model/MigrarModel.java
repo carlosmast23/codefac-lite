@@ -244,6 +244,7 @@ public abstract class MigrarModel extends MigrarPanel{
         getPnlCamposRequeridos().removeAll();
         
         for (ExcelMigrar.CampoMigrarInterface campoMigrar : this.excelMigrar.obtenerCampos()) {
+            System.out.println("CAMPO REQUERIDO: "+campoMigrar.getNombre());
             JCheckBox jcheckBox=new JCheckBox(campoMigrar.getNombre());
             jcheckBox.setSelected(campoMigrar.getCampoRequerido());
             getPnlCamposRequeridos().add(jcheckBox);
