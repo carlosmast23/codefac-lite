@@ -541,7 +541,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         validarDatoRepetido(p,estadoEnum,new ValidarDatoRepetidoIf() {
             @Override
             public Object verificarDatoRepetido() throws ServicioCodefacException, RemoteException {
-                return buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
+                //Si es empaque no hago esa validacion por que esos datos son copias del principal
+                //TODO: toca revisar esa logica por que sideberia validar por que si modifica otro codigo conocido puede crear conflicto
+                if(!p.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+                {
+                    return buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
+                }
+                return null;
             }
         });
         
