@@ -418,18 +418,6 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
     {
-        validarEdicionCampo(p.getEmpresa(), estadoEnum, new ValidarEdicionCampoIf<Producto>() {
-            @Override
-            public Object getId() {
-                return p.getIdProducto();
-            }
-
-            @Override
-            public Boolean compararCampos(Producto dato) {
-                return p.getCodigoPersonalizado().equals(dato.getCodigoPersonalizado());
-            }
-        });
-        
         
         if(p.getCodigoPersonalizado()==null || p.getCodigoPersonalizado().trim().isEmpty())
         {
@@ -476,7 +464,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
          *          VALIDAR QUE NO EXITAN PRODUCTOS DUPLICADOS
          * =================================================================
          */
-        if(estadoEnum.equals(CrudEnum.EDITAR))
+        /*if(estadoEnum.equals(CrudEnum.EDITAR))
         {
             //validarEdicionCodigoPrincipal(p);
             
@@ -488,7 +476,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                     return ;
                 }
             }
-        }
+        }*/
         
         //Terminar de hacer esta parte pero tomar en cuenta que luego cuando traigan productos de importacion me esta generando problemas
         //Producto productoDuplicado=this.buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
@@ -547,6 +535,28 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             }
             
         }
+        
+        //VALIDACIONES ADICIONALES que requieren MAYOR POTENCIAL DE PROCESAMIENTO
+        //Validar que no existe un dato repedito al crear o al editar
+        validarDatoRepetido(p,estadoEnum,new ValidarDatoRepetidoIf() {
+            @Override
+            public Object verificarDatoRepetido() throws ServicioCodefacException, RemoteException {
+                return buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
+            }
+        });
+        
+        //Validar que se puede modificar o no el codigo del mismo datos
+        validarEdicionCampo(p.getEmpresa(), estadoEnum, new ValidarEdicionCampoIf<Producto>() {
+            @Override
+            public Object getId() {
+                return p.getIdProducto();
+            }
+
+            @Override
+            public Boolean compararCampos(Producto dato) {
+                return p.getCodigoPersonalizado().equals(dato.getCodigoPersonalizado());
+            }
+        });
         
         
 

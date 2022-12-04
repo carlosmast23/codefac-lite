@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
@@ -405,10 +406,32 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         //mapParametros.put(campo,datoComparacion);
         List resultadoList=obtenerPorMap(mapParametros);        
         if(resultadoList.size()>0)
-        {
-            throw new ServicioCodefacException("No se puede crear DATOS REPETIDOS ");
+        {            
+            throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje);
         }
         //return false;
+    }
+    
+    public void validarDatoRepetido(Object datoProcesando,CrudEnum estadoEnum,ValidarDatoRepetidoIf validarDatoRepetidoIf) throws ServicioCodefacException, RemoteException
+    {
+        Object resultado=validarDatoRepetidoIf.verificarDatoRepetido();
+        
+        if(resultado!=null)
+        {
+            if(estadoEnum.equals(CrudEnum.CREAR))
+            {
+                throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje);
+            }
+            else if(estadoEnum.equals(CrudEnum.EDITAR))
+            {
+                //Si el dato obtenido corresponde al mismo entones no debe editar
+                if(!resultado.equals(datoProcesando))
+                {
+                    throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje);
+                }
+            }
+        }
+        
     }
     
     /**
@@ -442,6 +465,12 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         public Object getId();
         public Boolean compararCampos(T dato);
     }
+    
+    public interface ValidarDatoRepetidoIf<T>
+    {
+        public T verificarDatoRepetido() throws ServicioCodefacException, RemoteException; 
+    }
+
     
     
 }

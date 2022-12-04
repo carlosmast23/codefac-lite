@@ -89,6 +89,7 @@ public abstract class MensajeCodefacSistema {
     public static abstract  class ErrorValidación
     {
         public static final CodefacMsj ERROR_VALIDAR_NUMEROS = new CodefacMsj(CodefacMsj.TITULO_ERROR,"El formato es incorrecto para el ingreso de números",MENSAJE_INCORRECTO);
+        public static final CodefacMsj ERROR_DATO_REPETIDO = new CodefacMsj(CodefacMsj.TITULO_ERROR,"No se puede crear DATOS REPETIDOS",MENSAJE_INCORRECTO);
     }
     
     public static abstract  class Exportacion
