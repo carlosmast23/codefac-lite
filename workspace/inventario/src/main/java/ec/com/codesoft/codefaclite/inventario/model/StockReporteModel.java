@@ -364,6 +364,10 @@ public class StockReporteModel extends StockMinimoPanel{
                             costoPromedio=UtilidadesImpuestos.agregarValorIva(producto.getTarifaIva(), costoPromedio);
                             costoPromedio.setScale(2, RoundingMode.HALF_UP);
                             
+                            //Agregar el iva al último costo
+                            ultimoCosto=UtilidadesImpuestos.agregarValorIva(producto.getTarifaIva(), ultimoCosto);
+                            ultimoCosto=ultimoCosto.setScale(2, RoundingMode.HALF_UP);
+                            
                         }
                         
                         //Kardex kardexTemp = (Kardex) objeto[2];

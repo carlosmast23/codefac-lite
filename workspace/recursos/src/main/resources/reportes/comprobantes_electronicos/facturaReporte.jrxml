@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="2.35794769100009"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="783"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -905,13 +905,6 @@
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<text><![CDATA[Ahorro por subsidio]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="417" y="111" width="138" height="12" uuid="8ede463a-cdcc-4704-b45d-f7b2fc3bb657"/>
-				<textElement>
-					<font size="7" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Nota : Incluye Iva cuando aplique]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="417" y="85" width="69" height="13" uuid="9d743f21-5f09-4468-a2e7-1c4ec8f1469b">

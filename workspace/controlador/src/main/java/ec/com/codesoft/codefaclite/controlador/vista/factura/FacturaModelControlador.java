@@ -62,6 +62,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -346,7 +347,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         interfaz.setearCostoDetalleTxt("");
         if(costo!=null)
         {
-            interfaz.setearCostoDetalleTxt(costo+"");
+            try {
+                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.SI))
+                {
+                    String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+                    costo= UtilidadesImpuestos.agregarValorIva(new BigDecimal(tarifaStr),costo);
+                    interfaz.setearCostoDetalleTxt(costo+"");
+                }
+                else
+                {
+                    interfaz.setearCostoDetalleTxt(costo+"");
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         interfaz.setearFechaCaducidadTxt("");

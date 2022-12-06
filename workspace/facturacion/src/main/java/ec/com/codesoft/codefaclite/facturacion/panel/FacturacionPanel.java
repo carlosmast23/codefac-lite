@@ -504,6 +504,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 15;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 100;
+        gridBagConstraints.ipady = 15;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         pnlDetalles.add(jScrollPane1, gridBagConstraints);
