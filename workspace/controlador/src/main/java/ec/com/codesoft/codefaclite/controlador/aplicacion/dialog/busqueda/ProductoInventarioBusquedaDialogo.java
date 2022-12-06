@@ -71,7 +71,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         titulo.add(new ColumnaDialogo("Marca", 0.3d));
         titulo.add(new ColumnaDialogo("Aplicación", 0.3d));
         titulo.add(new ColumnaDialogo("Ubicación", 0.2d));
-        titulo.add(new ColumnaDialogo("Pvp", 0.10d));
+        titulo.add(new ColumnaDialogo("Costo", 0.10d));
         titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
         titulo.add(new ColumnaDialogo("IVA", 0.05d));        
         titulo.add(new ColumnaDialogo("Stock", 0.05d));        
@@ -208,7 +208,8 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         vector.add((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
         vector.add((producto.getAplicacionProducto()!=null)?producto.getAplicacionProducto():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
-        vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
+        vector.add((kardex.getCostoPromedio()!=null)?kardex.getCostoPromedio().setScale(3,RoundingMode.HALF_UP)+"":"");
+        //vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
         vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");        
         vector.add((kardex.getStock()!=null)?kardex.getStock().setScale(2,RoundingMode.HALF_UP):"");

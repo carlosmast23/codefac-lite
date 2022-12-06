@@ -2327,8 +2327,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblTotalDescuento().setText("0.00");
         getLblValorIce().setText("0.00");
         getLblIva12().setText("0.00");
-        getLblValorIRBPNR().setText("0.00");
-        getLblPropina10().setText("0.00");
+        //getLblValorIRBPNR().setText("0.00");
+        //getLblPropina10().setText("0.00");
         getTxtValorTotal().setText("0.00");
 
         getBtnEditarDetalle().setEnabled(false);

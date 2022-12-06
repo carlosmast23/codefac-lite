@@ -933,8 +933,15 @@ public class Producto implements Serializable, Comparable<Producto> {
         {
             return valorUnitario;
         }
-        BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        
+        //BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        BigDecimal tarifa= getTarifaIva();
         return UtilidadesImpuestos.agregarValorIva(tarifa, valorUnitario);
+    }
+    
+    public BigDecimal getTarifaIva()
+    {
+        return new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
     }
     
     public BigDecimal getPrecioDistribuidorConIva() {

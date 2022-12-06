@@ -390,6 +390,21 @@ public class KardexFacade extends AbstractFacade<Kardex> {
 
     }
     
+    /**
+     * Metodo que me va a permitir agregar el iva en los precios, costos y utilidades cuando requiere agregar el iva
+     * @return 
+     */
+    /*private List<Object[]> agregarIvaResultado(List<Object[]> resultadoList)
+    {
+        for (Object[] objeto : resultadoList) {
+            Producto producto=(Producto) objeto[0];
+            BigDecimal costoPromedio=(BigDecimal)objeto[2];
+            BigDecimal ultimoCosto = (BigDecimal)objeto[5];
+            
+            
+        }
+    }*/
+    
     //Metodo temporal para no mostrar los productos on stock cero en el reporte de inventairo
     //TODO: Ver como mejorar
     @Deprecated

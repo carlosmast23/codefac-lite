@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.dataExport.ProductoExportar;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
@@ -730,6 +731,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtPV5().setText("0");
         getTxtPV6().setText("0");
         getTxtImagenProducto().setText("");
+        getTxtUltimoCosto().setText("0");
+        getTxtCostoPromedio().setText("0");
+        getTxtStock().setText("0");
         //getTxtStockInicial().setText("0");
         getChkVentas().setSelected(true);
         getChkCompras().setSelected(true);
@@ -787,7 +791,24 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         actualizarTablaEnsamble();
         actualizarTablaEmpaques();
         verificarVisibleBotonEditarPresentacion();
+        cargarDatoKardex(controlador.producto);
         cargarFotoFormulario();
+        
+    }
+    
+    private void cargarDatoKardex(Producto producto)
+    {
+        try {
+            Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
+            if(kardex!=null)
+            {
+                getTxtUltimoCosto().setText(kardex.getPrecioUltimo()+"");
+                getTxtCostoPromedio().setText(kardex.getCostoPromedio()+"");
+                getTxtStock().setText(kardex.getStock()+"");
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
