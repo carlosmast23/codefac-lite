@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="2.35794769100009"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="830"/>
+	<property name="ireport.y" value="240"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -162,7 +162,7 @@
 				<text><![CDATA[CLAVE DE ACCESO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="71" y="258" width="331" height="15" uuid="7a51c9a1-117a-4cd1-9e9e-2050b5f8424b"/>
+				<reportElement x="71" y="258" width="331" height="13" uuid="7a51c9a1-117a-4cd1-9e9e-2050b5f8424b"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -191,7 +191,7 @@
 				<textFieldExpression><![CDATA[$P{ambiente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="-2" y="258" width="73" height="15" uuid="b0655437-1765-43fa-8aa8-396a8dd3634b"/>
+				<reportElement x="-2" y="258" width="73" height="13" uuid="b0655437-1765-43fa-8aa8-396a8dd3634b"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
@@ -206,7 +206,7 @@
 				<textFieldExpression><![CDATA[$P{nombre_documento}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="402" y="257" width="77" height="15" uuid="853671ed-6041-4aa4-badb-4c46f5b0ee08"/>
+				<reportElement x="402" y="258" width="77" height="13" uuid="853671ed-6041-4aa4-badb-4c46f5b0ee08"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
@@ -221,7 +221,7 @@
 				<text><![CDATA[No:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="71" y="272" width="86" height="15" uuid="3fd4f4c5-365a-4994-86dc-4012c478e913"/>
+				<reportElement x="71" y="272" width="141" height="13" uuid="3fd4f4c5-365a-4994-86dc-4012c478e913"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -235,7 +235,7 @@
 				<textFieldExpression><![CDATA[$P{ruc}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="157" y="273" width="55" height="15" uuid="a8db84d5-f603-4ea1-acc4-d38d75d78f34">
+				<reportElement x="16" y="285" width="55" height="13" uuid="a8db84d5-f603-4ea1-acc4-d38d75d78f34">
 					<printWhenExpression><![CDATA[new Boolean($P{direccion_comprador}!=null && !$P{direccion_comprador}.isEmpty() )]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -245,7 +245,9 @@
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="205" width="130" height="12" uuid="fb1587ca-fa20-4e4d-83ee-31037db32eda"/>
+				<reportElement x="6" y="205" width="130" height="12" uuid="fb1587ca-fa20-4e4d-83ee-31037db32eda">
+					<printWhenExpression><![CDATA[new Boolean($P{contribuyente_especial}!=null && !$P{contribuyente_especial}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="8" isBold="true"/>
 					<paragraph tabStopWidth="40"/>
@@ -321,7 +323,7 @@
 				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="212" y="272" width="336" height="26" isRemoveLineWhenBlank="true" uuid="c3f69d9f-76ab-4743-a414-32a0db491e45"/>
+				<reportElement x="71" y="285" width="477" height="13" isRemoveLineWhenBlank="true" uuid="c3f69d9f-76ab-4743-a414-32a0db491e45"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -334,13 +336,13 @@
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Dashed"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Agente de Retención Resolución "+$P{pl_agenteRetencionResolucion}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="272" width="66" height="15" uuid="0339d62a-37fd-4428-8ee1-2c9c89925dfc"/>
+				<reportElement x="5" y="272" width="66" height="13" uuid="0339d62a-37fd-4428-8ee1-2c9c89925dfc"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="3" rightIndent="3"/>

@@ -75,7 +75,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel10 = new javax.swing.JLabel();
         txtNombreProducto = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        txtNombreProducto1 = new javax.swing.JTextField();
+        txtCodigoProducto = new javax.swing.JTextField();
         txtNombreProducto2 = new javax.swing.JTextField();
         lblEspacio123123 = new javax.swing.JLabel();
         lblEspacio33434 = new javax.swing.JLabel();
@@ -342,7 +342,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(txtNombreProducto1, gridBagConstraints);
+        jPanel1.add(txtCodigoProducto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
@@ -501,9 +501,9 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblMostrarDetalle;
     private javax.swing.JTable tblDato;
     private javax.swing.JTextField txtCategoria;
+    private javax.swing.JTextField txtCodigoProducto;
     private javax.swing.JSpinner txtDiasCaducidad;
     private javax.swing.JTextField txtNombreProducto;
-    private javax.swing.JTextField txtNombreProducto1;
     private javax.swing.JTextField txtNombreProducto2;
     // End of variables declaration//GEN-END:variables
 
@@ -691,6 +691,15 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         this.cmbIncluirIva = cmbIncluirIva;
     }
 
+    public JTextField getTxtCodigoProducto() {
+        return txtCodigoProducto;
+    }
+
+    public void setTxtCodigoProducto(JTextField txtCodigoProducto) {
+        this.txtCodigoProducto = txtCodigoProducto;
+    }
+
+    
     
     
 }

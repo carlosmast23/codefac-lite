@@ -1222,12 +1222,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa) throws java.rmi.RemoteException
     {
-        return getFacade().consultarStockFacade(bodega,nombreProducto,categoria,tipo,segmento,empresa,KardexOrdenarEnum.NOMBRE,TipoStockEnum.TODOS,TipoUbicacionEnum.TODOS);
+        return getFacade().consultarStockFacade(bodega,nombreProducto,null,categoria,tipo,segmento,empresa,KardexOrdenarEnum.NOMBRE,TipoStockEnum.TODOS,TipoUbicacionEnum.TODOS);
     }
     
-    public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException
+    public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException
     {
-        return getFacade().consultarStockFacade(bodega,nombreProducto,categoria,tipo,segmento,empresa,ordenEnum,tipoStockEnum,tipoUbicacionEnum);
+        
+        return getFacade().consultarStockFacade(bodega,nombreProducto,codigoProducto,categoria,tipo,segmento,empresa,ordenEnum,tipoStockEnum,tipoUbicacionEnum);
     }
 
     public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException

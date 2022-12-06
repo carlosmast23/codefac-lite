@@ -248,9 +248,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
         //Kardex k;
-        //k.getProducto().getUbicacion();
+        //k.getProducto().getCodigoPersonalizado();
          //k.getReserva();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
         //k.getProducto().getNombre()
@@ -292,6 +292,12 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         if(nombreProducto!=null)
         {
             whereNombreProducto=" and LOWER(k.producto.nombre) like LOWER(?9) ";
+        }
+        
+        String whereCodigoProducto="";
+        if(codigoProducto!=null)
+        {
+            whereCodigoProducto=" and LOWER(k.producto.codigoPersonalizado) like LOWER(?10) ";
         }
         
         
@@ -342,7 +348,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             tipoUbicacionWhere=" AND ( k.producto.ubicacion IS NULL OR k.producto.ubicacion='' ) ";
         }
         
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+orderBy;
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+orderBy;
         Query query = getEntityManager().createQuery(queryString);
         
         
@@ -378,6 +384,11 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         if(nombreProducto!=null)
         {
             query.setParameter(9, nombreProducto);
+        }
+        
+        if(codigoProducto!=null)
+        {
+            query.setParameter(10, codigoProducto);
         }
         
         //query.setParameter(3,GeneralEnumEstado.ELIMINADO.getEstado());
