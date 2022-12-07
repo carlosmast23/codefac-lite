@@ -1272,7 +1272,7 @@ public class CompraModel extends CompraPanel{
     
     private void mostrarDatosTablaSinRetencion()
     {
-        String[] titulo={"Cantidad","Descripción","Presentación","Valor Unitario","Valor Total"};
+        String[] titulo={"Cantidad","Código","Descripción","Presentación","Valor Unitario","Valor Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         
@@ -1290,6 +1290,7 @@ public class CompraModel extends CompraPanel{
                 
                 Vector<String> fila=new Vector<String>();
                 fila.add(detalle.getCantidad()+"");
+                fila.add(detalle.getProductoProveedor().getProducto().getCodigoPersonalizado()+"");
                 fila.add(detalle.getDescripcion()+"");
                 fila.add(presentacionProductoStr);
                 fila.add(detalle.getPrecioUnitario()+"");
