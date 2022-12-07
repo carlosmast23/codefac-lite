@@ -797,8 +797,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 //Todo: Tener en cuenta que este codigo se daño pero no se el por que
                 //carteraDetalle.setSaldo(detalle.getTotal());
                 //carteraDetalle.setTotal(detalle.getTotal());
-                carteraDetalle.setSaldo(detalle.calcularTotalFinalConTodosDecimales());
-                carteraDetalle.setTotal(detalle.calcularTotalFinalConTodosDecimales());
+                //carteraDetalle.setSaldo(detalle.calcularTotalFinalConTodosDecimales());
+                //carteraDetalle.setTotal(detalle.calcularTotalFinalConTodosDecimales());
+                carteraDetalle.setSaldo(detalle.calcularTotalFinal());
+                carteraDetalle.setTotal(detalle.calcularTotalFinal());
+                System.out.println(carteraDetalle.getTotal());
                 carteraDetalle.setId(carteraDetalle.generarIdTemporal() * -1l);
                 cartera.addDetalle(carteraDetalle);
                 
@@ -810,13 +813,13 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                  * sistema
                  */
                 if (carteraFactura != null) {
-                    CarteraCruce carteraCruceRenta = new CarteraCruce();
-                    carteraCruceRenta.setCarteraAfectada(carteraFactura);
-                    carteraCruceRenta.setCarteraDetalle(carteraDetalle);
-                    carteraCruceRenta.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                    carteraCruceRenta.setFechaCruce(UtilidadesFecha.getFechaHoy());
-                    carteraCruceRenta.setValor(detalle.calcularTotalFinalConTodosDecimales());
-                    cruces.add(carteraCruceRenta);
+                    CarteraCruce carteraCruce = new CarteraCruce();
+                    carteraCruce.setCarteraAfectada(carteraFactura);
+                    carteraCruce.setCarteraDetalle(carteraDetalle);
+                    carteraCruce.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                    carteraCruce.setFechaCruce(UtilidadesFecha.getFechaHoy());
+                    carteraCruce.setValor(detalle.calcularTotalFinal());
+                    cruces.add(carteraCruce);
                 }
             }
         } catch (RemoteException ex) {

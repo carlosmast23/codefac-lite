@@ -369,7 +369,8 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
      * @return 
      */
     public BigDecimal calcularTotalFinal() {
-        return this.total.add(iva).add(this.valorIce);
+        BigDecimal totalFinal=this.total.add(iva).add(this.valorIce);        
+        return totalFinal;
     }
     
     public BigDecimal calcularTotalFinalConTodosDecimales() 
