@@ -137,6 +137,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         tableDetallesServicio = new javax.swing.JTable();
         jLabel26 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
+        jToolBar2 = new javax.swing.JToolBar();
 
         setClosable(true);
         setIconifiable(true);
@@ -875,11 +876,17 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel28.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         jLabel28.setText("Productos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         getContentPane().add(jLabel28, gridBagConstraints);
+
+        jToolBar2.setRollover(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 11;
+        getContentPane().add(jToolBar2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -943,6 +950,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JLabel lblDescuentoCompra;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio1234;
@@ -1095,7 +1103,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.textoSimple, nombre = "Observaciones presupuesto")
+    //@ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.textoSimple, nombre = "Observaciones presupuesto")
     public JTextArea getTxtAreaObservaciones() {
         return txtAreaObservaciones;
     }
@@ -1131,7 +1139,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Descripción presupuesto")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSinSaltosLinea, nombre = "Descripción presupuesto")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
     }
