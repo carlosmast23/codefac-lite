@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="180" pageHeight="400" columnWidth="156" leftMargin="12" rightMargin="12" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="2.139837529582628"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="236"/>
+	<property name="ireport.y" value="44"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -202,7 +202,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
@@ -216,7 +216,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
@@ -230,7 +230,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
@@ -244,7 +244,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>

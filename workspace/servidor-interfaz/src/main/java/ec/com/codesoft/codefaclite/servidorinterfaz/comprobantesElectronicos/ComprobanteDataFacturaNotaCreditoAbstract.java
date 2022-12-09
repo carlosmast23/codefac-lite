@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
@@ -150,11 +151,36 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
     
     public static List<ImpuestoComprobante> crearImpuestoDetalles(CatalogoProducto catalogoProducto,BigDecimal totalSinImpuestosConIce,BigDecimal ivaRecalculado,BigDecimal total,BigDecimal valorIce)
     {
+        //TODO: SOLUCION TEMPORAL PARA SOLUCIONAR EL TEMA DEL IVA, por que como ahora no depende el producto del iva, el mismo producto puede tener iva 12 o iva cero
+        ImpuestoDetalle impuestoIva=null;
+        if(ivaRecalculado.compareTo(BigDecimal.ZERO)==0)
+        {
+            try {
+                impuestoIva=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorTarifa(0);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            try 
+            {
+                Integer ivaDefecto=Integer.parseInt(ParametrosSistemaCodefac.IVA_DEFECTO);
+                impuestoIva=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorTarifa(ivaDefecto);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
         ImpuestoComprobante impuesto = new ImpuestoComprobante();
-        impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
-        impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo() + "");
-        impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa() + ""));
+        impuesto.setCodigo(impuestoIva.getImpuesto().getCodigoSri());
+        impuesto.setCodigoPorcentaje(impuestoIva.getCodigo() + "");
+        impuesto.setTarifa(new BigDecimal(impuestoIva.getTarifa() + ""));
         impuesto.setBaseImponible(totalSinImpuestosConIce);
         
         //Obtengo nuevamente el iva calculado por que necesito todos los decimales para tener el valor exacto y en la base de datos esta grabado solo con 2 decimales y eso puede generar problemas
