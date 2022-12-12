@@ -447,6 +447,7 @@ public class CompraModel extends CompraPanel{
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
         getTxtDescuentoItem().setText("0");
+        getTxtCostoItem().setText("");
         getTxtCantidadItem().setText("");
         getTxtLoteNombre().setText("");
         getCmbPresentacionProducto().removeAllItems();
@@ -872,6 +873,7 @@ public class CompraModel extends CompraPanel{
                     getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
                     getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
                     getTxtDescuentoItem().setText(compraDetalle.getDescuento()+"");
+                    //getTxtCostoItem().setText(compraDetalle.getCo);
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
                     getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
                     getCmbIvaDetalle().setSelectedItem(compraDetalle.getPorcentajeIva());

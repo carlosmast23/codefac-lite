@@ -196,8 +196,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
         }
         
-        String queryString = "SELECT k.producto,max(k.stock),k FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+" "
-                + " group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
+        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+" "
+                + " group by k.producto having max(k.stock)<k.producto.cantidadMinima  ";
         
         String orderBy="";
         
