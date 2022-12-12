@@ -78,6 +78,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Factura f;
+        //f.getFechaEmision();
         //f.getEstado();
         //f.getSucursalEmpresa().gete
         //f.getEstadoEnviadoGuiaRemision()
@@ -126,7 +127,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         
         queryString+=filtroStr;
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
-        queryString+=" ORDER BY u.secuencial+0 DESC ";
+        queryString+=" ORDER BY u.fechaEmision DESC ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,filter);
