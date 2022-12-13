@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="200" pageHeight="400" columnWidth="160" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="2.353821282540891"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="146"/>
+	<property name="ireport.zoom" value="4.586931783631369"/>
+	<property name="ireport.x" value="186"/>
+	<property name="ireport.y" value="1527"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -289,7 +289,7 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="209">
+		<band height="220">
 			<staticText>
 				<reportElement x="0" y="107" width="160" height="32" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
 				<textElement>
@@ -359,18 +359,18 @@
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="1" y="139" width="159" height="70" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
-				<subreportParameter name="pl_telefonos">
-					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
-				</subreportParameter>
+				<reportElement x="1" y="139" width="159" height="80" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
 				<subreportParameter name="pl_img_whatsapp">
 					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_img_logo_pie">
-					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_facebook">
 					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_img_telefono">
 					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
@@ -380,6 +380,9 @@
 				</subreportParameter>
 				<subreportParameter name="pl_celular">
 					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_usuario">
+					<subreportParameterExpression><![CDATA[$P{pl_usuario}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_adicional">
 					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>

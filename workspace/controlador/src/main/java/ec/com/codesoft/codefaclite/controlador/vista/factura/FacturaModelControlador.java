@@ -1260,6 +1260,16 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      */
     public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre) 
     {
+        //Revisar el nombre del comproante si tiene un alias
+        if(facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            String aliasNotaVenta=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
+            if(!UtilidadesTextos.verificarNullOVacio(aliasNotaVenta))
+            {
+                nombre=aliasNotaVenta;
+            }
+        }
+        
         FormatoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, FormatoReporteEnum.A2);
         
         if(tipoReporteEnum!=null && tipoReporteEnum.equals(tipoReporteEnum.A4) && facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
