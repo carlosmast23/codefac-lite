@@ -296,6 +296,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda(),impresoraList);
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda2(),impresoraList);
         
+        UtilidadesComboBox.llenarComboBox(getCmbImpresoraFactura(),impresoraList);
+        
         
         //Agregar los tipos de negocios        
         UtilidadesComboBox.llenarComboBox(getCmbTipoNegocio(), TipoNegocioEnum.values());
@@ -379,6 +381,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroImpresoraComanda = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA);
             String nombreImpresora=(parametroImpresoraComanda != null) ? parametroImpresoraComanda.getValor() :null;
             getCmbImpresoraComanda().setSelectedItem(nombreImpresora);
+            
+            ParametroCodefac parametroImpresoraFactura = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA);
+            String nombreImpresoraFactura=(parametroImpresoraFactura != null) ? parametroImpresoraFactura.getValor() :null;
+            getCmbImpresoraFactura().setSelectedItem(nombreImpresoraFactura);
             
             ParametroCodefac parametroImpresoraComanda2 = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
             nombreImpresora=(parametroImpresoraComanda2 != null) ? parametroImpresoraComanda2.getValor() :null;
@@ -895,6 +901,15 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         }
         agregarParametro(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2,impresoraComandaTxt);
         agregarParametroEditar(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
+        
+        impresoraComanda=getCmbImpresoraFactura().getSelectedItem();
+        impresoraComandaTxt=null;
+        if(impresoraComanda!=null)
+        {
+            impresoraComandaTxt=impresoraComanda.toString();
+        }
+        agregarParametro(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA,impresoraComandaTxt);
+        agregarParametroEditar(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA);
 
         agregarParametro(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION, getTxtMotivoTrasladoGuiaRemision().getText());
         agregarParametroEditar(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);

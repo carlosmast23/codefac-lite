@@ -340,7 +340,11 @@ public class KardexModel extends KardexPanel {
                     {
                         //Cuando no encuentra nada seteo un kardex vacio
                         //kardexService.getKardexModificados(productoSeleccionado, cantidadMovimientos, bodega, ProductoEnsamble.EnsambleAccionEnum.AGREGAR)
-                        kardex=kardexService.construirKardexVacioSinPersistencia();
+                        kardex=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodega, productoSeleccionado);
+                        if(kardex==null)
+                        {
+                            kardex=kardexService.construirKardexVacioSinPersistencia();
+                        }
                         cargarTablaKardex();
                     }
                 } catch (RemoteException ex) {

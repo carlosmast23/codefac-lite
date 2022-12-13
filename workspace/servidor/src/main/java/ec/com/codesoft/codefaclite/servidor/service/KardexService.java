@@ -1484,6 +1484,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                System.out.println("Ultimo: "+kardex.getPrecioUltimo());
+                System.out.println("Costo Promedio: "+kardex.getCostoPromedio());
                 entityManager.merge(kardex);
             }
         });
