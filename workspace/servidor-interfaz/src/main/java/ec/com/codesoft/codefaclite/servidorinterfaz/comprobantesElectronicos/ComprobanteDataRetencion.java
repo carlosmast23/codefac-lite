@@ -185,14 +185,17 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
             //Agregar los detalles de los impuestos de las compras       
             for (CompraDetalle detalle : compra.getDetalles())             
             {
+                BigDecimal baseImponible=detalle.getSubtotal();
                 
                 List<ImpuestoComprobante> impuestoListTemp= ComprobanteDataFacturaNotaCreditoAbstract.crearImpuestoDetalles(
                     detalle.getProductoProveedor().getProducto().getCatalogoProducto(), 
-                    detalle.getTotalCalculado(),  //Falta tomar en cuenta el iva revisar en ComprobanteDataFacturaNotaCreditoAbstract
+                    baseImponible,  //Falta tomar en cuenta el iva revisar en ComprobanteDataFacturaNotaCreditoAbstract
                     detalle.obtenerIvaCalculado(), 
                     detalle.getTotal(), 
                     detalle.getValorIce()
                 );
+                
+                //TODO: Por el momento vuelvo a calcular la base imponible por que sta claculando mal en la funcion anterior
                 
                 impuestoList.addAll(impuestoListTemp);
             }            
