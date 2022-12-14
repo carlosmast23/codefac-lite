@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -123,6 +124,11 @@ public class StockReporteModel extends StockMinimoPanel{
             getCmbMostrarDetalle().removeAllItems();
             getCmbMostrarDetalle().addItem(EnumSiNo.NO);
             getCmbMostrarDetalle().addItem(EnumSiNo.SI);
+            
+            //Cargar los datos para saber si se debe incluir el iva en el reporte
+            getCmbIncluirIva().removeAllItems();
+            getCmbIncluirIva().addItem(EnumSiNo.NO);
+            getCmbIncluirIva().addItem(EnumSiNo.SI);
             
         } catch (RemoteException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -315,10 +321,18 @@ public class StockReporteModel extends StockMinimoPanel{
                         nombreProducto="%"+nombreProducto+"%";
                     }
                     
+                    String codigoProducto=getTxtCodigoProducto().getText();
+                    
+                    if(UtilidadesTextos.verificarNullOVacio(codigoProducto))
+                    {
+                        codigoProducto=null;
+                    }
+                            
+                    
                     KardexOrdenarEnum ordenarEnum=(KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();
                     TipoStockEnum tipoStockEnum=(TipoStockEnum) getCmbTipoStock().getSelectedItem();
                     TipoUbicacionEnum tipoUbicacionEnum=(TipoUbicacionEnum) getCmbUbicacion().getSelectedItem();
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum,tipoStockEnum,tipoUbicacionEnum);
+                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,codigoProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum,tipoStockEnum,tipoUbicacionEnum);
                     
                     listaData=new ArrayList<StockMinimoData>();
                     
@@ -335,6 +349,25 @@ public class StockReporteModel extends StockMinimoPanel{
                         if(reserva==null)
                         {
                             reserva=BigDecimal.ZERO;
+                        }
+                        
+                        //Aumentar el valor del iva en los precios, costos y utilidades
+                        EnumSiNo incluyeIvaEnum=(EnumSiNo) getCmbIncluirIva().getSelectedItem();
+                        
+                        BigDecimal valorUnitario=producto.getValorUnitario();
+                        if(incluyeIvaEnum!=null && incluyeIvaEnum.equals(EnumSiNo.SI))
+                        {
+                            //Obtener el valor unitario pero con iva
+                            valorUnitario=producto.getValorUnitarioConIva();
+                            
+                            //Verificar si el costo le tengo que poner con iva
+                            costoPromedio=UtilidadesImpuestos.agregarValorIva(producto.getTarifaIva(), costoPromedio);
+                            costoPromedio.setScale(2, RoundingMode.HALF_UP);
+                            
+                            //Agregar el iva al último costo
+                            ultimoCosto=UtilidadesImpuestos.agregarValorIva(producto.getTarifaIva(), ultimoCosto);
+                            ultimoCosto=ultimoCosto.setScale(2, RoundingMode.HALF_UP);
+                            
                         }
                         
                         //Kardex kardexTemp = (Kardex) objeto[2];
@@ -374,8 +407,10 @@ public class StockReporteModel extends StockMinimoPanel{
                         data.setUltimoCosto(ultimoCosto+"");
                         data.setBodega(bodega.getNombre());
                         data.setLote((lote!=null)?lote.getCodigo():"");
-                        data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
-                        data.setUtilidad1(producto.getValorUnitario().subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
+                        //data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
+                        //data.setUtilidad1(producto.getValorUnitario().subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
+                        data.setPvp1(valorUnitario.setScale(2, RoundingMode.HALF_UP));
+                        data.setUtilidad1(valorUnitario.subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
                         
                         data.setAplicacion(producto.getAplicacionProducto());
                         data.setTipo(producto.getTipoProducto());

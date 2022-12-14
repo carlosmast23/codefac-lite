@@ -205,7 +205,8 @@ public class StockMinimoModel extends StockMinimoPanel{
             {
                 Producto producto = (Producto) objeto[0];
                 BigDecimal cantidad = (BigDecimal) objeto[1];
-                Kardex kardex=(Kardex) objeto[2];
+                Kardex kardex=null;
+                //Kardex kardex=(Kardex) objeto[2];
                 //Lote lote=(Lote)objeto[4];
 
                 StockMinimoData data = new StockMinimoData();
@@ -218,7 +219,10 @@ public class StockMinimoModel extends StockMinimoPanel{
                 data.setLote(""); //Por el momento voy dejar que salga un stock minimo por todos los lotes
                 //Ver si este dato luego se debe poner
                 data.setBodega("");
-                data.setReserva(kardex.getReserva());
+                if(kardex!=null)
+                {
+                    data.setReserva(kardex.getReserva());
+                }
                 
                 //TODO: Optimizar este proceso para obtener toda la informacipon directamente del servidor
                 List<ProductoProveedor> productoProveedorList= ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarPorProductoActivo(producto);

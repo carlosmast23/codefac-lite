@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="145" pageHeight="400" columnWidth="141" leftMargin="2" rightMargin="2" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="2.353821282540893"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="317"/>
+	<property name="ireport.y" value="518"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -202,7 +202,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 					<paragraph leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
@@ -216,7 +216,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 					<paragraph leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
@@ -230,7 +230,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 					<paragraph leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
@@ -244,7 +244,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 					<paragraph leftIndent="1" rightIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
@@ -285,7 +285,7 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="208">
+		<band height="220">
 			<staticText>
 				<reportElement x="13" y="106" width="128" height="32" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
 				<textElement>
@@ -354,18 +354,18 @@
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="13" y="138" width="128" height="70" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
-				<subreportParameter name="pl_telefonos">
-					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
-				</subreportParameter>
+				<reportElement x="13" y="138" width="128" height="80" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
 				<subreportParameter name="pl_img_whatsapp">
 					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_img_logo_pie">
-					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_facebook">
 					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_img_telefono">
 					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
@@ -375,6 +375,9 @@
 				</subreportParameter>
 				<subreportParameter name="pl_celular">
 					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_usuario">
+					<subreportParameterExpression><![CDATA[$P{pl_usuario}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_adicional">
 					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>

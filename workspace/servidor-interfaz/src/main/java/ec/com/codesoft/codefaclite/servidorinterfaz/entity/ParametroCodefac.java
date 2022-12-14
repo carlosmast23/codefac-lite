@@ -47,6 +47,8 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String MODIFICAR_PRECIO_MENOR="modificar_precio_menor";
     
+    public static final String MOSTRAR_COSTO_CON_IVA="mostrar_precio_con_iva";
+    
     
     //public static final String SRI_WS_RECEPCION= "sri_ws_recepcion";
     //public static final String SRI_WS_AUTORIZACION= "sri_ws_autorizacion";
@@ -216,6 +218,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String IMPRESORA_DEFECTO_COMANDA="impresora_defecto_comanda";
     public static final String IMPRESORA_DEFECTO_COMANDA_2="impresora_defecto_comanda_2";
+    
+    public static final String IMPRESORA_DEFECTO_FACTURA="impresora_defecto_factura";
     
     public static final String COPIAS_IMPRESORA_COMANDA="copias_impresora_comanda";
     

@@ -1450,15 +1450,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             {
                 for(TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList())
                 {
-                    if(turnoAsignado.getEstadoEnum().equals(GeneralEnumEstado.ELIMINADO))
+                    if(turnoAsignado.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
                     {
-                        break;
-                    }
-                    if(UtilidadesHora.comprobarHoraEnRangoDeTiempo(turnoAsignado.getTurno().getHoraInicial(), turnoAsignado.getTurno().getHoraFinal(), UtilidadesHora.horaActual()))
-                    {
-                       cajaPermisoParaUsuario = cajaPermiso;
-                       break;
-                    }
+                        if(UtilidadesHora.comprobarHoraEnRangoDeTiempo(turnoAsignado.getTurno().getHoraInicial(), turnoAsignado.getTurno().getHoraFinal(), UtilidadesHora.horaActual()))
+                        {
+                           cajaPermisoParaUsuario = cajaPermiso;
+                           break;
+                        }
+                    }                    
                 }
             }
         }

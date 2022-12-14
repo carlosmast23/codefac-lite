@@ -196,8 +196,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
         }
         
-        String queryString = "SELECT k.producto,max(k.stock),k FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+" "
-                + " group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
+        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+" "
+                + " group by k.producto having max(k.stock)<k.producto.cantidadMinima  ";
         
         String orderBy="";
         
@@ -248,9 +248,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
         //Kardex k;
-        //k.getProducto().getUbicacion();
+        //k.getProducto().getCodigoPersonalizado();
          //k.getReserva();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
         //k.getProducto().getNombre()
@@ -292,6 +292,12 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         if(nombreProducto!=null)
         {
             whereNombreProducto=" and LOWER(k.producto.nombre) like LOWER(?9) ";
+        }
+        
+        String whereCodigoProducto="";
+        if(codigoProducto!=null)
+        {
+            whereCodigoProducto=" and LOWER(k.producto.codigoPersonalizado) like LOWER(?10) ";
         }
         
         
@@ -342,7 +348,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             tipoUbicacionWhere=" AND ( k.producto.ubicacion IS NULL OR k.producto.ubicacion='' ) ";
         }
         
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+orderBy;
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+orderBy;
         Query query = getEntityManager().createQuery(queryString);
         
         
@@ -380,6 +386,11 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             query.setParameter(9, nombreProducto);
         }
         
+        if(codigoProducto!=null)
+        {
+            query.setParameter(10, codigoProducto);
+        }
+        
         //query.setParameter(3,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
         
@@ -389,6 +400,21 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         return eliminarProductosPorLote(query.getResultList(),empresa);
 
     }
+    
+    /**
+     * Metodo que me va a permitir agregar el iva en los precios, costos y utilidades cuando requiere agregar el iva
+     * @return 
+     */
+    /*private List<Object[]> agregarIvaResultado(List<Object[]> resultadoList)
+    {
+        for (Object[] objeto : resultadoList) {
+            Producto producto=(Producto) objeto[0];
+            BigDecimal costoPromedio=(BigDecimal)objeto[2];
+            BigDecimal ultimoCosto = (BigDecimal)objeto[5];
+            
+            
+        }
+    }*/
     
     //Metodo temporal para no mostrar los productos on stock cero en el reporte de inventairo
     //TODO: Ver como mejorar

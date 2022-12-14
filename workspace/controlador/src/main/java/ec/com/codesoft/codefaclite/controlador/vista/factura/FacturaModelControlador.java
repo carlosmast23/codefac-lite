@@ -62,6 +62,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -346,7 +347,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         interfaz.setearCostoDetalleTxt("");
         if(costo!=null)
         {
-            interfaz.setearCostoDetalleTxt(costo+"");
+            try {
+                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.SI))
+                {
+                    String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+                    costo= UtilidadesImpuestos.agregarValorIva(new BigDecimal(tarifaStr),costo);
+                    interfaz.setearCostoDetalleTxt(costo+"");
+                }
+                else
+                {
+                    interfaz.setearCostoDetalleTxt(costo+"");
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         interfaz.setearFechaCaducidadTxt("");
@@ -1246,6 +1260,16 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      */
     public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre) 
     {
+        //Revisar el nombre del comproante si tiene un alias
+        if(facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            String aliasNotaVenta=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
+            if(!UtilidadesTextos.verificarNullOVacio(aliasNotaVenta))
+            {
+                nombre=aliasNotaVenta;
+            }
+        }
+        
         FormatoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, FormatoReporteEnum.A2);
         
         if(tipoReporteEnum!=null && tipoReporteEnum.equals(tipoReporteEnum.A4) && facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))

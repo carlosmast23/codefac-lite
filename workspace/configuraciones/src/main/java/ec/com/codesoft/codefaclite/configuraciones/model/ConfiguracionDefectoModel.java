@@ -241,6 +241,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbEditarPrecioUnitFactura(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbModificarPrecioMenor(), EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbMostrarCostoConIva(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbDatosCompartidosEmpresas(),EnumSiNo.values());
         
@@ -294,6 +295,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         List<String> impresoraList= UtilidadesImpresora.obtenerNombreImpresorasDisponibles();
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda(),impresoraList);
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda2(),impresoraList);
+        
+        UtilidadesComboBox.llenarComboBox(getCmbImpresoraFactura(),impresoraList);
         
         
         //Agregar los tipos de negocios        
@@ -378,6 +381,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroImpresoraComanda = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA);
             String nombreImpresora=(parametroImpresoraComanda != null) ? parametroImpresoraComanda.getValor() :null;
             getCmbImpresoraComanda().setSelectedItem(nombreImpresora);
+            
+            ParametroCodefac parametroImpresoraFactura = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA);
+            String nombreImpresoraFactura=(parametroImpresoraFactura != null) ? parametroImpresoraFactura.getValor() :null;
+            getCmbImpresoraFactura().setSelectedItem(nombreImpresoraFactura);
             
             ParametroCodefac parametroImpresoraComanda2 = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
             nombreImpresora=(parametroImpresoraComanda2 != null) ? parametroImpresoraComanda2.getValor() :null;
@@ -568,6 +575,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroModificarPrecioMenor = parametrosTodos.get(ParametroCodefac.MODIFICAR_PRECIO_MENOR);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroModificarPrecioMenor != null) ? parametroModificarPrecioMenor.getValor() : null);
             getCmbModificarPrecioMenor().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
+            ParametroCodefac parametroMostrarCostoConIva = parametrosTodos.get(ParametroCodefac.MOSTRAR_COSTO_CON_IVA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarCostoConIva != null) ? parametroMostrarCostoConIva.getValor() : null);
+            getCmbMostrarCostoConIva().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
             ParametroCodefac parametroFacturarInventarioNegativo = parametrosTodos.get(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroFacturarInventarioNegativo != null) ? parametroFacturarInventarioNegativo.getValor() : null);
@@ -775,6 +786,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.MODIFICAR_PRECIO_MENOR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.MODIFICAR_PRECIO_MENOR);
         
+        enumSiNo = (EnumSiNo) getCmbMostrarCostoConIva() .getSelectedItem();
+        agregarParametro(ParametroCodefac.MOSTRAR_COSTO_CON_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.MOSTRAR_COSTO_CON_IVA);
+        
         enumSiNo = (EnumSiNo) getCmbEditarPrecioUnitFactura().getSelectedItem();
         agregarParametro(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA);
@@ -886,6 +901,15 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         }
         agregarParametro(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2,impresoraComandaTxt);
         agregarParametroEditar(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
+        
+        impresoraComanda=getCmbImpresoraFactura().getSelectedItem();
+        impresoraComandaTxt=null;
+        if(impresoraComanda!=null)
+        {
+            impresoraComandaTxt=impresoraComanda.toString();
+        }
+        agregarParametro(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA,impresoraComandaTxt);
+        agregarParametroEditar(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA);
 
         agregarParametro(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION, getTxtMotivoTrasladoGuiaRemision().getText());
         agregarParametroEditar(ParametroCodefac.MOTIVO_TRASLADO_GUIA_REMISION);

@@ -75,7 +75,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel10 = new javax.swing.JLabel();
         txtNombreProducto = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        txtNombreProducto1 = new javax.swing.JTextField();
+        txtCodigoProducto = new javax.swing.JTextField();
         txtNombreProducto2 = new javax.swing.JTextField();
         lblEspacio123123 = new javax.swing.JLabel();
         lblEspacio33434 = new javax.swing.JLabel();
@@ -89,6 +89,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel17 = new javax.swing.JLabel();
         cmbUbicacion = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
+        cmbIncluirIva = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -341,7 +342,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(txtNombreProducto1, gridBagConstraints);
+        jPanel1.add(txtCodigoProducto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
@@ -380,7 +381,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.add(cmbOrdenar, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel14.setText("Iva:");
+        jLabel14.setText("Incluir Iva?:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 3;
@@ -445,6 +446,13 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel18, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbIncluirIva, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -461,6 +469,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<Bodega> cmbBodega;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
+    private javax.swing.JComboBox<EnumSiNo> cmbIncluirIva;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarDetalle;
     private javax.swing.JComboBox<KardexOrdenarEnum> cmbOrdenar;
     private javax.swing.JComboBox<Bodega> cmbSegmento;
@@ -492,9 +501,9 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblMostrarDetalle;
     private javax.swing.JTable tblDato;
     private javax.swing.JTextField txtCategoria;
+    private javax.swing.JTextField txtCodigoProducto;
     private javax.swing.JSpinner txtDiasCaducidad;
     private javax.swing.JTextField txtNombreProducto;
-    private javax.swing.JTextField txtNombreProducto1;
     private javax.swing.JTextField txtNombreProducto2;
     // End of variables declaration//GEN-END:variables
 
@@ -674,5 +683,23 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         this.cmbUbicacion = cmbUbicacion;
     }
 
+    public JComboBox<EnumSiNo> getCmbIncluirIva() {
+        return cmbIncluirIva;
+    }
+
+    public void setCmbIncluirIva(JComboBox<EnumSiNo> cmbIncluirIva) {
+        this.cmbIncluirIva = cmbIncluirIva;
+    }
+
+    public JTextField getTxtCodigoProducto() {
+        return txtCodigoProducto;
+    }
+
+    public void setTxtCodigoProducto(JTextField txtCodigoProducto) {
+        this.txtCodigoProducto = txtCodigoProducto;
+    }
+
+    
+    
     
 }

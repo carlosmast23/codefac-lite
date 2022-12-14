@@ -52,6 +52,9 @@ public class CompraDetalle implements Serializable {
     @Column(name = "IVA")
     private BigDecimal iva;
     
+    //@Column(name = "PRECIO_UNITARIO")
+    //private BigDecimal precioUnitario;
+    
     
     @JoinColumn(name="COMPRA_ID")
     @ManyToOne(optional = false)

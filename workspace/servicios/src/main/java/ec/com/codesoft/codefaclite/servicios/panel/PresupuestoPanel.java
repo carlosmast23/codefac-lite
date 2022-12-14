@@ -135,8 +135,12 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel23 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableDetallesServicio = new javax.swing.JTable();
-        jLabel26 = new javax.swing.JLabel();
+        jToolBar2 = new javax.swing.JToolBar();
         jLabel28 = new javax.swing.JLabel();
+        lblTotalProductos = new javax.swing.JLabel();
+        jToolBar3 = new javax.swing.JToolBar();
+        jLabel29 = new javax.swing.JLabel();
+        lblTotalServicios = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -863,23 +867,37 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jScrollPane3, gridBagConstraints);
 
-        jLabel26.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jLabel26.setText("Servicios");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
-        getContentPane().add(jLabel26, gridBagConstraints);
+        jToolBar2.setRollover(true);
 
         jLabel28.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jLabel28.setText("Productos");
+        jLabel28.setText("PRODUCTOS   |   Total:  ");
+        jToolBar2.add(jLabel28);
+
+        lblTotalProductos.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        lblTotalProductos.setText("0.00");
+        jToolBar2.add(lblTotalProductos);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
-        getContentPane().add(jLabel28, gridBagConstraints);
+        getContentPane().add(jToolBar2, gridBagConstraints);
+
+        jToolBar3.setRollover(true);
+
+        jLabel29.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel29.setText("SERVICIOS   |   Total:  ");
+        jToolBar3.add(jLabel29);
+
+        lblTotalServicios.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        lblTotalServicios.setText("0.00");
+        jToolBar3.add(lblTotalServicios);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 7;
+        getContentPane().add(jToolBar3, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -923,9 +941,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -943,6 +961,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JLabel lblDescuentoCompra;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio1234;
@@ -954,6 +974,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel lblObjetoMantenimiento;
     private javax.swing.JLabel lblSubtotalCompra;
     private javax.swing.JLabel lblTotalCompra;
+    private javax.swing.JLabel lblTotalProductos;
+    private javax.swing.JLabel lblTotalServicios;
     private javax.swing.JLabel lblTotalVenta;
     private javax.swing.JLabel llblEspacio50;
     private javax.swing.JPanel pnlDatosAdicionalesDetalle;
@@ -1095,7 +1117,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.textoSimple, nombre = "Observaciones presupuesto")
+    //@ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.textoSimple, nombre = "Observaciones presupuesto")
     public JTextArea getTxtAreaObservaciones() {
         return txtAreaObservaciones;
     }
@@ -1131,7 +1153,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Descripción presupuesto")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSinSaltosLinea, nombre = "Descripción presupuesto")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -1338,6 +1360,23 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         this.tableDetallesServicio = tableDetallesServicio;
     }
 
+    public JLabel getLblTotalProductos() {
+        return lblTotalProductos;
+    }
+
+    public void setLblTotalProductos(JLabel lblTotalProductos) {
+        this.lblTotalProductos = lblTotalProductos;
+    }
+
+    public JLabel getLblTotalServicios() {
+        return lblTotalServicios;
+    }
+
+    public void setLblTotalServicios(JLabel lblTotalServicios) {
+        this.lblTotalServicios = lblTotalServicios;
+    }
+
+    
     
     
     

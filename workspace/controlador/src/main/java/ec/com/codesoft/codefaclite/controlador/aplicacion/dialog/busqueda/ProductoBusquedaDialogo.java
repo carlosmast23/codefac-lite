@@ -95,14 +95,15 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Código", 0.2d));        
         titulo.add(new ColumnaDialogo("Unidad", 0.2d));
+        titulo.add(new ColumnaDialogo("Marca", 0.2d));
         if(aplicacionColumna)
         {
             titulo.add(new ColumnaDialogo("Aplicación",0.2d));
         }
-        titulo.add(new ColumnaDialogo("Pvp1 ", 0.1d));
-        titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.1d));
-        titulo.add(new ColumnaDialogo("IVA", 0.1d));        
-        titulo.add(new ColumnaDialogo("ICE", 0.1d));        
+        titulo.add(new ColumnaDialogo("Pvp1 ", 0.05d));
+        titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.05d));
+        titulo.add(new ColumnaDialogo("IVA", 0.05d));        
+        titulo.add(new ColumnaDialogo("ICE", 0.05d));        
         return titulo;
     }
 
@@ -126,6 +127,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             presentacion=t.buscarPresentacionProducto().getNombre();
         }
         dato.add(presentacion);
+        dato.add((t.getMarcaProducto()!=null)?t.getMarcaProducto().getNombre():"");
         //dato.add(t.getCodigoUPC());       
         
         if(aplicacionColumna)
