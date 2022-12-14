@@ -223,6 +223,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String COPIAS_IMPRESORA_COMANDA="copias_impresora_comanda";
     
+    public static final String COPIAS_IMPRESORA_VENTA="copias_impresora_venta";
+    
     /**
      * Activar credito por defecto para la pantalla de ventas para saber si tiene que ir las ventas a cartera o no
      */

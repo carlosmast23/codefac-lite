@@ -82,15 +82,15 @@ create table COMPRA_DETALLE
     SRI_RETENCION_IVA_ID BIGINT,
     SRI_RETENCION_RENTA_IVA_ID BIGINT,
     COMPRA_ID BIGINT,
-    CANTIDAD decimal(13,3),
-    PRECIO_UNITARIO decimal(13,3),
+    CANTIDAD decimal(13,5),
+    PRECIO_UNITARIO decimal(13,6),
     DESCUENTO decimal(13,2),
     VALOR_ICE decimal,
     VALOR_RETENCION_IVA decimal(13,2),
     VALOR_RETENCION_RENTA decimal(13,2),
     IVA decimal(13,2),
     TOTAL decimal(13,2),
-    DESCRIPCION varchar(150),
+    DESCRIPCION varchar(300),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.9.4)*/
     CODIGO_SUSTENTO_SRI varchar(16),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.1.9)*/
