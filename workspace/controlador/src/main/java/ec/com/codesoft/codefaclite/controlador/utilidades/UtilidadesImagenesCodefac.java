@@ -41,6 +41,7 @@ public abstract class UtilidadesImagenesCodefac {
         JFileChooser jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Elegir archivo");
         jFileChooser.setFileFilter(new FileNameExtensionFilter("Logo Imagen", "png", "jpg","jpeg","bmp","gif"));  
+        jFileChooser.setAcceptAllFileFilterUsed(false);
         return jFileChooser;
     }
     
