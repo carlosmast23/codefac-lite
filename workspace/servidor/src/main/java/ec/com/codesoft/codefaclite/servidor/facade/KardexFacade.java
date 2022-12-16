@@ -165,6 +165,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
     }
     
+    //TODO: Por el momento no toma en cuenta problemas con lotes que tengan negativos por que puede afectar en los calculos
     public Long consultarStockMinimoCantidadFacade(Empresa empresa)  throws java.rmi.RemoteException
     {
         //Producto producto;
@@ -173,11 +174,13 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //kardex.getBodega();
         //Bodega b;
         //b.getStockMinimoAdvertencia()
-        String queryString = " SELECT COUNT(k) FROM Kardex k WHERE (k.producto.estado<>?4 ) AND k.stock<k.producto.cantidadMinima AND k.bodega.stockMinimoAdvertencia=?5  ";               
-        Query query = getEntityManager().createQuery(queryString);
+        //String queryString = " SELECT COUNT(k) FROM Kardex k WHERE (k.producto.estado<>?4 ) AND k.stock<k.producto.cantidadMinima AND k.bodega.stockMinimoAdvertencia=?5  ";               
+        String queryString = "SELECT  COUNT(*) FROM ( SELECT P.ID_PRODUCTO FROM KARDEX k INNER JOIN PRODUCTO P ON k.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID=k.BODEGA_ID WHERE B.STOCK_MINIMO_ADVERTENCIA='s' AND P.ESTADO !='e' GROUP BY P.ID_PRODUCTO,P.CANTIDAD_MINIMA HAVING SUM((k.STOCK+ABS(k.STOCK))/2)<P.CANTIDAD_MINIMA ) e ";               
+        Query query = getEntityManager().createNativeQuery(queryString);
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(5,EnumSiNo.SI.getLetra());
-        return (Long) query.getSingleResult();
+        Integer totalMinimo=(Integer) query.getSingleResult();
+        return Long.parseLong(totalMinimo+"");
     }
 
     public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException {
