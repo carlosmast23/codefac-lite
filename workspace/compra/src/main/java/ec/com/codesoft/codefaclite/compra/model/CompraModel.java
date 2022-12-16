@@ -374,11 +374,11 @@ public class CompraModel extends CompraPanel{
         }
         
         //actualizarDatosMostrarVentana();
-        if (session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)) {
+        //if (session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)) {
             mostrarDatosTabla();
-        } else {
-            mostrarDatosTablaSinRetencion();
-        }
+        //} else {
+        //    mostrarDatosTablaSinRetencion();
+        //}
         
         //Cargar el tipo de emision de las compras
         if(compra.getTipoFacturacionEnum()!=null)
@@ -1272,7 +1272,7 @@ public class CompraModel extends CompraPanel{
         UtilidadesTablas.ocultarColumna(getTblFacturaReembolso(),0);  
     }
     
-    private void mostrarDatosTablaSinRetencion()
+    /*private void mostrarDatosTablaSinRetencion()
     {
         String[] titulo={"Cantidad","Código","Descripción","Presentación","Valor Unitario","Valor Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
@@ -1303,7 +1303,7 @@ public class CompraModel extends CompraPanel{
         
         
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
-    }
+    }*/
     
     
     
@@ -1467,12 +1467,12 @@ public class CompraModel extends CompraPanel{
     private void actualizarDatosMostrarVentana()
     {
         actualizarTotales();
-        if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
+        //if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
             mostrarDatosTabla();
-        }
-        else{
-            mostrarDatosTablaSinRetencion();
-        }
+        //}
+        //else{
+        //    mostrarDatosTablaSinRetencion();
+        //}
         mostrarDatosTotales();
         limpiarCampos();
     }

@@ -7,10 +7,10 @@ package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.reportexml.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.inventario.data.CodigoBarrasData;
 import ec.com.codesoft.codefaclite.inventario.panel.ImprimirCodigoBarrasPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -18,9 +18,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadCodigoBarras;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,13 +33,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import org.jdom.Element;
 
 /**
  *
@@ -65,6 +65,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         getCmbTipoCodigoBarras().removeAllItems();
         getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.CODE128);
         getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.CODE39);        
+        getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.EAN);        
     }
 
     @Override
@@ -107,10 +108,50 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         }
         
         InputStream path = RecursoCodefac.JASPER_INVENTARIO.getResourceInputStream(nombreJasper);
+        
+        path=aplicarConfiguraciones(path);
         Map<String,Object> parametros = new HashMap<String,Object>();
         
         ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, getData(), panelPadre,"Códigos de Barras");
         
+    }
+    
+    private InputStream aplicarConfiguraciones(InputStream imputInputStream)
+    {
+        ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(imputInputStream);
+        
+        String altoTxt=getTxtAlto().getText();
+        String anchoTxt=getTxtAncho().getText();
+        
+        if(!UtilidadesTextos.verificarNullOVacio(altoTxt))
+        {
+            Integer alto=Integer.parseInt(altoTxt);
+            manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_ALTO_DOCUMENTO, (alto+40)+"");
+            Element elementDetail=manager.buscarEtiquetaPorNombre("detail");
+            Element elementBand=manager.buscarEtiquetaPorNombre(elementDetail,"band");
+            manager.setearValor(elementBand,"height",altoTxt);
+            
+            //buscar la etiqueta para el alto del código de barras
+            Element elementImage=manager.buscarEtiquetaPorNombre(elementBand, "image");
+            Element reportElement=manager.buscarEtiquetaPorNombre(elementImage, "reportElement");            
+            manager.setearValor(reportElement, "height", (alto-35)+"");
+            
+            if(!UtilidadesTextos.verificarNullOVacio(anchoTxt))
+            {
+                Integer ancho=Integer.parseInt(anchoTxt);
+                manager.setearValor(reportElement, "width", (ancho-20)+"");
+            }
+        }
+        
+        
+        if(!UtilidadesTextos.verificarNullOVacio(anchoTxt))
+        {
+            manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_ANCHO_DOCUMENTO, anchoTxt);
+            
+        }
+        
+        
+        return manager.generarNuevoDocumento();
     }
     
     private List<CodigoBarrasData> getData()

@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
+import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
@@ -34,9 +35,13 @@ public abstract class UtilidadCodigoBarras {
             {
                 bean39 = new Code39Bean();
             }
-            else
+            else if(codigoEnum.equals(CodigoBarrasEnum.CODE128))
             {
                 bean39=new Code128Bean();
+            }
+            else if(codigoEnum.equals(CodigoBarrasEnum.EAN))
+            {
+                bean39=new EAN13Bean();
             }
             //final int dpi = 160;
             //final int dpi = 80;
@@ -73,7 +78,8 @@ public abstract class UtilidadCodigoBarras {
     public enum CodigoBarrasEnum
     {
         CODE128,
-        CODE39;        
+        CODE39,
+        EAN;        
     }
     
 }

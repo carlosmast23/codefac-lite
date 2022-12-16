@@ -39,7 +39,7 @@ import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
-import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
+import ec.com.codesoft.codefaclite.controlador.reportexml.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaFisicaDataMap;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.facturacion.model.disenador;
+package ec.com.codesoft.codefaclite.controlador.reportexml;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BandaComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComponenteComprobanteFisico;
@@ -26,28 +26,29 @@ import org.jdom.output.XMLOutputter;
 
 /**
  *
+ * TODO: Cambiar el nombre de esta clase para tener un nombre más general * 
  * @author Carlos
  */
 public class ManagerReporteFacturaFisica {
     
-    private final String NOMBRE_ANCHO_DOCUMENTO="pageWidth";
-    private final String NOMBRE_ALTO_DOCUMENTO="pageHeight";
-    private final String NOMBRE_ALTO_BANDA="height";
-    private final String NOMBRE_ID_COMPONENTE="uuid";
-    private final String NOMBRE_X_COMPONENTE="x";
-    private final String NOMBRE_Y_COMPONENTE="y";
-    private final String NOMBRE_ANCHO_COMPONENTE="width";
-    private final String NOMBRE_ALTO_COMPONENTE="height";
-    private final String NOMBRE_FONT_COMPONENTE="size";
-    private final String NOMBRE_BOLD_COMPONENTE="isBold";
+    public static final String NOMBRE_ANCHO_DOCUMENTO="pageWidth";
+    public static final String NOMBRE_ALTO_DOCUMENTO="pageHeight";
+    public static final String NOMBRE_ALTO_BANDA="height";
+    public static final String NOMBRE_ID_COMPONENTE="uuid";
+    public static final String NOMBRE_X_COMPONENTE="x";
+    public static final String NOMBRE_Y_COMPONENTE="y";
+    public static final String NOMBRE_ANCHO_COMPONENTE="width";
+    public static final String NOMBRE_ALTO_COMPONENTE="height";
+    public static final String NOMBRE_FONT_COMPONENTE="size";
+    public static final String NOMBRE_BOLD_COMPONENTE="isBold";
     
     /**
      * Este campo va en funcion del ancho de la pagina y parece que es el mismo valor menos los margenes
      */
-    private final String NOMBRE_ANCHO_COLUMNA="columnWidth";
+    public static final String NOMBRE_ANCHO_COLUMNA="columnWidth";
     
-    private final String ID_LINEA_INICIO="eb719316-db48-41bc-b826-7e0ef1b2ff21";
-    private final String ID_LINEA_FINAL="4ead026f-bfbb-4dbb-9189-f0cb97eb039a";
+    public static final String ID_LINEA_INICIO="eb719316-db48-41bc-b826-7e0ef1b2ff21";
+    public static final String ID_LINEA_FINAL="4ead026f-bfbb-4dbb-9189-f0cb97eb039a";
     
     /**
      * Reporte original sobre el cual se va a trabajar
@@ -82,7 +83,19 @@ public class ManagerReporteFacturaFisica {
     
     }
     
-    private Element buscarEtiquetaPorNombre(Element root, String nombre)
+    public Element buscarEtiquetaPorNombre(String nombre)
+    {
+        for (Object element : rootNode.getChildren()) {
+            if(((Element)element).getName().equals(nombre))
+            {
+                return (Element) element;
+            }
+        }
+        return null;
+    
+    }
+    
+    public Element buscarEtiquetaPorNombre(Element root, String nombre)
     {
         for (Object element : root.getChildren()) {
             if(((Element)element).getName().equals(nombre))
@@ -94,9 +107,17 @@ public class ManagerReporteFacturaFisica {
     
     }
     
+    /**
+     * TODO: Ver si se puede optimizar un mejor metodo para que no depende de propiedades especificar
+     * @param columna
+     * @param componente
+     * @param altoBanda 
+     */
+    @Deprecated
     private void setearComponente(Element columna,ComponenteComprobanteFisico componente,int altoBanda)
     {
         Element bandaElemento=(Element) columna.getChildren().get(0); //el componente 0 es la banda
+        
         //Va a recorrer todos los componentes de la banda
         for (Object object : bandaElemento.getChildren()) {
             Element tipoElemento=(Element) object;
@@ -173,6 +194,22 @@ public class ManagerReporteFacturaFisica {
     
     }
     
+    public Element buscarComponente(String uuid)
+    {        
+        for (Object object : rootNode.getChildren()) 
+        {
+            Element tipoElemento=(Element) object;
+            Element elementoReporte=buscarEtiquetaPorNombre(tipoElemento, "reportElement");
+            String elementoReporteId=elementoReporte.getAttribute(NOMBRE_ID_COMPONENTE).getValue();
+            
+            if(elementoReporteId.equals(uuid))
+            {
+                return elementoReporte;
+            }
+        }
+        return null;
+    }
+    
 
     public void setearNuevosValores(ComprobanteFisicoDisenio comprobante)
     {
@@ -182,7 +219,8 @@ public class ManagerReporteFacturaFisica {
         rootNode.getAttribute(NOMBRE_ANCHO_COLUMNA).setValue(comprobante.getAnchoColumna()+"");
         
         //Establecer propiedades de las bandas
-        for (BandaComprobante banda : comprobante.getSecciones()) {
+        for (BandaComprobante banda : comprobante.getSecciones()) 
+        {
             Element columnaElemento=buscarEtiquetaPorNombre(rootNode,banda.getNombre());
             Element bandaElemento=(Element) columnaElemento.getChildren().get(0); //el componente 0 es la banda
             bandaElemento.getAttribute(NOMBRE_ALTO_BANDA).setValue(banda.getAlto()+"");
@@ -193,6 +231,18 @@ public class ManagerReporteFacturaFisica {
                 setearComponente(columnaElemento,componente,banda.getAlto());
             }
         }
+        
+    }
+    
+    public void setearValor(String nombreAtributo,String valor)
+    {
+        rootNode.getAttribute(nombreAtributo).setValue(valor);
+        
+    }
+    
+    public void setearValor(Element elemento, String nombreAtributo,String valor)
+    {
+        elemento.getAttribute(nombreAtributo).setValue(valor);
         
     }
     

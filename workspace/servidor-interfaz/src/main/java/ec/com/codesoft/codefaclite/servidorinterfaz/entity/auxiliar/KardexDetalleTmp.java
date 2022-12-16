@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
 
@@ -18,6 +19,7 @@ import java.io.Serializable;
 public class KardexDetalleTmp extends KardexDetalle implements Serializable{
     public boolean seleccion;
     public Bodega bodega;
+    public Lote lote;
    
     public KardexDetalle obtenerObjetoOriginal()
     {

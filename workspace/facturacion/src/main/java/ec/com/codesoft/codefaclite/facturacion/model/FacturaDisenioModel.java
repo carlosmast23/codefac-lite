@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.disenador.DrawCanvas;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.DrawComponente;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.DrawDocumento;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.DrawSeccion;
-import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
+import ec.com.codesoft.codefaclite.controlador.reportexml.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.RepaintInterface;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaDisenoPanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;

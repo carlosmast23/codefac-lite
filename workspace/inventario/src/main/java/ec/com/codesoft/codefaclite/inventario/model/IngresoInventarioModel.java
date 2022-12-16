@@ -319,6 +319,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             kardexDetalle.setPrecioTotal(detalle.getTotal());
             kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp()); //Setear por defecto con la fecha de hoy
             kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
+            kardexDetalle.lote=detalle.getLote();
             
             kardexDetalle.seleccion=true;
                                     
@@ -332,7 +333,6 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                     kardexDetalle.addDetalle(item);
                 }
             }
-            
             detallesKardex.put(kardexDetalle, detalle);
 
 
@@ -344,12 +344,13 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     {
         Date fechaPorDefecto=getCmbFechaIngreso().getDate();
         
-        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Presentación","Cantidad","Costo Unitario","Costo Total","garantia"};        
+        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Presentación","Lote","Cantidad","Costo Unitario","Costo Total","garantia"};        
         Class clases[] = {
             KardexDetalleTmp.class,
             Boolean.class,
             Bodega.class,
             Date.class,
+            String.class,
             String.class,
             String.class,
             String.class,
@@ -365,11 +366,18 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             for (Map.Entry<KardexDetalleTmp, CompraDetalle> entry : detallesKardex.entrySet()) 
             {
                 KardexDetalleTmp kardexDetalle = entry.getKey();
+                //Kardex kardex=kardexDetalle.getKardex();
                 CompraDetalle compraDetalle = entry.getValue();
                 Producto producto= compraDetalle.getProductoProveedor().getProducto();
                 //producto.buscarProductoEmpaquePrincipal()
                 //String presentacionStr=(producto.buscarPresentacionOriginal()!=null)?producto.buscarPresentacionOriginal().getNombre():"";
                 String presentacionStr=(producto.buscarPresentacionProducto()!=null)?producto.buscarPresentacionProducto().getNombre():"";
+                
+                String loteStr="";
+                if(kardexDetalle!=null)
+                {
+                    loteStr=(kardexDetalle.lote!=null)?kardexDetalle.lote.getCodigo():"";
+                }
 
                 Object[] fila=
                 {
@@ -379,6 +387,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                     kardexDetalle.getFechaIngreso(),
                     compraDetalle.getDescripcion(),
                     presentacionStr,
+                    loteStr,
                     kardexDetalle.getCantidad(),
                     kardexDetalle.getPrecioUnitario(),
                     kardexDetalle.getPrecioTotal(),
