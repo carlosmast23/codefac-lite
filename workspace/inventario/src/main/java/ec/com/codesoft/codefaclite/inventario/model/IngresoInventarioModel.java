@@ -315,6 +315,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             kardexDetalle.setCantidad(detalle.getCantidad()); //TODO: ESTA PARTE SE DEBE MEJORAR PARA QUE EL KARDEX TERMINE CON VALORES DECIMALES
             kardexDetalle.setCodigoTipoDocumento(compraInventario.getCodigoTipoDocumento());
             kardexDetalle.setReferenciaDocumentoId(compraInventario.getId());
+            kardexDetalle.setDescuento(detalle.getDescuento());
             kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
             kardexDetalle.setPrecioTotal(detalle.getTotal());
             kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp()); //Setear por defecto con la fecha de hoy
@@ -344,12 +345,13 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     {
         Date fechaPorDefecto=getCmbFechaIngreso().getDate();
         
-        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Presentación","Lote","Cantidad","Costo Unitario","Costo Total","garantia"};        
+        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Presentación","Lote","Cantidad","Descuento","Costo Unitario","Costo Total","garantia"};        
         Class clases[] = {
             KardexDetalleTmp.class,
             Boolean.class,
             Bodega.class,
             Date.class,
+            String.class,
             String.class,
             String.class,
             String.class,
@@ -389,6 +391,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                     presentacionStr,
                     loteStr,
                     kardexDetalle.getCantidad(),
+                    kardexDetalle.getDescuento(),
                     kardexDetalle.getPrecioUnitario(),
                     kardexDetalle.getPrecioTotal(),
                     compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().getNombre()
@@ -863,6 +866,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                     
                     producto=respuesta.productoPresentacionPrincipal;
                     kardexDetalle.setCantidad(respuesta.cantidad);
+                    //kardexDetalle.setDescuento(respuesta);
                     kardexDetalle.setPrecioUnitario(respuesta.precioUnitario);
                 }
                 

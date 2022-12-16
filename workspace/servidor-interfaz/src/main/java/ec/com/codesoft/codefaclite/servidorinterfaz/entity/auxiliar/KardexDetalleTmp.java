@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  *
@@ -36,6 +37,7 @@ public class KardexDetalleTmp extends KardexDetalle implements Serializable{
         kardexDetalle.setSecuencial(this.getSecuencial());
         kardexDetalle.setPuntoEstablecimiento(this.getPuntoEstablecimiento());
         kardexDetalle.setPuntoEmision(this.getPuntoEmision());
+        kardexDetalle.setDescuento(this.getDescuento());
         
         if(getDetallesEspecificos()!=null)
         {

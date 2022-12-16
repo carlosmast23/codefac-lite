@@ -57,6 +57,9 @@ public class KardexDetalle implements Serializable ,Cloneable {
     @Column(name = "PRECIO_UNITARIO")
     private BigDecimal precioUnitario;
     
+    @Column(name = "DESCUENTO")
+    private BigDecimal descuento;
+    
     @Column(name = "PRECIO_TOTAL")
     private BigDecimal precioTotal;
     
@@ -269,6 +272,15 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public void setSigno(Integer signo) {
         this.signo = signo;
     }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+    
     
     
 
@@ -343,6 +355,16 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public BigDecimal obtenerCantidadConSigno()
     {
         return this.cantidad.multiply(getCodigoTipoDocumentoEnum().getSignoInventarioBigDecimal());
+    }
+    
+    public BigDecimal obtenerPrecioUnitarioConDescuento()
+    {
+        if(descuento==null)
+        {
+            descuento=BigDecimal.ZERO;
+        }
+        //Por el momento se redondea con 2 decimales
+        return precioUnitario.subtract(descuento.divide(cantidad,2,BigDecimal.ROUND_HALF_UP));
     }
     
     

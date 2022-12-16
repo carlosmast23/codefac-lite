@@ -623,7 +623,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         if(kardexDetalle.getCodigoTipoDocumentoEnum().getAfectaCostoInventario())
         {
             //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
-            kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+            kardex.setPrecioUltimo(kardexDetalle.obtenerPrecioUnitarioConDescuento());
             //Calcular el precio promedio con respecto al nuevo valor
             if(kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)>0)
             {
@@ -632,7 +632,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             }
             else
             {
-                kardex.setCostoPromedio(kardexDetalle.getPrecioUnitario());
+                kardex.setCostoPromedio(kardexDetalle.obtenerPrecioUnitarioConDescuento());
             }
             
             
@@ -692,7 +692,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         BigDecimal costoPonderado=kardex.getCostoPromedio();
         
         BigDecimal cantidadUnitaria=kardexDetalle.getCantidad();
-        BigDecimal precioUnitario=kardexDetalle.getPrecioUnitario();
+        BigDecimal precioUnitario=kardexDetalle.obtenerPrecioUnitarioConDescuento();
         
         //Primero calculo el numerador 
         BigDecimal resultadoCosto= costoPonderado.multiply(stock).add(precioUnitario.multiply(cantidadUnitaria));
