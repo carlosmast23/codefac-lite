@@ -64,6 +64,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import static org.castor.mapping.AbstractMappingLoaderFactory.LOG;
 
 /**
  *
@@ -71,6 +72,8 @@ import javax.persistence.Query;
  */
 public class UtilidadesService extends UnicastRemoteObject implements UtilidadesServiceIf {
 
+    private static final Logger LOG = Logger.getLogger(UtilidadesService.class.getName());
+    
     public UtilidadesService() throws RemoteException {
         super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
     }
@@ -669,11 +672,18 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     public Boolean verificarVersionSistema(String versionCliente) throws RemoteException,ServicioCodefacException
     {
         String versionServidor=ParametrosSistemaCodefac.VERSION;
+        LOG.log(Level.INFO, "Versión servidor comparando: <"+versionServidor+">");
+        LOG.log(Level.INFO, "Versión cliente comparando: <"+versionCliente+">");
         if(versionServidor.equals(versionCliente))
         {
             return true;
         }
         return false;
+    }
+    
+    public String obtenerVersionServidor() throws RemoteException,ServicioCodefacException
+    {
+        return ParametrosSistemaCodefac.VERSION;
     }
 
 

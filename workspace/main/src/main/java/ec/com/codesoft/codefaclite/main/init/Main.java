@@ -451,10 +451,19 @@ public class Main {
                     cargarRecursosRmiCliente(respuesta.ipPublica);
                     ParametrosClienteEscritorio.tipoClienteEnum=respuesta.tipoClienteEnum;
                     //verificarConexionesPermitidas();
+                    LOG.log(Level.INFO, "Versión actual del cliente: <"+ParametrosSistemaCodefac.VERSION+">");
+                    
                     if(!ServiceFactory.getFactory().getUtilidadesServiceIf().verificarVersionSistema(ParametrosSistemaCodefac.VERSION))
                     {
-                        DialogoCodefac.mensaje(new CodefacMsj("El cliente tiene una DIFERENTE VERSIÓN que el servidor y eso puede generar mal funcionamiento del sistema, primero actualice su equipo para continuar ", CodefacMsj.TipoMensajeEnum.ERROR));
-                        System.exit(0);
+                        String versionCliente=ParametrosSistemaCodefac.VERSION;
+                        String versionServidor=ServiceFactory.getFactory().getUtilidadesServiceIf().obtenerVersionServidor();
+                        String strVersion="\n Versión cliente <"+versionCliente+">, Versión servidor <"+versionServidor+">";
+                        Boolean continuar=DialogoCodefac.dialogoPregunta(new CodefacMsj("El cliente tiene una DIFERENTE VERSIÓN que el servidor y eso puede generar mal funcionamiento del sistema."+strVersion+"\nDeséa continuar de todos modos ? ", CodefacMsj.TipoMensajeEnum.ERROR));
+                        if(!continuar)
+                        {
+                            System.exit(0);
+                        }
+                        
                     }
                     
                     //Grabar la ip del ultimo servidor accedido para no ingresar nuevamente el dato

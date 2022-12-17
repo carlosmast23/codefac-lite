@@ -66,4 +66,7 @@ public interface UtilidadesServiceIf extends Remote
     public String getUrlServicioWeb() throws RemoteException,ServicioCodefacException;
     
     public Boolean verificarVersionSistema(String versionCliente) throws RemoteException,ServicioCodefacException;
+    
+    public String obtenerVersionServidor() throws RemoteException,ServicioCodefacException;
+    
 }
