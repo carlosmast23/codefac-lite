@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.panel.
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogPanelAuxIf;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogoConfigAuxIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
@@ -30,8 +31,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -43,7 +46,7 @@ import javax.swing.JPanel;
  *
  * @author Carlos
  */
-public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kardex> , InterfacesPropertisFindWeb,FiltroDialogoIf,DialogPanelAuxIf<Kardex>  
+public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kardex> , InterfacesPropertisFindWeb,FiltroDialogoIf,DialogPanelAuxIf<Kardex>  ,DialogoConfigAuxIf<Kardex>
 {
     
     public static final int PARAMETRO_FILTRO_STOCK=-93;
@@ -177,6 +180,9 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         return queryDialog;
     }
     
+    
+    
+    
     public String getFiltroPorSegmento()
     {
         return "";
@@ -264,6 +270,41 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         }
         
         return panelAux;
+    }
+
+    @Override
+    public List<Kardex> preProcessResult(List<Kardex> datos) 
+    {
+        List<Kardex> listTemp=new ArrayList<Kardex>(datos);
+        List<Kardex> resultadoList=new ArrayList<Kardex>(datos);
+        
+        
+        for( Kardex kardex : datos )
+        {
+            //Verifico si tiene lote para eliminar el otro dato que no tenga lote
+            if(kardex.getLote()!=null)
+            {
+                //Recorro la lista que tiene todos los datos para eliminar los que no necesito
+                for (Kardex kardexTmp : listTemp) 
+                {
+                    //No tomo en cuenta el mismo dato del kardex
+                    if(!kardex.equals(kardexTmp))
+                    {
+                        //Si encuentra otro dato con el mismo producto y bodega con stock en cero o negativo lo voy a eliminar
+                        if(kardexTmp.getProducto().equals(kardex.getProducto()) && kardexTmp.getBodega().equals(kardex.getBodega()))
+                        {
+                            //Si no tiene stock entonces dejo eliminando
+                            if(kardexTmp.getStock().compareTo(BigDecimal.ZERO)<=0)
+                            {
+                                resultadoList.remove(kardexTmp);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return resultadoList;
     }
     
 }

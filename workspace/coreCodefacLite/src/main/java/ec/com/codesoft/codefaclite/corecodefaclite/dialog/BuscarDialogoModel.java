@@ -329,6 +329,13 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             
             convertirMinusculasParametros(queryDialog);
             listaResultados=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),queryDialog.tipoQuery,limiteInferior,CANTIDAD_FILAS);
+            
+            if(model instanceof DialogoConfigAuxIf)
+            {
+                DialogoConfigAuxIf configIf=(DialogoConfigAuxIf) model;
+                listaResultados=configIf.preProcessResult(listaResultados);
+            }
+            
             cargarDatos(listaResultados);
             
             setearBotonesSiguienteAtras();

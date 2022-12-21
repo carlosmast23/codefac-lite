@@ -91,7 +91,7 @@ public class DialogoBuscarMb implements Serializable {
                     Long tamanioConsulta=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryTamanio, queryDialog.getParametros());                    
                     setRowCount(tamanioConsulta.intValue());
                     
-                    datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(),first,pageSize);
+                    datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(),queryDialog.tipoQuery,first,pageSize);
                     buscarDatos(controller, datosBusqueda);
                     return datosBusqueda;
                     //return super.load(first, pageSize, sortField, sortOrder, filters); //To change body of generated methods, choose Tools | Templates.
