@@ -165,6 +165,11 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final BigDecimal MONTO_MAXIMO_VENTAS_CONSUMIDOR_FINAL=new BigDecimal("50");
     
+    public static final BigDecimal obtenerIvaDefecto()
+    {
+        String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+        return new BigDecimal(tarifaStr);
+    }
     
     public abstract class ComprobantesElectronicos
     {

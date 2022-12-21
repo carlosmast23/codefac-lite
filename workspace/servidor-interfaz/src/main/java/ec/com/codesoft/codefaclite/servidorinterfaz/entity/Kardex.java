@@ -2,6 +2,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -245,6 +246,11 @@ public class Kardex implements Serializable,Cloneable {
 
     public void setLote(Lote lote) {
         this.lote = lote;
+    }
+    
+    public BigDecimal getPrecioUltimoConIva() {
+        BigDecimal tarifa=getProducto().getTarifaIva();
+        return UtilidadesImpuestos.agregarValorIva(tarifa,precioUltimo);
     }
     
     //TODO:Unificar los 2 metodos

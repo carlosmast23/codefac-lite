@@ -350,8 +350,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             try {
                 if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.SI))
                 {
-                    String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
-                    costo= UtilidadesImpuestos.agregarValorIva(new BigDecimal(tarifaStr),costo);
+                    //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+                    //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+                    costo= UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costo);
                     interfaz.setearCostoDetalleTxt(costo+"");
                 }
                 else

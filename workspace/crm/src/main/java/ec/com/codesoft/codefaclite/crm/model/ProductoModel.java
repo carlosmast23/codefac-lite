@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
@@ -35,11 +36,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.dataExport.ProductoExportar;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema.Exportacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -732,6 +736,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtPV6().setText("0");
         getTxtImagenProducto().setText("");
         getTxtUltimoCosto().setText("0");
+        getTxtUltimoCosto2().setText("0");
         getTxtCostoPromedio().setText("0");
         getTxtStock().setText("0");
         //getTxtStockInicial().setText("0");
@@ -802,7 +807,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
             if(kardex!=null)
             {
-                getTxtUltimoCosto().setText(kardex.getPrecioUltimo()+"");
+                BigDecimal costoUltimo=kardex.getPrecioUltimo();
+                
+                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.SI))
+                {
+                    costoUltimo= kardex.getPrecioUltimoConIva();
+                }
+                
+                getTxtUltimoCosto().setText(costoUltimo+"");
+                getTxtUltimoCosto2().setText(costoUltimo+"");
+                
                 getTxtCostoPromedio().setText(kardex.getCostoPromedio()+"");
                 getTxtStock().setText(kardex.getStock()+"");
             }

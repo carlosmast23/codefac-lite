@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
+
 import java.math.BigDecimal;
 
 /**
@@ -36,6 +37,14 @@ public class UtilidadesImpuestos {
         ivaDefecto=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
         return valor.multiply(ivaDefecto);
     }
+    
+    /*public static BigDecimal agregarValorIvaDefecto(BigDecimal valor)
+    {        
+        String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+        BigDecimal ivaDefecto=new BigDecimal(tarifaStr);
+        ivaDefecto=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
+        return valor.multiply(ivaDefecto);
+    }*/
     
     public static BigDecimal calcularValorIva(BigDecimal ivaDefecto,BigDecimal valor)
     {
