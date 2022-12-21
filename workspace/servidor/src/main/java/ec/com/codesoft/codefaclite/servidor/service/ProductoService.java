@@ -902,9 +902,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 //Solo grabo el producto cuando no esta creado previamente
+                //System.out.println("Costo: "+kardexDetalle.getKardex().getCostoPromedio());
                 if(p.getIdProducto()==null)
                 {
                     grabarSinTransaccion(p,false,false); //graba el producto                
+                }
+                else //Si ya tiene grabado el producto solo actualizo los datos
+                {
+                    //TODO: Ver si puedo utilizar el metodo de actualizar para evitar alguna inconsistencia
+                    entityManager.merge(p);
                 }
                                 
                 

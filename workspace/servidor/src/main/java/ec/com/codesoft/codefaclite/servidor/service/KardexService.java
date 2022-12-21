@@ -806,7 +806,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
          * ==============================================================
          */
         validarDetallesKardex(detalle,forzarGrabarCantidadCero);
-        
+        //Variable para poder actualizar otros adicionales que pueden venir con el kardex por ejemplo los costos
+        Kardex kardexTmp=detalle.getKardex();
         Kardex kardex =buscarKardexPorProductoyBodegayLote(detalle.getKardex().getBodega(), detalle.getKardex().getProducto(), lote);
 
         //List<Kardex> kardexList = getFacade().findByMap(map);
@@ -848,6 +849,20 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 em.merge(kardex); //grabando la persistencia
             }
         } 
+        else
+        {
+            if(kardexTmp.getCostoPromedio()!=null)
+            {
+                kardex.setCostoPromedio(kardexTmp.getCostoPromedio());
+            }
+            
+            if(kardexTmp.getPrecioUltimo()!=null)
+            {
+                kardex.setPrecioUltimo(kardexTmp.getPrecioUltimo());
+            }
+            //Actualizar cambios adicionales que vengan desde el kardex cuano ya existe
+            em.merge(kardex);
+        }
         //else {
             //Si existe el kardex solo busco el primer registro
         //    kardex = kardexList.get(0);
@@ -1098,9 +1113,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     }
     
-    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Integer cantidadMovimientos) throws java.rmi.RemoteException
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Lote lote,Integer cantidadMovimientos) throws java.rmi.RemoteException
     {
-        List<KardexDetalle> datosConsulta=getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega,cantidadMovimientos);
+        List<KardexDetalle> datosConsulta=getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega,lote,cantidadMovimientos);
         //Invertir la lista porque los resultados estan invertidos
         //Collections.reverse(datosConsulta);
         

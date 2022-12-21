@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -282,20 +283,30 @@ public abstract class AbstractFacade<T>
     }
     
     
-    public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo) {
-        Query query = ejecutarConsultaConParametros(queryStr, map, limiteMinimo, limiteMaximo);
+    public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo) {
+        Query query = ejecutarConsultaConParametros(queryStr, map,tipoQueryEnum, limiteMinimo, limiteMaximo);
         return query.getResultList();
     }
     
-    public static Long findStaticSizeDialog(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo) {
-        Query query = ejecutarConsultaConParametros(queryStr, map, limiteMinimo, limiteMaximo);
+    public static Long findStaticSizeDialog(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo) {
+        Query query = ejecutarConsultaConParametros(queryStr, map,tipoQueryEnum, limiteMinimo, limiteMaximo);
         return (Long) query.getSingleResult();
     }
     
-    public static Query ejecutarConsultaConParametros(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo)
+    public static Query ejecutarConsultaConParametros(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo)
     {
         System.out.println("[Dialog]"+queryStr);
-        Query query = entityManager.createQuery(queryStr);
+        Query query = null;
+        
+        if(tipoQueryEnum==null || tipoQueryEnum.equals(TipoQueryEnum.JPQL))
+        {
+            query=entityManager.createQuery(queryStr);
+        }
+        else if(tipoQueryEnum.equals(tipoQueryEnum.NATIVO))
+        {
+            query=entityManager.createNativeQuery(queryStr);
+        }
+                
         //Agregar los parametros del map al query
         for (Map.Entry<Integer, Object> entry : map.entrySet()) {
             Integer key = entry.getKey();

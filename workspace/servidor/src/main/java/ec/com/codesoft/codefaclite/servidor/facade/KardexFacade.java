@@ -121,13 +121,25 @@ public class KardexFacade extends AbstractFacade<Kardex> {
 
     }
 
-    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega, Integer cantidadMovimientos) {
+    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega,Lote lote, Integer cantidadMovimientos) {
         try {
             //KardexDetalle kd;
+            //kd.getKardex().getLote();
             //kd.getFechaCreacion();
+            
+            String whereLote="";
+            if(lote!=null)
+            {
+                whereLote=" and kd.kardex.lote=?5 ";
+            }
+            else
+            {
+                whereLote=" and kd.kardex.lote is null ";
+            }
+
 
             //kd.getFechaIngreso();
-            String queryString = "SELECT kd FROM KardexDetalle kd WHERE kd.kardex.bodega=?3 and kd.kardex.producto=?4 ";
+            String queryString = "SELECT kd FROM KardexDetalle kd WHERE kd.kardex.bodega=?3 and kd.kardex.producto=?4 "+whereLote;
 
             if (fechaInicial != null) {
                 queryString += " and kd.fechaIngreso>=?1 ";
@@ -157,6 +169,11 @@ public class KardexFacade extends AbstractFacade<Kardex> {
 
             if (fechaFinal != null) {
                 query.setParameter(2, fechaFinal);
+            }
+            
+            if(lote!=null)
+            {
+                query.setParameter(5,lote);
             }
 
             return query.getResultList();
@@ -244,6 +261,103 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         return query.getResultList();
 
     }
+    
+    private Boolean verificarAgregarDato(Object[] objeto,List<Object[]> resultadoList)
+    {
+        Producto producto = (Producto) objeto[0];
+        Bodega bodega = (Bodega) objeto[3];
+        Lote lote = (Lote) objeto[4];
+        
+        for (Object[] dato : resultadoList) 
+        {
+            Producto productoTmp = (Producto) dato[0];
+            Bodega bodegaTmp = (Bodega) dato[3];
+            Lote loteTmp = (Lote) dato[4];
+            
+            //Si coincide estos inidices entonces verifico el lote
+            if(productoTmp.equals(producto) && bodegaTmp.equals(bodega))
+            {
+                return false;
+            }            
+        }
+        return true;
+    }
+    
+    /**
+     * Este metodo es especialmente util para reducir el resultado cuando tenemos lotes y solo queremos seleccionar un unico lote
+     */
+    private List<Object[]> reducirResultadoSinStock(List<Object[]> datosList)
+    {
+        List<Object[]> resultadoList=new ArrayList<Object[]>();
+        
+        for (Object[] objeto : datosList)
+        {
+            Producto producto = (Producto) objeto[0];
+            BigDecimal cantidad = (BigDecimal) objeto[1];
+            BigDecimal costoPromedio = (BigDecimal) objeto[2];
+            Bodega bodega = (Bodega) objeto[3];
+            Lote lote = (Lote) objeto[4];
+            
+            //Buscar si ya existe un dato ingresado en el resultado final
+            if(verificarAgregarDato(objeto, resultadoList))
+            {
+                resultadoList.add(objeto);
+            }
+        }
+        
+        return resultadoList;
+    }
+    
+    private List<Object[]> ajustarResultadosSinStock(List<Object[]> listaConStock,List<Object[]> listaSinStock)
+    {
+        List<Object[]> resultadoList=new ArrayList<Object[]>();
+        
+        for (Object[] objectoSinStock : listaSinStock) 
+        {
+            //Verifico si ya esta agregado el dato dentro de los resultados
+            if(verificarAgregarDato(objectoSinStock, resultadoList))
+            {
+                //verifico si ya esta el dato incluido dentro de los otros datos del resultado del listado con Stock
+                if(verificarAgregarDato(objectoSinStock, listaConStock))
+                {
+                    resultadoList.add(objectoSinStock);
+                }
+            }
+        }
+        
+        return resultadoList;
+    }
+    
+    private List<Object[]> consultaSinStock(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException
+    {
+        List<Object[]> resultadoConStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum);
+        List<Object[]> resultadoSinStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.SIN_STOCK, tipoUbicacionEnum);
+        return ajustarResultadosSinStock(resultadoConStock, resultadoSinStock);
+    }
+    
+    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException
+    {
+        if(tipoStockEnum.equals(TipoStockEnum.CON_STOCK))
+        {
+            return consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum);
+        }
+        else if(tipoStockEnum.equals(TipoStockEnum.SIN_STOCK))
+        {
+            return  consultaSinStock(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, tipoUbicacionEnum);
+                        
+            //return reducirResultadoSinStock(consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.SIN_STOCK, tipoUbicacionEnum));
+        }
+        else
+        {
+            List<Object[]> resultadoConStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum);
+            List<Object[]> resultadoSinStock=consultaSinStock(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, tipoUbicacionEnum);
+            
+            resultadoConStock.addAll(resultadoSinStock);
+            return resultadoConStock;
+        }
+        //return null;
+    }
+    
 
     /**
      * TODO: Falta filtrar por empresa cuando sea vacia la bodega
@@ -251,7 +365,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockFacadeGeneral(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
         //Kardex k;
         //k.getProducto().getCodigoPersonalizado();
          //k.getReserva();
@@ -400,7 +514,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //List<KardexDetalle> detalles= query.getResultList();
         //return eliminarKardexPorLotes(detalles);
         //return query.getResultList();
-        return eliminarProductosPorLote(query.getResultList(),empresa);
+        return query.getResultList();
+        //return eliminarProductosPorLote(query.getResultList(),empresa);
 
     }
     
@@ -449,6 +564,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             if(ServiceFactory.getFactory().getLoteSeviceIf().existenLotesIngresados(empresa))
             {
                 List<Object[]> resultadoNuevo=new ArrayList<Object[]>();
+                
+                
+                Object[] objetoDefecto=null;
                 for (Object[] objeto : resultadoList)
                 {
                     Producto producto = (Producto) objeto[0];
@@ -456,12 +574,21 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                     BigDecimal costoPromedio = (BigDecimal) objeto[2];
                     Bodega bodega = (Bodega) objeto[3];
                     Lote lote = (Lote) objeto[4];
-                    
+                                        
                     if(cantidad.compareTo(BigDecimal.ZERO)>0)
                     {
                         resultadoNuevo.add(objeto);
                     }
+                    
+                    objetoDefecto=objeto;
                 }
+                
+                //Este artificio lo hago para mostrar siempre por lo menos un lote
+                if(resultadoNuevo.size()==0)
+                {
+                    resultadoNuevo.add(objetoDefecto);
+                }
+                
                 return resultadoNuevo;
             }
             

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
@@ -34,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -99,6 +101,8 @@ public class KardexModel extends KardexPanel {
     private TotalesAcumulado totalesAcumulado;
     
     private Bodega bodegaSeleccionada;
+    
+    private Lote lote;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -278,8 +282,36 @@ public class KardexModel extends KardexPanel {
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private void cargarDatosPantalla()
+    {
+        if (lote != null) {
+            getTxtLoteNombre().setText(lote.getCodigo());
+        } else {
+            getTxtLoteNombre().setText("");
+        }
+    }
+    
+    private ActionListener listenerBuscarLote=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            LoteBusqueda busqueda=new LoteBusqueda(session.getEmpresa(),productoSeleccionado);
+            BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(busqueda);            
+            buscarDialogo.setVisible(true);
+
+            if (buscarDialogo.getResultado() != null) 
+            {
+                lote= (Lote) buscarDialogo.getResultado();
+            }
+            
+            cargarDatosPantalla();
+        }
+    };
 
     private void agregarListernerBotones() {
+        
+        getBtnBuscarLote().addActionListener(listenerBuscarLote);        
+        
         getBtnProductoBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -300,6 +332,7 @@ public class KardexModel extends KardexPanel {
                     //Date fechaInicio=new Date(getCmbFechaInicial().getDate().getTime());
                     //Date fechaFin=new Date(getCmbFechaFinal().getDate().getTime());
                     Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
+                    
 
                     KardexServiceIf kardexService = ServiceFactory.getFactory().getKardexServiceIf();
 
@@ -327,7 +360,7 @@ public class KardexModel extends KardexPanel {
                         cantidadMovimientos=(Integer) getTxtMovimientos().getValue();
                     }                    
                     
-                    detalleKardex=kardexService.obtenerConsultaPorFecha(fechaInicial,fechaFinal, productoSeleccionado, bodega,cantidadMovimientos);
+                    detalleKardex=kardexService.obtenerConsultaPorFecha(fechaInicial,fechaFinal, productoSeleccionado,bodega,lote,cantidadMovimientos);
                     if (detalleKardex != null && detalleKardex.size() > 0) {
                         kardex = detalleKardex.get(detalleKardex.size()-1).getKardex();
                         cargarTablaKardex();

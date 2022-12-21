@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.dialog;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import java.util.Map;
  */
 public class QueryDialog {
     public String query;
+    public TipoQueryEnum tipoQuery;
     private Map<Integer,Object> parametros;
 
     public QueryDialog() {
@@ -37,6 +39,6 @@ public class QueryDialog {
         return parametros;
     }
     
-    
+
     
 }
