@@ -50,6 +50,19 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         super(RetencionFacade.class);
         retencionFacade = new RetencionFacade();
     }
+    
+    public Retencion editarRetencion(Retencion entity) throws ServicioCodefacException, RemoteException {
+         
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+             @Override
+             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validarRetencion(entity);
+                entityManager.merge(entity);
+             }             
+         });
+         
+         return entity;
+    }
 
     public Retencion grabar(Retencion entity) throws ServicioCodefacException, RemoteException {
         
@@ -133,6 +146,10 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
             throw new ServicioCodefacException("No se puede grabar retenciones sin detalles");
         }
         
+        if(retencion.getCompra().getAutorizacion()==null || retencion.getCompra().getAutorizacion().length()<10)
+        {
+            throw new ServicioCodefacException("No se puede emitir la autorización de la compra que tenga menos de 10 digitos ");
+        }
     
         if(retencion.getProveedor().getIdentificacion().equals(Persona.IDENTIFICACION_CONSUMIDOR_FINAL))
         {

@@ -71,6 +71,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -115,25 +116,24 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     public void nuevo() throws ExcepcionCodefacLite {
         getPanelDatosDetalles().setVisible(true);
     }
+    
+    private void validarSetearDatos() throws ExcepcionCodefacLite
+    {
+        if (!validar()) {
+            throw new ExcepcionCodefacLite("cancelado pantalla"); //Si no realiza la validacion se cancela el proceso
+        }
+        setearDatos();
+
+        if (!validarDesdeModelo()) {
+            throw new ExcepcionCodefacLite("cancelado valicion modelo"); //Si no realiza la validacion se cancela el proceso
+        }
+
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            
-            
-            if(!validar())
-            {
-                throw new ExcepcionCodefacLite("cancelado pantalla"); //Si no realiza la validacion se cancela el proceso
-            }
-            setearDatos();
-            
-            if (!validarDesdeModelo()) 
-            {
-                throw new ExcepcionCodefacLite("cancelado valicion modelo"); //Si no realiza la validacion se cancela el proceso
-            }
-            
-            
-            
+            validarSetearDatos();
             retencion=ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                     
@@ -180,9 +180,26 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite {
-        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.NO_PERMITE_EDITAR);
-        throw new ExcepcionCodefacLite("Edicion no permitida");
+    public void editar() throws ExcepcionCodefacLite {        
+        if(retencion.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO))
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.NO_PERMITE_EDITAR);
+            throw new ExcepcionCodefacLite("Edicion no permitida comprobante autorizado");
+        }
+        else
+        {
+            try {
+                validarSetearDatos();
+                ServiceFactory.getFactory().getRetencionServiceIf().editar(retencion);
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+            } catch (RemoteException ex) {
+                Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
         
     }
 
@@ -697,8 +714,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     private void cargarTablayTotalesRetenciones()
     {
         List<CompraDetalle> compraDetalles = retencion.getCompra().getDetalles();
-        DefaultTableModel datos = UtilidadesTablas.crearModeloTabla(new String[]{"Obj", "Nombre","Base Imponible", "Retencia Iva", "Retención Renta"},
-                new Class[]{CompraDetalle.class, String.class,String.class, String.class, String.class});
+        DefaultTableModel datos = UtilidadesTablas.crearModeloTabla(new String[]{"Obj", "Nombre","Base Imponible","% IVA", "Ret Iva","% RENTA" ,"Ret Renta"},
+                new Class[]{CompraDetalle.class, String.class,String.class, String.class, String.class,String.class, String.class});
+        
 
         BigDecimal totalRetencionIva = new BigDecimal(BigInteger.ZERO);
         BigDecimal totalRetencionRenta = new BigDecimal(BigInteger.ZERO);
@@ -711,8 +729,10 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                 fila.add(compraDetalle);
                 fila.add(compraDetalle.getDescripcion());
                 fila.add(compraDetalle.getBaseImponibleRenta().toString());
+                fila.add(compraDetalle.getSriRetencionIva().getPorcentaje());
                 fila.add(compraDetalle.getValorSriRetencionIVA());
-                fila.add(compraDetalle.getValorSriRetencionRenta());
+                fila.add(compraDetalle.getSriRetencionRenta().getPorcentaje());
+                fila.add(compraDetalle.getValorSriRetencionRenta().setScale(2, RoundingMode.HALF_UP));
                 totalRetencionIva = totalRetencionIva.add(compraDetalle.getValorSriRetencionIVA());
                 totalRetencionRenta = totalRetencionRenta.add(compraDetalle.getValorSriRetencionRenta());
                 datos.addRow(fila);
@@ -737,6 +757,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
 
         //Ocultar la primera columna de la tabla
         UtilidadesTablas.ocultarColumna(getTblDetalleRetenciones(), 0);
+        UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleRetenciones(),new Integer[]{0,150,50,50,50,50,50});
     }
 
     private void cargarDatosEmpresa() {

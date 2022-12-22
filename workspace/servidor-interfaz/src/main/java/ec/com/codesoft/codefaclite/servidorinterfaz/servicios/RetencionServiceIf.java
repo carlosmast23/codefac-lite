@@ -31,5 +31,5 @@ public interface RetencionServiceIf extends ServiceAbstractIf<Retencion> {
    public List<RetencionDetalle> obtenerRetencionesRentaPorCompra(Compra compra,SriRetencion sriRetencion)throws RemoteException;
    public List<Retencion> obtenerRetencionesPorCompra(Compra compra) throws ServicioCodefacException, RemoteException;
    public List<Retencion> obtenerRetencionesSinDetalleReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa) throws RemoteException;
-
+   public Retencion editarRetencion(Retencion entity) throws ServicioCodefacException, RemoteException;
 }

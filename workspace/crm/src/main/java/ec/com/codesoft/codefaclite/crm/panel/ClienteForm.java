@@ -1143,7 +1143,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida" )
+    //@ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida" )
     public JTextField getjTextCorreo() {
         return jTextCorreo;
     }

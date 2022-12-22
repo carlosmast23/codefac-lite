@@ -9,16 +9,12 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Client
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenTrabajoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.excel.Excel;
-import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -37,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -44,22 +41,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
@@ -67,8 +59,8 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -90,25 +82,15 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.DefaultTableModel;
-import org.bouncycastle.pqc.math.linearalgebra.BigIntUtils;
-import sun.nio.cs.ext.Big5;
 
 /**
  *
@@ -1051,7 +1033,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         //Boolean perPro = true;
         if(presupuestoDetalle == null)
         {
-            presupuestoDetalle = new PresupuestoDetalle();
+            presupuestoDetalle = new PresupuestoDetalle(true);
             agregar = true;
         }
         
@@ -1291,6 +1273,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
          * Mostrar valores en pantalla
          */
         getLblSubtotalCompra().setText(subtotalCompra.toString());
+        
+        //valores de los sibtotales
+        getLblTotalProductos().setText(subtotalCompra.toString());
+        getLblTotalServicios().setText(subtotalVenta.subtract(subtotalCompra).toString());
+        
+        
         getLblDescuentoCompra().setText(descuentoCompra.toString());
         getLblTotalCompra().setText(totalCompra.toString());
         
@@ -1301,9 +1289,15 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         //BigDecimal descuentoVentas=(presupuesto.getDescuentoVenta()!=null)?presupuesto.getDescuentoVenta():BigDecimal.ZERO;
         
         getTxtSubtotalVentas().setText(subtotalVenta.toString());
-        getTxtDescuentoVentas().setText(descuentoVenta.toString());        
+        getTxtDescuentoVentas().setText(descuentoVenta.toString());
+
+        BigDecimal valorIva=UtilidadesImpuestos.calcularValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), totalVenta);
         
-        getLblTotalVenta().setText(totalVenta.toString());
+        getLblIva().setText(valorIva.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO)+"");
+                
+        
+        BigDecimal totalConIva=UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), totalVenta);
+        getLblTotalVenta().setText(totalConIva.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO)+"");
         
         /**
          * Cargar valores en Presupuesto}
@@ -1665,7 +1659,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             PresupuestoDetalle presupuestoDetalle = null;
             int fila = getTableDetallesPresupuesto().getSelectedRow();
             
-            if(fila>0)
+            if(fila>=0)
             {
                 presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila,0);
                 
@@ -1673,7 +1667,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             else
             {
                 fila = getTableDetallesServicio().getSelectedRow();
-                if(fila>0)
+                if(fila>=0)
                 {
                     presupuestoDetalle=(PresupuestoDetalle) getTableDetallesServicio().getValueAt(fila,0);
                 }
@@ -1682,6 +1676,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             
             if(presupuestoDetalle != null){
                 
+                    System.out.println("Eliminando detalle con producto: "+presupuestoDetalle.getProducto().getNombre());
                     presupuesto.getPresupuestoDetalles().remove(presupuestoDetalle);
                     getBtnAgregarDetalle().setEnabled(true);
                     limpiarDetalles();

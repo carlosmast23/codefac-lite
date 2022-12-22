@@ -9,7 +9,9 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.panel.DatoAdicionalDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.email.UtilidadesCorreo;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -35,6 +37,16 @@ public class DatoAdicionalModel extends DatoAdicionalDialog{
         agregarListenerCombos();
         getCmbTipo().setSelectedIndex(0);
     }
+    
+    private Boolean validarInformacion()
+    {
+        if(tipo.equals(FacturaAdicional.Tipo.TIPO_CORREO))
+        {
+            return UtilidadesCorreo.validarCorreos(valor);
+        }
+        
+        return true;
+    }
 
     private void agregarListenerBotones() {
         getBtnAgregar().addActionListener(new ActionListener() {
@@ -55,7 +67,15 @@ public class DatoAdicionalModel extends DatoAdicionalDialog{
                 valor = getTxtDato().getText();
                 campo = getTxtCampo().getText();
                 tipo = (FacturaAdicional.Tipo) getCmbTipo().getSelectedItem();
-                dispose();
+                if(validarInformacion())
+                {
+                    dispose();
+                }
+                else
+                {
+                    DialogoCodefac.mensaje(new CodefacMsj("Error al validar la información", CodefacMsj.TipoMensajeEnum.ERROR));
+                }
+                
             }
         });
         

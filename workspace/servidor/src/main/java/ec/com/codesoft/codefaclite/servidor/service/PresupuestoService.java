@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -71,6 +72,13 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                  */
                 if (entity.getPresupuestoDetalles() != null) {
                     for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
+                        
+                        //Uso este artificio para cuando utilizo id negativos para hacer comprobaciones en la vista
+                        if(presupuestoDetalle.getId()<0)
+                        {
+                            presupuestoDetalle=null;
+                        }
+                        
                         if (presupuestoDetalle.getProductoProveedor().getId() == null) {
                             entityManager.persist(presupuestoDetalle.getProductoProveedor());
                         } else {
@@ -192,6 +200,11 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                 }
             }
         });
+    }
+    
+    public Presupuesto consultarUltimaPorObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
+    { 
+        return getFacade().consultarUltimaOTporObjectoMantenimientoFacade(objetoMantenimiento);
     }
     
 }

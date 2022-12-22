@@ -28,7 +28,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.email.UtilidadesCorreo;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -128,6 +130,12 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
                 return persona.getIdentificacion().equals(dato.getIdentificacion());
             }
         });
+        
+        if(!UtilidadesCorreo.validarCorreos(persona.getCorreoElectronico()))
+        {
+            throw new ServicioCodefacException("Error validando el o los correos ingresados");
+        }
+        
         /**
          * Validaciones previas de los datos
          */

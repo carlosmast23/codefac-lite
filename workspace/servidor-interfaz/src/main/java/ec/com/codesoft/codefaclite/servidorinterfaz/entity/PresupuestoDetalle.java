@@ -36,6 +36,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class PresupuestoDetalle implements Serializable
 {   
+        private static Long idTemporal=-1l;
+
+    public PresupuestoDetalle() 
+    {
+        
+    }
+    
+    public PresupuestoDetalle(Boolean generarId)
+    {
+        id=idTemporal--;
+    }
+    
     @Id
     @Column(name="ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)        

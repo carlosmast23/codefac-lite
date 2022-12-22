@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -28,5 +29,6 @@ public interface PresupuestoServiceIf  extends ServiceAbstractIf<Presupuesto> {
    public List<PresupuestoDetalleActividad> consultarActividadPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException;
    public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList) throws ServicioCodefacException,RemoteException;
    public List<PresupuestoDetalleActividad> consultarActividadesPendientesPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException;
+   public Presupuesto consultarUltimaPorObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException;
    
 }

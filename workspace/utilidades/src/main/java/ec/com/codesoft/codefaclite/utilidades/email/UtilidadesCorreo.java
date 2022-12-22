@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.email;
 
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -82,6 +84,25 @@ public abstract class UtilidadesCorreo {
             //getTxtPasswordCorreo().setText("");
             //DialogoCodefac.mensaje("Error Correo", "Ingrese un correo valido", DialogoCodefac.MENSAJE_INCORRECTO);
         }
+    }
+    
+    public static Boolean validarCorreos(String correos)
+    {
+        String[] correoList=correos.split(",");
+        
+        for (String correo : correoList) 
+        {
+            if(!validarCorreoIndividual(correo))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static Boolean validarCorreoIndividual(String correo)
+    {
+        return UtilidadesExpresionesRegulares.validar(correo, ExpresionRegular.emailCompleto);
     }
     
 }

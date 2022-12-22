@@ -6,13 +6,16 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
@@ -109,4 +112,29 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         
         return query.getResultList();
     }
+    
+    public Presupuesto consultarUltimaOTporObjectoMantenimientoFacade(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
+    {
+        //Presupuesto p;
+        //p.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento()
+        //OrdenTrabajo ot;
+        //ot.getFechaIngreso();
+        //ot.getEstado();
+        //ot.getObjetoMantenimiento()
+        String queryStr="SELECT u FROM Presupuesto u WHERE u.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento = ?1 AND u.estado<> ?2 ORDER BY u.fechaIngreso desc ";
+        Query query = getEntityManager().createQuery(queryStr);
+        
+        query.setParameter(1, objetoMantenimiento);
+        query.setParameter(2, OrdenTrabajo.EstadoEnum.ELIMINADO.getEstado());
+        
+        query.setMaxResults(1);
+        
+        List<Presupuesto> resultadoList= query.getResultList();
+        if(resultadoList.size()>0)
+        {
+            return resultadoList.get(0);
+        }
+        return null;
+    }
+    
 }

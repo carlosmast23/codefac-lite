@@ -39,6 +39,7 @@ public final class ExpresionRegular
      * Formato estandar de correo electrónico
      * Ejm: correo@algo.ecu
     */
+    @Deprecated
     public static final String email = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$";
     
     /**
@@ -75,5 +76,7 @@ public final class ExpresionRegular
      * Ejm: 15, 1, 100
     */
     public static final String soloNumeros2 = "^[0-9]+$";
+    
+    public static final String emailCompleto = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
 
 }

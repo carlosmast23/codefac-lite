@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -835,6 +836,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             public void actionPerformed(ActionEvent e) {
                 try {
                     ObjetoMantenimiento objetoMantenimiento=(ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
+                    //Presupuesto ultimoPresupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarUltimaPorObjectoMantenimiento(objetoMantenimiento);
                     OrdenTrabajo ultimaOT=ServiceFactory.getFactory().getOrdenTrabajoServiceIf().consultarUltimaOTporObjectoMantenimiento(objetoMantenimiento);
                     
                     if(ultimaOT!=null)
