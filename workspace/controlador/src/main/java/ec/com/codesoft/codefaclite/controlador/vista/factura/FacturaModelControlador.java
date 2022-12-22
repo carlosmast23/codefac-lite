@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
+import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac.ImpresionAutomaticaEnum;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
@@ -42,7 +44,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpr
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstadoFormEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -1259,7 +1263,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param session
      * @param panelPadre 
      */
-    public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre) 
+    public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre,GeneralPanelInterface.EstadoFormularioEnum formEnum) 
     {
         //Revisar el nombre del comproante si tiene un alias
         if(facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
@@ -1346,8 +1350,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             configuracion=obtenerConfiguracionImpresora(session);
         }
+        
+        //Imprimir solo cuando esta grabar la primera de forma automaticamente
+        ImpresionAutomaticaEnum impresionAutomaticaEnum=null;
+        if(formEnum.equals(GeneralPanelInterface.EstadoFormularioEnum.GRABAR))
+        {
+            impresionAutomaticaEnum=ImpresionAutomaticaEnum.VENTA;
+        }
         //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
-        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion,impresionAutomaticaEnum);
 
     }
     

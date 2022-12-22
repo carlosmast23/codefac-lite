@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.callback;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
@@ -211,7 +212,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         }
         
         if (verificarImprimirComprobanteVenta()) {
-            FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session, facturacionModel.panelPadre);
+            FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session, facturacionModel.panelPadre,GeneralPanelInterface.EstadoFormularioEnum.GRABAR);
             //facturacionModel.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA,true);
             //imprimirComprobanteVenta();
         } else {
@@ -222,7 +223,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     private void generarReportePdf(String clave) {
         if(verificarImprimirComprobanteVenta())
         {
-            FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session, facturacionModel.panelPadre);
+            FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session, facturacionModel.panelPadre,GeneralPanelInterface.EstadoFormularioEnum.GRABAR);
             //facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
         }
         else
@@ -273,7 +274,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                         public void actionPerformed(ActionEvent e) {
                             if(verificarImprimirComprobanteVenta())
                             {
-                                FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session, facturacionModel.panelPadre);
+                                FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session, facturacionModel.panelPadre,GeneralPanelInterface.EstadoFormularioEnum.GRABAR);
                                 //facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
                             }
                             else

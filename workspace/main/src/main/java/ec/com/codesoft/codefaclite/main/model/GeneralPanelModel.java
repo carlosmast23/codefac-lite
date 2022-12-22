@@ -3952,6 +3952,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         frame.estadoFormularioEnum=GeneralPanelInterface.EstadoFormularioEnum.GRABAR;
     }
     
+    /*@Override
+    public SessionCodefac getSessionCodefac()
+    {
+        return sessionCodefac;
+    }*/
+    
     ////////////////////////////////////////////////////////////////////////////
     //              CLASES E INTERFACES ADICIONALES
     ////////////////////////////////////////////////////////////////////////////

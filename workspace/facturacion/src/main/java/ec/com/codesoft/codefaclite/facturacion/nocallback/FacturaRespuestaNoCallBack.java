@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteRespuestaNoCallBack;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
@@ -57,7 +58,7 @@ public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
             
             if(verificarImprimirComprobanteVenta())
             {
-                FacturaModelControlador.imprimirComprobanteVenta((Factura) comprobante, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session,facturacionModel.panelPadre);
+                FacturaModelControlador.imprimirComprobanteVenta((Factura) comprobante, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session,facturacionModel.panelPadre,GeneralPanelInterface.EstadoFormularioEnum.GRABAR);
                 //facturacionModel.imprimirComprobanteVenta((Factura) comprobante,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
             }
             else

@@ -1607,7 +1607,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 if(factura.getTipoFacturacionEnum()==null ||  factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {                    
-                    FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre);
+                    FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre,getEstadoFormularioEnum());
                 }                
                 else if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {
@@ -2096,7 +2096,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 break;
 
                             case 1: //opcion para comprobantes Venta
-                                FacturaModelControlador.imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA,false,session,panelPadre);
+                                FacturaModelControlador.imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA,false,session,panelPadre,getEstadoFormularioEnum());
                                 break;
 
                             case 2: //Cancelar
@@ -2137,7 +2137,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     
                 if(factura.getTipoFacturacionEnum()==null || factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
-                    FacturaModelControlador.imprimirComprobanteVenta(factura,aliasNotaVentaInterna,false,session,panelPadre);
+                    FacturaModelControlador.imprimirComprobanteVenta(factura,aliasNotaVentaInterna,false,session,panelPadre,getEstadoFormularioEnum());
                 }
                 else if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {

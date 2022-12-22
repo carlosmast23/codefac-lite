@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -105,6 +106,8 @@ public interface InterfazComunicacionPanel
     public void actualizarTituloCodefac();
     
     public void cerrarSession();
+    
+    public SessionCodefac getSessionCodefac();
     
     //public JXTaskPane buscarPanelCategoriaLateral(String tituloCategoria);
 

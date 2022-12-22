@@ -293,6 +293,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         //Agregar las impresoras disponibles
         List<String> impresoraList= UtilidadesImpresora.obtenerNombreImpresorasDisponibles();
+        impresoraList.add(0,null);
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda(),impresoraList);
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda2(),impresoraList);
         

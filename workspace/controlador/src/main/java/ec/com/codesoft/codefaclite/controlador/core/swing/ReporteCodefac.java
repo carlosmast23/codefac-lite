@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.controlador.core.swing;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImpresora;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
@@ -28,9 +30,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -195,8 +199,12 @@ public class ReporteCodefac {
         generarReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte);
     }
     
+    public static void generarReporteInternalFramePlantilla(RecursoCodefac recursoCodefac,String nombre, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora,ImpresionAutomaticaEnum impresionAutoEnum) {
+        generarReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte,configuracionImpresora,impresionAutoEnum);
+    }
+    
     public static void generarReporteInternalFramePlantilla(RecursoCodefac recursoCodefac,String nombre, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora) {
-        generarReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte,configuracionImpresora);
+        generarReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum,formatoReporte,configuracionImpresora,null);
     }
     
     @Deprecated
@@ -235,10 +243,19 @@ public class ReporteCodefac {
         panelPadre.crearReportePantalla(jasperPrint,tituloReporte);
     }
     
-    private static void generarReporte(RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora)
+    private static void generarReporte(RecursoCodefac recursoCodefac,String nombre,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,ConfiguracionImpresoraEnum configuracionImpresora,ImpresionAutomaticaEnum impresionAutomaticaEnum)
     {
+        //TODO
         JasperPrint jasperPrint=construirReporte(recursoCodefac,nombre, parametros, datos, panelPadre, tituloReporte, orientacionEnum, formatoReporte);
+        
+        if(impresionAutomaticaEnum!=null)
+        {
+            impresionAutomaticaEnum.imprimirAutomaticamente(panelPadre.getSessionCodefac().getEmpresa(), jasperPrint);
+        }
+        
         panelPadre.crearReportePantalla(jasperPrint,tituloReporte,configuracionImpresora);
+        
+        
     }
         
     private static void generarReporte(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
@@ -752,5 +769,68 @@ public class ReporteCodefac {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
         return parametros;
+    }
+
+    
+    public enum ImpresionAutomaticaEnum
+    {
+        COMANDA(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA,ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2,ParametroCodefac.COPIAS_IMPRESORA_COMANDA),
+        VENTA(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA,ParametroCodefac.COPIAS_IMPRESORA_VENTA);
+        
+        private String nombreParametroImpresora;
+        private String nombreParametroImpresora2;
+        private String copiasParametroImpresora;
+        
+        private ImpresionAutomaticaEnum(String nombreParametroImpresora, String copiasParametroImpresora) {
+            this.nombreParametroImpresora = nombreParametroImpresora;
+            this.copiasParametroImpresora = copiasParametroImpresora;
+        }
+
+        private ImpresionAutomaticaEnum(String nombreParametroImpresora, String nombreParametroImpresora2, String copiasParametroImpresora) {
+            this.nombreParametroImpresora = nombreParametroImpresora;
+            this.nombreParametroImpresora2 = nombreParametroImpresora2;
+            this.copiasParametroImpresora = copiasParametroImpresora;
+        }
+        
+        
+
+        public String getNombreParametroImpresora() {
+            return nombreParametroImpresora;
+        }
+
+        public String getCopiasParametroImpresora() {
+            return copiasParametroImpresora;
+        }
+        
+        
+        /**
+         * ////////////////// METODOS PERSONALIZADOS ///////////////////////
+         */
+        
+        public void imprimirAutomaticamente(Empresa empresa,JasperPrint jasperReporte)
+        {
+            String cantidadStr = ParametroUtilidades.obtenerValorParametro(empresa, copiasParametroImpresora);
+            if (!UtilidadesTextos.verificarNullOVacio(cantidadStr)) {
+                Integer cantidad = Integer.parseInt(cantidadStr);
+                if (cantidad > 0) {
+                    //List<String> impresoraList=new ArrayList<String>();
+                    //JasperPrint jasperReporte = FacturaModelControlador.getReporteTicket(proforma, sessionCodefac);
+                    //Impresora 1
+                    String nombreImpresoraDefecto = ParametroUtilidades.obtenerValorParametro(empresa, nombreParametroImpresora);
+                    if (!UtilidadesTextos.verificarNullOVacio(nombreImpresoraDefecto) && !nombreImpresoraDefecto.equals("null")) {
+                        UtilidadesImpresora.printReportToPrinter(jasperReporte, cantidad, nombreImpresoraDefecto);
+                    }
+
+                    //Impresora 2
+                    nombreImpresoraDefecto = ParametroUtilidades.obtenerValorParametro(empresa, nombreParametroImpresora2);
+                    if (!UtilidadesTextos.verificarNullOVacio(nombreImpresoraDefecto) && !nombreImpresoraDefecto.equals("null")) {
+                        UtilidadesImpresora.printReportToPrinter(jasperReporte, cantidad, nombreImpresoraDefecto);
+                    }
+
+                }
+            }
+             
+        }
+        
     }
 }
