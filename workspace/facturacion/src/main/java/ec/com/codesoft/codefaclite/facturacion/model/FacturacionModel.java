@@ -1604,7 +1604,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
                 DialogoCodefac.mensaje("Correcto", "La nota de venta interna se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                //facturaManual(factura.getCodigoDocumentoEnum());
+                
                 if(factura.getTipoFacturacionEnum()==null ||  factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {                    
                     FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre);

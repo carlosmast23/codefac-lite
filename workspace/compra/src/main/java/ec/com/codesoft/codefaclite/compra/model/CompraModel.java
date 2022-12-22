@@ -92,6 +92,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -856,16 +858,16 @@ public class CompraModel extends CompraPanel{
             
         });
         
-        getTblDetalleProductos().addMouseListener(new MouseAdapter() {
+        getTblDetalleProductos().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void mouseClicked(MouseEvent evt)
-            {
+            public void valueChanged(ListSelectionEvent e) {
                 filaDP = getTblDetalleProductos().getSelectedRow();
                 bandera = true;
                 if(filaDP>=0)
                 {
                     
                     CompraDetalle compraDetalle = (CompraDetalle) compra.getDetalles().get(filaDP); //TODO: Revisar si esta forma es la mas optima
+                    System.out.println("Seleccionado producto original vinculado: "+compraDetalle.getProductoProveedor().getProducto().getNombre() );
                     getTxtProductoItem().setText(compraDetalle.getProductoProveedor().getProducto().getCodigoPersonalizado());
                     verificarExistenciadeProductoProveedor();
                     getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
@@ -898,9 +900,9 @@ public class CompraModel extends CompraPanel{
                     
                     getCmbSustentoComprobante().setSelectedItem(compraDetalle.getCodigoSustentoSriEnum());
                 }
-                
             }
         });
+        
         
         getBtnEditarItem().addActionListener(new ActionListener() {
             @Override
