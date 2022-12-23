@@ -1886,6 +1886,9 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
         
+        JasperReport reportCabecera=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"cabecera.jrxml");
+        servicio.setReporteCabecera(reportCabecera);
+        
         JasperReport reportFormaPago=cargarRecursoJasperProxy(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"forma_pago.jrxml");
         servicio.setReporteFormaPago(reportFormaPago);
         

@@ -194,6 +194,7 @@ public class ComprobanteElectronicoService implements Runnable {
     private JasperReport reporteInfoOtroAdicional;
     private JasperReport reporteInfoAdicional;
     private JasperReport reporteFormaPago;
+    private JasperReport reporteCabecera;
     
     private boolean enviarPorLotes;
     
@@ -910,6 +911,7 @@ public class ComprobanteElectronicoService implements Runnable {
             List<Object> informacionAdiciona = reporte.getDetalles();
             Map<String, Object> datosMap = reporte.getMapReporte(aliasNombreDocumentosMap,razonSocialTituloPrincipal);
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
+            datosMap.put("SUBREPORT_CABECERA", reporteCabecera);
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
             datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
@@ -1142,6 +1144,7 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
             datosMap.put("estado","");
             
+            datosMap.put("SUBREPORT_CABECERA", reporteCabecera);
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
             datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
@@ -1177,50 +1180,7 @@ public class ComprobanteElectronicoService implements Runnable {
             
             ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
             return getPrintJasperComprobante(comprobante, claveAcceso);
-            /*ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
-
-            List<Object> informacionAdicional = reporte.getDetalles();
-            
-            //InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
-            //InputStream reporteFormaPago = this.reporteFormaPago.openStream();
-            //InputStream pathLogoImagen = this.pathLogoImagen.openStream();
-            
-            
-            String fechaHoraAutorizacion="";
-            String estado="";
-            //Si la carpeta que se quiere obtene es desde la autorizada consulto los otros datos que faltan
-            //if(carpetaOrigenXml.equals(CARPETA_AUTORIZADOS))
-            //{
-            //Intenta verificar si existe el dato de la fecha y hora de autorizacion
-                ComprobanteElectronicoAutorizado comprobanteAutorizado=new ComprobanteElectronicoAutorizado();
-                comprobanteAutorizado.construirDesdeArchivo(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS, claveAcceso.clave));
-                fechaHoraAutorizacion=comprobanteAutorizado.getFechaAutorizacion();
-                estado=comprobanteAutorizado.getEstado();
-            //}
-
-            Map<String, Object> datosMap = reporte.getMapReporte();
-            datosMap.put("SUBREPORT_DIR", pathParentJasper);
-            datosMap.put("fecha_hora_autorizacion",fechaHoraAutorizacion);
-            datosMap.put("estado","");
-            
-            datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
-            datosMap.put("SUBREPORT_INFO_OTRO", reporteInfoOtroAdicional);
-            datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
-            datosMap.put("imagen_logo", pathLogoImagen);
-
-            //
-            // Agregar datos adicionales como por ejemplo los datos del pide de
-            // pagina
-            //
-            //datosMap.putAll(mapAdicionalReporte);
-            datosMap.putAll(getMapCopyAdicionalReporte());
-
-            //datosMap.put("imagen_logo",is);
-            //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
-            //datosMap.put("imagen_logo",pathLogoImagen.openStream());
-
-            return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdicional);*/
-
+           
         } catch (JAXBException ex) {
             ex.printStackTrace();
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
@@ -2009,6 +1969,16 @@ public class ComprobanteElectronicoService implements Runnable {
     public void setReporteFormaPago(JasperReport reporteFormaPago) {
         this.reporteFormaPago = reporteFormaPago;
     }
+
+    public JasperReport getReporteCabecera() {
+        return reporteCabecera;
+    }
+
+    public void setReporteCabecera(JasperReport reporteCabecera) {
+        this.reporteCabecera = reporteCabecera;
+    }
+    
+    
 
     public List<ComprobanteElectronico> getComprobantesLote() {
         return comprobantesLote;

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecera" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cec7af02-86ab-4d6a-8f5a-fe28f2971551">
+	<property name="ireport.zoom" value="1.6105100000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="razon_social" class="java.lang.String"/>
+	<parameter name="nombre_legal" class="java.lang.String"/>
+	<parameter name="direccion" class="java.lang.String"/>
+	<parameter name="contribuyente_especial" class="java.lang.String"/>
+	<parameter name="obligado_contabilidad" class="java.lang.String"/>
+	<parameter name="direccion_sucursal" class="java.lang.String"/>
+	<parameter name="contribuyente_especial_1" class="java.lang.String"/>
+	<parameter name="obligado_contabilidad_1" class="java.lang.String"/>
+	<parameter name="tipoRegimen" class="java.lang.String"/>
+	<parameter name="pl_agenteRetencionResolucion" class="java.lang.String"/>
+	<parameter name="ruc" class="java.lang.String"/>
+	<parameter name="nombre_documento" class="java.lang.String"/>
+	<parameter name="secuencial" class="java.lang.String"/>
+	<parameter name="fecha_hora_autorizacion" class="java.lang.String"/>
+	<parameter name="ambiente" class="java.lang.String"/>
+	<parameter name="autorizacion" class="java.lang.String"/>
+	<parameter name="imagen_logo" class="java.lang.Object"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="256" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="108" width="305" height="144" uuid="680399eb-d782-443e-a73e-24e9b8762081"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement x="315" y="1" width="242" height="250" uuid="89d128eb-688c-460b-b2cf-0eb2ebd64cdd"/>
+			</rectangle>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="10" y="109" width="291" height="28" uuid="051adae8-ca32-4555-8459-711c20579089"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" isItalic="true"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{razon_social}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="215" width="130" height="12" uuid="ed975481-c19c-418f-be5f-e097803881ff"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Obligado a llevar Contabilidad]]></text>
+			</staticText>
+			<image hAlign="Center">
+				<reportElement x="13" y="1" width="287" height="107" uuid="bb08165b-9149-4955-9229-1dfe7f2baf40"/>
+				<imageExpression><![CDATA[$P{imagen_logo}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="136" y="203" width="163" height="12" uuid="99c0df72-f178-4c64-af43-2084c17b920b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{contribuyente_especial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="328" y="19" width="36" height="16" uuid="5792a5ea-d312-44be-a485-e8ecc7abb528"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ruc:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="203" width="130" height="12" uuid="537006b7-53b8-45e4-8c18-b99307031d1d">
+					<printWhenExpression><![CDATA[new Boolean($P{contribuyente_especial}!=null && !$P{contribuyente_especial}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Contribuyente Especial No:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="323" y="190" width="232" height="37" uuid="7e92f15b-18e1-440c-8b54-50840f1b0120">
+					<printWhenExpression><![CDATA[new Boolean($P{autorizacion}!=null && !$P{autorizacion}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
+				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="none">
+					<jr:codeExpression><![CDATA[$P{autorizacion}]]></jr:codeExpression>
+				</jr:Code128>
+			</componentElement>
+			<textField>
+				<reportElement x="412" y="143" width="100" height="20" uuid="810b4aca-979a-486b-b009-86e83fa0c3c9"/>
+				<textFieldExpression><![CDATA[$P{ambiente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="182" width="95" height="20" uuid="a139ebe8-aedd-4efd-8d98-a679593f979f"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección Sucursal:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="137" y="215" width="163" height="12" uuid="35c4d371-79d9-40a4-8331-86dbb74356b3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{obligado_contabilidad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="327" y="65" width="84" height="20" uuid="0e8086c7-1deb-4609-b667-0f478f81dbb8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="364" y="19" width="176" height="16" uuid="e2f93ae9-1c21-4d40-a192-a2be9ef11bf8"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ruc}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="328" y="143" width="84" height="20" uuid="523ad9e5-0671-43ac-a6e7-dde9553f2e36"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ambiente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="411" y="65" width="128" height="20" uuid="e05f3701-d307-43b8-b222-3977eaceabdc"/>
+				<textFieldExpression><![CDATA[$P{secuencial}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="328" y="85" width="221" height="18" uuid="452991de-9fdc-4887-b246-f2707757f375"/>
+				<textElement>
+					<font size="7" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="328" y="37" width="229" height="25" uuid="06bff11a-2720-47e1-843d-ef95dca1e376"/>
+				<textElement>
+					<font size="17" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombre_documento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="162" width="95" height="20" uuid="b689aee7-6609-4ea1-afff-eee6e2bbb451"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección Matriz:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="329" y="123" width="216" height="20" uuid="9c7401d1-3790-4a2e-ab04-bfc03d671b5c"/>
+				<textFieldExpression><![CDATA[$P{fecha_hora_autorizacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="6" y="227" width="293" height="12" uuid="7a015d3d-4c21-41d1-80bb-ebd2d8c6b381"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tipoRegimen}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="323" y="227" width="232" height="20" uuid="cbe09e16-2c89-46e8-badb-141c9df0ba5b"/>
+				<textElement>
+					<font size="7" isItalic="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="328" y="103" width="183" height="20" uuid="eda708bf-d1b4-4d03-b037-4c90b6bcc2cc">
+					<printWhenExpression><![CDATA[new Boolean($P{fecha_hora_autorizacion}!=null && !$P{fecha_hora_autorizacion}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha y Hora de Autorización:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="137" width="293" height="25" uuid="3a7e26a3-3964-47a0-b4e4-092b49196b6a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombre_legal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="103" y="161" width="198" height="22" uuid="21daca48-fa77-4991-81fc-52ca75e055ed"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="103" y="182" width="198" height="20" uuid="3375abe0-ef1a-4f3f-b6f3-9f12545b7971"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{direccion_sucursal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="327" y="167" width="100" height="20" uuid="6bdeab45-d2ed-486d-9782-68457756446e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLAVE DE ACCESO]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="6" y="239" width="293" height="12" uuid="93a12603-18c3-4156-9afd-a8f2cf74a9d9">
+					<printWhenExpression><![CDATA[new Boolean(!$P{pl_agenteRetencionResolucion}.equals(""))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Dashed"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Agente de Retención Resolución "+$P{pl_agenteRetencionResolucion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

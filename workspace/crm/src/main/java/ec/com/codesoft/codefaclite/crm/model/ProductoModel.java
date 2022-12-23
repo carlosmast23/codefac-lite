@@ -759,7 +759,13 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        controlador.producto=(Producto) entidad;
+        
+        if (entidad instanceof Kardex) {
+            controlador.producto = ((Kardex) entidad).getProducto();
+        } else {
+            controlador.producto = (Producto) entidad;
+        }
+        
         getTxtCodigoEAN().setText(controlador.producto.getCodigoEAN());
         getTxtCodigoUPC().setText(controlador.producto.getCodigoUPC());
 

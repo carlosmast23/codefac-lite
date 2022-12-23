@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="2.35794769100009"/>
+	<property name="ireport.zoom" value="1.610510000000061"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="783"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -85,6 +85,7 @@
 	<parameter name="campoFirma2" class="java.lang.String"/>
 	<parameter name="campoFirma3" class="java.lang.String"/>
 	<parameter name="tipoRegimen" class="java.lang.String"/>
+	<parameter name="SUBREPORT_CABECERA" class="java.lang.Object"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -105,62 +106,6 @@
 			<rectangle radius="10">
 				<reportElement x="-2" y="256" width="557" height="43" uuid="267e20e7-cdb9-4cc7-bbe5-773ecf3b0bf2"/>
 			</rectangle>
-			<image hAlign="Center">
-				<reportElement x="11" y="0" width="287" height="107" uuid="0b0aecb9-e33e-4335-9a20-b132c3621bbf"/>
-				<imageExpression><![CDATA[$P{imagen_logo}]]></imageExpression>
-			</image>
-			<rectangle radius="10">
-				<reportElement x="313" y="0" width="242" height="250" uuid="ff7501c2-32ef-49f6-ab70-46f28b26a58d"/>
-			</rectangle>
-			<rectangle radius="10">
-				<reportElement x="0" y="109" width="305" height="144" uuid="128a1725-5c7e-4bc8-b27b-142a8c3698f1"/>
-			</rectangle>
-			<textField isBlankWhenNull="true">
-				<reportElement x="318" y="75" width="221" height="18" uuid="8ce84796-bd04-40a2-b9d4-6aed40d2bb70"/>
-				<textElement>
-					<font size="7" isItalic="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="6" y="217" width="130" height="12" uuid="f86ce2f5-8b93-4b73-b0fb-84039e154190"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Obligado a llevar Contabilidad]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="401" y="55" width="128" height="20" uuid="a0727ea6-6a62-4dcd-b4b0-a1e57d389239"/>
-				<textFieldExpression><![CDATA[$P{secuencial}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="318" y="133" width="84" height="20" uuid="ccbf9fd5-f138-4ed6-8279-29ad77096b89"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ambiente:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="136" y="205" width="163" height="12" uuid="f9902681-6a04-4d2b-9fa1-d968cd848025"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{contribuyente_especial}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="100" y="183" width="198" height="22" uuid="c6e18b02-c339-4ac2-a0ef-df874a62768c"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{direccion_sucursal}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="317" y="157" width="100" height="20" uuid="263628ba-5b1d-4ff9-9f5f-e3f8c0a754ab"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[CLAVE DE ACCESO]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="71" y="258" width="331" height="13" uuid="7a51c9a1-117a-4cd1-9e9e-2050b5f8424b"/>
 				<textElement>
@@ -168,27 +113,12 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cliente_nombres}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="319" y="113" width="216" height="20" uuid="d19d3952-4232-4035-ad12-327170bdd525"/>
-				<textFieldExpression><![CDATA[$P{fecha_hora_autorizacion}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="318" y="9" width="36" height="16" uuid="eb119e44-1fd0-4d1a-a344-b88c7bfc3494"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ruc:]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="479" y="257" width="69" height="15" uuid="d61cbadd-18a1-4550-8c49-921ba009ddae"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fecha_emision}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="402" y="133" width="100" height="20" uuid="cb08c4ed-679d-45a1-9438-183a536efd79"/>
-				<textFieldExpression><![CDATA[$P{ambiente}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="-2" y="258" width="73" height="13" uuid="b0655437-1765-43fa-8aa8-396a8dd3634b"/>
@@ -198,13 +128,6 @@
 				</textElement>
 				<text><![CDATA[Razón Social:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="318" y="27" width="238" height="25" uuid="b2c4b48c-b4cf-426f-a708-025db7b97ff0"/>
-				<textElement>
-					<font size="17" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{nombre_documento}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="402" y="258" width="77" height="13" uuid="853671ed-6041-4aa4-badb-4c46f5b0ee08"/>
 				<textElement textAlignment="Right">
@@ -213,26 +136,12 @@
 				</textElement>
 				<text><![CDATA[Fecha Emisión:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="317" y="55" width="84" height="20" uuid="10e48216-48bb-4bce-9370-a0d54c0a304f"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[No:]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="71" y="272" width="141" height="13" uuid="3fd4f4c5-365a-4994-86dc-4012c478e913"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cliente_identificacion}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="354" y="9" width="176" height="16" uuid="5fa1f26b-0472-4a9a-b9f4-b166fa81bf34"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{ruc}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="16" y="285" width="55" height="13" uuid="a8db84d5-f603-4ea1-acc4-d38d75d78f34">
@@ -244,102 +153,12 @@
 				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="6" y="205" width="130" height="12" uuid="fb1587ca-fa20-4e4d-83ee-31037db32eda">
-					<printWhenExpression><![CDATA[new Boolean($P{contribuyente_especial}!=null && !$P{contribuyente_especial}.isEmpty() )]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font size="8" isBold="true"/>
-					<paragraph tabStopWidth="40"/>
-				</textElement>
-				<text><![CDATA[Contribuyente Especial No:]]></text>
-			</staticText>
-			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="101" y="162" width="198" height="22" uuid="369ab1d6-f0d1-4c79-90e5-a828e3fe1cf9"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="6" y="185" width="95" height="20" uuid="d79b8839-4ba0-410e-9c87-8c0ca43e2bf3"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Dirección Sucursal:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="318" y="93" width="183" height="20" uuid="b96a7dcf-c938-4a5d-9225-9ff9b509f9e9">
-					<printWhenExpression><![CDATA[new Boolean($P{fecha_hora_autorizacion}!=null && !$P{fecha_hora_autorizacion}.isEmpty() )]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Fecha y Hora de Autorización:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="136" y="217" width="163" height="12" uuid="830f3c58-e5f5-41be-850d-110f21ea3892"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{obligado_contabilidad}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="6" y="137" width="293" height="25" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="11" isBold="true" isItalic="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{nombre_legal}]]></textFieldExpression>
-			</textField>
-			<componentElement>
-				<reportElement x="313" y="180" width="238" height="47" uuid="40b8dc45-f9bd-4178-84ea-1fab32e8b949">
-					<printWhenExpression><![CDATA[new Boolean($P{autorizacion}!=null && !$P{autorizacion}.isEmpty() )]]></printWhenExpression>
-				</reportElement>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="none">
-					<jr:codeExpression><![CDATA[$P{autorizacion}]]></jr:codeExpression>
-				</jr:Code128>
-			</componentElement>
-			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="109" width="305" height="28" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true" isItalic="true"/>
-					<paragraph leftIndent="5" rightIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{razon_social}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="5" y="162" width="95" height="20" uuid="c22337eb-1915-4f01-8262-ca7581251ac2"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Dirección Matriz:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="313" y="229" width="238" height="20" uuid="eed9ee67-1e09-439f-adb3-57fa2b0c1f16"/>
-				<textElement>
-					<font size="7" isItalic="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
-			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="71" y="285" width="477" height="13" isRemoveLineWhenBlank="true" uuid="c3f69d9f-76ab-4743-a414-32a0db491e45"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{direccion_comprador}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="5" y="241" width="290" height="12" uuid="5409c158-a50e-49ac-aa60-6837ba292c83">
-					<printWhenExpression><![CDATA[new Boolean(!$P{pl_agenteRetencionResolucion}.equals(""))]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Dashed"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="7" isBold="true" isItalic="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Agente de Retención Resolución "+$P{pl_agenteRetencionResolucion}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="5" y="272" width="66" height="13" uuid="0339d62a-37fd-4428-8ee1-2c9c89925dfc"/>
@@ -349,16 +168,191 @@
 				</textElement>
 				<text><![CDATA[Identificación:]]></text>
 			</staticText>
-			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="5" y="229" width="293" height="12" uuid="328a0557-ebee-4ae4-8604-ec8a43bd98e8"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Dashed"/>
-				</box>
-				<textElement>
-					<font size="8" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{tipoRegimen}]]></textFieldExpression>
-			</textField>
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="256" uuid="010f5a85-37fb-4d9b-8fe3-2dbc8ae9a8d0"/>
+				<subreportParameter name="total">
+					<subreportParameterExpression><![CDATA[$P{total}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="direccion">
+					<subreportParameterExpression><![CDATA[$P{direccion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_direccion">
+					<subreportParameterExpression><![CDATA[$P{pl_direccion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="secuencial">
+					<subreportParameterExpression><![CDATA[$P{secuencial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_telefono">
+					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_agenteRetencionResolucion">
+					<subreportParameterExpression><![CDATA[$P{pl_agenteRetencionResolucion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="cliente_nombres">
+					<subreportParameterExpression><![CDATA[$P{cliente_nombres}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="nombre_documento">
+					<subreportParameterExpression><![CDATA[$P{nombre_documento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha_emision">
+					<subreportParameterExpression><![CDATA[$P{fecha_emision}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="descuento">
+					<subreportParameterExpression><![CDATA[$P{descuento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="razon_social">
+					<subreportParameterExpression><![CDATA[$P{razon_social}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_FORMA_PAGO">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_FORMA_PAGO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="autorizacion">
+					<subreportParameterExpression><![CDATA[$P{autorizacion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_titulo">
+					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="iva_porcentaje">
+					<subreportParameterExpression><![CDATA[$P{iva_porcentaje}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="direccion_sucursal">
+					<subreportParameterExpression><![CDATA[$P{direccion_sucursal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_INFO_OTRO">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_INFO_OTRO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="campoFirma3">
+					<subreportParameterExpression><![CDATA[$P{campoFirma3}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="tipoRegimen">
+					<subreportParameterExpression><![CDATA[$P{tipoRegimen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_usuario">
+					<subreportParameterExpression><![CDATA[$P{pl_usuario}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ambiente">
+					<subreportParameterExpression><![CDATA[$P{ambiente}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="campoFirma1">
+					<subreportParameterExpression><![CDATA[$P{campoFirma1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="campoFirma2">
+					<subreportParameterExpression><![CDATA[$P{campoFirma2}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="subtotal">
+					<subreportParameterExpression><![CDATA[$P{subtotal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_url_img1">
+					<subreportParameterExpression><![CDATA[$P{pl_url_img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="formaPagoList">
+					<subreportParameterExpression><![CDATA[$P{formaPagoList}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fecha_hora_autorizacion">
+					<subreportParameterExpression><![CDATA[$P{fecha_hora_autorizacion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ahorroPorSubsidio">
+					<subreportParameterExpression><![CDATA[$P{ahorroPorSubsidio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ruc">
+					<subreportParameterExpression><![CDATA[$P{ruc}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_INFO_ADICIONAL">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_INFO_ADICIONAL}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_celular">
+					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="nombre_legal">
+					<subreportParameterExpression><![CDATA[$P{nombre_legal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="direccion_comprador">
+					<subreportParameterExpression><![CDATA[$P{direccion_comprador}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_instagram">
+					<subreportParameterExpression><![CDATA[$P{pl_img_instagram}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_whatsapp">
+					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_nombre_empresa">
+					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="imagen_logo">
+					<subreportParameterExpression><![CDATA[$P{imagen_logo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ice">
+					<subreportParameterExpression><![CDATA[$P{ice}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_contribuyenteRegimenMicroempresas">
+					<subreportParameterExpression><![CDATA[$P{pl_contribuyenteRegimenMicroempresas}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_url_piepagina">
+					<subreportParameterExpression><![CDATA[$P{pl_url_piepagina}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_instagram">
+					<subreportParameterExpression><![CDATA[$P{pl_instagram}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_CABECERA">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_CABECERA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="cliente_identificacion">
+					<subreportParameterExpression><![CDATA[$P{cliente_identificacion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_url_piepagina_1">
+					<subreportParameterExpression><![CDATA[$P{pl_url_piepagina_1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_firmas_factura">
+					<subreportParameterExpression><![CDATA[$P{pl_firmas_factura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="obligado_contabilidad">
+					<subreportParameterExpression><![CDATA[$P{obligado_contabilidad}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_url_cabecera">
+					<subreportParameterExpression><![CDATA[$P{pl_url_cabecera}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="subtotal_cero">
+					<subreportParameterExpression><![CDATA[$P{subtotal_cero}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="valorTotalSinSubsidio">
+					<subreportParameterExpression><![CDATA[$P{valorTotalSinSubsidio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="iva">
+					<subreportParameterExpression><![CDATA[$P{iva}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="contribuyente_especial">
+					<subreportParameterExpression><![CDATA[$P{contribuyente_especial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="estado">
+					<subreportParameterExpression><![CDATA[$P{estado}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="informacionAdicionalList">
+					<subreportParameterExpression><![CDATA[$P{informacionAdicionalList}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_fecha_hora">
+					<subreportParameterExpression><![CDATA[$P{pl_fecha_hora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_adicional">
+					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_CABECERA}]]></subreportExpression>
+			</subreport>
 		</band>
 	</title>
 	<columnHeader>
