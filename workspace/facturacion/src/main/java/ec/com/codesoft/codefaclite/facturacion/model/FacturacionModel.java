@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Factur
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FarmaciaProductoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenTrabajoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
@@ -1218,17 +1219,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         //Bodega activa de venta
         //TODO: Ver si esta parte de las bodegas de venta se pueden agregar dentro del metodo de busqueda
-        BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
-        Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+        //BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+        //Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
         
-        if(bodegaVenta==null)
-        {
-            throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
-        }
+        //if(bodegaVenta==null)
+        //{
+        //    throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
+        //}
                 
         if(manejaInventario.equals(EnumSiNo.SI))
         {
-            ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta,true);
+            /*ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta,true);
             
             //cambiar el tipo de buscador si tiene activo el parametro de farmacia
             if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.FARMACIA))
@@ -1238,12 +1239,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             else if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
             {
                 productoInventarioBusquedaDialogo=new TallerMecanicoInventarioBusquedaDialogo(manejaInventario,session.getEmpresa(), bodegaVenta);
-            }
+            }*/
             
-            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);            
-            buscarDialogoModel.setVisible(true);
-            Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
-            kardexSeleccionado = kardex;
+            //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);            
+            //buscarDialogoModel.setVisible(true);
+            //Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
+            ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX);
+            kardexSeleccionado = (Kardex) dialogoFactory.ejecutarDialogo();
             productoSeleccionado=kardexSeleccionado.getProducto();
             
         }

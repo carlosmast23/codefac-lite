@@ -93,10 +93,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         String whereStockNegativo="";
         
-        //if(isManejoInvetario!=null)
-        //{
-        //    whereManejaInventario=" and u.manejarInventario=?98 ";
-        //}
+
         
         String queryFiltroEmpresa=" and u.empresa=?4";
         Boolean datosCompartidosEmpresas=false;

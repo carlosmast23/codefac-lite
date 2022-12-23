@@ -217,6 +217,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbAdvertenciaActualizarCostos(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbBuscadorSoloInventario(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbVentanasMultiples(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbPermitirEditarCodigo(),EnumSiNo.values());
@@ -592,6 +593,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroAdvertenciaActualizarCosto != null) ? parametroAdvertenciaActualizarCosto.getValor() : null);
             getCmbAdvertenciaActualizarCostos().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
             
+            ParametroCodefac parametroBuscadorSoloInventario = parametrosTodos.get(ParametroCodefac.BUSCADOR_SOLO_INVENTARIO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroBuscadorSoloInventario != null) ? parametroBuscadorSoloInventario.getValor() : null);
+            getCmbBuscadorSoloInventario().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
+            
             ParametroCodefac parametroVentasMultiples = parametrosTodos.get(ParametroCodefac.VENTANAS_MULTIPLES);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroVentasMultiples != null) ? parametroVentasMultiples.getValor() : null);
             getCmbVentanasMultiples().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -809,6 +814,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbAdvertenciaActualizarCostos().getSelectedItem();
         agregarParametro(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO);
+        
+        enumSiNo = (EnumSiNo) getCmbBuscadorSoloInventario().getSelectedItem();
+        agregarParametro(ParametroCodefac.BUSCADOR_SOLO_INVENTARIO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.BUSCADOR_SOLO_INVENTARIO);
         
         enumSiNo = (EnumSiNo) getCmbVentanasMultiples().getSelectedItem();
         agregarParametro(ParametroCodefac.VENTANAS_MULTIPLES, (enumSiNo != null) ? enumSiNo.getLetra() : null);

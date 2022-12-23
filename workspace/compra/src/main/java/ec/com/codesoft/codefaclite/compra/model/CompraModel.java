@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
@@ -811,11 +812,18 @@ public class CompraModel extends CompraPanel{
         getBtnBuscarProductoProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),false,true);
-                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
-                buscarDialogo.setVisible(true);
-                Producto productoTmp = (Producto) buscarDialogo.getResultado();
-                cargarProductoVistaAgregar(productoTmp);
+                try {
+                    // ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),false,true);
+                    //BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                    //buscarDialogo.setVisible(true);
+                    //Producto productoTmp = (Producto) buscarDialogo.getResultado();
+                    ProductoBusquedaDialogoFactory busquedaFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(), ProductoBusquedaDialogoFactory.ResultadoEnum.PRODUCTO);
+                    Producto productoTmp = (Producto) busquedaFactory.ejecutarDialogo();
+                    cargarProductoVistaAgregar(productoTmp);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                    new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.CORRECTO);
+                }
             }
         });
         

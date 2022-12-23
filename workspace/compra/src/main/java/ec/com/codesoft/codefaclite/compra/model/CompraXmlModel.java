@@ -253,7 +253,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     }
 
     public void crearModeloTabla() {
-        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema", "Cod Xml", "Descripción compra","Iva","Cantidad","Desc", "Precio"};
+        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema", "Cod Xml", "Descripción compra","Iva","Cantidad","Precio","Desc"};
         DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class, String.class, String.class, String.class,String.class,String.class});
         getTblDetalles().setModel(modelo);
         UtilidadesTablas.definirTamanioColumnas(getTblDetalles(), new Integer[]{0});

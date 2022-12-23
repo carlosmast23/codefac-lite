@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.vista.crm;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
@@ -21,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
@@ -383,14 +385,26 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),null,null);
-        return productoBusquedaDialogo;
+        //ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),null,null);
+        ProductoBusquedaDialogoFactory busquedaFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(), ProductoBusquedaDialogoFactory.ResultadoEnum.PRODUCTO);
+        
+        return (InterfaceModelFind) busquedaFactory.construirDialogo();
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
+        
+        if(entidad instanceof Kardex)
+        {
+            producto=((Kardex)entidad).getProducto();
+        }
+        else
+        {
+            producto=(Producto) entidad;
+        }
+        
         System.out.println("cargando pantlla producto controlador ...");
-        producto=(Producto) entidad;
+        
         
         iceSeleccionado=producto.getCatalogoProducto().getIce();
         ivaSeleccionado=producto.getCatalogoProducto().getIva();

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 //import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
@@ -312,15 +313,23 @@ public class KardexModel extends KardexPanel {
         
         getBtnBuscarLote().addActionListener(listenerBuscarLote);        
         
+        
         getBtnProductoBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI,session.getEmpresa(),true,true);
-                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
-                buscarDialogo.setVisible(true);
-                productoSeleccionado = (Producto) buscarDialogo.getResultado();
-                if (productoSeleccionado != null) {
-                    getTxtProducto().setText(productoSeleccionado.getNombre());
+                try {
+                    //ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI,session.getEmpresa(),true,true);
+                    //BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                    //buscarDialogo.setVisible(true);
+                    //productoSeleccionado = (Producto) buscarDialogo.getResultado();
+                    ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.PRODUCTO);
+                    productoSeleccionado = (Producto) dialogoFactory.ejecutarDialogo();
+                    if (productoSeleccionado != null) {
+                        getTxtProducto().setText(productoSeleccionado.getNombre());
+                    }
+                } catch (ServicioCodefacException ex) {                    
+                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+                    new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR);
                 }
             }
         });

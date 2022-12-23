@@ -298,6 +298,11 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String ADVERTENCIA_ACTUALIZAR_COSTO="advertencia_actualizar_costo";
     
+    /**
+     * Variable que me permite mostrar un único dialogo siempre de inventario para todos los buscadores
+     */
+    public static final String BUSCADOR_SOLO_INVENTARIO="buscador_solo_inventario";
+    
     public static final String PVP1_MARGEN_UTILIDAD = "pvp1_margen_utilidad";
     public static final String PVP2_MARGEN_UTILIDAD = "pvp2_margen_utilidad";
     public static final String PVP3_MARGEN_UTILIDAD = "pvp3_margen_utilidad";
