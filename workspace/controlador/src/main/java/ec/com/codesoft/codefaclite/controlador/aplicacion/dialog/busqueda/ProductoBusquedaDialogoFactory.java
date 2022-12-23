@@ -115,6 +115,7 @@ public class ProductoBusquedaDialogoFactory
                 kardex.setProducto(producto);
                 return kardex;
             }
+            return resultado;
         }
         else if(resultado instanceof Kardex)
         {
