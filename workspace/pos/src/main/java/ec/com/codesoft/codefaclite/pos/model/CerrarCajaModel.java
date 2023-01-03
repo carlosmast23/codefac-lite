@@ -179,18 +179,23 @@ public class CerrarCajaModel extends CajaSessionModel
         
         //Cargar los datos de los detalles
         List<VentaReporteData> detalleData=new ArrayList<VentaReporteData>();
-        for (IngresoCaja ingresoCaja : cajaSession.getIngresosCaja()) 
-        {
-            VentaReporteData reporteData=new VentaReporteData(
-                    ingresoCaja.getFactura().getSecuencial()+"", 
-                    ingresoCaja.getFactura().getIdentificacion(), 
-                    ingresoCaja.getFactura().getRazonSocial(), 
-                    ingresoCaja.getFactura().getTotal()+"",
-                    ingresoCaja.getFactura().getEstadoEnum().getNombre());
-            
-            detalleData.add(reporteData);            
-        }
         
+        List<IngresoCaja> ingresoCajaList=cajaSession.getIngresosCaja();
+        
+        if(ingresoCajaList!=null)
+        {
+            for (IngresoCaja ingresoCaja : ingresoCajaList) 
+            {
+                VentaReporteData reporteData=new VentaReporteData(
+                        ingresoCaja.getFactura().getSecuencial()+"", 
+                        ingresoCaja.getFactura().getIdentificacion(), 
+                        ingresoCaja.getFactura().getRazonSocial(), 
+                        ingresoCaja.getFactura().getTotal()+"",
+                        ingresoCaja.getFactura().getEstadoEnum().getNombre());
+
+                detalleData.add(reporteData);            
+            }
+        }
         
         DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
                 @Override

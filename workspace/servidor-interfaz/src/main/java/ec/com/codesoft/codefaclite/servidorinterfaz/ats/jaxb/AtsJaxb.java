@@ -222,7 +222,7 @@ public class AtsJaxb implements Serializable
             for (VentaAts venta : ventas) {
                 if(venta.getTipoEmision().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getCodigoSri()))
                 {   
-                    this.totalVentas=this.totalVentas.add(venta.getBaseImpGrav());
+                    this.totalVentas=this.totalVentas.add(venta.getBaseImpGrav().add(venta.getBaseImponible()));
                 }
                 //this.totalIva=this.totalIva.add(venta.getMontoIva());
             }

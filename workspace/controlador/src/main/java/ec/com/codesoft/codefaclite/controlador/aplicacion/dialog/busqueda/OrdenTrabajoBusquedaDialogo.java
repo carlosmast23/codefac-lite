@@ -30,11 +30,10 @@ public class OrdenTrabajoBusquedaDialogo implements InterfaceModelFind<OrdenTrab
     }
 
     @Override
-    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
-        //OrdenTrabajo ordenTrabajo;
+    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {        
         //ordenTrabajo.getEstadoEnum()
         String queryString = "SELECT ot FROM OrdenTrabajo ot WHERE ";
-        queryString+=" ( LOWER(ot.codigo) like ?2 ) or ot.descripcion like lower(?3) and (ot.estado=?1)";
+        queryString+=" ( LOWER(ot.codigo) like ?2 ) or ot.descripcion like lower(?3) and (ot.estado=?1) ORDER BY ot.id desc ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,OrdenTrabajo.EstadoEnum.GENERADO.getEstado());
         queryDialog.agregarParametro(2,filter);

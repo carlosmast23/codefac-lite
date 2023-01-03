@@ -363,8 +363,20 @@ public class KardexDetalle implements Serializable ,Cloneable {
         {
             descuento=BigDecimal.ZERO;
         }
-        //Por el momento se redondea con 2 decimales
-        return precioUnitario.subtract(descuento.divide(cantidad,2,BigDecimal.ROUND_HALF_UP));
+        
+        //Si no existe cantidad solo calcula sin tomar en cuenta la cantidad esto pasa por ejemplo al migrar
+        if(cantidad==null || cantidad.compareTo(BigDecimal.ZERO)==0)
+        {
+            return precioUnitario.subtract(descuento);
+        }
+        else
+        {
+            //Por el momento se redondea con 2 decimales
+            //se divide el DESCUENTO por la CANTIDAD, por que el ingreso en las compras se hace por el valor total no individual
+            return precioUnitario.subtract(descuento.divide(cantidad,2,BigDecimal.ROUND_HALF_UP));
+        }
+        
+        
     }
     
     

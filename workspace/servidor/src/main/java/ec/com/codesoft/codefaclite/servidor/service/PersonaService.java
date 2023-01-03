@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.email.UtilidadesCorreo;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -131,9 +132,12 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             }
         });
         
-        if(!UtilidadesCorreo.validarCorreos(persona.getCorreoElectronico()))
+        if(!UtilidadesTextos.verificarNullOVacio(persona.getCorreoElectronico()))
         {
-            throw new ServicioCodefacException("Error validando el o los correos ingresados");
+            if(!UtilidadesCorreo.validarCorreos(persona.getCorreoElectronico()))
+            {
+                throw new ServicioCodefacException("Error validando el o los correos ingresados");
+            }
         }
         
         /**

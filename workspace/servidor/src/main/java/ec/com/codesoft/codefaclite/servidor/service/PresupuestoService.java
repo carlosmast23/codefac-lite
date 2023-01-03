@@ -76,7 +76,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                         //Uso este artificio para cuando utilizo id negativos para hacer comprobaciones en la vista
                         if(presupuestoDetalle.getId()<0)
                         {
-                            presupuestoDetalle=null;
+                            presupuestoDetalle.setId(null);
                         }
                         
                         if (presupuestoDetalle.getProductoProveedor().getId() == null) {

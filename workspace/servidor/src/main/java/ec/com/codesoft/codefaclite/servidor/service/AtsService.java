@@ -246,8 +246,16 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
         
         for (ComprobanteEntity comprobanteEntity : comprobantesList) {
-             AnuladoAts anuladoAts= construirAnuladoAts(comprobanteEntity.getPreimpreso(),comprobanteEntity.getClaveAcceso(),comprobanteEntity.getCodigoDocumentoEnum());
-             anuladoList.add(anuladoAts);
+            AnuladoAts anuladoAts= construirAnuladoAts(comprobanteEntity.getPreimpreso(),comprobanteEntity.getClaveAcceso(),comprobanteEntity.getCodigoDocumentoEnum());
+             
+            if(!UtilidadesTextos.verificarNullOVacio(anuladoAts.getAutorizacion()))
+            {
+                anuladoList.add(anuladoAts);
+            }             
+            else //Cuando NO TIENE AUTORIZACION no le agrego porque va a generar problemas en el ATS
+            {
+                Logger.getLogger(AtsService.class.getName()).log(Level.WARNING,"El documento con secuencial: "+anuladoAts.getSecuencialInicio()+" no tiene autorización ");
+            }
         }
         
         return anuladoList;        
@@ -290,6 +298,24 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
         for (Compra compra : compras) 
         {
+            if(compra.getSecuencial()==171120221)
+            {
+                System.out.println("Revisar compra");
+            }
+            
+            //si no es un documento legal no lo tomo en cuenta para el anexo
+            if(!compra.getCodigoDocumentoEnum().getDocumentoLegal())
+            {
+                continue;
+            }
+            
+            //Cuando tenga un cliente final no tomo en cuenta en el ATS por que tiene una nueva validacion que no permite ese caso
+            if(compra.getProveedor().getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.CLIENTE_FINAL) || compra.getIdentificacion().equals(Persona.IDENTIFICACION_CONSUMIDOR_FINAL) )
+            {
+                System.out.println("Compra: "+compra.getSecuencial()+", Proveedor:"+compra.getProveedor().getIdentificacion()+""+compra.getIdentificacion());
+                continue;
+            }
+            
             CompraAts compraAts= crearCompraAts(compra, sriRetencionIva, sriRetencionRenta,alertas);
             if (validarCompraAts(compraAts, alertas)) 
             {

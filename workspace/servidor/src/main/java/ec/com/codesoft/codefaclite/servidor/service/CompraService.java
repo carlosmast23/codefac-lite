@@ -567,6 +567,12 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             }
         }
         
+        //Validar que el RUC GRABADO SEA EL MISMO DE LA COMPRA o lanzar una excepcion
+        if(!compra.getIdentificacion().equals(compra.getProveedor().getIdentificacion()))
+        {
+            throw new ServicioCodefacException("Diferencia entre el proveedor grabado: "+compra.getProveedor().getIdentificacion()+" ,y el ruc de la compra :"+compra.getIdentificacion());
+        }
+        
         /**
          * =====================================================================
          *          VALIDAR EL INGRESO DE DATOS NO REPETIDOS

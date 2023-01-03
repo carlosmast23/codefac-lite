@@ -23,6 +23,7 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Código",0.2d));
+        titulo.add(new ColumnaDialogo("Cliente",0.5d));
         titulo.add(new ColumnaDialogo("Descripción",0.3d));
         titulo.add(new ColumnaDialogo("Estado",0.15d));
         titulo.add(new ColumnaDialogo("Total",0.10d));
@@ -47,6 +48,7 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
     public void agregarObjeto(Presupuesto p, Vector dato) 
     {
         dato.add(p.getId());
+        dato.add(p.getPersona().getNombreSimple());
         dato.add(p.getDescripcion());
         dato.add((p.getEstadoEnum()!=null)?p.getEstadoEnum().getNombre():"Sin estado");
         dato.add(p.getTotalVenta());

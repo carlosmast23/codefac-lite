@@ -288,11 +288,16 @@ public class CajaSession implements Serializable
         }
 
         //Todo: mejorar esta parte 
-        for (IngresoCaja ingresoCaja : getIngresosCaja()) 
+        List<IngresoCaja> ingresoCajaList=new ArrayList<IngresoCaja>();
+        
+        if(ingresoCajaList!=null)
         {
-            if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )
+            for (IngresoCaja ingresoCaja : ingresoCajaList) 
             {
-                totalVentas = totalVentas.add(ingresoCaja.getValor());
+                if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )
+                {
+                    totalVentas = totalVentas.add(ingresoCaja.getValor());
+                }
             }
         }
         

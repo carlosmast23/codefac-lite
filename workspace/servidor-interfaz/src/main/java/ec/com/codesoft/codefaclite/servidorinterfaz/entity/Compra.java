@@ -369,6 +369,10 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
             {
                 descuentoImpuestosTmp=descuentoImpuestosTmp.add(detalle.getDescuento());
             }
+            else
+            {
+            
+            }
         }
         descuentoImpuestos=descuentoImpuestosTmp.setScale(2, RoundingMode.HALF_UP);
         

@@ -746,7 +746,6 @@ public class CompraModel extends CompraPanel{
                         if (entity != null) {
                             /*String identificacion = compra.getProveedor().getIdentificacion();
                             String nombre = compra.getProveedor().getRazonSocial();
-                            getTxtProveedor().setText(identificacion + " - " + nombre);
                             desbloquearIngresoDetalleProducto();*/
                             cargarProductoVistaAgregar(entity);
                         }
@@ -1515,7 +1514,7 @@ public class CompraModel extends CompraPanel{
             else
             {
                 BigDecimal precioUnitario=new BigDecimal(precioUnitarioTxt);
-                if(precioUnitario.compareTo(BigDecimal.ZERO)<=0)
+                if(precioUnitario.compareTo(BigDecimal.ZERO)<0)
                 {
                     DialogoCodefac.mensaje("Advertencia","El precio unitario debe ser mayor que 0",DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return false;

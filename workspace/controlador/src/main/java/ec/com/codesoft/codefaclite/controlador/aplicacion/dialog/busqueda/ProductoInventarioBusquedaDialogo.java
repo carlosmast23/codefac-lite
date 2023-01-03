@@ -213,7 +213,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         vector.add((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
         vector.add((producto.getAplicacionProducto()!=null)?producto.getAplicacionProducto():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
-        vector.add((kardex.getCostoPromedio()!=null)?kardex.getCostoPromedio().setScale(3,RoundingMode.HALF_UP)+"":"");
+        vector.add((kardex.getPrecioUltimoConIva()!=null)?kardex.getPrecioUltimoConIva().setScale(3,RoundingMode.HALF_UP)+"":"");
         //vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
         vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");        

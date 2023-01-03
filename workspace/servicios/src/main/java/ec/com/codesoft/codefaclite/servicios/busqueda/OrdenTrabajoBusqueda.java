@@ -23,6 +23,7 @@ public class OrdenTrabajoBusqueda implements InterfaceModelFind<OrdenTrabajo>
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Código",0.2d));
+        titulo.add(new ColumnaDialogo("Cliente",0.5d));
         titulo.add(new ColumnaDialogo("Descripción",0.3d));
         titulo.add(new ColumnaDialogo("Estado",0.15d));
         titulo.add(new ColumnaDialogo("Ingreso",0.15d));
@@ -31,8 +32,11 @@ public class OrdenTrabajoBusqueda implements InterfaceModelFind<OrdenTrabajo>
 
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
+        //OrdenTrabajo ordenTrabajo;
+        //ordenTrabajo.getId()
+        //ordenTrabajo.getCliente().getNombreSimple();
         String queryString = "SELECT o FROM OrdenTrabajo o WHERE ";
-        queryString+=" o.estado=?2 OR CAST(o.id CHAR(64)) like ?1 ";
+        queryString+=" o.estado=?2 OR CAST(o.id CHAR(64)) like ?1 ORDER BY o.id desc ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter);
         queryDialog.agregarParametro(2, GeneralEnumEstado.ACTIVO.getEstado());
@@ -43,8 +47,9 @@ public class OrdenTrabajoBusqueda implements InterfaceModelFind<OrdenTrabajo>
     public void agregarObjeto(OrdenTrabajo o, Vector dato) 
     {
         dato.add(o.getId());
-        dato.add(o.getDescripcion());
-        dato.add(o.getEstado());
+        dato.add(o.getCliente().getNombresCompletos());
+        dato.add(o.getDetalles().get(0).getDescripcion());
+        dato.add(o.getEstadoEnum().getNombre());
         dato.add(o.getFechaIngreso());
     }
 

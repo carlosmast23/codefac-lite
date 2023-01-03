@@ -49,10 +49,11 @@ public class FacturaBusquedaPresupuesto implements InterfaceModelFind<Presupuest
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Presupuesto p;
+        //p.getId()
         //p.getOrdenTrabajoDetalle().getOrdenTrabajo().getCliente().getRazonSocial();
         String queryString = "SELECT u FROM Presupuesto u WHERE ( u.estado=?1 ) AND ";
         queryString+=(cliente!=null)?" u.ordenTrabajoDetalle.ordenTrabajo.cliente=?3 AND":"";
-        queryString+=" ( LOWER(u.codigo) like ?2 OR  LOWER(u.ordenTrabajoDetalle.ordenTrabajo.cliente.razonSocial) like ?2 OR CAST(u.id CHAR(64) ) like ?2 )";
+        queryString+=" ( LOWER(u.codigo) like ?2 OR  LOWER(u.ordenTrabajoDetalle.ordenTrabajo.cliente.razonSocial) like ?2 OR CAST(u.id CHAR(64) ) like ?2 ) ORDER BY u.id desc ";
         
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,Presupuesto.EstadoEnum.TERMINADO.getLetra()); //Solo buscar los prespuestos que esten con estado terminado
