@@ -751,9 +751,12 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     {
         BigDecimal total=BigDecimal.ZERO;
         for (CompraDetalle detalle : detalles) 
-        {
+        {            
             BigDecimal sriRetencion=detalle.getValorSriRetencionRenta();
-            total=total.add(sriRetencion);
+            if(sriRetencion!=null)
+            {
+                total=total.add(sriRetencion);
+            }
             
         }
         return total.setScale(2, RoundingMode.HALF_UP);
@@ -765,7 +768,10 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         for (CompraDetalle detalle : detalles) 
         {
             BigDecimal sriRetencion=detalle.getValorSriRetencionIVA();
-            total=total.add(sriRetencion);
+            if(sriRetencion!=null)
+            {
+                total=total.add(sriRetencion);
+            }
             
         }
         return total.setScale(2, RoundingMode.HALF_UP);
