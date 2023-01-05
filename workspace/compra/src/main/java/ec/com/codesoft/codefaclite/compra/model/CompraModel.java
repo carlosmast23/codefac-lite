@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBu
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -667,8 +668,23 @@ public class CompraModel extends CompraPanel{
         cargarDatosCompra(this.compra);
         
     }
+    
+    private ActionListener listenerRetencionAplicarTodo=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //aplicarRetencionDetalle
+            
+            for (CompraDetalle detalle : compra.getDetalles()) 
+            {
+                aplicarRetencionDetalle(detalle);
+            }
+            actualizarDatosMostrarVentana();
+        }
+    };
 
     private void agregarListenerBotones() {
+        
+        getBtnRetencionAplicarTodo().addActionListener(listenerRetencionAplicarTodo);
         
         getBtnAgregarReembolso().addActionListener(new ActionListener() {
             @Override
@@ -1326,6 +1342,9 @@ public class CompraModel extends CompraPanel{
         getLblSubtotalSinImpuestos().setText(compra.getSubtotalSinImpuestos()+"");
         getLblIva().setText(compra.getIva()+"");
         getLblTotal().setText(compra.getTotal()+"");
+        
+        getLblTotalIvaRet().setText(compra.calcularTotalRentencionIva()+"");
+        getLblTotalRentaRet().setText(compra.calcularTotalRentencionRenta()+"");
     }
 
     private void crearVariables() {
@@ -1396,6 +1415,23 @@ public class CompraModel extends CompraPanel{
         getBtnEditarItem().setEnabled(!b);
         getBtnEliminarItem().setEnabled(!b);
     }
+    
+    private void aplicarRetencionDetalle(CompraDetalle compraDetalle)
+    {
+        SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+        SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+        
+        compraDetalle.setSriRetencionIva(sriRetencionIva);
+        compraDetalle.setSriRetencionRenta(sriRetencionRenta);
+        
+        BigDecimal valorRetencionIVA = compraDetalle.getIva().multiply(new BigDecimal(sriRetencionIva.getPorcentaje()+"")).divide(new BigDecimal("100"));
+        BigDecimal valorRetencionRenta = compraDetalle.getTotal().multiply(new BigDecimal(sriRetencionRenta.getPorcentaje()+"")).divide(new BigDecimal("100"));
+            
+        compraDetalle.setValorSriRetencionIVA(valorRetencionIVA.setScale(2,BigDecimal.ROUND_HALF_UP));
+        compraDetalle.setValorSriRetencionRenta(valorRetencionRenta.setScale(2,BigDecimal.ROUND_HALF_UP));
+
+        
+    }
    
     //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
     private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,BigDecimal descuento,String descripcion,Integer porcentajeIva)
@@ -1436,24 +1472,27 @@ public class CompraModel extends CompraPanel{
             
             compraDetalle.setIva(compraDetalle.calcularValorIva());
             
-            SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
-            SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+            //SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+            //SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
             
-            compraDetalle.setSriRetencionIva(sriRetencionIva);
-            compraDetalle.setSriRetencionRenta(sriRetencionRenta);
+            //compraDetalle.setSriRetencionIva(sriRetencionIva);
+            //compraDetalle.setSriRetencionRenta(sriRetencionRenta);
             
             compraDetalle.setProductoProveedor(productoProveedor);
             //compraDetalle.setTotal(compraDetalle.getSubtotal());
             compraDetalle.calcularSubtotalSinIva();
             
-            BigDecimal valorRetencionIVA = compraDetalle.getIva().multiply(new BigDecimal(sriRetencionIva.getPorcentaje()+"")).divide(new BigDecimal("100"));
-            BigDecimal valorRetencionRenta = compraDetalle.getTotal().multiply(new BigDecimal(sriRetencionRenta.getPorcentaje()+"")).divide(new BigDecimal("100"));
+            
+            aplicarRetencionDetalle(compraDetalle);
+            
+            //BigDecimal valorRetencionIVA = compraDetalle.getIva().multiply(new BigDecimal(sriRetencionIva.getPorcentaje()+"")).divide(new BigDecimal("100"));
+            //BigDecimal valorRetencionRenta = compraDetalle.getTotal().multiply(new BigDecimal(sriRetencionRenta.getPorcentaje()+"")).divide(new BigDecimal("100"));
             
             
-            compraDetalle.setValorSriRetencionIVA(valorRetencionIVA.setScale(2,BigDecimal.ROUND_HALF_UP));
-            compraDetalle.setValorSriRetencionRenta(valorRetencionRenta.setScale(2,BigDecimal.ROUND_HALF_UP));
+            //compraDetalle.setValorSriRetencionIVA(valorRetencionIVA.setScale(2,BigDecimal.ROUND_HALF_UP));
+            //compraDetalle.setValorSriRetencionRenta(valorRetencionRenta.setScale(2,BigDecimal.ROUND_HALF_UP));
             
-            BigDecimal valorTotalRetencion = valorRetencionIVA.add(valorRetencionRenta);
+            //BigDecimal valorTotalRetencion = valorRetencionIVA.add(valorRetencionRenta);
             
             //compraDetalle.setTotal(compraDetalle.getTotal().subtract(valorTotalRetencion));
             

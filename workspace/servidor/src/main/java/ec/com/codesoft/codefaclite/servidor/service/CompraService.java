@@ -323,9 +323,11 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     public void editarCompra(Compra compra) throws ServicioCodefacException
     {
         //TODO: Editar este metodo porque el de grabar es muy similar
+                
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validarDatosCompra(compra,CrudEnum.EDITAR);
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
                     for (CompraDetalle compraDetalle : compra.getDetalles()) 
                     {
@@ -417,7 +419,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     public void grabarCompra(Compra compra,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         llenarDatosPorDefecto(compra);
-        validarDatosCompra(compra);
+        validarDatosCompra(compra,CrudEnum.CREAR);
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -504,7 +506,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         }
     }
     
-    private void validarDatosCompra(Compra compra) throws RemoteException, ServicioCodefacException
+    private void validarDatosCompra(Compra compra,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException
     {
         if (compra.getPuntoEstablecimiento() == null) 
         {
@@ -593,14 +595,27 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             
             //compra.get
 
-            List<Compra> resultadoCompra= getFacade().findByMap(mapParametros);
-            if(resultadoCompra.size()>0)
+            if(crudEnum.equals(CrudEnum.CREAR))
             {
-                throw new ServicioCodefacException("No se puede ingresar compras repetidas del mismo proveedor");
+                List<Compra> resultadoCompra= getFacade().findByMap(mapParametros);
+
+                if(resultadoCompra.size()>0)
+                {
+                    throw new ServicioCodefacException("No se puede ingresar compras repetidas del mismo proveedor");
+                }
             }
         }
         
         validarAutorizacionPorDocumento(compra);
+        
+        //Validar temas de los detalles de la factura de compra
+        for (CompraDetalle detalle : compra.getDetalles()) 
+        {
+            if(detalle.getSubtotal().compareTo(BigDecimal.ZERO)<0)
+            {
+                throw new ServicioCodefacException("Existe un problema con el producto: "+detalle.getProductoProveedor().getProducto().getNombre()+", por que esta generando valores negativos");
+            }
+        }
         
         /**
          * Validar que este ingresando una compra repetida

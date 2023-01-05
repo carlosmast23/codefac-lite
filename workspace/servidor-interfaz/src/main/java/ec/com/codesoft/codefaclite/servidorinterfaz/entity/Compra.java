@@ -365,7 +365,7 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         for(CompraDetalle detalle: detalles)
         {
             //TODO: Por el momento queda seteado para 12%
-            if(detalle.getPorcentajeIva()==12)
+            if(detalle.getPorcentajeIva()!=null && detalle.getPorcentajeIva()==12)
             {
                 descuentoImpuestosTmp=descuentoImpuestosTmp.add(detalle.getDescuento());
             }
@@ -388,7 +388,8 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         BigDecimal descuentoSinImpuestosTmp = BigDecimal.ZERO;
         for (CompraDetalle detalle : detalles) {
             //TODO: Por el momento queda seteado para 12%
-            if (detalle.getPorcentajeIva() == 0) {
+            if (detalle.getPorcentajeIva()!=null && detalle.getPorcentajeIva() == 0) 
+            {
                 descuentoSinImpuestosTmp = descuentoSinImpuestosTmp.add(detalle.getDescuento());
             }
         }
@@ -744,6 +745,30 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     public void quitarFacturaReembolso(CompraFacturaReembolso compraFacturaReembolso)
     {
         facturaReembolsoList.remove(compraFacturaReembolso);
+    }
+    
+    public BigDecimal calcularTotalRentencionRenta()
+    {
+        BigDecimal total=BigDecimal.ZERO;
+        for (CompraDetalle detalle : detalles) 
+        {
+            BigDecimal sriRetencion=detalle.getValorSriRetencionRenta();
+            total=total.add(sriRetencion);
+            
+        }
+        return total.setScale(2, RoundingMode.HALF_UP);
+    }
+    
+    public BigDecimal calcularTotalRentencionIva()
+    {
+        BigDecimal total=BigDecimal.ZERO;
+        for (CompraDetalle detalle : detalles) 
+        {
+            BigDecimal sriRetencion=detalle.getValorSriRetencionIVA();
+            total=total.add(sriRetencion);
+            
+        }
+        return total.setScale(2, RoundingMode.HALF_UP);
     }
     
         

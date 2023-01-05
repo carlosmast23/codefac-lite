@@ -31,7 +31,7 @@ public enum CajaSessionEnum {
      */
     ELIMINADO("E", "ELIMINADO"),;
     
-     private String estado;
+    private String estado;
     private String nombre;
 
     private CajaSessionEnum(String estado,String nombre) {
