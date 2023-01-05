@@ -50,7 +50,7 @@ public class ActualizacionSistemaUtil {
         }
     }
     
-    @Deprecated //TODO:No se esta usando
+    /*@Deprecated //TODO:No se esta usando
     public static void actualizaComprobantesElectronicos()
     {
         List<ComprobanteEntity> listaComprobantesActualizar=new ArrayList<ComprobanteEntity>();
@@ -77,7 +77,7 @@ public class ActualizacionSistemaUtil {
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
     
     /**
      * Metodo que permite crear por lo menos una sucursal para cada empresa que esta creada

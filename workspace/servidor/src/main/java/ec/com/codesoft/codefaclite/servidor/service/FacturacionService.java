@@ -883,7 +883,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 case INVENTARIO:
                     //Todo: Mejorar esta parte por el momento cuando es una proforma no proceso el tema del inventario
                     //TODO: Parece que la parte de proforma deveria estar en la parte superior por que no debe afectar a ningun otro modulo
-                    if (factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA)) {
+                    if (factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA) ) 
+                    {
                         break;
                     }
 

@@ -589,7 +589,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
         if(tipoPaginaEnum.equals(TipoPaginaEnum.COMANDA))
         {
-            puntoEmisionSeleccionado=puntosEmision.get(0);
+            if(puntosEmision!=null && puntosEmision.size()>0)
+            {
+                puntoEmisionSeleccionado=puntosEmision.get(0);
+            }
         }
         
         factura.setEmpresa(sessionMb.getSession().getEmpresa());

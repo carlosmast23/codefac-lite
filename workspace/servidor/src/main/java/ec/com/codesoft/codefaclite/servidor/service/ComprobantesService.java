@@ -13,7 +13,6 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoAutorizado;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
@@ -54,7 +53,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidor.facade.ComprobanteEntityFacade;
@@ -62,7 +60,6 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade;
-import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
@@ -87,28 +84,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
-import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
-import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
-import java.awt.event.ActionListener;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -118,16 +106,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import org.jfree.util.Log;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**UtilidadesRmi.deserializar(byteReporte);
  *
@@ -1452,8 +1434,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
                 if(documentoAutorizado.getEstado().equals("AUTORIZADO"))
-                {                    
+                {   
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.WARNING,"Autorizando Comprobante: "+comprobanteOriginal.getCodigoDocumentoEnum().getNombre()," | con secuencial: "+comprobanteOriginal.getSecuencial()+" | con autorización: "+documentoAutorizado.getNumeroAutorizacion());
                     comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
                     XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
                     java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());
@@ -1464,8 +1448,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                         comprobanteOriginal.setTipoAmbiente(enumAmbiente.getLetra());
                     }
                     
-                     entityManager.merge(comprobanteOriginal);
-                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"El comprobante "+comprobanteOriginal.getPreimpreso()+" fue autorizado desde el metodo setearDatosAutorizacionComprobanteConTransaccion() en la clase ComprobantesService");
+                    entityManager.merge(comprobanteOriginal);
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"El comprobante "+comprobanteOriginal.getPreimpreso()+" fue autorizado desde el metodo setearDatosAutorizacionComprobanteConTransaccion() en la clase ComprobantesService");
                 }
 
             }
@@ -2740,7 +2724,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
     }
     
-    @Deprecated //TODO:No se esta usando
+    /*@Deprecated //TODO:No se esta usando
     public void actualizarComprobanteDatos(List<ComprobanteEntity> entidades) throws RemoteException, ServicioCodefacException
     {
         //Si no hay ningun dato para procesar no hago nada
@@ -2793,7 +2777,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             }
         }
         
-    }
+    }*/
     
     public void consultarDocumentoAutorizado()
     {

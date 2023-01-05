@@ -172,6 +172,7 @@ public abstract class ComprobantesElectronicosUtil {
             }
              */
         } catch (IOException ex) {
+            ex.printStackTrace();
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

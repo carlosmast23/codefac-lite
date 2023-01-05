@@ -86,7 +86,7 @@ public interface ComprobanteServiceIf extends Remote {
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public void actualizarComprobanteDatos(List<ComprobanteEntity> entidades) throws RemoteException, ServicioCodefacException;
+    //public void actualizarComprobanteDatos(List<ComprobanteEntity> entidades) throws RemoteException, ServicioCodefacException;
     
     /**
      * Metodo que permite enviar varios comprobante pero desde la forma normal es decir de uno en uno
