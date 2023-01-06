@@ -313,12 +313,15 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         parametros.put("codigo", presupuesto.getId().toString());
         
         String objetoMantenimiento="";
+        String kilometraje="";
         if(presupuesto.obtenerObjectoMantenimiento()!=null)
         {
             objetoMantenimiento=presupuesto.obtenerObjectoMantenimiento().toString();
+            kilometraje=presupuesto.obtenerObjectoMantenimiento().getKilometraje()+"";
         }
         
         parametros.put("objectoMantenimiento", objetoMantenimiento);
+        parametros.put("kilometraje", kilometraje);
         
         //Datos de la orden de trabajo
         parametros.put("ordenTrabajo", presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getId().toString());

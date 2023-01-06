@@ -156,6 +156,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.RoundingMode;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import org.jdesktop.swingx.JXTaskPane;
 
 /**
@@ -2959,7 +2962,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         //getBtnAgregarProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/list.png")));
         getBtnAgregarProducto().setText("");
-        getBtnAgregarProducto().setToolTipText("Agregar producto a la factura");
+        getBtnAgregarProducto().setToolTipText("Agregar producto a la factura [ctr + i]");
 
         //getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/add2.png")));
         getBtnCrearProducto().setText("");
@@ -4093,10 +4096,33 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         },VentanaEnum.ARQUEO_CAJA, false,parametros,this);
     }
     
-    
+    private ActionListener listenerEjemplo=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            System.out.println("ejemplo listener ...");
+        }
+    };
+            
 
     private void listenerComponentes() {
         getPnlDatosAdicionales().setComprobante(this);
+        KeyStroke keyStroke=javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_DOWN_MASK);
+        
+        getPnlPrincipal().registerKeyboardAction(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarDetalleProducto();
+            }
+        }, keyStroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
+        
+        /*getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "someAction");
+        getActionMap().put("someAction", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"evento de prueba 2 ...");
+            }
+        });*/
     }
 
     @Override
