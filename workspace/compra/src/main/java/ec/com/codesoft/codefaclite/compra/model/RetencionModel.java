@@ -900,7 +900,8 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             if(retencion.getDetalles()!=null)
                 retencion.getDetalles().clear(); //TODO: Corregido problema que cuando guardo y sale error nuevamente se vuelve a seguir agregando detalles
             
-            for (CompraDetalle compraDetalle : retencion.getCompra().getDetalles()) {
+            for (CompraDetalle compraDetalle : retencion.getCompra().getDetalles()) 
+            {
                 
                 //Validaciones cuando hay detalles que no requerien enviar retencion con iva 0
                 if(!compraDetalle.getSriRetencionIva().getCodigo().equals(SriRetencionIva.CODIGO_IVA_NO_APLICA))
@@ -912,7 +913,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                     retencionDetalleIva.setCodigoRetencionSri(compraDetalle.getSriRetencionIva().getCodigo().toString());
                     retencionDetalleIva.setPorcentajeRetener(compraDetalle.getSriRetencionIva().getPorcentaje().setScale(2, BigDecimal.ROUND_HALF_UP));
                     retencionDetalleIva.setRetencion(retencion);
-                    retencionDetalleIva.setValorRetenido(compraDetalle.getValorSriRetencionIVA());
+                    retencionDetalleIva.setValorRetenido(compraDetalle.getValorSriRetencionIVA().setScale(5, RoundingMode.HALF_UP));
                     System.out.println(compraDetalle.getValorSriRetencionIVA());       
                     retencion.addDetalle(retencionDetalleIva);
                 }
@@ -925,8 +926,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                 retencionDetalleRenta.setCodigoRetencionSri(compraDetalle.getSriRetencionRenta().getCodigo().toString());
                 retencionDetalleRenta.setPorcentajeRetener(compraDetalle.getSriRetencionRenta().getPorcentaje().setScale(2,BigDecimal.ROUND_HALF_UP));
                 retencionDetalleRenta.setRetencion(retencion);
-                retencionDetalleRenta.setValorRetenido(compraDetalle.getValorSriRetencionRenta());
-
+                retencionDetalleRenta.setValorRetenido(compraDetalle.getValorSriRetencionRenta().setScale(5, RoundingMode.HALF_UP));
                 
                 retencion.addDetalle(retencionDetalleRenta);
             }

@@ -1259,8 +1259,8 @@ public class CompraModel extends CompraPanel{
             fila.add(detalle.getCantidad()+"");
             fila.add(detalle.getDescripcion()+"");
             fila.add(loteCodigo);
-            fila.add(detalle.getValorSriRetencionIVA()+"");
-            fila.add(detalle.getValorSriRetencionRenta()+"");
+            fila.add((detalle.getValorSriRetencionIVA()!=null)?detalle.getValorSriRetencionIVA().setScale(3, RoundingMode.HALF_UP)+"":"");
+            fila.add((detalle.getValorSriRetencionRenta()!=null)?detalle.getValorSriRetencionRenta().setScale(3,RoundingMode.HALF_UP)+"":"");
             fila.add(detalle.getDescuento()+"");
             fila.add(detalle.getPrecioUnitario()+"");
             fila.add(detalle.getSubtotal()+"");
@@ -1427,8 +1427,8 @@ public class CompraModel extends CompraPanel{
         BigDecimal valorRetencionIVA = compraDetalle.getIva().multiply(new BigDecimal(sriRetencionIva.getPorcentaje()+"")).divide(new BigDecimal("100"));
         BigDecimal valorRetencionRenta = compraDetalle.getTotal().multiply(new BigDecimal(sriRetencionRenta.getPorcentaje()+"")).divide(new BigDecimal("100"));
             
-        compraDetalle.setValorSriRetencionIVA(valorRetencionIVA.setScale(2,BigDecimal.ROUND_HALF_UP));
-        compraDetalle.setValorSriRetencionRenta(valorRetencionRenta.setScale(2,BigDecimal.ROUND_HALF_UP));
+        compraDetalle.setValorSriRetencionIVA(valorRetencionIVA.setScale(5,BigDecimal.ROUND_HALF_UP));
+        compraDetalle.setValorSriRetencionRenta(valorRetencionRenta.setScale(5,BigDecimal.ROUND_HALF_UP));
 
         
     }

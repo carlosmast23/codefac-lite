@@ -753,6 +753,8 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         for (CompraDetalle detalle : detalles) 
         {            
             BigDecimal sriRetencion=detalle.getValorSriRetencionRenta();
+            
+            System.out.println("Rentencion: "+sriRetencion);
             if(sriRetencion!=null)
             {
                 total=total.add(sriRetencion);

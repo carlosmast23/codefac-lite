@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -216,7 +217,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
 
                 detalleComprobante.setBaseImponible(detalle.getBaseImponible());
                 detalleComprobante.setPorcentajeRetener(detalle.getPorcentajeRetener());
-                detalleComprobante.setValorRetenido(detalle.getValorRetenido());
+                detalleComprobante.setValorRetenido(detalle.getValorRetenido().setScale(2, RoundingMode.HALF_UP));
 
                 //Todo: por el momento solo guardo el 001 porque solo se emiten retenciones de facturas, pero este campo deberia guardarse para los ats supongo
                 //detalleComprobante.setCodDocSustento("01");
