@@ -366,7 +366,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @throws java.rmi.RemoteException 
      */
     public List<Object[]> consultarStockFacadeGeneral(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
-        //Kardex k;
+        //Producto p;
+        //p.getManejarInventario;
+        
         //k.getProducto().getCodigoPersonalizado();
          //k.getReserva();
         //k.getProducto().getCatalogoProducto().getCategoriaProducto();
@@ -465,10 +467,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             tipoUbicacionWhere=" AND ( k.producto.ubicacion IS NULL OR k.producto.ubicacion='' ) ";
         }
         
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+orderBy;
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva FROM Kardex k WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+orderBy;
         Query query = getEntityManager().createQuery(queryString);
-        
-        
         
         
         query.setParameter(6,GeneralEnumEstado.ACTIVO.getEstado());
@@ -507,6 +507,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         {
             query.setParameter(10, codigoProducto);
         }
+        
+        query.setParameter(11, EnumSiNo.SI.getLetra());
         
         //query.setParameter(3,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
