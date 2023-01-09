@@ -217,7 +217,16 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         //vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
         vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");        
-        vector.add((kardex.getStock()!=null)?kardex.getStock().setScale(2,RoundingMode.HALF_UP):"");
+        
+        if(producto.getManejarInventarioEnum()!=null && producto.getManejarInventarioEnum().equals(EnumSiNo.SI))
+        {
+            vector.add((kardex.getStock()!=null)?kardex.getStock().setScale(2,RoundingMode.HALF_UP):"");
+        }
+        else
+        {
+            vector.add("");
+        }
+        
     }
 
     @Override

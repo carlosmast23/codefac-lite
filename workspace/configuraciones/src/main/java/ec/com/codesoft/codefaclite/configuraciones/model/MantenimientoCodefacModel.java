@@ -82,7 +82,7 @@ public class MantenimientoCodefacModel extends MantenimientoCodefacPanel{
     private void eliminarClientes()
     {
         try {
-            List<Object[]> ejemplo = ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarConsultaNativaEnum(RecursoCodefacEnum.SQL_BORRAR_CLIENTE_POR_EMPRESA);
+            List<Object[]> ejemplo = ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarConsultaNativaEnum(RecursoCodefacEnum.SQL_BORRAR_CLIENTE_POR_EMPRESA,null);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             System.out.println("Tamanio:" + ejemplo.size());
         } catch (RemoteException ex) {

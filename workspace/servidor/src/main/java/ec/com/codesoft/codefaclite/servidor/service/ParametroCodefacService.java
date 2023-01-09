@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.ParametroCodefacFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoComandoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
@@ -271,7 +272,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         return parametro;
     }
     
-    public List ejecutarConsultaNativaEnum(RecursoCodefacEnum queryEnum) throws RemoteException,ServicioCodefacException
+    public List ejecutarConsultaNativaEnum(RecursoCodefacEnum queryEnum,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException
     {
         InputStream inputStreamReporte= RecursoCodefac.SQL_CODEFAC.getResourceInputStream(queryEnum.getNombre());
         String queryDatos= UtilidadesTextos.getStringFromInputStream(inputStreamReporte);
@@ -280,19 +281,19 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         List resultado=new ArrayList();
         for (String string : queryList) 
         {
-            resultado.addAll(ejecutarConsultaNativa(string));
+            resultado.addAll(ejecutarConsultaNativa(string,tipoComandoEnum));
         }
         return resultado;
     }
     
-    public List ejecutarVariasConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException
+    public List ejecutarVariasConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException
     {
         String[] queryList= queryStr.split(";");
         
         List resultado=new ArrayList();
         for (String string : queryList) 
         {
-            resultado.addAll(ejecutarConsultaNativa(string));
+            resultado.addAll(ejecutarConsultaNativa(string,tipoComandoEnum));
         }
         return resultado;
     }
@@ -304,17 +305,31 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public List ejecutarConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException
+    public List ejecutarConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException
     {
         try
         {
             Query query=AbstractFacade.entityManager.createNativeQuery(queryStr);
+                        
+            //En el caso que no se mande un tipo de comando el sistema genera uno de manera Automatica
+            if(tipoComandoEnum==null)
+            {
+                if(queryStr.toLowerCase().indexOf("select ")>=0)
+                {                
+                    tipoComandoEnum=TipoComandoEnum.CONSULTA;
+                }
+                else
+                {
+                    tipoComandoEnum=TipoComandoEnum.PROCESO;
+                }
+            }
+            
             //Verificar si es un query de actualizacion o consulta
-            if(queryStr.toLowerCase().indexOf("select ")>=0)
+            if(tipoComandoEnum.equals(TipoComandoEnum.CONSULTA))
             {                
                 return query.getResultList();
             }
-            else
+            else if(tipoComandoEnum.equals(TipoComandoEnum.PROCESO))
             {   
                 List<Object[]> resultado=new ArrayList<Object[]>();
                 
@@ -339,5 +354,8 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
             throw new ServicioCodefacException(e.getMessage());
         }
         
+        return null;
     }
+
+
 }

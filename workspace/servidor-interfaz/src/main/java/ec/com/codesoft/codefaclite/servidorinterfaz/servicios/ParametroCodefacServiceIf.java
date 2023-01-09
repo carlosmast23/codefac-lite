@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoComandoEnum;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -45,10 +46,10 @@ public interface ParametroCodefacServiceIf extends ServiceAbstractIf<ParametroCo
     
     public void crearParametroPorDefectoEmpresaSinTrasaccion(Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException;
     
-    public List ejecutarConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException;
+    public List ejecutarConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException;
     
     public ParametroCodefac getParametroByNombreSinEmpresa(String nombre) throws java.rmi.RemoteException;
     
-    public List ejecutarConsultaNativaEnum(RecursoCodefacEnum queryEnum) throws RemoteException,ServicioCodefacException;
-    public List ejecutarVariasConsultaNativa(String queryStr) throws RemoteException,ServicioCodefacException;
+    public List ejecutarConsultaNativaEnum(RecursoCodefacEnum queryEnum,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException;
+    public List ejecutarVariasConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException;
 }

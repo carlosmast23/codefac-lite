@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoComandoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -46,6 +47,13 @@ public class SqlModel extends SqlPanel {
             getCmbQuerysGuardados().addItem(value);
         }
         
+        getCmbTipoComando().removeAllItems();
+        getCmbTipoComando().addItem(null);
+        for (TipoComandoEnum value : TipoComandoEnum.values()) 
+        {
+            getCmbTipoComando().addItem(value);
+        }
+        
     }
     
     private void listenerComboBox()
@@ -71,7 +79,8 @@ public class SqlModel extends SqlPanel {
                 try {
                     getTxtErrores().setText("");
                     String queryStr=getTxtAreaSql().getText();
-                    List<Object[]> ejemplo=ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarVariasConsultaNativa(queryStr);
+                    TipoComandoEnum tipoComandoEnum=(TipoComandoEnum) getCmbTipoComando().getSelectedItem();
+                    List<Object[]> ejemplo=ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarVariasConsultaNativa(queryStr,tipoComandoEnum);
                     System.out.println("Tamanio:"+ejemplo.size());
                     construirModeloTabla(ejemplo);
                     
@@ -180,5 +189,6 @@ public class SqlModel extends SqlPanel {
     public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
     
 }

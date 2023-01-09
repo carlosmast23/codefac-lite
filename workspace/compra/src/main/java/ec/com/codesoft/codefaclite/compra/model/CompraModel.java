@@ -201,9 +201,14 @@ public class CompraModel extends CompraPanel{
         }
     }
     
-    private void setearValores()
+    private void setearValores() throws ServicioCodefacException
     {
         Persona.TipoIdentificacionEnum tipoIdentificacionEnum=compra.getProveedor().getTipoIdentificacionEnum();
+        if(tipoIdentificacionEnum==null)
+        {
+            throw new ServicioCodefacException("El proveedor no tiene definido un Tipo de identificación");
+        }
+        
         String codigoSri=tipoIdentificacionEnum.getCodigoSriCompra();
         compra.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
         
