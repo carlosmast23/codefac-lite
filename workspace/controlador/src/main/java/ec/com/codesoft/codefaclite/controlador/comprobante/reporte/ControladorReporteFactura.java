@@ -1122,6 +1122,14 @@ public class ControladorReporteFactura {
     {
         NORMAL("Normal",null),
         
+        AGRUPADO_POR_CLIENTE("Agrupado por cliente",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_CLIENTE).toString();
+                //return dato.getZona();
+            }
+        }),
+        
         AGRUPADO_POR_USUARIO("Agrupado por usuario",new CampoAgruparIf() {
             @Override
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
