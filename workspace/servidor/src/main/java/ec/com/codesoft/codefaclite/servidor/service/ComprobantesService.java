@@ -1381,7 +1381,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             }
 
             @Override
-            public void autorizado(Autorizacion documentoAutorizado) {
+            public void autorizado(Autorizacion documentoAutorizado) throws ComprobanteElectronicoException{
                 
                 try {
                     ComprobanteEntity comprobanteEditar=entityManager.merge(comprobanteOriginal);
@@ -1419,6 +1419,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     }*/
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                   throw new ComprobanteElectronicoException(ex.getMessage(), "Grabando AUTORIZACION", ComprobanteElectronicoException.ERROR_COMPROBANTE);
                 }
 
             }
@@ -1437,6 +1438,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 
                 if(documentoAutorizado.getEstado().equals("AUTORIZADO"))
                 {   
+                    if(!verificarExisteXmlAutorizado(comprobanteOriginal))
+                    {
+                        String mensajeError="ERROR AL CAMBIAR DE ESTADO A AUTORIZAR EL COMPROBANTE: "+comprobanteOriginal.getClaveAcceso()+", NO EXISTE EL XML EN EL DISCO";
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE,mensajeError);
+                        throw new ServicioCodefacException(mensajeError);
+                    }
+                    
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.WARNING,"Autorizando Comprobante: "+comprobanteOriginal.getCodigoDocumentoEnum().getNombre()," | con secuencial: "+comprobanteOriginal.getSecuencial()+" | con autorización: "+documentoAutorizado.getNumeroAutorizacion());
                     comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
                     XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
@@ -1455,6 +1463,33 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             }
         });        
                 
+    }
+    
+    /**
+     * Este metodo sirve como segunda comprobación para solo cambiar de estado cuando efectivamente exista un xml autorizada que garantiza todo el proceso
+     * @param comprobante
+     * @return 
+     */
+    private Boolean verificarExisteXmlAutorizado(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante)
+    {
+        try {
+            //Buscar el xml en el disco físico para verificar que tengo el archivo xml            
+            RemoteInputStream remoteInputStream =ServiceFactory.getFactory().getComprobanteServiceIf().obtenerXmlFirmadoComprobante(comprobante.getEmpresa(),comprobante.getClaveAcceso(),true);
+            //InputStream inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
+            
+            if(remoteInputStream!=null)
+            {
+                return true;
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
     
     
@@ -2652,7 +2687,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso) throws RemoteException, ServicioCodefacException
+    public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso,Boolean soloAutorizado) throws RemoteException, ServicioCodefacException
     {
         try {
             File file=null;//archivo para mostrar
@@ -2662,11 +2697,18 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
             String pathXmlAutorizados=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_AUTORIZADOS,claveAcceso);
             file=new File(pathXmlAutorizados);
-            
+                        
             if(!file.exists())
             {
-                String pathXml=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_FIRMADOS,claveAcceso);
-                file=new File(pathXml);
+                if(!soloAutorizado)
+                {
+                    String pathXml=comprobanteService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_FIRMADOS,claveAcceso);
+                    file=new File(pathXml);
+                }
+                else
+                {
+                    return null;
+                }                
             }
             
             SimpleRemoteInputStream istream = new SimpleRemoteInputStream(new FileInputStream(file));
@@ -2679,7 +2721,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         throw new ServicioCodefacException("Xml no disponible");
     }
     
-    
+
     public boolean eliminarComprobanteFisico(String claveAcceso) throws RemoteException, ServicioCodefacException
     {
         ClaveAcceso claveAccesoObj = new ClaveAcceso(claveAcceso);

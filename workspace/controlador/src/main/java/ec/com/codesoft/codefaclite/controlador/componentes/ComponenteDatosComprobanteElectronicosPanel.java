@@ -311,7 +311,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    RemoteInputStream remoteInputStream =ServiceFactory.getFactory().getComprobanteServiceIf().obtenerXmlFirmadoComprobante(comprobante.getEmpresa(),comprobante.getComprobante().getClaveAcceso());
+                    RemoteInputStream remoteInputStream =ServiceFactory.getFactory().getComprobanteServiceIf().obtenerXmlFirmadoComprobante(comprobante.getEmpresa(),comprobante.getComprobante().getClaveAcceso(),false);
                     
                     String nombreArchivoFinal=UtilidadesArchivos.generarNombreArchivoUnico("firma","xml");
                     File fileDestino = new File(ParametrosSistemaCodefac.CARPETA_DATOS_TEMPORALES+"/"+nombreArchivoFinal); //Ver si parametrizar el backslash 

@@ -67,7 +67,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     {
         List<AlertaResponse> alertas=new ArrayList<AlertaResponse>();
         alertas.add(obtenerNotificacionComprobantesElectronicos(sucursal.getEmpresa()));
-        //alertas.add(obtenerNotificacionComprobantesElectronicosBaseDatos(empresa));
+        alertas.add(obtenerNotificacionComprobantesElectronicosBaseDatos(sucursal.getEmpresa()));
         alertas.add(obtenerNotificacionFechaLimiteFirma(sucursal.getEmpresa()));
         alertas.add(obtenerCantidadInventarioMinimo(sucursal.getEmpresa()));
         alertas.add(obtenerAlertaDirectorioRespaldo(sucursal.getEmpresa()));
@@ -342,8 +342,8 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         if (totalComprobantesSinProcesar > 0) {
             //modeloTabla.addRow(new Object[]{TipoAdvertenciaEnum.ADVERTENCIA,totalComprobantesSinEnviar+" Comprobantes de enviar al Sri","Utilizar herramienta enviar"});
             return new AlertaResponse(
-                    AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,
-                    totalComprobantesSinProcesar + " Comprobantes de enviar al Sri",
+                    AlertaResponse.TipoAdvertenciaEnum.ALERTA,
+                    totalComprobantesSinProcesar + " Comprobantes SIN AUTORIZAR",
                     "Utilizar herramienta enviar");
         }
 

@@ -20,5 +20,5 @@ public interface ListenerComprobanteElectronico {
     public abstract void iniciado(ComprobanteElectronico comprobante);
     public abstract void procesando(int etapa,ClaveAcceso clave);
     public abstract void error(ComprobanteElectronicoException cee);
-    public abstract void autorizado(Autorizacion documentoAutorizado);
+    public abstract void autorizado(Autorizacion documentoAutorizado) throws ComprobanteElectronicoException;
 }

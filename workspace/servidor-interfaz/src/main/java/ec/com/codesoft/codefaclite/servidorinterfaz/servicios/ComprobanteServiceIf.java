@@ -73,7 +73,8 @@ public interface ComprobanteServiceIf extends Remote {
     
     public boolean verificarDisponibilidadSri(Empresa empresa) throws RemoteException;
     
-    public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso) throws RemoteException, ServicioCodefacException;
+    public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso,Boolean soloAutorizado) throws RemoteException, ServicioCodefacException;
+    
     
     public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException,ServicioCodefacException;
     

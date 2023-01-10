@@ -54,6 +54,10 @@ public class AlertaResponse implements Serializable{
         INFORMATIVO("Info"),
         ADVERTENCIA("Advertencia"),
         ALERTA("Alerta"),
+        /**
+         * Advertencia de tipo grave que se tiene que solucionar de manera urgente
+         * @Color ROJO
+         */
         GRAVE("Grave");
         
         private String grave;
