@@ -288,7 +288,9 @@ public class CajaSession implements Serializable
         }
 
         //Todo: mejorar esta parte 
-        List<IngresoCaja> ingresoCajaList=new ArrayList<IngresoCaja>();
+        //List<IngresoCaja> ingresoCajaList=new ArrayList<IngresoCaja>();
+        List<IngresoCaja> ingresoCajaList=ingresosCaja;
+        
         
         if(ingresoCajaList!=null)
         {

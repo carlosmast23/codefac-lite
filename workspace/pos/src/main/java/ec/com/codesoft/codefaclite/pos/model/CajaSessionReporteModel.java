@@ -96,7 +96,8 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                                     cs.getFechaHoraApertura().toString(),
                                     cs.getFechaHoraCierre().toString(),
                                     cs.getValorApertura().toString(),
-                                    cs.getValorCierre().toString()
+                                    cs.getValorCierre().toString(),
+                                    (cs.getEstadoCierreCaja()!=null)?cs.getEstadoCierreCaja():""
                             ));
                 });
             }
@@ -193,8 +194,8 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
             List<Caja> cajas = ServiceFactory.getFactory().getCajaServiceIf().buscarCajasPorSucursal(session);
             List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session.getSucursal(), cajas.get(0));
             
-            UtilidadesComboBox.llenarComboBox(getCmbCaja(), cajas);
-            UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios);
+            UtilidadesComboBox.llenarComboBox(getCmbCaja(), cajas,true);
+            UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios,true);
             
             modeloTablaCajasSession = new DefaultTableModel();
             getTblCajasSession().setModel(modeloTablaCajasSession);
@@ -246,6 +247,7 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                 titulo.add("Fecha Cierre");
                 titulo.add("Valor Apertura");
                 titulo.add("Valor Cierre");
+                titulo.add("Estado");
                 
                 modeloTablaCajasSession = new DefaultTableModel(titulo, 0);
                 
@@ -263,6 +265,7 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                     fila.add(csrd.getFechaHoraCierreCaja());
                     fila.add(csrd.getValorAperturaCaja());
                     fila.add(csrd.getValorCierreCaja());
+                    fila.add(csrd.getEstado());
                     
                     modeloTablaCajasSession.addRow(fila);
                 });

@@ -35,14 +35,24 @@ public class UtilidadesComboBox {
     
     public static void llenarComboBox(JComboBox comboBox,List datos)
     {
-        llenarComboBox(comboBox, datos, Boolean.TRUE);
+        llenarComboBox(comboBox, datos, Boolean.FALSE);
     }
     
-    public static void llenarComboBox(JComboBox comboBox,List datos,Boolean limpiar)
+    public static void llenarComboBox(JComboBox comboBox,List datos,Boolean defectoNull)
+    {
+        llenarComboBox(comboBox, datos, Boolean.TRUE,defectoNull);
+    }
+    
+    public static void llenarComboBox(JComboBox comboBox,List datos,Boolean limpiar,Boolean defectoNull)
     {
         if(limpiar)
         {
             comboBox.removeAllItems();
+        }
+        
+        if(defectoNull)
+        {
+            comboBox.addItem(null);
         }
         
         for (Object object : datos) 

@@ -59,7 +59,19 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
             Timestamp fechaInicioTimeStamp = UtilidadesFecha.castDateSqlToTimeStampSql(fechaInicio);
             Timestamp fechaFinTimeStamp = UtilidadesFecha.castDateSqlToTimeStampSql(fechaFin);
             
-            String stringQuery = "Select cs from CajaSession cs where cs.caja = ?1 and cs.usuario = ?2 and cs.estadoCierreCaja = ?3 ";
+            String cajaStr="";
+            if(caja!=null)
+            {
+                cajaStr=" and cs.caja = ?1 ";
+            }
+            
+            String usuarioStr="";
+            if(usuario!=null)
+            {
+                usuarioStr=" and cs.usuario = ?2 ";
+            }
+            
+            String stringQuery = "Select cs from CajaSession cs where 1=1  "+cajaStr+usuarioStr;
             String queryStringFecha="";
             
             if(fechaInicio!=null)
@@ -74,9 +86,18 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
 
             stringQuery += queryStringFecha;
             Query query = getEntityManager().createQuery(stringQuery);
-            query.setParameter(1, caja);
-            query.setParameter(2, usuario);
-            query.setParameter(3, CajaSessionEnum.FINALIZADO.getEstado());
+                        
+            //query.setParameter(3, CajaSessionEnum.FINALIZADO.getEstado());
+            
+            if(caja!=null)
+            {
+                query.setParameter(1, caja);
+            }
+            
+            if(usuario!=null)
+            {
+                query.setParameter(2, usuario);
+            }
 
             if(fechaInicio!=null)
             {

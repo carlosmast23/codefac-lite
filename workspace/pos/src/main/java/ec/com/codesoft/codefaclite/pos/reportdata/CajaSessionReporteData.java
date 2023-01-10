@@ -28,8 +28,9 @@ public class CajaSessionReporteData  implements ExcelDatosInterface
     
     private String valorAperturaCaja;
     private String valorCierreCaja; 
+    private String estado;
 
-    public CajaSessionReporteData(String nombreCaja, String nombreUsuario, String nombreSucursal, String nombrePuntoEmision, String fechaHoraAperturaCaja, String fechaHoraCierreCaja, String valorAperturaCaja, String valorCierreCaja) 
+    public CajaSessionReporteData(String nombreCaja, String nombreUsuario, String nombreSucursal, String nombrePuntoEmision, String fechaHoraAperturaCaja, String fechaHoraCierreCaja, String valorAperturaCaja, String valorCierreCaja,String estado) 
     {
         this.nombreCaja = nombreCaja;
         this.nombreUsuario = nombreUsuario;
@@ -39,6 +40,7 @@ public class CajaSessionReporteData  implements ExcelDatosInterface
         this.fechaHoraCierreCaja = fechaHoraCierreCaja;
         this.valorAperturaCaja = valorAperturaCaja;
         this.valorCierreCaja = valorCierreCaja;
+        this.estado=estado;
     }
     
     
@@ -122,5 +124,15 @@ public class CajaSessionReporteData  implements ExcelDatosInterface
     public void setValorCierreCaja(String valorCierreCaja) {
         this.valorCierreCaja = valorCierreCaja;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
 
 }

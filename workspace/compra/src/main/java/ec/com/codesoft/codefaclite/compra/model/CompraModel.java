@@ -118,7 +118,7 @@ public class CompraModel extends CompraPanel{
     private DefaultTableModel modeloTablaDetallesCompra;
     private DefaultTableModel modeloTablaCompraReembolso;
     private Boolean bandera;
-    private int filaDP;
+    //private int filaDP;
     private Boolean banderaIngresoDetallesCompra;
     private Compra.RetencionEnumCompras estadoRetencion;
 
@@ -889,7 +889,7 @@ public class CompraModel extends CompraPanel{
         getTblDetalleProductos().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                filaDP = getTblDetalleProductos().getSelectedRow();
+                int filaDP = getTblDetalleProductos().getSelectedRow();
                 bandera = true;
                 if(filaDP>=0)
                 {
@@ -938,6 +938,7 @@ public class CompraModel extends CompraPanel{
                 if(bandera)
                 {
                     bandera = false;
+                    int filaDP = getTblDetalleProductos().getSelectedRow();
                     filaDP = getTblDetalleProductos().getSelectedRow();
                     CompraDetalle compraDetalle = compra.getDetalles().get(filaDP);
                     agregarDetalleCompraConDatosVista(compraDetalle);
@@ -952,10 +953,14 @@ public class CompraModel extends CompraPanel{
             public void actionPerformed(ActionEvent e) {
                 if(bandera)
                 {
-                    bandera = false;
-                    modeloTablaDetallesCompra.removeRow(filaDP);
-                    compra.getDetalles().remove(filaDP);                   
-                    actualizarDatosMostrarVentana();
+                    int filaDP = getTblDetalleProductos().getSelectedRow();
+                    if(filaDP>=0)
+                    {
+                        bandera = false;
+                        modeloTablaDetallesCompra.removeRow(filaDP);
+                        compra.getDetalles().remove(filaDP);                   
+                        actualizarDatosMostrarVentana();
+                    }
                 }
             }
         });
