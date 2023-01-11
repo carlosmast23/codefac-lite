@@ -103,6 +103,8 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final SimpleDateFormat FORMATO_ESTANDAR_FECHA_HORA = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
     
+    public static final SimpleDateFormat FORMATO_ESTANDAR_FECHA_HORA_SIN_SEGUNDOS = new SimpleDateFormat("dd/MM/yyyy HH:mm");  
+    
     /**
      * Variable para configurar los intentos maximos para verificar conexion con el Sri
      */

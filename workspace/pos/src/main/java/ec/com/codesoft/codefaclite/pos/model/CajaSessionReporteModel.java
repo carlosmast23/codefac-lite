@@ -19,14 +19,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +37,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -42,6 +47,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CajaSessionReporteModel extends CajaSessionReportePanel 
 {
+    private static final int COLUMNA_OBJECTO=0;
+    
     
     private DefaultTableModel modeloTablaCajasSession;
 
@@ -52,6 +59,7 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
         iniciarValores();
         listenerCombos();
         listenerBotones();
+        listenerTabla();
     }
 
     @Override
@@ -83,18 +91,35 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
             
             List<CajaSession> cajasSession = (List<CajaSession>) ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicial, fechaFinal);
             
+            
+            
             dataReporte = new ArrayList<>();
             if(cajasSession != null && !cajasSession.isEmpty()){
                 cajasSession.forEach(cs -> 
                 {
+                    SimpleDateFormat format=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA_SIN_SEGUNDOS;
+                    
+                    String fechaAperturaStr="";                    
+                    if(cs.getFechaHoraApertura()!=null)
+                    {
+                        fechaAperturaStr=format.format(cs.getFechaHoraApertura());
+                    }
+                    
+                    String fechaCierreStr="";                    
+                    if(cs.getFechaHoraCierre()!=null)
+                    {
+                        fechaCierreStr=format.format(cs.getFechaHoraCierre());
+                    }
+                    
                     dataReporte.add(
                             new CajaSessionReporteData(
+                                    cs,
                                     cs.getCaja().getNombre(),
                                     cs.getUsuario().getNick(),
                                     cs.getCaja().getSucursal().getNombre(),
                                     cs.getCaja().getPuntoEmision().getPuntoEmision().toString(),
-                                    cs.getFechaHoraApertura().toString(),
-                                    cs.getFechaHoraCierre().toString(),
+                                    fechaAperturaStr,
+                                    fechaCierreStr,
                                     cs.getValorApertura().toString(),
                                     cs.getValorCierre().toString(),
                                     (cs.getEstadoCierreCaja()!=null)?cs.getEstadoCierreCaja():""
@@ -228,7 +253,32 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
     {
         Caja caja = (Caja) getCmbCaja().getSelectedItem();
         List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session.getSucursal(), caja);
-        UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios);
+        UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios,true);
+    }
+    
+    private ActionListener listenerImprimirReporteCaja=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            Integer fila= getTblCajasSession().getSelectedRow();
+            if(fila>=0)
+            {
+                CajaSession cajaSession= (CajaSession) getTblCajasSession().getValueAt(fila, COLUMNA_OBJECTO);
+                CerrarCajaModel.generarReporteCaja(cajaSession, panelPadre);
+            }
+        }
+    };
+    
+    private void listenerTabla()
+    {
+         JPopupMenu jPopupMenu = new JPopupMenu();
+        
+        //MENU PARA ENLAZAR DE UN PRODUCTO EXISTENTE
+        JMenuItem jMenuItemEnlazarProveedor = new JMenuItem("Imprimir Detalle");
+        jMenuItemEnlazarProveedor.addActionListener(listenerImprimirReporteCaja);
+        jPopupMenu.add(jMenuItemEnlazarProveedor);
+        
+        getTblCajasSession().setComponentPopupMenu(jPopupMenu);
     }
     
     private void listenerBotones() 
@@ -238,7 +288,8 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
             public void actionPerformed(ActionEvent e) 
             {
                 
-                Vector<String> titulo = new Vector<>();
+                Vector<Object> titulo = new Vector<>();
+                titulo.add("");
                 titulo.add("Caja");
                 titulo.add("Usuario");
                 titulo.add("Sucursal");
@@ -255,8 +306,9 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                 
                 dataReporte.forEach(csrd -> 
                 {
-                    Vector<String> fila = new Vector<>();
+                    Vector<Object> fila = new Vector<>();
                     
+                    fila.add(csrd.getCajaSession());
                     fila.add(csrd.getNombreCaja());
                     fila.add(csrd.getNombreUsuario());
                     fila.add(csrd.getNombreSucursal());
@@ -269,8 +321,9 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                     
                     modeloTablaCajasSession.addRow(fila);
                 });
-                
+                                
                 getTblCajasSession().setModel(modeloTablaCajasSession);
+                UtilidadesTablas.ocultarColumna(getTblCajasSession(),COLUMNA_OBJECTO);
 
             }
         });

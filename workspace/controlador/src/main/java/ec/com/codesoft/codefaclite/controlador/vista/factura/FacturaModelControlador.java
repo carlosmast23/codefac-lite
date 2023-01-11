@@ -1821,7 +1821,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         A6("A6","comprobante_venta_ticket.jrxml"),
         POS_80("POS 80","comprobante_venta_ticket.jrxml"),
         POS_50("POS 50","comprobante_venta_ticket_50.jrxml"),
-        POS_40("POS 40","comprobante_venta_ticket_40.jrxml");
+        POS_40("POS 40","comprobante_venta_ticket_40.jrxml"),
+        POS_30("POS 30","comprobante_venta_ticket_30.jrxml")
+        ;
 
         private FormatoReporteEnum(String nombre,String reporteJasperNombre) {
             this.nombre = nombre;

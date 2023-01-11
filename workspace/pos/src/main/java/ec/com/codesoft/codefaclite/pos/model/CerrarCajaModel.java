@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.pos.model;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
@@ -149,10 +150,82 @@ public class CerrarCajaModel extends CajaSessionModel
         return CajaSesionModelControlador.TipoProcesoCajaEnum.CIERRE_CAJA; //To change body of generated methods, choose Tools | Templates.
     }
     
+    //TODO: Optimizar esta parte para poner en otro lado más general por ejemplo el contralador
+    public static void generarReporteCaja(CajaSession cajaSession,InterfazComunicacionPanel panelPadre)
+    {
+        InputStream path = RecursoCodefac.JASPER_POS.getResourceInputStream("reporteCierreCaja.jrxml");
+        Map<String,Object> parametros = new HashMap<String,Object>();
+        
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //CajaSession cajaSession=getControlador().getCajaSession();
+        String fechaAperturaStr= format.format(cajaSession.getFechaHoraApertura());
+        
+        String fechaCierreStr="";
+        if(cajaSession.getFechaHoraCierre()!=null)
+        {
+            fechaCierreStr=format.format(cajaSession.getFechaHoraCierre());
+        }
+        
+        //Cargar los datos de los parametros
+        
+        parametros.put("caja", cajaSession.getCaja().getNombre());
+        parametros.put("usuario", cajaSession.getUsuario().getNick());
+        parametros.put("fecha_apertura", fechaAperturaStr);
+        parametros.put("fecha_cierre", fechaCierreStr);
+        parametros.put("valor_apertura", cajaSession.getValorApertura()+"");
+        parametros.put("valor_cierre_teorico", cajaSession.getValorCierre()+"");
+        parametros.put("valor_ciere_practico", cajaSession.getValorCierreReal()+"");
+        parametros.put("observacion", cajaSession.getObservacionCierreCaja());
+        
+        
+        //Cargar los datos de los detalles
+        List<VentaReporteData> detalleData=new ArrayList<VentaReporteData>();
+        
+        List<IngresoCaja> ingresoCajaList=cajaSession.getIngresosCaja();
+        
+        if(ingresoCajaList!=null)
+        {
+            for (IngresoCaja ingresoCaja : ingresoCajaList) 
+            {
+                VentaReporteData reporteData=new VentaReporteData(
+                        ingresoCaja.getFactura().getSecuencial()+"", 
+                        ingresoCaja.getFactura().getIdentificacion(), 
+                        ingresoCaja.getFactura().getRazonSocial(), 
+                        ingresoCaja.getFactura().getTotal()+"",
+                        ingresoCaja.getFactura().getEstadoEnum().getNombre());
+
+                detalleData.add(reporteData);            
+            }
+        }
+        
+        DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = {"Secuencial", "Identificación","Cliente", "Total"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, detalleData);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        exc.printStackTrace();
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, detalleData, panelPadre,"Cierre Caja");
+                }
+            });
+    }
+    
     @Override
     public void generarReporte()
     {
-        InputStream path = RecursoCodefac.JASPER_POS.getResourceInputStream("reporteCierreCaja.jrxml");
+        generarReporteCaja(getControlador().getCajaSession(), panelPadre);
+        /*InputStream path = RecursoCodefac.JASPER_POS.getResourceInputStream("reporteCierreCaja.jrxml");
         Map<String,Object> parametros = new HashMap<String,Object>();
         
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -217,7 +290,7 @@ public class CerrarCajaModel extends CajaSessionModel
                 public void pdf() {
                     ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, detalleData, panelPadre,"Cierre Caja");
                 }
-            });
+            });*/
         
         //Llenar datos para el reporte
     

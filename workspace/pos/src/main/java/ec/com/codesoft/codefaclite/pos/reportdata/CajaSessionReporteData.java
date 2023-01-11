@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.pos.reportdata;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public class CajaSessionReporteData  implements ExcelDatosInterface
 {
-
+    private CajaSession cajaSession;
     private String nombreCaja;
     private String nombreUsuario;
     private String nombreSucursal;
@@ -30,7 +31,7 @@ public class CajaSessionReporteData  implements ExcelDatosInterface
     private String valorCierreCaja; 
     private String estado;
 
-    public CajaSessionReporteData(String nombreCaja, String nombreUsuario, String nombreSucursal, String nombrePuntoEmision, String fechaHoraAperturaCaja, String fechaHoraCierreCaja, String valorAperturaCaja, String valorCierreCaja,String estado) 
+    public CajaSessionReporteData(CajaSession cajaSession,String nombreCaja, String nombreUsuario, String nombreSucursal, String nombrePuntoEmision, String fechaHoraAperturaCaja, String fechaHoraCierreCaja, String valorAperturaCaja, String valorCierreCaja,String estado) 
     {
         this.nombreCaja = nombreCaja;
         this.nombreUsuario = nombreUsuario;
@@ -41,6 +42,7 @@ public class CajaSessionReporteData  implements ExcelDatosInterface
         this.valorAperturaCaja = valorAperturaCaja;
         this.valorCierreCaja = valorCierreCaja;
         this.estado=estado;
+        this.cajaSession=cajaSession;
     }
     
     
@@ -132,7 +134,15 @@ public class CajaSessionReporteData  implements ExcelDatosInterface
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
-    
 
+    public CajaSession getCajaSession() {
+        return cajaSession;
+    }
+
+    public void setCajaSession(CajaSession cajaSession) {
+        this.cajaSession = cajaSession;
+    }
+    
+    
+    
 }

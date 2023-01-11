@@ -150,6 +150,7 @@ public class Caja implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -170,6 +171,8 @@ public class Caja implements Serializable {
         }
         return true;
     }
+
+    
 
     @Override
     public String toString() {

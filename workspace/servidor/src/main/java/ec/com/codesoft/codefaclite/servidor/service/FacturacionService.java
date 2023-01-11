@@ -599,7 +599,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 throw new ServicioCodefacException("Error con la identificacion del cliente seleccionado");
             }
             
-            //Validacion de MONTOS SUPERIORES A $200 PARA CONSUMIDORES FINALES EN DOCUMENTOS LEGALES
+            //Validacion de MONTOS SUPERIORES A $50 PARA CONSUMIDORES FINALES EN DOCUMENTOS LEGALES
             if (factura.getCliente().isClienteFinal() && factura.getCodigoDocumentoEnum().getDocumentoLegal()) 
             {
                 if (factura.getTotal().compareTo(ParametrosSistemaCodefac.MONTO_MAXIMO_VENTAS_CONSUMIDOR_FINAL) > 0) {
@@ -691,6 +691,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         //TODO: Ver si se puede poner estos codigos en otra seccion 
                         detalle.setDescripcion(detalle.getDescripcion().replace("”","''"));
                         detalle.setDescripcion(detalle.getDescripcion().replace(""," "));
+                        detalle.setDescripcion(detalle.getDescripcion().replace("Ð","Ñ"));
                     }
                     
                 }

@@ -44,11 +44,11 @@ public class Presupuesto implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "EMPRESA_ID")
-    private Long empresaId;
+    @JoinColumn(name = "EMPRESA_ID")
+    private Empresa empresa;
     
-    @Column(name = "USUARIO_ID")
-    private Long usuarioId;
+    @JoinColumn(name = "USUARIO_ID")
+    private Usuario usuario;
     
     @Column(name = "CODIGO")
     private String codigo;
@@ -205,21 +205,33 @@ public class Presupuesto implements Serializable
         this.fechaValidez = fechaValidez;
     }
 
-    public Long getEmpresaId() {
-        return empresaId;
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
-    public void setEmpresaId(Long empresaId) {
-        this.empresaId = empresaId;
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
-    public Long getUsuarioId() {
+    
+
+    /*ublic Long getUsuarioId() {
         return usuarioId;
     }
 
     public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
+    }*/
+
+    public Usuario getUsuario() {
+        return usuario;
     }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
+    
 
     public BigDecimal getDescuentoCompra() {
         return descuentoCompra;

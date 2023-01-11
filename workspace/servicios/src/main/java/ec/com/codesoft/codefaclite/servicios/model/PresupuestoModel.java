@@ -20,10 +20,11 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.servicio.PresupuestoControlador;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.busqueda.PresupuestoBusqueda;
-import ec.com.codesoft.codefaclite.servicios.data.PresupuestoData;
+import ec.com.codesoft.codefaclite.controlador.vista.servicio.PresupuestoData;
 import ec.com.codesoft.codefaclite.servicios.panel.PresupuestoPanel;
 import ec.com.codesoft.codefaclite.servicios.reportdata.OrdenCompraDataReporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
@@ -44,6 +45,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -91,6 +93,7 @@ import javax.swing.JTextField;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -296,11 +299,13 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
     @Override
     public void imprimir() {
-        InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuesto.jrxml");
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, obtenerMapReporte(), obtenerDetallesReporte(), panelPadre,"Presupuesto");
+        //InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("presupuesto.jrxml");
+        //ReporteCodefac.generarReporteInternalFramePlantilla(path, obtenerMapReporte(), obtenerDetallesReporte(), panelPadre,"Presupuesto");
+        JasperPrint jasper= PresupuestoControlador.getReporteJasperPresupuesto(presupuesto);
+        ReporteCodefac.generarReporteInternalFrame(jasper, panelPadre, "Presupuesto "+presupuesto.getCodigo(), ConfiguracionImpresoraEnum.NINGUNA);
     }
     
-    private Map<String,Object> obtenerMapReporte()
+    /*private Map<String,Object> obtenerMapReporte()
     {
         Map<String,Object> parametros=new HashMap<String,Object>();
         parametros.put("identificacion", presupuesto.getPersona().getIdentificacion());
@@ -323,6 +328,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         parametros.put("objectoMantenimiento", objetoMantenimiento);
         parametros.put("kilometraje", kilometraje);
         
+        parametros.put("notas", presupuesto.getOrdenTrabajoDetalle().getNotas());
+        
         //Datos de la orden de trabajo
         parametros.put("ordenTrabajo", presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getId().toString());
         parametros.put("descripcion", presupuesto.getDescripcion());
@@ -342,12 +349,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         parametros.put("utilidad", totales.utilidad.toString());
         
         return parametros ;
-    }
+    }*/
     
     
         
     
-    private List<PresupuestoData> obtenerDetallesReporte()
+    /*private List<PresupuestoData> obtenerDetallesReporte()
     {
         List<PresupuestoData> datos=new ArrayList<PresupuestoData>();
         if(presupuesto.getPresupuestoDetalles()!=null)
@@ -377,7 +384,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         }
         return datos;
         
-    }
+    }*/
 
     @Override
     public void actualizar() throws ExcepcionCodefacLite {
@@ -1343,6 +1350,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private void setearDatos() 
     {               
             Presupuesto.EstadoEnum generalEnumEstado = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();
+            this.presupuesto.setEmpresa(session.getEmpresa());
+            this.presupuesto.setUsuario(session.getUsuario());
             this.presupuesto.setEstado(generalEnumEstado.getLetra());
             this.presupuesto.setDescripcion(""+getTxtDescripcion().getText());
             this.presupuesto.setCatalogoProducto((CatalogoProducto) getCmbTipoPresupuesto().getSelectedItem());
@@ -1620,7 +1629,14 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 }
                 
                 //Setear en la pantalla el precio de producto proveedor
-                getTxtPrecioCompra().setText(productoProveedor.getCosto()+"");
+                if(getChkInventarioProveedor().isSelected())
+                {
+                    getTxtPrecioCompra().setText(productoProveedor.getProducto().getValorUnitario()+"");                    
+                }
+                else
+                {
+                    getTxtPrecioCompra().setText(productoProveedor.getCosto()+"");
+                }
                 
             } catch (RemoteException ex) {
                 Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
