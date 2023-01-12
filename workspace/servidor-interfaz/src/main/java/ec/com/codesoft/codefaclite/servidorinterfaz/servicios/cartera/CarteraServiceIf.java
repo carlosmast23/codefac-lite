@@ -30,7 +30,7 @@ import java.util.List;
  */
 public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException;
-    public List<Cartera> listaCarteraSaldoCero(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento) throws ServicioCodefacException, RemoteException;
+    public List<Cartera> listaCarteraSaldoCero(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento,Integer diasPorVencer) throws ServicioCodefacException, RemoteException;
     public List<CarteraCruce> consultarMovimientoCartera(Persona persona) throws java.rmi.RemoteException;
     public void eliminar(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException;
     public void editar(Cartera entity,List<CarteraCruce> cruces) throws ServicioCodefacException, RemoteException;
@@ -38,6 +38,7 @@ public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public BigDecimal obtenerSaldoDisponibleCruzar(Persona cliente,Empresa empresa,Estudiante estudiante) throws ServicioCodefacException, RemoteException;
     public void eliminarCarteraSinTransaccion(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException ;
     public Cartera obtenerRetencionPorFactura(Factura factura,Cartera.TipoCarteraEnum tipoCartera) throws ServicioCodefacException, RemoteException;
-    public BigDecimal listaCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento) throws ServicioCodefacException, RemoteException;
+    public BigDecimal listaCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento,Integer diasPorVencer) throws ServicioCodefacException, RemoteException;
+    public Long listaCarteraSaldoCeroTamanio(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento,Integer diasPorVencer) throws ServicioCodefacException, RemoteException;
     
 }

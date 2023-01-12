@@ -13,8 +13,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
@@ -73,7 +76,9 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         alertas.add(obtenerAlertaDirectorioRespaldo(sucursal.getEmpresa()));
         alertas.add(obtenerAlertaIvaSinConfigurar(sucursal.getEmpresa()));
         alertas.add(obtenerAlertaStockProductosPorCaducar(sucursal));
+        alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
+        
         
         
         return alertas;        
@@ -103,6 +108,37 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         }
         return null;
         
+    }
+    
+    private AlertaResponse obtenerCuentasPorCobrarPorCaducar(Sucursal sucursal)
+    {
+    
+        try {
+            Integer numeroDias= ParametroUtilidades.obtenerValorParametroInteger(sucursal.getEmpresa(), ParametroCodefac.DIAS_CREDITO_ALERTA,0);
+            
+            Long cantidadCartera = ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCeroTamanio(
+                    null,
+                    null,
+                    null,
+                    null,
+                    DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+                    Cartera.TipoCarteraEnum.CLIENTE,
+                    Cartera.TipoSaldoCarteraEnum.CON_SALDO,
+                    Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO,
+                    CarteraEstadoReporteEnum.VENCIDA,
+                    sucursal,
+                    null,
+                    numeroDias);
+            
+            
+            AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ALERTA,cantidadCartera+" Cuentas de cobrar "," por caducar");
+            return alertaRespuesta;
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(AlertaService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AlertaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     private AlertaResponse obtenerAlertaIvaSinConfigurar(Empresa empresa)

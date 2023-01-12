@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -96,6 +97,16 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     public void setLblTotal(JLabel lblTotal) {
         this.lblTotal = lblTotal;
     }
+
+    public JSpinner getTxtDiasPorVencer() {
+        return txtDiasPorVencer;
+    }
+
+    public void setTxtDiasPorVencer(JSpinner txtDiasPorVencer) {
+        this.txtDiasPorVencer = txtDiasPorVencer;
+    }
+    
+    
     
     
 
@@ -111,6 +122,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jSpinner1 = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         txtCliente = new javax.swing.JTextField();
         btnBuscarCliente = new javax.swing.JButton();
@@ -130,6 +142,8 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         cmbTipoReporteCartera = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         cmbTipoReporte = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        txtDiasPorVencer = new javax.swing.JSpinner();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -185,9 +199,9 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(checkTodos, gridBagConstraints);
 
-        jLabel2.setText("Tipo Cartera:");
+        jLabel2.setText("Días por Vencer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -305,6 +319,21 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbTipoReporte, gridBagConstraints);
 
+        jLabel8.setText("Tipo Cartera:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel8, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtDiasPorVencer, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -323,13 +352,16 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblEspaciosBlancos12;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tableCuentasPorCobrar;
     private javax.swing.JTextField txtCliente;
+    private javax.swing.JSpinner txtDiasPorVencer;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<CarteraEstadoReporteEnum> getCmbTipoReporteCartera() {

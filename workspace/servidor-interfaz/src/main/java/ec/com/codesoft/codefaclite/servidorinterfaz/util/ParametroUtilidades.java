@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
@@ -143,6 +144,18 @@ public abstract class ParametroUtilidades {
             Logger.getLogger(ParametroUtilidades.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public static Integer obtenerValorParametroInteger(Empresa empresa , String nombreParametro,Integer valorDefecto) 
+    {
+        Integer resultado=valorDefecto;
+        String numeroStr= obtenerValorParametro(empresa, nombreParametro);
+        
+        if(!UtilidadesTextos.verificarNullOVacio(numeroStr))
+        {
+            resultado=Integer.parseInt(numeroStr);
+        }
+        return resultado;
     }
     
     public static String obtenerValorParametroSinEmpresa(String nombreParametro) 

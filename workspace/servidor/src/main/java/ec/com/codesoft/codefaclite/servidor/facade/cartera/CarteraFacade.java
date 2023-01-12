@@ -23,6 +23,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.FlushModeType;
@@ -39,12 +41,12 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
     
-    public BigDecimal getCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum)
+    public BigDecimal getCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer)
     {
-        return (BigDecimal) getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.VALOR_TOTAL).getSingleResult();
+        return (BigDecimal) getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.VALOR_TOTAL,diasPorVencer).getSingleResult();
     }
     
-    public Query getCarteraSaldoCeroAbstract(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,TipoConsultaEnum tipoConsultaEnum)
+    public Query getCarteraSaldoCeroAbstract(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,TipoConsultaEnum tipoConsultaEnum,Integer diasPorVencer)
     {
         String cliente = "";
         String fecha = "";
@@ -79,16 +81,26 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         {
             saldo=" AND c.saldo>0 ";
         }
+        
+        
+        //Obtener la fecha actual para poder hacer las comparaciones
+        java.sql.Date fechaActual=UtilidadesFecha.getFechaHoy(); 
+        if(diasPorVencer!=null && diasPorVencer>0)
+        {
+            fechaActual=UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarDiasFecha(fechaActual, diasPorVencer));
+        }
       
         ////////////////////////////////////////////
         //FILTRAR POR EL TIPO DE CARTERA VENCIDA  //
         ////////////////////////////////////////////
         if(carteraEstadoReporteEnum.equals(CarteraEstadoReporteEnum.VENCIDA))
         {
-            whereTipoCarteraVencida=" AND c.fechaFinCredito < CURRENT_DATE ";
+            //whereTipoCarteraVencida=" AND c.fechaFinCredito < CURRENT_DATE ";
+            whereTipoCarteraVencida=" AND c.fechaFinCredito < ?9 ";
         }else if(carteraEstadoReporteEnum.equals(CarteraEstadoReporteEnum.SIN_VENCER))
         {
-            whereTipoCarteraVencida=" AND c.fechaFinCredito >= CURRENT_DATE ";
+            //whereTipoCarteraVencida=" AND c.fechaFinCredito >= CURRENT_DATE ";
+            whereTipoCarteraVencida=" AND c.fechaFinCredito >= ?9 ";
         }
 
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");
@@ -182,6 +194,11 @@ public class CarteraFacade extends AbstractFacade<Cartera>
                 query.setParameter(6,sucursal);
             }
             
+            if(!UtilidadesTextos.verificarNullOVacio(whereTipoCarteraVencida))
+            {
+                query.setParameter(9,fechaActual);
+            }
+            
             //return query.getResultList();
             return query;
         } catch (NoResultException e) {
@@ -189,9 +206,14 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         }
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum)
+    public List<Cartera> getCarteraSaldoCero(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer)
     {
-        return getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.DATOS).getResultList();
+        return getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.DATOS,diasPorVencer).getResultList();
+    }
+    
+    public Long getCarteraSaldoCeroTamanio(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer)
+    {
+        return (Long) getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.TAMANIO,diasPorVencer).getSingleResult();
     }
     
     private String obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum documentoCategoria,String alias)

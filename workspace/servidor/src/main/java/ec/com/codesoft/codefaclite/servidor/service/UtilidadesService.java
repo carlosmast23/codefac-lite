@@ -615,6 +615,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                             Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO, 
                             CarteraEstadoReporteEnum.TODO,
                             null,
+                            null,
                             null);
         
         reporte.agregarParametro("cuentasPorCobrar",totalCuentaPorCobrar+"");
@@ -631,6 +632,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                             Cartera.TipoSaldoCarteraEnum.CON_SALDO,
                             Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO, 
                             CarteraEstadoReporteEnum.TODO,
+                            null,
                             null,
                             null);
         

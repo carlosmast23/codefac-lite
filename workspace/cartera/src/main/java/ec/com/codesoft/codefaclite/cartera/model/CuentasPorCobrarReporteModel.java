@@ -241,6 +241,8 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                         fechaFin=new Date(getDateFechaFin().getDate().getTime());
                     }
                     
+                    Integer diasPorVencer=(Integer) getTxtDiasPorVencer().getValue();
+                            
                     
                     List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(
                             persona, 
@@ -253,7 +255,8 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                             Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO, 
                             (CarteraEstadoReporteEnum) getCmbTipoReporteCartera().getSelectedItem(),
                             session.getSucursal(),
-                            null);
+                            null,
+                            diasPorVencer);
                     
                     carteraResultado=carteras;
                     mostrarDatosTabla(carteras);

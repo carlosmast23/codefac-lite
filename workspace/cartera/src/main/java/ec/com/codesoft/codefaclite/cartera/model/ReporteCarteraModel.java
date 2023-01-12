@@ -374,7 +374,8 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                             Cartera.TipoOrdenamientoEnum.POR_RAZON_SOCIAL,
                             CarteraEstadoReporteEnum.TODO,
                             session.getSucursal(),
-                            documentoEnum);
+                            documentoEnum,
+                            null);
                     
 
                     construirResultadoData(resultado);

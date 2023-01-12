@@ -77,6 +77,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacio6 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
         cmbCreditoDefectoFacturas = new javax.swing.JComboBox<>();
+        jLabel85 = new javax.swing.JLabel();
+        txtDiasCreditoAlerta = new javax.swing.JSpinner();
         jPanel11 = new javax.swing.JPanel();
         jLabel59 = new javax.swing.JLabel();
         cmbReporteDefectoPedido = new javax.swing.JComboBox<>();
@@ -397,21 +399,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(cmbActivarModuloCartera, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel3.add(lblEspacio6, gridBagConstraints);
 
         jLabel36.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel36.setText("Crédito Por Defecto Facturas:");
+        jLabel36.setText("Días Crédito Alerta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel36, gridBagConstraints);
 
@@ -419,8 +423,24 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(cmbCreditoDefectoFacturas, gridBagConstraints);
+
+        jLabel85.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel85.setText("Crédito Por Defecto Facturas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel85, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(txtDiasCreditoAlerta, gridBagConstraints);
 
         jTabbedPane1.addTab("Cartera", jPanel3);
 
@@ -1928,6 +1948,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel82;
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
+    private javax.swing.JLabel jLabel85;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -1966,6 +1987,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JSpinner txtCopiasFactura;
     private javax.swing.JTextField txtDatoAdicionalTitulo;
     private javax.swing.JSpinner txtDiasAlertaPago;
+    private javax.swing.JSpinner txtDiasCreditoAlerta;
     private javax.swing.JTextField txtLeyendaAdicionalComprobante;
     private javax.swing.JTextField txtLeyendaFirmaFactura1;
     private javax.swing.JTextField txtLeyendaFirmaFactura2;
@@ -2576,5 +2598,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbBuscadorSoloInventario(JComboBox<EnumSiNo> cmbBuscadorSoloInventario) {
         this.cmbBuscadorSoloInventario = cmbBuscadorSoloInventario;
     }
+
+    public JSpinner getTxtDiasCreditoAlerta() {
+        return txtDiasCreditoAlerta;
+    }
+
+    public void setTxtDiasCreditoAlerta(JSpinner txtDiasCreditoAlerta) {
+        this.txtDiasCreditoAlerta = txtDiasCreditoAlerta;
+    }
+
+    
     
 }

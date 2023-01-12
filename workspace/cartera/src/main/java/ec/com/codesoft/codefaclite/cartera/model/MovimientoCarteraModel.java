@@ -210,7 +210,7 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
             }
                         
             //List<CarteraCruce> cruces=ServiceFactory.getFactory().getCarteraServiceIf().consultarMovimientoCartera(personaFiltro);
-            carteraResultado= carteraServiceIf.listaCarteraSaldoCero(personaFiltro,null,fechaInicial, fechaFinal,DocumentoCategoriaEnum.COMPROBANTES_VENTA, (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),Cartera.TipoSaldoCarteraEnum.TODOS,Cartera.TipoOrdenamientoEnum.POR_FECHA,CarteraEstadoReporteEnum.TODO,session.getSucursal(),null);
+            carteraResultado= carteraServiceIf.listaCarteraSaldoCero(personaFiltro,null,fechaInicial, fechaFinal,DocumentoCategoriaEnum.COMPROBANTES_VENTA, (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),Cartera.TipoSaldoCarteraEnum.TODOS,Cartera.TipoOrdenamientoEnum.POR_FECHA,CarteraEstadoReporteEnum.TODO,session.getSucursal(),null,null);
             //mapMovimientoCartera=convertirCrucesEnMap(cruces);
             construirTablaMovimientoCartera();
             

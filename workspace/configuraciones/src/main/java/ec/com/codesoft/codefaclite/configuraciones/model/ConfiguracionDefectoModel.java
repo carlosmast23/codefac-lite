@@ -512,6 +512,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro = parametrosTodos.get(ParametroCodefac.COPIAS_IMPRESORA_VENTA);
             getTxtCopiasFactura().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 0);
             
+            parametro = parametrosTodos.get(ParametroCodefac.DIAS_CREDITO_ALERTA);
+            getTxtDiasCreditoAlerta().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 0);
+            
             parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);
             getTxtNumeroDecimalesProducto().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()) : 2);
             
@@ -966,6 +969,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.COPIAS_IMPRESORA_VENTA, getTxtCopiasFactura().getValue().toString());
         agregarParametroEditar(ParametroCodefac.COPIAS_IMPRESORA_VENTA);   
+        
+        agregarParametro(ParametroCodefac.DIAS_CREDITO_ALERTA, getTxtDiasCreditoAlerta().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.DIAS_CREDITO_ALERTA);   
         
         agregarParametro(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, getTxtNumeroDecimalesProducto().getValue().toString());
         agregarParametroEditar(ParametroCodefac.NUMERO_DECIMAL_PRODUCTO);  
