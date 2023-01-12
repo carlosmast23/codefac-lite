@@ -15,6 +15,7 @@ public class ComprobanteVentaData {
     private String cantidad;
     private String precioUnitario;
     private String total;
+    private String iva;
     
     /**
      * Datos adicionales en especial para el reporte de las proformas
@@ -80,6 +81,14 @@ public class ComprobanteVentaData {
 
     public void setDescuento(String descuento) {
         this.descuento = descuento;
+    }
+
+    public String getIva() {
+        return iva;
+    }
+
+    public void setIva(String iva) {
+        this.iva = iva;
     }
     
     /**

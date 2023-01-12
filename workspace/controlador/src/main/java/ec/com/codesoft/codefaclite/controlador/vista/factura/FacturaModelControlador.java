@@ -1638,6 +1638,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             data.setCantidad(detalle.getCantidad().toString());
             data.setCodigo(detalle.getCodigoPrincipal());
             data.setNombre(detalle.getDescripcion().toString());
+            data.setIva(detalle.getIvaPorcentaje()+"");
             
             BigDecimal precioUnitario=detalle.getPrecioUnitario();
             BigDecimal total=detalle.getTotal();
