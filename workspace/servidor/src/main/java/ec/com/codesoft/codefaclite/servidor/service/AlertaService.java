@@ -130,9 +130,12 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
                     null,
                     numeroDias);
             
+            if(cantidadCartera>0)
+            {
+                AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ALERTA,cantidadCartera+" Cuentas de cobrar "," por caducar");
+                return alertaRespuesta;
+            }
             
-            AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ALERTA,cantidadCartera+" Cuentas de cobrar "," por caducar");
-            return alertaRespuesta;
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(AlertaService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {

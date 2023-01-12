@@ -44,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -745,6 +746,15 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         @Override
         public String toString() {
             return nombre;
+        }
+        
+        public BigDecimal quitarIva(BigDecimal valor)
+        {
+            if(nombre.equals(CON_IVA.nombre))
+            {
+                UtilidadesImpuestos.quitarValorIva(BigDecimal.ZERO,valor,6);
+            }
+            return valor;
         }
         
         public static IvaOpcionEnum findByToString(String nombre)

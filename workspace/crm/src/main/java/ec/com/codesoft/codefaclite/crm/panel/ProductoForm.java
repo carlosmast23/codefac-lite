@@ -180,6 +180,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         lblEspacio12381239 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
         txtCodigoEmpaquetado = new javax.swing.JTextField();
+        cmbIvaOpcionPrecioVentaPresentacion = new javax.swing.JComboBox<>();
         btnEliminarEmpaque = new javax.swing.JButton();
         lblEstado123 = new javax.swing.JLabel();
         btnCrearPresentacion = new javax.swing.JButton();
@@ -932,7 +933,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel43.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel43.setText("Código:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -963,7 +964,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlPresentacionAdicional.add(txtPrecioEmpaquetado, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 0.1;
         pnlPresentacionAdicional.add(lblEspacio12381239, gridBagConstraints);
@@ -977,7 +978,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlPresentacionAdicional.add(jLabel50, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 50;
@@ -985,6 +986,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlPresentacionAdicional.add(txtCodigoEmpaquetado, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlPresentacionAdicional.add(cmbIvaOpcionPrecioVentaPresentacion, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1500,6 +1508,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo> cmbGarantia;
     private javax.swing.JComboBox<EnumSiNo> cmbGenerarCodigoBarras;
+    private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPresentacion;
     private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPublico;
     private javax.swing.JComboBox<EnumSiNo> cmbManejaInventario;
     private javax.swing.JComboBox<MarcaProducto> cmbMarca;
@@ -2239,6 +2248,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public void setTxtUltimoCosto2(JTextField txtUltimoCosto2) {
         this.txtUltimoCosto2 = txtUltimoCosto2;
     }
+
+    public JComboBox<IvaOpcionEnum> getCmbIvaOpcionPrecioVentaPresentacion() {
+        return cmbIvaOpcionPrecioVentaPresentacion;
+    }
+
+    public void setCmbIvaOpcionPrecioVentaPresentacion(JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPresentacion) {
+        this.cmbIvaOpcionPrecioVentaPresentacion = cmbIvaOpcionPrecioVentaPresentacion;
+    }
+    
     
     
     

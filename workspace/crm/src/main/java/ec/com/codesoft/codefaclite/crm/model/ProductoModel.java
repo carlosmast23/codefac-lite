@@ -310,6 +310,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             List<PresentacionProducto> presentacionProductosList=presentacionService.obtenerActivosPorEmpresa(session.getEmpresa());
             UtilidadesComboBox.llenarComboBox(getCmbPresentacionEmpaquetado(),presentacionProductosList);
             UtilidadesComboBox.llenarComboBox(getCmbTipoPresentacion(), ProductoPresentacionDetalle.TipoPresentacionEnum.values());
+            UtilidadesComboBox.llenarComboBox(getCmbIvaOpcionPrecioVentaPresentacion(), ProductoModelControlador.IvaOpcionEnum.values());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -424,8 +425,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             BigDecimal cantidad = new BigDecimal(getTxtCantidadEmpaquetado().getText());
 
             BigDecimal pvp = null;
-            if (!UtilidadesTextos.verificarNullOVacio(getTxtPrecioEmpaquetado().getText())) {
-                pvp = new BigDecimal(getTxtPrecioEmpaquetado().getText());
+            if (!UtilidadesTextos.verificarNullOVacio(getTxtPrecioEmpaquetado().getText())) 
+            {
+                ProductoModelControlador.IvaOpcionEnum ivaOpcionEnum=(ProductoModelControlador.IvaOpcionEnum) getCmbIvaOpcionPrecioVentaPresentacion().getSelectedItem();
+                if(ivaOpcionEnum.equals(ivaOpcionEnum.CON_IVA))
+                {
+                    pvp = new BigDecimal(getTxtPrecioEmpaquetado().getText());
+                    pvp=UtilidadesImpuestos.quitarValorIva(session.obtenerIvaActual(), pvp, 6);
+                }
+                
             }
             
             detallePresentacion.setCantidad(cantidad);
