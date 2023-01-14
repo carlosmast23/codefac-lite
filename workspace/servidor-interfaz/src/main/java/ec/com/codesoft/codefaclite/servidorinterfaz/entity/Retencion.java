@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -76,6 +77,9 @@ public class Retencion extends ComprobanteEntity implements Serializable {
      */
     @Column(name = "TIPO_DOCUMENTO")
     private String tipoDocumento;
+    
+    @Transient
+    private RetencionPeriodoFiscalEnum periodoFiscalEnum;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion", fetch = FetchType.EAGER)
     private List<RetencionDetalle> detalles;
@@ -173,6 +177,16 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     public void setDatosAdicionales(List<RetencionAdicional> datosAdicionales) {
         this.datosAdicionales = datosAdicionales;
     }
+
+    public RetencionPeriodoFiscalEnum getPeriodoFiscalEnum() {
+        return periodoFiscalEnum;
+    }
+
+    public void setPeriodoFiscalEnum(RetencionPeriodoFiscalEnum periodoFiscalEnum) {
+        this.periodoFiscalEnum = periodoFiscalEnum;
+    }
+    
+    
 
     public void addDatoAdicional(String campo, String valor) {
         RetencionAdicional dato = new RetencionAdicional();
@@ -347,6 +361,13 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     }
 
     public String getPeriodoFiscal() {
+        
+        //Esta validacion sirve para procesar cuando requiere el periodo fiscal de la compra
+        if(periodoFiscalEnum!=null && periodoFiscalEnum.equals(periodoFiscalEnum.COMPPRA))
+        {
+            return UtilidadesFecha.obtenerMesStr(compra.getFechaEmision()) + "/" + UtilidadesFecha.obtenerAnioStr(compra.getFechaEmision());
+        }
+        
         return UtilidadesFecha.obtenerMesStr(fechaEmision) + "/" + UtilidadesFecha.obtenerAnioStr(fechaEmision);
     }
     
@@ -420,6 +441,11 @@ public class Retencion extends ComprobanteEntity implements Serializable {
         return parametroMap;
     }
 
+        
+    public enum RetencionPeriodoFiscalEnum
+    {
+        RETENCION,
+        COMPPRA;
+    }
     
-
 }

@@ -54,6 +54,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -830,6 +831,9 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
             //getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
             getCmbTipoDocumento().addItem(TipoDocumentoEnum.COMPRA);
             
+            UtilidadesComboBox.llenarComboBox(getCmbPeriodoFiscal(), Retencion.RetencionPeriodoFiscalEnum.values());
+            
+            
             
         } catch (RemoteException ex) {
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -850,6 +854,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         retencion.setProveedor(retencion.getProveedor());
         retencion.setIdentificacion(retencion.getProveedor().getIdentificacion());
         retencion.setEmpresa(session.getEmpresa());
+        retencion.setPeriodoFiscalEnum((Retencion.RetencionPeriodoFiscalEnum) getCmbPeriodoFiscal().getSelectedItem());
         //retencion.setIdentificacion(retencion.getProveedor().getIdentificacion());
         
         PuntoEmision puntoEmisionSeleccionado= obtenerPuntoEmisionSeleccionado();
@@ -1229,7 +1234,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         comprobanteData.setMapInfoAdicional(getMapAdicional(retencion));
         return comprobanteData;
     }
-    
+
 
     
 

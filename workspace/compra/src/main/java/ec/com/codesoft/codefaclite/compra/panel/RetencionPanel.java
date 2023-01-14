@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion.RetencionPeriodoFiscalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -59,6 +60,8 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         btnBuscarFacturaCompra = new javax.swing.JButton();
         lblEspacio3 = new javax.swing.JLabel();
         lblEspacio14 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        cmbPeriodoFiscal = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         txtProveedor = new javax.swing.JTextField();
@@ -140,9 +143,9 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         PanelDatosNotaCredito.setLayout(new java.awt.GridBagLayout());
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("Factura Compra:");
+        jLabel4.setText("Periodo Fiscal:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -184,6 +187,22 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         PanelDatosNotaCredito.add(lblEspacio14, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel12.setText("Factura Compra:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        PanelDatosNotaCredito.add(jLabel12, gridBagConstraints);
+
+        cmbPeriodoFiscal.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        PanelDatosNotaCredito.add(cmbPeriodoFiscal, gridBagConstraints);
 
         tabTipoDocumentos.addTab("Compra", PanelDatosNotaCredito);
 
@@ -801,6 +820,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarProveedor;
     private javax.swing.JButton btnEditar;
     private org.jdesktop.swingx.JXDatePicker cmbFechaDocumento;
+    private javax.swing.JComboBox<RetencionPeriodoFiscalEnum> cmbPeriodoFiscal;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -809,6 +829,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -1102,6 +1123,14 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
 
     public void setTxtSecuencialCompra(JTextField txtSecuencialCompra) {
         this.txtSecuencialCompra = txtSecuencialCompra;
+    }
+
+    public JComboBox<RetencionPeriodoFiscalEnum> getCmbPeriodoFiscal() {
+        return cmbPeriodoFiscal;
+    }
+
+    public void setCmbPeriodoFiscal(JComboBox<RetencionPeriodoFiscalEnum> cmbPeriodoFiscal) {
+        this.cmbPeriodoFiscal = cmbPeriodoFiscal;
     }
 
     
