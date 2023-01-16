@@ -363,7 +363,7 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     public String getPeriodoFiscal() {
         
         //Esta validacion sirve para procesar cuando requiere el periodo fiscal de la compra
-        if(periodoFiscalEnum!=null && periodoFiscalEnum.equals(periodoFiscalEnum.COMPPRA))
+        if(periodoFiscalEnum!=null && periodoFiscalEnum.equals(periodoFiscalEnum.COMPRA))
         {
             return UtilidadesFecha.obtenerMesStr(compra.getFechaEmision()) + "/" + UtilidadesFecha.obtenerAnioStr(compra.getFechaEmision());
         }
@@ -445,7 +445,7 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     public enum RetencionPeriodoFiscalEnum
     {
         RETENCION,
-        COMPPRA;
+        COMPRA;
     }
     
 }

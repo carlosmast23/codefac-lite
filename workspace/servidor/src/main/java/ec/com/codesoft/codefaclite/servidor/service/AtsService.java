@@ -444,6 +444,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
         //Solo informar el tema de retenciones para documentos diferentes de Facturas de Reembolso
         if (!compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO)) {
+
+            
             List<RetencionDetalle> retencionesRenta = consultarRetencionesRenta(compra, sriRetencionRenta);
             List<AirAts> retencionesAts = new ArrayList<AirAts>();
             for (RetencionDetalle retencionRenta : retencionesRenta) {
@@ -454,6 +456,10 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 retencionRentaAts.setValRetAir(retencionRenta.getValorRetenido().setScale(2, BigDecimal.ROUND_UP));
                 //retencionesAts.add(retencionRentaAts);
                 agregarAirAts(retencionesAts, retencionRentaAts);
+                
+                /*if (compra.getSecuencial().equals(278137)) {
+                    System.out.println("Retencion = > "+retencionRenta.getId()+", "+retencionRenta.getValorRetenido());
+                }*/
             }
             compraAts.setDetalleAir(retencionesAts);
         }

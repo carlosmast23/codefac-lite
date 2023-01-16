@@ -210,11 +210,12 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
     
     public List<RetencionDetalle> obtenerRetencionesRentaPorCompraFacade(Compra compra,SriRetencion sriRetencion) throws RemoteException
     {
-        String queryString="SELECT rd FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.codigoSri=?3 ";
+        String queryString="SELECT rd FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.retencion.estado<>?3 and rd.codigoSri=?4 ";
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1,compra);
         query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
-        query.setParameter(3, sriRetencion.getCodigo());
+        query.setParameter(3,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+        query.setParameter(4, sriRetencion.getCodigo());
         
         return query.getResultList();
     }

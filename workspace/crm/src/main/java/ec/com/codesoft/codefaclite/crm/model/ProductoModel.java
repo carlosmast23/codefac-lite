@@ -427,10 +427,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             BigDecimal pvp = null;
             if (!UtilidadesTextos.verificarNullOVacio(getTxtPrecioEmpaquetado().getText())) 
             {
+                pvp = new BigDecimal(getTxtPrecioEmpaquetado().getText());
                 ProductoModelControlador.IvaOpcionEnum ivaOpcionEnum=(ProductoModelControlador.IvaOpcionEnum) getCmbIvaOpcionPrecioVentaPresentacion().getSelectedItem();
                 if(ivaOpcionEnum.equals(ivaOpcionEnum.CON_IVA))
-                {
-                    pvp = new BigDecimal(getTxtPrecioEmpaquetado().getText());
+                {                    
                     pvp=UtilidadesImpuestos.quitarValorIva(session.obtenerIvaActual(), pvp, 6);
                 }
                 
