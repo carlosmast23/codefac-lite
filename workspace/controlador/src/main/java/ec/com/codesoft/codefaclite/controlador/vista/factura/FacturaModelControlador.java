@@ -620,34 +620,37 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         else
         {
-            try 
-            {
-                //getCmbIva().setEnabled(true);
-                interfaz.habilitarComboIva(true);
-                //TODO: Ver alguna forma de cargar por defecto el precio guardado en la base de datos
-                if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI))
-                {
-                    //getCmbIva().setSelectedItem(EnumSiNo.SI);
-                    interfaz.setComboIva(EnumSiNo.SI);
-                    BigDecimal porcentajeIce=(facturaDetalle.getIcePorcentaje()!=null)?facturaDetalle.getIcePorcentaje():null;
-                    BigDecimal valorConIva=UtilidadIva.calcularValorConIvaIncluido(
-                            session.obtenerIvaActualDecimal(),
-                            porcentajeIce,
-                            facturaDetalle.getPrecioUnitario());
-                    //getTxtValorUnitario().setText(valorConIva.toString());
-                    interfaz.setTxtValorUnitario(valorConIva.toString());
-                }
-                else
-                {
-                    //getCmbIva().setSelectedItem(EnumSiNo.NO);
-                    interfaz.setComboIva(EnumSiNo.NO);
-                }
-                
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            //getCmbIva().setEnabled(true);
+            cargarPrecioUnitario(facturaDetalle.getIcePorcentaje(),facturaDetalle.getPrecioUnitario());
+            //facturaDetalle.getPrecioUnitario()
            
             
+        }
+    }
+    
+    public void cargarPrecioUnitario(BigDecimal icePorcentaje,BigDecimal precioUnitario)
+    {
+        try {
+            interfaz.habilitarComboIva(true);
+            
+            //TODO: Ver alguna forma de cargar por defecto el precio guardado en la base de datos
+            if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI)) {
+                //getCmbIva().setSelectedItem(EnumSiNo.SI);
+                interfaz.setComboIva(EnumSiNo.SI);
+                //BigDecimal porcentajeIce = (facturaDetalle.getIcePorcentaje() != null) ? facturaDetalle.getIcePorcentaje() : null;
+                BigDecimal porcentajeIce = (icePorcentaje != null) ? icePorcentaje : null;
+                BigDecimal valorConIva = UtilidadIva.calcularValorConIvaIncluido(
+                        session.obtenerIvaActualDecimal(),
+                        porcentajeIce,
+                        precioUnitario);
+                //getTxtValorUnitario().setText(valorConIva.toString());
+                interfaz.setTxtValorUnitario(valorConIva.toString());
+            } else {
+                //getCmbIva().setSelectedItem(EnumSiNo.NO);
+                interfaz.setComboIva(EnumSiNo.NO);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

@@ -84,6 +84,7 @@ public class PresupuestoControlador {
         {
             for (PresupuestoDetalle presupuestoDetalle : presupuesto.getPresupuestoDetalles()) {
                 PresupuestoData presupuestoData=new PresupuestoData();
+                presupuestoData.setCodigo(presupuestoDetalle.getProducto().getCodigoPersonalizado());
                 presupuestoData.setCantidad(presupuestoDetalle.getCantidad().toString());
                 presupuestoData.setDescuento(presupuestoDetalle.getDescuentoCompra().toString());
                 presupuestoData.setIdentificacion(presupuestoDetalle.getPersona().getIdentificacion());

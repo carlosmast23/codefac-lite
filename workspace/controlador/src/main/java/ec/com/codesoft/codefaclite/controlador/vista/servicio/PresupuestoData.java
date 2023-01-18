@@ -10,6 +10,8 @@ package ec.com.codesoft.codefaclite.controlador.vista.servicio;
  * @author Carlos
  */
 public class PresupuestoData {
+    
+    private String codigo;
     private String identificacion;
     private String razonSocial;
     private String producto;
@@ -25,6 +27,14 @@ public class PresupuestoData {
     public PresupuestoData() {
     }
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    
     public String getIdentificacion() {
         return identificacion;
     }
