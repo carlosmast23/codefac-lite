@@ -95,6 +95,7 @@ public class PresupuestoControlador {
                 presupuestoData.setSubtotal(presupuestoDetalle.calcularSubtotalCompra().toString());
                 presupuestoData.setTotal(presupuestoDetalle.calcularTotalCompra().toString());
                 presupuestoData.setCategoria(presupuestoDetalle.getProducto().getTipoProductoEnum().getNombre());
+                presupuestoData.setReserva(presupuestoDetalle.getReservadoEnum().getNombre().toUpperCase());
                 
                 datos.add(presupuestoData);
             }

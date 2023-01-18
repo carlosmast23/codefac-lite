@@ -55,6 +55,7 @@
 	<field name="total" class="java.lang.String"/>
 	<field name="categoria" class="java.lang.String"/>
 	<field name="codigo" class="java.lang.String"/>
+	<field name="reserva" class="java.lang.String"/>
 	<variable name="TOTAL_GROUP" class="java.math.BigDecimal" resetType="Group" resetGroup="categoria" calculation="Sum">
 		<variableExpression><![CDATA[new BigDecimal($F{total}).setScale(2,BigDecimal.ROUND_HALF_UP)]]></variableExpression>
 	</variable>
@@ -76,7 +77,7 @@
 					<text><![CDATA[Código]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="157" y="25" width="219" height="15" uuid="dfdbf39a-8cf2-49a6-8698-48d0924afb61"/>
+					<reportElement x="157" y="25" width="187" height="15" uuid="dfdbf39a-8cf2-49a6-8698-48d0924afb61"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -148,6 +149,19 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="344" y="25" width="32" height="15" uuid="b4062c1b-21ad-4508-a687-8fa6b656393a"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Reser]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -387,7 +401,7 @@
 	<detail>
 		<band height="15" splitType="Stretch">
 			<textField>
-				<reportElement x="157" y="0" width="219" height="15" uuid="336da1d6-6220-44fd-b747-7b2c56099775"/>
+				<reportElement x="157" y="0" width="187" height="15" uuid="336da1d6-6220-44fd-b747-7b2c56099775"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -469,6 +483,20 @@
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="344" y="0" width="32" height="15" uuid="85796ace-8437-498c-838b-346abe22c82c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reserva}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

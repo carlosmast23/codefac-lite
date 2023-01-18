@@ -19,6 +19,7 @@ public class PresupuestoData {
     private String subtotal;
     private String descuento;
     private String total;
+    private String reserva;
     /**
      * Este campo va a ser para identificar el tipo de producto o servicio
      */
@@ -98,6 +99,16 @@ public class PresupuestoData {
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
+
+    public String getReserva() {
+        return reserva;
+    }
+
+    public void setReserva(String reserva) {
+        this.reserva = reserva;
+    }
+    
+    
         
     
 }
