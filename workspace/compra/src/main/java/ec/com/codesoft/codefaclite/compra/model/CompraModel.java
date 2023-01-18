@@ -1130,6 +1130,7 @@ public class CompraModel extends CompraPanel{
             } catch (RemoteException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

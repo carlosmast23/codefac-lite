@@ -453,6 +453,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getTxtCodigo().setText("");
         this.getTxtDescripcion().setText("");
         this.getLblObjetoMantenimiento().setText("");
+        this.getTxtKilometraje().setText("");
         initDatosTabla();
     }
 
@@ -608,6 +609,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     presupuesto.setPersona(ordenTrabajo.getCliente());
                     getTxtCliente().setText(ordenTrabajo.getCliente().getIdentificacion()+" - "+ordenTrabajo.getCliente().getRazonSocial());
                     getLblObjetoMantenimiento().setText((ordenTrabajo.getObjetoMantenimiento()!=null)?ordenTrabajo.getObjetoMantenimiento().toString():"");
+                    getTxtKilometraje().setText((ordenTrabajo.getObjetoMantenimiento()!=null)?ordenTrabajo.getObjetoMantenimiento().getKilometraje()+"":"");
                     cargarDetallesOrdenTrabajo(ordenTrabajo);
                 }
                 

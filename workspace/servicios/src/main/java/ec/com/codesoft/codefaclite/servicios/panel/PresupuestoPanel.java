@@ -144,6 +144,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jToolBar3 = new javax.swing.JToolBar();
         jLabel29 = new javax.swing.JLabel();
         lblTotalServicios = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        txtKilometraje = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -204,7 +206,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.3;
@@ -298,7 +300,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblObjetoMantenimiento, gridBagConstraints);
@@ -307,7 +308,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtOrdenTrabajo, gridBagConstraints);
@@ -539,7 +540,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         lblIndicarFechaValidez.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -837,10 +838,10 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jTabbedPane1.getAccessibleContext().setAccessibleName("");
 
         jLabel27.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel27.setText("Tiempo Validez:");
+        jLabel27.setText("Kilometraje:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel27, gridBagConstraints);
@@ -929,6 +930,24 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridwidth = 7;
         getContentPane().add(jToolBar3, gridBagConstraints);
 
+        jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel30.setText("Tiempo Validez:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel30, gridBagConstraints);
+
+        txtKilometraje.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtKilometraje, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -976,6 +995,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1024,6 +1044,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JTextField txtDescuentoVentas;
     private javax.swing.JTextField txtDiasPresupuesto;
     private javax.swing.JTextField txtEmpleadoDetalle;
+    private javax.swing.JTextField txtKilometraje;
     private javax.swing.JTextField txtOrdenTrabajo;
     private javax.swing.JTextField txtPrecioCompra;
     private javax.swing.JTextField txtPrecioVenta;
@@ -1417,9 +1438,14 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         this.lblIva = lblIva;
     }
 
-    
-    
-    
+    public JTextField getTxtKilometraje() {
+        return txtKilometraje;
+    }
+
+    public void setTxtKilometraje(JTextField txtKilometraje) {
+        this.txtKilometraje = txtKilometraje;
+    }
+
     
     
 }

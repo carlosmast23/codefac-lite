@@ -943,6 +943,12 @@ public class ComprobanteElectronicoService implements Runnable {
             xmlStrNormalizado=xmlStrNormalizado.substring(posicionInicioCorte, posicionFinCorte);            
         }
         
+        //Remplazar la etiqueta de xmlns por  xmlns:ds por que genera problema al deserializar el xml
+        if(xmlStrNormalizado.indexOf("xmlns:ds")<=0)
+        {
+            xmlStrNormalizado=xmlStrNormalizado.replace("xmlns", "xmlns:ds");
+        }
+        
         return xmlStrNormalizado;
 
     }
