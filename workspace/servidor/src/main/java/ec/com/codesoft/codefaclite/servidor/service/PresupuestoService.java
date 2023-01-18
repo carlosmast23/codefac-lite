@@ -120,7 +120,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         try {
             List<String> destinatarios = Arrays.asList(presupuesto.getPersona().getEstablecimientoActivoPorDefecto().getCorreoElectronico());
             //Si no existen destinarios cancelo el envio a los correos
-            if (destinatarios.size() == 0 || destinatarios.get(0).trim().isEmpty()) {
+            if (destinatarios==null || destinatarios.size() == 0 || destinatarios.get(0)==null || destinatarios.get(0).trim().isEmpty()) {
                 return;
             }
             

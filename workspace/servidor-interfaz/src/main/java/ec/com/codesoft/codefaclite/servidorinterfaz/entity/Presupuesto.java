@@ -47,6 +47,9 @@ public class Presupuesto implements Serializable
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
     
+    @JoinColumn(name = "SUCURSAL_ID")
+    private Sucursal sucursal;
+    
     @JoinColumn(name = "USUARIO_ID")
     private Usuario usuario;
     
@@ -272,6 +275,16 @@ public class Presupuesto implements Serializable
     public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
         this.catalogoProducto = catalogoProducto;
     }
+
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
+    }
+    
+    
     
     public ObjetoMantenimiento obtenerObjectoMantenimiento()
     {

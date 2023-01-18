@@ -30,6 +30,8 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author CARLOS_CODESOFT
  */
 public class PresupuestoControlador {
+
+    
     
     private static Map<String,Object> obtenerMapReporte(Presupuesto presupuesto)
     {
@@ -115,7 +117,13 @@ public class PresupuestoControlador {
         Map<String, Object> mapParametros = obtenerMapReporte(presupuesto);
         List<PresupuestoData> dataReporte = getDetalleDataReporte(presupuesto);
         //Por el momento queda seleccionada la sucursal por defectp
-        Sucursal sucursal=presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getCliente().getEmpresa().getSucursales().get(0);
+        //Sucursal sucursal=presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getCliente().getEmpresa().getSucursales().get(0);
+        Sucursal sucursal=presupuesto.getSucursal();
+        if(sucursal==null)        
+        {
+            sucursal=presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getCliente().getEmpresa().getSucursales().get(0);
+        }
+        
         return ReporteCodefac.generarReporteInternalFramePlantillaReturn(
                 sucursal, 
                 presupuesto.getUsuario(), 

@@ -164,7 +164,19 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
 
     @Override
     public TipoLicenciaEnum getTipoLicencia(Empresa empresa) throws RemoteException {
-        return UtilidadesServidor.mapEmpresasLicencias.get(empresa).tipoLicencia;
+        Map<Empresa,EmpresaLicencia> mapEmpresa= UtilidadesServidor.mapEmpresasLicencias;
+        EmpresaLicencia empresaLicencia=mapEmpresa.get(empresa);
+         
+        if(empresaLicencia!=null)
+        {
+            //return UtilidadesServidor.mapEmpresasLicencias.get(empresa).tipoLicencia;
+            return empresaLicencia.tipoLicencia;
+        }
+        else
+        {
+            //Por defecto mando la licencia gratuita si no encuentra pra poder sacara los reportes
+            return TipoLicenciaEnum.GRATIS;
+        }
     }
 
     @Override

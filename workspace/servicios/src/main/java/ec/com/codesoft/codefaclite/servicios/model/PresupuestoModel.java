@@ -53,6 +53,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
@@ -286,14 +287,19 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
         if(getEstadoFormularioEnum().equals(EstadoFormularioEnum.EDITAR)) //Opcion solo disponible para editar
-        {
-            try {
-                ServiceFactory.getFactory().getPresupuestoServiceIf().eliminar(presupuesto);
-            } catch (ServicioCodefacException ex) {
-                Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
-                Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        {            
+            if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO))
+            {
+                try 
+                {                    
+                    ServiceFactory.getFactory().getPresupuestoServiceIf().eliminar(presupuesto);
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }                        
         }
     }
 
@@ -1353,6 +1359,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     {               
             Presupuesto.EstadoEnum generalEnumEstado = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();
             this.presupuesto.setEmpresa(session.getEmpresa());
+            this.presupuesto.setSucursal(session.getSucursal());
             this.presupuesto.setUsuario(session.getUsuario());
             this.presupuesto.setEstado(generalEnumEstado.getLetra());
             this.presupuesto.setDescripcion(""+getTxtDescripcion().getText());
