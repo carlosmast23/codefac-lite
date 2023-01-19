@@ -273,6 +273,28 @@ public class CarteraFacade extends AbstractFacade<Cartera>
      */
     public BigDecimal obtenerValorCruceCarteraDetalle(CarteraDetalle  carteraDetalle)
     {
+        //Metodo temporal para ver cuando cruces estan relacionados
+        /*String queryStringTmp = "SELECT u FROM CarteraCruce u WHERE u.carteraDetalle=?1 ";
+        Query queryTmp = getEntityManager().createQuery(queryStringTmp);
+        queryTmp.setParameter(1, carteraDetalle);
+        List<CarteraCruce> resultadoList= queryTmp.getResultList();
+        Cartera carteraAfecta=null;
+        for (CarteraCruce carteraCruce : resultadoList) {
+            carteraAfecta=carteraCruce.getCarteraAfectada();
+            System.out.println("Cruce Valor: "+carteraCruce.getValor()+", Cartera Detalle ID: "+carteraCruce.getCarteraDetalle().getId());
+        }
+        
+        String queryString2 = "SELECT u FROM CarteraCruce u WHERE u.carteraAfectada=?1 ";
+        queryTmp = getEntityManager().createQuery(queryString2);
+        queryTmp.setParameter(1, carteraAfecta);
+        resultadoList= queryTmp.getResultList();
+
+        for (CarteraCruce carteraCruce : resultadoList) {
+            carteraAfecta=carteraCruce.getCarteraAfectada();
+            System.out.println("Cruce Valor: "+carteraCruce.getValor()+", Cartera Detalle ID: "+carteraCruce.getCarteraDetalle().getId());
+        }*/
+        
+        
         //carteraDetalle.get
         //carteraCruce.get        
         String queryString = "SELECT SUM(u.valor) FROM CarteraCruce u WHERE u.carteraDetalle=?1 ";

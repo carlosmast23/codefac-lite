@@ -394,6 +394,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 Cartera carteraAfectada=cruce.getCarteraAfectada(); //Solo busco el primer dato de la cartera que afecta porque en los demas debe apuntar al mismo
                 Cartera carteraQueAfecta= cruce.getCarteraDetalle().getCartera();
                 
+                System.out.println("Cartara Afecta: "+carteraAfectada.getPreimpreso()+", total: "+carteraAfectada.getTotal());
+                
                 ///Generar el valor del saldo 
                 BigDecimal valorCruzadoCarteraAfectada=  getFacade().obtenerValorCruceCarteraAfecta(carteraAfectada);
                 BigDecimal saldocarteraAfectada=carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada);
@@ -909,15 +911,15 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         /**
          * RETENCION DEL IVA
          */
-        CarteraDetalle carteraDetallIva = new CarteraDetalle();
-        carteraDetallIva.setDescripcion("Retención del iva");
-        carteraDetallIva.setSaldo(retencionIva);
-        carteraDetallIva.setTotal(retencionIva);
-        cartera.addDetalle(carteraDetallIva);
+        CarteraDetalle carteraDetalleIva = new CarteraDetalle();
+        carteraDetalleIva.setDescripcion("Retención del iva");
+        carteraDetalleIva.setSaldo(retencionIva);
+        carteraDetalleIva.setTotal(retencionIva);
+        cartera.addDetalle(carteraDetalleIva);
         
         //persistir las entidades creadas
         entityManager.persist(cartera);
-        entityManager.persist(carteraDetallIva);
+        entityManager.persist(carteraDetalleIva);
         entityManager.persist(carteraDetalleRenta);
         entityManager.flush();
 
@@ -949,7 +951,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                  */
                 CarteraCruce carteraCruceIva = new CarteraCruce();
                 carteraCruceIva.setCarteraAfectada(carteraCompra);
-                carteraCruceIva.setCarteraDetalle(carteraDetalleRenta);
+                carteraCruceIva.setCarteraDetalle(carteraDetalleIva);
                 carteraCruceIva.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                 carteraCruceIva.setFechaCruce(UtilidadesFecha.getFechaHoy());
                 carteraCruceIva.setValor(retencionIva);
