@@ -218,6 +218,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jToolBar3 = new javax.swing.JToolBar();
         btnBuscarFacturaReembolso = new javax.swing.JButton();
         btnAgregarReembolso = new javax.swing.JButton();
+        btnDescargarXmlInternet = new javax.swing.JButton();
 
         btnCargarXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml2.png"))); // NOI18N
         btnCargarXml.setToolTipText("Cargar compra desde Xml");
@@ -323,7 +324,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         pblContenedora.add(txtAutorizacion, gridBagConstraints);
@@ -836,7 +837,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         pblContenedora.add(jToolBar2, gridBagConstraints);
 
@@ -1111,6 +1112,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pblContenedora.add(jTabbedPane2, gridBagConstraints);
 
+        btnDescargarXmlInternet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/descarga.png"))); // NOI18N
+        btnDescargarXmlInternet.setToolTipText("Descargar desde internet");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pblContenedora.add(btnDescargarXmlInternet, gridBagConstraints);
+
         getContentPane().add(pblContenedora, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -1135,6 +1144,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnCargarXml;
     private javax.swing.JButton btnCrearLote;
     private javax.swing.JButton btnCrearProducto;
+    private javax.swing.JButton btnDescargarXmlInternet;
     private javax.swing.JButton btnEditarItem;
     private javax.swing.JButton btnEliminarItem;
     private javax.swing.JButton btnOrdenCompraBuscar;
@@ -1666,7 +1676,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setLblTotalRentaRet(JLabel lblTotalRentaRet) {
         this.lblTotalRentaRet = lblTotalRentaRet;
     }
-    
+
+    public JButton getBtnDescargarXmlInternet() {
+        return btnDescargarXmlInternet;
+    }
+
+    public void setBtnDescargarXmlInternet(JButton btnDescargarXmlInternet) {
+        this.btnDescargarXmlInternet = btnDescargarXmlInternet;
+    }
     
     
 }
