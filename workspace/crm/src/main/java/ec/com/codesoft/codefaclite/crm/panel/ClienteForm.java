@@ -104,6 +104,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel20 = new javax.swing.JLabel();
         jTextCiudad = new javax.swing.JTextField();
         btnAbriWhatsapp = new javax.swing.JButton();
+        jLabel44 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jComboTipoCliente = new javax.swing.JComboBox<>();
@@ -434,10 +435,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanelCaracteristicasGenerales.add(txtNombreContacto, gridBagConstraints);
 
         jLabel38.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel38.setText("Extensión:");
+        jLabel38.setText("Campo Adicional:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel38, gridBagConstraints);
@@ -470,6 +471,15 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanelCaracteristicasGenerales.add(btnAbriWhatsapp, gridBagConstraints);
+
+        jLabel44.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel44.setText("Extensión:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales.add(jLabel44, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Principales", jPanelCaracteristicasGenerales);
 
@@ -1046,6 +1056,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

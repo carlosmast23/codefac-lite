@@ -319,6 +319,24 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             }
         }
         
+        validacionPostGrabarSinTransaccion(p);
+    }
+    
+    private void validacionPostGrabarSinTransaccion(Producto producto) throws ServicioCodefacException
+    {
+        for (ProductoPresentacionDetalle productoPresentacionDetalle : producto.getPresentacionList()) 
+        {
+            entityManager.flush();
+            if(productoPresentacionDetalle.getProductoOriginal()==null || productoPresentacionDetalle.getProductoOriginal().getIdProducto()==null)
+            {
+                throw new ServicioCodefacException("Error al grabar la presentación: "+productoPresentacionDetalle.getPresentacionProducto().getNombre()+", por que no tiene presentación original ");
+            }
+            
+            if(productoPresentacionDetalle.getProductoEmpaquetado()==null || productoPresentacionDetalle.getProductoEmpaquetado().getIdProducto()==null)
+            {
+                throw new ServicioCodefacException("Error al grabar la presentación: "+productoPresentacionDetalle.getPresentacionProducto().getNombre()+", por que no tiene presentación adicional ");
+            }
+        }
     }
     
     private void grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList)
@@ -328,6 +346,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         {                                    
             for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) 
             {
+                //Validacion para verificar que si tenga la referencia al nuevo product de forma correcta
+                
                 if(presentacionDetalle.getId()==null)
                 {                    
                     try {
