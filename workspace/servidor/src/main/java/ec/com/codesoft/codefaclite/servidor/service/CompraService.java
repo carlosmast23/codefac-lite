@@ -138,8 +138,9 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     public Compra obtenerCompraDesdeClaveDeAcceso(String claveAcceso,Empresa empresa) throws RemoteException,ServicioCodefacException
     {
-
-        Boolean xmlDescargado = ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendiente(
+        ComprobanteElectronico comprobante = obtenerComprobanteElectronicoConClaveAcceso(claveAcceso, empresa);
+        return obtenerCompraDesdeXml(comprobante, empresa);
+        /*Boolean xmlDescargado = ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendiente(
                 ComprobanteElectronicoService.ETAPA_ENVIAR + 1,
                 ComprobanteElectronicoService.ETAPA_ENVIAR + 2,
                 claveAcceso,
@@ -158,6 +159,31 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             File archivo=new File(pathFile);
             ComprobanteElectronico comprobante = ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(archivo);
             return obtenerCompraDesdeXml(comprobante, empresa);
+        }
+        return null;*/
+    }
+    
+   
+    public ComprobanteElectronico obtenerComprobanteElectronicoConClaveAcceso(String claveAcceso, Empresa empresa) throws RemoteException, ServicioCodefacException {
+        Boolean xmlDescargado = ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendiente(
+                ComprobanteElectronicoService.ETAPA_ENVIAR + 1,
+                ComprobanteElectronicoService.ETAPA_ENVIAR + 2,
+                claveAcceso,
+                null,
+                null,
+                false,
+                false,
+                empresa
+        );
+
+        if (xmlDescargado) {
+            ComprobantesService service = new ComprobantesService();
+            ComprobanteElectronicoService comprobanteElectronicoService = service.obtenerComprobanteElectronicoServiceConfigurado(empresa);
+            String pathFile = comprobanteElectronicoService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_AUTORIZADOS, claveAcceso);
+            File archivo = new File(pathFile);
+            ComprobanteElectronico comprobante = ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(archivo);
+            //return obtenerCompraDesdeXml(comprobante, empresa);
+            return comprobante;
         }
         return null;
     }

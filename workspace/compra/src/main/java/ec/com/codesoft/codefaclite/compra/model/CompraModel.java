@@ -62,6 +62,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
@@ -78,6 +79,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -97,6 +99,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -687,15 +690,19 @@ public class CompraModel extends CompraPanel{
         }
     };
     
+    private void abrirDialogoCompraXml(Compra compra)
+    {
+        Object[] parametros = {compra};
+        panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
+    }
+    
     private ActionListener listenerDescargarXmlInternet=new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
                 System.out.println("descargando factura");
-                compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeClaveDeAcceso(getTxtAutorizacion().getText(), session.getEmpresa());
-                
-                Object[] parametros={compra};
-                panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
+                compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeClaveDeAcceso(getTxtAutorizacion().getText(), session.getEmpresa());               
+                abrirDialogoCompraXml(compra);
             } catch (RemoteException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
@@ -704,8 +711,34 @@ public class CompraModel extends CompraPanel{
             
         }
     };
+    
+    private ActionListener listenerDescargarPdfInternet=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                System.out.println("descargando factura");
+                ComprobanteElectronico comprobanteElectronico=ServiceFactory.getFactory().getCompraServiceIf().obtenerComprobanteElectronicoConClaveAcceso(getTxtAutorizacion().getText(), session.getEmpresa());
+                byte[] byteReporte=ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(comprobanteElectronico, null, comprobanteElectronico.getInformacionTributaria().getClaveAcceso(),session.getEmpresa());
+                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+
+                panelPadre.crearReportePantalla(jasperPrint, comprobanteElectronico.getInformacionTributaria().getPreimpreso());
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    };
 
     private void agregarListenerBotones() {
+        
+        getBtnDescargarPdfInternet().addActionListener(listenerDescargarPdfInternet);
         
         getBtnDescargarXmlInternet().addActionListener(listenerDescargarXmlInternet);
         
@@ -1142,8 +1175,9 @@ public class CompraModel extends CompraPanel{
                 
                 Compra compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeXml(comprobanteElectronico,session.getEmpresa());
                 
-                Object[] parametros={compra};
-                panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
+                //Object[] parametros={compra};
+                //panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
+                abrirDialogoCompraXml(compra);
                         
                 //cargarDatosCompra(compra);
                 

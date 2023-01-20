@@ -757,13 +757,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     public byte[] getReporteComprobante(ComprobanteEntity comprobanteEntity,String claveAcceso,Empresa empresa) throws RemoteException
     {        
-        ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
         
-        //Cargar recursos para el reporte
-        cargarDatosRecursos(comprobanteElectronico, empresa);
-        //mapReportePlantilla(empresa);
-        cargarConfiguraciones(comprobanteElectronico, empresa);
-        comprobanteElectronico.setClaveAcceso(claveAcceso);
 
         
         ComprobanteDataInterface comprobanteDataIf=convertirComprobanteEntityToDataFacturacionElectronica(comprobanteEntity);
@@ -772,7 +766,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             {
                 ComprobanteElectronico comprobanteElectronicoData = convertirComprobanteDatoToComprobateElectronico(comprobanteDataIf);
 
-                String fechaAutorizacionStr = "";
+                /*String fechaAutorizacionStr = "";
                 if (comprobanteEntity.getFechaAutorizacionSri() != null) 
                 {
                     fechaAutorizacionStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA.format(comprobanteEntity.getFechaAutorizacionSri());
@@ -781,13 +775,45 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 //TODO: Optimizar para ver si se puede setear este dato desde una etapa previa para tener mejor organizado el codigo
                 comprobanteElectronicoData.getInformacionTributaria().setClaveAcceso(claveAcceso);
                 JasperPrint jasperPrint = comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronicoData, claveAcceso, fechaAutorizacionStr);
-                return UtilidadesRmi.serializar(jasperPrint);
+                return UtilidadesRmi.serializar(jasperPrint);*/
+                return getReporteComprobante(comprobanteElectronicoData, comprobanteEntity, claveAcceso, empresa);
             } catch (IOException ex) {
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
     
+    }
+    
+    public byte[] getReporteComprobante(ComprobanteElectronico comprobanteElectronicoData,ComprobanteEntity comprobanteEntity,String claveAcceso,Empresa empresa) throws RemoteException 
+    {
+        try {
+            ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
+            
+            //Cargar recursos para el reporte
+            cargarDatosRecursos(comprobanteElectronico, empresa);
+            //mapReportePlantilla(empresa);
+            cargarConfiguraciones(comprobanteElectronico, empresa);
+            comprobanteElectronico.setClaveAcceso(claveAcceso);
+            
+            String fechaAutorizacionStr = "";
+            
+            if(comprobanteEntity!=null)
+            {
+                if (comprobanteEntity.getFechaAutorizacionSri() != null) {
+                    fechaAutorizacionStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA.format(comprobanteEntity.getFechaAutorizacionSri());
+                }
+            }
+            
+            //TODO: Optimizar para ver si se puede setear este dato desde una etapa previa para tener mejor organizado el codigo
+            comprobanteElectronicoData.getInformacionTributaria().setClaveAcceso(claveAcceso);
+            JasperPrint jasperPrint = comprobanteElectronico.getPrintJasperComprobante(comprobanteElectronicoData, claveAcceso, fechaAutorizacionStr);
+            return UtilidadesRmi.serializar(jasperPrint);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
     
     /**
