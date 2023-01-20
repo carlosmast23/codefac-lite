@@ -2766,6 +2766,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
     }
     
+    public ComprobanteElectronicoService obtenerComprobanteElectronicoServiceConfigurado(Empresa empresa) throws RemoteException, ServicioCodefacException
+    {
+        ComprobanteElectronicoService comprobanteService = new ComprobanteElectronicoService();
+        cargarConfiguraciones(comprobanteService,empresa);
+        return comprobanteService;
+    }
+    
     /*@Deprecated //TODO:No se esta usando
     public void actualizarComprobanteDatos(List<ComprobanteEntity> entidades) throws RemoteException, ServicioCodefacException
     {

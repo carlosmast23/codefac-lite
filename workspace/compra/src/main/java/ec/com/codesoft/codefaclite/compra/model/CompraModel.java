@@ -686,8 +686,28 @@ public class CompraModel extends CompraPanel{
             actualizarDatosMostrarVentana();
         }
     };
+    
+    private ActionListener listenerDescargarXmlInternet=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                System.out.println("descargando factura");
+                compra=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraDesdeClaveDeAcceso(getTxtAutorizacion().getText(), session.getEmpresa());
+                
+                Object[] parametros={compra};
+                panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
+            } catch (RemoteException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    };
 
     private void agregarListenerBotones() {
+        
+        getBtnDescargarXmlInternet().addActionListener(listenerDescargarXmlInternet);
         
         getBtnRetencionAplicarTodo().addActionListener(listenerRetencionAplicarTodo);
         

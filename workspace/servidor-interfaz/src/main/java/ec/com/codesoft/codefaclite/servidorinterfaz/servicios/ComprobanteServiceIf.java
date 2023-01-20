@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
@@ -112,7 +113,7 @@ public interface ComprobanteServiceIf extends Remote {
     
     public byte[] getReporteComprobanteComprobante(ComprobanteDataInterface comprobanteData,Usuario usuario,String claveAccesoPersonalizada) throws RemoteException;
     
-    
+    public ComprobanteElectronicoService obtenerComprobanteElectronicoServiceConfigurado(Empresa empresa) throws RemoteException, ServicioCodefacException;
     
     
 }

@@ -136,6 +136,32 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         return null;
     }*/
     
+    public Compra obtenerCompraDesdeClaveDeAcceso(String claveAcceso,Empresa empresa) throws RemoteException,ServicioCodefacException
+    {
+
+        Boolean xmlDescargado = ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesPendiente(
+                ComprobanteElectronicoService.ETAPA_ENVIAR + 1,
+                ComprobanteElectronicoService.ETAPA_ENVIAR + 2,
+                claveAcceso,
+                null,
+                null,
+                false,
+                false,
+                empresa
+        );
+
+        if(xmlDescargado)
+        {
+            ComprobantesService service=new ComprobantesService();
+            ComprobanteElectronicoService comprobanteElectronicoService=service.obtenerComprobanteElectronicoServiceConfigurado(empresa);
+            String pathFile= comprobanteElectronicoService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_AUTORIZADOS, claveAcceso);
+            File archivo=new File(pathFile);
+            ComprobanteElectronico comprobante = ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(archivo);
+            return obtenerCompraDesdeXml(comprobante, empresa);
+        }
+        return null;
+    }
+    
     public Compra obtenerCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException
     {        
         //InputStream inputStream=null;

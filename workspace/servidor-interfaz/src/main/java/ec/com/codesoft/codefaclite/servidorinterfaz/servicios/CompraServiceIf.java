@@ -40,5 +40,6 @@ public interface CompraServiceIf extends ServiceAbstractIf<Compra>
     
     public List<Producto> obtenerProductosActualizarPrecios(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException;
     public BigDecimal obtenerCompraReporteTotalValor(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Compra obtenerCompraDesdeClaveDeAcceso(String claveAcceso,Empresa empresa) throws RemoteException,ServicioCodefacException;
     
 }
