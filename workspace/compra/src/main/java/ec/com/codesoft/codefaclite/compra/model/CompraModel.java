@@ -138,7 +138,8 @@ public class CompraModel extends CompraPanel{
         iniciarCombos();
         agregarListerCombos();
         agregarListenerBotones();
-        agregarListenerTextoBox();        
+        agregarListenerTextoBox();
+        agregarListenerPopUps();
         crearVariables();
         if(session.getEmpresa() != null){
             if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
@@ -166,6 +167,29 @@ public class CompraModel extends CompraPanel{
         agregarListenerPopUp();
     }
 
+    private void agregarListenerPopUps()
+    {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem jMenuItemDatoAdicional = new JMenuItem("Modificar Precios de Venta");
+        
+        jMenuItemDatoAdicional.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblDetalleProductos().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    CompraDetalle compraDetalle = (CompraDetalle) getTblDetalleProductos().getValueAt(filaSeleccionada, 0);
+                    
+                }
+                
+                DialogoCodefac.mensaje("Correcto","El xml fue eliminado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            }
+        });
+        
+        jPopupMenu.add(jMenuItemDatoAdicional);
+        getTblDetalleProductos().setComponentPopupMenu(jPopupMenu);
+    }
+    
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
         
@@ -1308,7 +1332,7 @@ public class CompraModel extends CompraPanel{
      */
     private void mostrarDatosTabla()
     {
-        String[] titulo={"Código","Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Desc","Val Unit","Total"};
+        String[] titulo={"","Código","Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Desc","Val Unit","Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         for (CompraDetalle detalle : detalles) {
@@ -1319,7 +1343,8 @@ public class CompraModel extends CompraPanel{
                 loteCodigo=detalle.getLote().getCodigo();
             }
             
-            Vector<String> fila=new Vector<String>();
+            Vector<Object> fila=new Vector<Object>();
+            fila.add(detalle);
             fila.add(detalle.getProductoProveedor().getProducto().getCodigoPersonalizado());
             fila.add(detalle.getCantidad()+"");
             fila.add(detalle.getDescripcion()+"");
@@ -1331,8 +1356,9 @@ public class CompraModel extends CompraPanel{
             fila.add(detalle.getSubtotal()+"");
             this.modeloTablaDetallesCompra.addRow(fila);
         }
-        
+                
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
+        UtilidadesTablas.ocultarColumna(getTblDetalleProductos(),0);
         
     }
     

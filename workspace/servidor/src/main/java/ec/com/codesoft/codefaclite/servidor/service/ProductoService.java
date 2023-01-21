@@ -593,6 +593,17 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //Quitar espacios en blanco
         p.setNombre(p.getNombre().trim());
         
+        //Corregir datos cuando no tengan seteados para poner por defecto
+        if(p.getDisponibleVentaEnum()==null)
+        {
+            p.setDisponibleVentaEnum(EnumSiNo.SI);
+        }
+        
+        if(p.getDisponibleCompraEnum()==null)
+        {
+            p.setDisponibleCompraEnum(EnumSiNo.SI);
+        }
+        
     }
     
     public void editarProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
