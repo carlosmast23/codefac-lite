@@ -18,6 +18,31 @@ public class UtilidadesPorcentajes {
     public static final BigDecimal CIEN=new BigDecimal("100");
     public static final RoundingMode MODO_REDONDEO=RoundingMode.HALF_UP;
     
+
+    /**
+     * Metodo que permite agregar un valor y un porcentaje y calcular la utilidad
+     * si el porcentaje de utilidad es cero por defcto retorno cero
+     * @param valor
+     * @param porcentajeUtilidad
+     * @return 
+     */
+    public static BigDecimal agregarUtilidadPrecio(BigDecimal valor,BigDecimal porcentajeUtilidad,BigDecimal valorDefecto)
+    {
+        if(porcentajeUtilidad.compareTo(BigDecimal.ZERO)==0)
+        {
+            if(valorDefecto!=null)
+            {
+                return valorDefecto;
+            }
+            return BigDecimal.ZERO;
+        }
+        
+        BigDecimal porcentaje= porcentajeUtilidad.divide(new BigDecimal("100"),4,RoundingMode.HALF_UP).add(BigDecimal.ONE);
+        
+        return valor.multiply(porcentaje);       
+        
+    }
+    
     /**
      * Metodo que permite calcular el valor menos el descuento
      * Formula:

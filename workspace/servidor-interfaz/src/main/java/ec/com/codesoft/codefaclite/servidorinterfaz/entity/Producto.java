@@ -573,6 +573,20 @@ public class Producto implements Serializable, Comparable<Producto> {
         addPresentacion(detalle);
     }
     
+    public BigDecimal obtenerPrecioVentaPorNumero(Integer numeroPvp)
+    {
+        List<PrecioVenta> precioVentaList= obtenerPreciosVenta();
+        
+        if(numeroPvp<precioVentaList.size())
+        {
+            PrecioVenta precioVenta=precioVentaList.get(numeroPvp);        
+            return precioVenta.precio;
+        }
+               
+        return BigDecimal.ZERO;
+        
+    }
+    
     public List<PrecioVenta> obtenerPreciosVenta()
     {
         List<PrecioVenta> valores=new ArrayList<PrecioVenta>();
@@ -974,6 +988,26 @@ public class Producto implements Serializable, Comparable<Producto> {
         
         BigDecimal tarifa = new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
         return UtilidadesImpuestos.agregarValorIva(tarifa, pvp4);
+    }
+    
+    public BigDecimal getPvp5ConIva() {
+
+        if (pvp5 == null || pvp5.compareTo(BigDecimal.ZERO) == 0) {
+            return pvp5;
+        }
+        
+        BigDecimal tarifa = new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        return UtilidadesImpuestos.agregarValorIva(tarifa, pvp5);
+    }
+    
+    public BigDecimal getPvp6ConIva() {
+
+        if (pvp6 == null || pvp6.compareTo(BigDecimal.ZERO) == 0) {
+            return pvp6;
+        }
+        
+        BigDecimal tarifa = new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        return UtilidadesImpuestos.agregarValorIva(tarifa, pvp6);
     }
 
     

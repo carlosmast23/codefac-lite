@@ -12,17 +12,20 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaPedidoLoteMo
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.UtilidadPrecioModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.UtilidadPrecioPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -32,13 +35,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class UtilidadPrecioModel extends UtilidadPrecioPanel implements InterfazPostConstructPanel, ControladorVistaIf,UtilidadPrecioModelControlador.SwingIf{
+public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogInterfacePanel,InterfazPostConstructPanel, ControladorVistaIf,UtilidadPrecioModelControlador.SwingIf{
 
     
     private UtilidadPrecioModelControlador controlador;
@@ -47,7 +52,39 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Interfaz
     public void iniciar() throws ExcepcionCodefacLite, RemoteException 
     {
         this.controlador = new UtilidadPrecioModelControlador(DialogoCodefac.intefaceMensaje, session,this, UtilidadPrecioModelControlador.TipoVista.ESCRITORIO);
+        listenerTablas();
         crearModeloTabla();
+    }
+    
+    private void listenerCargarPreciosOriginal(Producto producto)
+    {
+        DefaultTableModel tableModel = UtilidadesTablas.crearModeloTabla(new String[]{"Precio", "Valor"}, new Class[]{String.class, String.class});
+        List<Producto.PrecioVenta> precioList= producto.obtenerPreciosVenta();
+        
+        for (Producto.PrecioVenta precioVenta : precioList) 
+        {
+            Object[] fila={precioVenta.alias,precioVenta.precio+""};
+            tableModel.addRow(fila);
+        }
+        
+        getTblPreciosOriginal().setModel(tableModel);
+    }
+    
+    private void listenerTablas()
+    {
+        getTblProductos().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                
+                int filaSeleccionada=getTblProductos().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    ProductoPrecioDataTable productoData=(ProductoPrecioDataTable) getTblProductos().getValueAt(filaSeleccionada,0);
+                    listenerCargarPreciosOriginal(productoData.producto);
+                }
+            }
+        });        
+        
     }
 
     @Override
@@ -138,12 +175,12 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Interfaz
             "Nombre Producto",
             "Último Costo",
             "Costo Promedio",
-            "% pvp1",
-            "% pvp2",
-            "% pvp3",
-            "% pvp4",
-            "% pvp5",
-            "% pvp6"
+            "Pvp1",
+            "Pvp2",
+            "Pvp3",
+            "Pvp4",
+            "Pvp5",
+            "Pvp6"
         };
         
         DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(
@@ -174,8 +211,9 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Interfaz
         getTblProductos().setComponentPopupMenu(popup);
         
 
-        UtilidadesTablas.definirTamanioColumnas(getTblProductos(),new Integer[]{0});
+        UtilidadesTablas.definirTamanioColumnas(getTblProductos(),new Integer[]{0,50,250,600,80,80});
     }
+    
     
     public ITableBindingAddData getTableBindingAddData()
     {
@@ -185,7 +223,8 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Interfaz
                 Producto producto=valueTmp.producto;
                 String codigo=producto.getCodigoPersonalizado();
                 String nombreProducto=producto.getNombre();
-                                
+                               
+                valueTmp.recalcularValoresDesdePorcentajes(valueTmp.costoUltimo);
                                                 
                 return new Object[]{
                     valueTmp,
@@ -193,24 +232,35 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Interfaz
                     nombreProducto,
                     valueTmp.costoUltimo,
                     valueTmp.costoPromedio,
-                    valueTmp.porcentajePvp1,
-                    valueTmp.porcentajePvp2,
-                    valueTmp.porcentajePvp3,
-                    valueTmp.porcentajePvp4,
-                    valueTmp.porcentajePvp5,
-                    valueTmp.porcentajePvp6,
+                    valueTmp.pvp1,
+                    valueTmp.pvp2,
+                    valueTmp.pvp3,
+                    valueTmp.pvp4,
+                    valueTmp.pvp5,
+                    valueTmp.pvp6,
                 };
             }
 
             @Override
             public void setData(ProductoPrecioDataTable objetoOriginal, Object objetoModificado, Integer columnaModificada) {
                 final int COLUMNA_OBJETO=0;
-                final int COLUMNA_PVP1_PORCENTAJE=3;
-                final int COLUMNA_PVP2_PORCENTAJE=4;
-                final int COLUMNA_PVP3_PORCENTAJE=5;
-                final int COLUMNA_PVP4_PORCENTAJE=6;
-                final int COLUMNA_PVP5_PORCENTAJE=7;
-                final int COLUMNA_PVP6_PORCENTAJE=8;
+                final int COLUMNA_PVP1_PORCENTAJE=6;
+                final int COLUMNA_PVP2_PORCENTAJE=7;
+                final int COLUMNA_PVP3_PORCENTAJE=8;
+                final int COLUMNA_PVP4_PORCENTAJE=9;
+                final int COLUMNA_PVP5_PORCENTAJE=10;
+                final int COLUMNA_PVP6_PORCENTAJE=11;
+                
+                BigDecimal valorModificado=null;
+                
+                try
+                {
+                    valorModificado=new BigDecimal(objetoModificado+"");
+                }
+                catch(NumberFormatException nfe)
+                {
+                    nfe.printStackTrace();
+                }
                 
                 
                 switch (columnaModificada) {
@@ -218,27 +268,27 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Interfaz
                         break;
 
                     case COLUMNA_PVP1_PORCENTAJE:
-                        objetoOriginal.porcentajePvp1=new BigDecimal(objetoModificado+"");
+                        objetoOriginal.pvp1=valorModificado;
                         break;
 
                     case COLUMNA_PVP2_PORCENTAJE:
-                        objetoOriginal.porcentajePvp2=new BigDecimal(objetoModificado+"");
+                        objetoOriginal.pvp2=valorModificado;
                         break;
                         
                     case COLUMNA_PVP3_PORCENTAJE:
-                        objetoOriginal.porcentajePvp3=new BigDecimal(objetoModificado+"");
+                        objetoOriginal.pvp3=valorModificado;
                         break;
 
                     case COLUMNA_PVP4_PORCENTAJE:
-                        objetoOriginal.porcentajePvp4=new BigDecimal(objetoModificado+"");
+                        objetoOriginal.pvp4=valorModificado;
                         break;
                         
                     case COLUMNA_PVP5_PORCENTAJE:
-                        objetoOriginal.porcentajePvp5=new BigDecimal(objetoModificado+"");
+                        objetoOriginal.pvp5=valorModificado;
                         break;
                         
                     case COLUMNA_PVP6_PORCENTAJE:
-                        objetoOriginal.porcentajePvp6=new BigDecimal(objetoModificado+"");
+                        objetoOriginal.pvp6=valorModificado;
                         break;
                 }
                 
@@ -271,6 +321,17 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements Interfaz
             this.controlador.castListDataTable(productoListTmp);
             actualizarBindingCompontValues();
         }
+    }
+
+    @Override
+    public Object getResult() throws ExcepcionCodefacLite {
+        try {
+            this.controlador.grabar();
+            //Todo: Terminar logica para terminr de retornar los datos para grabar            
+        } catch (RemoteException ex) {
+            Logger.getLogger(UtilidadPrecioModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
 }

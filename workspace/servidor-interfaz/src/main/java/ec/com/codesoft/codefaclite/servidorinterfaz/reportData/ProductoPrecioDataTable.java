@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.reportData;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,6 +28,14 @@ public class ProductoPrecioDataTable implements Serializable{
         public BigDecimal porcentajePvp4;
         public BigDecimal porcentajePvp5;
         public BigDecimal porcentajePvp6;
+        
+        
+        public BigDecimal pvp1;
+        public BigDecimal pvp2;
+        public BigDecimal pvp3;
+        public BigDecimal pvp4;
+        public BigDecimal pvp5;
+        public BigDecimal pvp6;
 
         public ProductoPrecioDataTable(Producto producto,BigDecimal costoCalculo,BigDecimal costoPromedio,BigDecimal costoUltimo, BigDecimal porcentajePvp1, BigDecimal porcentajePvp2, BigDecimal porcentajePvp3, BigDecimal porcentajePvp4, BigDecimal porcentajePvp5, BigDecimal porcentajePvp6) {
             this.producto = producto;
@@ -45,6 +54,17 @@ public class ProductoPrecioDataTable implements Serializable{
         {
             BigDecimal porcentajeCalculo=porcentajePvp.divide(new BigDecimal("100"),2, RoundingMode.HALF_UP).add(BigDecimal.ONE);
             return porcentajeCalculo.multiply(costoCalculo);
+        }
+        
+        public void recalcularValoresDesdePorcentajes(BigDecimal costo)
+        {
+            pvp1=UtilidadesPorcentajes.agregarUtilidadPrecio(costo,porcentajePvp1,pvp1);
+            pvp2=UtilidadesPorcentajes.agregarUtilidadPrecio(costo,porcentajePvp2,pvp2);
+            pvp3=UtilidadesPorcentajes.agregarUtilidadPrecio(costo,porcentajePvp3,pvp3);
+            pvp4=UtilidadesPorcentajes.agregarUtilidadPrecio(costo,porcentajePvp4,pvp4);
+            pvp5=UtilidadesPorcentajes.agregarUtilidadPrecio(costo,porcentajePvp5,pvp5);
+            pvp6=UtilidadesPorcentajes.agregarUtilidadPrecio(costo,porcentajePvp6,pvp6);
+            
         }
         
         

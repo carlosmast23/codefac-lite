@@ -166,6 +166,22 @@ public class CompraModel extends CompraPanel{
         }
         agregarListenerPopUp();
     }
+    
+    private void listenerModificarPrecioVenta(Producto productoSeleccionado)
+    {
+        List<Producto> productoList=new ArrayList<Producto>();
+        productoList.add(productoSeleccionado);
+        
+        Object[] parametros = {productoList};
+        
+        panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Object>() {
+            @Override
+            public void updateInterface(Object entity) {
+                
+            }
+        }, VentanaEnum.UTILIDAD_PRECIO, false,parametros, this);
+        
+    }
 
     private void agregarListenerPopUps()
     {
@@ -179,10 +195,9 @@ public class CompraModel extends CompraPanel{
                 if(filaSeleccionada>=0)
                 {
                     CompraDetalle compraDetalle = (CompraDetalle) getTblDetalleProductos().getValueAt(filaSeleccionada, 0);
-                    
+                    listenerModificarPrecioVenta(compraDetalle.getProductoProveedor().getProducto());
                 }
                 
-                DialogoCodefac.mensaje("Correcto","El xml fue eliminado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             }
         });
         

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.7684607682500024"/>
+	<property name="ireport.zoom" value="2.5892034107948314"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -185,9 +185,9 @@
 		<band height="9" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="34" splitType="Stretch">
+		<band height="15" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="119" height="20" uuid="0e07b48c-4afa-487a-a0a1-725ad2b3d761"/>
+				<reportElement x="0" y="0" width="119" height="15" uuid="0e07b48c-4afa-487a-a0a1-725ad2b3d761"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -197,11 +197,12 @@
 				</box>
 				<textElement>
 					<font size="9"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombreSucursal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="0" width="57" height="20" uuid="5d2235e5-15e3-421b-8966-98e70ed69ca3"/>
+				<reportElement x="119" y="0" width="57" height="15" uuid="5d2235e5-15e3-421b-8966-98e70ed69ca3"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -211,11 +212,12 @@
 				</box>
 				<textElement textAlignment="Center">
 					<font size="9"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombrePuntoEmision}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="176" y="0" width="117" height="20" uuid="adcd36db-a36a-4dd4-bed8-1d65e763886c"/>
+				<reportElement x="176" y="0" width="117" height="15" uuid="adcd36db-a36a-4dd4-bed8-1d65e763886c"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -225,11 +227,12 @@
 				</box>
 				<textElement textAlignment="Center">
 					<font size="9"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaHoraAperturaCaja}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="293" y="0" width="117" height="20" uuid="eb647a03-fa07-48f5-ae0e-86fb06c010e8"/>
+				<reportElement x="293" y="0" width="117" height="15" uuid="eb647a03-fa07-48f5-ae0e-86fb06c010e8"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -239,11 +242,12 @@
 				</box>
 				<textElement textAlignment="Center">
 					<font size="9"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaHoraCierreCaja}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="410" y="0" width="72" height="20" uuid="1fa26896-078d-4aa9-913d-0dce2601aec9"/>
+				<reportElement x="410" y="0" width="72" height="15" uuid="1fa26896-078d-4aa9-913d-0dce2601aec9"/>
 				<box leftPadding="10">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -253,11 +257,12 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font size="9"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorAperturaCaja}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="482" y="0" width="73" height="20" uuid="c416da68-59af-4038-88a5-4f0de8364475"/>
+				<reportElement x="482" y="0" width="73" height="15" uuid="c416da68-59af-4038-88a5-4f0de8364475"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -267,6 +272,7 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font size="9"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valorCierreCaja}]]></textFieldExpression>
 			</textField>

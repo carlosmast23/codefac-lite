@@ -120,8 +120,8 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                                     cs.getCaja().getPuntoEmision().getPuntoEmision().toString(),
                                     fechaAperturaStr,
                                     fechaCierreStr,
-                                    cs.getValorApertura().toString(),
-                                    cs.getValorCierre().toString(),
+                                    (cs.getValorApertura()!=null)?cs.getValorApertura().toString():"",
+                                    (cs.getValorCierre()!=null)?cs.getValorCierre().toString():"",
                                     (cs.getEstadoCierreCaja()!=null)?cs.getEstadoCierreCaja():""
                             ));
                 });

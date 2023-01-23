@@ -833,7 +833,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 for (ProductoPrecioDataTable productoData : productos) 
                 {
                     //Solo calcular el precio de venta si tiene un costo mayor que cero
-                    if(productoData.costoCalculo.compareTo(BigDecimal.ZERO)>0)
+                    /*if(productoData.costoCalculo.compareTo(BigDecimal.ZERO)>0)
                     {
                         Producto producto= productoData.producto;        
                         
@@ -865,12 +865,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         if(productoData.porcentajePvp6!=null && productoData.porcentajePvp6.compareTo(BigDecimal.ZERO)>=0)
                         {
                             producto.setPvp6(productoData.calcularPvp6());
-                        }
+                        }*/
+                    
                         
-                        
+                        Producto producto= productoData.producto;        
                         producto.setActualizarPrecioEnum(EnumSiNo.NO);
                         entityManager.merge(producto);
-                    }
+                    //}
                     
                 }
             }

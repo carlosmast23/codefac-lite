@@ -29,6 +29,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades.obtenerValorBaseDatos;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -56,7 +58,9 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     private List<ProductoPrecioDataTable> productoSeleccionadoList;
     
     private List<CostoCalculoEnum> costoCalculoList;
+    private List<EnumSiNo> opcionIvaList;
     private CostoCalculoEnum costoCalculoEnum;
+    private EnumSiNo incluidoIva;
     
     private ProductoPrecioDataTable productoSeleccionado;
     private TableBindingImp tableBindingControlador;
@@ -67,7 +71,21 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public UtilidadPrecioModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
     }
+    
+    private List<Producto> listDataTableToObject(List<ProductoPrecioDataTable> productoDataList)
+    {
+        List<Producto> productoList=new ArrayList<Producto>();
+        for (ProductoPrecioDataTable productoData : productoDataList) 
+        {
+            productoList.add(productoData.producto);            
+        }
+        return productoList;
+    }
 
+    public void listenerActualizarPorcentaje()
+    {
+        castListDataTable(listDataTableToObject(productoList));
+    }
     
     public void listenerConsultarProductos()
     {
@@ -119,6 +137,28 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
                     new BigDecimal(pvp6Porcentaje)
             );
             
+            if(incluidoIva.equals(EnumSiNo.NO))
+            {
+                productoDataTable.pvp1=producto.getValorUnitario();
+                productoDataTable.pvp2=producto.getPrecioDistribuidor();
+                productoDataTable.pvp3=producto.getPrecioTarjeta();
+                productoDataTable.pvp4=producto.getPvp4();
+                productoDataTable.pvp5=producto.getPvp5();
+                productoDataTable.pvp6=producto.getPvp6();
+            }
+            else if(incluidoIva.equals(EnumSiNo.SI))
+            {
+                productoDataTable.pvp1=producto.getValorUnitarioConIva();
+                productoDataTable.pvp2=producto.getPrecioDistribuidorConIva();
+                productoDataTable.pvp3=producto.getPrecioTarjetaConIva();
+                productoDataTable.pvp4=producto.getPvp4ConIva();
+                productoDataTable.pvp5=producto.getPvp5ConIva();
+                productoDataTable.pvp6=producto.getPvp6ConIva();
+                productoDataTable.costoPromedio=UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costoPromedio);
+                productoDataTable.costoUltimo=UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costoUltimo);
+            }
+            
+            
             productoList.add(productoDataTable);
         }
         
@@ -135,7 +175,9 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         costoCalculoList=UtilidadesLista.arrayToList(CostoCalculoEnum.values());
+        opcionIvaList=UtilidadesLista.arrayToList(EnumSiNo.values());
         costoCalculoEnum=CostoCalculoEnum.ULTIMO_COSTO;
+        incluidoIva=EnumSiNo.NO;
         cargarValorPorDefectoMargenUtilidades();
     }
     
@@ -213,13 +255,30 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
             {
                 throw new ExcepcionCodefacLite("Cancelar grabar utilidad ...");
             }
-            List<ProductoPrecioDataTable> productosSelecionadoList= completarCostoCalculoLista(productoSeleccionadoList);
-            ServiceFactory.getFactory().getProductoServiceIf().actualizarPrecios(productosSelecionadoList);
+            //List<ProductoPrecioDataTable> productosSelecionadoList= completarCostoCalculoLista(productoSeleccionadoList);
+            normalizarDatosProcesar(productoSeleccionadoList);
+            ServiceFactory.getFactory().getProductoServiceIf().actualizarPrecios(productoSeleccionadoList);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("Cancelar grabar utilidad ...");
+        }
+    }
+    
+    private void normalizarDatosProcesar(List<ProductoPrecioDataTable> lista)
+    {
+        for (ProductoPrecioDataTable productoDataTable : lista) 
+        {
+            if(incluidoIva.equals(EnumSiNo.SI))
+            {
+                productoDataTable.pvp1= UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), productoDataTable.pvp1,6);
+                productoDataTable.pvp2= UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), productoDataTable.pvp2,6);
+                productoDataTable.pvp3= UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), productoDataTable.pvp3,6);
+                productoDataTable.pvp4= UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), productoDataTable.pvp4,6);
+                productoDataTable.pvp5= UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), productoDataTable.pvp5,6);
+                productoDataTable.pvp6= UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), productoDataTable.pvp6,6);
+            }
         }
     }
     
@@ -231,7 +290,8 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
         }
     }
     
-    public List<ProductoPrecioDataTable> completarCostoCalculoLista(List<ProductoPrecioDataTable> lista)
+    
+    /*public List<ProductoPrecioDataTable> completarCostoCalculoLista(List<ProductoPrecioDataTable> lista)
     {
         for (ProductoPrecioDataTable productoData : lista) 
         {
@@ -245,7 +305,7 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
             }
         }
         return lista;
-    }
+    }*/
     
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
@@ -433,6 +493,24 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     public void setProductoFiltro(Producto productoFiltro) {
         this.productoFiltro = productoFiltro;
     }
+
+    public List<EnumSiNo> getOpcionIvaList() {
+        return opcionIvaList;
+    }
+
+    public void setOpcionIvaList(List<EnumSiNo> opcionIvaList) {
+        this.opcionIvaList = opcionIvaList;
+    }
+
+    public EnumSiNo getIncluidoIva() {
+        return incluidoIva;
+    }
+
+    public void setIncluidoIva(EnumSiNo incluidoIva) {
+        this.incluidoIva = incluidoIva;
+    }
+    
+    
     
     
     
