@@ -224,7 +224,7 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
 
         jLabel9.setFont(new java.awt.Font("Arial", 3, 12)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Lista de Precios Original");
+        jLabel9.setText("Detalle de Precios");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 8;
@@ -272,7 +272,7 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.ipadx = 250;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jScrollPane2, gridBagConstraints);
 

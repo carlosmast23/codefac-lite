@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDat
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -56,14 +57,72 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
         crearModeloTabla();
     }
     
-    private void listenerCargarPreciosOriginal(Producto producto)
+    private void listenerCargarPreciosOriginal(ProductoPrecioDataTable productoData)
     {
-        DefaultTableModel tableModel = UtilidadesTablas.crearModeloTabla(new String[]{"Precio", "Valor"}, new Class[]{String.class, String.class});
-        List<Producto.PrecioVenta> precioList= producto.obtenerPreciosVenta();
+        if(productoData==null)
+        {
+            getTblPreciosOriginal().setModel(new DefaultTableModel());
+        }
         
+        BigDecimal costo=productoData.costoCalculo;
+        DefaultTableModel tableModel = UtilidadesTablas.crearModeloTabla(new String[]{"Nombre","Costo","Original","Nuevo","%"}, new Class[]{String.class,String.class,String.class,String.class,String.class});
+        List<Producto.PrecioVenta> precioList= productoData.producto.obtenerPreciosVenta();
+        
+        BigDecimal porcentajeCosto=BigDecimal.ZERO;
+        BigDecimal precioEditado=BigDecimal.ZERO;
+        Integer indice=0;
         for (Producto.PrecioVenta precioVenta : precioList) 
         {
-            Object[] fila={precioVenta.alias,precioVenta.precio+""};
+            indice++;
+            
+            switch(indice)
+            {
+                case 1:
+                    precioEditado=productoData.pvp1;
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp1, costo);
+                    break;
+
+                case 2:
+                    precioEditado=productoData.pvp2;
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp2, costo);
+                    break;
+
+                case 3:
+                    precioEditado=productoData.pvp3;
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp3, costo);
+                    break;
+
+                case 4:
+                    precioEditado=productoData.pvp4;
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp4, costo);
+                    break;
+
+                case 5:
+                    precioEditado=productoData.pvp5;
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp5, costo);
+                    break;
+
+                case 6:
+                    precioEditado=productoData.pvp6;
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp6, costo);
+                    break;
+            
+            }
+            
+            String porcentajeStr="";
+            
+            if(porcentajeCosto!=null)
+            {
+                porcentajeStr=porcentajeCosto.setScale(0, RoundingMode.HALF_UP)+"%";
+            }
+            
+            String precioEditadoStr="";
+            if(precioEditado!=null)
+            {
+                precioEditadoStr=precioEditado.setScale(2, RoundingMode.HALF_UP)+"";
+            }
+            
+            Object[] fila={precioVenta.alias,productoData.costoCalculo.setScale(2, RoundingMode.HALF_UP),precioVenta.precio.setScale(2, RoundingMode.HALF_UP)+"",precioEditadoStr,porcentajeStr};
             tableModel.addRow(fila);
         }
         
@@ -80,7 +139,8 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
                 if(filaSeleccionada>=0)
                 {
                     ProductoPrecioDataTable productoData=(ProductoPrecioDataTable) getTblProductos().getValueAt(filaSeleccionada,0);
-                    listenerCargarPreciosOriginal(productoData.producto);
+                    
+                    listenerCargarPreciosOriginal(productoData);
                 }
             }
         });        
@@ -224,8 +284,8 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
                 String codigo=producto.getCodigoPersonalizado();
                 String nombreProducto=producto.getNombre();
                                
-                valueTmp.recalcularValoresDesdePorcentajes(valueTmp.costoUltimo);
-                                                
+                valueTmp.recalcularValoresDesdePorcentajes(valueTmp.costoCalculo);
+                                                                
                 return new Object[]{
                     valueTmp,
                     codigo,
@@ -262,6 +322,8 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
                     nfe.printStackTrace();
                 }
                 
+                //BigDecimal costoCalculo=objetoOriginal.costoCalculo;
+                
                 
                 switch (columnaModificada) {
                     case COLUMNA_OBJETO:
@@ -269,26 +331,32 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
 
                     case COLUMNA_PVP1_PORCENTAJE:
                         objetoOriginal.pvp1=valorModificado;
+                        listenerCargarPreciosOriginal(objetoOriginal);
                         break;
 
                     case COLUMNA_PVP2_PORCENTAJE:
                         objetoOriginal.pvp2=valorModificado;
+                        listenerCargarPreciosOriginal(objetoOriginal);
                         break;
                         
                     case COLUMNA_PVP3_PORCENTAJE:
                         objetoOriginal.pvp3=valorModificado;
+                        listenerCargarPreciosOriginal(objetoOriginal);
                         break;
 
                     case COLUMNA_PVP4_PORCENTAJE:
                         objetoOriginal.pvp4=valorModificado;
+                        listenerCargarPreciosOriginal(objetoOriginal);
                         break;
                         
                     case COLUMNA_PVP5_PORCENTAJE:
                         objetoOriginal.pvp5=valorModificado;
+                        listenerCargarPreciosOriginal(objetoOriginal);
                         break;
                         
                     case COLUMNA_PVP6_PORCENTAJE:
                         objetoOriginal.pvp6=valorModificado;
+                        listenerCargarPreciosOriginal(objetoOriginal);
                         break;
                 }
                 
@@ -317,7 +385,7 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
         
         if(parametros.length>0)
         {
-            List<Producto> productoListTmp=(List<Producto>) parametros[0];
+            List<ProductoPrecioDataTable> productoListTmp=(List<ProductoPrecioDataTable>) parametros[0];
             this.controlador.castListDataTable(productoListTmp);
             actualizarBindingCompontValues();
         }
@@ -332,6 +400,11 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
             Logger.getLogger(UtilidadPrecioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public void limpiarTablaDetalle() {
+        listenerCargarPreciosOriginal(null);
     }
     
 }

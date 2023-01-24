@@ -57,6 +57,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
@@ -167,10 +168,13 @@ public class CompraModel extends CompraPanel{
         agregarListenerPopUp();
     }
     
-    private void listenerModificarPrecioVenta(Producto productoSeleccionado)
+    private void listenerModificarPrecioVenta(Producto productoSeleccionado,BigDecimal precioCompra)
     {
-        List<Producto> productoList=new ArrayList<Producto>();
-        productoList.add(productoSeleccionado);
+        List<ProductoPrecioDataTable> productoList=new ArrayList<ProductoPrecioDataTable>();
+        
+        ProductoPrecioDataTable productoDataTable=new ProductoPrecioDataTable(productoSeleccionado, precioCompra);
+        
+        productoList.add(productoDataTable);
         
         Object[] parametros = {productoList};
         
@@ -195,7 +199,7 @@ public class CompraModel extends CompraPanel{
                 if(filaSeleccionada>=0)
                 {
                     CompraDetalle compraDetalle = (CompraDetalle) getTblDetalleProductos().getValueAt(filaSeleccionada, 0);
-                    listenerModificarPrecioVenta(compraDetalle.getProductoProveedor().getProducto());
+                    listenerModificarPrecioVenta(compraDetalle.getProductoProveedor().getProducto(),compraDetalle.getPrecioUnitario());
                 }
                 
             }

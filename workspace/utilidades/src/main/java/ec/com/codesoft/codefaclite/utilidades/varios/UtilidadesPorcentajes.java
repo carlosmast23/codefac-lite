@@ -19,6 +19,16 @@ public class UtilidadesPorcentajes {
     public static final RoundingMode MODO_REDONDEO=RoundingMode.HALF_UP;
     
 
+    public static BigDecimal calcularPorcentajeDosValores(BigDecimal valorComparar, BigDecimal valorTotal) 
+    {
+        if(valorTotal.compareTo(BigDecimal.ZERO)<=0)
+        {
+            //throw new Exception("Error de division para zero");
+            return null;
+        }
+        return valorComparar.divide(valorTotal,4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+    }
+    
     /**
      * Metodo que permite agregar un valor y un porcentaje y calcular la utilidad
      * si el porcentaje de utilidad es cero por defcto retorno cero
@@ -28,7 +38,7 @@ public class UtilidadesPorcentajes {
      */
     public static BigDecimal agregarUtilidadPrecio(BigDecimal valor,BigDecimal porcentajeUtilidad,BigDecimal valorDefecto)
     {
-        if(porcentajeUtilidad.compareTo(BigDecimal.ZERO)==0)
+        if(porcentajeUtilidad.compareTo(BigDecimal.ZERO)<=0)
         {
             if(valorDefecto!=null)
             {

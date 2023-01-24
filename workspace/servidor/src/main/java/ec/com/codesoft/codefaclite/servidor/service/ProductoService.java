@@ -867,8 +867,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             producto.setPvp6(productoData.calcularPvp6());
                         }*/
                     
-                        
                         Producto producto= productoData.producto;        
+                        producto.setValorUnitario(productoData.pvp1);
+                        producto.setPrecioDistribuidor(productoData.pvp2);
+                        producto.setPrecioTarjeta(productoData.pvp3);
+                        producto.setPvp4(productoData.pvp4);
+                        producto.setPvp5(productoData.pvp5);
+                        producto.setPvp6(productoData.pvp6);
+                        
                         producto.setActualizarPrecioEnum(EnumSiNo.NO);
                         entityManager.merge(producto);
                     //}

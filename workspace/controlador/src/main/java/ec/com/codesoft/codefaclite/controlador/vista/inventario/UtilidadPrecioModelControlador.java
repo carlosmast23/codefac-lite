@@ -84,14 +84,15 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
 
     public void listenerActualizarPorcentaje()
     {
-        castListDataTable(listDataTableToObject(productoList));
+        castListDataTable(productoList);
+        getInterazEscritorio().limpiarTablaDetalle();
     }
     
     public void listenerConsultarProductos()
     {
         try {
             List<Producto> productoTmpList= ServiceFactory.getFactory().getProductoServiceIf().reporteProducto(productoFiltro,getInterfaz().pendientesActualizarPrecio());
-            castListDataTable(productoTmpList);
+            castListProducto(productoTmpList);
             
         } catch (RemoteException ex) {
             Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -101,31 +102,54 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
         
     }
     
-    
-    
-    public void castListDataTable(List<Producto> productoTmpList)
+    private void castListProducto(List<Producto> productoTmpList)
     {
-        productoList=new ArrayList<ProductoPrecioDataTable>();
+        List<ProductoPrecioDataTable> listTmp=new ArrayList<ProductoPrecioDataTable>();
         for (Producto producto : productoTmpList) 
         {
+            listTmp.add(new ProductoPrecioDataTable(producto));
+        }
+        
+        castListDataTable(listTmp);
+    }
+    
+    
+    //todo: Cambiar el nombre de esta funcion para algo más descriptivo, lo que hace es coger datos inconclusos y terminar de llenar con datos por defecto
+    public void castListDataTable(List<ProductoPrecioDataTable> productoTmpList)
+    {
+        productoList=new ArrayList<ProductoPrecioDataTable>();
+        for (ProductoPrecioDataTable productoData : productoTmpList) 
+        {
 
+            Producto producto=productoData.producto;
             BigDecimal costoPromedio = BigDecimal.ZERO;
             BigDecimal costoUltimo = BigDecimal.ZERO;
             
             try {
                 //Kardex kardexProducto = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
-                CostoProductoRespuesta costoProducto=ServiceFactory.getFactory().getKardexServiceIf().buscarCostoProductoRespuesta(producto);
-                if (costoProducto != null) {
+                CostoProductoRespuesta costoProducto=ServiceFactory.getFactory().getKardexServiceIf().buscarCostoProductoRespuesta(productoData.producto);
+                
+                if (costoProducto != null) 
+                {
                     costoPromedio = costoProducto.costoPromedio;
                     costoUltimo = costoProducto.costoUltimo;
                 }
+                
+                //Si manda un ultimo costo cojo el de los datos enviados
+                if(productoData.costoUltimoOriginal!=null)
+                {
+                    costoUltimo=productoData.costoUltimoOriginal;
+                }
+                
+                
             } catch (RemoteException ex) {
                 Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            
             ProductoPrecioDataTable productoDataTable=new ProductoPrecioDataTable
             (
-                    producto, 
+                    productoData.producto, 
                     BigDecimal.ZERO,
                     costoPromedio,
                     costoUltimo,
@@ -156,8 +180,19 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
                 productoDataTable.pvp6=producto.getPvp6ConIva();
                 productoDataTable.costoPromedio=UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costoPromedio);
                 productoDataTable.costoUltimo=UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costoUltimo);
+                //productoData.costoCalculo=UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costoCalculo);
             }
             
+            BigDecimal costoCalculo=BigDecimal.ZERO;
+            if(costoCalculoEnum.equals(costoCalculoEnum.COSTO_PROMEDIO))
+            {
+                costoCalculo=productoDataTable.costoPromedio;
+            }
+            else if(costoCalculoEnum.equals(costoCalculoEnum.ULTIMO_COSTO))
+            {
+                costoCalculo=productoDataTable.costoUltimo;
+            }
+            productoDataTable.costoCalculo=costoCalculo;
             
             productoList.add(productoDataTable);
         }
@@ -427,6 +462,7 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
 
     public interface SwingIf extends CommonIf {
         //TODO: Implementacion de las interfaces solo necesarias para Swing
+        public void limpiarTablaDetalle();
         
     }
 
