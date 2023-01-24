@@ -326,11 +326,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     {
         for (ProductoPresentacionDetalle productoPresentacionDetalle : producto.getPresentacionList()) 
         {
+            Producto productoEmpaquetado=productoPresentacionDetalle.getProductoEmpaquetado();
+            
             entityManager.flush();
             if(productoPresentacionDetalle.getProductoOriginal()==null || productoPresentacionDetalle.getProductoOriginal().getIdProducto()==null)
             {
                 throw new ServicioCodefacException("Error al grabar la presentación: "+productoPresentacionDetalle.getPresentacionProducto().getNombre()+", por que no tiene presentación original ");
             }
+            
             
             if(productoPresentacionDetalle.getProductoEmpaquetado()==null || productoPresentacionDetalle.getProductoEmpaquetado().getIdProducto()==null)
             {
@@ -346,11 +349,12 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         {                                    
             for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) 
             {
-                //Validacion para verificar que si tenga la referencia al nuevo product de forma correcta
+                //Validacion para verificar que si tenga la referencia al nuevo producto de forma correcta
                 
-                if(presentacionDetalle.getId()==null)
+                if(presentacionDetalle.getId()==null || presentacionDetalle.getId()<0)
                 {                    
                     try {
+                        presentacionDetalle.setId(null);
                         Producto productoEmpaquetado =null;
                         if(presentacionDetalle.getTipoEnum().equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ORIGINAL))
                         {
@@ -369,7 +373,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             productoEmpaquetado.setSegmentoProducto(null);
                             productoEmpaquetado.setCasaComercial(null);*/                        
                             productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
-                            productoEmpaquetado.setPresentacionList(productoPresentacionList);
+                            //productoEmpaquetado.setPresentacionList(productoPresentacionList);
                                                     
                             //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
                             if (presentacionDetalle.getPvpTmp() == null) {
@@ -384,21 +388,27 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             }
 
                             entityManager.persist(productoEmpaquetado);
-                            entityManager.flush();
+                            entityManager.flush();                            
                         }
+                        
                         
                         presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);                        
                     } catch (RemoteException ex) {
                         Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    
+                                        
                     entityManager.persist(presentacionDetalle);
+                    //entityManager.flush();
+                    
                 }
             }
             
+            //finalmente luego que ya tengo creando los nuevos productos le enlazo el detalle por que estaba dando problemas recursivos al enlazar en el mismo proceso repetitivo
+            for (ProductoPresentacionDetalle productoPresentacionDetalle : productoPresentacionList) {
+                productoPresentacionDetalle.getProductoEmpaquetado().setPresentacionList(productoPresentacionList);                
+            }
             
-            
+            producto.setPresentacionList(productoPresentacionList);
             //Actualizar los cambios en el producto
             entityManager.merge(producto);
             

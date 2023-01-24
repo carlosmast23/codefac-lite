@@ -79,32 +79,32 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
             {
                 case 1:
                     precioEditado=productoData.pvp1;
-                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp1, costo);
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp1.subtract(costo), costo);
                     break;
 
                 case 2:
                     precioEditado=productoData.pvp2;
-                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp2, costo);
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp2.subtract(costo), costo);
                     break;
 
                 case 3:
                     precioEditado=productoData.pvp3;
-                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp3, costo);
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp3.subtract(costo), costo);
                     break;
 
                 case 4:
                     precioEditado=productoData.pvp4;
-                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp4, costo);
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp4.subtract(costo), costo);
                     break;
 
                 case 5:
                     precioEditado=productoData.pvp5;
-                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp5, costo);
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp5.subtract(costo), costo);
                     break;
 
                 case 6:
                     precioEditado=productoData.pvp6;
-                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp6, costo);
+                    porcentajeCosto=UtilidadesPorcentajes.calcularPorcentajeDosValores(productoData.pvp6.subtract(costo), costo);
                     break;
             
             }

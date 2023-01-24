@@ -761,6 +761,12 @@ public class CompraModel extends CompraPanel{
             try {
                 System.out.println("descargando factura");
                 ComprobanteElectronico comprobanteElectronico=ServiceFactory.getFactory().getCompraServiceIf().obtenerComprobanteElectronicoConClaveAcceso(getTxtAutorizacion().getText(), session.getEmpresa());
+                if(comprobanteElectronico==null)
+                {
+                    DialogoCodefac.mensaje(new CodefacMsj("No se puede encontrar el comprobante", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    return ;
+                }
+                
                 byte[] byteReporte=ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(comprobanteElectronico, null, comprobanteElectronico.getInformacionTributaria().getClaveAcceso(),session.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
 

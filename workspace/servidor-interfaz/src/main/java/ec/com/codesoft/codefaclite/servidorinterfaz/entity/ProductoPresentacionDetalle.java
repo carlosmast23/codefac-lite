@@ -25,6 +25,9 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "PRODUCTO_PRESENTACION_DETALLE")
 public class ProductoPresentacionDetalle implements Serializable{
+    
+    private static Long ID_TEMPORAL=-1l;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -55,7 +58,7 @@ public class ProductoPresentacionDetalle implements Serializable{
 
     public ProductoPresentacionDetalle() 
     {
-        
+        id=ID_TEMPORAL--;
     }
     
     public Long getId() {
@@ -139,7 +142,7 @@ public class ProductoPresentacionDetalle implements Serializable{
         return hash;
     }*/
 
-    @Override
+    /*@Override
     public int hashCode() {
         int hash = 3;
         if(this.id==null)
@@ -189,7 +192,34 @@ public class ProductoPresentacionDetalle implements Serializable{
             }
         }
         return true;
+    }*/
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + Objects.hashCode(this.id);
+        return hash;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProductoPresentacionDetalle other = (ProductoPresentacionDetalle) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
     
     
