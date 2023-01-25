@@ -105,6 +105,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jTextCiudad = new javax.swing.JTextField();
         btnAbriWhatsapp = new javax.swing.JButton();
         jLabel44 = new javax.swing.JLabel();
+        txtCampoAdicional = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jComboTipoCliente = new javax.swing.JComboBox<>();
@@ -480,6 +481,12 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel44, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales.add(txtCampoAdicional, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Principales", jPanelCaracteristicasGenerales);
 
@@ -1100,6 +1107,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblOligadoLlevarContabilidad;
     private javax.swing.JTable tblEstablecimientos;
+    private javax.swing.JTextField txtCampoAdicional;
     private javax.swing.JSpinner txtCodigoEstablecimiento;
     private javax.swing.JTextField txtCodigoPersonalizado;
     private javax.swing.JTextField txtCodigoPersonalizadoOficina;
@@ -1494,6 +1502,17 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setjTextCiudadEstablecimiento(JTextField jTextCiudadEstablecimiento) {
         this.jTextCiudadEstablecimiento = jTextCiudadEstablecimiento;
     }
+
+    @LimpiarAnotacion
+    public JTextField getTxtCampoAdicional() {
+        return txtCampoAdicional;
+    }
+
+    public void setTxtCampoAdicional(JTextField txtCampoAdicional) {
+        this.txtCampoAdicional = txtCampoAdicional;
+    }
+    
+    
 
     public JButton getBtnAbriWhatsapp() {
         return btnAbriWhatsapp;

@@ -328,6 +328,7 @@ public class ControladorReporteFactura {
                                 factura.getUsuario().getNick()
                         );
                         
+                        reporteData.setCampoAdicional((factura.getCliente().getCampoAdicional()!=null)?factura.getCliente().getCampoAdicional():"");
                         //Agregar datos adicionales al modelo de la factura
                         reporteData.setFechaMaximaPago((factura.getFechaVencimiento() != null) ? UtilidadesFecha.formatoDiaMesAño(factura.getFechaVencimiento()) : "");
                         reporteData.setVendedor((factura.getVendedor() != null) ? factura.getVendedor().getNombresCompletos() : "");
@@ -1191,6 +1192,13 @@ public class ControladorReporteFactura {
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
                 return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_VALOR).toString();
                 //return dato.getPrecioUnitarioReporte();
+            }
+        }),
+        
+        AGRUPADO_POR_CAMPO_ADICIONAL("Agrupado por campo adicional",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL).toString();
             }
         }),
         

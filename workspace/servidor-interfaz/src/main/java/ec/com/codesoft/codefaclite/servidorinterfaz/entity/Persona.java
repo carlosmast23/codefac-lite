@@ -140,6 +140,9 @@ public class Persona implements Serializable, Comparable<Persona> {
     
     @Column(name = "HABILITAR_CREDITO")
     private String habilitarCredito;
+    
+    @Column(name = "CAMPO_ADICIONAL")
+    private String campoAdicional;
 
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
@@ -548,7 +551,14 @@ public class Persona implements Serializable, Comparable<Persona> {
         }
         
     }
-    
+
+    public String getCampoAdicional() {
+        return campoAdicional;
+    }
+
+    public void setCampoAdicional(String campoAdicional) {
+        this.campoAdicional = campoAdicional;
+    }
     
     
     public String getCorreoElectronico()
