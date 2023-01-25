@@ -123,7 +123,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel20 = new javax.swing.JLabel();
         chkInventarioProveedor = new javax.swing.JCheckBox();
         chkReserva = new javax.swing.JCheckBox();
-        cmbTipoDocumento = new javax.swing.JComboBox<>();
         jLabel17 = new javax.swing.JLabel();
         pnlDatosAdicionalesDetalle = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -764,14 +763,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(chkReserva, gridBagConstraints);
 
-        cmbTipoDocumento.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
-        jPanel1.add(cmbTipoDocumento, gridBagConstraints);
-
         jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel17.setText("Producto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -969,7 +960,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<Presupuesto.EstadoEnum> cmbEstadoPresupuesto;
     private org.jdesktop.swingx.JXDatePicker cmbFechaPresupuesto;
     private javax.swing.JComboBox<String> cmbOpcionDiaMes;
-    private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoPresupuesto;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
@@ -1374,13 +1364,13 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         this.chkReserva = chkReserva;
     }
 
-    public JComboBox<TipoDocumentoEnum> getCmbTipoDocumento() {
+    /*public JComboBox<TipoDocumentoEnum> getCmbTipoDocumento() {
         return cmbTipoDocumento;
     }
 
     public void setCmbTipoDocumento(JComboBox<TipoDocumentoEnum> cmbTipoDocumento) {
         this.cmbTipoDocumento = cmbTipoDocumento;
-    }
+    }*/
 
     public JButton getBtnEmpleadoBuscar() {
         return btnEmpleadoBuscar;

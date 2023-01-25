@@ -460,6 +460,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getTxtDescripcion().setText("");
         this.getLblObjetoMantenimiento().setText("");
         this.getTxtKilometraje().setText("");
+        this.getLblTotalProductos().setText("0.00");
+        this.getLblTotalServicios().setText("0.00");
         initDatosTabla();
     }
 
@@ -495,9 +497,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         /**
          * Cargar los tipos de documentos para cargar del inventario
          */
-        getCmbTipoDocumento().removeAllItems();
+        /*getCmbTipoDocumento().removeAllItems();
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.INVENTARIO);
-        getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
+        getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);*/
         
         /**
          * Estado general de Presupuesto
@@ -527,16 +529,16 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     public void initDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
-        getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
+        //DefaultTableModel modeloTablaDetallesPresupuesto = new DE;
+        getTableDetallesPresupuesto().setModel(new DefaultTableModel());
         
-        DefaultTableModel modeloTablaDetallesPresupuesto2 = UtilidadesTablas.crearModeloTabla(new String[]{"#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
-        getTableDetallesServicio().setModel(modeloTablaDetallesPresupuesto);
+        //DefaultTableModel modeloTablaDetallesPresupuesto2 = UtilidadesTablas.crearModeloTabla(new String[]{"#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
+        getTableDetallesServicio().setModel(new DefaultTableModel());
     }
     
     private void cargarVistaEmpleado(Empleado empleado)
     {
-        TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        //TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         
         if(producto!=null && producto.getTipoProductoEnum().equals(TipoProductoEnum.SERVICIO))
         {
@@ -660,17 +662,17 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 if(persona!=null)
                 {
                     //if(persona.getIdentificacion().equals(session.getEmpresa().getIdentificacion()))
-                    TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                    //TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
                     
-                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
-                    {
+                    //if(tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
+                    //{
                         buscarProductosConInventario();
-                    }
-                    else if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
-                    {
+                    //}
+                    //else if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
+                    //{
                         //Buscar el producto sin inventario
-                        buscarProductoSinInventario();
-                    }
+                    //    buscarProductoSinInventario();
+                    //}
                 }
                 else
                 {
@@ -1273,12 +1275,14 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             Producto producto=detalle.getProducto();
             TipoProductoEnum tipoProducto=producto.getTipoProductoEnum();
             
-            subtotalVenta = subtotalVenta.add(detalle.getPrecioCompra()).multiply(detalle.getCantidad());
+            subtotalVenta = subtotalVenta.add(detalle.getPrecioCompra().multiply(detalle.getCantidad()));
+            //subtotalVenta = subtotalVenta.add(detalle.getPrecioCompra());
             descuentoVenta = descuentoVenta.add(detalle.getDescuentoCompra());
             
             if(tipoProducto.equals(TipoProductoEnum.PRODUCTO))
             {
-                subtotalCompra = subtotalCompra.add(detalle.getPrecioCompra()).multiply(detalle.getCantidad());
+                subtotalCompra = subtotalCompra.add(detalle.getPrecioCompra().multiply(detalle.getCantidad()));
+                //subtotalCompra = subtotalCompra.add(detalle.getPrecioCompra());
                 descuentoCompra = descuentoCompra.add(detalle.getDescuentoCompra());
             }
             
@@ -1442,13 +1446,13 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     public void mostrarDatosTabla()
     {
+        String[] tituloList={"obj","Código","Producto","Val Compra","Desc Compra","Val Venta","Desc Venta","Cantidad"};
+        Class[] claseList=new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class};
         int c=0;
         Vector<Object> fila;
-        DefaultTableModel modeloTablaDetallesPresupuesto = 
-        UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesPresupuesto =UtilidadesTablas.crearModeloTabla(tituloList,claseList);
         
-        DefaultTableModel modeloTablaDetallesProductos = 
-        UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesProductos = UtilidadesTablas.crearModeloTabla(tituloList,claseList);
         
         
         //for(Map.Entry<Integer,List<PresupuestoDetalle>> datoMap : mapOrden.entrySet())
@@ -1466,8 +1470,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 //}
                     fila = new Vector<>();
                     fila.add(detalle);
-                    fila.add("");
-                    fila.add(detalle.getPersona().getNombresCompletos()+"");
+                    //fila.add("");
+                    //fila.add(detalle.getPersona().getIdentificacion()+"");
+                    fila.add(detalle.getProducto().getCodigoPersonalizado()+"");
                     fila.add(detalle.getProducto().getNombre()+"");
                     fila.add(""+detalle.getPrecioCompra().multiply(detalle.getCantidad()));
                     //fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
@@ -1491,6 +1496,10 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesProductos);
         getTableDetallesServicio().setModel(modeloTablaDetallesPresupuesto);
+        
+        Integer[] tamanioTabla=new Integer[]{0,100,150};
+        UtilidadesTablas.cambiarTamanioColumnas(getTableDetallesPresupuesto(),tamanioTabla);
+        UtilidadesTablas.cambiarTamanioColumnas(getTableDetallesServicio(),tamanioTabla);
         /**
          * Agregar PopupMenu en Tabla
          */        
