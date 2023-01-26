@@ -316,10 +316,20 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             kardexDetalle.setCodigoTipoDocumento(compraInventario.getCodigoTipoDocumento());
             kardexDetalle.setReferenciaDocumentoId(compraInventario.getId());
             kardexDetalle.setDescuento(detalle.getDescuento());
-            kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
+            
             kardexDetalle.setPrecioTotal(detalle.getTotal());
             kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp()); //Setear por defecto con la fecha de hoy
             kardexDetalle.setFechaDocumento(UtilidadesFecha.getFechaHoy());
+            
+            if(detalle.getCostoUnitario()!=null)
+            {
+                kardexDetalle.setPrecioUnitario(detalle.getCostoUnitario());
+            }
+            else
+            {
+                kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
+            }
+            
             kardexDetalle.lote=detalle.getLote();
             
             kardexDetalle.seleccion=true;
@@ -345,7 +355,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     {
         Date fechaPorDefecto=getCmbFechaIngreso().getDate();
         
-        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Presentación","Lote","Cantidad","Descuento","Costo Unitario","Costo Total","garantia"};        
+        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Presentación","Lote","Cantidad","Descuento","Costo Unitario","garantia"};        
         Class clases[] = {
             KardexDetalleTmp.class,
             Boolean.class,
@@ -355,7 +365,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             String.class,
             String.class,
             String.class,
-            String.class,
+            //String.class,
             String.class,
             String.class,
             String.class};
@@ -393,7 +403,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                     kardexDetalle.getCantidad(),
                     kardexDetalle.getDescuento(),
                     kardexDetalle.getPrecioUnitario(),
-                    kardexDetalle.getPrecioTotal(),
+                    //kardexDetalle.getPrecioTotal(),
                     compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().getNombre()
                 };
 
@@ -853,15 +863,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 Producto producto=compraDetalle.getProductoProveedor().getProducto();
                 if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
                 {
-                    /*producto=producto.buscarProductoEmpaquePrincipal();
-                    //BigDecimal cantidadPorCaja= producto.obtenerCantidadPorCaja();
-                    ProductoPresentacionDetalle detallePresentacion=producto.buscarPresentacionDetalleProducto();
-                    BigDecimal cantidadPorCaja=detallePresentacion.getCantidad();
-                    
-                    if(cantidadPorCaja.compareTo(BigDecimal.ZERO)==0)
-                    {
-                        throw new ServicioCodefacException("Las cantidades de las conversiones no pueden ser CERO, producto: "+producto.getNombre());
-                    }*/
+
                     ProductoConversionPresentacionRespuesta respuesta  = ServiceFactory.getFactory().getProductoServiceIf().convertirProductoEmpaqueSecundarioEnPrincipal(producto,kardexDetalle.getCantidad(), kardexDetalle.getPrecioUnitario());
                     
                     producto=respuesta.productoPresentacionPrincipal;

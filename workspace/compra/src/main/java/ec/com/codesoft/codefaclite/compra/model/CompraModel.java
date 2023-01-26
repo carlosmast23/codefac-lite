@@ -66,6 +66,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
@@ -82,7 +83,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -501,6 +501,7 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().setText("");
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
+        getTxtCostoItem().setText("");
         getTxtDescuentoItem().setText("0");
         getTxtCostoItem().setText("");
         getTxtCantidadItem().setText("");
@@ -1002,6 +1003,7 @@ public class CompraModel extends CompraPanel{
                     verificarExistenciadeProductoProveedor();
                     getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
                     seleccionarComboTipoIva(compraDetalle.getPorcentajeIva());
+                    getTxtCostoItem().setText((compraDetalle.getCostoUnitario()!=null)?compraDetalle.getCostoUnitario()+"":"");
                     getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
                     getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
                     getTxtDescuentoItem().setText(compraDetalle.getDescuento()+"");
@@ -1187,7 +1189,14 @@ public class CompraModel extends CompraPanel{
     private void agregarDetalleCompraConDatosVista(CompraDetalle compraDetalle)
     {
 
-        BigDecimal costo = new BigDecimal(getTxtPrecionUnitarioItem().getText());
+        BigDecimal costo = null;
+        String costoStr=getTxtCostoItem().getText();
+        
+        if(!UtilidadesTextos.verificarNullOVacio(costoStr))
+        {
+            costo=new BigDecimal(costoStr);
+        }
+        
         BigDecimal cantidad = new BigDecimal(getTxtCantidadItem().getText());
         BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText());
         BigDecimal descuento=new BigDecimal(getTxtDescuentoItem().getText());
@@ -1377,13 +1386,14 @@ public class CompraModel extends CompraPanel{
             fila.add((detalle.getValorSriRetencionIVA()!=null)?detalle.getValorSriRetencionIVA().setScale(3, RoundingMode.HALF_UP)+"":"");
             fila.add((detalle.getValorSriRetencionRenta()!=null)?detalle.getValorSriRetencionRenta().setScale(3,RoundingMode.HALF_UP)+"":"");
             fila.add(detalle.getDescuento()+"");
-            fila.add(detalle.getPrecioUnitario()+"");
-            fila.add(detalle.getSubtotal()+"");
+            fila.add(detalle.getPrecioUnitario().setScale(4, RoundingMode.HALF_UP)+"");
+            fila.add(detalle.getSubtotal().setScale(4, RoundingMode.HALF_UP)+"");
             this.modeloTablaDetallesCompra.addRow(fila);
         }
                 
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
         UtilidadesTablas.ocultarColumna(getTblDetalleProductos(),0);
+        UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleProductos(),new Integer[]{0,150,50,250,100,50,50,50,50,50});
         
     }
     
@@ -1500,6 +1510,7 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().setEnabled(true);
         getTxtCantidadItem().setEnabled(true);
         getTxtPrecionUnitarioItem().setEnabled(true);
+        getTxtCostoItem().setEnabled(true);
         getTxtDescuentoItem().setEnabled(true);
         
     }
@@ -1510,6 +1521,7 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().setEnabled(false);
         getTxtCantidadItem().setEnabled(false);
         getTxtPrecionUnitarioItem().setEnabled(false);
+        getTxtCostoItem().setEnabled(false);
         getTxtDescuentoItem().setEnabled(false);
     }
     
@@ -1517,6 +1529,7 @@ public class CompraModel extends CompraPanel{
     {
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
+        getTxtCostoItem().setText("");
         getTxtDescuentoItem().setText("0");
         getTxtProductoItem().setText("");
         getTxtCantidadItem().setText("");
@@ -1560,10 +1573,19 @@ public class CompraModel extends CompraPanel{
         else{
             compraDetalle = new CompraDetalle();
         }
-        
-        
-            productoProveedor.setCosto(costo);
             
+            if(costo==null)
+            {
+                productoProveedor.setCosto(precioUnitario);
+                //costo=precioUnitario;
+            }
+            else
+            {
+                productoProveedor.setCosto(costo);
+            }
+            
+            
+            compraDetalle.setCostoUnitario(costo);
             compraDetalle.setCantidad(cantidadItem);
             
             compraDetalle.setPorcentajeIva(porcentajeIva);
