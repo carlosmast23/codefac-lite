@@ -17,7 +17,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -66,7 +70,9 @@ public class PresupuestoControlador {
         //Calcular los totales
         parametros.put("subtotal", presupuesto.getTotalVenta().toString());
         parametros.put("descuento", presupuesto.getDescuentoVenta().toString());
-        parametros.put("total", presupuesto.calcularTotalMenosDescuentos().toString());
+        parametros.put("iva", UtilidadesImpuestos.calcularValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(),presupuesto.calcularTotalMenosDescuentos()).setScale(2, RoundingMode.HALF_UP).toString());
+        //parametros.put("total", presupuesto.calcularTotalMenosDescuentos().toString());
+        parametros.put("total", UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(),presupuesto.calcularTotalMenosDescuentos()).setScale(2, RoundingMode.HALF_UP).toString());
         
         //Calcular los totales
         Presupuesto.ResultadoTotales totales=presupuesto.obtenerMapReporteTotales(presupuesto.getEmpresa().getIdentificacion());

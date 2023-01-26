@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidor.service.pos.CajaPermisoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
@@ -88,6 +89,7 @@ import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -422,7 +424,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         setearDatosDistribuidor(venta);
     }
     
-    private void setearDatosPorDefecto(Factura factura) throws RemoteException, ServicioCodefacException
+    private void setearDatosPorDefecto(Factura factura,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException
     {   
         //Fecha de cuando estamos generando el documento
         factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
@@ -433,6 +435,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ///Agregar estado de la nota de credito
         //factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
         factura.setEstadoNotaCreditoEnum(Factura.EstadoNotaCreditoEnum.SIN_ANULAR);
+        
+        //Agregar por defecto la fecha de vecimiento de la factura cuando tenga habilitado el crédito y los días de crédito
+        if(carteraParametro!=null)
+        {
+            if(carteraParametro.habilitarCredito && carteraParametro.diasCredito>0)
+            {
+                java.util.Date fechaVencimiento=UtilidadesFecha.sumarDiasFecha(factura.getFechaEmision(),carteraParametro.diasCredito);
+                String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaVencimiento);                
+                factura.addDatoAdicional(new FacturaAdicional(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO.getNombre(), fechaStr,ComprobanteAdicional.Tipo.TIPO_OTRO));
+            }
+        }
+        
         
         //Setear campos adicionales del detalle
         for (FacturaDetalle detalle : factura.getDetalles()) 
@@ -475,15 +489,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         {
             
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                
+            public void transaccion() throws ServicioCodefacException, RemoteException 
+            {   
                 setearDatosClienteYDistribuidor(factura);
                 
                 //Validaciones iniciales de la factura
                 validacionInicialFacturar(factura,carteraParametro,CrudEnum.CREAR);
                 
                 //Agrega datos adcional como por ejemplo la fecha de creacion de la factura
-                setearDatosPorDefecto(factura);
+                setearDatosPorDefecto(factura,carteraParametro);
                                
                 //Metodo que va a grabar la factura
                 grabarSinTransaccion(factura,carteraParametro);
@@ -499,8 +513,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     prestamoService.grabarSinTransaccion(prestamo, factura);
                 }
                 
-                 //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
-                 List<CajaPermiso> cajasPermisosList=factura.getUsuario().buscarPermisosCajasActivosService();
+                //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
+                List<CajaPermiso> cajasPermisosList=factura.getUsuario().buscarPermisosCajasActivosService();
                 if(cajasPermisosList != null && !cajasPermisosList.isEmpty())
                 {
                     agregarDatosParaCajaSession(factura);

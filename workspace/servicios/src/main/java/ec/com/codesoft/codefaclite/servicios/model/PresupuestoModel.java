@@ -1294,15 +1294,15 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         /**
          * Mostrar valores en pantalla
          */
-        getLblSubtotalCompra().setText(subtotalCompra.toString());
+        getLblSubtotalCompra().setText(subtotalCompra.setScale(2, RoundingMode.HALF_UP).toString());
         
         //valores de los sibtotales
-        getLblTotalProductos().setText(subtotalCompra.toString());
-        getLblTotalServicios().setText(subtotalVenta.subtract(subtotalCompra).toString());
+        getLblTotalProductos().setText(subtotalCompra.setScale(2, RoundingMode.HALF_UP).toString());
+        getLblTotalServicios().setText(subtotalVenta.subtract(subtotalCompra).setScale(2, RoundingMode.HALF_UP).toString());
         
         
         getLblDescuentoCompra().setText(descuentoCompra.toString());
-        getLblTotalCompra().setText(totalCompra.toString());
+        getLblTotalCompra().setText(totalCompra.setScale(2, RoundingMode.HALF_UP).toString());
         
         //getTxtSubtotalVentas().setText(subtotalVenta.toString());
         //getTxtDescuentoVentas().setText(descuentoVenta.toString());
@@ -1310,7 +1310,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         //BigDecimal subtotalVentas=(presupuesto.getTotalVenta()!=null)?presupuesto.getTotalVenta():BigDecimal.ZERO;
         //BigDecimal descuentoVentas=(presupuesto.getDescuentoVenta()!=null)?presupuesto.getDescuentoVenta():BigDecimal.ZERO;
         
-        getTxtSubtotalVentas().setText(subtotalVenta.toString());
+        getTxtSubtotalVentas().setText(subtotalVenta.setScale(2, RoundingMode.HALF_UP).toString());
         getTxtDescuentoVentas().setText(descuentoVenta.toString());
 
         BigDecimal valorIva=UtilidadesImpuestos.calcularValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), totalVenta);
@@ -1325,7 +1325,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
          * Cargar valores en Presupuesto}
          */
         setearValoresPresupuesto(descuentoCompra, descuentoVenta, totalCompra, totalVenta);
-        
+        //Boolean.FALSE
        
     }
     

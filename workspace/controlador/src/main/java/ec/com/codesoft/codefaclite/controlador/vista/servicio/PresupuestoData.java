@@ -19,6 +19,7 @@ public class PresupuestoData {
     private String subtotal;
     private String descuento;
     private String total;
+    private String iva;
     private String reserva;
     /**
      * Este campo va a ser para identificar el tipo de producto o servicio
@@ -107,8 +108,14 @@ public class PresupuestoData {
     public void setReserva(String reserva) {
         this.reserva = reserva;
     }
-    
-    
+
+    public String getIva() {
+        return iva;
+    }
+
+    public void setIva(String iva) {
+        this.iva = iva;
+    }
         
     
 }

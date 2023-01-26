@@ -336,6 +336,11 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     
     public CompraAts crearCompraAtsInfoGeneral(Compra compra) throws RemoteException, ServicioCodefacException
     {
+        if(compra==null)
+        {
+            throw new ServicioCodefacException("No existe compra para continuar con el proceso ...");
+        }
+        
         CompraAts compraAts = new CompraAts();
 
         String identificacion = (compra.getIdentificacion() != null && !compra.getIdentificacion().isEmpty()) ? compra.getIdentificacion() : compra.getProveedor().getIdentificacion();

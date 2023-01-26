@@ -90,6 +90,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         btnExportar = new javax.swing.JButton();
         btnImportar = new javax.swing.JButton();
         persona1 = new ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona();
+        btnUtilidadesCostos = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         tabMenu = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
@@ -246,6 +247,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         btnExportar.setText("Exportar");
 
         btnImportar.setText("Importar");
+
+        btnUtilidadesCostos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/copiar.png"))); // NOI18N
+        btnUtilidadesCostos.setText(" Precios");
 
         setClosable(true);
         setIconifiable(true);
@@ -1499,6 +1503,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnEliminarEnsamble;
     private javax.swing.JButton btnExportar;
     private javax.swing.JButton btnImportar;
+    private javax.swing.JButton btnUtilidadesCostos;
     private javax.swing.JCheckBox chkCompras;
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
@@ -2208,10 +2213,20 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.btnExportar = btnExportar;
     }
     
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Valores",visible = true)
+    public JButton getBtnUtilidadesCostos() {
+        return btnUtilidadesCostos;
+    }
+
+    public void setBtnUtilidadesCostos(JButton btnUtilidadesCostos) {
+        this.btnUtilidadesCostos = btnUtilidadesCostos;
+    }
+    
     @ComponenteSecundarioAnotacion(nombreCategoria = "Datos",visible = false)
     public JButton getBtnImportar() {
         return btnImportar;
     }
+    
 
     public void setBtnImportar(JButton btnImportar) {
         this.btnImportar = btnImportar;

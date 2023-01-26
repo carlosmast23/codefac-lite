@@ -4015,32 +4015,29 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         controlador.cargarFormaPago();
     }
                 
-    private void listenerChkFechaVencimiento()
-    {
+    private void listenerChkFechaVencimiento() {
         if (getChkActivarFechaVencimiento().isSelected()) {
-                    if(getCmbFechaVencimiento().getDate()!=null)
-                    {
-                        String fechaStr = UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
-                        factura.addDatoAdicional(new FacturaAdicional(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO.getNombre(), fechaStr,ComprobanteAdicional.Tipo.TIPO_OTRO));
-                        factura.setFechaVencimiento(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
-                    
-                    }                    
-                    getCmbFechaVencimiento().setEnabled(true);
-                    getChkActivarFechaVencimiento().setSelected(true);
+            if (getCmbFechaVencimiento().getDate() != null) {
+                String fechaStr = UtilidadesFecha.formatoDiaMesAño(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
+                factura.addDatoAdicional(new FacturaAdicional(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO.getNombre(), fechaStr, ComprobanteAdicional.Tipo.TIPO_OTRO));
+                factura.setFechaVencimiento(new java.sql.Date(getCmbFechaVencimiento().getDate().getTime()));
 
-                } else {
-                    FacturaAdicional fechaVencimientoDato=(FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
-                    if(fechaVencimientoDato!=null)
-                    {
-                        factura.getDatosAdicionales().remove(fechaVencimientoDato);
-                    }
-                    factura.setFechaVencimiento(null);
-                    getCmbFechaVencimiento().setEnabled(false);
-                    getChkActivarFechaVencimiento().setSelected(false);
+            }
+            getCmbFechaVencimiento().setEnabled(true);
+            getChkActivarFechaVencimiento().setSelected(true);
 
-                }
-                cargarTablaDatosAdicionales();            
-        
+        } else {
+            FacturaAdicional fechaVencimientoDato = (FacturaAdicional) factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO);
+            if (fechaVencimientoDato != null) {
+                factura.getDatosAdicionales().remove(fechaVencimientoDato);
+            }
+            factura.setFechaVencimiento(null);
+            getCmbFechaVencimiento().setEnabled(false);
+            getChkActivarFechaVencimiento().setSelected(false);
+
+        }
+        cargarTablaDatosAdicionales();
+
     }
 
     private void addListerFechas() {

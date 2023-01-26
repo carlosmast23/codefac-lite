@@ -83,7 +83,7 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
         DocumentoEnum documentoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
         dato.add(documentoEnum.getNombre());
         dato.add(t.getCodigoTipoDocumento()); 
-        dato.add(t.getInventarioIngresoEnum().getNombre());
+        dato.add((t.getInventarioIngresoEnum()!=null)?t.getInventarioIngresoEnum().getNombre():"");
         dato.add(t.getFechaFactura());
         dato.add(t.getTotal());
     }

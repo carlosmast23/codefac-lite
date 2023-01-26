@@ -16,6 +16,14 @@
     </Component>
     <Component class="ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona" name="persona1">
     </Component>
+    <Component class="javax.swing.JButton" name="btnUtilidadesCostos">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/img/iconos/32Pixeles/copiar.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value=" Precios"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="closable" type="boolean" value="true"/>

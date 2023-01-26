@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionD
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema.Exportacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
@@ -57,6 +58,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -490,9 +492,33 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }
     }
     
+    private void listenerUtilidadesCostos()
+    {
+        List<ProductoPrecioDataTable> productoList = new ArrayList<ProductoPrecioDataTable>();
+
+        ProductoPrecioDataTable productoDataTable = new ProductoPrecioDataTable(controlador.producto);
+
+        productoList.add(productoDataTable);
+
+        Object[] parametros = {productoList};
+
+        panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Object>() {
+            @Override
+            public void updateInterface(Object entity) {
+
+            }
+        }, VentanaEnum.UTILIDAD_PRECIO, false, parametros, this);
+    }
 
     private void listenerBotones() 
     {
+        getBtnUtilidadesCostos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerUtilidadesCostos();
+            }
+        });
+        
         getBtnExportar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

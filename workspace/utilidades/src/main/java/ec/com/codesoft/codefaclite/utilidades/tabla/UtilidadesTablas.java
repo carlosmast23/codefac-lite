@@ -207,6 +207,10 @@ public abstract class UtilidadesTablas {
             TableColumnModel columnModel = table.getColumnModel();        
             for (int i=0;i<columnModel.getColumnCount();i++) 
             {
+                if(i>=porcentajes.length)
+                {
+                    break;
+                }               
                 TableColumn columna=columnModel.getColumn(i);
                 int tamanioTabla=table.getSize().width;
                 double tamanioColumna=porcentajes[i]*tamanioTabla;
@@ -217,6 +221,7 @@ public abstract class UtilidadesTablas {
         }
         catch(Exception e)
         {
+            //TODO: Por el momento dejo de esta manera cuando no se completa todos los tamaños de todas las 
             e.printStackTrace();
         }
         

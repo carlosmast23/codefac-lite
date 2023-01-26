@@ -477,7 +477,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                
-                compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo para poder ingresar al inventario
+                compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo NO para poder ingresar al inventario
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
                 for (CompraDetalle compraDetalle : compra.getDetalles()) 
                 {
@@ -656,6 +656,13 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     throw new ServicioCodefacException("No se puede ingresar compras repetidas del mismo proveedor");
                 }
             }
+            
+            //Setear datos por DEFECTO
+            if(compra.getInventarioIngresoEnum()==null)
+            {
+                compra.setInventarioIngreso(EnumSiNo.SI.getLetra());
+            }
+            
         }
         
         validarAutorizacionPorDocumento(compra);
@@ -713,7 +720,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         eliminarRetencionCompraSinTransaccion(compra);
 
         //Solo crear movimiento de egreso de mercaderia cuando ya fueron ingresados al inventario
-        if (compra.getInventarioIngresoEnum().equals(EnumSiNo.SI)) {
+        if (compra.getInventarioIngresoEnum()!=null && compra.getInventarioIngresoEnum().equals(EnumSiNo.SI)) {
             for (CompraDetalle detalle : compra.getDetalles()) {
                 eliminarDetalleCompra(detalle);
             }
