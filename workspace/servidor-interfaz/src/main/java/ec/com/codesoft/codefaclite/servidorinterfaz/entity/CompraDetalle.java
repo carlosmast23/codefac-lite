@@ -95,6 +95,10 @@ public class CompraDetalle implements Serializable {
     @Transient
     private String codigoProveedor;
     
+    @Column(name = "COSTO_UNITARIO")
+    private BigDecimal costoUnitario;
+    
+    
     public CompraDetalle() {
     }
     
@@ -311,6 +315,15 @@ public class CompraDetalle implements Serializable {
     public void setLote(Lote lote) {
         this.lote = lote;
     }
+
+    public BigDecimal getCostoUnitario() {
+        return costoUnitario;
+    }
+
+    public void setCostoUnitario(BigDecimal costoUnitario) {
+        this.costoUnitario = costoUnitario;
+    }
+    
     
     
     /**

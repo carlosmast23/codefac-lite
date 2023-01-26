@@ -858,7 +858,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jPanel2.add(txtDescripcionItem, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel9.setText("Costo:");
+        jLabel9.setText("Costo Unit:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;

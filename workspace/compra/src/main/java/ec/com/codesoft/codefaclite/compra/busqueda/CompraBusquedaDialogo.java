@@ -37,11 +37,12 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("preimpreso",0.2d));
-        titulo.add(new ColumnaDialogo("cliene",0.3d));
+        titulo.add(new ColumnaDialogo("cliente",0.4d));
         titulo.add(new ColumnaDialogo("documento",0.15d));
         titulo.add(new ColumnaDialogo("tipo",0.15d));
+        titulo.add(new ColumnaDialogo("INV",0.05d));
         titulo.add(new ColumnaDialogo("fecha",0.15d));
-        titulo.add(new ColumnaDialogo("total",0.1d));
+        titulo.add(new ColumnaDialogo("total",0.05d));
         return titulo;
     }
 
@@ -79,9 +80,10 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
         dato.add(t.getPreimpreso());
         System.out.println(t.getPreimpreso());
         dato.add(t.getProveedor().getRazonSocial());
-        DocumentoEnum estadoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
-        dato.add(estadoEnum.getNombre());
+        DocumentoEnum documentoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
+        dato.add(documentoEnum.getNombre());
         dato.add(t.getCodigoTipoDocumento()); 
+        dato.add(t.getInventarioIngresoEnum().getNombre());
         dato.add(t.getFechaFactura());
         dato.add(t.getTotal());
     }
