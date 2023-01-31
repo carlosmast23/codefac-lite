@@ -123,8 +123,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             /**
              * TODO: Filtrar luego solo las mesas que esten activas
              */
-            mesaList=ServiceFactory.getFactory().getMesaSeviceIf().obtenerTodos();
+            mesaList=ServiceFactory.getFactory().getMesaSeviceIf().obtenerTodosActivos(session.getEmpresa());
         } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

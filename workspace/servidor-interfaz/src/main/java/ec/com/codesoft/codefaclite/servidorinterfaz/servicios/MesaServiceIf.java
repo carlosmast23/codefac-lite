@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -19,4 +20,5 @@ import java.rmi.RemoteException;
 public interface MesaServiceIf extends ServiceAbstractIf<Mesa>{    
     public Mesa grabar(Mesa mesa,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;
     public Mesa editar(Mesa entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;    
+    public List<Mesa> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException;
 }

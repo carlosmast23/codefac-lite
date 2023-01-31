@@ -533,6 +533,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 Boolean detalleRepetido=null;
                 for (ProductoPresentacionDetalle detalleTmp : p.getPresentacionList()) 
                 {
+                    if(detalle.getPresentacionProducto()==null)
+                    {
+                        continue;
+                    }
+                    
                     if(detalle.getPresentacionProducto().equals(detalleTmp.getPresentacionProducto()))
                     {                        
                         //El primer dato que encuntra no lo toma en cuenta por que siempre va a tener un dato

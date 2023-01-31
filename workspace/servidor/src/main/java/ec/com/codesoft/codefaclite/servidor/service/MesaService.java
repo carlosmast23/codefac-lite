@@ -16,6 +16,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MesaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -25,6 +28,17 @@ public class MesaService extends ServiceAbstract<Mesa, MesaFacade> implements Me
 
     public MesaService() throws RemoteException {
         super(MesaFacade.class);
+    }
+    
+    //TODO: Terminar de programar para que salgan todos los estados menos el eliminado
+    public List<Mesa> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException 
+    {
+        //Mesa mesa;
+        
+        //mesa.getEstadoEnum();
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado", Mesa.MesaEstadoEnum.LIBRE.getLetra());
+        return getFacade().findByMap(mapParametros);
     }
     
     private void validarGrabar(Mesa mesa,CrudEnum crudEnum) throws ServicioCodefacException

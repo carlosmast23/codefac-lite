@@ -161,6 +161,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel83 = new javax.swing.JLabel();
         cmbImpresoraFactura = new javax.swing.JComboBox<>();
         txtCopiasFactura = new javax.swing.JSpinner();
+        jLabel86 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jLabel55 = new javax.swing.JLabel();
         cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
@@ -1098,11 +1099,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbMostrarCostoConIva, gridBagConstraints);
 
         jLabel82.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel82.setText("Numeró de copias:");
+        jLabel82.setText("Mostros Costo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel82, gridBagConstraints);
 
@@ -1130,6 +1131,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(txtCopiasFactura, gridBagConstraints);
+
+        jLabel86.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel86.setText("Numeró de copias:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel86, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -1949,6 +1959,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
     private javax.swing.JLabel jLabel85;
+    private javax.swing.JLabel jLabel86;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;

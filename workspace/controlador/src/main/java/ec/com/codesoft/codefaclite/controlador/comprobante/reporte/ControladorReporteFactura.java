@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -342,6 +343,11 @@ public class ControladorReporteFactura {
                         //Agregando Zona y Ruta
                         reporteData.setZona(buscarZona(factura));
                         reporteData.setRuta((factura.getRutaNombre()!=null)?factura.getRutaNombre():"");
+                        
+                        if(!UtilidadesTextos.verificarNullOVacio(preimpresoNotaCreditoAfecta))
+                        {
+                            reporteData.setEstadoFactura("Anulado N/C");
+                        }
                         
                         if(reporteConDetallesFactura)
                         {
