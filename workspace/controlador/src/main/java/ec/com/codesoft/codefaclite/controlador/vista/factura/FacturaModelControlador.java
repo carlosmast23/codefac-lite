@@ -650,6 +650,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             } else {
                 //getCmbIva().setSelectedItem(EnumSiNo.NO);
                 interfaz.setComboIva(EnumSiNo.NO);
+                interfaz.setTxtValorUnitario(precioUnitario.toString());
             }
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
