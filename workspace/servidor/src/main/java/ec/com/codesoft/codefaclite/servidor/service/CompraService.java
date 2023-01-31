@@ -178,7 +178,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
 
         if (xmlDescargado) {
             ComprobantesService service = new ComprobantesService();
-            ComprobanteElectronicoService comprobanteElectronicoService = service.obtenerComprobanteElectronicoServiceConfigurado(empresa);
+            ComprobanteElectronicoService comprobanteElectronicoService = service.obtenerComprobanteElectronicoServiceConfigurado(empresa,true);
             String pathFile = comprobanteElectronicoService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_AUTORIZADOS, claveAcceso);
             File archivo = new File(pathFile);
             ComprobanteElectronico comprobante = ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(archivo);

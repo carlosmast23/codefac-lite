@@ -1791,8 +1791,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         servicio.setAliasNombreDocumentosMap(aliasNombreDocumentosMap);
         
     }
+    
+    private void cargarConfiguraciones(ComprobanteElectronicoService servicio,Empresa empresa)
+    {
+        cargarConfiguraciones(servicio, empresa,null);
+    }
 
-    private void cargarConfiguraciones(ComprobanteElectronicoService servicio,Empresa empresa) {
+    private void cargarConfiguraciones(ComprobanteElectronicoService servicio,Empresa empresa,Boolean modoProduccionDefecto) {
         try {
             ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
             Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
@@ -1806,7 +1811,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 servicio.setNombreFirma(parametroCodefacMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
                 servicio.setClaveFirma(UtilidadesEncriptar.desencriptar(parametroCodefacMap.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             }
+            
             String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
+            
+            //Si esta activada la opcion de modo de facturacion por defecto lleno con el valor de produccion
+            if(modoProduccionDefecto!=null && modoProduccionDefecto)
+            {
+                modoFacturacion=ComprobanteElectronicoService.MODO_PRODUCCION;
+            }
+            
             servicio.setModoFacturacion(modoFacturacion);
 
             cargarDatosRecursos(servicio,empresa);
@@ -2792,10 +2805,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
     }
     
-    public ComprobanteElectronicoService obtenerComprobanteElectronicoServiceConfigurado(Empresa empresa) throws RemoteException, ServicioCodefacException
+    public ComprobanteElectronicoService obtenerComprobanteElectronicoServiceConfigurado(Empresa empresa,Boolean modoProduccionDefecto) throws RemoteException, ServicioCodefacException
     {
         ComprobanteElectronicoService comprobanteService = new ComprobanteElectronicoService();
-        cargarConfiguraciones(comprobanteService,empresa);
+        cargarConfiguraciones(comprobanteService,empresa,modoProduccionDefecto);
         return comprobanteService;
     }
     
