@@ -16,7 +16,7 @@ create table CLIENTE(
     NOMBRES varchar(256),
     APELLIDOS varchar(256),
     TIPO_OPERADOR varchar(1),
-    RAZON_SOCIAL varchar(256),
+    RAZON_SOCIAL varchar(300),
     NOMBRE_LEGAL varchar(256),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
     TIPO_IDENTIFICACION varchar(1),

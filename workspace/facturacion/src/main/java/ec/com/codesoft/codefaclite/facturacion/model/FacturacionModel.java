@@ -240,6 +240,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }  
             
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
+            {
+                getLblCostoDetalle().setVisible(false);
+                getLblTextoCosto().setVisible(false);
+            }
+            else
+            {
+                getLblCostoDetalle().setVisible(true);
+                getLblTextoCosto().setVisible(true);
+            }
+            
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -645,7 +658,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     
-                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado);
+                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null);
                     
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -891,7 +904,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             try {
                 //Si esta habilitado el boton de agregar funciona para agregar
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado);
+                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -945,7 +958,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 controlador.actualizarFacturaDetalleCatalogo(facturaDetalle);
                 
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-                if(controlador.agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado,kardexSeleccionado))
+                if(controlador.agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado,kardexSeleccionado,null))
                 {
                     habilitarModoIngresoDatos();
                 }
@@ -2970,6 +2983,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         getBtnAgregarFormaPago().setText("");
         getBtnAgregarFormaPago().setToolTipText("Agregar formas e pago");
+        
+        
 
     }
 

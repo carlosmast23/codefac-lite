@@ -274,8 +274,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel42 = new javax.swing.JLabel();
         cmbIvaDescuento = new javax.swing.JComboBox<>();
         jPanel8 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        jLabel50 = new javax.swing.JLabel();
+        pnlCosto = new javax.swing.JPanel();
+        lblTextoCosto = new javax.swing.JLabel();
         lblCostoDetalle = new javax.swing.JLabel();
         asdadsasd = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
@@ -1604,22 +1604,22 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Adicionales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 11))); // NOI18N
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jPanel9.setBorder(new javax.swing.border.MatteBorder(null));
-        jPanel9.setForeground(new java.awt.Color(255, 255, 204));
+        pnlCosto.setBorder(new javax.swing.border.MatteBorder(null));
+        pnlCosto.setForeground(new java.awt.Color(255, 255, 204));
 
-        jLabel50.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel50.setText("Costo");
-        jPanel9.add(jLabel50);
+        lblTextoCosto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTextoCosto.setText("Costo");
+        pnlCosto.add(lblTextoCosto);
 
         lblCostoDetalle.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblCostoDetalle.setText("0");
-        jPanel9.add(lblCostoDetalle);
+        pnlCosto.add(lblCostoDetalle);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel8.add(jPanel9, gridBagConstraints);
+        jPanel8.add(pnlCosto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1785,7 +1785,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1799,7 +1798,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1835,6 +1833,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSubtotalNoObjetoDeIva;
     private javax.swing.JLabel lblSubtotalSinImpuesto;
     private javax.swing.JLabel lblTelefonoCliente;
+    private javax.swing.JLabel lblTextoCosto;
     private javax.swing.JLabel lblTotalDescuento;
     private javax.swing.JLabel lblValorIce;
     private javax.swing.JLabel lblValorTotal;
@@ -1846,6 +1845,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel panelProductos;
     private javax.swing.JPanel panelProductos1;
     private javax.swing.JTabbedPane panelTabDatos;
+    private javax.swing.JPanel pnlCosto;
     private javax.swing.JPanel pnlDetalles;
     private javax.swing.JPanel pnlPrincipal;
     private javax.swing.JPanel pnlVuelto;
@@ -2453,5 +2453,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setPnlPrincipal(JPanel pnlPrincipal) {
         this.pnlPrincipal = pnlPrincipal;
     }
+
+    public JLabel getLblTextoCosto() {
+        return lblTextoCosto;
+    }
+
+    public void setLblTextoCosto(JLabel lblTextoCosto) {
+        this.lblTextoCosto = lblTextoCosto;
+    }
+
     
 }

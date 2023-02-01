@@ -41,6 +41,7 @@ public class ParametroCodefac implements Serializable {
     public static final String EDITAR_DESCRIPCION_FACTURA= "edit_descripcion_factura";
     public static final String EDITAR_DESCUENTO_FACTURA= "edit_descuento_factura";
     public static final String EDITAR_PRECIO_UNIT_FACTURA= "edit_precio_unit_factura";
+    public static final String MOSTRAR_COSTOS_FACTURAR="mostrar_costos_facturar";
     
     /**
      * Esta opcion me permite controlar en las ventas que no puedan ingresar un valor inferior al precio original

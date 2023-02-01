@@ -511,7 +511,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
         try {
 
-            controlador.agregarDetallesFactura(facturaDetalle,precioVentaOriginalSeleccionada,documentoSeleccionado,null);
+            controlador.agregarDetallesFactura(facturaDetalle,precioVentaOriginalSeleccionada,documentoSeleccionado,null,null);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mostrarMensajeDialogo("Error ",ex.getMessage(), FacesMessage.SEVERITY_ERROR);

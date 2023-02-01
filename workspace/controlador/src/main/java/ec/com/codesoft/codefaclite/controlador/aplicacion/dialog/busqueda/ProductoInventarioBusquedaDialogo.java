@@ -57,12 +57,23 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     
     private Boolean mostrarStockNegativo;
     
+    private Boolean mostrarCosto=true;
+    
     public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega,Boolean mostrarStockNegativo) 
     {
         //this.isManejoInvetario = isManejoInvetario;
         this.empresa = empresa;
         this.bodega = bodega;
         this.mostrarStockNegativo=mostrarStockNegativo;
+        
+        try {
+            if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
+            {
+                this.mostrarCosto=false;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoInventarioBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -213,7 +224,15 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         vector.add((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
         vector.add((producto.getAplicacionProducto()!=null)?producto.getAplicacionProducto():"");
         vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
-        vector.add((kardex.getPrecioUltimoConIva()!=null)?kardex.getPrecioUltimoConIva().setScale(3,RoundingMode.HALF_UP)+"":"");
+        
+        if(mostrarCosto)
+        {
+            vector.add((kardex.getPrecioUltimoConIva()!=null)?kardex.getPrecioUltimoConIva().setScale(3,RoundingMode.HALF_UP)+"":"");
+        }
+        else
+        {
+            vector.add("");
+        }
         //vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
         vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
         vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");        

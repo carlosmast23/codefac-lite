@@ -162,6 +162,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbImpresoraFactura = new javax.swing.JComboBox<>();
         txtCopiasFactura = new javax.swing.JSpinner();
         jLabel86 = new javax.swing.JLabel();
+        cmbMostrarCostosFacturar = new javax.swing.JComboBox<>();
         jPanel13 = new javax.swing.JPanel();
         jLabel55 = new javax.swing.JLabel();
         cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
@@ -1099,7 +1100,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbMostrarCostoConIva, gridBagConstraints);
 
         jLabel82.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel82.setText("Mostros Costo:");
+        jLabel82.setText("Mostrar Costos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 6;
@@ -1140,6 +1141,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel86, gridBagConstraints);
+
+        cmbMostrarCostosFacturar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbMostrarCostosFacturar, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -1857,6 +1866,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbModificarPrecioMenor;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbModoFacturasGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarCostoConIva;
+    private javax.swing.JComboBox<EnumSiNo> cmbMostrarCostosFacturar;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
     private javax.swing.JComboBox<EnumSiNo> cmbNVITotalConIva;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
@@ -2618,6 +2628,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.txtDiasCreditoAlerta = txtDiasCreditoAlerta;
     }
 
+    public JComboBox<EnumSiNo> getCmbMostrarCostosFacturar() {
+        return cmbMostrarCostosFacturar;
+    }
+
+    public void setCmbMostrarCostosFacturar(JComboBox<EnumSiNo> cmbMostrarCostosFacturar) {
+        this.cmbMostrarCostosFacturar = cmbMostrarCostosFacturar;
+    }
     
     
 }

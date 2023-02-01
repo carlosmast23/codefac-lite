@@ -273,7 +273,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 try {
                     //DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     DocumentoEnum documentoSeleccionado=interfaz.obtenerDocumentoSeleccionado();
-                    agregarDetallesFactura(facturaDetalle,null, documentoSeleccionado, null);
+                    agregarDetallesFactura(facturaDetalle,null, documentoSeleccionado, null,null);
                     
                     //Cargar los productos adicionales para la factura
                     for (PresupuestoDetalle presupuestoDetalle : presupuestoTmp.getPresupuestoDetalles()) 
@@ -298,7 +298,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         this.setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum.INVENTARIO);
                         this.interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
                         setearValoresProducto(facturaDetalle);
-                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null);
+                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null,null);
                     }
                     
                 } catch (ServicioCodefacException ex) {
@@ -811,7 +811,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param facturaDetalle
      * @return 
      */
-    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex) throws ServicioCodefacException {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex,EnumSiNo reservaEnum) throws ServicioCodefacException {
 
         
         agregarDetallesFacturaValidacion(facturaDetalle, precioVentaOriginal);
@@ -834,7 +834,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         facturaDetalle.setLoteId((lote!=null)?lote.getId():null);
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));   
-        facturaDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(interfaz.obtenerChkReservado()));
+        //facturaDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(interfaz.obtenerChkReservado()));
+        facturaDetalle.setReservadoEnum(reservaEnum);
         facturaDetalle.setKardexId(interfaz.obtenerKardexId());
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
         if (!validacionPersonalizadaPorModulos(facturaDetalle,kardex,documentoEnum)) {
