@@ -295,10 +295,17 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                                 BigDecimal.ZERO
                         );
                         
+                        Kardex kardexSeleccionado= interfaz.obtenerKardexDesdeProducto(productoSeleccionado);
+                        
+                        if(kardexSeleccionado!=null)
+                        {
+                            facturaDetalle.setKardexId(kardexSeleccionado.getId());
+                        }
+                        
                         this.setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum.INVENTARIO);
                         this.interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
                         setearValoresProducto(facturaDetalle);
-                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null,null);
+                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null,facturaDetalle.getReservadoEnum());
                     }
                     
                 } catch (ServicioCodefacException ex) {
@@ -825,6 +832,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return false;
         }
         
+        //TODO: Por el momento cuando no encuentra un kardex intento buscar, pero parece que este paso esta redundado
+        //if(kardex==null)
+        //{
+        //    interfaz.obtenerKardexDesdeProducto(facturaDetalle.get);
+        //}
+        
         //Cuando tiene seleccionado una kardex mando el valor del lote
         Lote lote=null;
         if(kardex!=null)
@@ -832,11 +845,17 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             lote=kardex.getLote();
         }
         
+        
         facturaDetalle.setLoteId((lote!=null)?lote.getId():null);
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));   
         //facturaDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(interfaz.obtenerChkReservado()));
         facturaDetalle.setReservadoEnum(reservaEnum);
-        facturaDetalle.setKardexId(interfaz.obtenerKardexId());
+        //facturaDetalle.setKardexId(interfaz.obtenerKardexId());
+        //facturaDetalle.setKardexId((kardex!=null)?kardex.getId():null);
+        if(kardex!=null)
+        {
+            facturaDetalle.setKardexId(kardex.getId());
+        }
         //Validacion personalizada dependiendo de la logica de cada tipo de documento
         if (!validacionPersonalizadaPorModulos(facturaDetalle,kardex,documentoEnum)) {
                 return false;
@@ -1818,6 +1837,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         public void cargarCliente(PersonaEstablecimiento cliente);
         public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado);
+        public Kardex obtenerKardexDesdeProducto(Producto producto);
         
     }
     

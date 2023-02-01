@@ -1071,6 +1071,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         if(detalle.getReservadoEnum()!=null && detalle.getReservadoEnum().equals(EnumSiNo.SI))
         {
             kardex= detalle.getKardex();
+            
+            if(kardex==null)
+            {
+                throw new ServicioCodefacException("No se puede hacer una RESERVA sin un KARDEX");
+            }
+            
             kardex.procesarReserva(detalle.getCantidad(), SignoEnum.NEGATIVO);
             //kardex.setStock(kardex.getStock().add(detalle.getCantidad()));
             //kardex.setReserva(kardex.getReserva().subtract(detalle.getCantidad()));

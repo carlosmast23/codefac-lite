@@ -3704,6 +3704,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public Kardex obtenerKardexDesdeProducto(Producto producto)
+    {
+        try {
+            BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+            Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+            //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
+            return ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     private void addListenerCamposTexto() {
         
@@ -3780,39 +3795,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void keyPressed(KeyEvent e) {
                 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    try {
-                        Producto producto=FacturaModelControlador.listenerBuscarProducto(getTxtCodigoDetalle().getText(), controlador.getTipoDocumentoEnumSeleccionado(), session.getEmpresa());
-                        
-                        //Todo: Mejorar esta parte
-                        BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
-                        Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
-                        //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
-                        kardexSeleccionado=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);
-                        
-                        Lote lote=null;
-                        java.sql.Date fechaCaducidad=null;
-                        BigDecimal ultimoCosto=BigDecimal.ZERO;
-                        if(kardexSeleccionado!=null)
+                    Producto producto=FacturaModelControlador.listenerBuscarProducto(getTxtCodigoDetalle().getText(), controlador.getTipoDocumentoEnumSeleccionado(), session.getEmpresa());
+                    //Todo: Mejorar esta parte
+                    //BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+                    //Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+                    //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
+                    //kardexSeleccionado=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);ASD
+                    kardexSeleccionado=obtenerKardexDesdeProducto(producto);
+                    Lote lote=null;
+                    java.sql.Date fechaCaducidad=null;
+                    BigDecimal ultimoCosto=BigDecimal.ZERO;
+                    if(kardexSeleccionado!=null)
+                    {
+                        ultimoCosto=kardexSeleccionado.getPrecioUltimo();
+                        lote=kardexSeleccionado.getLote();
+                        if(lote!=null)
                         {
-                            ultimoCosto=kardexSeleccionado.getPrecioUltimo();
-                            lote=kardexSeleccionado.getLote();
-                            if(lote!=null)
-                            {
-                                fechaCaducidad=lote.getFechaVencimiento();
-                            }
+                            fechaCaducidad=lote.getFechaVencimiento();
                         }
-                        
-                        if (producto == null) {
-                            if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
-                                btnListenerCrearProducto();
-                            }
-                        } else {
-                            controlador.agregarProductoVista(producto,lote,(kardexSeleccionado!=null)?kardexSeleccionado.getStock():BigDecimal.ZERO,ultimoCosto,fechaCaducidad);
+                    }
+                    if (producto == null) {
+                        if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                            btnListenerCrearProducto();
                         }
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } else {
+                        controlador.agregarProductoVista(producto,lote,(kardexSeleccionado!=null)?kardexSeleccionado.getStock():BigDecimal.ZERO,ultimoCosto,fechaCaducidad);
                     }
                 }
 

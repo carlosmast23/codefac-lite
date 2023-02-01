@@ -108,7 +108,10 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
 
     public void setReservadoEnum(EnumSiNo reservadoEnum) 
     {
-        this.reservado = reservadoEnum.getLetra();
+        if(reservadoEnum!=null)
+        {
+            this.reservado = reservadoEnum.getLetra();
+        }
     }
 
     
