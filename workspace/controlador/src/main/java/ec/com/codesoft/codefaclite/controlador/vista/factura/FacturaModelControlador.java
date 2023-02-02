@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac.Impresi
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
@@ -1548,6 +1549,36 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 mapParametros.put("leyenda_documento",leyendaAdicional);
             }
             
+            //Agregar datos adicionales para imprimir en el ticket
+            List<InformacionAdicional> datoAdicionalList=new ArrayList<InformacionAdicional>();
+            for (FacturaAdicional facturaAdicional : facturaProcesando.getDatosAdicionalesComprobante()) 
+            {
+                InformacionAdicional informacionAdicional=new InformacionAdicional();
+                informacionAdicional.setNombre(facturaAdicional.getCampo());
+                informacionAdicional.setValor(facturaAdicional.getValor());
+                
+                datoAdicionalList.add(informacionAdicional);
+            }
+            
+            mapParametros.put("informacionAdicionalList", datoAdicionalList);
+            
+        try 
+        {
+            //Agregar el jasper del reporte adicional en le map
+            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            InputStream inputStream;
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicional_ticket.jrxml"));
+            
+            JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
+            mapParametros.put("pl_url_datos_adicionales",reportDatosAdicionales);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
             return mapParametros;
             
@@ -1597,6 +1628,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         mapParametros.put("informacionAdicionalList",obtenerDatosAdicionales(facturaProcesando));
 
         try {
+            //TODO: Optimizar guardando en un memoria de cache
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
             InputStream inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml"));
             JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);

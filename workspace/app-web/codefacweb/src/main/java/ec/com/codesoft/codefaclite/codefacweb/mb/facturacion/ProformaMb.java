@@ -83,6 +83,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
@@ -1264,6 +1265,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Kardex obtenerKardexDesdeProducto(Producto producto) {
+        return null;
     }
 
     /**
