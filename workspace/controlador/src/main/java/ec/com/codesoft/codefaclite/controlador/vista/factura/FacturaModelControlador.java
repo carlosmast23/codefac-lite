@@ -1560,6 +1560,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 datoAdicionalList.add(informacionAdicional);
             }
             
+            //Agregar datos adicionales para facturas electrónicas
+            agregarDatosFacturacionElectronica(facturaProcesando, datoAdicionalList);
+            
             mapParametros.put("informacionAdicionalList", datoAdicionalList);
             
         try 
@@ -1582,6 +1585,21 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             return mapParametros;
             
+    }
+    
+    private static void agregarDatosFacturacionElectronica(Factura factura,List<InformacionAdicional> datoAdicionalList)
+    {
+        if(factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
+        {                       
+            InformacionAdicional infoAdicional=new InformacionAdicional("Clave de Acceso",factura.getClaveAcceso());
+            datoAdicionalList.add(0,infoAdicional);
+            
+            String modoFacturacion= ParametroUtilidades.obtenerValorParametro(factura.getEmpresa(),ParametroCodefac.MODO_FACTURACION);            
+            infoAdicional=new InformacionAdicional("Ambiente",modoFacturacion);
+            datoAdicionalList.add(0,infoAdicional);
+            
+
+        }
     }
     
     private static List<InformacionAdicionalData> obtenerDatosAdicionales(Factura factura)
@@ -1693,7 +1711,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         for (FacturaDetalle detalle : facturaProcesando.getDetalles()) {
             
             ComprobanteVentaData data = new ComprobanteVentaData();
-            data.setCantidad(detalle.getCantidad().toString());
+            data.setCantidad(detalle.getCantidad().setScale(2, RoundingMode.HALF_UP).toString());
             data.setCodigo(detalle.getCodigoPrincipal());
             data.setNombre(detalle.getDescripcion().toString());
             data.setIva(detalle.getIvaPorcentaje()+"");

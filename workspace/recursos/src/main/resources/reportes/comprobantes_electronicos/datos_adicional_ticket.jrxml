@@ -23,8 +23,8 @@
 	</columnHeader>
 	<detail>
 		<band height="17">
-			<textField>
-				<reportElement x="0" y="8" width="150" height="9" uuid="b5e3a94f-972b-469b-ae32-f8d668eac341"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="8" width="150" height="9" uuid="b5e3a94f-972b-469b-ae32-f8d668eac341"/>
 				<box>
 					<pen lineStyle="Dashed"/>
 					<topPen lineStyle="Dashed"/>

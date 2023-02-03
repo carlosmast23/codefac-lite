@@ -20,6 +20,15 @@ public class InformacionAdicional implements Serializable{
    private String nombre;
    private String valor;
 
+    public InformacionAdicional() {
+    }
+
+    public InformacionAdicional(String nombre, String valor) {
+        this.nombre = nombre;
+        this.valor = valor;
+    }
+   
+
     @XmlAttribute(name = "nombre")
     public String getNombre() {
         return nombre;

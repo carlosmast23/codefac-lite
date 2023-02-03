@@ -305,6 +305,10 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public String getTipoAmbiente() {
         return tipoAmbiente;
     }
+    
+    public TipoAmbienteEnum getTipoAmbienteEnum() {
+        return TipoAmbienteEnum.buscarPorLetra(tipoAmbiente);
+    }
 
     public void setTipoAmbiente(String tipoAmbiente) {
         this.tipoAmbiente = tipoAmbiente;
@@ -653,6 +657,16 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
             for (TipoAmbienteEnum enumerador : TipoAmbienteEnum.values()) {
 
                 if (enumerador.getNombreSRI().equals(nombreSri)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+        
+        public static TipoAmbienteEnum buscarPorLetra(String letra) {
+            for (TipoAmbienteEnum enumerador : TipoAmbienteEnum.values()) {
+
+                if (enumerador.getLetra().equals(letra)) {
                     return enumerador;
                 }
             }

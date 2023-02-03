@@ -11,10 +11,11 @@
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_url_img1" class="java.lang.Object"/>
 	<parameter name="pl_razon_social" class="java.lang.String"/>
+	<parameter name="pl_ruc" class="java.lang.String"/>
 	<title>
-		<band height="76" splitType="Stretch">
+		<band height="83" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="59" width="160" height="8" uuid="cd48d5fa-c3a3-4c0a-9514-838fa8011953"/>
+				<reportElement x="0" y="68" width="160" height="8" uuid="cd48d5fa-c3a3-4c0a-9514-838fa8011953"/>
 				<textElement textAlignment="Center">
 					<font size="6" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
@@ -28,7 +29,7 @@
 				<textFieldExpression><![CDATA[$P{pl_titulo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="15" y="67" width="145" height="8" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
+				<reportElement x="15" y="75" width="145" height="8" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
 				<textElement textAlignment="Center">
 					<font size="6" isItalic="true"/>
 					<paragraph rightIndent="20"/>
@@ -36,7 +37,7 @@
 				<textFieldExpression><![CDATA[$P{pl_direccion}+" / "+$P{pl_telefonos}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="50" width="160" height="11" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
+				<reportElement x="0" y="58" width="160" height="11" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
@@ -46,6 +47,13 @@
 				<reportElement x="0" y="0" width="160" height="38" uuid="7bd91739-6399-49ec-830c-7ace7d372f42"/>
 				<imageExpression><![CDATA[$P{pl_url_img1}]]></imageExpression>
 			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="48" width="160" height="11" uuid="0fa52b3f-49f0-4fc7-882d-66a40e80e265"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pl_ruc}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 </jasperReport>
