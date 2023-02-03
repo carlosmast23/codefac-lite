@@ -666,7 +666,7 @@ public class KardexModel extends KardexPanel {
             
             bodegaSeleccionada=ServiceFactory.getFactory().getBodegaServiceIf().obtenerUnicaBodegaPorSucursal(session.getSucursal());
             
-            UtilidadesComboBox.llenarComboBox(getCmbBodega(),ServiceFactory.getFactory().getBodegaServiceIf().obtenerActivosPorEmpresa(session.getEmpresa()));
+            UtilidadesComboBox.llenarComboBox(getCmbBodega(),ServiceFactory.getFactory().getBodegaServiceIf().obtenerActivosPorSucursal(session.getSucursal()));
             getCmbBodega().setSelectedItem(bodegaSeleccionada);
             //getCmbBodega().removeAllItems();
             //BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();

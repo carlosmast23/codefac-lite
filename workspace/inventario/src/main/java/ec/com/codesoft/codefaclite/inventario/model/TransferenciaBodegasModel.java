@@ -160,11 +160,24 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
                        
             getCmbBodegaOrigen().removeAllItems();
             BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
+            
+            //Cargar solo las bodegas activas de la misma sucursal desde la cual se puede enviar los productos
+            List<Bodega> bodegaSucursalList= servicioBodega.obtenerActivosPorSucursal(session.getSucursal());
+            for (Bodega bodega : bodegaSucursalList) 
+            {
+                getCmbBodegaOrigen().addItem(bodega);
+            }
+            
+            
             List<Bodega> bodegas = servicioBodega.obtenerActivosPorEmpresa(session.getEmpresa());
             for (Bodega bodega : bodegas) {
-                getCmbBodegaOrigen().addItem(bodega);                
+                //getCmbBodegaOrigen().addItem(bodega);                
                 getCmbBodegaDestino().addItem(bodega);                
             }
+            
+            
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {

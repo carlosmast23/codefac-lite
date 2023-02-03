@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,8 +56,20 @@ public class ProductoBusquedaDialogoFactory
                 BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
                 Bodega bodegaVenta = service.obtenerBodegaVenta(sucursal);
                 
-                if (bodegaVenta == null) {
-                    throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
+                if (bodegaVenta == null) 
+                {
+                    //si no existe una bodega consulto cualquier otra bodega para poder mostrar los productos
+                    List<Bodega> bodegaList= service.obtenerActivosPorSucursal(sucursal);
+                    if(bodegaList.size()>=0)
+                    {
+                        bodegaVenta=bodegaList.get(0);
+                    }
+                    
+                    //Si no encuentra ninguna bodega entonces ya no crea nada
+                    if(bodegaVenta==null)
+                    {
+                        throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
+                    }
                 }
                 
                 ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, true);
