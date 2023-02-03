@@ -1589,7 +1589,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     private static void agregarDatosFacturacionElectronica(Factura factura,List<InformacionAdicional> datoAdicionalList)
     {
-        if(factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
+        if(factura.getTipoFacturacionEnum()!=null && factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
         {                       
             InformacionAdicional infoAdicional=new InformacionAdicional("Clave de Acceso",factura.getClaveAcceso());
             datoAdicionalList.add(0,infoAdicional);
