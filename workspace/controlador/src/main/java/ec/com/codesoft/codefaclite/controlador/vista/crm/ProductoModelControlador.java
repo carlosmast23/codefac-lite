@@ -560,6 +560,49 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         this.ivaOpcionSeleccionado = ivaOpcionSeleccionado;
     }
 
+    public IvaOpcionEnum getIvaOpcion2() {
+        return ivaOpcion2;
+    }
+
+    public void setIvaOpcion2(IvaOpcionEnum ivaOpcion2) {
+        this.ivaOpcion2 = ivaOpcion2;
+    }
+
+    public IvaOpcionEnum getIvaOpcion3() {
+        return ivaOpcion3;
+    }
+
+    public void setIvaOpcion3(IvaOpcionEnum ivaOpcion3) {
+        this.ivaOpcion3 = ivaOpcion3;
+    }
+
+    public IvaOpcionEnum getIvaOpcion4() {
+        return ivaOpcion4;
+    }
+
+    public void setIvaOpcion4(IvaOpcionEnum ivaOpcion4) {
+        this.ivaOpcion4 = ivaOpcion4;
+    }
+
+    public IvaOpcionEnum getIvaOpcion5() {
+        return ivaOpcion5;
+    }
+
+    public void setIvaOpcion5(IvaOpcionEnum ivaOpcion5) {
+        this.ivaOpcion5 = ivaOpcion5;
+    }
+
+    public IvaOpcionEnum getIvaOpcion6() {
+        return ivaOpcion6;
+    }
+
+    public void setIvaOpcion6(IvaOpcionEnum ivaOpcion6) {
+        this.ivaOpcion6 = ivaOpcion6;
+    }
+    
+    
+    
+
     public List<EnumSiNo> getGarantiaList() {
         return garantiaList;
     }
@@ -622,6 +665,12 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private void setearValoresProducto(Producto producto) {
         
         producto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        
+        //Si el tipo que contralo es de escritorio termino de implementar las vistas
+        if(tipoVista.equals(TipoVista.ESCRITORIO))
+        {
+            getInterazEscritorio().setearValoresProducto(producto);
+        }
 
           
         BigDecimal valorUnitario=producto.getValorUnitario();
@@ -631,22 +680,47 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         BigDecimal pvp5=producto.getPvp5();
         BigDecimal pvp6=producto.getPvp6();
         //valorUnitario = new BigDecimal(getTextValorUnitario().getText());
+        
+        BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+        BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
 
         //Si el valor esta incluido el iva calculo el valor sin iva
         if(getIvaOpcionSeleccionado().equals(IvaOpcionEnum.CON_IVA))
         {            
-            BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
-            BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
+            
             //TODO: Ver si el tema de los decimales se puede hacer configurable
             valorUnitario=valorUnitario.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
-
             //TODO: Agregar el resto de los calculos para los demas precios
-            precioDistribuidor=precioDistribuidor.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
-            precioTarjeta=precioTarjeta.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
-            pvp4=pvp4.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
-            pvp5=pvp5.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
-            pvp6=pvp6.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+                        
+            //pvp4=pvp4.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            //pvp5=pvp5.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            //pvp6=pvp6.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
             
+        }
+        
+        if(getIvaOpcion2().equals(IvaOpcionEnum.CON_IVA))
+        {
+            precioDistribuidor=precioDistribuidor.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+        }
+        
+        if(getIvaOpcion3().equals(IvaOpcionEnum.CON_IVA))
+        {
+            precioTarjeta=precioTarjeta.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+        }
+        
+        if(getIvaOpcion4().equals(IvaOpcionEnum.CON_IVA))
+        {
+            pvp4=pvp4.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+        }
+        
+        if(getIvaOpcion5().equals(IvaOpcionEnum.CON_IVA))
+        {
+            pvp5=pvp5.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+        }
+        
+        if(getIvaOpcion6().equals(IvaOpcionEnum.CON_IVA))
+        {
+            pvp6=pvp6.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
         }
         
         
@@ -664,12 +738,6 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         
         producto.setEmpresa(session.getEmpresa());
         
-        
-        //Si el tipo que contralo es de escritorio termino de implementar las vistas
-        if(tipoVista.equals(TipoVista.ESCRITORIO))
-        {
-            getInterazEscritorio().setearValoresProducto(producto);
-        }
         
         if(producto.getPathFotoTmp()!=null)
         {

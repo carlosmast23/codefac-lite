@@ -2006,20 +2006,21 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.cmbIvaIncluidoPvp4 = cmbIvaIncluidoPvp4;
     }
 
+    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion5")
     public JComboBox<IvaOpcionEnum> getCmbIvaIncluidoPvp5() {
         return cmbIvaIncluidoPvp5;
     }
 
-    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion5")
+    
     public void setCmbIvaIncluidoPvp5(JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp5) {
         this.cmbIvaIncluidoPvp5 = cmbIvaIncluidoPvp5;
     }
 
+    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion6")
     public JComboBox<IvaOpcionEnum> getCmbIvaIncluidoPvp6() {
         return cmbIvaIncluidoPvp6;
     }
-
-    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion6")
+    
     public void setCmbIvaIncluidoPvp6(JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp6) {
         this.cmbIvaIncluidoPvp6 = cmbIvaIncluidoPvp6;
     }
