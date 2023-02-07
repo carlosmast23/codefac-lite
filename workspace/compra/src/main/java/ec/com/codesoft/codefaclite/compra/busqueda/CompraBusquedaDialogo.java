@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
@@ -20,16 +21,16 @@ import java.util.Vector;
  */
 public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
 {
-    private Empresa empresa;
+    private Sucursal sucursal;
     private Boolean filtrarComprasSinProcesarRetencion;
 
-    public CompraBusquedaDialogo(Empresa empresa) {
-        this.empresa = empresa;
+    public CompraBusquedaDialogo(Sucursal sucursal) {
+        this.sucursal = sucursal;
         this.filtrarComprasSinProcesarRetencion=false;
     }
     
-    public CompraBusquedaDialogo(Empresa empresa,Boolean filtrarComprasSinProcesarRetencion) {
-        this.empresa = empresa;
+    public CompraBusquedaDialogo(Sucursal sucursal,Boolean filtrarComprasSinProcesarRetencion) {
+        this.sucursal = sucursal;
         this.filtrarComprasSinProcesarRetencion=filtrarComprasSinProcesarRetencion;
     }
     
@@ -49,11 +50,12 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Compra compra;
+        //compra.getSucursalEmpresa().
         //compra.getE
         //Compra c;
         //c.getEstadoEnum().ELIMINADO;
         
-        String queryString = "SELECT c FROM Compra c WHERE c.empresa=?4 and c.estado<>?3 and ";
+        String queryString = "SELECT c FROM Compra c WHERE c.sucursalEmpresa=?4 and c.estado<>?3 and ";
         queryString+= " ( LOWER(c.secuencial) like ?1 OR  LOWER(c.razonSocial) like ?1 )";
         if(filtrarComprasSinProcesarRetencion)
         {
@@ -71,7 +73,7 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
         }
         
         queryDialog.agregarParametro(3,GeneralEnumEstado.ELIMINADO.getEstado());
-        queryDialog.agregarParametro(4,empresa);
+        queryDialog.agregarParametro(4,sucursal);
         return queryDialog;
     }
 

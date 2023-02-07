@@ -82,6 +82,12 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     private ImpuestoDetalle iceSeleccionado;
     private ImpuestoDetalle irbpnrSeleccionado;
     private IvaOpcionEnum ivaOpcionSeleccionado;
+    private IvaOpcionEnum ivaOpcion2;
+    private IvaOpcionEnum ivaOpcion3;
+    private IvaOpcionEnum ivaOpcion4;
+    private IvaOpcionEnum ivaOpcion5;
+    private IvaOpcionEnum ivaOpcion6;
+    
     private Boolean generarCodigoAutomatico;
     //private ProductoPresentacionDetalle productoPresentacionDetalle;
     //private MarcaProducto marcaProductoSeleccionado;
@@ -364,6 +370,12 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         producto.setMarcaProducto(null);
         producto.setAplicacionProducto("");
         ivaOpcionSeleccionado=IvaOpcionEnum.SIN_IVA;
+        ivaOpcion2=IvaOpcionEnum.SIN_IVA;
+        ivaOpcion3=IvaOpcionEnum.SIN_IVA;
+        ivaOpcion4=IvaOpcionEnum.SIN_IVA;
+        ivaOpcion5=IvaOpcionEnum.SIN_IVA;
+        ivaOpcion6=IvaOpcionEnum.SIN_IVA;
+        
         categoriaSeleccionada=null;
         //presentacionSeleccionada=null;
         iceSeleccionado=null;
@@ -613,6 +625,11 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
 
           
         BigDecimal valorUnitario=producto.getValorUnitario();
+        BigDecimal precioDistribuidor=producto.getPrecioDistribuidor();
+        BigDecimal precioTarjeta=producto.getPrecioTarjeta();
+        BigDecimal pvp4=producto.getPvp4();
+        BigDecimal pvp5=producto.getPvp5();
+        BigDecimal pvp6=producto.getPvp6();
         //valorUnitario = new BigDecimal(getTextValorUnitario().getText());
 
         //Si el valor esta incluido el iva calculo el valor sin iva
@@ -622,9 +639,25 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
             //TODO: Ver si el tema de los decimales se puede hacer configurable
             valorUnitario=valorUnitario.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+
+            //TODO: Agregar el resto de los calculos para los demas precios
+            precioDistribuidor=precioDistribuidor.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            precioTarjeta=precioTarjeta.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            pvp4=pvp4.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            pvp5=pvp5.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            pvp6=pvp6.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
             
         }
+        
+        
+        
         producto.setValorUnitario(valorUnitario);
+        producto.setPrecioDistribuidor(precioDistribuidor);
+        producto.setPrecioTarjeta(precioTarjeta);
+        producto.setPvp4(pvp4);
+        producto.setPvp5(pvp5);
+        producto.setPvp6(pvp6);
+        
         
         CatalogoProducto catalogoProducto=crearCatalogoProducto(producto);
         producto.setCatalogoProducto(catalogoProducto);

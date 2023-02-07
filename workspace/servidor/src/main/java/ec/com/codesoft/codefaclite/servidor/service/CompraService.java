@@ -173,7 +173,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 null,
                 false,
                 false,
-                empresa
+                empresa,
+                true
         );
 
         if (xmlDescargado) {

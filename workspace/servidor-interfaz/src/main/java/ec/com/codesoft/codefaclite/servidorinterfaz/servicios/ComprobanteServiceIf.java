@@ -41,7 +41,7 @@ public interface ComprobanteServiceIf extends Remote {
     
     public boolean verificarCredencialesFirma(String claveFirma,Empresa empresa) throws RemoteException;
 
-    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono,Empresa empresa) throws RemoteException;
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono,Empresa empresa,Boolean modoProduccionDefecto) throws RemoteException;
     
     @Deprecated
     public List<AlertaComprobanteElectronico> procesarComprobantesPendienteSinCallBack(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,Empresa empresa) throws RemoteException,ServicioCodefacException;

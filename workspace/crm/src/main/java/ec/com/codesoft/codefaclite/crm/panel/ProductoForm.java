@@ -95,7 +95,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         tabMenu = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         txtCodigoPersonalizado = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         textNombre = new javax.swing.JTextField();
@@ -124,6 +123,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel22 = new javax.swing.JLabel();
         jLabel52 = new javax.swing.JLabel();
         txtUltimoCosto2 = new javax.swing.JTextField();
+        jLabel53 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -164,6 +164,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         chkCompras = new javax.swing.JCheckBox();
         chkVentas = new javax.swing.JCheckBox();
         jLabel49 = new javax.swing.JLabel();
+        cmbIvaIncluidoPvp3 = new javax.swing.JComboBox<>();
+        cmbIvaIncluidoPvp4 = new javax.swing.JComboBox<>();
+        cmbIvaIncluidoPvp5 = new javax.swing.JComboBox<>();
+        cmbIvaIncluidoPvp6 = new javax.swing.JComboBox<>();
+        cmbIvaIncluidoPvp2 = new javax.swing.JComboBox<>();
         jPanel10 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
         cmbPresentacionEmpaquetado = new javax.swing.JComboBox<>();
@@ -267,15 +272,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Código Personalizado: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel2, gridBagConstraints);
 
         txtCodigoPersonalizado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -534,6 +530,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtUltimoCosto2, gridBagConstraints);
+
+        jLabel53.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel53.setText("Código Personalizado: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel53, gridBagConstraints);
 
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -859,6 +864,41 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel49, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbIvaIncluidoPvp3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbIvaIncluidoPvp4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbIvaIncluidoPvp5, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbIvaIncluidoPvp6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbIvaIncluidoPvp2, gridBagConstraints);
 
         tabMenu.addTab("Info Adicional", jPanel5);
 
@@ -1513,6 +1553,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo> cmbGarantia;
     private javax.swing.JComboBox<EnumSiNo> cmbGenerarCodigoBarras;
+    private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp2;
+    private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp3;
+    private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp4;
+    private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp5;
+    private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp6;
     private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPresentacion;
     private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPublico;
     private javax.swing.JComboBox<EnumSiNo> cmbManejaInventario;
@@ -1538,7 +1583,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -1575,6 +1619,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1933,6 +1978,53 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public void setCmbIvaOpcionPrecioVentaPublico(JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPublico) {
         this.cmbIvaOpcionPrecioVentaPublico = cmbIvaOpcionPrecioVentaPublico;
     }
+
+    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion2")
+    public JComboBox<IvaOpcionEnum> getCmbIvaIncluidoPvp2() {
+        return cmbIvaIncluidoPvp2;
+    }
+
+    public void setCmbIvaIncluidoPvp2(JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp2) {
+        this.cmbIvaIncluidoPvp2 = cmbIvaIncluidoPvp2;
+    }
+
+    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion3")
+    public JComboBox<IvaOpcionEnum> getCmbIvaIncluidoPvp3() {
+        return cmbIvaIncluidoPvp3;
+    }
+
+    public void setCmbIvaIncluidoPvp3(JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp3) {
+        this.cmbIvaIncluidoPvp3 = cmbIvaIncluidoPvp3;
+    }
+
+    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion4")
+    public JComboBox<IvaOpcionEnum> getCmbIvaIncluidoPvp4() {
+        return cmbIvaIncluidoPvp4;
+    }
+
+    public void setCmbIvaIncluidoPvp4(JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp4) {
+        this.cmbIvaIncluidoPvp4 = cmbIvaIncluidoPvp4;
+    }
+
+    public JComboBox<IvaOpcionEnum> getCmbIvaIncluidoPvp5() {
+        return cmbIvaIncluidoPvp5;
+    }
+
+    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion5")
+    public void setCmbIvaIncluidoPvp5(JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp5) {
+        this.cmbIvaIncluidoPvp5 = cmbIvaIncluidoPvp5;
+    }
+
+    public JComboBox<IvaOpcionEnum> getCmbIvaIncluidoPvp6() {
+        return cmbIvaIncluidoPvp6;
+    }
+
+    @ComboBoxBinding(source = "controlador.ivaOpcionList",valueSelect = "controlador.ivaOpcion6")
+    public void setCmbIvaIncluidoPvp6(JComboBox<IvaOpcionEnum> cmbIvaIncluidoPvp6) {
+        this.cmbIvaIncluidoPvp6 = cmbIvaIncluidoPvp6;
+    }
+    
+    
 
     @ComboBoxBinding(source = "controlador.llevaInventarioList",valueSelect = "controlador.producto.manejarInventarioEnum")
     public JComboBox<EnumSiNo> getCmbManejaInventario() {

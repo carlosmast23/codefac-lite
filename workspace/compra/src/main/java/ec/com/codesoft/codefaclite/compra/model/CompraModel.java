@@ -373,7 +373,7 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getEmpresa());
+        CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getSucursal());
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
         buscarDialogoModel.setVisible(true);
         Compra compra = (Compra)buscarDialogoModel.getResultado();

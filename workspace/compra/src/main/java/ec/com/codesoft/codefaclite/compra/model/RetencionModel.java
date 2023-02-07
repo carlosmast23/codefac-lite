@@ -532,7 +532,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         getBtnBuscarFacturaCompra().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getEmpresa(),true);
+                CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getSucursal(),true);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
                 buscarDialogoModel.setVisible(true);
                 

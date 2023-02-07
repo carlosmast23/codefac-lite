@@ -416,17 +416,17 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
                     errores.add("Clave Acceso:"+claveAcceso+"\nError:"+cee.getMessage());
                 }
-            }, enviarCorreo,false,empresa); //todo: ver si se hace parametrizable este valor de asincrono o no asincrono , por defecto esta no asincrono            
+            }, enviarCorreo,false,empresa,null); //todo: ver si se hace parametrizable este valor de asincrono o no asincrono , por defecto esta no asincrono            
         }
         return errores; //Esta opcion va a permitir que espera a que se termine el proceso y no funcione en segundo plano
     
     }          
     
-    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono,Empresa empresa) throws RemoteException
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono,Empresa empresa,Boolean modoProduccionDefecto) throws RemoteException
     {
         //Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
-        cargarConfiguraciones(comprobanteElectronico,empresa);
+        cargarConfiguraciones(comprobanteElectronico,empresa,modoProduccionDefecto);
         
         comprobanteElectronico.setCorreosElectronicos(correos);
         comprobanteElectronico.setEnviarCorreos(enviarCorreo);
