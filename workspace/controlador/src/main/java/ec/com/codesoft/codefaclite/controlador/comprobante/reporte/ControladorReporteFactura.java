@@ -611,7 +611,7 @@ public class ControladorReporteFactura {
         String nombreArchivo=UtilidadesArchivos.generarNombreArchivoUnico("reporte","pdf");
         String pathGrabar="tmp\\"+nombreArchivo; //TODO: Camabiar por algun nombre en funcion de la fecha para que se unico y no genere problemas
         
-        ReporteCodefac.generarReporteInternalFramePlantillaArchivo(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4,pathGrabar);
+        ReporteCodefac.generarReporteInternalFramePlantillaArchivo(path, mapParametrosReportePdf(null), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4,pathGrabar);
         File file=new File(pathGrabar);
         if(file.exists())
         {
@@ -629,7 +629,7 @@ public class ControladorReporteFactura {
         //String nombreArchivo=UtilidadesArchivos.generarNombreArchivoUnico("reporte","pdf");
         //String pathGrabar="\\tmp\\"+nombreArchivo; //TODO: Camabiar por algun nombre en funcion de la fecha para que se unico y no genere problemas
         
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(null), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
         
         
     }
@@ -643,7 +643,7 @@ public class ControladorReporteFactura {
         //String pathGrabar="\\tmp\\"+nombreArchivo; //TODO: Camabiar por algun nombre en funcion de la fecha para que se unico y no genere problemas
         
         ordenarListaPorPuntoEmision(data);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(null), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
         
         
     }
@@ -657,7 +657,7 @@ public class ControladorReporteFactura {
         /*for (ReporteFacturaData report : data) {
             System.out.println("claveAcceso="+report.getClaveAcceso()+" , cantidad="+report.getCantidad());
         }*/
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(null), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
     public void obtenerReporteAgrupadoPorProductoCategoria(InterfazComunicacionPanel panelPadre)
@@ -665,7 +665,7 @@ public class ControladorReporteFactura {
         String titulo = "Ventas Agrupado por Categoria";
         InputStream path=getReportePorCategorias();
         ordenarListaPorProductoCategoria(data);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(null), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
     public void obtenerReporteAgrupadoPorPrecio(InterfazComunicacionPanel panelPadre)
@@ -673,7 +673,7 @@ public class ControladorReporteFactura {
         String titulo = "Ventas Agrupado por Precio";
         InputStream path=getReportePorPrecios();
         ordenarListaPorPrecio(data);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(null), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
     public void obtenerReporteAgrupadoPorFormasDePago(InterfazComunicacionPanel panelPadre)
@@ -681,7 +681,7 @@ public class ControladorReporteFactura {
         String titulo = "Ventas Agrupado por Formas de Pago";
         InputStream path=getReportePorPrecios();
         ordenarListaPorPrecio(data);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(null), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
     public void obtenerReporteAgrupado(InterfazComunicacionPanel panelPadre,TipoReporteEnum tipoReporteEnum)
@@ -694,7 +694,7 @@ public class ControladorReporteFactura {
         UtilidadReporteJasper.obtenerDatosReporteAgrupado(tipoReporteEnum, data);
         
         //ordenarListaPorPrecio(data);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(tipoReporteEnum), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
     
@@ -703,7 +703,7 @@ public class ControladorReporteFactura {
         String titulo = "Reporte Ventas Agrupado por Vendedores";
         InputStream path=getReportePorVendedores();
         ordenarListaPorVendedores(data);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(null), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
     }
     
     private void ordenarListaPorVendedores(List<ReporteFacturaData> reporteData)
@@ -824,7 +824,16 @@ public class ControladorReporteFactura {
         return mapTotales;
     }*/
     
-    public Map<String,Object> mapParametrosReportePdf()
+    public void intercambiarInfoProductosReporte()
+    {
+        for (ReporteFacturaData reporteFacturaData : data) 
+        {
+            reporteFacturaData.setRazonSocialCliente(reporteFacturaData.getNombreProducto());
+        }
+    }
+    
+    
+    public Map<String,Object> mapParametrosReportePdf(TipoReporteEnum tipoReporteEnum)
     {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
@@ -834,6 +843,15 @@ public class ControladorReporteFactura {
         parameters.put("estadofactura", estadoFactura.getNombre());
         parameters.put("afectaNotaCredito",(documentoConsultaEnum.equals(documentoConsultaEnum.NOTA_CREDITO))?false:afectarNotaCredito);//Si el documento es nota de credito siempre mando descativado
         
+        //Por defecto muestro la razón social pero cambia para casos especificos
+        parameters.put("titulo_adicional", "Razón Social");
+        
+        if(tipoReporteEnum!=null && tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE))
+        {
+            parameters.put("titulo_adicional","Producto");
+        }
+        
+                
         if(estadoFactura.equals(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI))
         {
             parameters.putAll(totalAnulados.buildMap(EtiquetaReporteEnum.ANULADOS));
@@ -1128,6 +1146,14 @@ public class ControladorReporteFactura {
     public enum TipoReporteEnum implements EnumReporteAgruparIf
     {
         NORMAL("Normal",null),
+        
+        AGRUPADO_POR_DETALLE("Agrupado por detalle",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_DETALLE).toString();
+                //return dato.getZona();
+            }
+        }),
         
         AGRUPADO_POR_CLIENTE("Agrupado por cliente",new CampoAgruparIf() {
             @Override

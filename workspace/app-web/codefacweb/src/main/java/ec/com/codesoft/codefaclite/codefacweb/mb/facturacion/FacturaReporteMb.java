@@ -366,7 +366,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
         System.out.println("Imprimir ...");
         //no cacho List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
         //no cacho Map<String, Object> mapParametros = getMapParametrosReporte(factura);
-        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, controladorReporte.mapParametrosReportePdf(), data, sessionMb.getSession(), titulo, OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
+        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, controladorReporte.mapParametrosReportePdf(null), data, sessionMb.getSession(), titulo, OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
         //JasperPrint jasperPrint = JasperFillManager.fillReport(path, mapParametros, new JRBeanCollectionDataSource(dataReporte));
         UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,"Reporte Ventas.pdf");
         /*Map<String, Object>mapParametros = ReporteCodefac.mapReportePlantilla(OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4, sessionMb.getSession());

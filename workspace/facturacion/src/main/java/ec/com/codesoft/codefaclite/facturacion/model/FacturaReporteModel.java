@@ -163,8 +163,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
         TipoReporteEnum tipoReporteEnum = (TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
         if (tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CATEGORIA)
-                || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR)) {
-            controladorReporte.setReporteConDetallesFactura(true);
+                || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR)
+                || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE)
+            ) {
+            controladorReporte.setReporteConDetallesFactura(true);            
         }
 
         Long tiempoInicial = System.nanoTime();
@@ -174,6 +176,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
         System.out.println("El tiempo en generar el reporte es: " + segundosDemora);
 
         data = controladorReporte.getData();
+        
+        if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE))
+        {
+            controladorReporte.intercambiarInfoProductosReporte();
+        }
 
         imprimirTabla();
 

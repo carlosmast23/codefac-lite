@@ -515,6 +515,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
                 
         switch(tipoRepoteEnum)
         {
+            case AGRUPADO_POR_DETALLE:
+                return numeroFactura;
             case AGRUPADO_POR_CLIENTE:
                 return razonSocialCliente;
             case AGRUPADO_POR_USUARIO:
