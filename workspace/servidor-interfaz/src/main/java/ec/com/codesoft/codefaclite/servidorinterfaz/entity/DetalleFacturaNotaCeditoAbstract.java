@@ -37,6 +37,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     private BigDecimal descuento;
     @Column(name = "VALOR_ICE")
     private BigDecimal valorIce;
+    
+    @Column(name = "DESCRIPCION", length = 150)
+    private String descripcion;
 
     @Column(name = "TOTAL")
     private BigDecimal total;
@@ -46,8 +49,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Column(name = "IVA_PORCENTAJE")
     private Integer ivaPorcentaje;
 
-    @Column(name = "DESCRIPCION", length = 150)
-    private String descripcion;
+
 
     @Column(name = "REFERENCIA_ID")
     private Long referenciaId;

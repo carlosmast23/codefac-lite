@@ -785,8 +785,18 @@ public class CompraModel extends CompraPanel{
             
         }
     };
+    
+    private ActionListener listenerDescuentoGlobal=new ActionListener() 
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+        }
+    }
 
     private void agregarListenerBotones() {
+        
+        getBtnAplicarDescuentoGlobal().addActionListener(listenerCrearLote);
         
         getBtnDescargarPdfInternet().addActionListener(listenerDescargarPdfInternet);
         
