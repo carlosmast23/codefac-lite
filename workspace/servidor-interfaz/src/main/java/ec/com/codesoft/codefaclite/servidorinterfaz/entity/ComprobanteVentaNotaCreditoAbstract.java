@@ -8,8 +8,12 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -166,6 +170,57 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     
     public BigDecimal getSubtotalSinImpuestosMenosDescuento() {
         return subtotalSinImpuestos.subtract(descuentoSinImpuestos);
+    }
+    
+    public void aplicarDescuento(BigDecimal descuentoLeido,Boolean porcentajeDescuentoGlobal,EnumSiNo ivaDescuentoEnumSiNo)
+    {
+        //String descuentoStr = getTxtDescuentoGlobal().getText();
+
+        //BigDecimal descuentoLeido = new BigDecimal(descuentoStr);
+
+        //Esta variable va a almacenar siempre el descuento antes de impuestos
+        //y cuando el usuario quiera poner un descuento incluido iva primero hago la conversion interna            
+        List<DetalleFacturaNotaCeditoAbstract> detalleList= getDetallesComprobante();
+        for (DetalleFacturaNotaCeditoAbstract detalle : detalleList) {
+
+            BigDecimal descuentoValor = BigDecimal.ZERO;
+
+            if (porcentajeDescuentoGlobal) {
+
+                descuentoValor = descuentoLeido.divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP).multiply(detalle.getSubtotalSinDescuentos());
+
+            } else {
+                BigDecimal descuentoValorGlobal = BigDecimal.ZERO;
+                if (ivaDescuentoEnumSiNo.equals(EnumSiNo.NO)) {
+                    //Cuando ingresa el valor que no incluye el iva, lo agrego directamente
+                    descuentoValorGlobal = descuentoLeido;
+                } else if (ivaDescuentoEnumSiNo.equals(EnumSiNo.SI)) {
+                    ParametrosSistemaCodefac.obtenerIvaDefecto();
+                    //BigDecimal ivaDefecto = new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+                    BigDecimal ivaDefecto =ParametrosSistemaCodefac.obtenerIvaDefecto();
+                    descuentoValorGlobal = UtilidadesImpuestos.quitarValorIva(ivaDefecto, descuentoLeido, 6);
+                }
+
+                //Calcular el descuento individual por cada producto
+                //BigDecimal subtotalFactura=factura.getSubtotalImpuestos().add(factura.getDescuentoSinImpuestos());
+                BigDecimal subtotalFactura =getSubtotalImpuestosMenosDescuento().add(getSubtotalSinImpuestosMenosDescuento());
+                BigDecimal porcentajeDecimalDescuentoGeneral = descuentoValorGlobal.divide(subtotalFactura, 6, BigDecimal.ROUND_HALF_UP);
+
+                descuentoValor = porcentajeDecimalDescuentoGeneral.multiply(detalle.getSubtotalSinDescuentos());
+
+            }
+
+            //Solo grabar con 2 decimales por que el Sri no permite más en los descuentos
+            detalle.setDescuento(descuentoValor.setScale(2, BigDecimal.ROUND_HALF_UP));
+        }
+
+        for (DetalleFacturaNotaCeditoAbstract detalle : detalleList) {
+            //Solo grabar con 2 decimales por que el Sri no permite más en los descuentos
+            detalle.calcularTotalesDetallesFactura();
+        }
+
+        //cargarDatosDetalles();
+        //controlador.cargarTotales();
     }
     
     public void calcularTotalesDesdeDetalles() {

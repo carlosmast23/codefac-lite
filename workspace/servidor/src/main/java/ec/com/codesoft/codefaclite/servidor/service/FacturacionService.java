@@ -1086,9 +1086,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         //Buscar el lote si no tiene un datos
         Lote lote=null;
-        if(detalle.getLoteId()!=null)
+        if(detalle.getLote()!=null)
         {
-            lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorId(detalle.getLoteId());
+            lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorId(detalle.getLote());
         }
 
         if(kardex==null)

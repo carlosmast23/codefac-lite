@@ -639,6 +639,10 @@ public class CompraModel extends CompraPanel{
             getCmbEmitirRetencion().addItem(EnumSiNo.SI);
             getCmbEmitirRetencion().addItem(EnumSiNo.NO);
             
+            getCmbIvaDescuento().removeAllItems();
+            getCmbIvaDescuento().addItem(EnumSiNo.SI);
+            getCmbIvaDescuento().addItem(EnumSiNo.NO);       
+            
             List<ImpuestoDetalle> impuestoDetalleList = ServiceFactory.getFactory().getImpuestoDetalleServiceIf().obtenerIvaVigente();
             getCmbIvaDetalle().removeAllItems();
             for (ImpuestoDetalle impuestoDetalle : impuestoDetalleList)
@@ -790,13 +794,17 @@ public class CompraModel extends CompraPanel{
     {
         @Override
         public void actionPerformed(ActionEvent e) {
+            String descuentoStr=getTxtDescuentoGlobal().getText();            
+            BigDecimal descuentoLeido=new BigDecimal(descuentoStr);            
+            compra.aplicarDescuento(descuentoLeido, getChkPorcentajeDescuentoGlobal().isSelected(),(EnumSiNo) getCmbIvaDescuento().getSelectedItem());
+            actualizarDatosMostrarVentana();
             
         }
-    }
+    };
 
     private void agregarListenerBotones() {
         
-        getBtnAplicarDescuentoGlobal().addActionListener(listenerCrearLote);
+        getBtnAplicarDescuentoGlobal().addActionListener(listenerDescuentoGlobal);
         
         getBtnDescargarPdfInternet().addActionListener(listenerDescargarPdfInternet);
         
@@ -1012,7 +1020,7 @@ public class CompraModel extends CompraPanel{
                     getTxtProductoItem().setText(compraDetalle.getProductoProveedor().getProducto().getCodigoPersonalizado());
                     verificarExistenciadeProductoProveedor();
                     getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
-                    seleccionarComboTipoIva(compraDetalle.getPorcentajeIva());
+                    seleccionarComboTipoIva(compraDetalle.getIvaPorcentaje());
                     getTxtCostoItem().setText((compraDetalle.getCostoUnitario()!=null)?compraDetalle.getCostoUnitario()+"":"");
                     getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
                     getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
@@ -1020,7 +1028,7 @@ public class CompraModel extends CompraPanel{
                     //getTxtCostoItem().setText(compraDetalle.getCo);
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
                     getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
-                    getCmbIvaDetalle().setSelectedItem(compraDetalle.getPorcentajeIva());
+                    getCmbIvaDetalle().setSelectedItem(compraDetalle.getIvaPorcentaje());
                     
                     cargarPresentaciones(compraDetalle.getProductoProveedor().getProducto());
                     //getCmbPresentacionProducto().setSelectedItem(compraDetalle.getProductoProveedor().getProducto().buscarPresentacionOriginal());
@@ -1271,7 +1279,7 @@ public class CompraModel extends CompraPanel{
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {
                     //TODO:Mejorar esta parte para no pasar los mismos datos                    
-                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getDescripcion(),compraDetalle.getPorcentajeIva());
+                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje());
                     
                 }
                 
@@ -1598,7 +1606,7 @@ public class CompraModel extends CompraPanel{
             compraDetalle.setCostoUnitario(costo);
             compraDetalle.setCantidad(cantidadItem);
             
-            compraDetalle.setPorcentajeIva(porcentajeIva);
+            compraDetalle.setIvaPorcentaje(porcentajeIva);
             
             
             //BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 

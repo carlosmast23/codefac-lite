@@ -27,30 +27,30 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "COMPRA_DETALLE")
-public class CompraDetalle implements Serializable {
+public class CompraDetalle extends DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //@Column(name = "PRODUCTO_ID")
     //private Long productoId;
-    @Column(name = "CANTIDAD")
-    private BigDecimal cantidad;
-    @Column(name = "PRECIO_UNITARIO")
-    private BigDecimal precioUnitario;
-    @Column(name = "DESCUENTO")
-    private BigDecimal descuento;
-    @Column(name = "VALOR_ICE")
-    private BigDecimal valorIce;
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
+    /*@Column(name = "CANTIDAD")
+    private BigDecimal cantidad;*/
+    /*@Column(name = "PRECIO_UNITARIO")
+    private BigDecimal precioUnitario;*/
+    /*@Column(name = "DESCUENTO")
+    private BigDecimal descuento;*/
+    /*@Column(name = "VALOR_ICE")
+    private BigDecimal valorIce;*/
+    /*@Column(name = "DESCRIPCION")
+    private String descripcion;*/
     /**
      * Todo: Revisar como corregir este problema porque el total se esta grabando el subtotal sin iva y no le modificado porque la compra funciona con esta logica y genera problemas
      */
-    @Column(name = "TOTAL")
-    private BigDecimal total;
-    @Column(name = "IVA")
-    private BigDecimal iva;
+    /*@Column(name = "TOTAL")
+    private BigDecimal total;*/
+    /*@Column(name = "IVA")
+    private BigDecimal iva;*/
     
     //@Column(name = "PRECIO_UNITARIO")
     //private BigDecimal precioUnitario;
@@ -81,11 +81,11 @@ public class CompraDetalle implements Serializable {
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
     
-    @Column(name = "PORCENTAJE_IVA")
-    private Integer porcentajeIva;
+    //@Column(name = "PORCENTAJE_IVA")
+    //private Integer porcentajeIva;
     
-    @JoinColumn(name = "LOTE_ID")
-    private Lote lote;
+    /*@JoinColumn(name = "LOTE_ID")
+    private Lote lote;*/
         
     /**
      * Este campo me permite guardar cual fue el codigo original del proveedor cuando exista un codigo
@@ -108,7 +108,7 @@ public class CompraDetalle implements Serializable {
 
 
 
-    public BigDecimal getCantidad() {
+    /*public BigDecimal getCantidad() {
         return cantidad;
     }
 
@@ -122,7 +122,7 @@ public class CompraDetalle implements Serializable {
 
     public BigDecimal getValorIce() {
         return valorIce;
-    }
+    }*/
 
     public void setId(Long id) {
         this.id = id;
@@ -130,7 +130,7 @@ public class CompraDetalle implements Serializable {
 
 
 
-    public void setCantidad(BigDecimal cantidad) {
+    /*public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -148,9 +148,9 @@ public class CompraDetalle implements Serializable {
 
     public String getDescripcion() {
         return descripcion;
-    }
+    }*/
 
-    public void setDescripcion(String descripcion) {
+    /*public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
@@ -168,17 +168,20 @@ public class CompraDetalle implements Serializable {
 
     public void setIva(BigDecimal iva) {
         this.iva = iva;
-    }
+    }*/
     
     //TODO: Metodo temporal hasta poder ver como hacer para grabar correctamente
     //Parece que va a tocar grabar todos los decimales y en este punto redondear
     public BigDecimal obtenerIvaCalculado()
     {
+        BigDecimal iva=getIva();
+        BigDecimal total=getTotal();
+        
         if (iva.compareTo(BigDecimal.ZERO) == 0) {
             return iva;
         }
         
-        return this.total.multiply(new BigDecimal("0.12")).setScale(2, RoundingMode.HALF_UP);
+        return total.multiply(new BigDecimal("0.12")).setScale(2, RoundingMode.HALF_UP);
     }
 
     public Compra getCompra() {
@@ -219,12 +222,16 @@ public class CompraDetalle implements Serializable {
      */
     public BigDecimal getSubtotal()
     {
+        BigDecimal cantidad=getCantidad();
+        BigDecimal precioUnitario=getPrecioUnitario();
+        BigDecimal descuento=getDescuento();
         return new BigDecimal(cantidad+"").multiply(precioUnitario).subtract(descuento);
     }
     
     public void calcularSubtotalSinIva()
     {
-        total=getSubtotal();
+        BigDecimal total=getSubtotal();
+        setTotal(total);
     }
     /**
      * Calcula el valor del iva 
@@ -234,14 +241,14 @@ public class CompraDetalle implements Serializable {
     {
         //Todo: revisar el valor del iva 12 que esta quemado
         //return getSubtotal().multiply( new BigDecimal("0.12"));
-        return UtilidadesImpuestos.calcularValorIva(new BigDecimal(porcentajeIva+""),getSubtotal());
+        return UtilidadesImpuestos.calcularValorIva(new BigDecimal(getIvaPorcentaje()+""),getSubtotal());
     }
     
     public BigDecimal calcularTotal()
     {
         //Todo: revisar el valor del iva 12 que esta quemado
         //return getSubtotal().multiply(new BigDecimal("1.12"));
-        return UtilidadesImpuestos.agregarValorIva(new BigDecimal(porcentajeIva+""), getSubtotal());
+        return UtilidadesImpuestos.agregarValorIva(new BigDecimal(getIvaPorcentaje()+""), getSubtotal());
     }
 
     public SriRetencionIva getSriRetencionIva() {
@@ -300,21 +307,21 @@ public class CompraDetalle implements Serializable {
         this.codigoProveedor = codigoProveedor;
     }
 
-    public Integer getPorcentajeIva() {
+    /*public Integer getPorcentajeIva() {
         return porcentajeIva;
     }
 
     public void setPorcentajeIva(Integer porcentajeIva) {
         this.porcentajeIva = porcentajeIva;
-    }
+    }*/
 
-    public Lote getLote() {
+    /*public Lote getLote() {
         return lote;
     }
 
     public void setLote(Lote lote) {
         this.lote = lote;
-    }
+    }*/
 
     public BigDecimal getCostoUnitario() {
         return costoUnitario;

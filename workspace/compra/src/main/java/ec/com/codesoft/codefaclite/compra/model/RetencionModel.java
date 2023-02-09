@@ -416,7 +416,7 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         String ivaStr=ParametrosSistemaCodefac.IVA_DEFECTO;            
         Integer ivaPorDefecto=new Integer(ivaStr);
         
-        compraDetalle.setPorcentajeIva(ivaPorDefecto);
+        compraDetalle.setIvaPorcentaje(ivaPorDefecto);
 
         //TODO: Revisar si solo una base imponible o debo usar 2 para mas precion con productos que no distintas base de retencion                
         

@@ -396,7 +396,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 productoSeleccionado.getCodigoPersonalizado(), 
                 productoSeleccionado.getCatalogoProducto(), 
                 productoSeleccionado.getIdProducto(), 
-                (lote!=null)?lote.getId():null,
+                (lote!=null)?lote:null,
                 EnumSiNo.NO,
                 interfaz.obtenerTipoDocumentoSeleccionado(),
                 BigDecimal.ZERO);
@@ -413,7 +413,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             String codigo,
             CatalogoProducto catalogoProducto,
             Long referenciaId,  
-            Long loteId,
+            Lote lote,
             EnumSiNo reservaEnumSiNo,
             TipoDocumentoEnum tipoDocumentoReferencia,
             BigDecimal descuento)
@@ -424,7 +424,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setDescuento(descuento);
         facturaDetalle.setPrecioUnitario(valorUnitario);
         facturaDetalle.setReferenciaId(referenciaId);
-        facturaDetalle.setLoteId(loteId);
+        facturaDetalle.setLote(lote);
         facturaDetalle.setCatalogoProducto(catalogoProducto);
         facturaDetalle.setCodigoPrincipal(codigo);
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoReferencia);
@@ -847,7 +847,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         
-        facturaDetalle.setLoteId((lote!=null)?lote.getId():null);
+        facturaDetalle.setLote((lote!=null)?lote:null);
         facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));   
         //facturaDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(interfaz.obtenerChkReservado()));
         facturaDetalle.setReservadoEnum(reservaEnum);

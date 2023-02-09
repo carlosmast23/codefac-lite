@@ -850,10 +850,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             BigDecimal descuentoLeido=new BigDecimal(descuentoStr);
             
+            factura.aplicarDescuento(descuentoLeido, getChkPorcentajeDescuentoGlobal().isSelected(),(EnumSiNo) getCmbIvaDescuento().getSelectedItem());
+            
             //Esta variable va a almacenar siempre el descuento antes de impuestos
             //y cuando el usuario quiera poner un descuento incluido iva primero hago la conversion interna            
             
-            for (FacturaDetalle detalle : factura.getDetalles()) {
+            /*for (FacturaDetalle detalle : factura.getDetalles()) {
                 
                 
                 BigDecimal descuentoValor = BigDecimal.ZERO;
@@ -889,7 +891,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             for (FacturaDetalle detalle : factura.getDetalles()) {
                 //Solo grabar con 2 decimales por que el Sri no permite más en los descuentos
                 detalle.calcularTotalesDetallesFactura();
-            }            
+            }*/            
             
             cargarDatosDetalles();            
             controlador.cargarTotales();

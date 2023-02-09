@@ -43,7 +43,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "COMPRA")
-public class Compra extends ComprobanteEntity<FacturaAdicional> implements Serializable {    
+public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> implements Serializable {    
     //public static final String ESTADO_FACTURADO="F";
     //public static final String ESTADO_ANULADO="A";
     //public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
@@ -73,32 +73,32 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     /**
      * Valor del descuento de los productos que cobran iva
      */
-    @Column(name = "DESCUENTO_IVA")
-    private BigDecimal descuentoImpuestos;
+    /*@Column(name = "DESCUENTO_IVA")
+    private BigDecimal descuentoImpuestos;*/
     /**
      * Valor del descuento de los productos que no cobran iva
      */    
-    @Column(name = "DESCUENTO_IVA_CERO")
-    private BigDecimal descuentoSinImpuestos;
+    /*@Column(name = "DESCUENTO_IVA_CERO")
+    private BigDecimal descuentoSinImpuestos;*/
     
     
-    @Column(name = "SUBTOTAL_IVA")
-    private BigDecimal subtotalImpuestos;
-    @Column(name = "SUBTOTAL_IVA_CERO")
-    private BigDecimal subtotalSinImpuestos;
+    /*@Column(name = "SUBTOTAL_IVA")
+    private BigDecimal subtotalImpuestos;*/
+    /*@Column(name = "SUBTOTAL_IVA_CERO")
+    private BigDecimal subtotalSinImpuestos;*/
     
-    @Column(name = "VALOR_ICE")
-    private BigDecimal ice;
+    /*@Column(name = "VALOR_ICE")
+    private BigDecimal ice;*/
     /**
      * Valor del iva cobrado
      */
-    @Column(name = "IVA")
-    private BigDecimal iva;
+    /*@Column(name = "IVA")
+    private BigDecimal iva;*/
 
     @Column(name = "IVA_SRI_ID")
     private Long ivaSriId;
-    @Column(name = "TOTAL")
-    private BigDecimal total;
+    /*@Column(name = "TOTAL")
+    private BigDecimal total;*/
     //@Column(name = "USUARIO_ID")
     //private Long usuarioId;
     @Column(name = "ESTADO")
@@ -168,7 +168,7 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     public Compra() {
         this.descuentoImpuestos=BigDecimal.ZERO;
         this.descuentoSinImpuestos=BigDecimal.ZERO;
-        this.ice=BigDecimal.ZERO;
+        setIce(BigDecimal.ZERO);
         
     }
     
@@ -365,7 +365,7 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         for(CompraDetalle detalle: detalles)
         {
             //TODO: Por el momento queda seteado para 12%
-            if(detalle.getPorcentajeIva()!=null && detalle.getPorcentajeIva()==12)
+            if(detalle.getIvaPorcentaje()!=null && detalle.getIvaPorcentaje()==12)
             {
                 descuentoImpuestosTmp=descuentoImpuestosTmp.add(detalle.getDescuento());
             }
@@ -388,7 +388,7 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         BigDecimal descuentoSinImpuestosTmp = BigDecimal.ZERO;
         for (CompraDetalle detalle : detalles) {
             //TODO: Por el momento queda seteado para 12%
-            if (detalle.getPorcentajeIva()!=null && detalle.getPorcentajeIva() == 0) 
+            if (detalle.getIvaPorcentaje()!=null && detalle.getIvaPorcentaje() == 0) 
             {
                 descuentoSinImpuestosTmp = descuentoSinImpuestosTmp.add(detalle.getDescuento());
             }
@@ -401,13 +401,13 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         this.descuentoSinImpuestos = descuentoSinImpuestos;
     }
 
-    public BigDecimal getSubtotalImpuestos() {
+    /*public BigDecimal getSubtotalImpuestos() {
         return subtotalImpuestos;
     }
 
     public void setSubtotalImpuestos(BigDecimal subtotalImpuestos) {
         this.subtotalImpuestos = subtotalImpuestos;
-    }
+    }*/
 
     public BigDecimal getSubtotalSinImpuestos() {
         return subtotalSinImpuestos;
@@ -540,13 +540,13 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
         this.codigoSustentoSri = codigoEnum.getCodigo();
     }
 
-    public BigDecimal getIce() {
+    /*public BigDecimal getIce() {
         return ice;
     }
 
     public void setIce(BigDecimal ice) {
         this.ice = ice;
-    }
+    }*/
 
     
     public TipoDocumentoEnum getCodigoTipoDocumentoEnum() {
@@ -560,7 +560,7 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
     
     
     public BigDecimal getSubtotalImpuestosSinDescuentos() {
-        return subtotalImpuestos.add(descuentoImpuestos);
+        return getSubtotalImpuestos().add(descuentoImpuestos);
     }
     
     public BigDecimal getSubtotalSinImpuestosSinDescuentos() {
@@ -630,10 +630,12 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
      */
     public void calcularTotales(BigDecimal ivaConDecimales)
     {
-        this.subtotalImpuestos=BigDecimal.ZERO;
+        //this.subtotalImpuestos=BigDecimal.ZERO;
+        setSubtotalImpuestos(BigDecimal.ZERO);
         this.subtotalSinImpuestos=BigDecimal.ZERO;
         this.iva=BigDecimal.ZERO;
-        this.ice=(this.ice!=null)?this.ice:BigDecimal.ZERO;
+        setIce((this.getIce()!=null)?this.getIce():BigDecimal.ZERO);
+        //this.ice=(this.ice!=null)?this.ice:BigDecimal.ZERO;
         
         if(detalles!=null)
         {
@@ -641,13 +643,14 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
             //fd.getReferenciaId()
             for (CompraDetalle detalle : detalles) {
                 //if(detalle.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
-                if(detalle.getPorcentajeIva()==0)
+                if(detalle.getIvaPorcentaje()==0)
                 {   //Sumar los subtotales con valor 0
                     subtotalSinImpuestos=subtotalSinImpuestos.add(detalle.getTotal());                    
                 }
                 else
                 { //Sumar los subtotales con valor 12
-                    subtotalImpuestos=subtotalImpuestos.add(detalle.getTotal());
+                    //subtotalImpuestos=subtotalImpuestos.add(detalle.getTotal());
+                    setSubtotalImpuestos(getSubtotalImpuestos().add(detalle.getTotal()));
                     
                     //iva=iva.add(detalle.getIva());
                 }
@@ -655,17 +658,19 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
             
             //Obtengo los subtotal menos los decuentos
             //TODO: REVISAR ESTE TEMA POR QUE EN TEORIA YA VIENE LOS DESCUENTOS RESTADOS EN EL TOTAL
-            subtotalImpuestos=subtotalImpuestos.add(ice);
+            //subtotalImpuestos=subtotalImpuestos.add(ice);
+            setSubtotalImpuestos(getSubtotalImpuestos().add(getIce()));
             //subtotalImpuestos=subtotalImpuestos.add(ice).subtract(descuentoImpuestos);
             //subtotalSinImpuestos=subtotalSinImpuestos.subtract(descuentoSinImpuestos);
             
             
             //Setear la escala del iva y del valor total
-            iva=subtotalImpuestos.multiply(ivaConDecimales);
+            //iva=subtotalImpuestos.multiply(ivaConDecimales);
+            iva=getSubtotalImpuestos().multiply(ivaConDecimales);
             iva=iva.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
             
             
-            total=subtotalImpuestos.add(subtotalSinImpuestos).add(iva); //calcular el total de los valores
+            total=getSubtotalImpuestos().add(subtotalSinImpuestos).add(iva); //calcular el total de los valores
             
             //redondeo despues de redondear el iva para tener un valor coherente con la sumatoria de los valores redondeados
             total=total.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
@@ -777,6 +782,11 @@ public class Compra extends ComprobanteEntity<FacturaAdicional> implements Seria
             
         }
         return total.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public List<DetalleFacturaNotaCeditoAbstract> getDetallesComprobante() {
+        return (List<DetalleFacturaNotaCeditoAbstract>) (List<?>) detalles;
     }
     
         

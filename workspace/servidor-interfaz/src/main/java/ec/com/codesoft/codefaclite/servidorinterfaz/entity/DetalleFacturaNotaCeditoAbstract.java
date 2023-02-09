@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
@@ -67,8 +69,8 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Column(name = "ICE_PORCENTAJE")
     private BigDecimal icePorcentaje;
     
-    @Column(name = "LOTE_ID")
-    private Long loteId;
+    @JoinColumn(name = "LOTE_ID")
+    private Lote lote;
     
     @Column(name = "COSTO_PROMEDIO")
     private BigDecimal costoPromedio;
@@ -212,13 +214,23 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         this.tipoDocumento = tipoDocumentoEnum.getCodigo();
     }
 
-    public Long getLoteId() {
+    /*public Long getLoteId() {
         return loteId;
     }
 
     public void setLoteId(Long loteId) {
         this.loteId = loteId;
+    }*/
+
+    public Lote getLote() {
+        return lote;
     }
+
+    public void setLote(Lote lote) {
+        this.lote = lote;
+    }
+    
+    
 
     public Long getKardexId() {
         return kardexId;
@@ -342,7 +354,26 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         BigDecimal iva = getCalcularTotalDetalleConTodosDecimales().add(valorIce).multiply(valorIvaDecimal);
         return iva;
     }
-
+    
+    public void calcularTotalesDetallesFactura()
+    {
+        //Calular el total despues del descuento porque necesito esa valor para grabar
+        
+        calcularTotalDetalle();
+        /**
+         * Revisar este calculo del iva para no calcular 2 veces al mostrar
+         */
+        setIvaPorcentaje(getIvaPorcentaje());
+        if(getIcePorcentaje()!=null)
+        {
+            calcularValorIce(getIcePorcentaje());
+        }
+        
+             
+        calculaIva();
+    }
+    
+    
     public void calcularValorIce() {
         calcularValorIce(icePorcentaje);
     }
