@@ -199,7 +199,14 @@ public class CompraModel extends CompraPanel{
                 if(filaSeleccionada>=0)
                 {
                     CompraDetalle compraDetalle = (CompraDetalle) getTblDetalleProductos().getValueAt(filaSeleccionada, 0);
-                    listenerModificarPrecioVenta(compraDetalle.getProductoProveedor().getProducto(),compraDetalle.getPrecioUnitario());
+                    BigDecimal costo=compraDetalle.getCostoUnitario();
+                    
+                    if(costo==null || costo.compareTo(BigDecimal.ZERO)==0)
+                    {
+                        costo=compraDetalle.getPrecioUnitario();
+                    }
+                    
+                    listenerModificarPrecioVenta(compraDetalle.getProductoProveedor().getProducto(),costo);
                 }
                 
             }
