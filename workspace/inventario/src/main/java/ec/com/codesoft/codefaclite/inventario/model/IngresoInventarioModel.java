@@ -312,6 +312,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             kardexDetalle.setPuntoEstablecimiento(compraInventario.getPuntoEstablecimiento().toString());
             kardexDetalle.setPuntoEmision(compraInventario.getPuntoEmision().toString());
             kardexDetalle.setSecuencial(compraInventario.getSecuencial());
+            kardexDetalle.setRazonSocial(compraInventario.getRazonSocial());
             
             kardexDetalle.setCantidad(detalle.getCantidad()); //TODO: ESTA PARTE SE DEBE MEJORAR PARA QUE EL KARDEX TERMINE CON VALORES DECIMALES
             kardexDetalle.setCodigoTipoDocumento(compraInventario.getCodigoTipoDocumento());

@@ -15,7 +15,6 @@ import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Rectangle2D;
 
 /**
  *

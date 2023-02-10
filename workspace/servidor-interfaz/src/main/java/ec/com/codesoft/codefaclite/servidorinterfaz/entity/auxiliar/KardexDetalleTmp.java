@@ -38,6 +38,7 @@ public class KardexDetalleTmp extends KardexDetalle implements Serializable{
         kardexDetalle.setPuntoEstablecimiento(this.getPuntoEstablecimiento());
         kardexDetalle.setPuntoEmision(this.getPuntoEmision());
         kardexDetalle.setDescuento(this.getDescuento());
+        kardexDetalle.setRazonSocial(this.getRazonSocial());
         
         if(getDetallesEspecificos()!=null)
         {

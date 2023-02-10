@@ -17,6 +17,8 @@ import javax.xml.namespace.QName;
  * @author Carlos
  */
 public class AutorizacionTest {
+    
+    //@XmlAccessorType(XmlAccessType.FIELD)
     public static void main(String[] args) {
          String uri = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
         try {

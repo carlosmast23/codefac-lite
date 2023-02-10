@@ -1145,6 +1145,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
         kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
         kardexDetalle.setFechaDocumento(UtilidadesFecha.castDateUtilToSql(detalle.getFactura().getFechaEmision()));
+        
+        kardexDetalle.setRazonSocial(detalle.getFactura().getRazonSocial());
+        //kardexDetalle.setNombreLegal(detalle.getFactura().get);
 
         //Actualizar los valores del kardex
         kardexService.recalcularValoresKardex(kardex, kardexDetalle);

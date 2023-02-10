@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service.cartera;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
+
 import ec.com.codesoft.codefaclite.servidor.facade.cartera.CarteraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;

@@ -53,7 +53,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import org.eclipse.persistence.internal.sessions.factories.SessionsFactory;
-import sun.applet.Main;
+
 
 /**
  *

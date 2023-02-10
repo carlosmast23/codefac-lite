@@ -7,7 +7,6 @@ package ec.com.codesoft.codefaclite.controlador.vistas.core.components;
 
 import ec.com.codesoft.codefaclite.controlador.vistas.core.ConverterSwingMvvc;
 import java.util.List;
-import javafx.scene.control.PasswordField;
 import javax.swing.JPasswordField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
