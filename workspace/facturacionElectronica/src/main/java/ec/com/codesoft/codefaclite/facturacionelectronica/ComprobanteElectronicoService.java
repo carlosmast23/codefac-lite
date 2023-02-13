@@ -960,6 +960,13 @@ public class ComprobanteElectronicoService implements Runnable {
             
             //VERIFICAR si existe un XML AUTORIZADO primero obtengo el formato normal del XML FIRMADO
             String xmlStr=new String(Files.readAllBytes(archivoXml.toPath()),StandardCharsets.UTF_8);
+            
+            //Verificar si no encuentra una etiqueta básica o puede ser que este en otro formato
+            if(xmlStr.indexOf("<claveAcceso>")<0)
+            {
+                xmlStr=new String(Files.readAllBytes(archivoXml.toPath()),StandardCharsets.UTF_16LE);
+            }
+            
             xmlStr=normalizarXmlComprobante(xmlStr);
                         
             final String etiquetaAperturaFirmado="[CDATA[";
