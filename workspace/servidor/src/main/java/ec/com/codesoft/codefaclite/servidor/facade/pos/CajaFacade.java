@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.servidor.facade.pos;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -27,10 +29,13 @@ public class CajaFacade extends AbstractFacade<Caja>{
     {
         try
         {
-            String queryString = "Select distinct(cp.caja) from CajaPermiso cp where cp.usuario = ?1";
+            //CajaPermiso cp;
+            //cp.getCaja().setEstadoEnum(CajaEnum.ACTIVO);
+            String queryString = "Select distinct(cp.caja) from CajaPermiso cp where cp.usuario = ?1 and cp.caja.estado=?2 ";
 
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(1, usuario);
+            query.setParameter(2, CajaEnum.ACTIVO.getEstado());
             return query.getResultList();
            
         } 
