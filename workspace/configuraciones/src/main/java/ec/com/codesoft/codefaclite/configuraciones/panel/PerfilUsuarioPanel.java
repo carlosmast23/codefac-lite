@@ -68,6 +68,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         btnBuscarEmpleado = new javax.swing.JButton();
         lblEspacioBlanco1 = new javax.swing.JLabel();
         lblEspacioBlanco2 = new javax.swing.JLabel();
+        btnResetear = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         txtParametrosComprobantesElectronicos = new javax.swing.JTextField();
@@ -285,6 +286,12 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacioBlanco2, gridBagConstraints);
 
+        btnResetear.setText("Resetear");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        jPanel1.add(btnResetear, gridBagConstraints);
+
         jTabbedPane1.addTab("Usuario", jPanel1);
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -494,6 +501,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarPerfil;
     private javax.swing.JButton btnQuitarPuntoEmision;
     private javax.swing.JButton btnQuitarTurno;
+    private javax.swing.JButton btnResetear;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<EnumSiNo> jComboBoxFiltrarFacturas;
     private javax.swing.JLabel jLabel1;
@@ -724,4 +732,14 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     public void setjListTurnosCaja(JList<TurnoAsignado> jListTurnosCaja) {
         this.jListTurnosCaja = jListTurnosCaja;
     }    
+
+    public JButton getBtnResetear() {
+        return btnResetear;
+    }
+
+    public void setBtnResetear(JButton btnResetear) {
+        this.btnResetear = btnResetear;
+    }
+    
+    
 }

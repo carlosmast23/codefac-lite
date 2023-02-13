@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Turno;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -55,6 +56,7 @@ import javax.swing.event.ListSelectionListener;
 public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     
     private Usuario usuario;
+    private Boolean forzarResetearClave;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -125,11 +127,12 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             String claveAnterior = new String(getTxtClaveAnterior().getPassword());
 
             //Si alguna de estos datos fue modificado asumo que quiere editar la clave
-            if (!clave.equals("") || !claveAnterior.equals("") || !claveRepetida.equals("")) {
-                if (validarEditarClave(clave, claveRepetida, claveAnterior)) {
+            if (!clave.equals("") || !claveAnterior.equals("") || !claveRepetida.equals("") || forzarResetearClave) {
+                if (validarEditarClave(clave, claveRepetida, claveAnterior) || forzarResetearClave) {
                     Usuario usuarioTmp=usuarioServicioIf.cambiarClave(usuario,claveAnterior,clave); //Todo : Mejorar esta parte para solo ejecutar cuando desean cambiar la clave
                     usuario=usuarioTmp;
                 } else {
+                    DialogoCodefac.mensaje(new CodefacMsj("Error al validar las claves", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                     throw new ExcepcionCodefacLite("Validacion incorrecta");
                 }
             }
@@ -155,6 +158,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         
     private boolean validarEditarClave(String clave,String claveRepetida,String claveAnterior)
     {
+        
         
         if(clave.equals(""))
         {
@@ -297,8 +301,19 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    ActionListener  listenerResetearClave=new ActionListener() {        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            forzarResetearClave=true;
+            DialogoCodefac.mensaje(new CodefacMsj("Ingrese la nueva clave para RESETEAR y presione el botón de GRABAR ", CodefacMsj.TipoMensajeEnum.CORRECTO));
+        }
+    };
 
     private void agregarListener() {
+        
+        
+        getBtnResetear().addActionListener(listenerResetearClave);
         
         getBtnBuscarEmpleado().addActionListener(new ActionListener() {
             @Override
@@ -585,6 +600,14 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getCmbEstado().addItem(GeneralEnumEstado.ACTIVO);
         getCmbEstado().addItem(GeneralEnumEstado.INACTIVO);
         UtilidadesComboBox.llenarComboBox(getjComboBoxFiltrarFacturas(), EnumSiNo.values());
+        forzarResetearClave=false;
+        
+        //Activar o descativar boton de resetear clave si se entra con un usuario Root o no
+        if(!session.getUsuario().isRoot)
+        {
+            getBtnResetear().setVisible(false);
+        }
+        
     }
 
     @Override
