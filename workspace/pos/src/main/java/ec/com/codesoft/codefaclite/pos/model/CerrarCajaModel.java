@@ -20,7 +20,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
@@ -30,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 /**
  *
@@ -53,6 +58,61 @@ public class CerrarCajaModel extends CajaSessionModel
         //addListenerCombo();
         getPnlCierreCaja().setVisible(true);
         getPnlCierreCajaOpciones().setVisible(true);
+        
+        addInternalFrameListener(new InternalFrameListener() {
+            @Override
+            public void internalFrameOpened(InternalFrameEvent e) {
+                
+            }
+
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {
+                
+            }
+
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                
+            }
+
+            @Override
+            public void internalFrameIconified(InternalFrameEvent e) {
+                
+            }
+
+            @Override
+            public void internalFrameDeiconified(InternalFrameEvent e) {
+                
+            }
+
+            @Override
+            public void internalFrameActivated(InternalFrameEvent e) {
+                try {
+                    iniciar();
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void internalFrameDeactivated(InternalFrameEvent e) {
+                
+            }
+        });
+                        
+        this.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                DialogoCodefac.mensaje(new CodefacMsj("focusGained", CodefacMsj.TipoMensajeEnum.CORRECTO));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                DialogoCodefac.mensaje(new CodefacMsj("focusLost", CodefacMsj.TipoMensajeEnum.CORRECTO));
+            }
+        });
         //set
         super.iniciar();
     }
