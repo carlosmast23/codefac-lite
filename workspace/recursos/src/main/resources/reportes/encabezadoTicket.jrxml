@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="encabezado" pageWidth="200" pageHeight="200" whenNoDataType="AllSectionsNoDetail" columnWidth="160" leftMargin="0" rightMargin="40" topMargin="0" bottomMargin="0" uuid="58e2b8e6-fde5-4ef1-90e6-cb1dd3f4a182">
-	<property name="ireport.zoom" value="3.4522712143931593"/>
+	<property name="ireport.zoom" value="5.55991731349233"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
@@ -12,8 +12,9 @@
 	<parameter name="pl_url_img1" class="java.lang.Object"/>
 	<parameter name="pl_razon_social" class="java.lang.String"/>
 	<parameter name="pl_ruc" class="java.lang.String"/>
+	<parameter name="pl_rimpe" class="java.lang.String"/>
 	<title>
-		<band height="83" splitType="Stretch">
+		<band height="93" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="68" width="160" height="8" uuid="cd48d5fa-c3a3-4c0a-9514-838fa8011953"/>
 				<textElement textAlignment="Center">
@@ -53,6 +54,20 @@
 					<font size="8" isBold="false" isItalic="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_ruc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="83" width="160" height="10" uuid="6bdfa40d-6699-4c27-abd7-9202d3e05945"/>
+				<box>
+					<pen lineStyle="Dotted"/>
+					<topPen lineWidth="0.5" lineStyle="Double"/>
+					<leftPen lineStyle="Dotted"/>
+					<bottomPen lineStyle="Dotted"/>
+					<rightPen lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pl_rimpe}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

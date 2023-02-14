@@ -610,7 +610,8 @@ public class ReporteCodefac {
             parametros.put("pl_celular", matriz.getCelular());
             parametros.put("pl_facebook", sucursal.getEmpresa().getFacebook());                
             parametros.put("pl_instagram",(sucursal.getEmpresa().getInstagram()!=null)?sucursal.getEmpresa().getInstagram():"");
-            parametros.put("pl_ruc", sucursal.getEmpresa().getIdentificacion());        
+            parametros.put("pl_ruc", sucursal.getEmpresa().getIdentificacion());       
+            parametros.put("pl_rimpe", sucursal.getEmpresa().obtenerLeyendaRimpe());
 
             /**
              * Agregado valdación cuando no llenen ningun dato que salgo información del sistema cuando el usuario tiene una licencia gratuita

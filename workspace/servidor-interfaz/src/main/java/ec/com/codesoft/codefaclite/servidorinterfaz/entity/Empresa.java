@@ -30,6 +30,7 @@ import javax.persistence.Table;
 @Table(name = "EMPRESA")
 public class Empresa implements Serializable {
 
+    public static final String LEYENDA_RIMPE="CONTRIBUYENTE RÉGIMEN RIMPE";
     public static final String NO_LLEVA_CONTABILIDAD = "NO";
     public static final String SI_LLEVA_CONTABILIDAD = "SI";
 
@@ -344,6 +345,21 @@ public class Empresa implements Serializable {
         this.instagram = instagram;
     }
     
+    public String obtenerLeyendaRimpe()
+    {
+        String leyenda="";
+        
+        if(getRimpeEmprendedoresEnum()!=null && getRimpeEmprendedoresEnum().equals(EnumSiNo.SI))
+        {
+            leyenda=LEYENDA_RIMPE;
+        }
+        
+        if(getRimpeNegociosPopularesEnum()!=null && getRimpeNegociosPopularesEnum().equals(EnumSiNo.SI))
+        {
+            leyenda=LEYENDA_RIMPE;
+        }
+        return leyenda;
+    }
     
     /**
      * Metodo que permite obtener por defecto el nombre comercial pero si no tiene devuelve la razon social
