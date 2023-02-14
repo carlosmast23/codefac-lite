@@ -159,7 +159,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         validarGrabarProducto(p,CrudEnum.CREAR);
-        
+                
         CatalogoProducto catalogoProducto = p.getCatalogoProducto();
         p.setCatalogoProducto(null);
         
@@ -617,6 +617,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         if(p.getDisponibleCompraEnum()==null)
         {
             p.setDisponibleCompraEnum(EnumSiNo.SI);
+        }
+        
+        //TODO: Setear los valores por defecto
+        for (ProductoEnsamble productoEnsamble : p.getDetallesEnsamble()) 
+        {
+            if(productoEnsamble.getId()!=null && productoEnsamble.getId()<0)
+            {
+                productoEnsamble.setId(null);
+            }
         }
         
     }

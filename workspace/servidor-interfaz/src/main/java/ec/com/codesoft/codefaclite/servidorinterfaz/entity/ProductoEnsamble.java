@@ -25,6 +25,8 @@ import javax.persistence.Table;
 @Table(name = "PRODUCTO_ENSAMBLE")
 public class ProductoEnsamble implements Serializable{
     
+    private static Long ID_TEMP=-1l;
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +50,7 @@ public class ProductoEnsamble implements Serializable{
     private Producto productoEnsamble;
 
     public ProductoEnsamble() {
+        this.id=ID_TEMP--;
     }
 
     public Long getId() {
