@@ -77,17 +77,25 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
         @Override
         public void actionPerformed(ActionEvent e) {
             
-            int indice=getTblDetalles().getSelectedRow();
-            if(indice<0)
+            int[] indices=getTblDetalles().getSelectedRows();
+            if(indices.length<=0)
             {
                 return ;
             }
             
             Producto productoSeleccionado= enlazarProveedor();
-            enlazarProductoTabla(productoSeleccionado, indice);
+            enlazarProductoTabla(productoSeleccionado, indices);
             
         }
     };
+    
+    private void enlazarProductoTabla(Producto productoSeleccionado,int[] fila)
+    {
+        for (int i = 0; i < fila.length; i++) 
+        {
+            enlazarProductoTabla(productoSeleccionado, fila[i]);
+        }
+    }
     
     private void enlazarProductoTabla(Producto productoSeleccionado,int fila)
     {
