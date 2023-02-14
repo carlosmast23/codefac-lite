@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
@@ -235,6 +236,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //obtener los datos del PROVEEDOR
         Persona proveedor=cargarProveedorCompraDesdeXml(comprobanteElectronico,empresa);
         compraNueva.setProveedor(proveedor);
+        
+        compraNueva.setCodigoDocumentoEnum(DocumentoEnum.obtenerPorComprobanteEnum(comprobanteElectronico.getInformacionTributaria().getCodigoDocumentoEnum()));
         
         //obtener los datos de la CLAVE DE ACCESO
         String claveAcceso=comprobanteElectronico.getInformacionTributaria().getClaveAcceso();
