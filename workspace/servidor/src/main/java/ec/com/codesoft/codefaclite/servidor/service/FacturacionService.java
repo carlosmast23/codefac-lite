@@ -863,6 +863,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     private void grabarDetallesFacturaSinTransaccion(Factura factura) throws RemoteException,PersistenceException,ServicioCodefacException
     {
+        //IMPORTANTE: Este flush es importante por que si no esta causa conflicto con otro datos
+        entityManager.flush();
         //TODO: Ver si es necesario grabar en esta parte
         List<FacturaDetalle> facturaDetalleList=factura.getDetalles();
         List<FormaPago> facturaFormasPagoList=factura.getFormaPagos();
