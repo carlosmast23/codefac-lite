@@ -414,6 +414,11 @@ public class CompraAts implements Serializable {
     }
     
     
+    public BigDecimal obtenerTotalRetencionIva()
+    {
+        return valRetBien10.add(valRetServ20).add(valorRetBienes).add(valRetServ50).add(valorRetServicios).add(valRetServ100);
+    }
+    
     
     
 

@@ -209,12 +209,11 @@ public class AtsModel extends AtsPanel {
             "# Comprobantes",
             "Base Imponible",
             "Iva",
-            "Ret Renta",
-            "Ret Iva"};
+            "Ret IVA"
+        };
         
         Class clase[]={
             CompraAts.class,
-            String.class,
             String.class,
             String.class,
             String.class,
@@ -231,7 +230,6 @@ public class AtsModel extends AtsPanel {
             false,
             false,
             true,
-            true,
         };
         
         DefaultTableModel modeloTabla = UtilidadesTablas.crearModeloTabla(titulo, clase, editar);
@@ -246,8 +244,7 @@ public class AtsModel extends AtsPanel {
                     "1",
                     (compra.getBaseImpGrav()==null)?"Error":compra.getBaseImpGrav().toString(),
                     (compra.getMontoIva()==null)?"Error":compra.getMontoIva().toString(),
-                    "0",
-                    "0",
+                    compra.obtenerTotalRetencionIva(),
                 });
             }
         }

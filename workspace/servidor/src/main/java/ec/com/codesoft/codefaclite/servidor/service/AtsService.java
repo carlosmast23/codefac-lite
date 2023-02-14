@@ -298,7 +298,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
         for (Compra compra : compras) 
         {
-            if(compra.getSecuencial()==171120221)
+            if(compra.getSecuencial()==1778)
             {
                 System.out.println("Revisar compra");
             }
