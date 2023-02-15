@@ -5,10 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.cartera.reportdata;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -119,9 +122,20 @@ public class CruceCarteraData {
         for (Cartera cartera : carteraLista) {
             CruceCarteraData data=new CruceCarteraData();
             
+            String nombreComercial="";
+            PersonaEstablecimiento personaEstablecimiento= cartera.getPersona().getEstablecimientoActivoPorDefecto();
+            if(personaEstablecimiento!=null)
+            {
+                nombreComercial=personaEstablecimiento.getNombreComercial();
+            }
+            else
+            {
+                Logger.getLogger(CruceCarteraData.class.getName()).log(Level.WARNING,"Cliente no tiene establecimientos: "+cartera.getPersona().getIdentificacion());
+            }
+            
             data.setIdentificacion(cartera.getPersona().getIdentificacion());
-            String nombreLegal=(cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial()!=null)?cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial():"";
-            data.setNombreLegal(nombreLegal);
+            //String nombreLegal=(cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial()!=null)?cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial():"";
+            data.setNombreLegal(nombreComercial);
             data.setRazonSocial(cartera.getPersona().getRazonSocial());
             data.setDocumento(cartera.getCarteraDocumentoEnum().getNombre());
             data.setFechaEmision(cartera.getFechaEmision().toString());
@@ -137,8 +151,8 @@ public class CruceCarteraData {
                 data=new CruceCarteraData();
                 //TODO:Optmizar codigo repetido
                 data.setIdentificacion(cartera.getPersona().getIdentificacion());
-                String nombreLegal2=(cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial()!=null)?cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial():"";
-                data.setNombreLegal(nombreLegal2);
+                //String nombreLegal2=(cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial()!=null)?cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial():"";
+                data.setNombreLegal(nombreComercial);
                 data.setRazonSocial(cartera.getPersona().getRazonSocial());
                 data.setDocumento(cruce.getCarteraDetalle().getCartera().getCarteraDocumentoEnum().getNombre());
                 data.setFechaEmision(cruce.getCarteraDetalle().getCartera().getFechaEmision()+"");
