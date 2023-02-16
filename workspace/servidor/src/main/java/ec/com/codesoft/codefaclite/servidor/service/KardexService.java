@@ -622,8 +622,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //Si el movimiento del kardex detalle esta clasificado como que afecta a el inventario entonces hago el resto de calculos
         if(kardexDetalle.getCodigoTipoDocumentoEnum().getAfectaCostoInventario())
         {
-            //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
-            kardex.setPrecioUltimo(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+            ///Verificar si quieren hacer los calculos de los costos tomando en cuenta los descuentos
+            if(ParametroUtilidades.comparar(kardex.getProducto().getEmpresa(),ParametroCodefac.CALCULAR_DESCUENTO_COSTO, EnumSiNo.SI))
+            {
+                //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
+                kardex.setPrecioUltimo(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+            }
+            else
+            {
+                kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+            }
+            
+            
             //Calcular el precio promedio con respecto al nuevo valor
             if(kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)>0)
             {

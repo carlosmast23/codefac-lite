@@ -306,6 +306,11 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String BUSCADOR_SOLO_INVENTARIO="buscador_solo_inventario";
     
+    /**
+     * Variable que permite activar si se quieren tener en cuenta los descuentos al momento de calcular los costos
+     */
+    public static final String CALCULAR_DESCUENTO_COSTO="calcular_descuento_costo";
+    
     public static final String PVP1_MARGEN_UTILIDAD = "pvp1_margen_utilidad";
     public static final String PVP2_MARGEN_UTILIDAD = "pvp2_margen_utilidad";
     public static final String PVP3_MARGEN_UTILIDAD = "pvp3_margen_utilidad";

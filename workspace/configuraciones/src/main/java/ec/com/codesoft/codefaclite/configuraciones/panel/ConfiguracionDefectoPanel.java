@@ -231,6 +231,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtMargenDescuentoMinimoVenta = new javax.swing.JSpinner();
         jLabel84 = new javax.swing.JLabel();
         cmbBuscadorSoloInventario = new javax.swing.JComboBox<>();
+        jLabel87 = new javax.swing.JLabel();
+        cmbCalculaDescuentoCostos = new javax.swing.JComboBox<>();
         jPanel9 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
@@ -1418,16 +1420,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(cmbFacturarInventarioNegativo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel21.setText("Buscadores solo inventario:");
+        jLabel21.setText("Calcular descuento en los Costos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel21, gridBagConstraints);
@@ -1624,7 +1626,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
@@ -1662,6 +1664,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(cmbBuscadorSoloInventario, gridBagConstraints);
+
+        jLabel87.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel87.setText("Buscadores solo inventario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel87, gridBagConstraints);
+
+        cmbCalculaDescuentoCostos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(cmbCalculaDescuentoCostos, gridBagConstraints);
 
         jTabbedPane1.addTab("Inventario", jPanel8);
 
@@ -1837,6 +1856,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarLoteFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbBuscadorSoloInventario;
+    private javax.swing.JComboBox<EnumSiNo> cmbCalculaDescuentoCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbCargarProductoIvaFactura;
     private javax.swing.JComboBox<ConfiguracionImpresoraEnum> cmbConfiguracionImpresora;
     private javax.swing.JComboBox<EnumSiNo> cmbConstruirEnsamblesFacturar;
@@ -1970,6 +1990,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel84;
     private javax.swing.JLabel jLabel85;
     private javax.swing.JLabel jLabel86;
+    private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -2635,6 +2656,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbMostrarCostosFacturar(JComboBox<EnumSiNo> cmbMostrarCostosFacturar) {
         this.cmbMostrarCostosFacturar = cmbMostrarCostosFacturar;
     }
+
+    public JComboBox<EnumSiNo> getCmbCalculaDescuentoCostos() {
+        return cmbCalculaDescuentoCostos;
+    }
+
+    public void setCmbCalculaDescuentoCostos(JComboBox<EnumSiNo> cmbCalculaDescuentoCostos) {
+        this.cmbCalculaDescuentoCostos = cmbCalculaDescuentoCostos;
+    }
+    
+    
     
     
 }
