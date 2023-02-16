@@ -28,10 +28,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
@@ -329,7 +331,16 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 //Actualizar el costo promedio del kardex generado
                 if(kardexDetalleNuevo!=null)
                 {
-                    notaDetalle.setCostoPromedio(kardexDetalleNuevo.getKardex().getCostoPromedio());
+                    if(ParametroUtilidades.comparar(bodega.getEmpresa(),ParametroCodefac.CALCULAR_UTILIDAD_ULTIMO_COSTO,EnumSiNo.SI))
+                    {
+                        notaDetalle.setCostoPromedio(kardexDetalleNuevo.getKardex().getPrecioUltimo());
+                    }
+                    else
+                    {
+                        notaDetalle.setCostoPromedio(kardexDetalleNuevo.getKardex().getCostoPromedio());
+                    }
+                    
+                    
                 }
                 
                 break;

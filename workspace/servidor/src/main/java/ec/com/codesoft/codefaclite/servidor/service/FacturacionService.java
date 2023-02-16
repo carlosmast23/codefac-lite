@@ -1160,7 +1160,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         entityManager.merge(kardex); //Actualizo el kardex con la nueva referencia
         
         //adicional grabar el costo en el detalle de las facturas para luego hacer el reporte
-        detalle.setCostoPromedio(kardex.getCostoPromedio());
+        if(ParametroUtilidades.comparar(bodega.getEmpresa(),ParametroCodefac.CALCULAR_UTILIDAD_ULTIMO_COSTO,EnumSiNo.SI))
+        {
+            detalle.setCostoPromedio(kardex.getPrecioUltimo());
+        }
+        else
+        {
+            detalle.setCostoPromedio(kardex.getCostoPromedio());
+        }
        
     }
     

@@ -311,6 +311,11 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String CALCULAR_DESCUENTO_COSTO="calcular_descuento_costo";
     
+    /**
+     * Calcular la utilidad de con el ultimo costo y no con el costo promedio
+     */
+    public static final String CALCULAR_UTILIDAD_ULTIMO_COSTO="calcular_utilidad_ultimo_costo";
+    
     public static final String PVP1_MARGEN_UTILIDAD = "pvp1_margen_utilidad";
     public static final String PVP2_MARGEN_UTILIDAD = "pvp2_margen_utilidad";
     public static final String PVP3_MARGEN_UTILIDAD = "pvp3_margen_utilidad";
