@@ -134,6 +134,7 @@ public class KardexModel extends KardexPanel {
         {
             setearValores();
             ServiceFactory.getFactory().getKardexServiceIf().actualizarKardex(kardex);
+            consultar();
             DialogoCodefac.mensaje(new CodefacMsj("Datos Actualizados Correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));
         } catch (RemoteException ex) {
             Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -337,67 +338,63 @@ public class KardexModel extends KardexPanel {
         getBtnConsultar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    //Date fechaInicio=new Date(getCmbFechaInicial().getDate().getTime());
-                    //Date fechaFin=new Date(getCmbFechaFinal().getDate().getTime());
-                    Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
-                    
-
-                    KardexServiceIf kardexService = ServiceFactory.getFactory().getKardexServiceIf();
-
-                    /*Map<String, Object> parametrosMap = new HashMap<String, Object>();
-                    parametrosMap.put("bodega", bodega);
-                    parametrosMap.put("producto", productoSeleccionado);*/
-
-                    //List<Kardex> resultados = kardexService.obtenerPorMap(parametrosMap);
-                    Date fechaInicial=null;
-                    Date fechaFinal=null;
-                            
-                    if(getCmbFechaInicial().getDate()!=null)
-                    {
-                        fechaInicial=new Date(getCmbFechaInicial().getDate().getTime());
-                    }
-                    
-                    if(getCmbFechaFinal().getDate()!=null)
-                    {
-                        fechaFinal=new Date(getCmbFechaFinal().getDate().getTime());
-                    }
-                    
-                    Integer cantidadMovimientos=null;
-                    if(!getChkTodosMovimientos().isSelected())
-                    {
-                        cantidadMovimientos=(Integer) getTxtMovimientos().getValue();
-                    }                    
-                    
-                    detalleKardex=kardexService.obtenerConsultaPorFecha(fechaInicial,fechaFinal, productoSeleccionado,bodega,lote,cantidadMovimientos);
-                    if (detalleKardex != null && detalleKardex.size() > 0) {
-                        kardex = detalleKardex.get(detalleKardex.size()-1).getKardex();
-                        cargarTablaKardex();
-                        UtilidadesTablas.ubicarFinalTabla(getTblKardexDetalle());
-                        
-                        getTxtCostoPromedio().setText(kardex.getCostoPromedio()+"");
-                        getTxtUltimoCosto().setText(kardex.getPrecioUltimo()+"");
-                    }
-                    else
-                    {
-                        //Cuando no encuentra nada seteo un kardex vacio
-                        //kardexService.getKardexModificados(productoSeleccionado, cantidadMovimientos, bodega, ProductoEnsamble.EnsambleAccionEnum.AGREGAR)
-                        kardex=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodega, productoSeleccionado);
-                        if(kardex==null)
-                        {
-                            kardex=kardexService.construirKardexVacioSinPersistencia();
-                        }
-                        cargarTablaKardex();
-                    }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
-                    DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
+                consultar();
             }
         });
+    }
+    
+    private void consultar()
+    {
+        try {
+            //Date fechaInicio=new Date(getCmbFechaInicial().getDate().getTime());
+            //Date fechaFin=new Date(getCmbFechaFinal().getDate().getTime());
+            Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
+
+            KardexServiceIf kardexService = ServiceFactory.getFactory().getKardexServiceIf();
+
+            /*Map<String, Object> parametrosMap = new HashMap<String, Object>();
+                    parametrosMap.put("bodega", bodega);
+                    parametrosMap.put("producto", productoSeleccionado);*/
+            //List<Kardex> resultados = kardexService.obtenerPorMap(parametrosMap);
+            Date fechaInicial = null;
+            Date fechaFinal = null;
+
+            if (getCmbFechaInicial().getDate() != null) {
+                fechaInicial = new Date(getCmbFechaInicial().getDate().getTime());
+            }
+
+            if (getCmbFechaFinal().getDate() != null) {
+                fechaFinal = new Date(getCmbFechaFinal().getDate().getTime());
+            }
+
+            Integer cantidadMovimientos = null;
+            if (!getChkTodosMovimientos().isSelected()) {
+                cantidadMovimientos = (Integer) getTxtMovimientos().getValue();
+            }
+
+            detalleKardex = kardexService.obtenerConsultaPorFecha(fechaInicial, fechaFinal, productoSeleccionado, bodega, lote, cantidadMovimientos);
+            if (detalleKardex != null && detalleKardex.size() > 0) {
+                kardex = detalleKardex.get(detalleKardex.size() - 1).getKardex();
+                cargarTablaKardex();
+                UtilidadesTablas.ubicarFinalTabla(getTblKardexDetalle());
+
+                getTxtCostoPromedio().setText(kardex.getCostoPromedio() + "");
+                getTxtUltimoCosto().setText(kardex.getPrecioUltimo() + "");
+            } else {
+                //Cuando no encuentra nada seteo un kardex vacio
+                //kardexService.getKardexModificados(productoSeleccionado, cantidadMovimientos, bodega, ProductoEnsamble.EnsambleAccionEnum.AGREGAR)
+                kardex = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodega, productoSeleccionado);
+                if (kardex == null) {
+                    kardex = kardexService.construirKardexVacioSinPersistencia();
+                }
+                cargarTablaKardex();
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void cargarTablaKardex() {
@@ -580,7 +577,8 @@ public class KardexModel extends KardexPanel {
         getTblKardexDetalle().setModel(modeloTabla);
 
         getLblCantidad().setText(kardex.getStock() + "");
-        getLblPrecioPromedio().setText(kardex.calcularPrecioPromedio() + "");
+        //getLblPrecioPromedio().setText(kardex.calcularPrecioPromedio() + "");
+        getLblPrecioPromedio().setText(kardex.getCostoPromedio() + "");
         getLblPrecioUltimo().setText(kardex.getPrecioUltimo() + "");
         getLblTotal().setText(kardex.getPrecioTotal() + "");
 
