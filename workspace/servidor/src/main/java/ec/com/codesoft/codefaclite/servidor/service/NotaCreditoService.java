@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -159,7 +160,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     
     
 
-    public NotaCredito grabar(NotaCredito notaCredito) throws ServicioCodefacException {      
+    public NotaCredito grabar(NotaCredito notaCredito,ModoProcesarEnum modoProcesarEnum) throws ServicioCodefacException,RemoteException {      
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -203,7 +204,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 }
                 
                 //Actualizar la cartera cuando se hacen notas de credito
-                grabarCarteraSinTransaccion(notaCredito);
+                grabarCarteraSinTransaccion(notaCredito,modoProcesarEnum);
 
 
             }
@@ -214,11 +215,12 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     
     
     
-    private void grabarCarteraSinTransaccion(NotaCredito notaCredito) throws RemoteException, ServicioCodefacException
+    private void grabarCarteraSinTransaccion(NotaCredito notaCredito,ModoProcesarEnum modoProcesarEnum) throws RemoteException, ServicioCodefacException
     {
+        //Si quiere procesar en modo forzar primero anulo los cruces anteriores        
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE,null,CrudEnum.CREAR);
+        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE,null,CrudEnum.CREAR,modoProcesarEnum);
     }
     
     private void anularRubroEstudiante(Long referenciaId,BigDecimal total) throws RemoteException

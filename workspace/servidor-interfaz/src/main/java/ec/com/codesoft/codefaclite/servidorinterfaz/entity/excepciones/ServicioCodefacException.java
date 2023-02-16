@@ -13,10 +13,17 @@ public class ServicioCodefacException extends Exception {
     
     //Variable que indica si se puede volver a procesar pero en modo forzado
     private Boolean procesarModoForzado;
+    private TipoExcepcionEnum tipoExcepcionEnum;
     
     public ServicioCodefacException(String message) {
         super(message);
         this.procesarModoForzado=false;
+    }
+    
+    public ServicioCodefacException(String message,TipoExcepcionEnum tipoExcepcionEnum) {
+        super(message);
+        this.procesarModoForzado=false;
+        this.tipoExcepcionEnum=tipoExcepcionEnum;
     }
 
     public ServicioCodefacException(String string,Boolean procesarModoForzado) {
@@ -33,6 +40,20 @@ public class ServicioCodefacException extends Exception {
     public void setProcesarModoForzado(Boolean procesarModoForzado) {
         this.procesarModoForzado = procesarModoForzado;
     }
+
+    public TipoExcepcionEnum getTipoExcepcionEnum() {
+        return tipoExcepcionEnum;
+    }
+
+    public void setTipoExcepcionEnum(TipoExcepcionEnum tipoExcepcionEnum) {
+        this.tipoExcepcionEnum = tipoExcepcionEnum;
+    }
     
+    
+    
+    public enum TipoExcepcionEnum
+    {
+        NC_SALDO_NEGATIVO;
+    }
     
 }

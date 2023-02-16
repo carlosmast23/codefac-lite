@@ -435,14 +435,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         saldo=saldo.setScale(2, RoundingMode.DOWN);
         if(saldo.compareTo(BigDecimal.ZERO)<0)
         {
-            throw new ServicioCodefacException("Error al procesar la cartera por que el movimiento va a generar saldos negativos . Saldo negativo [ "+saldo+" ]");
+            throw new ServicioCodefacException("Error al procesar la cartera por que el movimiento va a generar saldos negativos . Saldo negativo [ "+saldo+" ]",ServicioCodefacException.TipoExcepcionEnum.NC_SALDO_NEGATIVO);
         }
     }
     
     /**
      * Metodo que me permite almacenar los documentos en la tabla de cartera
      */
-    public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException 
+    public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro,CrudEnum crudEnum,ModoProcesarEnum modoProcesar) throws RemoteException, ServicioCodefacException 
     {
         //Si no esta activo el modulo de cartera no continua
         if(!ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
@@ -483,7 +483,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 break;
 
             case NOTA_CREDITO:
-                crearCarteraNotaCredito(comprobante, cartera, cruces);
+                crearCarteraNotaCredito(comprobante, cartera, cruces,modoProcesar);
                 break;
                 
             default:
@@ -767,7 +767,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
     }
     
-    private void crearCarteraNotaCredito(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces)
+    private void crearCarteraNotaCredito(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,ModoProcesarEnum modoProcesarEnum) throws ServicioCodefacException
     {
         try {            
             NotaCredito notaCredito = (NotaCredito) comprobante;
@@ -784,13 +784,20 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             CarteraService carteraService = new CarteraService();
             //carteraService.buscarCarteraPorReferencia(Long.MIN_VALUE, documentoEnum, GeneralEnumEstado.ACTIVO, tipo, sucursal)
             Cartera carteraFactura = null;
-            if (notaCredito.getFactura() != null) {
+            if (notaCredito.getFactura() != null) 
+            {
                 carteraFactura = carteraService.buscarCarteraPorReferencia(
                         notaCredito.getFactura().getId(),
                         notaCredito.getFactura().getCodigoDocumentoEnum(),
                         GeneralEnumEstado.ACTIVO,
                         Cartera.TipoCarteraEnum.CLIENTE,
                         notaCredito.getSucursalEmpresa());
+                
+                if(modoProcesarEnum.equals(modoProcesarEnum.FORZADO))
+                {
+                    eliminarCrucesPorCartera(carteraFactura);
+                }
+                
             }
             
             for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
@@ -1043,6 +1050,20 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
             }
         });
+    }
+    
+    /**
+     * TODO: Este metodo tiene que usarse con cuidad por que se pueden eliminar cruces importantes y luego puede generar incosisencia en los daots
+     */
+    public void eliminarCrucesPorCartera(Cartera carteraPadre) throws ServicioCodefacException, RemoteException
+    {
+        List<CarteraCruce> cruceList = ServiceFactory.getFactory().getCarteraCruceServiceIf().buscarPorCarteraAfecta(carteraPadre);
+
+        for (CarteraCruce carteraCruce : cruceList) {
+            CarteraDetalle carteraDetalle = carteraCruce.getCarteraDetalle();
+            eliminarCarteraSinTransaccion(carteraDetalle.getCartera(), ModoProcesarEnum.FORZADO);
+        }
+        
     }
     
     public void eliminarCarteraSinTransaccion(Cartera entity,ModoProcesarEnum modo) throws ServicioCodefacException, RemoteException 

@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
@@ -145,43 +146,68 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
     
     public void grabar() throws ExcepcionCodefacLite {
     
-        NotaCredito notaCredito=interfaz.obtenerNotaCredito();
-                
-        try {
-            NotaCredito notaCreditoGrabada;
-            NotaCreditoServiceIf servicio = ServiceFactory.getFactory().getNotaCreditoServiceIf();
-            setearValoresNotaCredito();
-
-            if (!validarDatosNotaCredito()) {
-                throw new ExcepcionCodefacLite("Error Validación");
-            }
-
-            notaCredito = servicio.grabar(notaCredito);
-            mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-            notaCreditoGrabada = notaCredito;//graba una referencia con ambiento del metodo para los listener
-
-            ComprobanteDataNotaCredito comprobanteData = new ComprobanteDataNotaCredito(notaCredito);
-
-            comprobanteData.setMapInfoAdicional(getMapAdicional(notaCredito));
-
-            ClienteInterfaceComprobante cic = interfaz.obtenerClienteInterfaceComprobante(notaCreditoGrabada);
-
-            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
-                cic = null;
-            }
-
-            ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-            comprobanteServiceIf.procesarComprobante(comprobanteData, notaCredito, session.getUsuario(), cic);
-
-            interfaz.procesarMonitor(notaCreditoGrabada);
-
-        } catch (ServicioCodefacException ex) {
+        try
+        {
+            grabarNotaCredito(ModoProcesarEnum.NORMAL);
+        }
+        catch (ServicioCodefacException ex) {
             Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-            mostrarMensaje(new CodefacMsj("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));            
+            mostrarMensaje(new CodefacMsj("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));       
+            
+            //Si la excepcion es por saldos negativos preguntar si quiere forzar para procesar anulando los abonos
+            if(ex.getTipoExcepcionEnum().equals(ServicioCodefacException.TipoExcepcionEnum.NC_SALDO_NEGATIVO))
+            {
+                if(dialogoPregunta(new CodefacMsj("Desea procesar en modo forzado ELIMINANDO las abonos y cruces en CARTERA ?  ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
+                {
+                    try {
+                        grabarNotaCredito(ModoProcesarEnum.FORZADO);
+                        return;
+                    } catch (ServicioCodefacException ex1) {
+                         mostrarMensaje(new CodefacMsj("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO));    
+                        Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex1);
+                    } catch (RemoteException ex1) {
+                        Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            }            
             throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void grabarNotaCredito(ModoProcesarEnum modoProcesar) throws ExcepcionCodefacLite,ServicioCodefacException,RemoteException
+    {
+        NotaCredito notaCredito = interfaz.obtenerNotaCredito();
+
+        NotaCredito notaCreditoGrabada;
+        NotaCreditoServiceIf servicio = ServiceFactory.getFactory().getNotaCreditoServiceIf();
+        setearValoresNotaCredito();
+
+        if (!validarDatosNotaCredito()) {
+            throw new ExcepcionCodefacLite("Error Validación");
+        }
+
+        notaCredito = servicio.grabar(notaCredito,modoProcesar);
+        mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        notaCreditoGrabada = notaCredito;//graba una referencia con ambiento del metodo para los listener
+
+        ComprobanteDataNotaCredito comprobanteData = new ComprobanteDataNotaCredito(notaCredito);
+
+        comprobanteData.setMapInfoAdicional(getMapAdicional(notaCredito));
+
+        ClienteInterfaceComprobante cic = interfaz.obtenerClienteInterfaceComprobante(notaCreditoGrabada);
+
+        if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+            cic = null;
+        }
+
+        ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+        comprobanteServiceIf.procesarComprobante(comprobanteData, notaCredito, session.getUsuario(), cic);
+
+        interfaz.procesarMonitor(notaCreditoGrabada);
+
+
     }
     
     

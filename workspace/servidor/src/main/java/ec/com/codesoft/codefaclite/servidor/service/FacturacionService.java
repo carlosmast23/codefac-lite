@@ -959,7 +959,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE,carteraParametro,CrudEnum.CREAR);
+        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE,carteraParametro,CrudEnum.CREAR,ModoProcesarEnum.NORMAL);
     }
     
     private void afectarPresupuesto(FacturaDetalle detalle) throws RemoteException
@@ -1090,7 +1090,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         Lote lote=null;
         if(detalle.getLote()!=null)
         {
-            lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorId(detalle.getLote());
+            lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorId(detalle.getLote().getId());
         }
 
         if(kardex==null)

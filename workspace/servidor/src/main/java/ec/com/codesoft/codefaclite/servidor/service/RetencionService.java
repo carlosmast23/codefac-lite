@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac.CODIGO_NO_APLICA_RETENCIONES;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
@@ -136,7 +137,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null,CrudEnum.CREAR);
+        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null,CrudEnum.CREAR,ModoProcesarEnum.NORMAL);
     }
     
     private void validarRetencion(Retencion retencion) throws ServicioCodefacException, RemoteException

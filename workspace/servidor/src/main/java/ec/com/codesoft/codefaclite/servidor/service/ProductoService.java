@@ -620,11 +620,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
         
         //TODO: Setear los valores por defecto
-        for (ProductoEnsamble productoEnsamble : p.getDetallesEnsamble()) 
+        if(p.getDetallesEnsamble()!=null)
         {
-            if(productoEnsamble.getId()!=null && productoEnsamble.getId()<0)
+            for (ProductoEnsamble productoEnsamble : p.getDetallesEnsamble()) 
             {
-                productoEnsamble.setId(null);
+                if(productoEnsamble.getId()!=null && productoEnsamble.getId()<0)
+                {
+                    productoEnsamble.setId(null);
+                }
             }
         }
         
