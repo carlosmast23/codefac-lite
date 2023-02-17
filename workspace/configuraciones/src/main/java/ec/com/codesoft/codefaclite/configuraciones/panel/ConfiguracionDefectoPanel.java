@@ -539,6 +539,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Cargar forma de cargar productos con iva:");
+        jLabel5.setToolTipText("Permite cargar en la pantalla de factura al momento de seleccionar el producto que se muestre incluido o no incluido el iva");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -1159,10 +1160,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel13.setLayout(new java.awt.GridBagLayout());
 
         jLabel55.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel55.setText("Total con Iva:");
+        jLabel55.setText("Incluir total producto con Iva:");
+        jLabel55.setToolTipText("Esta opción permite incluir al valor del producto con el iva, para que puedan hacer una nota de venta por el mismo valor que si hubieran hecho una factura con iva");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel13.add(jLabel55, gridBagConstraints);
@@ -1170,7 +1172,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbNotaVentaInternaIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel13.add(cmbNotaVentaInternaIva, gridBagConstraints);
@@ -1182,11 +1184,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.weighty = 0.1;
         jPanel13.add(lblEspacio3345, gridBagConstraints);
 
-        jLabel75.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel75.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel75.setForeground(new java.awt.Color(204, 0, 0));
         jLabel75.setText("Nota de Venta Interna con iva:");
+        jLabel75.setToolTipText("VATENCIÓN: Esta opción va a desglosar el total en la nota de venta interna, pero eso no se debe usar porque es ilegal ya que es un documento interno que no debe llevar IVA, debe estar por defecto seleccionado NO");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel13.add(jLabel75, gridBagConstraints);
@@ -1194,7 +1198,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbNVITotalConIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel13.add(cmbNVITotalConIva, gridBagConstraints);
