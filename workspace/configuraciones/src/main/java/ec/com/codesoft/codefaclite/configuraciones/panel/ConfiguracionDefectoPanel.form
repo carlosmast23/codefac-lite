@@ -1542,7 +1542,7 @@
                   <Color blue="0" green="0" red="cc" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Nota de Venta Interna con iva:"/>
-                <Property name="toolTipText" type="java.lang.String" value="VATENCI&#xd3;N: Esta opci&#xf3;n va a desglosar el total en la nota de venta interna, pero eso no se debe usar porque es ilegal ya que es un documento interno que no debe llevar IVA, debe estar por defecto seleccionado NO"/>
+                <Property name="toolTipText" type="java.lang.String" value="ATENCI&#xd3;N: Esta opci&#xf3;n va a desglosar el total en la nota de venta interna, pero eso no se debe usar porque es ilegal ya que es un documento interno que no debe llevar IVA, debe estar por defecto seleccionado NO"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

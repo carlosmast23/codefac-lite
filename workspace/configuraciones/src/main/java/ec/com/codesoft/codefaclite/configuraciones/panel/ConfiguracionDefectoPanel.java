@@ -1187,7 +1187,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel75.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel75.setForeground(new java.awt.Color(204, 0, 0));
         jLabel75.setText("Nota de Venta Interna con iva:");
-        jLabel75.setToolTipText("VATENCIÓN: Esta opción va a desglosar el total en la nota de venta interna, pero eso no se debe usar porque es ilegal ya que es un documento interno que no debe llevar IVA, debe estar por defecto seleccionado NO");
+        jLabel75.setToolTipText("ATENCIÓN: Esta opción va a desglosar el total en la nota de venta interna, pero eso no se debe usar porque es ilegal ya que es un documento interno que no debe llevar IVA, debe estar por defecto seleccionado NO");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;

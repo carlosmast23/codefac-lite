@@ -233,8 +233,9 @@ public class StockMinimoData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.lote,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.bodega,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.producto, Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.marca, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.marca, Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.categoria, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.aplicacion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.ubicacion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.stock,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.pvp1,Excel.TipoDataEnum.NUMERO));
