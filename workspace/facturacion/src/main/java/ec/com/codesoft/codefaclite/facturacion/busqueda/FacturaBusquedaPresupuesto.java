@@ -42,7 +42,8 @@ public class FacturaBusquedaPresupuesto implements InterfaceModelFind<Presupuest
         titulo.add(new ColumnaDialogo("Cliente", 0.3d));
         titulo.add(new ColumnaDialogo("estado", 0.15d));
         titulo.add(new ColumnaDialogo("fecha", 0.15d));
-        titulo.add(new ColumnaDialogo("total", 0.1d));
+        titulo.add(new ColumnaDialogo("tot", 0.1d));
+        titulo.add(new ColumnaDialogo("tot+iva", 0.1d));
         return titulo;
     }
 
@@ -74,7 +75,7 @@ public class FacturaBusquedaPresupuesto implements InterfaceModelFind<Presupuest
         dato.add((t.getEstadoEnum()!=null)?t.getEstadoEnum().getNombre():"Sin estado");
         dato.add(t.getFechaPresupuesto());
         dato.add(t.getTotalVenta());
-        
+        dato.add(t.getTotalVentaConIva());
         
     }
 

@@ -100,4 +100,17 @@ public class UtilidadesPorcentajes {
         BigDecimal porcentajeDecimal=porcentajeEntero.divide(UtilidadBigDecimal.CIEN,2,BigDecimal.ROUND_HALF_UP);
         return valor.multiply(porcentajeDecimal);
     }
+    
+    /**
+     * Metodo que me permite calcular un porcentaje y agregar al valor original
+     * @porcentajeNumero estevalor debe ser entre 0 y 100 de preferencia
+     * @return 
+     */
+    public static BigDecimal calcularValorIncluidoPorcentaje(BigDecimal valor, BigDecimal porcentajeNumero)
+    {
+        BigDecimal porcentajeDecimal=porcentajeNumero.divide(UtilidadBigDecimal.CIEN,2,BigDecimal.ROUND_HALF_UP);
+        porcentajeDecimal=porcentajeDecimal.add(BigDecimal.ONE);
+        
+        return valor.multiply(porcentajeDecimal).setScale(2,BigDecimal.ROUND_HALF_UP);
+    }
 }

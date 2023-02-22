@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -301,7 +302,18 @@ public class Presupuesto implements Serializable
         return null;
     }
     
-    
+    public BigDecimal getTotalVentaConIva()
+    {
+        if(catalogoProducto!=null)
+        {
+            Integer porcentaje=catalogoProducto.getIva().getTarifa();
+            if(!porcentaje.equals(0))
+            {
+                return UtilidadesPorcentajes.calcularValorIncluidoPorcentaje(totalVenta,new BigDecimal(porcentaje));
+            }
+        }
+        return totalVenta;
+    }
     
     public void addDetalle(PresupuestoDetalle detalle)
     {
