@@ -55,6 +55,9 @@ public class Caja implements Serializable {
     @JoinColumn(name = "PUNTO_EMISION_ID")
     private PuntoEmision puntoEmision;
     
+    @JoinColumn(name = "PUNTO_EMISION_2_ID")
+    private PuntoEmision puntoEmision2;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "caja", fetch = FetchType.EAGER)
     private List<CajaPermiso> cajasPermiso;
     
@@ -126,9 +129,17 @@ public class Caja implements Serializable {
     public void setPuntoEmision(PuntoEmision puntoEmision) {
         this.puntoEmision = puntoEmision;
     }
-
+    
     public List<CajaPermiso> getCajasPermiso() {
         return cajasPermiso;
+    }
+
+    public PuntoEmision getPuntoEmision2() {
+        return puntoEmision2;
+    }
+
+    public void setPuntoEmision2(PuntoEmision puntoEmision2) {
+        this.puntoEmision2 = puntoEmision2;
     }
 
     public void setCajasPermiso(List<CajaPermiso> cajasPermiso) {

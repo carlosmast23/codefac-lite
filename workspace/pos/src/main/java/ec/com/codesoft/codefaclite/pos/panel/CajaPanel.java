@@ -57,6 +57,8 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
         jLabel9 = new javax.swing.JLabel();
         jComboSucursal = new javax.swing.JComboBox<>();
         jComboPuntoEmision = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        cmbPuntoEmision2 = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -99,7 +101,7 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -107,10 +109,10 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Punto Emisión:");
+        jLabel3.setText("Punto Emisión 2:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel3, gridBagConstraints);
@@ -119,7 +121,7 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
         jLabel4.setText("Descripción:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
@@ -128,14 +130,14 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
         jLabel5.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jComboEstado, gridBagConstraints);
@@ -143,7 +145,7 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
         jLabel8.setText("        ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -171,11 +173,29 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jComboPuntoEmision, gridBagConstraints);
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel6.setText("Punto Emisión:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbPuntoEmision2, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<PuntoEmision> cmbPuntoEmision2;
     private javax.swing.JComboBox<CajaEnum> jComboEstado;
     private javax.swing.JComboBox<PuntoEmision> jComboPuntoEmision;
     private javax.swing.JComboBox<Sucursal> jComboSucursal;
@@ -184,6 +204,7 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
@@ -229,6 +250,16 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
     public void setjComboPuntoEmision(JComboBox<PuntoEmision> jComboPuntoEmision) {
         this.jComboPuntoEmision = jComboPuntoEmision;
     }
+
+    public JComboBox<PuntoEmision> getCmbPuntoEmision2() {
+        return cmbPuntoEmision2;
+    }
+
+    public void setCmbPuntoEmision2(JComboBox<PuntoEmision> cmbPuntoEmision2) {
+        this.cmbPuntoEmision2 = cmbPuntoEmision2;
+    }
+    
+    
     
     @ComboBoxBinding(source = "controlador.SucursalList", valueSelect = "controlador.Caja.Sucursal" )
     public JComboBox<Sucursal> getjComboSucursal() {

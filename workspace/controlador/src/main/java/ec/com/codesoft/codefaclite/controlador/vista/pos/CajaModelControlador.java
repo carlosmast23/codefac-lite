@@ -173,6 +173,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     public interface CommonIf
     {        
         public PuntoEmision getPuntoEmision();
+        public PuntoEmision getPuntoEmision2();
         public String getDescripcion();
     }
     
@@ -220,5 +221,6 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
     public void setearDatos(){
         caja.setDescripcion(getInterfaz().getDescripcion());
         caja.setPuntoEmision(getInterfaz().getPuntoEmision());
+        caja.setPuntoEmision2(getInterfaz().getPuntoEmision2());
     }
 }   

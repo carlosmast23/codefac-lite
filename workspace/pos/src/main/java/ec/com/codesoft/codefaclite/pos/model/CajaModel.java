@@ -101,6 +101,7 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
         getjTextNombre().setText(caja.getNombre());
         getjComboSucursal().setSelectedItem(caja.getSucursal());
         getjComboPuntoEmision().setSelectedItem(caja.getPuntoEmision());
+        getCmbPuntoEmision2().setSelectedItem(caja.getPuntoEmision2());
         getjTextAreaDescripcion().setText(caja.getDescripcion());
     }
 
@@ -131,6 +132,7 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
                     List<PuntoEmision> puntoEmisionLista;
                     puntoEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);                   
                     UtilidadesComboBox.llenarComboBox(getjComboPuntoEmision(), puntoEmisionLista); 
+                    UtilidadesComboBox.llenarComboBox(getCmbPuntoEmision2(), puntoEmisionLista,true);
                     puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();
                 } catch (ServicioCodefacException | RemoteException ex) {
                     Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -142,6 +144,11 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
     @Override
     public PuntoEmision getPuntoEmision() {
         return (PuntoEmision) getjComboPuntoEmision().getSelectedItem();
+    }
+    
+    @Override
+    public PuntoEmision getPuntoEmision2() {
+        return (PuntoEmision) getCmbPuntoEmision2().getSelectedItem();
     }
 
     @Override

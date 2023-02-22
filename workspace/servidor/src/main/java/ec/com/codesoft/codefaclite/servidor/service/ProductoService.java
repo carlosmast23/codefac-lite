@@ -40,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversion
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TopProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -159,6 +160,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         validarGrabarProducto(p,CrudEnum.CREAR);
+        
+        //Agregando datos por defecto
+        p.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());        
                 
         CatalogoProducto catalogoProducto = p.getCatalogoProducto();
         p.setCatalogoProducto(null);
@@ -636,6 +640,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     public void editarProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
     {
         validarGrabarProducto(producto,CrudEnum.EDITAR);
+        producto.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {

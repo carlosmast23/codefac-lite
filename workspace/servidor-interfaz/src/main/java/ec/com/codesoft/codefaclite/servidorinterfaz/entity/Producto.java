@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -169,7 +170,7 @@ public class Producto implements Serializable, Comparable<Producto> {
     private String actualizarPrecio;
     
     @Column(name = "FECHA_ULTIMA_ACTUALIZACION_PRECIO") 
-    private Date fechaUltimaActualizacionPrecio;
+    private Timestamp fechaUltimaActualizacionPrecio;
     
     @Column(name = "DISPONIBLE_VENTA") 
     private String disponibleVenta;
@@ -179,6 +180,12 @@ public class Producto implements Serializable, Comparable<Producto> {
     
     @Column(name = "REGISTRO_SANITARIO") 
     private String registroSanitario;
+    
+    @Column(name = "FECHA_CREACION")
+    protected Timestamp fechaCreacion;
+    
+    @Column(name = "FECHA_ULTIMA_EDICION")
+    protected Timestamp fechaUltimaEdicion;
     
     /*@JoinColumn(name = "PRESENTACION_ID")
     private PresentacionProducto presentacion;*/
@@ -320,6 +327,15 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setStockInicial(Long stockInicial) {
         this.stockInicial = stockInicial;
     }
+
+    public Timestamp getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+    
 
     /*public String getMarca() {
         return marca;
@@ -734,11 +750,11 @@ public class Producto implements Serializable, Comparable<Producto> {
     }
 
 
-    public Date getFechaUltimaActualizacionPrecio() {
+    public Timestamp getFechaUltimaActualizacionPrecio() {
         return fechaUltimaActualizacionPrecio;
     }
 
-    public void setFechaUltimaActualizacionPrecio(Date fechaUltimaActualizacionPrecio) {
+    public void setFechaUltimaActualizacionPrecio(Timestamp fechaUltimaActualizacionPrecio) {
         this.fechaUltimaActualizacionPrecio = fechaUltimaActualizacionPrecio;
     }
 
@@ -789,9 +805,15 @@ public class Producto implements Serializable, Comparable<Producto> {
     public void setActividadList(List<ProductoActividad> actividadList) {
         this.actividadList = actividadList;
     }
-    
-    
-    
+
+    public Timestamp getFechaUltimaEdicion() {
+        return fechaUltimaEdicion;
+    }
+
+    public void setFechaUltimaEdicion(Timestamp fechaUltimaEdicion) 
+    {
+        this.fechaUltimaEdicion = fechaUltimaEdicion;
+    }
 
     public InputStream obtenerImagenProducto()
     {

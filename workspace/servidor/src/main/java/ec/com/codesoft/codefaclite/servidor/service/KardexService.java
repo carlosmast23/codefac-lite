@@ -928,7 +928,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             {
                 Producto producto=kardex.getProducto();
                 producto.setActualizarPrecioEnum(EnumSiNo.SI);
-                producto.setFechaUltimaActualizacionPrecio(UtilidadesFecha.getFechaHoy());
+                producto.setFechaUltimaActualizacionPrecio(UtilidadesFecha.getFechaHoyTimeStamp());
                 entityManager.merge(producto);
             }        
         }
