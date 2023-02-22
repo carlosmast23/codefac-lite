@@ -116,12 +116,13 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
     public Presupuesto consultarUltimaOTporObjectoMantenimientoFacade(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
     {
         //Presupuesto p;
+        //p.getFechaCreacion()
         //p.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento()
         //OrdenTrabajo ot;
         //ot.getFechaIngreso();
         //ot.getEstado();
         //ot.getObjetoMantenimiento()
-        String queryStr="SELECT u FROM Presupuesto u WHERE u.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento = ?1 AND u.estado<> ?2 ORDER BY u.fechaIngreso desc ";
+        String queryStr="SELECT u FROM Presupuesto u WHERE u.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento = ?1 AND u.estado<> ?2 ORDER BY u.fechaCreacion desc ";
         Query query = getEntityManager().createQuery(queryStr);
         
         query.setParameter(1, objetoMantenimiento);

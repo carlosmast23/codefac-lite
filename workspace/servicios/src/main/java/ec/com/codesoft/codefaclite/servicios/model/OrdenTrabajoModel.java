@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.servicio.PresupuestoControlador;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.busqueda.OrdenTrabajoBusqueda;
 import ec.com.codesoft.codefaclite.servicios.panel.OrdenTrabajoPanel;
@@ -35,12 +36,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -67,6 +70,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.collections4.map.HashedMap;
 import org.jdesktop.swingx.prompt.PromptSupport;
 
@@ -831,18 +835,30 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             }
         });
         
+        
+        
         getBtnBuscarUltimoMantenimiento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     ObjetoMantenimiento objetoMantenimiento=(ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
-                    //Presupuesto ultimoPresupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarUltimaPorObjectoMantenimiento(objetoMantenimiento);
-                    OrdenTrabajo ultimaOT=ServiceFactory.getFactory().getOrdenTrabajoServiceIf().consultarUltimaOTporObjectoMantenimiento(objetoMantenimiento);
+                    Presupuesto ultimoPresupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarUltimaPorObjectoMantenimiento(objetoMantenimiento);
+                    //OrdenTrabajo ultimaOT=ServiceFactory.getFactory().getOrdenTrabajoServiceIf().consultarUltimaOTporObjectoMantenimiento(objetoMantenimiento);
                     
-                    if(ultimaOT!=null)
+                    if(ultimoPresupuesto!=null)
                     {
-                        imprimirReporte(ultimaOT);
+                        JasperPrint jasper = PresupuestoControlador.getReporteJasperPresupuesto(ultimoPresupuesto);
+                        ReporteCodefac.generarReporteInternalFrame(jasper, panelPadre, "Presupuesto " + ultimoPresupuesto.getCodigo(), ConfiguracionImpresoraEnum.NINGUNA);                        
                     }
+                    else
+                    {
+                        DialogoCodefac.mensaje(new CodefacMsj("No existen datos anteriores para mostrar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    }
+
+                    //if(ultimaOT!=null)
+                    //{
+                    //    imprimirReporte(ultimaOT);
+                    //
                 } catch (RemoteException ex) {
                     Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {

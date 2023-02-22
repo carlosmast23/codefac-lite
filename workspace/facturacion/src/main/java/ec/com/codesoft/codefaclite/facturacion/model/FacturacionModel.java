@@ -1071,7 +1071,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void cargarCliente(PersonaEstablecimiento cliente)
     {
-        if (cliente != null) {
+        if (cliente != null) 
+        {
             factura.setCliente(cliente.getPersona());
             factura.setSucursal(cliente);
             //Elimino datos adicionales del anterior cliente si estaba seleccionado
@@ -2788,8 +2789,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(factura.getCliente()!=null)
                 {
                     getTxtCliente().setText(factura.getCliente().getIdentificacion());
-                    getLblNombreCliente().setText(factura.getCliente().getRazonSocial());
-                    getLblDireccionCliente().setText(factura.getSucursal().getDireccion());
+                    getLblNombreCliente().setText(UtilidadesTextos.acortarTexto(factura.getCliente().getRazonSocial(),40));
+                    getLblDireccionCliente().setText(UtilidadesTextos.acortarTexto(factura.getSucursal().getDireccion(),40));
                     getLblTelefonoCliente().setText(factura.getSucursal().getTelefonoConvencional());
                 }
                 break;

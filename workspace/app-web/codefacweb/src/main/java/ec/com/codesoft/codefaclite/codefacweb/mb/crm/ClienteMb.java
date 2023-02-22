@@ -5,28 +5,25 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.mb.crm;
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.codefacweb.core.DialogoWeb;
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
-import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.UtilidadWeb;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstadoFormEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -36,11 +33,22 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
+import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Map;
+import javax.activation.MimetypesFileTypeMap;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.imageio.stream.ImageInputStream;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -68,6 +76,8 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
     private Boolean identificacionPasaporte;
     private PersonaEstablecimiento establecimientoDefecto;
+    
+    private StreamedContent imagenEjemplo;
     
     /**
      * Variable por el momento para poder almacenar la referencia del objeto a retornar cuando es dialogo para ver como se
@@ -334,9 +344,25 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
 
         try {
             nacionalidadSeleccionada = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerDefaultEcuador();
+            
+            //Cargar los datos de la imagen
+            byte[] imagenSerializada = ServiceFactory.getFactory().getRecursosServiceIf().obtenerRecurso(sessionMb.getSession().getEmpresa(), DirectorioCodefac.IMAGENES, "logo.png");
+            //byte[] imagenSerializada = service.obtenerRecurso(sucursal.getEmpresa(), DirectorioCodefac.IMAGENES, nombreImagen);
+            RemoteInputStream risImagen = (RemoteInputStream) UtilidadesRmi.deserializar(imagenSerializada);
+            if (risImagen != null) {
+                InputStream imagenEjemploTmp = RemoteInputStreamClient.wrap(risImagen);
+                //BufferedImage tmp1= UtilidadImagen.castInputStreamToBufferedImage(imagenEjemploTmp);
+                imagenEjemplo= new DefaultStreamedContent(imagenEjemploTmp);
+                //DefaultStreamedContent(imagenEjemploTmp, new MimetypesFileTypeMap().getContentType(imagenEjemploTmp));
+            }
+            
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
+            Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteMb.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -444,6 +470,16 @@ public class ClienteMb extends GeneralAbstractMb implements DialogoWeb<Persona>,
         System.out.println("Latitud: "+latitud+", Longitud: "+longitud); 
                 
     }
+
+    public StreamedContent getImagenEjemplo() {
+        return imagenEjemplo;
+    }
+
+    public void setImagenEjemplo(StreamedContent imagenEjemplo) {
+        this.imagenEjemplo = imagenEjemplo;
+    }
+    
+    
     
     
 
