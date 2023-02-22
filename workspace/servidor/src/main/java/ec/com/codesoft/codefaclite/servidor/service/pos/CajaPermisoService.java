@@ -45,6 +45,12 @@ public class CajaPermisoService extends ServiceAbstract<CajaPermiso, CajaPermiso
         for (CajaPermiso cajaPermiso : cajaPermisoList) 
         {
             puntoEmisionList.add(cajaPermiso.getCaja().getPuntoEmision());
+            
+            //Agregar el segundo punto de emisión si tien permiso
+            if(cajaPermiso.getCaja().getPuntoEmision2()!=null)
+            {
+                puntoEmisionList.add(cajaPermiso.getCaja().getPuntoEmision2());
+            }
         }
         return puntoEmisionList;
     }

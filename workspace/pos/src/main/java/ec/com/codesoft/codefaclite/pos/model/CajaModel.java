@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaModelControlador.SwingIf{
      
     private CajaModelControlador controlador=null;
-    private PuntoEmision puntoEmision;
+    //private PuntoEmision puntoEmision;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -133,7 +133,7 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
                     puntoEmisionLista = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sucursal);                   
                     UtilidadesComboBox.llenarComboBox(getjComboPuntoEmision(), puntoEmisionLista); 
                     UtilidadesComboBox.llenarComboBox(getCmbPuntoEmision2(), puntoEmisionLista,true);
-                    puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();
+                    //puntoEmision = (PuntoEmision) getjComboPuntoEmision().getSelectedItem();
                 } catch (ServicioCodefacException | RemoteException ex) {
                     Logger.getLogger(CajaModel.class.getName()).log(Level.SEVERE, null, ex);
                 }

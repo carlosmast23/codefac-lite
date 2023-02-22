@@ -39,10 +39,14 @@ public class CajaService extends ServiceAbstract<Caja,CajaFacade> implements Caj
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 if(entity.getPuntoEmision() == null)
+                {
                     throw new ServicioCodefacException("No existe un punto de emisión seleccionado");
+                }
                 
                 if(entity.getSucursal() == null)
+                {
                     throw new ServicioCodefacException("No existe una sucursal seleccionada");
+                }
                 
                 entityManager.persist(entity);
             }

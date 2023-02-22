@@ -1481,7 +1481,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         for(CajaPermiso cajaPermiso : cajaPermisoList) 
         {
-            if(cajaPermiso.getCaja().getPuntoEmision().getPuntoEmision().equals(factura.getPuntoEmision()))
+            Caja caja=cajaPermiso.getCaja();
+            if(caja.getPuntoEmision().getPuntoEmision().equals(factura.getPuntoEmision()) || ( caja.getPuntoEmision2()!=null && caja.getPuntoEmision2().getPuntoEmision().equals(factura.getPuntoEmision())))
             {
                 for(TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList())
                 {

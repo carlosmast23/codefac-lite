@@ -36,8 +36,9 @@ public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> columnasTitulo = new Vector<>();
         columnasTitulo.add(new ColumnaDialogo("Sucursal", 0.2d));
-        columnasTitulo.add(new ColumnaDialogo("Punto Emisión", 0.2d));
-        columnasTitulo.add(new ColumnaDialogo("Caja", 0.2d));
+        columnasTitulo.add(new ColumnaDialogo("Nombre", 0.2d));
+        columnasTitulo.add(new ColumnaDialogo("Punto 1", 0.2d));
+        columnasTitulo.add(new ColumnaDialogo("Punto 2", 0.2d));        
         columnasTitulo.add(new ColumnaDialogo("Descripción", 0.2d));
         return columnasTitulo;
     }
@@ -68,8 +69,9 @@ public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>
     @Override
     public void agregarObjeto(Caja t, Vector dato) {
         dato.add(t.getSucursal().toString());
-        dato.add(t.getPuntoEmision().toString());
         dato.add(t.getNombre());
+        dato.add(t.getPuntoEmision().toString());
+        dato.add((t.getPuntoEmision2()!=null)?t.getPuntoEmision2().toString():"");        
         dato.add(t.getDescripcion());
     }
 
@@ -77,8 +79,9 @@ public class CajaBusquedaDialogo implements InterfaceModelFind<Caja>
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
         propiedades.add("sucursal.nombre");
-        propiedades.add("puntoEmision.descripcion");
         propiedades.add("nombre");
+        propiedades.add("puntoEmision.descripcion");
+        propiedades.add("");        
         propiedades.add("descripcion");
         return propiedades;
     }
