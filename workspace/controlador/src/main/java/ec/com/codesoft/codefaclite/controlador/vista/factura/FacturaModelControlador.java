@@ -284,7 +284,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         //TODO: Ver si puedo unir esta parte con el metodo que ya existe para poder agregar los detalles unitarios
                         facturaDetalle = crearFacturaDetalle
                         (
-                                productoSeleccionado.getValorUnitario(),
+                                //productoSeleccionado.getValorUnitario(),
+                                presupuestoDetalle.getPrecioCompra(),
                                 productoSeleccionado.getPrecioSinSubsidio(),
                                 productoSeleccionado.getNombre(),
                                 productoSeleccionado.getCodigoPersonalizado(),
