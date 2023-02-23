@@ -81,6 +81,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     private CatalogoProducto catalogoProducto;
     
+    @JoinColumn(name = "KARDEX_ITEM_ESPECIFICO_ID")
+    private KardexItemEspecifico kardexItemEspecifico;
+    
     @Column(name = "KARDEX_ID")
     private Long kardexId;
 
@@ -265,6 +268,16 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void setCantidadPresentacion(BigDecimal cantidadPresentacion) {
         this.cantidadPresentacion = cantidadPresentacion;
     }
+
+    public KardexItemEspecifico getKardexItemEspecifico() {
+        return kardexItemEspecifico;
+    }
+
+    public void setKardexItemEspecifico(KardexItemEspecifico kardexItemEspecifico) {
+        this.kardexItemEspecifico = kardexItemEspecifico;
+    }
+    
+    
     
     
     public Kardex getKardex()

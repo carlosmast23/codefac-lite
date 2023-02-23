@@ -487,7 +487,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("Documento seleccionado : "+documentoSeleccionado.getNombre());
         productoSeleccionado = (Producto) event.getObject(); 
         precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();
-        controlador.agregarProductoVista(productoSeleccionado,null,BigDecimal.ZERO,null,null);
+        controlador.agregarProductoVista(productoSeleccionado,null,null,BigDecimal.ZERO,null,null);
         //cargarDetalleFacturaAgregar(productoSeleccionado); 
     }
     

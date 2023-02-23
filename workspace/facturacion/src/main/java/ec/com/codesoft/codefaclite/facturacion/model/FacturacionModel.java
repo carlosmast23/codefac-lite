@@ -1025,6 +1025,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             productoSeleccionado.getCatalogoProducto(),
                             entity.getIdProducto(),
                             null,
+                            null,
                             EnumSiNo.NO,
                             TipoDocumentoEnum.LIBRE,
                             BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
@@ -1125,6 +1126,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     ordenTrabajoTmp.getCatalogoProducto(), 
                     ordenTrabajoTmp.getId(), 
                     null,
+                    null,
                     EnumSiNo.NO,
                     tipoDocumentoEnum.PRESUPUESTOS,
                     BigDecimal.ZERO);
@@ -1185,6 +1187,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 
                     rubroEstudianteTmp.getId(), 
                     null,
+                    null,
                     EnumSiNo.NO,
                     controlador.getTipoDocumentoEnumSeleccionado(),
                     descuentoValor);
@@ -1232,7 +1235,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             buscarDialogoModel.setVisible(true);
             productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
             getCmbIva().setSelectedItem(EnumSiNo.NO);    
-            controlador.agregarProductoVista(productoSeleccionado,null,null,null,null);
+            controlador.agregarProductoVista(productoSeleccionado,null,null,null,null,null);
     }
     
     private void agregarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
@@ -1309,12 +1312,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
 
         int cantidadItemsIndividuales = ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
+        
+        KardexItemEspecifico kardexItemEspecifico =null;
         if (productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI) && cantidadItemsIndividuales > 0) 
         {
             ProductoInventarioEspecificoDialogo dialogoEspecifico = new ProductoInventarioEspecificoDialogo(productoSeleccionado);
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(dialogoEspecifico);
             buscarDialogoModel.setVisible(true);
-            KardexItemEspecifico kardexItemEspecifico = (KardexItemEspecifico) buscarDialogoModel.getResultado();
+            kardexItemEspecifico = (KardexItemEspecifico) buscarDialogoModel.getResultado();
             /*
             TODO:Solucion para por el momento agregar el codigo invividual pero falta programar en solo servicios para dar de baja a los productos individuales y que no me aparesca en la lista
              */
@@ -1334,16 +1339,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     fechaCaducidad=kardexSeleccionado.getLote().getFechaVencimiento();
                 }
                 
-                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
+                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecifico,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
             }
             else
             {
-                controlador.agregarProductoVista(productoSeleccionado, null,null,null,null);
+                controlador.agregarProductoVista(productoSeleccionado, null,null,null,null,null);
             }
             
         } 
         else if (manejaInventario.equals(EnumSiNo.NO)) {
-            controlador.agregarProductoVista(productoSeleccionado, null,BigDecimal.ZERO,null,null);
+            controlador.agregarProductoVista(productoSeleccionado, null,null,BigDecimal.ZERO,null,null);
         }
     }
     
@@ -3852,7 +3857,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             btnListenerCrearProducto();
                         }
                     } else {
-                        controlador.agregarProductoVista(producto,lote,(kardexSeleccionado!=null)?kardexSeleccionado.getStock():BigDecimal.ZERO,ultimoCosto,fechaCaducidad);
+                        controlador.agregarProductoVista(producto,lote,null,(kardexSeleccionado!=null)?kardexSeleccionado.getStock():BigDecimal.ZERO,ultimoCosto,fechaCaducidad);
                     }
                 }
 

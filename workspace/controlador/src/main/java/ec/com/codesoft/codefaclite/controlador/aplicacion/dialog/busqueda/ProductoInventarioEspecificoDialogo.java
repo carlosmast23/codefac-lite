@@ -39,9 +39,13 @@ public class ProductoInventarioEspecificoDialogo implements InterfaceModelFind<K
 
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
-        String queryConsulta="SELECT kie FROM Kardex k,KardexDetalle kd,KardexItemEspecifico kie where kie.kardexDetalle=kd and kd.kardex=k and k.producto=?1 ";
+        //KardexItemEspecifico kie;
+        //kie.getEstado()
+                 
+        String queryConsulta="SELECT kie FROM Kardex k,KardexDetalle kd,KardexItemEspecifico kie where kie.kardexDetalle=kd and kd.kardex=k and k.producto=?1 and kie.estado=?2 ";
         QueryDialog queryDialog=new QueryDialog(queryConsulta);
         queryDialog.agregarParametro(1,producto);
+        queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
         //queryDialog.agregarParametro(2,filter);
         return queryDialog;
     }

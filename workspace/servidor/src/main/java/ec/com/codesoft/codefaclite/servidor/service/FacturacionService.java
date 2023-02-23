@@ -37,6 +37,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -1150,6 +1151,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         kardexDetalle.setRazonSocial(detalle.getFactura().getRazonSocial());
         //kardexDetalle.setNombreLegal(detalle.getFactura().get);
+        
+        //Si el producto tiene relacionado un item especifico lo agrego para tener la referencia de la venta
+        if(detalle.getKardexItemEspecifico()!=null)
+        {
+            KardexItemEspecifico kardexItemEspecifico=detalle.getKardexItemEspecifico();
+            kardexItemEspecifico.setEstadoEnum(GeneralEnumEstado.INACTIVO);
+            entityManager.merge(kardexItemEspecifico);
+            kardexDetalle.addDetalle(detalle.getKardexItemEspecifico());
+        }
 
         //Actualizar los valores del kardex
         kardexService.recalcularValoresKardex(kardex, kardexDetalle);

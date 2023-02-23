@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
@@ -261,6 +262,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     presupuestoTmp.getCatalogoProducto(), 
                     presupuestoTmp.getId(),
                     null,
+                    null,
                     EnumSiNo.NO,
                     getTipoDocumentoEnumSeleccionado(),
                     BigDecimal.ZERO);
@@ -292,6 +294,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                                 productoSeleccionado.getCatalogoProducto(),
                                 productoSeleccionado.getIdProducto(),
                                 null, //Verificar este tema cuando vaya a trabar con varios LOTES
+                                null,
                                 presupuestoDetalle.getReservadoEnum(),
                                 TipoDocumentoEnum.INVENTARIO,
                                 BigDecimal.ZERO
@@ -341,7 +344,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param lote
      * @param stock 
      */
-    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad) {
+    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad) {
         if (productoSeleccionado == null) {
             return;
         }
@@ -398,6 +401,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 productoSeleccionado.getCatalogoProducto(), 
                 productoSeleccionado.getIdProducto(), 
                 (lote!=null)?lote:null,
+                itemEspecifico,
                 EnumSiNo.NO,
                 interfaz.obtenerTipoDocumentoSeleccionado(),
                 BigDecimal.ZERO);
@@ -415,6 +419,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             CatalogoProducto catalogoProducto,
             Long referenciaId,  
             Lote lote,
+            KardexItemEspecifico kardexItemEspecifico,
             EnumSiNo reservaEnumSiNo,
             TipoDocumentoEnum tipoDocumentoReferencia,
             BigDecimal descuento)
@@ -426,6 +431,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setPrecioUnitario(valorUnitario);
         facturaDetalle.setReferenciaId(referenciaId);
         facturaDetalle.setLote(lote);
+        facturaDetalle.setKardexItemEspecifico(kardexItemEspecifico);
         facturaDetalle.setCatalogoProducto(catalogoProducto);
         facturaDetalle.setCodigoPrincipal(codigo);
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoReferencia);
