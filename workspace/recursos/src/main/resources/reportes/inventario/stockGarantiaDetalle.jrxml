@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreporte_deuda_imprimir" pageWidth="157" pageHeight="802" columnWidth="157" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1004b0be-d701-4012-adf0-16b68c3f4f0e">
-	<property name="ireport.zoom" value="1.7715610000000088"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreporte_deuda_imprimir" pageWidth="200" pageHeight="802" columnWidth="200" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1004b0be-d701-4012-adf0-16b68c3f4f0e">
+	<property name="ireport.zoom" value="3.452271214393119"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="fila">
@@ -16,7 +16,7 @@
 	<pageHeader>
 		<band height="11">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="157" height="11" forecolor="#FFFFFF" backcolor="#666666" uuid="e359cb9b-5861-4350-b025-cd8e7c42652e"/>
+				<reportElement mode="Opaque" x="0" y="0" width="200" height="11" forecolor="#FFFFFF" backcolor="#666666" uuid="e359cb9b-5861-4350-b025-cd8e7c42652e"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -27,12 +27,12 @@
 	<detail>
 		<band height="11" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="0" width="157" height="11" uuid="ac4a956a-8989-409a-96c6-83b7624ba87a"/>
+				<reportElement x="0" y="0" width="200" height="11" uuid="ac4a956a-8989-409a-96c6-83b7624ba87a"/>
 				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.75"/>
-					<rightPen lineWidth="0.75"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement>
 					<font size="8"/>
