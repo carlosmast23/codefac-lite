@@ -44,6 +44,7 @@ import ec.com.codesoft.codefaclite.controlador.reportexml.ManagerReporteFacturaF
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaFisicaDataMap;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
@@ -3608,6 +3609,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     break;
                 case PRESUPUESTOS:
                     activarTabDatos(2);
+                    //Seleccionar por defecto un punto de emision cuando exista
+                    Integer puntoEmisionDefecto = ParametroUtilidades.obtenerValorParametroInteger(session.getEmpresa(),ParametroCodefac.PUNTO_EMISION_DEFECTO_PRESUPUESTOS,null);
+                    if(puntoEmisionDefecto!=null)
+                    {
+                        seleccionarComboPuntoEmisionPorNumero(puntoEmisionDefecto);
+                    }
+                    
                     break;
                     
                 case ORDEN_TRABAJO:
@@ -3622,6 +3630,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     break;
             }
         }        
+        
+    }
+    
+    private void seleccionarComboPuntoEmisionPorNumero(Integer puntoEmisionNumero)
+    {
+        //UtilidadesComboBox.crearCabeceraComboBox(comboBox, title);
+        
+        /*for (int i = 0; i < getCmbPuntoEmision().getItemCount(); i++) 
+        {
+            PuntoEmision puntoEmision= getCmbPuntoEmision().getItemAt(i);
+            if(puntoEmision.getPuntoEmision().equals(puntoEmisionNumero))
+            {
+                getCmbPuntoEmision().setSelectedIndex(i);
+                break;
+            }
+        }*/
+        UtilidadesComboBox.seleccionarItemPorCriterio(getCmbPuntoEmision(),puntoEmisionNumero,new UtilidadesComboBox.CriterioCompararComboEnum<PuntoEmision>() {
+            @Override
+            public Object objectoComparador(PuntoEmision objeto) {
+                return objeto.getPuntoEmision();
+            }
+        });
         
     }
     

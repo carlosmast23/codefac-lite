@@ -13,6 +13,24 @@ import javax.swing.JComboBox;
  * @author Carlos
  */
 public class UtilidadesComboBox {
+    
+    public static void seleccionarItemPorCriterio(JComboBox comboBox,Object valor,CriterioCompararComboEnum criterio)
+    {
+        for (int i = 0; i < comboBox.getItemCount(); i++) 
+        {
+            Object puntoEmision= comboBox.getItemAt(i);
+            Object comparador=criterio.objectoComparador(puntoEmision);
+            if(comparador!=null)
+            {
+                if(comparador.equals(valor))
+                {
+                    comboBox.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+    }
+    
 
     public static void crearCabeceraComboBox(JComboBox comboBox, String titulo) {
         //comboBox.setRenderer(new MyComboBoxRenderer(titulo));
@@ -59,5 +77,10 @@ public class UtilidadesComboBox {
         {
             comboBox.addItem(object);
         }
+    }
+    
+    public interface CriterioCompararComboEnum<T>
+    {
+        public abstract Object objectoComparador(T objeto );
     }
 }

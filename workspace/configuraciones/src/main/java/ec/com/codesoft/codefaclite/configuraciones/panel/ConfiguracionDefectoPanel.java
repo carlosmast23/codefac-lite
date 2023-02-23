@@ -63,6 +63,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtNotaVentaInternaAlias = new javax.swing.JTextField();
         jLabel65 = new javax.swing.JLabel();
         txtLeyendaAdicionalComprobante = new javax.swing.JTextField();
+        jLabel89 = new javax.swing.JLabel();
+        txtPuntoEmisionDefectoPresupuestos = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -300,17 +302,17 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel1.add(cmbTipoDocumentoCompra, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio3, gridBagConstraints);
 
         jLabel52.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel52.setText("Leyenda Adicional Comprobante:");
+        jLabel52.setText("Punto Emisión Por Defecto Presupuestos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel52, gridBagConstraints);
@@ -335,6 +337,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtLeyendaAdicionalComprobante, gridBagConstraints);
+
+        jLabel89.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel89.setText("Leyenda Adicional Comprobante:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel89, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtPuntoEmisionDefectoPresupuestos, gridBagConstraints);
 
         jTabbedPane1.addTab("Documentos", jPanel1);
 
@@ -2016,6 +2034,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel86;
     private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel88;
+    private javax.swing.JLabel jLabel89;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -2066,6 +2085,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JSpinner txtNumeroDecimalesRide;
     private javax.swing.JTextField txtNumeroMaximoDetalleFactura;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
+    private javax.swing.JSpinner txtPuntoEmisionDefectoPresupuestos;
     private javax.swing.JSpinner txtPvp1MargenUtilidad;
     private javax.swing.JSpinner txtPvp2MargenUtilidad;
     private javax.swing.JSpinner txtPvp3MargenUtilidad;
@@ -2697,10 +2717,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbCalcularUtilidadUltimoCosto(JComboBox<EnumSiNo> cmbCalcularUtilidadUltimoCosto) {
         this.cmbCalcularUtilidadUltimoCosto = cmbCalcularUtilidadUltimoCosto;
     }
-    
-    
-    
-    
+
+    public JSpinner getTxtPuntoEmisionDefectoPresupuestos() {
+        return txtPuntoEmisionDefectoPresupuestos;
+    }
+
+    public void setTxtPuntoEmisionDefectoPresupuestos(JSpinner txtPuntoEmisionDefectoPresupuestos) {
+        this.txtPuntoEmisionDefectoPresupuestos = txtPuntoEmisionDefectoPresupuestos;
+    }
     
     
 }

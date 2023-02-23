@@ -228,6 +228,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String DIAS_CREDITO_ALERTA="dias_credito_alerta";
     
+    public static final String PUNTO_EMISION_DEFECTO_PRESUPUESTOS="punto_emision_defecto_presupuestos";
+    
     /**
      * Activar credito por defecto para la pantalla de ventas para saber si tiene que ir las ventas a cartera o no
      */
