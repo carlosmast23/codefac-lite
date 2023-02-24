@@ -806,10 +806,16 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 //Todo: Tener en cuenta que este codigo se daño pero no se el por que
                 //carteraDetalle.setSaldo(detalle.getTotal());
                 //carteraDetalle.setTotal(detalle.getTotal());
-                //carteraDetalle.setSaldo(detalle.calcularTotalFinalConTodosDecimales());
-                //carteraDetalle.setTotal(detalle.calcularTotalFinalConTodosDecimales());
-                carteraDetalle.setSaldo(detalle.calcularTotalFinal());
-                carteraDetalle.setTotal(detalle.calcularTotalFinal());
+                
+                //NOTA: Si falla la proxima vez esta parte no esta mal por que para el final total coincida con el de la factura siempre se tiene que tomar en cuenta todos los decimales
+                //TODO: Si en el futuro se genera un error toca revisar pero el metodo calcularTotalFinalConTodosDecimales si esta bien 
+                
+                carteraDetalle.setSaldo(detalle.calcularTotalFinalConTodosDecimales());
+                carteraDetalle.setTotal(detalle.calcularTotalFinalConTodosDecimales());
+                
+                //carteraDetalle.setSaldo(detalle.calcularTotalFinal());
+                //carteraDetalle.setTotal(detalle.calcularTotalFinal());
+                
                 System.out.println(carteraDetalle.getTotal());
                 carteraDetalle.setId(carteraDetalle.generarIdTemporal() * -1l);
                 cartera.addDetalle(carteraDetalle);
@@ -827,7 +833,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                     carteraCruce.setCarteraDetalle(carteraDetalle);
                     carteraCruce.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                     carteraCruce.setFechaCruce(UtilidadesFecha.getFechaHoy());
-                    carteraCruce.setValor(detalle.calcularTotalFinal());
+                    //carteraCruce.setValor(detalle.calcularTotalFinal());
+                    carteraCruce.setValor(detalle.calcularTotalFinalConTodosDecimales());
                     cruces.add(carteraCruce);
                 }
             }

@@ -1,0 +1,125 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
+
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.sql.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ *
+ * @author CARLOS_CODESOFT
+ */
+@Entity
+@Table(name = "DESCUENTO")
+public class Descuento extends EntityAbstract<GeneralEnumEstado>{
+    
+    @Column(name = "NOMBRE")
+    private String nombre;
+    
+    @Column(name = "FECHA_INICIO")
+    private Date fechaInicio;
+    
+    @Column(name = "FECHA_FIN")
+    private Date fechaFin;
+    
+    @Column(name = "ALCANCE")
+    private String alcance;
+    
+    
+    /////////////////////////////////////////////////
+    ///             METODOS GET AND SET
+    ////////////////////////////////////////////////
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getAlcance() {
+        return alcance;
+    }
+
+    public void setAlcance(String alcance) {
+        this.alcance = alcance;
+    }
+    
+    public AlcanceEnum getAlcanceEnum() {
+        return AlcanceEnum.getEnum(alcance);
+    }
+
+    public void setAlcanceEnum(AlcanceEnum alcanceEnum) 
+    {
+        this.alcance=alcanceEnum.letra;
+    }
+    
+    
+    ////////////////////////////////////////////////////
+    ///     CODIGO PERSONALIZADO
+    ////////////////////////////////////////////////////
+    
+    /**
+     * Este enum me va a permitir defecinir el alcance del descuento por ejemplo a nivel de todos los productos o a nivel de una cantidad de productos especificos
+     */
+    public enum AlcanceEnum
+    {
+        GLOBAL("Global","g"),
+        SEGMENTADO("Segmentado","s");
+        
+        private String nombre;
+        private String letra;
+
+        private AlcanceEnum(String nombre, String letra) {
+            this.nombre = nombre;
+            this.letra = letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+        
+        public static AlcanceEnum getEnum(String letra)
+        {
+            for (AlcanceEnum value : AlcanceEnum.values()) 
+            {
+                if(value.getLetra().equals(letra))
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
+        
+    }
+    
+    
+    
+}

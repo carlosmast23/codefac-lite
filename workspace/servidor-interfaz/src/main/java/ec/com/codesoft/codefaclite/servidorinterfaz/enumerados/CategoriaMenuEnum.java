@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 public enum CategoriaMenuEnum implements Serializable{
     GESTIONAR("Gestionar",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/gestionar.png")),
     PROCESOS("Procesos",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/proceso.png")),
+    DESCUENTOS("Descuentos",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/deudas.png")),
     DEUDAS_ACADEMICOS("Rubros",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/deudas.png")),
     MATRICULA("Matricula",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/inscripcion.png")),
     REPORTES("Reportes",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/reporte.png")),

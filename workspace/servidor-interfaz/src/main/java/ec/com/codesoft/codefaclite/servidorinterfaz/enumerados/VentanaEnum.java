@@ -166,6 +166,7 @@ public enum VentanaEnum implements Serializable{
     REPORTE_ARQUEO_CAJA("ec.com.codesoft.codefaclite.pos.model.ArqueoCajaReporteModel", "ACRT", "Reporte Arqueo Caja", ModuloCodefacEnum.POS, CategoriaMenuEnum.REPORTES, TipoLicenciaEnum.PRO, null),
     MESA("ec.com.codesoft.codefaclite.restaurante.model.MesaModel", "MESA", "Mesa", ModuloCodefacEnum.RESTAURANTE, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO},TipoLicenciaEnum.PRO,null,null),
     PRODUCCION("ec.com.codesoft.codefaclite.inventario.model.ProduccionModel", "PROD", "Producción", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO},TipoLicenciaEnum.GRATIS,null,null),    
+    DESCUENTO("ec.com.codesoft.codefaclite.inventario.model.DescuentoModel", "DESC", "Descuento", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.DESCUENTOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     ;
     
 
