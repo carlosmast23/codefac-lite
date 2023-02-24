@@ -58,7 +58,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -124,6 +123,9 @@ public class KardexModel extends KardexPanel {
         
         BigDecimal ultimoCosto=new BigDecimal(getTxtUltimoCosto().getText());
         kardex.setPrecioUltimo(ultimoCosto);
+        
+        BigDecimal reserva=new BigDecimal(getTxtReserva().getValue()+"");
+        kardex.setReserva(reserva);
         
     }
 
@@ -380,6 +382,7 @@ public class KardexModel extends KardexPanel {
 
                 getTxtCostoPromedio().setText(kardex.getCostoPromedio() + "");
                 getTxtUltimoCosto().setText(kardex.getPrecioUltimo() + "");
+                getTxtReserva().setValue(kardex.getReserva().toBigInteger());
             } else {
                 //Cuando no encuentra nada seteo un kardex vacio
                 //kardexService.getKardexModificados(productoSeleccionado, cantidadMovimientos, bodega, ProductoEnsamble.EnsambleAccionEnum.AGREGAR)

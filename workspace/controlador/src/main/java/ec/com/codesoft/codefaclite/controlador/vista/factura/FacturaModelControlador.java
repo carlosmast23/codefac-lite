@@ -255,6 +255,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             String descripcion="P "+presupuestoTmp.getId()+objetoMantenimiento+" OT"+presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoTmp.getDescripcion();
             FacturaDetalle facturaDetalle=crearFacturaDetalle(
+                    BigDecimal.ONE,
                     presupuestoTmp.calcularValorServicio(), 
                     null, //No tiene valor del subsidio
                     descripcion, 
@@ -286,6 +287,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         //TODO: Ver si puedo unir esta parte con el metodo que ya existe para poder agregar los detalles unitarios
                         facturaDetalle = crearFacturaDetalle
                         (
+                                presupuestoDetalle.getCantidad(),
                                 //productoSeleccionado.getValorUnitario(),
                                 presupuestoDetalle.getPrecioCompra(),
                                 productoSeleccionado.getPrecioSinSubsidio(),
@@ -394,6 +396,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //descripcion=descripcion.replace("\n"," ");
         
         FacturaDetalle facturaDetalle=crearFacturaDetalle(
+                BigDecimal.ONE,
                 productoSeleccionado.getValorUnitario(), 
                 productoSeleccionado.getPrecioSinSubsidio(),
                 descripcion, 
@@ -412,6 +415,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     }
     
     public FacturaDetalle crearFacturaDetalle(
+            BigDecimal cantidad,
             BigDecimal valorUnitario,
             BigDecimal valorSinSubsidio,
             String descripcion,
@@ -425,7 +429,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             BigDecimal descuento)
     {
         FacturaDetalle facturaDetalle=new FacturaDetalle();
-        facturaDetalle.setCantidad(BigDecimal.ONE);
+        facturaDetalle.setCantidad(cantidad);
         facturaDetalle.setDescripcion(descripcion);
         facturaDetalle.setDescuento(descuento);
         facturaDetalle.setPrecioUnitario(valorUnitario);

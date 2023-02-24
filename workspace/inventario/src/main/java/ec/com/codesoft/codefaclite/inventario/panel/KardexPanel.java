@@ -72,6 +72,8 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel12 = new javax.swing.JLabel();
         txtLoteNombre = new javax.swing.JTextField();
         btnBuscarLote = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        txtReserva = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -274,10 +276,10 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         getContentPane().add(chkTodosMovimientos, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText("Costo Promedio:");
+        jLabel8.setText("Reserva:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
@@ -334,6 +336,21 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarLote, gridBagConstraints);
 
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText("Costo Promedio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel13, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtReserva, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -350,6 +367,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -370,6 +388,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtLoteNombre;
     private javax.swing.JSpinner txtMovimientos;
     private javax.swing.JTextField txtProducto;
+    private javax.swing.JSpinner txtReserva;
     private javax.swing.JTextField txtUltimoCosto;
     // End of variables declaration//GEN-END:variables
 
@@ -510,6 +529,16 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     public void setBtnBuscarLote(JButton btnBuscarLote) {
         this.btnBuscarLote = btnBuscarLote;
     }
+
+    public JSpinner getTxtReserva() {
+        return txtReserva;
+    }
+
+    public void setTxtReserva(JSpinner txtReserva) {
+        this.txtReserva = txtReserva;
+    }
+    
+    
     
     
 

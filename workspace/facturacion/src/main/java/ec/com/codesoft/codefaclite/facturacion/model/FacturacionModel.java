@@ -1018,6 +1018,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     productoSeleccionado = entity;                    
                     
                     FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
+                            BigDecimal.ONE,
                             productoSeleccionado.getValorUnitario(),
                             productoSeleccionado.getPrecioSinSubsidio(),
                             productoSeleccionado.getNombre(),
@@ -1119,6 +1120,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {            
             //ordenTrabajoTmp.get
             FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
+                    BigDecimal.ONE,
                     BigDecimal.ZERO, 
                     null, //Este tipo de valores no tienen subsidio
                     ordenTrabajoTmp.getDescripcion(), 
@@ -1180,6 +1182,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             
             FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
+                    BigDecimal.ONE,
                     rubroEstudianteTmp.obtenerSaldoIncluidoDescuento(), 
                     null, //Este tipo de valores no tienen subsidio
                     rubroEstudianteTmp.getRubroNivel().getNombre(), 
