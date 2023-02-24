@@ -6,6 +6,7 @@ create table DESCUENTO(
     FECHA_INICIO timestamp, 
     FECHA_FIN timestamp, 
     ALCANCE varchar(1), 
+    EMPRESA_ID BIGINT,  
 
     FECHA_CREACION timestamp, 
     FECHA_ULTIMA_EDICION timestamp, 

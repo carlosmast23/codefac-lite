@@ -48,7 +48,9 @@ public class DescuentoBusqueda implements InterfaceModelFind<Descuento>{
 
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
-        Descuento descuento;
+        //Descuento descuento;
+        //descuento.getEstado();
+        //descuento.getEm
         //descuento.getEmpresa();
         
         

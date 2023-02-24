@@ -113,7 +113,8 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_transporte.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_modulo_pos.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("create_modulo_restaurant.sql")
+        RecursoCodefac.SQL.getResourceInputStream("create_modulo_restaurant.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_modulo_inventario.sql")
             
     };
     
