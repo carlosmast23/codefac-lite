@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="1.7684607682500113"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="7"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -606,120 +606,7 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="99" splitType="Stretch">
-			<staticText>
-				<reportElement x="614" y="13" width="100" height="20" uuid="7562de4f-7334-449b-a2f9-47509118e08b"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<text><![CDATA[Precio Venta]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="614" y="33" width="100" height="20" uuid="002a8dc6-4ff2-4dd4-875d-8eed45d3c83c"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<text><![CDATA[Compras]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="614" y="53" width="100" height="20" uuid="17dd50b9-5e96-46ad-8a37-fec185bf5205"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<text><![CDATA[Producción Interna]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="614" y="73" width="100" height="20" uuid="a8b8fae7-6c34-4e68-9ba3-0e60012e3d01"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<text><![CDATA[Utilidad]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="714" y="13" width="88" height="20" uuid="e1434bc6-1fb4-4fcb-92f3-04858d528935"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{venta_acum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="714" y="33" width="88" height="20" uuid="a4c1f2b0-b5cc-4294-949e-55594910ca59"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{compra_acum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="714" y="53" width="88" height="20" uuid="39853039-bec4-4ee4-a540-f9ad7f0138ad"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{interno_acum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="714" y="73" width="88" height="20" uuid="99c73cf4-ee67-4605-a792-0722d3bcdfcb"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{utilidad_acum}]]></textFieldExpression>
-			</textField>
-		</band>
+		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch">
@@ -769,7 +656,120 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="90" splitType="Stretch">
+			<staticText>
+				<reportElement x="607" y="6" width="100" height="20" uuid="7562de4f-7334-449b-a2f9-47509118e08b"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<text><![CDATA[Precio Venta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="607" y="26" width="100" height="20" uuid="002a8dc6-4ff2-4dd4-875d-8eed45d3c83c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<text><![CDATA[Compras]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="607" y="46" width="100" height="20" uuid="17dd50b9-5e96-46ad-8a37-fec185bf5205"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<text><![CDATA[Producción Interna]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="607" y="66" width="100" height="20" uuid="a8b8fae7-6c34-4e68-9ba3-0e60012e3d01"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<text><![CDATA[Utilidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="707" y="6" width="88" height="20" uuid="e1434bc6-1fb4-4fcb-92f3-04858d528935"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{venta_acum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="707" y="26" width="88" height="20" uuid="a4c1f2b0-b5cc-4294-949e-55594910ca59"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{compra_acum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="707" y="46" width="88" height="20" uuid="39853039-bec4-4ee4-a540-f9ad7f0138ad"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{interno_acum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="707" y="66" width="88" height="20" uuid="99c73cf4-ee67-4605-a792-0722d3bcdfcb"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{utilidad_acum}]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 	<noData>
 		<band height="50">
