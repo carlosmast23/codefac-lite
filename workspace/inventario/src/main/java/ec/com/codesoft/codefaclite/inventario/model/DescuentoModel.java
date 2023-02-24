@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.controlador.vista.inventario.DescuentoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.LoteControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
@@ -16,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.DescuentoPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.LotePanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import java.rmi.RemoteException;
@@ -29,13 +31,13 @@ import java.util.logging.Logger;
  *
  * @author CARLOS_CODESOFT
  */
-public class DescuentoModel extends DescuentoPanel implements DialogInterfacePanel<Lote>,InterfazPostConstructPanel,ControladorVistaIf,LoteControlador.ISwing{
+public class DescuentoModel extends DescuentoPanel implements DialogInterfacePanel<Descuento>,InterfazPostConstructPanel,ControladorVistaIf,DescuentoControlador.ISwing{
     
-    private LoteControlador controlador;
+    private DescuentoControlador controlador;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        controlador=new LoteControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+        controlador=new DescuentoControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
     }
 
     @Override
@@ -105,11 +107,11 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
         return permisos;
     }
 
-    public LoteControlador getControlador() {
+    public DescuentoControlador getControlador() {
         return controlador;
     }
 
-    public void setControlador(LoteControlador controlador) {
+    public void setControlador(DescuentoControlador controlador) {
         this.controlador = controlador;
     }
 
@@ -124,10 +126,10 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
     }
 
     @Override
-    public Lote getResult() throws ExcepcionCodefacLite {
+    public Descuento getResult() throws ExcepcionCodefacLite {
         try {
             controlador.grabar();
-            return controlador.getLote();
+            return controlador.getDescuento();
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(DescuentoModel.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
@@ -140,12 +142,12 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
     @Override
     public void postConstructorExterno(Object[] parametros) {
         
-        if(parametros[0]!=null)
+        /*if(parametros[0]!=null)
         {
             Producto productoTmp=(Producto) parametros[0];
             controlador.getLote().setProducto(productoTmp);            
         }
-        actualizarBindingCompontValues();
+        actualizarBindingCompontValues();*/
     }
     
 }

@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -44,20 +45,20 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        cmbFechaElaboracion = new org.jdesktop.swingx.JXDatePicker();
-        cmbFechaVencimiento = new org.jdesktop.swingx.JXDatePicker();
+        cmbFechaInicio = new org.jdesktop.swingx.JXDatePicker();
+        cmbFechaFin = new org.jdesktop.swingx.JXDatePicker();
         txtDescripción = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbAlcance = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jComboBox2 = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -92,7 +93,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jPanel1.add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Tipo:");
+        jLabel4.setText("Alcance:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -109,13 +110,13 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFechaElaboracion, gridBagConstraints);
+        jPanel1.add(cmbFechaInicio, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFechaVencimiento, gridBagConstraints);
+        jPanel1.add(cmbFechaFin, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -152,7 +153,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        jPanel1.add(cmbAlcance, gridBagConstraints);
 
         jScrollPane2.setViewportView(jTable2);
 
@@ -192,23 +193,20 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
 
         jToolBar1.setRollover(true);
 
-        jButton1.setText("-");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
-
-        jButton2.setText("+");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton2);
 
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jToolBar1.add(jComboBox2);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel1.add(jToolBar1, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -218,11 +216,11 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.jdesktop.swingx.JXDatePicker cmbFechaElaboracion;
-    private org.jdesktop.swingx.JXDatePicker cmbFechaVencimiento;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<Descuento.AlcanceEnum> cmbAlcance;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaInicio;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<Descuento.AlcanceEnum> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -240,6 +238,47 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
+    public JComboBox<Descuento.AlcanceEnum> getCmbAlcance() {
+        return cmbAlcance;
+    }
 
+    public void setCmbAlcance(JComboBox<Descuento.AlcanceEnum> cmbAlcance) {
+        this.cmbAlcance = cmbAlcance;
+    }
+
+    public JXDatePicker getCmbFechaFin() {
+        return cmbFechaFin;
+    }
+
+    public void setCmbFechaFin(JXDatePicker cmbFechaFin) {
+        this.cmbFechaFin = cmbFechaFin;
+    }
+
+    public JXDatePicker getCmbFechaInicio() {
+        return cmbFechaInicio;
+    }
+
+    public void setCmbFechaInicio(JXDatePicker cmbFechaInicio) {
+        this.cmbFechaInicio = cmbFechaInicio;
+    }
+
+    public JTextField getTxtDescripción() {
+        return txtDescripción;
+    }
+
+    public void setTxtDescripción(JTextField txtDescripción) {
+        this.txtDescripción = txtDescripción;
+    }
+
+    public JTextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public void setTxtNombre(JTextField txtNombre) {
+        this.txtNombre = txtNombre;
+    }
+
+
+    
     
 }

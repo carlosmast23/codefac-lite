@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -22,6 +23,9 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
     @Column(name = "NOMBRE")
     private String nombre;
     
+    @Column(name = "DESCRIPCION")
+    private String descripcion;
+    
     @Column(name = "FECHA_INICIO")
     private Date fechaInicio;
     
@@ -30,6 +34,9 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
     
     @Column(name = "ALCANCE")
     private String alcance;
+    
+    @JoinColumn(name = "EMPRESA_ID")
+    protected Empresa empresa;
     
     
     /////////////////////////////////////////////////
@@ -76,6 +83,24 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
     {
         this.alcance=alcanceEnum.letra;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+    
+    
     
     
     ////////////////////////////////////////////////////
