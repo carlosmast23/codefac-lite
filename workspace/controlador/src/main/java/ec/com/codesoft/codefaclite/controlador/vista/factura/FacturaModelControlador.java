@@ -277,7 +277,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 try {
                     //DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     DocumentoEnum documentoSeleccionado=interfaz.obtenerDocumentoSeleccionado();
-                    agregarDetallesFactura(facturaDetalle,null, documentoSeleccionado, null,null);
+                    agregarDetallesFactura(facturaDetalle,null, documentoSeleccionado, null,null,null);
                     
                     //Cargar los productos adicionales para la factura
                     for (PresupuestoDetalle presupuestoDetalle : presupuestoTmp.getPresupuestoDetalles()) 
@@ -312,7 +312,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         this.setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum.INVENTARIO);
                         this.interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
                         setearValoresProducto(facturaDetalle);
-                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null,facturaDetalle.getReservadoEnum());
+                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null,facturaDetalle.getReservadoEnum(),facturaDetalle.getCantidad());
                     }
                     
                 } catch (ServicioCodefacException ex) {
@@ -830,7 +830,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param facturaDetalle
      * @return 
      */
-    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex,EnumSiNo reservaEnum) throws ServicioCodefacException {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex,EnumSiNo reservaEnum,BigDecimal cantidad) throws ServicioCodefacException {
 
         
         agregarDetallesFacturaValidacion(facturaDetalle, precioVentaOriginal);
@@ -859,7 +859,16 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         
         facturaDetalle.setLote((lote!=null)?lote:null);
-        facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));   
+        
+        //Solo leer la cantidad de la pantalla si no estan enviando una cantidad
+        if(cantidad==null)
+        {
+            facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));   
+        }
+        else
+        {
+            facturaDetalle.setCantidad(cantidad);
+        }
         //facturaDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(interfaz.obtenerChkReservado()));
         facturaDetalle.setReservadoEnum(reservaEnum);
         //facturaDetalle.setKardexId(interfaz.obtenerKardexId());

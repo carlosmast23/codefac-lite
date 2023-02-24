@@ -659,7 +659,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     
-                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null);
+                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null);
                     
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -907,7 +907,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             try {
                 //Si esta habilitado el boton de agregar funciona para agregar
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null);
+                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -961,7 +961,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 controlador.actualizarFacturaDetalleCatalogo(facturaDetalle);
                 
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-                if(controlador.agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado,kardexSeleccionado,null))
+                if(controlador.agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado,kardexSeleccionado,null,null))
                 {
                     habilitarModoIngresoDatos();
                 }
