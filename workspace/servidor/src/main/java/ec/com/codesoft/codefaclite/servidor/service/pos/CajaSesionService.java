@@ -199,19 +199,26 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     @Override
     public CajaSession obtenerCajaSessionPorPuntoEmisionYUsuario(Integer puntoEmision, Usuario usuario) 
     {
-        Map<String, Object> mapParametros = new HashMap<>();
+        /*Map<String, Object> mapParametros = new HashMap<>();
         mapParametros.put("usuario", usuario);
         mapParametros.put("caja.puntoEmision.puntoEmision", puntoEmision);
         mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
         
-        List<CajaSession> cajasSession = getFacade().findByMap(mapParametros);
+        List<CajaSession> cajasSession = getFacade().findByMap(mapParametros);*/
         
-        if(cajasSession.size() > 0)
+        
+        List<CajaSession> resultadoList= getFacade().obtenerCajaSessionPorPuntoEmisionYUsuarioFacade(puntoEmision, usuario);
+        if(resultadoList!=null && resultadoList.size()>0)
+        {
+            return resultadoList.get(0);
+        }
+        return null;
+        /*if(cajasSession.size() > 0)
         {
             return cajasSession.get(0);
         }
         
-        return null;
+        return null;*/
     }
     
     @Override

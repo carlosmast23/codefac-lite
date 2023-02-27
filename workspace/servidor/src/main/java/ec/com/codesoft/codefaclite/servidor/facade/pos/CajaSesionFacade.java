@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade.pos;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
@@ -114,6 +115,21 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
         }catch (NoResultException e) {
             return null;
         }
+    }
+    
+    public List<CajaSession> obtenerCajaSessionPorPuntoEmisionYUsuarioFacade(Integer puntoEmision, Usuario usuario) 
+    {
+        String stringQuery = "SELECT u from CajaSession u where u.usuario = ?1 and u.estadoCierreCaja = ?2 and ( u.caja.puntoEmision.puntoEmision = ?3 OR u.caja.puntoEmision2.puntoEmision = ?3 )  order by u.fechaHoraCierre desc";
+
+        Query query = getEntityManager().createQuery(stringQuery);
+        query.setParameter(1, usuario);
+        query.setParameter(2, CajaSessionEnum.ACTIVO.getEstado());
+        query.setParameter(3, puntoEmision);
+
+        List<CajaSession> resultadoLista = query.getResultList();
+
+        return resultadoLista;
+               
     }
     
 }
