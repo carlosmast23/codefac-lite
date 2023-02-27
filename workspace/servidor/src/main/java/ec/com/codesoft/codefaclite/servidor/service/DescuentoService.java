@@ -43,8 +43,24 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
         super(DescuentoFacade.class);
     }
     
+    private void setearDatosDefecto(Descuento descuento,Empresa empresa)
+    {
+        descuento.setEmpresa(empresa);
+    }
+    
     private void validarGrabar(Descuento descuento,CrudEnum crudEnum) throws ServicioCodefacException
     {           
+        
+        if(UtilidadesTextos.verificarNullOVacio(descuento.getNombre()))
+        {
+            throw new ServicioCodefacException("Debe ingresar un nombre de descuento para grabar");
+        }
+        
+        if(descuento.getEmpresa()==null)
+        {
+            throw new ServicioCodefacException("No se puede GRABAR un descuento sin asignar una empresa");
+        }
+        
         /*if(descuento.getEmpresa()==null)
         {
             throw new ServicioCodefacException("No se puede grabar sin una Empresa");
@@ -63,6 +79,7 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                setearDatosDefecto(entity, empresa);
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.CREAR);

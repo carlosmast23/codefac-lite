@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.converter.DateUtilToDateSq
 import ec.com.codesoft.codefaclite.controlador.vistas.core.DateComboBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -238,6 +239,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
+    @ComboBoxBinding(source = "controlador.alcanceList" ,valueSelect = "controlador.descuento.alcanceEnum")
     public JComboBox<Descuento.AlcanceEnum> getCmbAlcance() {
         return cmbAlcance;
     }
@@ -246,6 +248,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         this.cmbAlcance = cmbAlcance;
     }
 
+    @DateComboBinding(value = "controlador.descuento.fechaFin",converter = DateUtilToDateSqlConverter.class)
     public JXDatePicker getCmbFechaFin() {
         return cmbFechaFin;
     }
@@ -254,6 +257,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         this.cmbFechaFin = cmbFechaFin;
     }
 
+    @DateComboBinding(value = "controlador.descuento.fechaInicio",converter = DateUtilToDateSqlConverter.class)
     public JXDatePicker getCmbFechaInicio() {
         return cmbFechaInicio;
     }
@@ -262,6 +266,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         this.cmbFechaInicio = cmbFechaInicio;
     }
 
+    @TextFieldBinding(value = "controlador.descuento.descripcion")
     public JTextField getTxtDescripción() {
         return txtDescripción;
     }
@@ -270,6 +275,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         this.txtDescripción = txtDescripción;
     }
 
+    @TextFieldBinding(value = "controlador.descuento.nombre")
     public JTextField getTxtNombre() {
         return txtNombre;
     }
@@ -277,6 +283,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     public void setTxtNombre(JTextField txtNombre) {
         this.txtNombre = txtNombre;
     }
+    
 
 
     

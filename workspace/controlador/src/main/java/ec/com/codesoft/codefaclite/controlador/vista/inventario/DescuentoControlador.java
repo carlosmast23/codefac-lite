@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ import java.util.logging.Logger;
 public class DescuentoControlador extends ModelControladorAbstract<DescuentoControlador.ICommon, DescuentoControlador.ISwing, DescuentoControlador.IWeb> implements  VistaCodefacIf{
     
     private Descuento descuento;
+    
+    private List<Descuento.AlcanceEnum> alcanceList;
 
     public DescuentoControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, ICommon interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -37,6 +40,13 @@ public class DescuentoControlador extends ModelControladorAbstract<DescuentoCont
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         descuento=new Descuento();
+        cargarDatosIniciales();
+    }
+    
+    
+    private void cargarDatosIniciales()
+    {
+        alcanceList= UtilidadesLista.arrayToList(Descuento.AlcanceEnum.values());
     }
 
     @Override
@@ -132,7 +142,14 @@ public class DescuentoControlador extends ModelControladorAbstract<DescuentoCont
         this.descuento = descuento;
     }
 
-    
+    public List<Descuento.AlcanceEnum> getAlcanceList() {
+        return alcanceList;
+    }
+
+    public void setAlcanceList(List<Descuento.AlcanceEnum> alcanceList) {
+        this.alcanceList = alcanceList;
+    }
+
     
     
     @Override
