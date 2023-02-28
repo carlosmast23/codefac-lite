@@ -87,6 +87,7 @@ import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.File;
 import java.io.FileInputStream;
@@ -2280,28 +2281,37 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 if(empleado.getDireccion()!=null && !empleado.getDireccion().trim().isEmpty())
                 {
                     ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Dirección",empleado.getDireccion());
-                    comprobante.addDatoAdicional(comprobanteAdicional);
+                    //comprobante.addDatoAdicional(comprobanteAdicional);
                 }
             }
             
             if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_RUC_EMPLEADO,EnumSiNo.SI))
             {
                 ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*RUC",empleado.getIdentificacion());
-                comprobante.addDatoAdicional(comprobanteAdicional);
+                //comprobante.addDatoAdicional(comprobanteAdicional);
             }
             
             if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_RAZON_SOCIAL_EMPLEADO,EnumSiNo.SI))
             {
                 ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Razón Social",empleado.getNombresCompletos());
-                comprobante.addDatoAdicional(comprobanteAdicional);
-            }        
+                //comprobante.addDatoAdicional(comprobanteAdicional);
+            }
+            
+            if(ParametroUtilidades.comparar(comprobante.getEmpresa(),ParametroCodefac.FACTURACION_RIDE_PLACA_EMPLEADO,EnumSiNo.SI))
+            {
+                if(!UtilidadesTextos.verificarNullOVacio(empleado.getPlaca()))
+                {
+                    ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Placa",empleado.getPlaca());
+                    //comprobante.addDatoAdicional(comprobanteAdicional);
+                }
+            }
         }
         
         if (ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO, EnumSiNo.SI)) {
 
             String puntosEmisionFormato = comprobante.getUsuario().formatoPuntoEmisionActivos();
             ComprobanteAdicional comprobanteAdicional = construirDatoAdicionalSinTransaccion(comprobante, "*Punto de Emisión", puntosEmisionFormato);
-            comprobante.addDatoAdicional(comprobanteAdicional);
+            //comprobante.addDatoAdicional(comprobanteAdicional);
         }
         
         //Datos adicionales solo para cuando el documento es una factura
@@ -2312,7 +2322,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 String direccionReferencia = factura.getSucursal().getReferenciaDireccion();
                 if (direccionReferencia != null && !direccionReferencia.trim().isEmpty()) {
                     ComprobanteAdicional comprobanteAdicional = construirDatoAdicionalSinTransaccion(comprobante, "*Referencia Dirección", direccionReferencia);
-                    comprobante.addDatoAdicional(comprobanteAdicional);
+                    //comprobante.addDatoAdicional(comprobanteAdicional);
                 }
             }
 
@@ -2320,7 +2330,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 String codigoPersonalizado = factura.getSucursal().getCodigoPersonalizado();
                 if (codigoPersonalizado != null && !codigoPersonalizado.trim().isEmpty()) {
                     ComprobanteAdicional comprobanteAdicional = construirDatoAdicionalSinTransaccion(comprobante, "Código Personalizado", codigoPersonalizado);
-                    comprobante.addDatoAdicional(comprobanteAdicional);
+                    //comprobante.addDatoAdicional(comprobanteAdicional);
                 }
             }
         }
@@ -2524,7 +2534,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
        {
            
            ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Tipo","Contribuyente Régimen RIMPE");
-           comprobante.addDatoAdicional(comprobanteAdicional);
+           //comprobante.addDatoAdicional(comprobanteAdicional);
            //agregarParametroComprobante(comprobante, parametroCodefac.getValor());           
        }      
        
@@ -2533,10 +2543,10 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
        {
            
            ComprobanteAdicional comprobanteAdicional=construirDatoAdicionalSinTransaccion(comprobante,"*Tipo","Contribuyente Negocio Popular - Régimen RIMPE");
-           if(comprobanteAdicional!=null)
+           /*if(comprobanteAdicional!=null)
            {
                 comprobante.addDatoAdicional(comprobanteAdicional);
-           }
+           }*/
            //agregarParametroComprobante(comprobante, parametroCodefac.getValor());           
        }      
         

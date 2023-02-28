@@ -70,6 +70,8 @@ create table EMPLEADO
     CORREO_ELECTRONICO varchar(100),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.3)*/
     GENERO varchar(1),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.9.6)*/
+    PLACA varchar(64),
     primary key(ID)
 );
 

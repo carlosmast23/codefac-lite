@@ -52,6 +52,8 @@ public class Empleado implements Serializable
     private String cargo;
     @Column(name = "ESTADO")
     private String estado;
+    @Column(name = "PLACA")
+    private String placa;
     
 //    @JoinColumn(name = "PERSONA_ID")
 //    @ManyToOne    
@@ -194,6 +196,14 @@ public class Empleado implements Serializable
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
     
     

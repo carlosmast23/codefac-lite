@@ -72,6 +72,8 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         lblEspacio2 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         txtCodigo = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        txtPlaca = new javax.swing.JTextField();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -86,7 +88,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("Apellidos:");
@@ -94,7 +96,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Código Personalizado:");
@@ -102,7 +104,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel3, gridBagConstraints);
 
         jLabel4.setText("Dirección:");
@@ -110,7 +112,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
 
         jLabel5.setText("Telefono:");
@@ -118,7 +120,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel5, gridBagConstraints);
 
         jLabel6.setText("Celular:");
@@ -126,7 +128,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel6, gridBagConstraints);
 
         jLabel7.setText("Correo Electrónico:");
@@ -134,7 +136,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel7, gridBagConstraints);
 
         jLabel8.setText("Genero:");
@@ -142,7 +144,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
 
         jLabel9.setText("Cargo:");
@@ -150,7 +152,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel9, gridBagConstraints);
 
         jLabel10.setText("Estado:");
@@ -158,7 +160,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel10, gridBagConstraints);
 
         jLabel11.setText("Departamento:");
@@ -166,15 +168,15 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel11, gridBagConstraints);
 
-        jLabel12.setText("Nacionalidad:");
+        jLabel12.setText("Placa:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel12, gridBagConstraints);
 
         txtIdentificacion.setText("  ");
@@ -182,6 +184,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtIdentificacion, gridBagConstraints);
 
         txtNombres.setText("  ");
@@ -190,6 +193,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtNombres, gridBagConstraints);
 
         txtApellidos.setText("  ");
@@ -198,6 +202,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtApellidos, gridBagConstraints);
 
         txtCargo.setText("  ");
@@ -205,6 +210,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtCargo, gridBagConstraints);
 
         txtTelefono.setText("  ");
@@ -212,6 +218,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtTelefono, gridBagConstraints);
 
         txtCelular.setText("  ");
@@ -219,6 +226,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtCelular, gridBagConstraints);
 
         txtCorreoElectronico.setText("  ");
@@ -226,30 +234,37 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtCorreoElectronico, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.ipadx = 150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbDepartamento, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.ipadx = 150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbNacionalidad, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbEstado, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbSexo, gridBagConstraints);
 
         txtAreaDireccion.setColumns(20);
@@ -264,12 +279,13 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.ipadx = 15;
         gridBagConstraints.ipady = 30;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtAreaDireccion1, gridBagConstraints);
 
         jLabel13.setText("          ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -297,7 +313,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel16, gridBagConstraints);
 
         txtCodigo.setText("  ");
@@ -305,7 +321,25 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtCodigo, gridBagConstraints);
+
+        jLabel17.setText("Nacionalidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel17, gridBagConstraints);
+
+        txtPlaca.setText("  ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtPlaca, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -444,7 +478,14 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void setTxtCodigo(JTextField txtCodigo) {
         this.txtCodigo = txtCodigo;
     }
-    
+
+    public JTextField getTxtPlaca() {
+        return txtPlaca;
+    }
+
+    public void setTxtPlaca(JTextField txtPlaca) {
+        this.txtPlaca = txtPlaca;
+    }
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -460,6 +501,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -478,6 +520,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     private javax.swing.JTextField txtCorreoElectronico;
     private javax.swing.JTextField txtIdentificacion;
     private javax.swing.JTextField txtNombres;
+    private javax.swing.JTextField txtPlaca;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

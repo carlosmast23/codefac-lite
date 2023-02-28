@@ -171,6 +171,7 @@ public class ParametroCodefac implements Serializable {
     public static final String FACTURACION_RIDE_PUNTO_EMISION_EMPLEADO="facturacion_ride_punto_emision_empleado";
     public static final String FACTURACION_RIDE_REFERENCIA_DIRECCION="facturacion_ride_referencia_direccion";
     public static final String FACTURACION_RIDE_CODIGO_PERSONALIZADO="facturacion_ride_codigo_personalizado";
+    public static final String FACTURACION_RIDE_PLACA_EMPLEADO="facturacion_ride_placa_empleado";
     
     
     

@@ -203,6 +203,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
     {
         getTxtApellidos().setText("");
         getTxtCargo().setText("");
+        getTxtPlaca().setText("");
         getTxtCelular().setText("");
         getTxtCorreoElectronico().setText("");
         getTxtIdentificacion().setText("");
@@ -218,6 +219,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
     {
         this.empleado.setApellidos(""+getTxtApellidos().getText());
         this.empleado.setCargo(""+getTxtCargo().getText());
+        this.empleado.setPlaca(getTxtPlaca().getText());
         this.empleado.setCorreoElectronico(""+getTxtCorreoElectronico().getText());
         Departamento departamento = (Departamento) getCmbDepartamento().getSelectedItem();
         if(departamento != null){
@@ -252,6 +254,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         getTxtApellidos().setText(this.empleado.getApellidos());
         getTxtAreaDireccion().setText(this.empleado.getDireccion());
         getTxtCargo().setText(this.empleado.getCargo());
+        getTxtPlaca().setText(this.empleado.getPlaca());
         getTxtCelular().setText(this.empleado.getTelefonoCelular());
         getTxtCorreoElectronico().setText(this.empleado.getCorreoElectronico());
         getTxtIdentificacion().setText(this.empleado.getIdentificacion());

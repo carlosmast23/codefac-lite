@@ -165,6 +165,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtCopiasFactura = new javax.swing.JSpinner();
         jLabel86 = new javax.swing.JLabel();
         cmbMostrarCostosFacturar = new javax.swing.JComboBox<>();
+        jLabel90 = new javax.swing.JLabel();
+        cmbDatoAdicionalRidePlaca = new javax.swing.JComboBox<>();
         jPanel13 = new javax.swing.JPanel();
         jLabel55 = new javax.swing.JLabel();
         cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
@@ -549,7 +551,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 21;
+        gridBagConstraints.gridy = 22;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -647,7 +649,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel18.setText("Mostrar titulos facturas Físicas:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 20;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -839,7 +841,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel37.setText("Ride Nombre Principal:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel37, gridBagConstraints);
@@ -908,7 +910,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbMostrarTituloFactFisica.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbMostrarTituloFactFisica, gridBagConstraints);
@@ -975,16 +977,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(txtLeyendaFirmaFactura2, gridBagConstraints);
 
         jLabel47.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel47.setText("Código Personalizado:");
+        jLabel47.setText("Placa Empleado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 19;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel47, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 20;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1039,14 +1041,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel56.setText("Número decimales Ride:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel56, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -1172,6 +1174,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbMostrarCostosFacturar, gridBagConstraints);
+
+        jLabel90.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel90.setText("Código Personalizado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel90, gridBagConstraints);
+
+        cmbDatoAdicionalRidePlaca.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbDatoAdicionalRidePlaca, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -1905,6 +1924,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbCreditoDefectoFacturas;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideCodigoPersonalizado;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideDireccionEmpledo;
+    private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRidePlaca;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRidePuntoEmisionEmpleado;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideRazoSocialEmpledo;
     private javax.swing.JComboBox<EnumSiNo> cmbDatoAdicionalRideReferenciaDireccion;
@@ -2036,6 +2056,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel88;
     private javax.swing.JLabel jLabel89;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel90;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -2725,6 +2746,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setTxtPuntoEmisionDefectoPresupuestos(JSpinner txtPuntoEmisionDefectoPresupuestos) {
         this.txtPuntoEmisionDefectoPresupuestos = txtPuntoEmisionDefectoPresupuestos;
     }
+
+    public JComboBox<EnumSiNo> getCmbDatoAdicionalRidePlaca() {
+        return cmbDatoAdicionalRidePlaca;
+    }
+
+    public void setCmbDatoAdicionalRidePlaca(JComboBox<EnumSiNo> cmbDatoAdicionalRidePlaca) {
+        this.cmbDatoAdicionalRidePlaca = cmbDatoAdicionalRidePlaca;
+    }
+    
     
     
 }
