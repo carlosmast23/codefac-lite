@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.FechaCaducidadDat
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReporteFechaCaducidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.FechaCaducidadResult;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -33,4 +34,5 @@ public interface DescuentoSeviceIf extends ServiceAbstractIf<Descuento>{
     public Descuento grabar(Descuento entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;
     public Descuento editar(Descuento entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;
     public void editarSinTransaccion(Descuento entity) throws ServicioCodefacException, RemoteException;        
+    public List<BigDecimal> consultarDescuentosPorProducto(Producto producto,Integer numeroPrecio) throws ServicioCodefacException, RemoteException;        
 }

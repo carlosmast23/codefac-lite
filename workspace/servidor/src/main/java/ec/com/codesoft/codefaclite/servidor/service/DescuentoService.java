@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.result.FechaCaducidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -168,6 +169,29 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
                 entityManager.merge(entity);
             }
         });
+    }
+    
+    public List<BigDecimal> consultarDescuentosPorProducto(Producto producto,Integer numeroPrecio) throws ServicioCodefacException, RemoteException
+    {
+        List<DescuentoProductoDetalle> detalleDescuento= getFacade().consultarDescuentosPorProductoFacade(producto);
+        
+        List<BigDecimal> descuentoList=new ArrayList<BigDecimal>();
+        for (DescuentoProductoDetalle descuentoProductoDetalle : detalleDescuento) {
+            
+            //OPTIMIZAR ESTA PARTE PARA HACER DIRECTO EN LA CONSULTA
+            List<DescuentoCondicionPrecio> condicionList= descuentoProductoDetalle.getDescuento().getCondicionPrecioList();
+            for (DescuentoCondicionPrecio condicion : condicionList) 
+            {
+                if(condicion.getNumeroPrecio().equals(numeroPrecio))
+                {
+                    descuentoList.add(condicion.getPorcentajeDescuento());
+                }
+            }
+            
+        }
+        
+        return descuentoList;
+        
     }
  
     

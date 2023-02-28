@@ -612,6 +612,7 @@ public class Producto implements Serializable, Comparable<Producto> {
             PrecioVenta precioVenta=new PrecioVenta();
             precioVenta.alias=PrecioVenta.PV1;
             precioVenta.precio=valorUnitario;
+            precioVenta.numero=1;
             valores.add(precioVenta);
         }
         
@@ -620,6 +621,7 @@ public class Producto implements Serializable, Comparable<Producto> {
             PrecioVenta precioVenta=new PrecioVenta();
             precioVenta.alias=PrecioVenta.PV2;
             precioVenta.precio=precioDistribuidor;
+            precioVenta.numero=2;
             valores.add(precioVenta);
         }
         
@@ -628,6 +630,7 @@ public class Producto implements Serializable, Comparable<Producto> {
             PrecioVenta precioVenta=new PrecioVenta();
             precioVenta.alias=PrecioVenta.PV3;
             precioVenta.precio=precioTarjeta;
+            precioVenta.numero=3;
             valores.add(precioVenta);
         }
         
@@ -636,6 +639,7 @@ public class Producto implements Serializable, Comparable<Producto> {
             PrecioVenta precioVenta=new PrecioVenta();
             precioVenta.alias=PrecioVenta.PV4;
             precioVenta.precio=pvp4;
+            precioVenta.numero=4;
             valores.add(precioVenta);
         }
         
@@ -644,6 +648,7 @@ public class Producto implements Serializable, Comparable<Producto> {
             PrecioVenta precioVenta=new PrecioVenta();
             precioVenta.alias=PrecioVenta.PV5;
             precioVenta.precio=pvp5;
+            precioVenta.numero=5;
             valores.add(precioVenta);
         }
         
@@ -652,6 +657,7 @@ public class Producto implements Serializable, Comparable<Producto> {
             PrecioVenta precioVenta=new PrecioVenta();
             precioVenta.alias=PrecioVenta.PV6;
             precioVenta.precio=pvp6;
+            precioVenta.numero=6;
             valores.add(precioVenta);
         }
         
@@ -1184,6 +1190,7 @@ public class Producto implements Serializable, Comparable<Producto> {
         
         public String alias;
         public BigDecimal precio;
+        public Integer numero;
 
         @Override
         public String toString() {
@@ -1205,6 +1212,16 @@ public class Producto implements Serializable, Comparable<Producto> {
         public void setPrecio(BigDecimal precio) {
             this.precio = precio;
         }
+
+        public Integer getNumero() {
+            return numero;
+        }
+
+        public void setNumero(Integer numero) {
+            this.numero = numero;
+        }
+        
+        
         
         
         

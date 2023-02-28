@@ -1271,6 +1271,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         return null;
     }
 
+    @Override
+    public void cargarPreciosPorcentaje(List<BigDecimal> descuentos) {
+        
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA

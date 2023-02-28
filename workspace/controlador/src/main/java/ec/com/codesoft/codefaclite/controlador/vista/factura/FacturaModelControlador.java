@@ -340,6 +340,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return null;
     }
     
+    public List<BigDecimal> consultarDescuentoPorProducto(Producto producto,Integer numeroPrecio)
+    {
+        try {
+            return ServiceFactory.getFactory().getDescuentoSeviceIf().consultarDescuentosPorProducto(producto, numeroPrecio);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<BigDecimal>();
+    }
+    
+    
+    
     /**
      * TODO: Ver si en este mismo metodo se puede hacer para tener seleccionado el kardex del producto para no tener en el modelo de la vista
      * @param productoSeleccionado
@@ -356,6 +370,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         //cargarPrecios(productoSeleccionado);
         interfaz.cargarPrecios(productoSeleccionado);
+        interfaz.cargarPreciosPorcentaje(consultarDescuentoPorProducto(productoSeleccionado,1));
         interfaz.cargarPresentaciones(productoSeleccionado);
         if(stock!=null)
         {
@@ -1851,6 +1866,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         Metodo que permite establecer como cargar los precios en la vista
         */
         public void cargarPrecios(Producto producto);
+        
+        public void cargarPreciosPorcentaje(List<BigDecimal> descuentos );
         
         public void cargarPresentaciones(Producto producto);
         

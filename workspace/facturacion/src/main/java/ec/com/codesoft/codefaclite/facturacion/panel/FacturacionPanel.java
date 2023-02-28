@@ -127,7 +127,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel19 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
         txtValorUnitario = new javax.swing.JTextField();
-        txtDescuento = new javax.swing.JTextField();
         checkPorcentaje = new javax.swing.JCheckBox();
         jLabel41 = new javax.swing.JLabel();
         txtCantidad = new javax.swing.JTextField();
@@ -147,6 +146,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel20 = new javax.swing.JLabel();
         lblStockDetalle = new javax.swing.JLabel();
         chkReserva = new javax.swing.JCheckBox();
+        cmbDescuento = new javax.swing.JComboBox<>();
         PanelFormasPago = new javax.swing.JPanel();
         btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -400,20 +400,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 60;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         pnlDetalles.add(txtValorUnitario, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 60;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        pnlDetalles.add(txtDescuento, gridBagConstraints);
 
         checkPorcentaje.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        checkPorcentaje.setText("Porcentaje");
+        checkPorcentaje.setText("%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         pnlDetalles.add(checkPorcentaje, gridBagConstraints);
 
@@ -556,6 +548,20 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         pnlDetalles.add(chkReserva, gridBagConstraints);
+
+        cmbDescuento.setEditable(true);
+        cmbDescuento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbDescuentoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        pnlDetalles.add(cmbDescuento, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1670,7 +1676,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.checkPorcentaje = checkPorcentaje;
     }
 
-    @LimpiarAnotacion
+    /*@LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0-9]+([.][0-9]+)?$",nombre = "Descuento")
     public JTextField getTxtDescuento() {
         return txtDescuento;
@@ -1678,7 +1684,17 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setTxtDescuento(JTextField txtDescuento) {
         this.txtDescuento = txtDescuento;
+    }*/
+
+    @LimpiarAnotacion
+    public JComboBox<String> getCmbDescuento() {
+        return cmbDescuento;
     }
+
+    public void setCmbDescuento(JComboBox<String> cmbDescuento) {
+        this.cmbDescuento = cmbDescuento;
+    }
+    
 
     private void btnAgregarFormaPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFormaPagoActionPerformed
         // TODO add your handling code here:
@@ -1695,6 +1711,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private void cmbConsumidorFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbConsumidorFinalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbConsumidorFinalActionPerformed
+
+    private void cmbDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDescuentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbDescuentoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1733,6 +1753,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkPorcentajeDescuentoGlobal;
     private javax.swing.JCheckBox chkReserva;
     private javax.swing.JCheckBox cmbConsumidorFinal;
+    private javax.swing.JComboBox<String> cmbDescuento;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private org.jdesktop.swingx.JXDatePicker cmbFechaVencimiento;
     private javax.swing.JComboBox<EnumSiNo> cmbIva;
@@ -1856,7 +1877,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtCodigoDetalle;
     private javax.swing.JTextArea txtDescripcion;
-    private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtDescuentoGlobal;
     private javax.swing.JSpinner txtDiasCredito;
     private javax.swing.JTextField txtEstudiante;

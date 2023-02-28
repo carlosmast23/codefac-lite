@@ -304,7 +304,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         camposValidar.add(getTxtValorUnitario());
         camposValidar.add(getTxtCantidad());
         //camposValidar.add(getTxtDescripcion());
-        camposValidar.add(getTxtDescuento());
+        //camposValidar.add(getTxtDescuento());
         //Obtener el estado de validacion de los campos
         for (JTextField campo : camposValidar) {
             Color color=campo.getBackground();
@@ -641,7 +641,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
                     getTxtDescripcion().setText(facturaDetalle.getDescripcion());
                     getTxtDescripcion().setCaretPosition(0);
-                    getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
+                    //getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
+                    getCmbDescuento().addItem(facturaDetalle.getDescuento()+"");
+                    getCmbDescuento().setSelectedItem(facturaDetalle.getDescuento()+"");
                     getCheckPorcentaje().setSelected(false);
                     getBtnEditarDetalle().setEnabled(true);
                     getBtnAgregarDetalleFactura().setEnabled(false);
@@ -1380,6 +1382,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbPreciosVenta().removeAllItems();
         for (Producto.PrecioVenta precioVenta : producto.obtenerPreciosVenta()) {
             getCmbPreciosVenta().addItem(precioVenta);            
+        }
+    }
+    
+    public void cargarPreciosPorcentaje(List<BigDecimal> descuentos ) {
+        getCmbDescuento().removeAllItems();
+        for (BigDecimal descuento : descuentos) 
+        {
+            getCmbDescuento().addItem(descuento+"");
+            
+            //Optimizar para poner fuera del ciclo repetitivo
+            getCheckPorcentaje().setSelected(true);
         }
     }
     
@@ -2321,7 +2334,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getChkReserva().setSelected(false);
         getTxtCantidad().setText("");
         getTxtDescripcion().setText("");
-        getTxtDescuento().setText("");
+        //getTxtDescuento().setText("");
+        getCmbDescuento().addItem("");
+        getCmbDescuento().setSelectedItem("");
         getTxtReferenciaContacto().setText("");
         getCmbPresentacionProducto().removeAllItems();
         //getTxtClientePresupuesto().setText("");
@@ -2400,7 +2415,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_DESCUENTO_FACTURA, EnumSiNo.NO))
             {
-                getTxtDescuento().setEnabled(false);
+                //getTxtDescuento().setEnabled(false);
+                getCmbDescuento().setEnabled(false);
             }
             
             if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_DESCRIPCION_FACTURA, EnumSiNo.NO))
@@ -3468,6 +3484,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(precioVenta!=null)
                 {
                     controlador.cargarPrecioUnitario((productoSeleccionado.getCatalogoProducto().getIce()!=null)?productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje():BigDecimal.ZERO,precioVenta.precio);
+                    
+                    //Cargar los descuentos disponibles por cada precio
+                    List<BigDecimal> descuentosList=controlador.consultarDescuentoPorProducto(productoSeleccionado,precioVenta.numero);
+                    cargarPreciosPorcentaje(descuentosList);
+                    
                     //getTxtValorUnitario().setText(precioVenta.precio.toString());
                 }
             }
@@ -4243,7 +4264,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtValorUnitario().setText(valorUnitario+"");
         getTxtDescripcion().setText(descripcion);
         getTxtDescripcion().setCaretPosition(0);
-        getTxtDescuento().setText(descuento.toString());
+        //getTxtDescuento().setText(descuento.toString());
+        getCmbDescuento().addItem(descuento.toString());
+        getCmbDescuento().setSelectedItem(descuento.toString());
         //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         //Dar foco a la cantidad a ingresar
         getTxtCantidad().setText("1");
@@ -4289,7 +4312,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public String obtenerTxtDescuento() {
-        return getTxtDescuento().getText();
+        //return getTxtDescuento().getText();
+        return getCmbDescuento().getSelectedItem().toString();
     }
 
     @Override
@@ -4351,7 +4375,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void setearDescuentoTxt(String descuento) {
-        getTxtDescuento().setText(descuento);
+        //getTxtDescuento().setText(descuento);
+        getCmbDescuento().addItem(descuento);
+        getCmbDescuento().setSelectedItem(descuento);
     }
 
     @Override
