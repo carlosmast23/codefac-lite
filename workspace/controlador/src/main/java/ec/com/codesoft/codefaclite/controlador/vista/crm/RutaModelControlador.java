@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoProductoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
@@ -48,6 +49,9 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
      * Variable para almacenar la variable seleccionada
      */
     private RutaDetalle rutaDetalleSeleccionado;
+    
+    
+    private DescuentoProductoDetalle productoDetalleSeleccionado;
 
     public RutaModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -298,6 +302,14 @@ public class RutaModelControlador extends ModelControladorAbstract<RutaModelCont
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(RutaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public DescuentoProductoDetalle getProductoDetalleSeleccionado() {
+        return productoDetalleSeleccionado;
+    }
+
+    public void setProductoDetalleSeleccionado(DescuentoProductoDetalle productoDetalleSeleccionado) {
+        this.productoDetalleSeleccionado = productoDetalleSeleccionado;
     }
     
     

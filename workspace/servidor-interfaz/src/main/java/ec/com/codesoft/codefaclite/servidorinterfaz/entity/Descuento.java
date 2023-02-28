@@ -7,9 +7,14 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -37,6 +42,11 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
     
     @JoinColumn(name = "EMPRESA_ID")
     protected Empresa empresa;
+    
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
+    private List<DescuentoProductoDetalle> productoList;
+    
+    
     
     
     /////////////////////////////////////////////////
@@ -81,7 +91,10 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
 
     public void setAlcanceEnum(AlcanceEnum alcanceEnum) 
     {
-        this.alcance=alcanceEnum.letra;
+        if(alcanceEnum!=null)
+        {
+            this.alcance=alcanceEnum.letra;
+        }
     }
 
     public String getDescripcion() {
@@ -99,13 +112,42 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
-    
-    
+
+    public List<DescuentoProductoDetalle> getProductoList() {
+        return productoList;
+    }
+
+    public void setProductoList(List<DescuentoProductoDetalle> productoList) {
+        this.productoList = productoList;
+    }
     
     
     ////////////////////////////////////////////////////
     ///     CODIGO PERSONALIZADO
     ////////////////////////////////////////////////////
+    
+    public void agregarProductoPorLote(List<Producto> productoList)
+    {
+        if(productoList!=null)
+        {
+            for (Producto producto : productoList) 
+            {
+                agregarProducto(producto);
+            }
+        }
+    }
+    
+    public void agregarProducto(Producto producto)
+    {
+        if(productoList==null)
+        {
+            this.productoList=new ArrayList<DescuentoProductoDetalle>();            
+        }
+        
+        DescuentoProductoDetalle descuentoProductoDetalle=new DescuentoProductoDetalle(this, producto);
+        
+        this.productoList.add(descuentoProductoDetalle);
+    }
     
     /**
      * Este enum me va a permitir defecinir el alcance del descuento por ejemplo a nivel de todos los productos o a nivel de una cantidad de productos especificos

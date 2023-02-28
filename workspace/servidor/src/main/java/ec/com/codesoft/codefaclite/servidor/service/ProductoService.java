@@ -99,8 +99,22 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             return getFacade().buscarProductoEmpaquePrincipal(producto);
         }        
         
+        
         //Si no encuentra 
         return producto;
+    }
+    
+    public List<Producto> buscarPorCategoria(CategoriaProducto categoria) throws RemoteException,ServicioCodefacException
+    {
+        //Producto producto;
+        //producto.getCatalogoProducto().getCategoriaProducto();
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("catalogoProducto.categoriaProducto",categoria);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        //mapParametros.put("empresa",empresa);        
+        List<Producto> productos=getFacade().findByMap(mapParametros);
+        
+        return productos;
     }
     
     public List<Producto> reporteProducto(Producto producto,Boolean pendienteActualizarPrecio) throws RemoteException,ServicioCodefacException

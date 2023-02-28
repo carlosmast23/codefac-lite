@@ -15,7 +15,7 @@ import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.inventario.ReporteInventarioStockControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CatalogoProductoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.ReporteInventarioStockPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;

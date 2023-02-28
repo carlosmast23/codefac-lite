@@ -6,14 +6,17 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.inventario.DescuentoControlador.TipoBusquedaProductoEnum;
 import ec.com.codesoft.codefaclite.controlador.vistas.converter.DateUtilToDateSqlConverter;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.DateComboBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -54,12 +57,15 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jLabel5 = new javax.swing.JLabel();
         cmbAlcance = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblProductos = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton2 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        btnAgregarProducto = new javax.swing.JButton();
+        cmbTipoAgregarProducto = new javax.swing.JComboBox<>();
+        jToolBar2 = new javax.swing.JToolBar();
+        jButton3 = new javax.swing.JButton();
+        jComboBox3 = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -156,7 +162,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbAlcance, gridBagConstraints);
 
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblProductos);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -194,21 +200,39 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
 
         jToolBar1.setRollover(true);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        btnAgregarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarProducto.setFocusable(false);
+        btnAgregarProducto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarProducto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAgregarProducto);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jToolBar1.add(jComboBox2);
+        jToolBar1.add(cmbTipoAgregarProducto);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jToolBar1, gridBagConstraints);
+
+        jToolBar2.setRollover(true);
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        jButton3.setFocusable(false);
+        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(jButton3);
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jToolBar2.add(jComboBox3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        jPanel1.add(jToolBar1, gridBagConstraints);
+        jPanel1.add(jToolBar2, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -217,11 +241,13 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JComboBox<Descuento.AlcanceEnum> cmbAlcance;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicio;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<TipoBusquedaProductoEnum> cmbTipoAgregarProducto;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -233,8 +259,9 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JTable tblProductos;
     private javax.swing.JTextField txtDescripción;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
@@ -283,9 +310,35 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     public void setTxtNombre(JTextField txtNombre) {
         this.txtNombre = txtNombre;
     }
-    
 
+    @ComboBoxBinding(source = "controlador.tipoBusquedaProductoList" ,valueSelect = "controlador.tipoBusquedaProductoSeleccionado")
+    public JComboBox<TipoBusquedaProductoEnum> getCmbTipoAgregarProducto() {
+        return cmbTipoAgregarProducto;
+    }
 
+    public void setCmbTipoAgregarProducto(JComboBox<TipoBusquedaProductoEnum> cmbTipoAgregarProducto) {
+        this.cmbTipoAgregarProducto = cmbTipoAgregarProducto;
+    }
+
+    @ButtonBinding(actionListener = "controlador.agregarProductoListener")
+    public JButton getBtnAgregarProducto() {
+        return btnAgregarProducto;
+    }
+
+    public void setBtnAgregarProducto(JButton btnAgregarProducto) {
+        this.btnAgregarProducto = btnAgregarProducto;
+    }
+
+    @TableBinding(source = "controlador.descuento.productoList",tableAddDataInterface = "tableBindingAddData",selectValue = "controlador.productoSeleccionado")
+    public JTable getTblProductos() {
+        return tblProductos;
+    }
+
+    public void setTblProductos(JTable tblProductos) {
+        this.tblProductos = tblProductos;
+    }
     
+    
+        
     
 }

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.DescuentoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.LoteControlador;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -18,14 +19,18 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.inventario.panel.DescuentoPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.LotePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoProductoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -38,6 +43,7 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         controlador=new DescuentoControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+        crearModeloTablaProductos();
     }
 
     @Override
@@ -149,5 +155,32 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
         }
         actualizarBindingCompontValues();*/
     }
+    
+    public void crearModeloTablaProductos()
+    {   
+        String titulo[]=new String[]{"Objeto","Código","Nombre"};
+        DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class,Object.class,Object.class});
+        getTblProductos().setModel(modelo);
+        UtilidadesTablas.definirTamanioColumnas(getTblProductos(),new Integer[]{0});
+    }
+    
+    public ITableBindingAddData getTableBindingAddData()
+    {
+        return new ITableBindingAddData<DescuentoProductoDetalle>() {
+            @Override
+            public Object[] addData(DescuentoProductoDetalle value) {
+                return new Object[]{
+                    value,
+                    value.getProducto().getCodigoPersonalizado(),
+                    value.getProducto().getNombre(),
+                };
+            }
+
+            @Override
+            public void setData(DescuentoProductoDetalle objetoOriginal, Object objetoModificado, Integer columnaModificada) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+    };
     
 }

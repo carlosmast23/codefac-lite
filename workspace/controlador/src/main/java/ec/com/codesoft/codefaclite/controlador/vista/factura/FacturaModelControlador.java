@@ -1571,17 +1571,21 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             //Agregar datos adicionales para imprimir en el ticket
             List<InformacionAdicional> datoAdicionalList=new ArrayList<InformacionAdicional>();
-            for (FacturaAdicional facturaAdicional : facturaProcesando.getDatosAdicionalesComprobante()) 
-            {
-                InformacionAdicional informacionAdicional=new InformacionAdicional();
-                informacionAdicional.setNombre(facturaAdicional.getCampo());
-                informacionAdicional.setValor(facturaAdicional.getValor());
-                
-                datoAdicionalList.add(informacionAdicional);
-            }
             
-            //Agregar datos adicionales para facturas electrónicas
-            agregarDatosFacturacionElectronica(facturaProcesando, datoAdicionalList);
+            if(!facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+            {
+                for (FacturaAdicional facturaAdicional : facturaProcesando.getDatosAdicionalesComprobante()) 
+                {
+                    InformacionAdicional informacionAdicional=new InformacionAdicional();
+                    informacionAdicional.setNombre(facturaAdicional.getCampo());
+                    informacionAdicional.setValor(facturaAdicional.getValor());
+
+                    datoAdicionalList.add(informacionAdicional);
+                }
+
+                //Agregar datos adicionales para facturas electrónicas
+                agregarDatosFacturacionElectronica(facturaProcesando, datoAdicionalList);
+            }            
             
             mapParametros.put("informacionAdicionalList", datoAdicionalList);
             
