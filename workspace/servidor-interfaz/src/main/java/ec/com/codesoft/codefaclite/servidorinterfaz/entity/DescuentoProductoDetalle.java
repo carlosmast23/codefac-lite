@@ -11,25 +11,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-//@Entity
-//@Table(name = "DESCUENTO_PRODUCTO_DETALLE")
+@Entity
+@Table(name = "DESCUENTO_PRODUCTO_DETALLE")
 public class DescuentoProductoDetalle implements Serializable
 {
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column (name = "ID")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "ID")
     private Long  id;
     
-    //@Column (name = "DESCUENTO")
+    @JoinColumn (name = "DESCUENTO_ID")
     private Descuento descuento;
     
-    //@Column (name = "PRODUCTO")
+    @JoinColumn (name = "PRODUCTO_ID")
     private Producto producto;
 
     public DescuentoProductoDetalle() 

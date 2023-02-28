@@ -43,8 +43,11 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
     @JoinColumn(name = "EMPRESA_ID")
     protected Empresa empresa;
     
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "descuento",fetch = FetchType.EAGER)
     private List<DescuentoProductoDetalle> productoList;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "descuento",fetch = FetchType.EAGER)
+    private List<DescuentoCondicionPrecio> condicionPrecioList;
     
     
     
@@ -120,6 +123,15 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
     public void setProductoList(List<DescuentoProductoDetalle> productoList) {
         this.productoList = productoList;
     }
+
+    public List<DescuentoCondicionPrecio> getCondicionPrecioList() {
+        return condicionPrecioList;
+    }
+
+    public void setCondicionPrecioList(List<DescuentoCondicionPrecio> condicionPrecioList) {
+        this.condicionPrecioList = condicionPrecioList;
+    }
+    
     
     
     ////////////////////////////////////////////////////
@@ -147,6 +159,18 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
         DescuentoProductoDetalle descuentoProductoDetalle=new DescuentoProductoDetalle(this, producto);
         
         this.productoList.add(descuentoProductoDetalle);
+    }
+    
+    public void agregarCondicionPrecio(DescuentoCondicionPrecio condicionPrecio)
+    {
+        if(condicionPrecioList==null)
+        {
+            this.condicionPrecioList=new ArrayList<DescuentoCondicionPrecio >();            
+        }
+        
+        //DescuentoCondicionPrecio descuentoCondicionPrecio=new DescuentoCondicionPrecio(this);
+        condicionPrecio.setDescuento(this);
+        this.condicionPrecioList.add(condicionPrecio);
     }
     
     /**

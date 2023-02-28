@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoCondicionPrecio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoProductoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -25,6 +26,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSiste
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -40,8 +43,11 @@ public class DescuentoControlador extends ModelControladorAbstract<DescuentoCont
 
     private List<Descuento.AlcanceEnum> alcanceList;
     private List<TipoBusquedaProductoEnum> tipoBusquedaProductoList;
+    private List<Integer> precioList;
+            
     private TipoBusquedaProductoEnum tipoBusquedaProductoSeleccionado;
     private DescuentoProductoDetalle productoSeleccionado;
+    private DescuentoCondicionPrecio condicionPrecioSeleccionado;
 
     public DescuentoControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, ICommon interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -54,8 +60,11 @@ public class DescuentoControlador extends ModelControladorAbstract<DescuentoCont
     }
 
     private void cargarDatosIniciales() {
+        this.condicionPrecioSeleccionado=new DescuentoCondicionPrecio();
         alcanceList = UtilidadesLista.arrayToList(Descuento.AlcanceEnum.values());
         tipoBusquedaProductoList=UtilidadesLista.arrayToList(TipoBusquedaProductoEnum.values());        
+        precioList=Arrays.asList(1,2,3,4,5,6);
+                
     }
 
     @Override
@@ -153,6 +162,15 @@ public class DescuentoControlador extends ModelControladorAbstract<DescuentoCont
             Logger.getLogger(DescuentoControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void agregarCondicionPrecioListener()
+    {
+        descuento.agregarCondicionPrecio(condicionPrecioSeleccionado);
+        Logger.getLogger(DescuentoControlador.class.getName()).log(Level.SEVERE,"#Precio: "+condicionPrecioSeleccionado.getNumeroPrecio()+", %Descuento: "+condicionPrecioSeleccionado.getPorcentajeDescuento());
+        //Limpiar para que pueda ingresar de nuevo otra condicion
+        condicionPrecioSeleccionado=new DescuentoCondicionPrecio();
+    }
+    
 
     public void cargarProductosVista() throws ServicioCodefacException, RemoteException {
         
@@ -229,6 +247,22 @@ public class DescuentoControlador extends ModelControladorAbstract<DescuentoCont
 
     public void setProductoSeleccionado(DescuentoProductoDetalle productoSeleccionado) {
         this.productoSeleccionado = productoSeleccionado;
+    }
+
+    public DescuentoCondicionPrecio getCondicionPrecioSeleccionado() {
+        return condicionPrecioSeleccionado;
+    }
+
+    public void setCondicionPrecioSeleccionado(DescuentoCondicionPrecio condicionPrecioSeleccionado) {
+        this.condicionPrecioSeleccionado = condicionPrecioSeleccionado;
+    }
+
+    public List<Integer> getPrecioList() {
+        return precioList;
+    }
+
+    public void setPrecioList(List<Integer> precioList) {
+        this.precioList = precioList;
     }
     
     

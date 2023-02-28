@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.DescuentoControlador.TipoBusquedaProductoEnum;
 import ec.com.codesoft.codefaclite.controlador.vistas.converter.DateUtilToDateSqlConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.DateComboBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TableBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
@@ -53,7 +54,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         cmbFechaFin = new org.jdesktop.swingx.JXDatePicker();
         txtDescripción = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblCondicionPrecios = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         cmbAlcance = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -63,9 +64,12 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jToolBar1 = new javax.swing.JToolBar();
         btnAgregarProducto = new javax.swing.JButton();
         cmbTipoAgregarProducto = new javax.swing.JComboBox<>();
-        jToolBar2 = new javax.swing.JToolBar();
-        jButton3 = new javax.swing.JButton();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        txtDescuento = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel9 = new javax.swing.JLabel();
+        cmbPrecios = new javax.swing.JComboBox<>();
+        btnAgregarCondicionPrecio = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -108,6 +112,8 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -127,19 +133,19 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtDescripción, gridBagConstraints);
 
-        jTable1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Condiciones Precios", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 24))); // NOI18N
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblCondicionPrecios);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -147,11 +153,11 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Fecha Fin:");
+        jLabel5.setText("# Pvp:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
 
@@ -165,8 +171,8 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jScrollPane2.setViewportView(tblProductos);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.4;
@@ -179,8 +185,8 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jLabel6.setText("Productos Agregados");
         jLabel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
@@ -188,12 +194,12 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Condiciones Precios");
+        jLabel7.setText("Condiciones para Precios");
         jLabel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         jPanel1.add(jLabel7, gridBagConstraints);
@@ -209,30 +215,59 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jToolBar1.add(cmbTipoAgregarProducto);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jToolBar1, gridBagConstraints);
 
-        jToolBar2.setRollover(true);
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar2.add(jButton3);
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jToolBar2.add(jComboBox3);
-
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Fecha Fin:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel8, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtDescuento, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        jPanel1.add(jToolBar2, gridBagConstraints);
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        jPanel1.add(jSeparator1, gridBagConstraints);
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText("% descuento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel9, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbPrecios, gridBagConstraints);
+
+        btnAgregarCondicionPrecio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarCondicionPrecio.setFocusable(false);
+        btnAgregarCondicionPrecio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarCondicionPrecio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        jPanel1.add(btnAgregarCondicionPrecio, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -241,13 +276,13 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarCondicionPrecio;
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JComboBox<Descuento.AlcanceEnum> cmbAlcance;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFin;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicio;
+    private javax.swing.JComboBox<Integer> cmbPrecios;
     private javax.swing.JComboBox<TipoBusquedaProductoEnum> cmbTipoAgregarProducto;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -255,14 +290,17 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JTable tblCondicionPrecios;
     private javax.swing.JTable tblProductos;
     private javax.swing.JTextField txtDescripción;
+    private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
@@ -337,8 +375,42 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     public void setTblProductos(JTable tblProductos) {
         this.tblProductos = tblProductos;
     }
-    
-    
+
+    @ButtonBinding(actionListener = "controlador.agregarCondicionPrecioListener")
+    public JButton getBtnAgregarCondicionPrecio() {
+        return btnAgregarCondicionPrecio;
+    }
+
+    public void setBtnAgregarCondicionPrecio(JButton btnAgregarCondicionPrecio) {
+        this.btnAgregarCondicionPrecio = btnAgregarCondicionPrecio;
+    }
+
+    @ComboBoxBinding(source = "controlador.precioList" ,valueSelect = "controlador.condicionPrecioSeleccionado.numeroPrecio")
+    public JComboBox<Integer> getCmbPrecios() {
+        return cmbPrecios;
+    }
+
+    public void setCmbPrecios(JComboBox<Integer> cmbPrecios) {
+        this.cmbPrecios = cmbPrecios;
+    }
+
+    @TableBinding(source = "controlador.descuento.condicionPrecioList",tableAddDataInterface = "tableBindingAddDataCondicion",selectValue = "controlador.condicionPrecioSeleccionado")
+    public JTable getTblCondicionPrecios() {
+        return tblCondicionPrecios;
+    }
+
+    public void setTblCondicionPrecios(JTable tblCondicionPrecios) {
+        this.tblCondicionPrecios = tblCondicionPrecios;
+    }
+
+    @TextFieldBinding(value = "controlador.condicionPrecioSeleccionado.porcentajeDescuento",converter = StringToBigDecimalConverter.class )
+    public JTextField getTxtDescuento() {
+        return txtDescuento;
+    }
+
+    public void setTxtDescuento(JTextField txtDescuento) {
+        this.txtDescuento = txtDescuento;
+    }
         
     
 }

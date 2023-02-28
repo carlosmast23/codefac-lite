@@ -359,6 +359,12 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
                     if (value != null) {
 
                         for (Object valor : value) {
+                            //Si el valor es null no agrego a la tabla
+                            if(valor==null)
+                            {
+                                continue;
+                            }
+                            
                             Object[] datosAgregar = addDataInterface.addData(valor);
                             //Si el modo Check esta activo agrego el valor de seleccion
                             if (modoSelectedCheck) {

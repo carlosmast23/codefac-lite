@@ -8,6 +8,8 @@ import ec.com.codesoft.codefaclite.servidor.facade.DescuentoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.LoteFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoCondicionPrecio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoProductoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -85,7 +87,46 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.CREAR);
                 //setearDatosGrabar(entity, empresa,CrudEnum.CREAR);
                 validarGrabar(entity, CrudEnum.CREAR);
+                                
+                
+                List<DescuentoProductoDetalle> productoList= entity.getProductoList();
+                entity.setProductoList(null);
+                
+                List<DescuentoCondicionPrecio> condicionList= entity.getCondicionPrecioList();
+                entity.setCondicionPrecioList(null);
+                
                 entityManager.persist(entity);
+                
+                //Grabar los detalles de la entidad
+                
+                for (DescuentoProductoDetalle productoDetalle : productoList) 
+                {
+                    if(productoDetalle.getId()!=null && productoDetalle.getId()<0)
+                    {
+                        productoDetalle.setId(null);
+                    }
+                    
+                    productoDetalle.setDescuento(entity);
+                    entityManager.persist(productoDetalle);
+                    
+                }
+                
+                
+                for (DescuentoCondicionPrecio condicion : condicionList) 
+                {
+                    if (condicion.getId() != null && condicion.getId() < 0) {
+                        condicion.setId(null);
+                    }
+
+                    condicion.setDescuento(entity);
+                    entityManager.persist(condicion);
+                }
+                
+                entity.setProductoList(productoList);
+                entity.setCondicionPrecioList(condicionList);
+                
+                entityManager.merge(entity);
+                
                 
             }
         });

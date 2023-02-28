@@ -116,6 +116,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoProductoDetalle</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoCondicionPrecio</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>
