@@ -119,9 +119,29 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
     
     public List<CajaSession> obtenerCajaSessionPorPuntoEmisionYUsuarioFacade(Integer puntoEmision, Usuario usuario) 
     {
-        String stringQuery = "SELECT u from CajaSession u where u.usuario = ?1 and u.estadoCierreCaja = ?2 and ( u.caja.puntoEmision.puntoEmision = ?3 OR u.caja.puntoEmision2.puntoEmision = ?3 )  order by u.fechaHoraCierre desc";
-
-        Query query = getEntityManager().createQuery(stringQuery);
+        //TODO: Mejorar esta parte por que fallaba el metodo cuando tenia 2 objetos para comparar y el uno tenia un valor de null
+        List<CajaSession> resultado = obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(puntoEmision, usuario,1);
+        List<CajaSession> resultadoTmp = obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(puntoEmision, usuario,2);
+        resultado.addAll(resultadoTmp);
+        return resultado;
+    }
+    
+    public List<CajaSession> obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(Integer puntoEmision, Usuario usuario,Integer numeroPuntoEmision) 
+    {
+        
+        
+        String consultaGeneral="SELECT u FROM CajaSession u WHERE u.usuario = ?1 AND u.estadoCierreCaja = ?2 AND u.caja.puntoEmision?#.puntoEmision = ?3  ORDER BY u.fechaHoraCierre desc";
+        
+        if(numeroPuntoEmision==1)
+        {
+            consultaGeneral = consultaGeneral.replace("?#","");
+        }
+        else if(numeroPuntoEmision==2)
+        {
+            consultaGeneral = consultaGeneral.replace("?#","2");
+        }
+        
+        Query query = getEntityManager().createQuery(consultaGeneral);
         query.setParameter(1, usuario);
         query.setParameter(2, CajaSessionEnum.ACTIVO.getEstado());
         query.setParameter(3, puntoEmision);
