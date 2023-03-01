@@ -1686,7 +1686,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.txtDescuento = txtDescuento;
     }*/
 
-    @LimpiarAnotacion
+    
     public JComboBox<String> getCmbDescuento() {
         return cmbDescuento;
     }

@@ -1587,20 +1587,17 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Agregar datos adicionales para imprimir en el ticket
             List<InformacionAdicional> datoAdicionalList=new ArrayList<InformacionAdicional>();
             
-            if(!facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
-            {
-                for (FacturaAdicional facturaAdicional : facturaProcesando.getDatosAdicionalesComprobante()) 
-                {
-                    InformacionAdicional informacionAdicional=new InformacionAdicional();
-                    informacionAdicional.setNombre(facturaAdicional.getCampo());
-                    informacionAdicional.setValor(facturaAdicional.getValor());
+            for (FacturaAdicional facturaAdicional : facturaProcesando.getDatosAdicionalesComprobante()) {
+            InformacionAdicional informacionAdicional = new InformacionAdicional();
+            informacionAdicional.setNombre(facturaAdicional.getCampo());
+            informacionAdicional.setValor(facturaAdicional.getValor());
 
-                    datoAdicionalList.add(informacionAdicional);
-                }
+            datoAdicionalList.add(informacionAdicional);
+            }
 
-                //Agregar datos adicionales para facturas electrónicas
-                agregarDatosFacturacionElectronica(facturaProcesando, datoAdicionalList);
-            }            
+            //Agregar datos adicionales para facturas electrónicas
+            agregarDatosFacturacionElectronica(facturaProcesando, datoAdicionalList);
+           
             
             mapParametros.put("informacionAdicionalList", datoAdicionalList);
             
@@ -1628,6 +1625,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     private static void agregarDatosFacturacionElectronica(Factura factura,List<InformacionAdicional> datoAdicionalList)
     {
+        //Si el documento es una nota de venta no tengo en cuenta los datos para las facturas
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            return ;
+        }
+        
         if(factura.getTipoFacturacionEnum()!=null && factura.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
         {                       
             InformacionAdicional infoAdicional=new InformacionAdicional("Clave de Acceso",factura.getClaveAcceso());
