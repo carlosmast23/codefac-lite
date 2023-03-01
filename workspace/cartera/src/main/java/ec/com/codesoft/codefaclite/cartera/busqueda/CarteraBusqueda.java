@@ -130,11 +130,12 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialo
             queryString=queryString+" AND  u.saldo>0 ";
         }
         
-        queryString += "AND u.estado=?6 AND ( LOWER(u.codigo) like ?1 or LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or CAST(u.secuencial CHAR(64)) like ?1 ) ";
+        //queryString += "AND u.estado=?6 AND ( LOWER(u.codigo) like LOWER(?1) or LOWER(u.persona.razonSocial) like LOWER(?1) or u.persona.identificacion like ?1 or CAST(u.secuencial CHAR(64)) like ?1 ) ";
+        queryString += " AND ( LOWER(u.codigo) like LOWER(?1) or LOWER(u.persona.razonSocial) like LOWER(?1) or u.persona.identificacion like ?1 or CAST(u.secuencial CHAR(64)) like ?1 ) ";
         queryString += "ORDER BY u.fechaCreacion desc ";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter.toLowerCase());
-        queryDialog.agregarParametro(6, GeneralEnumEstado.ACTIVO.getEstado());
+        //queryDialog.agregarParametro(6, GeneralEnumEstado.ACTIVO.getEstado());
         
         if(documentosEnum!=null)
         {

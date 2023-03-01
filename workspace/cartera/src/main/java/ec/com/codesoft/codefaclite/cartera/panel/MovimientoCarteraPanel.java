@@ -57,6 +57,8 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         lblEspacio2 = new javax.swing.JLabel();
         btnBuscarPersona = new javax.swing.JButton();
         chkTodos = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        txtSecuencial = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -77,10 +79,10 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoCartera, gridBagConstraints);
 
-        jLabel2.setText("Fecha Inicio:");
+        jLabel2.setText("Secuencial Factura:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -127,7 +129,7 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         btnConsultar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnConsultar, gridBagConstraints);
@@ -136,7 +138,7 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -169,6 +171,20 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(chkTodos, gridBagConstraints);
 
+        jLabel5.setText("Fecha Inicio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtSecuencial, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -186,6 +202,7 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
@@ -193,6 +210,7 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JTable tblDatos;
     private javax.swing.JTextField txtPersonaFiltro;
+    private javax.swing.JTextField txtSecuencial;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<TipoCarteraEnum> getCmbTipoCartera() {
@@ -255,6 +273,15 @@ public abstract class MovimientoCarteraPanel  extends ControladorCodefacInterfac
         return chkTodos;
     }
 
+    public JTextField getTxtSecuencial() {
+        return txtSecuencial;
+    }
+
+    public void setTxtSecuencial(JTextField txtSecuencial) {
+        this.txtSecuencial = txtSecuencial;
+    }
+
+    
     
     
 }

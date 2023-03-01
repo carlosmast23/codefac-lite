@@ -170,7 +170,9 @@ public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
                     CarteraEstadoReporteEnum.TODO,
                     session.getSucursal(),
                     DocumentoEnum.ABONOS_ACADEMICO,
-                    null);
+                    null,
+                    null
+            );
             
             for (Cartera cartera : abonosCarteraList) 
             {

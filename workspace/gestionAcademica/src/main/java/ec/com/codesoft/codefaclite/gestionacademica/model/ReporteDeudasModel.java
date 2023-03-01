@@ -242,6 +242,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                         CarteraEstadoReporteEnum.TODO, 
                         session.getSucursal(), 
                         DocumentoEnum.ABONOS_ACADEMICO,
+                        null,
                         null
                 );
                 

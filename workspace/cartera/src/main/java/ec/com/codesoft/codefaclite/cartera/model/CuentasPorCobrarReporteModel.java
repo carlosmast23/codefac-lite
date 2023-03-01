@@ -256,7 +256,8 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                             (CarteraEstadoReporteEnum) getCmbTipoReporteCartera().getSelectedItem(),
                             session.getSucursal(),
                             null,
-                            diasPorVencer);
+                            diasPorVencer,
+                            null);
                     
                     carteraResultado=carteras;
                     mostrarDatosTabla(carteras);

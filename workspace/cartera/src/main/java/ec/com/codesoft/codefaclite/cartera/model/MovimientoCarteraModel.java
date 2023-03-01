@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoRepo
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -208,9 +209,15 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
             {
                 fechaFinal=new Date(getCmbFechaFin().getDate().getTime());
             }
+            
+            Integer secuencial=null;
+            if(!UtilidadesTextos.verificarNullOVacio(getTxtSecuencial().getText()))
+            {
+                secuencial=Integer.parseInt(getTxtSecuencial().getText());
+            }
                         
             //List<CarteraCruce> cruces=ServiceFactory.getFactory().getCarteraServiceIf().consultarMovimientoCartera(personaFiltro);
-            carteraResultado= carteraServiceIf.listaCarteraSaldoCero(personaFiltro,null,fechaInicial, fechaFinal,DocumentoCategoriaEnum.COMPROBANTES_VENTA, (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),Cartera.TipoSaldoCarteraEnum.TODOS,Cartera.TipoOrdenamientoEnum.POR_FECHA,CarteraEstadoReporteEnum.TODO,session.getSucursal(),null,null);
+            carteraResultado= carteraServiceIf.listaCarteraSaldoCero(personaFiltro,null,fechaInicial, fechaFinal,DocumentoCategoriaEnum.COMPROBANTES_VENTA, (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem(),Cartera.TipoSaldoCarteraEnum.TODOS,Cartera.TipoOrdenamientoEnum.POR_FECHA,CarteraEstadoReporteEnum.TODO,session.getSucursal(),null,null,secuencial);
             //mapMovimientoCartera=convertirCrucesEnMap(cruces);
             construirTablaMovimientoCartera();
             
@@ -224,24 +231,24 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
     
     private void construirTablaMovimientoCartera()
     {
-        String[] titulo={"identificación","Nombres","Documento","Preimpreso","Debe","Haber"};
+        String[] titulo={"identificación","Codigo","Nombres","Documento","Preimpreso","Debe","Haber"};
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
         
         for (Cartera cartera : carteraResultado) {
             List<CarteraCruce> cruces = cartera.getCruces();
             
-            String[] filaTitulo={cartera.getPersona().getIdentificacion(),cartera.getPersona().getRazonSocial(),"Factura",cartera.getPreimpreso(),cartera.getTotal().toString(),""};
+            String[] filaTitulo={cartera.getPersona().getIdentificacion(),cartera.getCodigo(),cartera.getPersona().getRazonSocial(),"Factura",cartera.getPreimpreso(),cartera.getTotal().toString(),""};
             modeloTabla.addRow(filaTitulo);
             
             for (CarteraCruce cruceTmp : cruces) {
-                String[] filaCruce={"","","Abono","","",cruceTmp.getValor().toString(),""};
+                String[] filaCruce={"","",cruceTmp.getCarteraDetalle().getCartera().getCodigo(),"Abono","","",cruceTmp.getValor().toString(),""};
                 modeloTabla.addRow(filaCruce);
             }
             
             //Saldos y valores cancelado
-            String[] filaSaldo={"","","","Debe","0",cartera.getTotal().subtract(cartera.getSaldo()).toString()};
+            String[] filaSaldo={"","","","","Debe","0",cartera.getTotal().subtract(cartera.getSaldo()).toString()};
             modeloTabla.addRow(filaSaldo);
-            String[] filaHaber={"","","","Haber","0",cartera.getSaldo().toString()};
+            String[] filaHaber={"","","","","Haber","0",cartera.getSaldo().toString()};
             modeloTabla.addRow(filaHaber);
             
             //Espacio en blanco para manejar un formato bonito

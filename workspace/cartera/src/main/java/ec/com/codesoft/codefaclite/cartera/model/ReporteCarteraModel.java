@@ -375,6 +375,7 @@ public class ReporteCarteraModel extends ReporteCarteraPanel {
                             CarteraEstadoReporteEnum.TODO,
                             session.getSucursal(),
                             documentoEnum,
+                            null,
                             null);
                     
 
