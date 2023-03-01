@@ -306,8 +306,10 @@ public class CompraModel extends CompraPanel{
             estadoRetencion=Compra.RetencionEnumCompras.SIN_CONTABILIDAD;
         }
         
-        
-        compra.setEstadoRetencion(estadoRetencion.getEstado());
+        if(estadoFormulario.equals(ESTADO_GRABAR))
+        {
+            compra.setEstadoRetencion(estadoRetencion.getEstado());
+        }
         
         compra.setCodigoComprobanteSriEnum(documentoEnum);
         //compra.setCodigoSustentoSriEnum((SriSustentoComprobanteEnum) getCmbSustentoComprobante().getSelectedItem());
