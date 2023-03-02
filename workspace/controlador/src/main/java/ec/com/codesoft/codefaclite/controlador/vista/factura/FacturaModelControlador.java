@@ -245,11 +245,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //EnumSiNo.SI
             
             String objetoVehiculoTxt="";
+            String kilometrajeTxt="";
             ObjetoMantenimiento objetoMantenimiento=presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
             
             if(objetoMantenimiento!=null)
             {
                 objetoVehiculoTxt= " "+objetoMantenimiento.toString()+" ";                
+                kilometrajeTxt=objetoMantenimiento.getKilometraje()+"";
             }
             
             
@@ -330,12 +332,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             {
                 Factura factura=interfaz.obtenerFactura();
                 factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.VEHICULO.getNombre(), objetoVehiculoTxt,ComprobanteAdicional.Tipo.TIPO_OTRO));
+                factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.KILOMETRAJE.getNombre(), kilometrajeTxt,ComprobanteAdicional.Tipo.TIPO_OTRO));
+                factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.ORDEN_TRABAJO.getNombre(), presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"",ComprobanteAdicional.Tipo.TIPO_OTRO));                
+                
                 //Factura facturaTmp= interfaz.obtenerFactura();
                 //System.out.println(facturaTmp.getDatosAdicionales().size());
             }
             
-            return facturaDetalle;
-            
+            return facturaDetalle;            
         }
         return null;
     }
