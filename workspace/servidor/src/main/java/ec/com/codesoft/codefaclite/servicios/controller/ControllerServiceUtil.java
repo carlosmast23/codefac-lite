@@ -18,6 +18,8 @@ import ec.com.codesoft.codefaclite.servidor.service.CompraService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
 import ec.com.codesoft.codefaclite.servidor.service.DepartamentoService;
+import ec.com.codesoft.codefaclite.servidor.service.DescuentoCondicionPrecioService;
+import ec.com.codesoft.codefaclite.servidor.service.DescuentoProductoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.DescuentoService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpleadoService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
@@ -128,6 +130,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoCondicionPrecioServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoProductoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
@@ -338,6 +342,8 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(ProductoPresentacionDetalleService.class, ProductoPresentacionDetalleServiceIf.class);
             mapRecursos.put(GarantiaService.class,GarantiaServiceIf .class);
             mapRecursos.put(DescuentoService.class,DescuentoSeviceIf.class);
+            mapRecursos.put(DescuentoProductoDetalleService.class,DescuentoProductoDetalleServiceIf.class);
+            mapRecursos.put(DescuentoCondicionPrecioService .class,DescuentoCondicionPrecioServiceIf.class);
             
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);

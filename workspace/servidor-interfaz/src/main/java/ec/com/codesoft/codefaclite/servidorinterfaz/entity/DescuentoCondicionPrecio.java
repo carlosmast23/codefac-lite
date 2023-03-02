@@ -23,6 +23,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "DESCUENTO_CONDICION_PRECIO")
 public class DescuentoCondicionPrecio implements Serializable{
+    
     private static Long SECUENCIAL_TMP=-11l;
     @Id
     @Column(name = "ID")
@@ -44,6 +45,7 @@ public class DescuentoCondicionPrecio implements Serializable{
 
     public DescuentoCondicionPrecio(Descuento descuento) {
         this.descuento = descuento;
+        this.id=SECUENCIAL_TMP--;
     }
     
 
@@ -103,10 +105,6 @@ public class DescuentoCondicionPrecio implements Serializable{
         }
         return true;
     }
-    
-    
-    
-    
     
     
 }

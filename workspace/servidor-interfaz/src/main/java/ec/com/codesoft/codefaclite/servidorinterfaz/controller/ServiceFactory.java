@@ -22,6 +22,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoCondicionPrecioServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoProductoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
@@ -248,6 +250,8 @@ public abstract class ServiceFactory {
     public ProductoPresentacionDetalleServiceIf getProductoPresentacionDetalleServiceIf(){return (ProductoPresentacionDetalleServiceIf) getRecursosRMI(ProductoPresentacionDetalleServiceIf.class);};
     public GarantiaServiceIf getGarantiaServiceIf(){return (GarantiaServiceIf) getRecursosRMI(GarantiaServiceIf.class);};
     public DescuentoSeviceIf getDescuentoSeviceIf(){return (DescuentoSeviceIf) getRecursosRMI(DescuentoSeviceIf.class);};
+    public DescuentoProductoDetalleServiceIf getDescuentoProductoDetalleServiceIf(){return (DescuentoProductoDetalleServiceIf) getRecursosRMI(DescuentoProductoDetalleServiceIf.class);};
+    public DescuentoCondicionPrecioServiceIf getDescuentoCondicionPrecioServiceIf(){return (DescuentoCondicionPrecioServiceIf) getRecursosRMI(DescuentoCondicionPrecioServiceIf.class);};
     
     
     /**

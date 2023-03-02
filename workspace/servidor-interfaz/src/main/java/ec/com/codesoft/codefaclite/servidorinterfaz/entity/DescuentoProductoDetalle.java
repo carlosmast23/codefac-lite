@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,8 @@ import javax.persistence.Table;
 @Table(name = "DESCUENTO_PRODUCTO_DETALLE")
 public class DescuentoProductoDetalle implements Serializable
 {
+    public static Long INDICE_TMP=-1l;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "ID")
@@ -35,7 +38,7 @@ public class DescuentoProductoDetalle implements Serializable
 
     public DescuentoProductoDetalle() 
     {
-        
+        this.id=INDICE_TMP--;
     }
 
     public DescuentoProductoDetalle(Descuento descuento, Producto producto) {
@@ -72,6 +75,34 @@ public class DescuentoProductoDetalle implements Serializable
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DescuentoProductoDetalle other = (DescuentoProductoDetalle) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+
+    
     
     
     

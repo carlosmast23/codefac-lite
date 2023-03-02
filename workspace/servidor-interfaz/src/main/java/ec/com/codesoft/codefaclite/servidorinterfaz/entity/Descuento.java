@@ -161,6 +161,23 @@ public class Descuento extends EntityAbstract<GeneralEnumEstado>{
         this.productoList.add(descuentoProductoDetalle);
     }
     
+    public void eliminarDescuentoProductoDetalle(DescuentoProductoDetalle descuentoProducto)
+    {
+        if(this.productoList!=null)
+        {
+            this.productoList.remove(descuentoProducto);
+        }
+    }
+    
+    public void eliminarDescuentoCondicionPrecio(DescuentoCondicionPrecio condicionPrecio)
+    {
+        if(this.condicionPrecioList!=null)
+        {
+            this.condicionPrecioList.remove(condicionPrecio);
+        }
+    }
+    
+    
     public void agregarCondicionPrecio(DescuentoCondicionPrecio condicionPrecio)
     {
         if(condicionPrecioList==null)

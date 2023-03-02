@@ -6,6 +6,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.DescuentoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.LoteFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoCondicionPrecio;
@@ -23,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.FechaCaducidadDat
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReporteFechaCaducidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.FechaCaducidadResult;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoCondicionPrecioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -154,8 +156,87 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
     
     public void editarSinTransaccion(Descuento entity) throws ServicioCodefacException, RemoteException 
     {
+        List<DescuentoCondicionPrecio> descuentoCondicionPrecioList=entity.getCondicionPrecioList();
+        List<DescuentoProductoDetalle> descuentoProductoDetalleList=entity.getProductoList();
         validarGrabar(entity, CrudEnum.EDITAR);
+        
+        for (DescuentoCondicionPrecio condicion : descuentoCondicionPrecioList) 
+        {
+            //Si el datoya existe simplemente lo que tengo que hacer es editar
+            if(condicion.getId()!=null && condicion.getId()>0)
+            {
+                entityManager.merge(condicion);
+            }
+            else
+            {
+                condicion.setId(null);
+                entityManager.persist(condicion);
+            }
+        }
+        
+        for (DescuentoProductoDetalle descuento : descuentoProductoDetalleList) 
+        {
+            if(descuento.getId()!=null && descuento.getId()>0)
+            {
+                entityManager.merge(descuento);
+            }
+            else
+            {
+                descuento.setId(null);
+                entityManager.persist(descuento);
+            }
+            
+        }
+        
+        eliminarDetallesDescuentoCondicion(entity);
+        eliminarDetallesProducto(entity);
+        entityManager.flush();
+               
+                
         entityManager.merge(entity);
+        
+        
+        
+    }
+    
+    private void eliminarDetallesDescuentoCondicion(Descuento entity) throws RemoteException, ServicioCodefacException
+    {
+        DescuentoCondicionPrecioServiceIf  descuentoCondicionPrecioServiceIf= ServiceFactory.getFactory().getDescuentoCondicionPrecioServiceIf();
+        List<DescuentoCondicionPrecio> originalList= descuentoCondicionPrecioServiceIf.consultarPorDescuento(entity);
+        //List<DescuentoCondicionPrecio> eliminadoList=new ArrayList<DescuentoCondicionPrecio>();        
+        for (DescuentoCondicionPrecio condicion : originalList) {
+            
+            //Si el dato original no esta en la otra lista significa que fue eliminado
+            if(!entity.getCondicionPrecioList().contains(condicion))
+            {
+                //eliminadoList.add(condicion);
+                //condicion=descuentoCondicionPrecioServiceIf.buscarPorId(condicion.getId());
+                condicion=entityManager.merge(condicion);
+                entityManager.flush();
+                entityManager.remove(condicion);
+            }
+        }
+        
+    }
+    
+    private void eliminarDetallesProducto(Descuento entity) throws RemoteException, ServicioCodefacException
+    {
+        List<DescuentoProductoDetalle> originalList= ServiceFactory.getFactory().getDescuentoProductoDetalleServiceIf().consultarPorDescuento(entity);
+        
+        for (DescuentoProductoDetalle condicion : originalList) 
+        {
+            //Si el dato original no esta en la otra lista significa que fue eliminado
+            if(!entity.getProductoList().contains(condicion))
+            {
+                //eliminadoList.add(condicion);
+                condicion=entityManager.merge(condicion);
+                entityManager.flush();
+                //condicion=ServiceFactory.getFactory().getDescuentoProductoDetalleServiceIf().buscarPorId(condicion.getId());
+                //entityManager.flush();
+                entityManager.remove(condicion);
+            }
+        }
+        
     }
     
     

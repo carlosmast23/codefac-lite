@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.DescuentoPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.LotePanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoCondicionPrecio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoProductoDetalle;
@@ -25,6 +26,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -32,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -47,7 +52,62 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
         controlador=new DescuentoControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
         crearModeloTablaProductos();
         crearModeloTablaCondicionPrecios();
+        agregarListenerPopUps();
     }
+    
+    private void agregarListenerPopUps()
+    {
+        agregarListenerPopUpsProducto();
+        agregarListenerPopUpsCondicion();
+        
+    }
+    
+    private void agregarListenerPopUpsProducto()
+    {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem jMenuItemDatoAdicional = new JMenuItem("Eliminar Producto");
+
+        jMenuItemDatoAdicional.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int filaSeleccionada = getTblProductos().getSelectedRow();
+                if (filaSeleccionada >= 0) {
+                    DescuentoProductoDetalle descuentoProductoDetalle = (DescuentoProductoDetalle) getTblProductos().getValueAt(filaSeleccionada, 0);
+                    controlador.getDescuento().eliminarDescuentoProductoDetalle(descuentoProductoDetalle);
+                    actualizarBindingCompontValues();
+                }
+
+            }
+        });
+
+        jPopupMenu.add(jMenuItemDatoAdicional);
+        getTblProductos().setComponentPopupMenu(jPopupMenu);
+    }
+    
+    private void agregarListenerPopUpsCondicion()
+    {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem jMenuItemDatoAdicional = new JMenuItem("Eliminar Condición");
+
+        jMenuItemDatoAdicional.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int filaSeleccionada = getTblCondicionPrecios().getSelectedRow();
+                if (filaSeleccionada >= 0) {
+                    DescuentoCondicionPrecio descuentoCondicionPrecio = (DescuentoCondicionPrecio) getTblCondicionPrecios().getValueAt(filaSeleccionada, 0);
+                    controlador.getDescuento().eliminarDescuentoCondicionPrecio(descuentoCondicionPrecio);
+                    actualizarBindingCompontValues();
+                }
+
+            }
+        });
+
+        jPopupMenu.add(jMenuItemDatoAdicional);
+        getTblCondicionPrecios().setComponentPopupMenu(jPopupMenu);
+    }
+    
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
@@ -164,7 +224,7 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
         String titulo[]=new String[]{"Objeto","Código","Nombre","Categoria"};
         DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class,Object.class,Object.class,Object.class});
         getTblProductos().setModel(modelo);
-        UtilidadesTablas.definirTamanioColumnas(getTblProductos(),new Integer[]{0});
+        UtilidadesTablas.definirTamanioColumnas(getTblProductos(),new Integer[]{0});        
     }
     
     public ITableBindingAddData getTableBindingAddData()
