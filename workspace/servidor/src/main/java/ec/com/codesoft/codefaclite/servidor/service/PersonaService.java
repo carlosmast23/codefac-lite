@@ -58,10 +58,15 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
 
     public void editarPersona(Persona p) throws ServicioCodefacException, java.rmi.RemoteException {
+        editarConValidacion(p, Boolean.FALSE);
+    }
+    
+    public void editarConValidacion(Persona p,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException
+    {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                validarCliente(p, Boolean.TRUE, CrudEnum.EDITAR,false);
+                validarCliente(p, Boolean.TRUE, CrudEnum.EDITAR,modoForzado);
                 for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
                     if (establecimiento.getId() == null) {
                         entityManager.persist(establecimiento);
@@ -115,7 +120,6 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             }
         });
         return p;
-
     }
 
     private void validarCliente(Persona persona, Boolean validarCedula, CrudEnum crudEnum,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException {

@@ -48,4 +48,6 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     
     public Persona crearProveedorDesdeEmpresa(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException;
     
+    public void editarConValidacion(Persona p,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException;
+    
 }

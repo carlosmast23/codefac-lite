@@ -1497,7 +1497,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesProductos);
         getTableDetallesServicio().setModel(modeloTablaDetallesPresupuesto);
         
-        Integer[] tamanioTabla=new Integer[]{0,100,150};
+        Integer[] tamanioTabla=new Integer[]{0,30,100};
         UtilidadesTablas.cambiarTamanioColumnas(getTableDetallesPresupuesto(),tamanioTabla);
         UtilidadesTablas.cambiarTamanioColumnas(getTableDetallesServicio(),tamanioTabla);
         /**
@@ -1531,8 +1531,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         UtilidadesTablas.ocultarColumna(getTableDetallesServicio(), 0);
         //UtilidadesTablas.cambiarColorFila(getTableDetallesServicio());
         
-        UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 1);
-        UtilidadesTablas.ocultarColumna(getTableDetallesServicio(), 1);
+        //UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 1);
+        //UtilidadesTablas.ocultarColumna(getTableDetallesServicio(), 1);
         
     }
     

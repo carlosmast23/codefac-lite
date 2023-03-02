@@ -172,7 +172,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public void editar() throws ExcepcionCodefacLite {
         try {
             setearDatos();
-            personaService.editarPersona(persona);
+            personaService.editarConValidacion(persona,procesarModoForzado);
             
             DialogoCodefac.mensaje("Correcto","La persona fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             
@@ -182,6 +182,16 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             throw new ExcepcionCodefacLite(ex.getMessage());
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            if(ex.getProcesarModoForzado())
+            {
+                Boolean coninuar= DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea procesar en MODO FORZADO ?", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                if(coninuar)
+                {
+                    procesarModoForzado=true;
+                    editar();
+                    return;
+                }
+            }            
             throw new ExcepcionCodefacLite("Cancelado por error");
         }
     }
