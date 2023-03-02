@@ -146,7 +146,7 @@ public class CorreoElectronico {
             }
         });
         
-        //session.setDebug(true);
+        session.setDebug(true);
         return session;
     }
     

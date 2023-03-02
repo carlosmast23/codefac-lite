@@ -434,5 +434,15 @@ public class UtilidadesFecha {
     {
         return obtenerAnio(getFechaHoy());
     }
+    
+    public static int obtenerMesActual()
+    {
+        return obtenerMes(getFechaHoy());
+    }
+    
+    public static int obtenerDiaActual()
+    {
+        return obtenerDia(getFechaHoy());
+    }
 
 }

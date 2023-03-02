@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -85,5 +87,37 @@ public abstract class UtilidadesSistema {
             Desktop.getDesktop().open(path);
     }
     
+    /**
+     * Esta clave se va a generar dinamicamente en funcion de la fecha para otorgar ciertos permisos de acceso como por ejemplo las actualizaciones
+     */
+    public static String generarClaveSoporte()
+    {
+        //dd/MM/yyyy
+        String anioStr= UtilidadesFecha.obtenerAnioActual()+"";
+        Integer anioPrimeraParte=Integer.parseInt(anioStr.substring(0, 2));
+        Integer anioSegundaParte=Integer.parseInt(anioStr.substring(2, 4));
+        
+        Integer dia=UtilidadesFecha.obtenerDiaActual();
+        Integer mes=UtilidadesFecha.obtenerMesActual();
+        
+        Integer clavePrimeraParte=anioPrimeraParte+dia;
+        Integer claveSegundaParte=anioSegundaParte+mes;
+        
+        String claveFinal=clavePrimeraParte.toString()+claveSegundaParte.toString();
+        
+        return claveFinal;
+    }
+    
+    public static Boolean verificarClaveSoporte(String claveIngresada)
+    {
+        if(!UtilidadesTextos.verificarNullOVacio(claveIngresada))
+        {
+            if(claveIngresada.equals(generarClaveSoporte()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     
 }
