@@ -197,6 +197,10 @@ public class StockMinimoModel extends StockMinimoPanel{
     {
         try {
             Bodega bodegaSeleccionada = (Bodega) getCmbBodega().getSelectedItem();
+            if(getChkTodasBodega().isSelected())
+            {
+                bodegaSeleccionada=null;
+            }
             KardexOrdenarEnum ordenarEnum=(KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();            
             listaStock = ServiceFactory.getFactory().getKardexServiceIf().consultarStockMinimo(bodegaSeleccionada, categoriaProducto, session.getEmpresa(),ordenarEnum);
             listaData = new ArrayList<StockMinimoData>();
