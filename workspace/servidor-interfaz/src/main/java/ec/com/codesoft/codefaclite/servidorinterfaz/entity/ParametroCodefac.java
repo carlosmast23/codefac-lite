@@ -74,7 +74,7 @@ public class ParametroCodefac implements Serializable {
     //@Deprecated
     //public static final String TIPO_FACTURACION="tipo_facturacion";
 
-    public static final String DIRECTORIO_RESPALDO = "directorio_respaldo";
+    
     public static final String DEFECTO_TIPO_DOCUMENTO_FACTURA = "defecto_tipo_documento_factura";
     public static final String DEFECTO_TIPO_DOCUMENTO_COMPRA = "defecto_tipo_documento_compra";
     
@@ -194,10 +194,7 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String FECHA_VALIDACION_CORREO="fecha_validacion_correo";
     
-    /**
-     * Variable que me va a permitir llevar el control para que el sistema automaticamenta saque respaldos cada determinado tiempo y se manden a nuestro correo para siempre tener un respaldo
-     */
-    public static final String FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA="fecha_ultimo_envio_respaldo_sistema";
+
     
     
     public static final String DOCUMENTO_DEFECTO_VISTA_FACTURA="documento_defecto_vista_factura";
@@ -488,6 +485,17 @@ public class ParametroCodefac implements Serializable {
     {
         public static String DB_RESPALDO_AUTOMATICO_SALIR="DB_RESPALDO_AUTOMATICO_SALIR";
         public static String DB_RESPALDO_HORA_PROGRAMADA="DB_RESPALDO_HORA_PROGRAMADA";
+        public static final String DIRECTORIO_RESPALDO = "directorio_respaldo";
+        /**
+         * Variable que me va a permitir llevar el control para que el sistema
+         * automaticamenta saque respaldos cada determinado tiempo y se manden a
+         * nuestro correo para siempre tener un respaldo
+         */
+        public static final String FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA = "fecha_ultimo_envio_respaldo_sistema";
+        /**
+         * Variable que me va a permitir saber si los respaldos fueron enviados la última vez o tiene algún problema con el envio
+         */
+        public static final String PROBLEMA_ULTIMO_ENVIO_RESPALDO="problema_ultimo_envio_respaldo";
     }
     
     public static class AliasNombresDocumentos

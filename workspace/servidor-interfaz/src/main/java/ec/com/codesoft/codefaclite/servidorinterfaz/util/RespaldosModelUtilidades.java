@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -98,6 +99,7 @@ public class RespaldosModelUtilidades {
     
     public static void enviarRespaldoCorreoEmpresa(List<File> fileRespaldoList,Empresa empresa,String correoEmpresa,Boolean cuentaInternaSistema) throws ServicioCodefacException
     {
+
         try {
             String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(UtilidadesFecha.getFechaHoy());
             CorreoCodefac correoCodefac = new CorreoCodefac();
@@ -131,14 +133,41 @@ public class RespaldosModelUtilidades {
             else
             {
                 correoCodefac.enviarCorreo(empresa,mensajeCorreo,tituloCorreo,correosList,mapArchivosAdjuntos);
+
+
+                //Si los datos son correctos grabo cuando fue la última modificación de la fecha
+                ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
+                    empresa,
+                    ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA,
+                    UtilidadesFecha.formatDate(UtilidadesFecha.hoy(),ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA));
+                
+                ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
+                        empresa,
+                        ParametroCodefac.ParametrosRespaldoDB.PROBLEMA_ULTIMO_ENVIO_RESPALDO,
+                        EnumSiNo.NO.getLetra());
+                
             }
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(RespaldosModelUtilidades.class.getName()).log(Level.SEVERE, null, ex);
+            
+            //GRABAR EL PARAMETRO DE ADVERTENCIA PARA INFORMAR QUE NO HAYA NOVEDADES AL HACER EL RESPALDO
+            try {
+                ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
+                        empresa,
+                        ParametroCodefac.ParametrosRespaldoDB.PROBLEMA_ULTIMO_ENVIO_RESPALDO,
+                        EnumSiNo.SI.getLetra());
+            } catch (RemoteException ex2) {
+                Logger.getLogger(RespaldosModelUtilidades.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             throw new ServicioCodefacException(ex.getMessage());
             //DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            
         } catch (RemoteException ex) {
             Logger.getLogger(RespaldosModelUtilidades.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+
     }
     
     private static void copiarDirectorio(InputStream origen, File destino) throws IOException 
@@ -177,7 +206,7 @@ public class RespaldosModelUtilidades {
             else
             {
             
-                ParametroCodefac parametroDirectorioRespaldo= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RESPALDO, empresa);
+                ParametroCodefac parametroDirectorioRespaldo= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.ParametrosRespaldoDB.DIRECTORIO_RESPALDO, empresa);
                 //this.parametro = this.parametroCodefacServiceIf.getParametrosMap(session.getEmpresa());
                 //ParametroCodefac p = this.parametro.get(ParametroCodefac.DIRECTORIO_RESPALDO);
                 if(parametroDirectorioRespaldo!=null && parametroDirectorioRespaldo.getValor() != null)

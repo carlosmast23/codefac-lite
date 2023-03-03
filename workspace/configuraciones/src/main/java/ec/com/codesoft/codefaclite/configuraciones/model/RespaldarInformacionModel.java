@@ -142,11 +142,11 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             try{
                 if(!getTxtUbicacionRespaldo().getText().equals(""))
                 {
-                    ParametroCodefac parametroDirectorio = this.session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RESPALDO);
+                    ParametroCodefac parametroDirectorio = this.session.getParametrosCodefac().get(ParametroCodefac.ParametrosRespaldoDB.DIRECTORIO_RESPALDO);
                     //Si no existe el parametro entonces creo uno nuevo
                     if(parametroDirectorio==null)
                     {
-                        parametroDirectorio=new ParametroCodefac(ParametroCodefac.DIRECTORIO_RESPALDO);
+                        parametroDirectorio=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DIRECTORIO_RESPALDO);
                         parametroDirectorio.setEmpresa(session.getEmpresa());
                     }
                     

@@ -77,6 +77,8 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         alertas.add(obtenerAlertaIvaSinConfigurar(sucursal.getEmpresa()));
         alertas.add(obtenerAlertaStockProductosPorCaducar(sucursal));
         alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
+        alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
+        alertas.add(obtenerNotificacionProblemasConEnvioRespaldo(sucursal.getEmpresa()));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
         
@@ -164,7 +166,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     
     private AlertaResponse obtenerAlertaDirectorioRespaldo(Empresa empresa) throws RemoteException,ServicioCodefacException 
     {
-        String directorioEmpresa=ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.DIRECTORIO_RESPALDO);
+        String directorioEmpresa=ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.ParametrosRespaldoDB.DIRECTORIO_RESPALDO);
         
         if(directorioEmpresa==null || directorioEmpresa.trim().isEmpty())
         {
@@ -185,6 +187,18 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
             return alertaRespuesta;
         }
         
+        return null;
+         
+    }
+    
+    private AlertaResponse obtenerNotificacionProblemasConEnvioRespaldo(Empresa empresa) throws RemoteException,ServicioCodefacException 
+    {
+        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.ParametrosRespaldoDB.PROBLEMA_ULTIMO_ENVIO_RESPALDO,EnumSiNo.SI))
+        {
+            AlertaResponse alerta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.GRAVE,"Error Enviar Último Respaldo","Llamar Soporte");
+            return alerta;
+        }
+                
         return null;
          
     }
