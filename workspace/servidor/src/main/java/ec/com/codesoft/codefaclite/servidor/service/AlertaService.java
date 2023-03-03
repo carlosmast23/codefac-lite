@@ -79,6 +79,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
         alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
         alertas.add(obtenerNotificacionProblemasConEnvioRespaldo(sucursal.getEmpresa()));
+        alertas.add(obtenerNotificacionFechaRespaldo());
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
         
@@ -146,6 +147,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         return null;
     }
     
+    
     private AlertaResponse obtenerAlertaIvaSinConfigurar(Empresa empresa)
     {
         try {
@@ -189,6 +191,27 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         
         return null;
          
+    }
+    
+    /**
+     * Esta notificacion se encarga de verificar que no pase más de 5 días sin enviar los respaldos 
+     * @return 
+     */
+    private AlertaResponse obtenerNotificacionFechaRespaldo()
+    {
+        String fechaStr=ParametroUtilidades.obtenerValorParametroSinEmpresa(ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
+        if(!UtilidadesTextos.verificarNullOVacio(fechaStr))
+        {
+            java.util.Date fechaUltimaVerificacion = UtilidadesFecha.castStringToDate(fechaStr, ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA);
+            int diasDiferencia=UtilidadesFecha.obtenerDistanciaConLaFechaActual(fechaUltimaVerificacion);
+            if(diasDiferencia>ParametrosSistemaCodefac.TOLERACION_DIAS_SIN_RESPALDO)
+            {
+                AlertaResponse alertaRespuesta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ALERTA,ParametrosSistemaCodefac.TOLERACION_DIAS_SIN_RESPALDO+" días sin enviar RESPALDOS","Llamar Soporte");
+                return alertaRespuesta;
+            }
+        }
+        return null;
+        //ParametrosSistemaCodefac.TOLERACION_DIAS_SIN_RESPALDO;
     }
     
     private AlertaResponse obtenerNotificacionProblemasConEnvioRespaldo(Empresa empresa) throws RemoteException,ServicioCodefacException 

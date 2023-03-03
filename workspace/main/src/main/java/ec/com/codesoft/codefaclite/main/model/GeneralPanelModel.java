@@ -437,7 +437,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void generarRespaldoAutomaticoSistema()
     {
         Boolean generarRespaldo=false;
-        String fechaStr = ParametroUtilidades.obtenerValorParametro(sessionCodefac.getEmpresa(), ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
+        String fechaStr = ParametroUtilidades.obtenerValorParametroSinEmpresa(ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
         if (fechaStr != null && !fechaStr.isEmpty()) {
             java.util.Date fechaUltimaVerificacion = UtilidadesFecha.castStringToDate(fechaStr, ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA);
             int diasDiferencia = UtilidadesFecha.obtenerDistanciaConLaFechaActual(fechaUltimaVerificacion);
