@@ -376,9 +376,14 @@ public class FacturaFacade extends AbstractFacade<Factura> {
       
       public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor)
       {
+          //Factura f;
+          //f.getEstadoEnum().AUTORIZADO
+          
           String whereFechaMenor="";
           
           String whereFechaMayor="";
+          
+          String whereEstado="";
           
           if(fechaMayor!=null)
           {
@@ -390,10 +395,12 @@ public class FacturaFacade extends AbstractFacade<Factura> {
               whereFechaMenor= " AND F.FECHA_EMISION >= ?2";
           }
           
+          whereEstado=" AND (F.ESTADO='A' OR F.ESTADO='S' ) ";
+          
           String queryString="SELECT F.SECUENCIAL,F.FECHA_EMISION ,F.RAZON_SOCIAL,F.IDENTIFICACION,F.ID,FD.SUBTOTAL,FD.COSTO,FD.UTILIDAD FROM FACTURA F INNER JOIN " +
                         "(" +
                         "	SELECT FD.FACTURA_ID ,SUM(FD.TOTAL) AS SUBTOTAL ,SUM(FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION) AS COSTO , SUM(FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION) AS UTILIDAD FROM FACTURA_DETALLE FD  GROUP BY FD.FACTURA_ID " +
-                        ") FD ON F.ID =FD.FACTURA_ID WHERE 1=1  "+whereFechaMayor+whereFechaMenor ;
+                        ") FD ON F.ID =FD.FACTURA_ID WHERE 1=1  "+whereFechaMayor+whereFechaMenor+whereEstado ;
       
           Query query=getEntityManager().createNativeQuery(queryString);
           Logger.getLogger(FacturaFacade.class.getName()).log(Level.INFO,queryString);
