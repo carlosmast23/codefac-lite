@@ -117,4 +117,6 @@ public interface ComprobanteServiceIf extends Remote {
     
     public byte[] getReporteComprobante(ComprobanteElectronico comprobanteElectronicoData,ComprobanteEntity comprobanteEntity,String claveAcceso,Empresa empresa) throws RemoteException;
     
+    public List<ComprobanteElectronico> getPendientesProcesar(Empresa empresa) throws ServicioCodefacException, RemoteException;
+    
 }

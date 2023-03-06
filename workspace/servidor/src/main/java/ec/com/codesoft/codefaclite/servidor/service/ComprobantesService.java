@@ -85,6 +85,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -210,6 +211,42 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
             
         }
+    }
+    
+    public void procesarSinAutorizarYEnviadosPendientes(Empresa empresa) throws RemoteException,ServicioCodefacException
+    {
+        // 1.- INTETAR ENVIAR TODO de la carpeta firmado sin ENVIAR
+        List<ComprobanteElectronico> firmadosSinEnviarList=getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
+        //Procesar primero las facturas que esten en FIRMADOS SIN ENVIAR
+        procesarComprobantesLotePendienteComprobantes(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE+1, ComprobanteElectronicoService.ETAPA_RIDE, firmadosSinEnviarList ,null, empresa.getIdentificacion(),null,false,empresa,true);
+        
+        
+        //2-.- PROCESAR LOS COMPROBANTES de la carpeta ENVIADO, en conjunto con los anteriores que no se pudieron procesar de la carpeta firmados sin enviar
+        //Buscar de nuevo si quedan comprobantes pendientes significa que me toca procesar en el otro proceso de ENVIADOS
+        firmadosSinEnviarList=getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
+        
+        ////////////// PROCESAR LOS COMPROBANTES CON EL PROCESO DE ENVIADOS ///////////////////////////////
+        List<ComprobanteElectronico> sinEnviarList=getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
+        //Agrego a la lista los comprobantes que no se pudieron procesar para ver si lo puedo hacer en esta otra etapa de ENVIADOS
+        sinEnviarList.addAll(firmadosSinEnviarList);
+        procesarComprobantesLotePendienteComprobantes(ComprobanteElectronicoService.ETAPA_ENVIAR+1, ComprobanteElectronicoService.ETAPA_RIDE, sinEnviarList ,null, empresa.getIdentificacion(),null,false,empresa,true);
+        
+        
+        //3.- FINALMENTE los comprobantes que no se pudieron procesar en la carpeta enviados lo intento en el proceso de FIRMADOS SIN ENVIAR
+        sinEnviarList=getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
+        procesarComprobantesLotePendienteComprobantes(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE+1, ComprobanteElectronicoService.ETAPA_RIDE, sinEnviarList ,null, empresa.getIdentificacion(),null,false,empresa,true);
+        
+        
+    }
+    public boolean procesarComprobantesLotePendienteComprobantes(Integer etapaInicial,Integer etapaLimite,List<ComprobanteElectronico> comprobanteList,List<ComprobanteDataInterface> comprobantesProcesos,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa,Boolean sincrono) throws RemoteException
+    {
+        List<String> clavesAcceso = UtilidadesLista.castListToListString(comprobanteList, new UtilidadesLista.CastListInterface<ComprobanteElectronico>() {
+            @Override
+            public String getString(ComprobanteElectronico dato) {
+                return dato.getInformacionTributaria().getClaveAcceso();
+            }
+        });
+        return procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, comprobantesProcesos, ruc, callbackClientObject, enviarCorreo, empresa, sincrono);
     }
     
     public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,List<ComprobanteDataInterface> comprobantesProcesos,String ruc,ClienteInterfaceComprobanteLote callbackClientObject,Boolean enviarCorreo,Empresa empresa,Boolean sincrono) throws RemoteException
@@ -646,6 +683,20 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
         }
         return null;
+    }
+    
+    /**
+     * Obtiene todos los comprobantes que se encuentren pendientes de procesar
+     * @param empresa
+     * @return
+     * @throws ServicioCodefacException
+     * @throws RemoteException 
+     */
+    public List<ComprobanteElectronico> getPendientesProcesar(Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        List<ComprobanteElectronico> resultadoList=getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
+        resultadoList.addAll(getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa));
+        return resultadoList;
     }
     
     public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion,Empresa empresa) throws RemoteException

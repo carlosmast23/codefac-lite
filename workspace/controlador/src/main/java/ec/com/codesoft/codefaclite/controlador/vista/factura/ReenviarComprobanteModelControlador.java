@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -36,12 +37,16 @@ public class ReenviarComprobanteModelControlador extends ModelControladorAbstrac
     private void cargarComprobantes()
     {
         try {
-            //Carlos todos los comprobantes pendientes de enviar de la carpeta "sin autorizar y no enviados"
-            List<ComprobanteElectronico> comprobantesPendientesAutorizar=ServiceFactory.getFactory().getComprobanteServiceIf().getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_GENERADOS,session.getEmpresa());
-            getInterfaz().cargarVistaTabla(comprobantesPendientesAutorizar);                      
+            //Cargo todos los comprobantes pendientes de enviar de la carpeta "sin autorizar y no enviados"
+            //List<ComprobanteElectronico> pendienteList=ServiceFactory.getFactory().getComprobanteServiceIf().getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR,session.getEmpresa());
+            //pendienteList.addAll(ServiceFactory.getFactory().getComprobanteServiceIf().getcOM);
+            List<ComprobanteElectronico> pendienteList=ServiceFactory.getFactory().getComprobanteServiceIf().getPendientesProcesar(session.getEmpresa());
+            getInterfaz().cargarVistaTabla(pendienteList);                      
             
             
         } catch (RemoteException ex) {
+            Logger.getLogger(ReenviarComprobanteModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReenviarComprobanteModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         
