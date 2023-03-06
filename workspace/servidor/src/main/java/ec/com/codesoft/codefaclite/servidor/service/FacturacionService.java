@@ -593,6 +593,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             {                
                 throw new ServicioCodefacException("Error al grabar el documento, se va a generar un documento repetido ");
             }
+            
+            //Verificar que no pueda poner una fecha superior a la del día de hoy
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+            {
+                if(factura.getFechaEmision().compareTo(UtilidadesFecha.getFechaHoraHoy())>0)
+                {
+                    throw new ServicioCodefacException("Error al grabar el documento, no se puede grabar con fecha superior a la actual ");
+                }
+            }
         }
         
         //Solo valido los datos de clientes cuando es un DOCUMENTO diferente de proforma, por que si se puede grabar sin datos para proforma en especial para las comandas

@@ -77,7 +77,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         alertas.add(obtenerAlertaIvaSinConfigurar(sucursal.getEmpresa()));
         alertas.add(obtenerAlertaStockProductosPorCaducar(sucursal));
         alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
-        alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
+        //alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
         alertas.add(obtenerNotificacionProblemasConEnvioRespaldo(sucursal.getEmpresa()));
         alertas.add(obtenerNotificacionFechaRespaldo());
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
