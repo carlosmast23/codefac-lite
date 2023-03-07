@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControl
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
@@ -73,6 +74,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacioBlanco = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cmbFormatoHojas = new javax.swing.JComboBox<>();
+        jLabel91 = new javax.swing.JLabel();
+        cmbNumeroPrecioPresupuesto = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         cmbActivarModuloCartera = new javax.swing.JComboBox<>();
@@ -364,7 +367,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel2.setText("Detalles Reporte Ordenes de Trabajo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel2.add(jLabel2, gridBagConstraints);
@@ -375,7 +378,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -384,22 +387,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel2.add(jScrollPane1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanel2.add(lblEspacioBlanco2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel2.add(lblEspacioBlanco, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Formato Reportes:");
+        jLabel3.setText("Precio Presupuestos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel2.add(jLabel3, gridBagConstraints);
@@ -409,6 +412,21 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel2.add(cmbFormatoHojas, gridBagConstraints);
+
+        jLabel91.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel91.setText("Formato Reportes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(jLabel91, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(cmbNumeroPrecioPresupuesto, gridBagConstraints);
 
         jTabbedPane1.addTab("Ordenes Trabajo", jPanel2);
 
@@ -1952,6 +1970,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
     private javax.swing.JComboBox<EnumSiNo> cmbNVITotalConIva;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
+    private javax.swing.JComboBox<String> cmbNumeroPrecioPresupuesto;
     private javax.swing.JComboBox<OrientacionReporteEnum> cmbOrientacionReporte;
     private javax.swing.JComboBox<EnumSiNo> cmbPermitirDescuentoMenorCosto;
     private javax.swing.JComboBox<EnumSiNo> cmbPermitirEditarCodigo;
@@ -2057,6 +2076,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel89;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel90;
+    private javax.swing.JLabel jLabel91;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -2754,6 +2774,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbDatoAdicionalRidePlaca(JComboBox<EnumSiNo> cmbDatoAdicionalRidePlaca) {
         this.cmbDatoAdicionalRidePlaca = cmbDatoAdicionalRidePlaca;
     }
+
+    public JComboBox<String> getCmbNumeroPrecioPresupuesto() {
+        return cmbNumeroPrecioPresupuesto;
+    }
+
+    public void setCmbNumeroPrecioPresupuesto(JComboBox<String> cmbNumeroPrecioPresupuesto) {
+        this.cmbNumeroPrecioPresupuesto = cmbNumeroPrecioPresupuesto;
+    }
+
     
     
     

@@ -52,7 +52,7 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         titulo.add(new ColumnaDialogo("Pvp1", 0.1d));
         titulo.add(new ColumnaDialogo("Pvp2", 0.1d));
         titulo.add(new ColumnaDialogo("Pvp3", 0.1d));
-        titulo.add(new ColumnaDialogo("Pvp4", 0.1d));
+        titulo.add(new ColumnaDialogo("Taller", 0.1d));
         return titulo;
     }
     

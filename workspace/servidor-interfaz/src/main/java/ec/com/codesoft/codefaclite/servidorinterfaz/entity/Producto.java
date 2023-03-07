@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
@@ -599,8 +600,25 @@ public class Producto implements Serializable, Comparable<Producto> {
             return precioVenta.precio;
         }
                
-        return BigDecimal.ZERO;
+        return BigDecimal.ZERO;        
+    }
+    
+    public BigDecimal obtenerPrecioVentaPorNombre(String nombre)
+    {
+        List<PrecioVenta> precioVentaList= obtenerPreciosVenta();
         
+        if(precioVentaList!=null)
+        {
+            for (PrecioVenta precioVenta : precioVentaList) 
+            {
+                if(precioVenta.alias.equals(nombre))
+                {
+                    return precioVenta.precio;
+                }
+            }
+        }
+               
+        return BigDecimal.ZERO;        
     }
     
     public List<PrecioVenta> obtenerPreciosVenta()
@@ -1049,6 +1067,18 @@ public class Producto implements Serializable, Comparable<Producto> {
         return getValorUnitarioConIva().subtract(valorUnitario);
     }
     
+    public BigDecimal obtenerPrecioPresupuesto(Empresa empresa)
+    {
+        String numeroPrecio = ParametroUtilidades.obtenerValorParametro(empresa, ParametroCodefac.NUMERO_PRECIO_PRESUPUESTO);
+        BigDecimal precio = BigDecimal.ZERO;
+        if (numeroPrecio == null) {
+            precio = getValorUnitario();
+        } else {
+            precio = obtenerPrecioVentaPorNombre(numeroPrecio);
+        }
+        return precio;
+    }
+    
     /**
      * Esto sirve cuando tiene varias presentaciones y se tiene que buscar el producto principal
      * para hacer esta busqueda se tiene que buscar el que tenga el tipo distinto de Empaque
@@ -1223,7 +1253,19 @@ public class Producto implements Serializable, Comparable<Producto> {
         
         
         
-        
+        public static List<String> getListadoPrecios()
+        {
+            List<String> precioList=new ArrayList<String>();
+            precioList.add(PV1);
+            precioList.add(PV2);
+            precioList.add(PV3);
+            
+            precioList.add(PV4);
+            precioList.add(PV5);
+            precioList.add(PV6);
+            return precioList;
+            
+        }
         
 
     }

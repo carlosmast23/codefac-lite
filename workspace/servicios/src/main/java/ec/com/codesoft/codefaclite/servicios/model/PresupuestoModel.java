@@ -58,6 +58,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
@@ -757,7 +758,19 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             bodega=kardex.getBodega();
             if(getChkInventarioProveedor().isSelected())
             {
-                getTxtPrecioCompra().setText(producto.getValorUnitario()+"");
+                /*String numeroPrecio=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.NUMERO_PRECIO_PRESUPUESTO);
+                BigDecimal precio=BigDecimal.ZERO;
+                if(numeroPrecio==null)
+                {
+                    precio=producto.getValorUnitario();
+                }
+                else
+                {
+                    precio=producto.obtenerPrecioVentaPorNombre(numeroPrecio);                
+                }*/
+                BigDecimal precio=producto.obtenerPrecioPresupuesto(session.getEmpresa());
+                //getTxtPrecioCompra().setText(producto.getValorUnitario()+"");
+                getTxtPrecioCompra().setText(precio+"");
             }
             else
             {
@@ -1649,7 +1662,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 //Setear en la pantalla el precio de producto proveedor
                 if(getChkInventarioProveedor().isSelected())
                 {
-                    getTxtPrecioCompra().setText(productoProveedor.getProducto().getValorUnitario()+"");                    
+                    BigDecimal precio=productoProveedor.getProducto().obtenerPrecioPresupuesto(session.getEmpresa());
+                    getTxtPrecioCompra().setText(precio+"");                    
+                    //getTxtPrecioCompra().setText(productoProveedor.getProducto().getValorUnitario()+"");                    
                 }
                 else
                 {
