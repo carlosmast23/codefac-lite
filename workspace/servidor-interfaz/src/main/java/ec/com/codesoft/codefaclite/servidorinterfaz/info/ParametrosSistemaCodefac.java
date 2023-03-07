@@ -20,7 +20,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.2.9.9.8";
+    public static final String VERSION="1.2.9.9.9";
     /**
      * El modo de conf9.6.7guracion del sistema
      */

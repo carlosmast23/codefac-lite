@@ -97,6 +97,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -1563,8 +1564,9 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.WARNING,"Autorizando Comprobante: "+comprobanteOriginal.getCodigoDocumentoEnum().getNombre()," | con secuencial: "+comprobanteOriginal.getSecuencial()+" | con autorización: "+documentoAutorizado.getNumeroAutorizacion());
                     comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
                     XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
-                    java.sql.Date fechaAutorizacion = new java.sql.Date(fechaXml.toGregorianCalendar().getTime().getTime());
-                    comprobanteOriginal.setFechaAutorizacionSri(fechaAutorizacion);
+                    java.util.Date fechaAutorizacion = new java.util.Date(fechaXml.toGregorianCalendar().getTime().getTime());
+                    Timestamp fechaHoraAutorizacion= UtilidadesFecha.castDateToTimeStamp(fechaAutorizacion);
+                    comprobanteOriginal.setFechaAutorizacionSri(fechaHoraAutorizacion);
 
                     ComprobanteEntity.TipoAmbienteEnum enumAmbiente = ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(documentoAutorizado.getAmbiente());
                     if (enumAmbiente != null) {

@@ -105,7 +105,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
      * en especial para que puedan anular comprobante en el Sri
      */
     @Column(name = "FECHA_AUTORIZACION_SRI")
-    protected Date fechaAutorizacionSri;
+    protected Timestamp fechaAutorizacionSri;
 
     /**
      * Tipo de ambiente de produccion o pruebas en el que fue emitido el
@@ -294,11 +294,11 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         this.direccionMatriz = direccionMatriz;
     }
 
-    public Date getFechaAutorizacionSri() {
+    public Timestamp getFechaAutorizacionSri() {
         return fechaAutorizacionSri;
     }
 
-    public void setFechaAutorizacionSri(Date fechaAutorizacionSri) {
+    public void setFechaAutorizacionSri(Timestamp fechaAutorizacionSri) {
         this.fechaAutorizacionSri = fechaAutorizacionSri;
     }
 
