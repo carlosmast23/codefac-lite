@@ -13,6 +13,8 @@ import java.io.Serializable;
  */
 public class AlertaResponse implements Serializable{
     
+    public static final String ALERTA_COMPROBANTES_PENDIENTES_AUTORIZAR="Comprobantes de enviar al Sri";
+    
     public TipoAdvertenciaEnum tipoAdvertenciaEnum;
     public String descripcion;
     public String solucion;

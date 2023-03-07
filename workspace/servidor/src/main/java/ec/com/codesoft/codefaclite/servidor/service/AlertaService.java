@@ -50,6 +50,8 @@ import javax.mail.Session;
  * @author CARLOS_CODESOFT
  */
 public class AlertaService extends UnicastRemoteObject implements Serializable,AlertaServiceIf {
+    
+    
 
     public AlertaService() throws RemoteException {
         super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
@@ -379,16 +381,16 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     private AlertaResponse obtenerNotificacionComprobantesElectronicos(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
         ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-        Integer comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
-        Integer comprobantesEnviadosSinRespuesta = comprobanteServiceIf.getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa);
-
-        Integer totalComprobantesSinEnviar = comprobantesFirmadoSinEnviar + comprobantesEnviadosSinRespuesta;
+        //Integer comprobantesFirmadoSinEnviar = comprobanteServiceIf.getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
+        //Integer comprobantesEnviadosSinRespuesta = comprobanteServiceIf.getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa);
+         Integer totalComprobantesSinEnviar =comprobanteServiceIf.obtenerTotalComprobantesSinTerminarProcesar(empresa);
+        //Integer totalComprobantesSinEnviar = comprobantesFirmadoSinEnviar + comprobantesEnviadosSinRespuesta;
 
         if (totalComprobantesSinEnviar > 0) {
             //modeloTabla.addRow(new Object[]{TipoAdvertenciaEnum.ADVERTENCIA,totalComprobantesSinEnviar+" Comprobantes de enviar al Sri","Utilizar herramienta enviar"});
             return new AlertaResponse(
                     AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,
-                    totalComprobantesSinEnviar + " Comprobantes de enviar al Sri",
+                    totalComprobantesSinEnviar +" "+ AlertaResponse.ALERTA_COMPROBANTES_PENDIENTES_AUTORIZAR,
                     "Utilizar herramienta enviar");
         }
 

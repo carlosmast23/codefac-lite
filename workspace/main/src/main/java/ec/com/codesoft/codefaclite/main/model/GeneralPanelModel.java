@@ -519,7 +519,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         public void procesar() {
                             //Grabar las posiciones de los widgets al momento de salir
                             grabarDatosPosicionesWidgetSalir();
-                            generarRespaldoBaseDatosPorCorreo();
+                            generarRespaldoBaseDatosPorCorreo();                            
                             
                             //Solo detener la publicidad cuando exista
                             if (hiloPublicidadCodefac != null) {
@@ -537,6 +537,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            terminarAutorizarComprobantesPendientes();
             UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web    
             dispose();
             System.exit(0);
@@ -549,6 +550,29 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             case 2:
                 break;
         }
+    }
+    
+    private void terminarAutorizarComprobantesPendientes()
+    {
+        try {
+            Integer totalComprobantePendientes=ServiceFactory.getFactory().getComprobanteServiceIf().obtenerTotalComprobantesSinTerminarProcesar(sessionCodefac.getEmpresa());
+            
+            if(totalComprobantePendientes>0)
+            {
+                Boolean continuar=DialogoCodefac.dialogoPregunta(new CodefacMsj("El sistema detecta comprobantes pendientes, desea intentar terminar de autorizar ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                if(continuar)
+                {
+
+                        ServiceFactory.getFactory().getComprobanteServiceIf().procesarSinAutorizarYEnviadosPendientes(sessionCodefac.getEmpresa());
+
+                }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     private void cerrarTodasPantallas()

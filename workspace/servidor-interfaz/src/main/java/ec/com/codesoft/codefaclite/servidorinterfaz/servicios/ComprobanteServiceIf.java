@@ -119,4 +119,8 @@ public interface ComprobanteServiceIf extends Remote {
     
     public List<ComprobanteElectronico> getPendientesProcesar(Empresa empresa) throws ServicioCodefacException, RemoteException;
     
+    public void procesarSinAutorizarYEnviadosPendientes(Empresa empresa) throws RemoteException,ServicioCodefacException;
+    
+    public Integer obtenerTotalComprobantesSinTerminarProcesar(Empresa empresa) throws RemoteException;
+    
 }

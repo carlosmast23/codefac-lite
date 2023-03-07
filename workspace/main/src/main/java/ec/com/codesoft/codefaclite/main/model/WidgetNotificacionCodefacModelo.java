@@ -5,33 +5,27 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.panel.WidgetNotificacionesCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse.TipoAdvertenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
-import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -49,6 +43,7 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
         getLblNotificaciones().setText(TITULO_PAGINA);
         this.sucursal=sucursal;
         listenerBotones();
+        listenerPopUps();
         actualizarNotificaciones(ModoProcesarEnum.NORMAL);
         
     }
@@ -190,7 +185,41 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
         this.sucursal = sucursal;
     }
 
+    private void listenerPopUps() {
+        JPopupMenu menu=new JPopupMenu();
+        JMenuItem item= new JMenuItem("Solucionar Problema");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Integer filaSeleccionada=getTblNotificaciones().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    String nombreAlerta=(String) getTblNotificaciones().getValueAt(filaSeleccionada, 1);
+                    
+                    if(nombreAlerta.contains(AlertaResponse.ALERTA_COMPROBANTES_PENDIENTES_AUTORIZAR))
+                    {
+                        listenerTerminarAutorizarComprobantes();
+                    }
+                }
+            }
+        });
+       
+        menu.add(item);
+        getTblNotificaciones().setComponentPopupMenu(menu);
+    }
 
-    
+    private void listenerTerminarAutorizarComprobantes()
+    {
+        try {
+            ServiceFactory.getFactory().getComprobanteServiceIf().procesarSinAutorizarYEnviadosPendientes(sucursal.getEmpresa());
+            actualizarNotificaciones(ModoProcesarEnum.NORMAL);
+            DialogoCodefac.mensaje(new CodefacMsj("Proceso finalizado correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));            
+        } catch (RemoteException ex) {
+            Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(WidgetNotificacionCodefacModelo.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+        }
+    }
     
 }
