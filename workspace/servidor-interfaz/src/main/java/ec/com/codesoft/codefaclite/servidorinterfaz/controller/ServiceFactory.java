@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BancoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CasaComercialServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
@@ -252,6 +253,7 @@ public abstract class ServiceFactory {
     public DescuentoSeviceIf getDescuentoSeviceIf(){return (DescuentoSeviceIf) getRecursosRMI(DescuentoSeviceIf.class);};
     public DescuentoProductoDetalleServiceIf getDescuentoProductoDetalleServiceIf(){return (DescuentoProductoDetalleServiceIf) getRecursosRMI(DescuentoProductoDetalleServiceIf.class);};
     public DescuentoCondicionPrecioServiceIf getDescuentoCondicionPrecioServiceIf(){return (DescuentoCondicionPrecioServiceIf) getRecursosRMI(DescuentoCondicionPrecioServiceIf.class);};
+    public BancoServiceIf getBancoServiceIf(){return (BancoServiceIf) getRecursosRMI(BancoServiceIf.class);};
     
     
     /**

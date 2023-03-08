@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.EntityAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -23,10 +24,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "BANCO")
-public class Banco implements Serializable{
-    @Id
+public class Banco extends EntityAbstract<GeneralEnumEstado>{
+    /*@Id
     @Column(name = "BODEGA_ID")
-    private Long id;
+    private Long id;*/
     
     @Column(name = "CODIGO")
     private String codigo;
@@ -37,8 +38,8 @@ public class Banco implements Serializable{
     @Column(name = "NOMBRE")
     private String nombre;
     
-    @Column(name = "ESTADO")
-    private String estado;
+    /*@Column(name = "ESTADO")
+    private String estado;*/
     
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
@@ -46,13 +47,13 @@ public class Banco implements Serializable{
     public Banco() {
     }
 
-    public Long getId() {
+    /*public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
+    }*/
 
     public String getCodigo() {
         return codigo;

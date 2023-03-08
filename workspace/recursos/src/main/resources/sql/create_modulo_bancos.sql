@@ -1,16 +1,23 @@
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.3.0.0.1)*/
 create table BANCO
 (
-    ID BIGINT not null ,
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
     EMPRESA_ID BIGINT,
     CODIGO varchar(30),
     CODIGO_MULTICASH varchar(10),
     NOMBRE varchar(120),
+    FECHA_CREACION timestamp, 
+    FECHA_ULTIMA_EDICION timestamp, 
+    USUARIO_CREACION_ID BIGINT,  
+    USUARIO_ULTIMA_EDICION_ID BIGINT,  
     ESTADO varchar(1),
 
     primary key (ID),
-    CONSTRAINT id_banco_empresa_fk FOREIGN KEY (EMPRESA_ID) REFERENCES EMPRESA(ID),
+    CONSTRAINT id_banco_empresa_fk FOREIGN KEY (EMPRESA_ID) REFERENCES EMPRESA(ID)
     
 );
+
+
 
 create table CUENTA_BANCO
 (

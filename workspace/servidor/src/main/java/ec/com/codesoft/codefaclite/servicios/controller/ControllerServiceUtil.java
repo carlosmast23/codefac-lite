@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ActualizarSistemaService;
 import ec.com.codesoft.codefaclite.servidor.service.AlertaService;
 import ec.com.codesoft.codefaclite.servidor.service.AtsService;
+import ec.com.codesoft.codefaclite.servidor.service.BancoService;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import ec.com.codesoft.codefaclite.servidor.service.CasaComercialService;
 import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
@@ -120,6 +121,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BancoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CasaComercialServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
@@ -344,6 +346,8 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(DescuentoService.class,DescuentoSeviceIf.class);
             mapRecursos.put(DescuentoProductoDetalleService.class,DescuentoProductoDetalleServiceIf.class);
             mapRecursos.put(DescuentoCondicionPrecioService .class,DescuentoCondicionPrecioServiceIf.class);
+            mapRecursos.put(BancoService.class,BancoServiceIf.class);
+            
             
             
             ServiceControllerServer.cargarRecursos(mapRecursos,host);
