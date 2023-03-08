@@ -88,6 +88,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     
     protected String campoAdicional;
     
+    protected String responsable;
+    
     public ReporteFacturaData() {
     }
     
@@ -424,9 +426,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     public void setCampoAdicional(String campoAdicional) {
         this.campoAdicional = campoAdicional;
     }
-    
-    
-    
+
+    public String getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(String responsable) {
+        this.responsable = responsable;
+    }
     
 
     @Override
@@ -517,6 +524,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         {
             case AGRUPADO_POR_DETALLE:
                 return numeroFactura;
+            case AGRUPADO_POR_RESPONSABLE:
+                return responsable;
             case AGRUPADO_POR_CLIENTE:
                 return razonSocialCliente;
             case AGRUPADO_POR_USUARIO:

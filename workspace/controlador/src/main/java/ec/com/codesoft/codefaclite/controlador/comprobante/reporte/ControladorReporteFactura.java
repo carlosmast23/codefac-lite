@@ -497,6 +497,7 @@ public class ControladorReporteFactura {
                 }
                 dataFacturaCopia.setNombreProducto(detalle.getDescripcion());
                 dataFacturaCopia.setCodigoProducto(detalle.getCodigoPrincipal());
+                dataFacturaCopia.setResponsable((detalle.getResponsable()!=null)?detalle.getResponsable().getNombresCompletos():"");
                 
                 //TODO: Por el momento se realiza la consulta directa del producto pero esta parte tiene que estar en el servidor
                 String nombreCategoria="Sin asignar";
@@ -1223,6 +1224,14 @@ public class ControladorReporteFactura {
             @Override
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
                 return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_VALOR).toString();
+                //return dato.getPrecioUnitarioReporte();
+            }
+        }),
+        
+        AGRUPADO_POR_RESPONSABLE("Agrupado por responsable",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_RESPONSABLE).toString();
                 //return dato.getPrecioUnitarioReporte();
             }
         }),

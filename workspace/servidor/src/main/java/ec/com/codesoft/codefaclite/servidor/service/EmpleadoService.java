@@ -71,5 +71,15 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
         return getFacade().findByMap(parametroMap);
     }
     
+    //TODO: Terminar de implementar para que funcione tomando en cuenta el parametro de la empresa
+    public List<Empleado> buscarActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        //Empleado empleado;
+        //empleado.getEstado()
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
+    
     
 }

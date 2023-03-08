@@ -48,6 +48,9 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     @JoinColumn(name = "FACTURA_ID")
     @ManyToOne(optional = false)
     private Factura factura;
+    
+    @JoinColumn(name = "RESPONSABLE_ID")
+    private Empleado responsable;
 
 
     @Column(name = "PRECIO_SIN_SUBSIDIO")
@@ -114,6 +117,14 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         }
     }
 
+    public Empleado getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(Empleado responsable) {
+        this.responsable = responsable;
+    }
+    
     
     @Override
     public int hashCode() {

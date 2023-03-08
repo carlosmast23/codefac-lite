@@ -22,4 +22,5 @@ public interface EmpleadoServiceIf  extends ServiceAbstractIf<Empleado>
     public void eliminar(Empleado e) throws java.rmi.RemoteException;
     public List<Empleado> buscar() throws java.rmi.RemoteException;
     public List<Empleado> buscarPorDepartamento(Departamento departamento,Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException;
+    public List<Empleado> buscarActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException;
 }

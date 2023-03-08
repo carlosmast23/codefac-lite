@@ -162,6 +162,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
         TipoReporteEnum tipoReporteEnum = (TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
         if (tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO)
+                || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_RESPONSABLE)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CATEGORIA)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE)

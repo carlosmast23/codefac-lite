@@ -3985,9 +3985,55 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         jPopupMenu2.add(jMenuItemFormaPago);
         getTblFormasPago().setComponentPopupMenu(jPopupMenu2);
         
-        
+        addPopUpListenerTblDetalle();
 
                 
+    }
+    
+    private void addPopUpListenerTblDetalle()
+    {
+        JPopupMenu jPopupMenu=new JPopupMenu();
+        JMenuItem jMenuItemResponsable=new JMenuItem("Agregar Responsable Principal");
+        jMenuItemResponsable.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try {
+                    FacturaDetalle facturaDetalle= obtenerFacturaDetalleSeleccionado();
+                    if(facturaDetalle!=null)
+                    {
+                        List<Empleado> empleadoList=ServiceFactory.getFactory().getEmpleadoServiceIf().buscarActivosPorEmpresa(session.getEmpresa());
+                        empleadoList.add(0,null);
+                        Empleado empleado=(Empleado) DialogoCodefac.dialogoComboBox("Empleados", "Seleccione un empleado", empleadoList,facturaDetalle.getResponsable());
+                        facturaDetalle.setResponsable(empleado);
+                        
+                    }
+                
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        });
+        
+        jPopupMenu.add(jMenuItemResponsable);
+        getTblDetalleFactura().setComponentPopupMenu(jPopupMenu);
+        
+    }
+    
+    private FacturaDetalle obtenerFacturaDetalleSeleccionado()
+    {
+        int fila = getTblDetalleFactura().getSelectedRow();
+        if (fila >= 0) 
+        {
+            modoEdicionDetalle = true;
+            //setear valores para cargar de nuevo en los campos de la factura
+            FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
+            return facturaDetalle;
+        }
+        return null;
     }
     
     

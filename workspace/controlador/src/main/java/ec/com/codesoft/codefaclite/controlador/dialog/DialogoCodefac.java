@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -126,6 +127,16 @@ public abstract class DialogoCodefac {
     
     public static boolean dialogoPregunta(CodefacMsj codefacMsj) {
         return dialogoPregunta(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje.getCodigo());
+    }
+    
+    public static Object dialogoComboBox(String titulo,String mensaje,List datos, Object datoSeleccionado)
+    {       
+        return JOptionPane.showInputDialog(null,mensaje,titulo, JOptionPane.QUESTION_MESSAGE, null, datos.toArray(), datoSeleccionado);
+    }
+    
+    public static Object dialogoComboBox(String titulo,String mensaje,Object[] datos, Object datoSeleccionado)
+    {
+        return JOptionPane.showInputDialog(null,mensaje,titulo, JOptionPane.QUESTION_MESSAGE, null, datos, datoSeleccionado);
     }
     
     /**
