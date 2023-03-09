@@ -69,14 +69,14 @@
 				</textElement>
 				<text><![CDATA[Generado con CODEFAC  www.cf.codesoft.com]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="58" width="105" height="13" uuid="6ea78e00-ab5d-4624-b851-493ff3f92abb"/>
 				<textElement verticalAlignment="Middle">
 					<font size="6" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Elaborado por:"+$P{pl_usuario}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="105" y="58" width="65" height="13" uuid="179aa780-9f1e-4756-b0f8-16b0b8ee8417"/>
 				<textElement verticalAlignment="Middle">
 					<font size="6" isBold="true" isItalic="true" isUnderline="false"/>

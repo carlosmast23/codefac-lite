@@ -1024,13 +1024,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         cmbPuntoEmision.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jToolBar3.add(cmbPuntoEmision);
 
-        lblSecuencial.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        lblSecuencial.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         lblSecuencial.setText("-000000009");
         jToolBar3.add(lblSecuencial);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
         panelDatosFactura.add(jToolBar3, gridBagConstraints);

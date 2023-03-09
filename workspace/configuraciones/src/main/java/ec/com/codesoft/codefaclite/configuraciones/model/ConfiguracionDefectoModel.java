@@ -297,6 +297,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A4);
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A5);
         getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.A6);
+        getCmbReporteDefectoPedido().addItem(FormatoReporteEnum.POS_80);
         
         //Agregar las impresoras disponibles
         List<String> impresoraList= UtilidadesImpresora.obtenerNombreImpresorasDisponibles();
