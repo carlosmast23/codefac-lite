@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -15,6 +16,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturaDetalleServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,6 +56,13 @@ public class FacturaDetalleService extends ServiceAbstract<FacturaDetalle, Factu
             Logger.getLogger(FacturaDetalleService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public List<FacturaDetalle> buscarPorFactura(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException
+    {        
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("factura",factura);
+        return getFacade().findByMap(mapParametros);
     }
     
 }

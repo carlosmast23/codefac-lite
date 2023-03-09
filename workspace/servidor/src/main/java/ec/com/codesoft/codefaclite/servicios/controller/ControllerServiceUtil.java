@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidor.service.CompraFacturaReembolsoServic
 import ec.com.codesoft.codefaclite.servidor.service.CompraService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
+import ec.com.codesoft.codefaclite.servidor.service.CuentaBancoService;
 import ec.com.codesoft.codefaclite.servidor.service.DepartamentoService;
 import ec.com.codesoft.codefaclite.servidor.service.DescuentoCondicionPrecioService;
 import ec.com.codesoft.codefaclite.servidor.service.DescuentoProductoDetalleService;
@@ -115,6 +116,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.CuentaBanco;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
@@ -131,6 +133,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraFacturaReemb
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CuentaBancoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoCondicionPrecioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoProductoDetalleServiceIf;
@@ -347,6 +350,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(DescuentoProductoDetalleService.class,DescuentoProductoDetalleServiceIf.class);
             mapRecursos.put(DescuentoCondicionPrecioService .class,DescuentoCondicionPrecioServiceIf.class);
             mapRecursos.put(BancoService.class,BancoServiceIf.class);
+            mapRecursos.put(CuentaBancoService.class,CuentaBancoServiceIf.class);
             
             
             

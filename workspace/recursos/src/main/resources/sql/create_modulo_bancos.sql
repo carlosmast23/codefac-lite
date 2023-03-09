@@ -18,16 +18,21 @@ create table BANCO
 );
 
 
-
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.3.0.0.1)*/
 create table CUENTA_BANCO
 (
-    ID BIGINT not null ,
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
     BANCO_ID BIGINT,
     NUMERO_CUENTA varchar(32),
     TIPO_CUENTA varchar(1),
     CLASIFICACION_INTERNA varchar(1),
     SECUENCIAL_CHEQUERA int,
     SALDO_TOTAL decimal(13,2),
+
+    FECHA_CREACION timestamp, 
+    FECHA_ULTIMA_EDICION timestamp, 
+    USUARIO_CREACION_ID BIGINT,  
+    USUARIO_ULTIMA_EDICION_ID BIGINT,  
     ESTADO varchar(1),
 
     primary key (ID),

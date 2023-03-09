@@ -399,10 +399,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 setearDatosClienteYDistribuidor(proforma);
                 entityManager.merge(proforma);
+                
+                eliminarDetalles(ServiceFactory.getFactory().getFacturaDetalleServiceIf().buscarPorFactura(proforma), proforma.getDetalles());
+                
             }
         });
         return proforma;
     }
+    
     
     /**
      * Metodo que permite setear los datos del cliente en la venta para poder datos estaticos para realizar control de la venta

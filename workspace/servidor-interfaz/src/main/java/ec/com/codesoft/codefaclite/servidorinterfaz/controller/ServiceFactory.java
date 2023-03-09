@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraFacturaReemb
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CuentaBancoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoCondicionPrecioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoProductoDetalleServiceIf;
@@ -254,6 +255,7 @@ public abstract class ServiceFactory {
     public DescuentoProductoDetalleServiceIf getDescuentoProductoDetalleServiceIf(){return (DescuentoProductoDetalleServiceIf) getRecursosRMI(DescuentoProductoDetalleServiceIf.class);};
     public DescuentoCondicionPrecioServiceIf getDescuentoCondicionPrecioServiceIf(){return (DescuentoCondicionPrecioServiceIf) getRecursosRMI(DescuentoCondicionPrecioServiceIf.class);};
     public BancoServiceIf getBancoServiceIf(){return (BancoServiceIf) getRecursosRMI(BancoServiceIf.class);};
+    public CuentaBancoServiceIf getCuentaBancoServiceIf(){return (CuentaBancoServiceIf) getRecursosRMI(CuentaBancoServiceIf.class);};
     
     
     /**

@@ -1,5 +1,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.EntityAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
@@ -8,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -16,11 +19,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "BODEGA")
-public class CuentaBanco implements Serializable{
-    
-    @Id
+public class CuentaBanco extends  EntityAbstract<GeneralEnumEstado>
+{   
+    /*@Id
     @Column(name = "BODEGA_ID")
-    private Long id;
+    private Long id;*/
     
     @Column(name = "NUMERO_CUENTA")
     private String numeroCuenta;
@@ -37,19 +40,22 @@ public class CuentaBanco implements Serializable{
     @Column(name = "SALDO_TOTAL")
     private BigDecimal saldoTotal;
     
-    @Column(name = "ESTADO")
-    private String estado;
+    @JoinColumn(name = "BANCO_ID")
+    private Banco banco;
+    
+    /*@Column(name = "ESTADO")
+    private String estado;*/
 
     public CuentaBanco() {
     }
 
-    public Long getId() {
+    /*public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
+    }*/
 
     public String getNumeroCuenta() {
         return numeroCuenta;
@@ -72,7 +78,10 @@ public class CuentaBanco implements Serializable{
     }
 
     public void setTipoCuentaEnum(TipoCuentaBancariaEnum tipoCuentaEnum) {
-        this.tipoCuenta = tipoCuentaEnum.getLetra();
+        if(tipoCuentaEnum!=null)
+        {
+            this.tipoCuenta = tipoCuentaEnum.getLetra();
+        }
     }
 
     public String getClasificacionInterna() {
@@ -114,6 +123,16 @@ public class CuentaBanco implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public void setBanco(Banco banco) {
+        this.banco = banco;
+    }
+    
+    
     
     /**
      * =======================================================================

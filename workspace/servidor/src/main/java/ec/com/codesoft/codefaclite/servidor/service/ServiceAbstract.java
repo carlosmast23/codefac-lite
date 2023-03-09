@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -430,6 +431,27 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
                     throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje);
                 }
             }
+        }
+        
+    }
+    
+    public void eliminarDetalles(List listaOriginal,List listaModificada)
+    {
+        List eliminarList=new ArrayList();
+        
+        //Busco los datos eliminados de la lista original
+        for (Object dato : listaOriginal) 
+        {
+            if(!listaModificada.contains(dato))
+            {
+                eliminarList.add(dato);
+            }
+        }
+        
+        for (Object object : eliminarList) 
+        {
+            Object objectTmp=entityManager.merge(object);
+            entityManager.remove(objectTmp);
         }
         
     }

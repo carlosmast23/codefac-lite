@@ -37,6 +37,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -65,7 +66,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     private Factura factura;
     private DefaultTableModel modeloTablaDetallesProductos;
     private Producto productoSeleccionado;
-    private int fila;
+    //private int[] filas;
     private boolean banderaProducto;
     //private Empresa empresa;
     private SessionCodefac session;
@@ -222,7 +223,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         getTblDetalleFactura().addMouseListener(new MouseAdapter() {
            @Override
            public void mouseClicked(java.awt.event.MouseEvent evt) {
-               fila = getTblDetalleFactura().getSelectedRow();
+               //filas = getTblDetalleFactura().getSelectedRows();
             }
         });
         
@@ -231,17 +232,24 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             public void actionPerformed(ActionEvent e) {
                 try
                 {
+                    int[] filas = getTblDetalleFactura().getSelectedRows();
                     if(!factura.getDetalles().isEmpty() ){
-                        if( fila != -1){
-                            factura.getDetalles().remove(fila);
-                            fila = -1;
+                        if( filas.length>0)
+                        {                                                      
+                            for (int fila : filas) 
+                            {
+                                FacturaDetalle facturaDetalleTmp=(FacturaDetalle) getTblDetalleFactura().getValueAt(fila,0);
+                                factura.getDetalles().remove(facturaDetalleTmp);
+                                //factura.getDetalles().remove(fila);
+                                //fila = -1;
+                            }                            
                             procesarTotales();
                             cargarDatosDetalles();
                             actualizarVentaDiariaComoPedido();
                         }
-                        else{
-                            DialogoCodefac.mensaje("Detalles Producto", "Seleccione el objeto a eliminar", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        }
+                        //else{
+                        //    DialogoCodefac.mensaje("Detalles Producto", "Seleccione el objeto a eliminar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        //}
                     }
                     else
                     {
@@ -327,7 +335,6 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void iniciarValores()
     {
-        fila = -1;
         banderaProducto = false;
         //Agregar los 2 tipos de documentos disponibles para ventas diarias
         getCmbTipoDocumento().removeAllItems();
@@ -573,7 +580,8 @@ public class VentasDiariasModel extends WidgetVentasDiarias
 
         this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         for (FacturaDetalle detalle : detalles) {
-            Vector<String> fila = new Vector<String>();
+            Vector<Object> fila = new Vector<Object>();
+            fila.add(detalle);
             fila.add(detalle.getDescripcion());
             fila.add(detalle.getCantidad().toString());
             fila.add(detalle.getPrecioUnitario().toString());
@@ -581,6 +589,8 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             modeloTablaDetallesProductos.addRow(fila);
         }
         getTblDetalleFactura().setModel(this.modeloTablaDetallesProductos);
+        UtilidadesTablas.ocultarColumna(getTblDetalleFactura(),0);
+        
     }
     
     public void calcularSubtotal12y0(List<FacturaDetalle> facturaDetalles) {
