@@ -22,6 +22,7 @@ import javax.persistence.Table;
 public class SriFormaPago implements Serializable {
     
     public static final String FORMA_PAGO_CARTERA_ALIAS="Cartera";
+    public static final String ALIAS_FORMA_PAGO_EFECTIVO="Efectivo";
 
     @Id
     @Column(name = "ID")

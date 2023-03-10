@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
@@ -298,7 +300,15 @@ public class CajaSession implements Serializable
             {
                 if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )
                 {
-                    totalVentas = totalVentas.add(ingresoCaja.getValor());
+                    for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
+                    {
+                        //Solo agregar las formas de pago en efectivo
+                        if(formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.ALIAS_FORMA_PAGO_EFECTIVO))
+                        {
+                            //System.out.println("Efectivo :"+ingre);
+                            totalVentas = totalVentas.add(formaPago.getTotal());
+                        }                        
+                    }
                 }
             }
         }
