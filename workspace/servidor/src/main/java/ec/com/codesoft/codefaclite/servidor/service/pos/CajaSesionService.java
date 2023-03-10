@@ -170,22 +170,27 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         });
         return entity;
     }
+    
+    public List<CajaSession> buscarCajasActivas(Caja caja)
+    {
+        Map<String, Object> mapParametros = new HashMap<>();
+        mapParametros.put("caja", caja);
+        mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
+        List<CajaSession> resultadoList = getFacade().findByMap(mapParametros);
+        return resultadoList;
+    }
 
     @Override
     public boolean buscarSiCajaTieneSessionActiva(Caja caja) {
-        Map<String,Object> mapParametros=new HashMap<>();
-        mapParametros.put("caja",caja);
-        mapParametros.put("estadoCierreCaja",CajaSessionEnum.ACTIVO.getEstado());
-        List<CajaSession> cajaSession = getFacade().findByMap(mapParametros);
+        
+        List<CajaSession> cajaSession = buscarCajasActivas(caja);
 
         return cajaSession.size()>0;
     }
     
     public CajaSession buscarCajaSessionActiva(Caja caja) {
-        Map<String,Object> mapParametros=new HashMap<>();
-        mapParametros.put("caja",caja);
-        mapParametros.put("estadoCierreCaja",CajaSessionEnum.ACTIVO.getEstado());
-        List<CajaSession> cajaSession = getFacade().findByMap(mapParametros);
+
+        List<CajaSession> cajaSession = buscarCajasActivas(caja);
         
         if(cajaSession.size()>0)
         {

@@ -16,11 +16,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.pos.reportdata.VentaReporteData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -28,6 +30,7 @@ import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -247,16 +250,29 @@ public class CerrarCajaModel extends CajaSessionModel
         {
             for (IngresoCaja ingresoCaja : ingresoCajaList) 
             {
-                VentaReporteData reporteData=new VentaReporteData(
-                        ingresoCaja.getFactura().getSecuencial()+"", 
-                        ingresoCaja.getFactura().getIdentificacion(), 
-                        ingresoCaja.getFactura().getRazonSocial(), 
-                        ingresoCaja.getFactura().getTotal()+"",
-                        ingresoCaja.getFactura().getEstadoEnum().getNombre());
+                for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
+                {
+                    VentaReporteData reporteData = new VentaReporteData(
+                            ingresoCaja.getFactura().getSecuencial() + "",
+                            ingresoCaja.getFactura().getIdentificacion(),
+                            ingresoCaja.getFactura().getRazonSocial(),
+                            formaPago.getTotal() + "",
+                            ingresoCaja.getFactura().getEstadoEnum().getNombre(),
+                            formaPago.getSriFormaPago().getAlias()
+                    );
 
-                detalleData.add(reporteData);            
+                    detalleData.add(reporteData);
+                }
+                
             }
         }
+        
+        UtilidadesLista.ordenarLista(detalleData,new Comparator<VentaReporteData>() {
+            @Override
+            public int compare(VentaReporteData o1, VentaReporteData o2) {
+                return o1.getFormaPago().compareTo(o2.getFormaPago());
+            }
+        });
         
         DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
                 @Override

@@ -1129,11 +1129,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             }
             else if(factura.getFormaPagos().size()>1)
             {
+                //TODO: Terminar una forma en la cual cuando tenga varias formas de pago coincida con los totales
                 //TODO: Si exsiten varias formas de pago transformo en una sola forma de pago 
                 //TODO: buscar una manera que esto luego funcione cuando tengo varias formas de pago asignado y tomar en cuenta la cartera
-                FormaPago formPagoDefecto=factura.buscarFormaPagoDistintaDeCartera();
+                /*FormaPago formPagoDefecto=factura.buscarFormaPagoDistintaDeCartera();
                 factura.getFormaPagos().clear();
                 factura.addFormaPago(formPagoDefecto);
+                interfaz.cargarFormasPagoTabla();*/
             }
             
             
