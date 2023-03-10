@@ -55,7 +55,8 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
                 
                 if(buscarSiCajaTieneSessionActiva(entity.getCaja()))
                 {
-                    throw new ServicioCodefacException("La caja ya esta con una sesión activa.\n Posible Solución: Otro Usuario tiene activa la sesión con esta caja");
+                    CajaSession cajaSession= buscarCajaSessionActiva(entity.getCaja());
+                    throw new ServicioCodefacException("La caja ya esta con una sesión activa.\n Posible Solución: Otro Usuario tiene activa la sesión con esta caja.\nUsuario:"+cajaSession.getUsuario().getNick());
                 }
                 
                 if(entity.getUsuario() == null)
@@ -178,6 +179,20 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         List<CajaSession> cajaSession = getFacade().findByMap(mapParametros);
 
         return cajaSession.size()>0;
+    }
+    
+    public CajaSession buscarCajaSessionActiva(Caja caja) {
+        Map<String,Object> mapParametros=new HashMap<>();
+        mapParametros.put("caja",caja);
+        mapParametros.put("estadoCierreCaja",CajaSessionEnum.ACTIVO.getEstado());
+        List<CajaSession> cajaSession = getFacade().findByMap(mapParametros);
+        
+        if(cajaSession.size()>0)
+        {
+            return cajaSession.get(0);
+        }
+        
+        return null;
     }
 
     @Override
