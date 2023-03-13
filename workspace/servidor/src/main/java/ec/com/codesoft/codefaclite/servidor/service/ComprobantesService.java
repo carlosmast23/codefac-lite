@@ -1969,13 +1969,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             /**
              * Cargar datos de las formas de pago
              */
-            SriServiceIf service = ServiceFactory.getFactory().getSriServiceIf();
+            /*SriServiceIf service = ServiceFactory.getFactory().getSriServiceIf();
             List<SriFormaPago> formasPagoSri = service.obtenerFormasPagoActivo();
             Map<String, String> mapFormasPago = new HashMap<String, String>();
             for (SriFormaPago sriFormaPago : formasPagoSri) {
                 mapFormasPago.put(sriFormaPago.getCodigo(), sriFormaPago.getNombre());
             }
-            servicio.setMapCodeAndNameFormaPago(mapFormasPago);
+            servicio.setMapCodeAndNameFormaPago(mapFormasPago);*/
             
             /**
              * Cargar los tipos de documentos para las facturas

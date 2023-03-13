@@ -1871,6 +1871,7 @@
                       <Font name="Arial" size="12" style="0"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Activar Financiamiento"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

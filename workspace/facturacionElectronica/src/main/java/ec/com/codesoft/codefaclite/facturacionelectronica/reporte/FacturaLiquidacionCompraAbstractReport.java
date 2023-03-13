@@ -23,7 +23,7 @@ import java.util.Map;
 public abstract class FacturaLiquidacionCompraAbstractReport extends ComprobanteElectronicoReporte{
     
     private ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobante;
-    private Map<String,String> mapCodeAndNameFormaPago;
+    //private Map<String,String> mapCodeAndNameFormaPago;
 
     public FacturaLiquidacionCompraAbstractReport(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobante) {
         super(comprobante);
@@ -134,7 +134,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
         {
             for (FormaPagoComprobante formaPagoComprobante : formasPago) {
                 FormaPagoData formaPagoData=new FormaPagoData();
-                if(mapCodeAndNameFormaPago!=null)
+                /*if(mapCodeAndNameFormaPago!=null)
                 {
                     String nombreFormaPago=mapCodeAndNameFormaPago.get(formaPagoComprobante.getFormaPago());
                     formaPagoData.setNombre((nombreFormaPago!=null)?nombreFormaPago:"Sin Nombre");
@@ -142,7 +142,8 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
                 else
                 {
                     formaPagoData.setNombre("Sin Nombre");
-                }
+                }*/
+                formaPagoData.setNombre(formaPagoComprobante.getNombreTmp());
                 formaPagoData.setValor(formaPagoComprobante.getTotal().toString());            
                 formaPagosData.add(formaPagoData);
             }
@@ -150,9 +151,9 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
         return formaPagosData;
     }
 
-    public void setMapCodeAndNameFormaPago(Map<String, String> mapCodeAndNameFormaPago) {
+    /*public void setMapCodeAndNameFormaPago(Map<String, String> mapCodeAndNameFormaPago) {
         this.mapCodeAndNameFormaPago = mapCodeAndNameFormaPago;
-    }
+    }*/
     
     public BigDecimal totalFactura()
     {

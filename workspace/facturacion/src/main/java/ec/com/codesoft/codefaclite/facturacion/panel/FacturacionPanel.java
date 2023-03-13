@@ -1461,6 +1461,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         chkActivarFinanciamiento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkActivarFinanciamiento.setText("Activar Financiamiento");
+        chkActivarFinanciamiento.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

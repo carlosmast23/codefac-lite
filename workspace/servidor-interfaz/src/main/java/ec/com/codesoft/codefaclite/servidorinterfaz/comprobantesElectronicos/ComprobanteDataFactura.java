@@ -221,6 +221,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 formaPagoComprobante.setPlazo(new BigDecimal(formaPago.getPlazo() + ""));
                 formaPagoComprobante.setTotal(formaPago.getTotal());
                 formaPagoComprobante.setUnidadTiempo(formaPago.getUnidadTiempo());
+                formaPagoComprobante.setNombreTmp(formaPago.getSriFormaPago().getNombre());
                 formaPagosFactura.add(formaPagoComprobante);
             }
             informacionComprobante.setFormaPagos(formaPagosFactura);

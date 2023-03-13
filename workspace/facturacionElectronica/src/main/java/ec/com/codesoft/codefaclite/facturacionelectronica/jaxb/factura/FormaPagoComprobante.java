@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -16,6 +17,9 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(propOrder = {"formaPago","total","plazo","unidadTiempo"})
 public class FormaPagoComprobante implements Serializable{    
+    
+    
+    private String nombreTmp;
     
     private String formaPago;
     
@@ -63,6 +67,16 @@ public class FormaPagoComprobante implements Serializable{
     public void setUnidadTiempo(String unidadTiempo) {
         this.unidadTiempo = unidadTiempo;
     }
+
+    @XmlTransient
+    public String getNombreTmp() {
+        return nombreTmp;
+    }
+
+    public void setNombreTmp(String nombreTmp) {
+        this.nombreTmp = nombreTmp;
+    }
+    
     
     
 }

@@ -7,15 +7,19 @@
  * Author:  Carlos
  * Created: 11/11/2017
  */
-INSERT INTO SRI_FORMA_PAGO (NOMBRE,ALIAS, CODIGO,FECHA_INICIO)
-    VALUES  ('SIN UTILIZACION DEL SISTEMA FINANCIERO','Efectivo', '01', '2013-01-01'),
-            ('COMPENSACION DE DEUDAS','Compensación', '15', '2013-01-01'),
-            ('TARJETA DE DEBITO','Tarjeta débito', '16', '2016-06-01'),
-            ('DINERO ELECTRONICO','Dinero electrónico', '17', '2016-06-01'),
-            ('TARJETA PREPAGO','Tarjeta prepago', '18', '2016-06-01'),
-            ('TARJETA DE CREDITO','Tarjeta crédito', '19', '2016-06-01'),
-            ('OTROS CON UTILIZACION DEL SISTEMA FINANCIERO','Otros', '20', '2016-06-01'),
-            ('ENDOSO DE TITULOS','Endoso títulos', '21', '2016-06-01');
+INSERT INTO SRI_FORMA_PAGO (ID_PADRE_FORMA_PAGO,NOMBRE,ALIAS, CODIGO,FECHA_INICIO)
+    VALUES  (NULL,'SIN UTILIZACION DEL SISTEMA FINANCIERO','Efectivo', '01', '2013-01-01'),
+            (NULL,'COMPENSACION DE DEUDAS','Compensación', '15', '2013-01-01'),
+            (NULL,'TARJETA DE DEBITO','Tarjeta débito', '16', '2016-06-01'),
+            (NULL,'DINERO ELECTRONICO','Dinero electrónico', '17', '2016-06-01'),
+            (NULL,'TARJETA PREPAGO','Tarjeta prepago', '18', '2016-06-01'),
+            (NULL,'TARJETA DE CREDITO','Tarjeta crédito', '19', '2016-06-01'),
+            (NULL,'OTROS CON UTILIZACION DEL SISTEMA FINANCIERO','Otros', '20', '2016-06-01'),
+            (NULL,'ENDOSO DE TITULOS','Endoso títulos', '21', '2016-06-01'),
+            (7,'TRANSFERENCIA','Transferencia', '20', '2016-06-01'),
+            (7,'DEPOSITO','Deposito', '20', '2016-06-01'),
+            (7,'CHEQUE','Cheque', '20', '2016-06-01'),
+;
 
 INSERT INTO SRI_IDENTIFICACION (CODIGO,TIPO_IDENTIFICACION_LETRA, TIPO_TRANSACCION,TIPO_IDENTIFICACION,FECHA_INICIO)
     VALUES ('01','R', 'COMPRA', 'RUC','01/01/2000');

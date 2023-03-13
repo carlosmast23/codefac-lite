@@ -206,7 +206,7 @@ public class ComprobanteElectronicoService implements Runnable {
      * con los valores proporicinados.
      * @return 
      */
-    private Map<String,String> mapCodeAndNameFormaPago;
+    //private Map<String,String> mapCodeAndNameFormaPago;
     
     private Map<String,String> mapCodeAndNameTipoRetecion;
         
@@ -1064,7 +1064,7 @@ public class ComprobanteElectronicoService implements Runnable {
         if(comprobante.getClass().equals(FacturaComprobante.class))
         {
             FacturaElectronicaReporte factElectReport=new FacturaElectronicaReporte((FacturaComprobante) comprobante);
-            factElectReport.setMapCodeAndNameFormaPago(mapCodeAndNameFormaPago);
+            //factElectReport.setMapCodeAndNameFormaPago(mapCodeAndNameFormaPago);
             return factElectReport;
         }
         else
@@ -1093,7 +1093,7 @@ public class ComprobanteElectronicoService implements Runnable {
                         if(comprobante.getClass().equals(LiquidacionCompraComprobante.class))
                         {
                             LiquidacionCompraReporte liquidacionCompraReporte = new LiquidacionCompraReporte((LiquidacionCompraComprobante) comprobante);
-                            liquidacionCompraReporte.setMapCodeAndNameFormaPago(mapCodeAndNameFormaPago);
+                            //liquidacionCompraReporte.setMapCodeAndNameFormaPago(mapCodeAndNameFormaPago);
                             return liquidacionCompraReporte;
                         }
                         else
@@ -1971,9 +1971,9 @@ public class ComprobanteElectronicoService implements Runnable {
     
     
 
-    public void setMapCodeAndNameFormaPago(Map<String, String> mapCodeAndNameFormaPago) {
+    /*public void setMapCodeAndNameFormaPago(Map<String, String> mapCodeAndNameFormaPago) {
         this.mapCodeAndNameFormaPago = mapCodeAndNameFormaPago;
-    }
+    }*/
 
     public void setReporteInfoAdicional(JasperReport reporteInfoAdicional) {
         this.reporteInfoAdicional = reporteInfoAdicional;

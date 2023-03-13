@@ -11,6 +11,7 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -42,6 +43,9 @@ public class SriFormaPago implements Serializable {
 
     @Column(name = "FECHA_FIN")
     private Date fechaFin;
+    
+    @JoinColumn(name="ID_PADRE_FORMA_PAGO")
+    private SriFormaPago formaPagoPadre;
 
     public SriFormaPago() {
 
@@ -94,6 +98,16 @@ public class SriFormaPago implements Serializable {
     public void setAlias(String alias) {
         this.alias = alias;
     }
+
+    public SriFormaPago getFormaPagoPadre() {
+        return formaPagoPadre;
+    }
+
+    public void setFormaPagoPadre(SriFormaPago formaPagoPadre) {
+        this.formaPagoPadre = formaPagoPadre;
+    }
+    
+    
     
     
 
