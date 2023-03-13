@@ -2977,6 +2977,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         ClaveAcceso claveAccesoObj = new ClaveAcceso(claveAcceso);
         EmpresaService empresaService = new EmpresaService();
         Empresa empresa = empresaService.buscarPorIdentificacion(claveAccesoObj.identificacion);
+        
+        if(empresa==null)
+        {
+            throw new ServicioCodefacException("No se pueden borrar comprobantes que no pertenecen a la empresa configurada");
+        }
 
         ComprobanteElectronicoService comprobanteService = new ComprobanteElectronicoService();
         cargarConfiguraciones(comprobanteService,empresa);

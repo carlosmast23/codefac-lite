@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional.
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -122,6 +123,12 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     @JoinColumn(name = "MESA_ID")
     private Mesa mesa;
+    
+    @Column(name = "CODIGO_TIPO_DOCUMENTO")
+    private String codigoTipoDocumento;
+    
+    @Column(name = "NOMBRE_TIPO_DOCUMENTO")
+    private String nombreTipoDocumento;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -455,7 +462,31 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         this.mesa = mesa;
     }
 
+    public String getCodigoTipoDocumento() {
+        return codigoTipoDocumento;
+    }
+
+    public void setCodigoTipoDocumento(String codigoTipoDocumento) {
+        this.codigoTipoDocumento = codigoTipoDocumento;
+    }
+
+    public String getNombreTipoDocumento() {
+        return nombreTipoDocumento;
+    }
+
+    public void setNombreTipoDocumento(String nombreTipoDocumento) {
+        this.nombreTipoDocumento = nombreTipoDocumento;
+    }
     
+    
+    public TipoDocumentoEnum getCodigoTipoDocumentoEnum() 
+    {
+        if(codigoTipoDocumento!=null)
+        {
+            TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
+        }
+        return null;
+    }
     
 
     @Override

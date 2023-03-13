@@ -5,16 +5,20 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
@@ -383,6 +387,22 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
 
         addDatoAdicionalAbstract(comprobanteAdicional);
 
+    }
+    
+    public PuntoEmision consultarPuntoEmision()
+    {
+        PuntoEmision puntoEmision=null;
+        
+        if(puntoEmisionId!=null)
+        {
+            try {
+                puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().buscarPorId(puntoEmisionId);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ComprobanteEntity.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return null;
     }
 
     public ComprobanteAdicional obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum campo) {

@@ -90,6 +90,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     
     protected String responsable;
     
+    protected String tipoDocumento;
+    
     public ReporteFacturaData() {
     }
     
@@ -434,6 +436,17 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     public void setResponsable(String responsable) {
         this.responsable = responsable;
     }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    
+    
     
 
     @Override
@@ -530,6 +543,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
                 return razonSocialCliente;
             case AGRUPADO_POR_USUARIO:
                 return usuario;
+            case AGRUPADO_POR_TIPO_DOCUMENTO:
+                return tipoDocumento;
             case AGRUPADO_POR_VENDEDOR:
                 return vendedor;
             case AGRUPADO_POR_PUNTO_EMISION:

@@ -328,9 +328,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 break;
             }
             
+            Factura factura=interfaz.obtenerFactura();
             if(objetoMantenimiento!=null)
             {
-                Factura factura=interfaz.obtenerFactura();
+                
                 factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.VEHICULO.getNombre(), objetoVehiculoTxt,ComprobanteAdicional.Tipo.TIPO_OTRO));
                 factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.KILOMETRAJE.getNombre(), kilometrajeTxt,ComprobanteAdicional.Tipo.TIPO_OTRO));
                 factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.ORDEN_TRABAJO.getNombre(), presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"",ComprobanteAdicional.Tipo.TIPO_OTRO));                
@@ -338,6 +339,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 //Factura facturaTmp= interfaz.obtenerFactura();
                 //System.out.println(facturaTmp.getDatosAdicionales().size());
             }
+            
+            //Setear el tipo de documento de presupuesto cuando venga de un presupuesto
+            factura.setNombreTipoDocumento(TipoDocumentoEnum.PRESUPUESTOS.getNombre());
+            factura.setCodigoTipoDocumento(TipoDocumentoEnum.PRESUPUESTOS.getCodigo());
+            
             
             return facturaDetalle;            
         }

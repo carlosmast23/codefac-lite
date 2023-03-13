@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -343,7 +344,8 @@ public class ControladorReporteFactura {
                         //Agregando Zona y Ruta
                         reporteData.setZona(buscarZona(factura));
                         reporteData.setRuta((factura.getRutaNombre()!=null)?factura.getRutaNombre():"");
-                        
+                        //TipoDocumentoEnum tipoDocumentoEnum=factura.getCodigoTipoDocumentoEnum();
+                        reporteData.setTipoDocumento((factura.getNombreTipoDocumento()!=null)?factura.getNombreTipoDocumento():"");
                         if(!UtilidadesTextos.verificarNullOVacio(preimpresoNotaCreditoAfecta))
                         {
                             reporteData.setEstadoFactura("Anulado N/C");
@@ -1140,7 +1142,7 @@ public class ControladorReporteFactura {
     public void setProductoFiltro(Producto productoFiltro) {
         this.productoFiltro = productoFiltro;
     }
-    
+
     
     
     
@@ -1169,6 +1171,14 @@ public class ControladorReporteFactura {
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
                 return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_USUARIO).toString();
                 //return dato.getZona();
+            }
+        }),
+        
+        AGRUPADO_POR_TIPO_DOCUMENTO("Agrupado por Tipo Documento",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_TIPO_DOCUMENTO).toString();
+                //return dato.getNombreProducto();
             }
         }),
         

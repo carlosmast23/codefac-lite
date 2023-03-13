@@ -2898,6 +2898,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(getPuntoEmisionSeleccionado().getPuntoEmision());
         factura.setPuntoEmisionId(getPuntoEmisionSeleccionado().getId());
+        TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        
+        //Solo si no fue previamente seleccionado el tipo de documento entonces en esta pantalla seteo
+        if(factura.getCodigoTipoDocumento()==null)
+        {
+            factura.setNombreTipoDocumento(tipoDocumentoEnum.getNombre());
+            factura.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
+        }
+        
         factura.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
         
         /**
