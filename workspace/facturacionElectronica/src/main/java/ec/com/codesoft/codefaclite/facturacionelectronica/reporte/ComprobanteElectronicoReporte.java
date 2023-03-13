@@ -54,7 +54,12 @@ public abstract class ComprobanteElectronicoReporte
         
         //Buscar si tiene un alias para el nombre del documento
         ComprobanteEnum comprobanteEnum = comprobante.getInformacionTributaria().getCodigoDocumentoEnum();
-        String nombreDocumento = comprobanteEnum.getNombre();
+        String nombreDocumento = "";
+        if(comprobanteEnum!=null)
+        {
+            nombreDocumento = comprobanteEnum.getNombre();
+        }
+        
         if(aliasNombreDocumentosMap!=null)
         {
             String nombreDocumentoTmp=aliasNombreDocumentosMap.get(comprobante.getInformacionTributaria().getCodigoDocumentoEnum());
@@ -71,7 +76,9 @@ public abstract class ComprobanteElectronicoReporte
              map.put("ambiente",ComprobanteElectronicoService.MODO_PRODUCCION);
         }
         else
+        {
             map.put("ambiente",ComprobanteElectronicoService.MODO_PRUEBAS);
+        }
         
         return map;
     }

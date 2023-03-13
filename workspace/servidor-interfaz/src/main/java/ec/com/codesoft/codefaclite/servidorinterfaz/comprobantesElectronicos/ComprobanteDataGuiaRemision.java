@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DestinatariosGuiaRemisionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.GuiaRemisionComprobante;
@@ -229,6 +230,11 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
     @Override
     public String getDireccionMatriz() {
         return guiaRemision.getDireccionMatriz();
+    }
+
+    @Override
+    public InformacionTributaria getInformacionTributaria() {
+        return null;
     }
     
     

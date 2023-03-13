@@ -785,10 +785,27 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     }
 
     @Override
+    public Persona getCliente() {
+        return proveedor;
+    }
+    
+    
+
+    @Override
     public List<DetalleFacturaNotaCeditoAbstract> getDetallesComprobante() {
         return (List<DetalleFacturaNotaCeditoAbstract>) (List<?>) detalles;
     }
     
+    /*public Factura convertirCompraAFactura()
+    {
+        Factura facturaNueva=new Factura();
+        //Informacion general
+        facturaNueva.setEmpresa(empresa);
+        facturaNueva.setCliente(proveedor);
+        facturaNueva.setClaveAcceso(claveAcceso);
+        factura 
+    
+    }*/
         
     public enum RetencionEnumCompras
     {

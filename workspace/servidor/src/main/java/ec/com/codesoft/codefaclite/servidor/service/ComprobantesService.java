@@ -60,10 +60,12 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.GuiaRemisionFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataRetencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
@@ -912,17 +914,22 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      */
     public ComprobanteDataInterface convertirComprobanteEntityToDataFacturacionElectronica(ComprobanteEntity comprobanteEntity)
     {
-        if(comprobanteEntity==null)
-        {
-            return null;
-        }
-        
+                
         if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
         {
-            Factura factura=(Factura) comprobanteEntity;
-            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
-            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
-            return comprobanteData;
+            if(comprobanteEntity instanceof Factura)
+            {
+                Factura factura=(Factura) comprobanteEntity;
+                ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+                comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+                return comprobanteData;
+            }
+            else if(comprobanteEntity instanceof Compra)
+            {
+                Compra compra=(Compra) comprobanteEntity;
+                ComprobanteDataCompra comprobanteData=new ComprobanteDataCompra(compra);
+                return comprobanteData;
+            }
         } 
         else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
         {
@@ -1733,7 +1740,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
 
     private InformacionTributaria getInfoInformacionTributaria(ComprobanteDataInterface comprobanteData) throws RemoteException {
-        InformacionTributaria infoTributaria = new InformacionTributaria();
+                
+        InformacionTributaria infoTributaria = comprobanteData.getInformacionTributaria();                
+        //Si existe construido una informacion tributaria retorno directamente por ejemplo para el caso de las compras
+        if(infoTributaria!=null)
+        {
+            return infoTributaria;
+        }
+        
+        infoTributaria = new InformacionTributaria();
         //InformacionTributaria infoTributaria = comprobanteData.getComprobante().getInformacionTributaria();
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
         //EmpresaService empresaService = new EmpresaService();

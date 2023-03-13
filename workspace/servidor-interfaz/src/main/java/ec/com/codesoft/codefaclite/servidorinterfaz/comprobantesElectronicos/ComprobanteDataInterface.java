@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
@@ -47,5 +48,7 @@ public interface ComprobanteDataInterface {
     public Empresa getEmpresa();
     
     public String getDireccionMatriz();
+    
+    public InformacionTributaria getInformacionTributaria();
 
 }

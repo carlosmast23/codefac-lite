@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
@@ -21,6 +22,8 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra.LiquidacionCompraComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -55,19 +58,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * TODO: Unificar con el mismo metodo de compra para no tener varios detalles
  * @author Carlos
  */
-public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbstract{
+public class ComprobanteDataCompra extends ComprobanteDataFacturaNotaCreditoAbstract{
 
-    private Factura factura;
+    private Compra factura;
     private Map<String, String> mapInfoAdicional;
     private List<String> correosAdicionales;
     private ListenerComprobanteElectronico listener;
     private Integer secuencial;
     //private List<FormaPago> formaPagos;
 
-    public ComprobanteDataFactura(Factura factura) 
+    public ComprobanteDataCompra(Compra factura) 
     {
         String secuencialStr=""; //Por defecto si no tiene secuencial dejo vacio
         if(factura.getSecuencial()!=null)
@@ -81,7 +84,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         this.factura = factura;
     }
 
-    public ComprobanteDataFactura(Factura factura, Integer secuencial) {
+    public ComprobanteDataCompra(Compra factura, Integer secuencial) {
         this.factura = factura;
         this.secuencial = secuencial;
     }
@@ -108,7 +111,18 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
 
     @Override
     public InformacionTributaria getInformacionTributaria() {
-        return null;
+        InformacionTributaria informacionTributaria=new InformacionTributaria();
+        informacionTributaria.setRuc(factura.getProveedor().getIdentificacion());
+        informacionTributaria.setRazonSocial(factura.getProveedor().getRazonSocial());
+        informacionTributaria.setNombreComercial(factura.getProveedor().getEstablecimientoActivoPorDefecto().getNombreComercial());
+        informacionTributaria.setDirecionMatriz(factura.getProveedor().getEstablecimientoActivoPorDefecto().getDireccion());
+        informacionTributaria.setAmbiente(ComprobanteElectronicoService.CODIGO_SRI_MODO_PRODUCCION.toString());
+        informacionTributaria.setCodigoDocumento(ComprobanteEnum.FACTURA.getCodigo());
+        informacionTributaria.setSecuencial(factura.getSecuencialFormat());
+        informacionTributaria.setPuntoEmision(factura.getPuntoEmisionFormat());
+        informacionTributaria.setEstablecimiento(factura.getPuntoEstablecimientoFormat());
+        
+        return informacionTributaria;
     }
     
     public class InfoComprobante implements InfoComprobanteInterface{
@@ -213,7 +227,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         /**
          * Grabar las formas de pago si la variable exise y es distinto de vacio
          */
-        if (factura.getFormaPagos() != null && factura.getFormaPagos().size() > 0) {
+        /*if (factura.getFormaPagos() != null && factura.getFormaPagos().size() > 0) {
             List<FormaPagoComprobante> formaPagosFactura = new ArrayList<FormaPagoComprobante>();
             for (FormaPago formaPago : factura.getFormaPagos()) {
                 FormaPagoComprobante formaPagoComprobante = new FormaPagoComprobante();
@@ -225,7 +239,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
             }
             informacionComprobante.setFormaPagos(formaPagosFactura);
             //infORMA.setFormaPagos(formaPagosFactura);
-        }
+        }*/
 
         /**
          * Total con impuestos la clave es el codigo del impuesto
@@ -236,23 +250,24 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
          * Informacion de los detalles
          */
         List<DetalleFacturaComprobante> detallesComprobante = new ArrayList<DetalleFacturaComprobante>();
-        List<FacturaDetalle> detallesFactura = factura.getDetallesOrdenados();
+        List<CompraDetalle> detallesFactura = factura.getDetalles();
 
-        for (FacturaDetalle facturaDetalle : detallesFactura) {
+        for (CompraDetalle facturaDetalle : detallesFactura) {
             try {
                 DetalleFacturaComprobante detalle = new DetalleFacturaComprobante();
+                detalle.setCodigoPrincipal(facturaDetalle.getProductoProveedor().getCodigoProveedor());
 
-                ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
+                //ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
                 
                 //Esta opcion me permite ocultar el codigo principal de los productos por ejemplo para que no puedan encontrar los clientes en otros proveedores
-                if(ParametroUtilidades.comparar(factura.getEmpresa(),ParametroCodefac.IMPRIMIR_CODIGO_INTERNO_PRODUCTO, EnumSiNo.SI))
+                /*if(ParametroUtilidades.comparar(factura.getEmpresa(),ParametroCodefac.IMPRIMIR_CODIGO_INTERNO_PRODUCTO, EnumSiNo.SI))
                 {
                     detalle.setCodigoPrincipal(facturaDetalle.getReferenciaId()+"");
                 }
                 else
                 {       
                     detalle.setCodigoPrincipal(respuesta.obtenerCodigoPrincipal()+"");
-                }
+                }*/
 
                 
                 detalle.setCantidad(facturaDetalle.getCantidad());
@@ -295,27 +310,25 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 /**
                  * Agregar valor del subsidio si existe o es mayor que cero
                  */
-                if(facturaDetalle.getPrecioSinSubsidio()!=null && facturaDetalle.getPrecioSinSubsidio().compareTo(BigDecimal.ZERO)!=0)
+                /*if(facturaDetalle.getPrecioSinSubsidio()!=null && facturaDetalle.getPrecioSinSubsidio().compareTo(BigDecimal.ZERO)!=0)
                 {
                     detalle.setPrecioSinSubsidio(facturaDetalle.getPrecioSinSubsidio());
-                }
+                }*/
                 
                 detallesComprobante.add(detalle);
             } catch (RemoteException ex) {
-                Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
-                Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ComprobanteDataCompra.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         /**
          * Agregar el valor del Subsidio al xml en el caso de que exista
          */
-        BigDecimal totalSubsidio=factura.calcularSubsidio();
+        /*BigDecimal totalSubsidio=factura.calcularSubsidio();
         if(totalSubsidio.compareTo(BigDecimal.ZERO)>0)
         {
             InformacionFactura comprobanteFactura=(InformacionFactura)informacionComprobante;
             comprobanteFactura.setTotalSubsidio(totalSubsidio);
-        }
+        }*/
 
         //comprobante.set
         comprobante.setDetalles(detallesComprobante);
@@ -341,10 +354,13 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
     @Override
     public Map<String, String> getMapAdicional() {
         //Validar el tipo de texto para quitar carcteres especiales
-        for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
-            String key = entry.getKey();
-            String value = UtilidadValidador.normalizarTextoCorreo(entry.getValue());
-            mapInfoAdicional.put(key, value);
+        if(mapInfoAdicional!=null)
+        {
+            for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
+                String key = entry.getKey();
+                String value = UtilidadValidador.normalizarTextoCorreo(entry.getValue());
+                mapInfoAdicional.put(key, value);
+            }
         }
         return mapInfoAdicional;
     }
@@ -375,11 +391,11 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         return new ArrayList<String>(); //TODO: Verificar si se deben usar estos campos porque ya se envian los correos desde la informacion adicional
     }
 
-    public Factura getFactura() {
+    public Compra getFactura() {
         return factura;
     }
 
-    public void setFactura(Factura factura) {
+    public void setFactura(Compra factura) {
         this.factura = factura;
     }
 

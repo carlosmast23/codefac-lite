@@ -101,7 +101,12 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
             data.setCantidad(detalleFacturaComprobante.getCantidad()+"");
             data.setCodigo(detalleFacturaComprobante.getCodigoPrincipal());
             data.setDescripcion(detalleFacturaComprobante.getDescripcion());
-            data.setPorcentajeIva(detalleFacturaComprobante.getImpuestos().get(0).getTarifa().setScale(0, RoundingMode.HALF_UP)+"");
+            
+            if(detalleFacturaComprobante.getImpuestos()!=null && detalleFacturaComprobante.getImpuestos().size()>0)
+            {
+                data.setPorcentajeIva(detalleFacturaComprobante.getImpuestos().get(0).getTarifa().setScale(0, RoundingMode.HALF_UP)+"");
+            }
+            
             data.setDescuento(detalleFacturaComprobante.getDescuento()+"");
             data.setPrecio_total(detalleFacturaComprobante.getPrecioTotalSinImpuesto()+"");
             data.setPrecio_unitario(detalleFacturaComprobante.getPrecioUnitario()+"");

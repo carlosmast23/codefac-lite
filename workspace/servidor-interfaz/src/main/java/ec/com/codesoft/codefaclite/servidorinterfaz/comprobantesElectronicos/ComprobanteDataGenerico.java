@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -80,6 +81,11 @@ public class ComprobanteDataGenerico implements ComprobanteDataInterface,Seriali
     @Override
     public String getDireccionMatriz() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public InformacionTributaria getInformacionTributaria() {
+        return null;
     }
     
 }

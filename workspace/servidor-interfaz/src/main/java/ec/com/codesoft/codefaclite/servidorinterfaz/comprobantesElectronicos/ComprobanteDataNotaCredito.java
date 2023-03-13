@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.InformacionComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.DetalleNotaCreditoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.InformacionNotaCredito;
@@ -98,6 +99,11 @@ public class ComprobanteDataNotaCredito extends ComprobanteDataFacturaNotaCredit
             }
         }
         return correos;
+    }
+
+    @Override
+    public InformacionTributaria getInformacionTributaria() {
+        return null;
     }
     
     public class InfoComprobante implements InfoComprobanteInterface{

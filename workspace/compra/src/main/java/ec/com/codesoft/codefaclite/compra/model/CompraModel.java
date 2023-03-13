@@ -372,7 +372,17 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void imprimir() {
-        
+        try {
+            
+            byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(compra, compra.getClaveAcceso(), session.getEmpresa());
+            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+            
+            panelPadre.crearReportePantalla(jasperPrint, compra.getPreimpreso());
+        } catch (IOException ex) {
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

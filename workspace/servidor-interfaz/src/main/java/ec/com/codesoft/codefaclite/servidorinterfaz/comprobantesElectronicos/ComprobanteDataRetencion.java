@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.DetalleRetencionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.DocumentoSustento;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.ImpuestoDocSustento;
@@ -282,6 +283,11 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
     @Override
     public String getDireccionMatriz() {
         return retencion.getDireccionMatriz();
+    }
+
+    @Override
+    public InformacionTributaria getInformacionTributaria() {
+        return null;
     }
     
     
