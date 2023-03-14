@@ -171,6 +171,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         parametros.put("valorIva", "10");
         parametros.put("total", "100");
         parametros.put("iva", "12");
+        parametros.put("prueba", "si");
         
         
 

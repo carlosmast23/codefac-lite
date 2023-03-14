@@ -1139,7 +1139,15 @@ public class CarteraModel extends CarteraPanel{
         
         cartera.setPuntoEmision((puntoEmision.isEmpty())?"0":puntoEmision);
         cartera.setPuntoEstablecimiento((puntoEstablecimiento.isEmpty())?"0":puntoEstablecimiento);
-        cartera.setSecuencial((secuencial.isEmpty())?0:Integer.parseInt(secuencial));
+        try
+        {
+            cartera.setSecuencial((secuencial.isEmpty())?0:Integer.parseInt(secuencial));
+            
+        }catch(java.lang.NumberFormatException nfe)
+        {
+            new ServicioCodefacException("Error al convert");
+            nfe.printStackTrace();;
+        }
         
         cartera.setSaldo(cartera.totalDetalles()); //TODO: Si no cruza con nada el saldo es el mismo del total
         Cartera.TipoCarteraEnum tipoEnum=(Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem();

@@ -26,6 +26,7 @@
 	<parameter name="ciudad" class="java.lang.String"/>
 	<parameter name="codigoCliente" class="java.lang.String"/>
 	<parameter name="numeroOrden" class="java.lang.String"/>
+	<parameter name="prueba" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -92,7 +93,9 @@
 				<textFieldExpression><![CDATA[$P{guiaRemision}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="0" width="60" height="1" uuid="eb719316-db48-41bc-b826-7e0ef1b2ff21"/>
+				<reportElement x="0" y="0" width="60" height="1" uuid="eb719316-db48-41bc-b826-7e0ef1b2ff21">
+					<printWhenExpression><![CDATA[new Boolean($P{prueba}!=null)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="2.0" lineStyle="Dashed"/>
 				</graphicElement>
@@ -278,7 +281,9 @@
 				<textFieldExpression><![CDATA[$P{formaPagoOtros}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="103" width="60" height="1" uuid="4ead026f-bfbb-4dbb-9189-f0cb97eb039a"/>
+				<reportElement x="0" y="103" width="60" height="1" uuid="4ead026f-bfbb-4dbb-9189-f0cb97eb039a">
+					<printWhenExpression><![CDATA[new Boolean($P{prueba}!=null)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="2.0" lineStyle="Dashed"/>
 				</graphicElement>
