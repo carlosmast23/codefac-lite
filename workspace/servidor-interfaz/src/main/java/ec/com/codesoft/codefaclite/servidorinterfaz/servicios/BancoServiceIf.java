@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.Banco;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -19,5 +20,5 @@ public interface BancoServiceIf extends ServiceAbstractIf<Banco>{
     
     public Banco grabar(Banco entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;
     public Banco editar(Banco entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;
-    
+    public List<Banco> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException;
 }

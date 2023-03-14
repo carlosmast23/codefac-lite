@@ -16,6 +16,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BancoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -99,8 +102,15 @@ public class BancoService extends ServiceAbstract<Banco,BancoFacade> implements 
             }
         });
     }
-
     
-    
+    public List<Banco> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        //Banco banco;
+        //banco.get
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        //mapParametros.put("empresa",empresa);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
     
 }

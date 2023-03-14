@@ -9,6 +9,9 @@ import ec.com.codesoft.codefaclite.facturacion.dialog.FormaPagoDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.Banco;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 
 import java.awt.Frame;
@@ -52,9 +55,20 @@ public class FormaPagoDialogModel extends FormaPagoDialog{
                 getCmbTiempo().addItem(categoria);
             }
             
+            //Setear valores de los bancos
+            getCmbBanco().removeAllItems();
+            List<Banco> bancoList= ServiceFactory.getFactory().getBancoServiceIf().obtenerActivosPorEmpresa(null);
+            
+            for (Banco banco : bancoList) 
+            {
+                getCmbBanco().addItem(banco);
+            }
+            
             getTxtPlazo().setText("");
             getTxtValor().setText("");
         } catch (RemoteException ex) {
+            Logger.getLogger(FormaPagoDialogModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(FormaPagoDialogModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -80,4 +94,6 @@ public class FormaPagoDialogModel extends FormaPagoDialog{
     {
         return formaPago;
     }
+    
+    
 }
