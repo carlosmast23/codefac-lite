@@ -250,6 +250,11 @@ public class UtilidadesFecha {
         return calendar.getTime();
     }
     
+    public static java.util.Date restarDiasFecha(java.util.Date date, int dias)
+    {
+        return sumarDiasFecha(date,-1* dias);
+    }
+    
     /**
      * @author: Carlos Sánchez 
      * @param date

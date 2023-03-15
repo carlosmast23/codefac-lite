@@ -213,7 +213,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbCargarProductoIvaFactura().addItem(EnumSiNo.NO);
         getCmbCargarProductoIvaFactura().addItem(EnumSiNo.SI);
         
-        getTxtDiasAlertaPago().setValue(7);//POR DEFECTO LOS DIAS PARA MOSTRAR LAS ALERTAS SON 7        
+        getTxtDiasAlertaPago().setValue(7);//POR DEFECTO LOS DIAS PARA MOSTRAR LAS ALERTAS SON 7     
+        getTxtDiasAlertaComprobantesPendientes().setValue(60); //60 DIAS POR DEFECTO PARA MOSTRAR LAS ALERTAS POR QUE DESPUES DE ESE TIEMPO YA NO SE DEBEN PODER AUTORIZAR
         
         
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
@@ -508,6 +509,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             
             parametro = parametrosTodos.get(ParametroCodefac.DIAS_ALERTA_PAGO);
             getTxtDiasAlertaPago().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 7);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.DIAS_ALERTA_COMPROBANTES_PENDIENTES);
+            getTxtDiasAlertaComprobantesPendientes().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 7);
             
             parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMALES_RIDE);
             getTxtNumeroDecimalesRide().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 2);
@@ -1003,6 +1007,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.DIAS_ALERTA_PAGO, getTxtDiasAlertaPago().getValue().toString());
         agregarParametroEditar(ParametroCodefac.DIAS_ALERTA_PAGO);   
+        
+        agregarParametro(ParametroCodefac.DIAS_ALERTA_COMPROBANTES_PENDIENTES, getTxtDiasAlertaComprobantesPendientes().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.DIAS_ALERTA_COMPROBANTES_PENDIENTES); 
         
         agregarParametro(ParametroCodefac.NUMERO_DECIMALES_RIDE, getTxtNumeroDecimalesRide().getValue().toString());
         agregarParametroEditar(ParametroCodefac.NUMERO_DECIMALES_RIDE);    

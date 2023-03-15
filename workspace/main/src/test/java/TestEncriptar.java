@@ -1,6 +1,8 @@
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +23,7 @@ public class TestEncriptar {
             //System.out.println(datosEncriptado);
             //System.out.println(UtilidadesEncriptar.desencriptar("5gdOfWztXqM\\=", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             String datosSinEncriptar=UtilidadesEncriptar.desencriptar("5gdOfWztXqM\\=", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
-
+            
             //String datosSinEncriptar=UtilidadesEncriptar.encriptar("oxalenyxgrdgdlrs", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR); 
             System.out.println(datosSinEncriptar);
         } catch (Exception ex) {

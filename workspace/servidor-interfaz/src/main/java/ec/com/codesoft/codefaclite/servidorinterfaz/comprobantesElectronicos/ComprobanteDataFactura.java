@@ -216,6 +216,12 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         if (factura.getFormaPagos() != null && factura.getFormaPagos().size() > 0) {
             List<FormaPagoComprobante> formaPagosFactura = new ArrayList<FormaPagoComprobante>();
             for (FormaPago formaPago : factura.getFormaPagos()) {
+                //Si la forma de pago no esta bien creada no la tomo en cuenta luego
+                if(formaPago.getSriFormaPago()==null)
+                {
+                    continue;
+                }
+                
                 FormaPagoComprobante formaPagoComprobante = new FormaPagoComprobante();
                 formaPagoComprobante.setFormaPago(formaPago.getSriFormaPago().getCodigo());
                 formaPagoComprobante.setPlazo(new BigDecimal(formaPago.getPlazo() + ""));

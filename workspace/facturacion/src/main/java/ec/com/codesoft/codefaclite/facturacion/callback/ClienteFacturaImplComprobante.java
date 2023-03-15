@@ -254,54 +254,52 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     
     @Override
     public void error(ComprobanteElectronicoException cee,String claveAcceso) throws RemoteException {
-        try {
-            byte[] resporteSerializado = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,facturaProcesando.getEmpresa());
-                        
-            monitorData.getBtnReporte().setEnabled(true);
-            monitorData.getBtnCerrar().setEnabled(true);
-            
-            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(resporteSerializado);
-            
-            monitorData.getBtnReporte().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) 
+        monitorData.getBtnReporte().setEnabled(true);
+        monitorData.getBtnCerrar().setEnabled(true);
+        monitorData.getBtnReporte().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                JOptionPane.showMessageDialog(null,cee.obtenerErrorFormato());
+                
+                monitorData.getBtnAbrir().addActionListener(new ActionListener() 
                 {
-                    JOptionPane.showMessageDialog(null,cee.obtenerErrorFormato());
-                    
-                    monitorData.getBtnAbrir().addActionListener(new ActionListener() 
-                    {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if(verificarImprimirComprobanteVenta())
-                            {
-                                FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session, facturacionModel.panelPadre,GeneralPanelInterface.EstadoFormularioEnum.GRABAR);
-                                //facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
-                            }
-                            else
-                            {
-                                facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-                            }
-
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(verificarImprimirComprobanteVenta())
+                        {
+                            FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando, NOMBRE_REPORTE_FACTURA_ELECTRONICA, true, facturacionModel.session, facturacionModel.panelPadre,GeneralPanelInterface.EstadoFormularioEnum.GRABAR);
+                            //facturacionModel.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_ELECTRONICA,true); //TODO:Verificar si este metodo no funciona
                         }
-                    });
-                }
-            });
-
-            if (cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE)) {
-                monitorData.getBtnAbrir().setEnabled(true);
-                monitorData.getBarraProgreso().setForeground(Color.YELLOW);
-            } else {
-                monitorData.getBarraProgreso().setForeground(Color.ORANGE);
+                        else
+                        {
+                            byte[] resporteSerializado;
+                            try {
+                                resporteSerializado = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,facturaProcesando.getEmpresa());
+                                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(resporteSerializado);
+                                facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IOException ex) {
+                                Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            
+                        }
+                        
+                    }
+                });
             }
-
-            //servicio.editar(facturaProcesando);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        });
+        if (cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE)) {
+            monitorData.getBtnAbrir().setEnabled(true);
+            monitorData.getBarraProgreso().setForeground(Color.YELLOW);
+        } else {
+            monitorData.getBarraProgreso().setForeground(Color.ORANGE);
         }
+        
+        //servicio.editar(facturaProcesando);
         facturacionModel.panelPadre.actualizarNotificacionesCodefac();
     }
     

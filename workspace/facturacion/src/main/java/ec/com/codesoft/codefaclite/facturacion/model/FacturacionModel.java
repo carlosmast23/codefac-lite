@@ -2485,7 +2485,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         List<FormaPago> formasPago = factura.getFormaPagos();
         for (FormaPago formaPago : formasPago) {
             Vector<String> fila = new Vector<>();
-            fila.add(formaPago.getSriFormaPago().getAlias());
+            
+            fila.add((formaPago.getSriFormaPago()!=null)?formaPago.getSriFormaPago().getAlias():"");
             fila.add(formaPago.getTotal().toString());
             //fila.add(formaPago.getUnidadTiempo());
             //fila.add(formaPago.getPlazo() + "");

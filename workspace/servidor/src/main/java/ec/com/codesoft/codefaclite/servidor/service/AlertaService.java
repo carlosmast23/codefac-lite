@@ -399,9 +399,19 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     
     private AlertaResponse obtenerNotificacionComprobantesElectronicosBaseDatos(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
+        Integer diasAlerta=ParametroUtilidades.obtenerValorParametroInteger(empresa,ParametroCodefac.DIAS_ALERTA_COMPROBANTES_PENDIENTES,null);
+        
+        java.sql.Date fechaInicial=null;
+        if(diasAlerta!=null)
+        {
+            java.util.Date fechaTmp=UtilidadesFecha.restarDiasFecha(UtilidadesFecha.getFechaHoy(),diasAlerta);
+            fechaInicial=UtilidadesFecha.castDateUtilToSql(fechaTmp);
+        }
+         
+        
         Long totalComprobantesSinProcesar=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTamanio(
                     null,
-                    null,
+                    fechaInicial,
                     null,
                     ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR,
                     Boolean.FALSE,

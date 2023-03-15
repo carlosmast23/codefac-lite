@@ -180,6 +180,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String DIAS_ALERTA_PAGO="dias_alerta_pago";
     
+    public static final String DIAS_ALERTA_COMPROBANTES_PENDIENTES="dias_alerta_comprobantes_pendientes";
+    
     /**
      * Variable que identifica que algunos campos como clientes, proveedores , proveedores pueden usar entre diferentres empresas
      */
