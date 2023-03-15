@@ -4369,7 +4369,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public String obtenerTxtDescuento() {
         //return getTxtDescuento().getText();
-        return getCmbDescuento().getSelectedItem().toString();
+        Object valorDescuento=getCmbDescuento().getSelectedItem();
+        if(valorDescuento==null)
+        {
+            valorDescuento="0";
+        }
+        return valorDescuento.toString();
     }
 
     @Override
