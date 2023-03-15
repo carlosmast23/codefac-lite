@@ -1273,6 +1273,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //buscarDialogoModel.setVisible(true);
             //Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
             ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX);
+            dialogoFactory.setDiponibleVenta(EnumSiNo.SI);
+            
             kardexSeleccionado = (Kardex) dialogoFactory.ejecutarDialogo();
             productoSeleccionado=kardexSeleccionado.getProducto();
             

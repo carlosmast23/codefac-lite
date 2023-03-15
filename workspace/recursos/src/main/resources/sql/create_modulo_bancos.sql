@@ -18,7 +18,7 @@ create table BANCO
 );
 
 
-/*@AGREGAR_TABLA(VERSION_SISTEMA=1.3.0.0.1)*/
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.3.0.0.4)*/
 create table CUENTA_BANCO
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
@@ -36,7 +36,7 @@ create table CUENTA_BANCO
     ESTADO varchar(1),
 
     primary key (ID),
-    CONSTRAINT id_cuenta_banco_banco_fk FOREIGN KEY (BANCO_ID) REFERENCES CUENTA_BANCO(ID),    
+    CONSTRAINT id_cuenta_banco_banco_fk FOREIGN KEY (BANCO_ID) REFERENCES CUENTA_BANCO(ID)   
 );
 
 create table MOVIMIENTO_CUENTA_BANCO
@@ -50,5 +50,5 @@ create table MOVIMIENTO_CUENTA_BANCO
     ESTADO varchar(1),
 
     primary key (ID),
-    CONSTRAINT id_movimiento_cuenta_banco_fk FOREIGN KEY (CUENTA_BANCO_ID) REFERENCES MOVIMIENTO_CUENTA_BANCO(ID),    
+    CONSTRAINT id_movimiento_cuenta_banco_fk FOREIGN KEY (CUENTA_BANCO_ID) REFERENCES MOVIMIENTO_CUENTA_BANCO(ID)
 );

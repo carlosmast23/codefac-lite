@@ -34,6 +34,7 @@ public class ProductoBusquedaDialogoFactory
     private Boolean inventarioDefecto;
     private ResultadoEnum resultadoEnum;
     private Boolean isInventario=false;
+    private EnumSiNo diponibleVenta;
 
     public ProductoBusquedaDialogoFactory(Sucursal sucursal,ResultadoEnum resultadoEnum) {
         this.sucursal = sucursal;
@@ -73,6 +74,10 @@ public class ProductoBusquedaDialogoFactory
                 }
                 
                 ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, true);
+                if(diponibleVenta!=null)
+                {
+                    productoInventarioBusquedaDialogo.setDisponibleVenta(diponibleVenta);
+                }
 
                 //cambiar el tipo de buscador si tiene activo el parametro de farmacia
                 if (ParametroUtilidades.comparar(sucursal.getEmpresa(), ParametroCodefac.TIPO_NEGOCIO, TipoNegocioEnum.FARMACIA)) {
@@ -140,6 +145,15 @@ public class ProductoBusquedaDialogoFactory
         }
         return null;
     }
+
+    public EnumSiNo getDiponibleVenta() {
+        return diponibleVenta;
+    }
+
+    public void setDiponibleVenta(EnumSiNo diponibleVenta) {
+        this.diponibleVenta = diponibleVenta;
+    }
+    
     
     
     

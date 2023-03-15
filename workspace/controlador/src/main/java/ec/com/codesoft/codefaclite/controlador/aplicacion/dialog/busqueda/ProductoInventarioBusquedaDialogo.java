@@ -59,6 +59,8 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     
     private Boolean mostrarCosto=true;
     
+    private EnumSiNo disponibleVenta;
+    
     public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega,Boolean mostrarStockNegativo) 
     {
         //this.isManejoInvetario = isManejoInvetario;
@@ -158,7 +160,14 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         String filtroSegmento=getFiltroPorSegmento();
         
-        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 AND k.estado<>'E' "+filtroMarca+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        String filtroDisponibleVenta="";
+        
+        if(disponibleVenta!=null)
+        {
+            filtroDisponibleVenta=" AND u.disponibleVenta=?7 ";
+        }
+        
+        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 AND k.estado<>'E' "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
         
         queryString+=" and (  LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
         
@@ -184,6 +193,11 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         {
             queryDialog.agregarParametro(98,isManejoInvetario.getLetra());
         }*/
+        
+        if(disponibleVenta!=null)
+        {
+            queryDialog.agregarParametro(7, disponibleVenta.getLetra());
+        }
        
         return queryDialog;
     }
@@ -296,6 +310,16 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         return panelAux;
     }
+
+    public EnumSiNo getDisponibleVenta() {
+        return disponibleVenta;
+    }
+
+    public void setDisponibleVenta(EnumSiNo disponibleVenta) {
+        this.disponibleVenta = disponibleVenta;
+    }
+    
+    
 
     @Override
     public List<Kardex> preProcessResult(List<Kardex> datos) 
