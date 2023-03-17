@@ -155,6 +155,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import static java.awt.image.ImageObserver.WIDTH;
 import java.math.RoundingMode;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -170,11 +171,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     public static final String NOMBRE_REPORTE_FACTURA_ELECTRONICA="Comprobante de Venta";
     public static final String NOMBRE_REPORTE_FACTURA_INTERNA="Comprobante de Venta Interna";
+    
+    public static final int INDICE_OBJECTO_TABLA_FACTURA=0;
+    public static final int INDICE_CANTIDAD_TABLA_FACTURA=2;
+    public static final int INDICE_ELIMINAR_TABLA_FACTURA=7;
     //private Persona persona;
     protected Factura factura;
     private Estudiante estudiante;
     //private DefaultTableModel modeloTablaFormasPago;
-    private DefaultTableModel modeloTablaDetallesProductos;
     private DefaultTableModel modeloTablaDatosAdicionales;
     private Producto productoSeleccionado;
     private Kardex kardexSeleccionado;
@@ -653,7 +657,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         });
-
+        
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -662,6 +666,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     
                     controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null);
+                    
+                    /*new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getTblDetalleFactura().requestFocus();                    
+                            getTblDetalleFactura().editCellAt(1,2);
+                        }
+                    }).start();*/
                     
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -997,6 +1009,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void eliminarDetalleModelo(int fila)
     {
+        DefaultTableModel modeloTablaDetallesProductos=(DefaultTableModel) getTblDetalleFactura().getModel();
         modeloTablaDetallesProductos.removeRow(fila);
         factura.getDetalles().remove(fila);
     }
@@ -2505,7 +2518,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         titulo.add("Descripcion");
         titulo.add("Descuento");
         titulo.add("Valor Total");
-        this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
+        DefaultTableModel modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         //this.modeloTablaDetallesProductos.isCellEditable
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
     }
@@ -2576,6 +2589,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      */
     public void cargarDatosDetalles() {
         String[] titulo ={
+        "",
         "Codigo",
         "ValorUni",
         "Cantidad",
@@ -2587,7 +2601,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         List<FacturaDetalle> detalles = factura.getDetallesOrdenados();
 
         //this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
-        this.modeloTablaDetallesProductos=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{
+        DefaultTableModel modeloTablaDetallesProductos=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{
+            Object.class,
+            String.class,
             String.class,
             String.class,
             String.class,
@@ -2599,8 +2615,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             try {
                 
                 TipoDocumentoEnum tipoReferenciaEnum=detalle.getTipoDocumentoEnum();
-                Vector<String> fila = new Vector<String>();
+                Vector<Object> fila = new Vector<Object>();
                 
+                fila.add(detalle);
                 if(detalle.getCodigoPrincipal()!=null)
                 {
                     fila.add(detalle.getCodigoPrincipal());
@@ -2655,16 +2672,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        getTblDetalleFactura().setModel(this.modeloTablaDetallesProductos);
+        getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
         
-        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{100,100,80,600,80,100,100}); //Definir los tamanios definidos para la tabla principal
+        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,100,100,80,600,80,100,100}); //Definir los tamanios definidos para la tabla principal
         
         ButtonColumn botonEliminar=new ButtonColumn(getTblDetalleFactura(),new AbstractAction() { //Agregado boton de eliminar a la tabla
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnListenerEliminar();
             }
-        }, 6); 
+        }, INDICE_ELIMINAR_TABLA_FACTURA); 
         //botonEliminar.setMnemonic(KeyEvent.VK_D);
         
         modeloTablaDetallesProductos.addTableModelListener(new TableModelListener() {
@@ -2676,15 +2693,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(filaModificada<0 || columnaModificada<0 || columnaModificada==6) //Si no existe ninguna fila seleccionada no ejecuta ninguna accion o si es lacolumna  6 que es el boton de eliminar
                     return;
                 
-                Object dato=modeloTablaDetallesProductos.getValueAt(filaModificada, columnaModificada);
+                Object dato=modeloTablaDetallesProductos.getValueAt(filaModificada, columnaModificada);                
                 //TableModel modelo = ((TableModel) (e.getSource()));
                 //String datoOriginal=modelo.getValueAt(filaModificada,columnaModificada)
                 
                 switch(columnaModificada)
                 {
-                    case 2:
-                        getTxtCantidad().setText(dato.toString());
-                        btnListenerEditar();
+                    case 3:
+                        FacturaDetalle datoOriginal=(FacturaDetalle) getTblDetalleFactura().getModel().getValueAt(filaModificada, INDICE_OBJECTO_TABLA_FACTURA);
+                        modificarCantidadesOIngresarCodigoBarras(datoOriginal, dato.toString());
+                        //getTxtCantidad().setText(dato.toString());
+                        //btnListenerEditar();
                         break;
                         
                 }
@@ -2693,6 +2712,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
         
         
+    }
+    
+    private void modificarCantidadesOIngresarCodigoBarras(FacturaDetalle facturaDetalle,String cantidadTxt)
+    {
+        String cantidadAnteriorTxt=facturaDetalle.getCantidad()+"";
+        
+        //Si existe un cambio muy grande del codigo anterior con el actual significa que se esta leyendo por el codigo de barras y tiene que hacer otro proceso
+        if((cantidadTxt.length()-cantidadAnteriorTxt.length())>2)
+        {
+            ingresarProductoDesdeCodigoDirecto(cantidadTxt);
+        }
+        else //Proceso normal para editar
+        {
+            getTxtCantidad().setText(cantidadTxt);
+            btnListenerEditar();
+        }
     }
     
     private String obtenerCodigoProducto(FacturaDetalle facturaDetalle)
@@ -3449,6 +3484,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void eliminarTodosLosDetalles()
     {
+        DefaultTableModel modeloTablaDetallesProductos=(DefaultTableModel) getTblDetalleFactura().getModel();
         UtilidadesTablas.eliminarTodosLosDatos(modeloTablaDetallesProductos);
         factura.getDetalles().clear();
     }
@@ -3869,32 +3905,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void keyPressed(KeyEvent e) {
                 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    Producto producto=FacturaModelControlador.listenerBuscarProducto(getTxtCodigoDetalle().getText(), controlador.getTipoDocumentoEnumSeleccionado(), session.getEmpresa());
-                    //Todo: Mejorar esta parte
-                    //BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
-                    //Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
-                    //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
-                    //kardexSeleccionado=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);ASD
-                    kardexSeleccionado=obtenerKardexDesdeProducto(producto);
-                    Lote lote=null;
-                    java.sql.Date fechaCaducidad=null;
-                    BigDecimal ultimoCosto=BigDecimal.ZERO;
-                    if(kardexSeleccionado!=null)
-                    {
-                        ultimoCosto=kardexSeleccionado.getPrecioUltimo();
-                        lote=kardexSeleccionado.getLote();
-                        if(lote!=null)
-                        {
-                            fechaCaducidad=lote.getFechaVencimiento();
-                        }
-                    }
-                    if (producto == null) {
-                        if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
-                            btnListenerCrearProducto();
-                        }
-                    } else {
-                        controlador.agregarProductoVista(producto,lote,null,(kardexSeleccionado!=null)?kardexSeleccionado.getStock():BigDecimal.ZERO,ultimoCosto,fechaCaducidad);
-                    }
+                    ingresarProductoDesdeCodigoDirecto(getTxtCodigoDetalle().getText());
                 }
 
             }
@@ -3902,6 +3913,66 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+    }
+    
+    private void ingresarProductoDesdeCodigoDirecto(String codigoDetalle)
+    {
+        Producto producto = FacturaModelControlador.listenerBuscarProducto(codigoDetalle, controlador.getTipoDocumentoEnumSeleccionado(), session.getEmpresa());
+        //Todo: Mejorar esta parte
+        //BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+        //Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+        //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
+        //kardexSeleccionado=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);ASD
+        kardexSeleccionado = obtenerKardexDesdeProducto(producto);
+        Lote lote = null;
+        java.sql.Date fechaCaducidad = null;
+        BigDecimal ultimoCosto = BigDecimal.ZERO;
+        if (kardexSeleccionado != null) {
+            ultimoCosto = kardexSeleccionado.getPrecioUltimo();
+            lote = kardexSeleccionado.getLote();
+            if (lote != null) {
+                fechaCaducidad = lote.getFechaVencimiento();
+            }
+        }
+
+        if (producto == null) {
+            if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                btnListenerCrearProducto();
+            }
+        } else {
+            try {
+                //Verificar si tengo que agregar a la vista o directamente lo agrego al detalle de las facturas
+                if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS, EnumSiNo.SI)) {
+                    DocumentoEnum documentoSeleccionado = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+                    TipoDocumentoEnum tipoDocumento = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+
+                    FacturaDetalle facturaDetalle = controlador.crearFacturaDetalle(
+                            BigDecimal.ONE,
+                            producto.getValorUnitario(),
+                            null, //No tiene valor del subsidio
+                            producto.getNombre(),
+                            producto.getCodigoPersonalizado(),
+                            producto.getCatalogoProducto(),
+                            producto.getIdProducto(),
+                            null,
+                            null,
+                            EnumSiNo.NO,
+                            tipoDocumento,
+                            BigDecimal.ZERO);
+
+                    setFacturaDetalleSeleccionado(facturaDetalle);
+                    controlador.setearValoresProducto(facturaDetalle);
+                    controlador.agregarDetallesFactura(facturaDetalle, null, documentoSeleccionado, kardexSeleccionado, EnumSiNo.NO, BigDecimal.ONE);
+                } else {
+                    controlador.agregarProductoVista(producto, lote, null, (kardexSeleccionado != null) ? kardexSeleccionado.getStock() : BigDecimal.ZERO, ultimoCosto, fechaCaducidad);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
     }
 
     private void addListenerTablas() {

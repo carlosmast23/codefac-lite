@@ -16,9 +16,9 @@ INSERT INTO SRI_FORMA_PAGO (ID_PADRE_FORMA_PAGO,NOMBRE,ALIAS, CODIGO,FECHA_INICI
             (NULL,'TARJETA DE CREDITO','Tarjeta crédito', '19', '2016-06-01'),
             (NULL,'OTROS CON UTILIZACION DEL SISTEMA FINANCIERO','Otros', '20', '2016-06-01'),
             (NULL,'ENDOSO DE TITULOS','Endoso títulos', '21', '2016-06-01'),
-            (7,'TRANSFERENCIA','Transferencia', '20', '2016-06-01'),
+            (NULL,'TRANSFERENCIA','Transferencia', '20', '2016-06-01'),
             (7,'DEPOSITO','Deposito', '20', '2016-06-01'),
-            (7,'CHEQUE','Cheque', '20', '2016-06-01'),
+            (7,'CHEQUE','Cheque', '20', '2016-06-01')
 ;
 
 INSERT INTO SRI_IDENTIFICACION (CODIGO,TIPO_IDENTIFICACION_LETRA, TIPO_TRANSACCION,TIPO_IDENTIFICACION,FECHA_INICIO)

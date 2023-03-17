@@ -645,7 +645,7 @@ public class CompraModel extends CompraPanel{
                 getCmbDocumento().addItem(documento);
             }
             //Quitar documento de compras que no deben estar como la liquidacion de compras
-            getCmbDocumento().removeItem(DocumentoEnum.LIQUIDACION_COMPRA);
+            //getCmbDocumento().removeItem(DocumentoEnum.LIQUIDACION_COMPRA);
             
             //Agregar los tipos de documentos disponibles
             getCmbTipoDocumento().removeAllItems();

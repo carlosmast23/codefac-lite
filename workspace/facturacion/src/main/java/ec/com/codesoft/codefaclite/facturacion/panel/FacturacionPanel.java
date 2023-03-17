@@ -114,12 +114,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         pnlPrincipal = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblDetalleFactura = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex)
-            {
-                return colIndex != 0 && colIndex != 3 && colIndex != 4;
-            }
-        };
+        tblDetalleFactura = new javax.swing.JTable();
         jToolBar2 = new javax.swing.JToolBar();
         pnlDetalles = new javax.swing.JPanel();
         txtCodigoDetalle = new javax.swing.JTextField();
@@ -886,7 +881,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         txtValorTotal.setEditable(false);
         txtValorTotal.setColumns(5);
-        txtValorTotal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtValorTotal.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         txtValorTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtValorTotal.setText("0.00");
         txtValorTotal.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(255, 0, 0)));
@@ -2484,6 +2479,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setLblTextoCosto(JLabel lblTextoCosto) {
         this.lblTextoCosto = lblTextoCosto;
     }
+
 
     
 }

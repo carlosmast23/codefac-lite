@@ -130,6 +130,8 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String FACTURAR_INVENTARIO_NEGATIVO="facturar_inventario_negativo";
     
+    public static final String AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS="agregar_producto_directo_lector_barras";
+    
     /**
      * Parametro parametro que me permite elegir si en los detalles me permiten agregar la información del lote del producto
      */

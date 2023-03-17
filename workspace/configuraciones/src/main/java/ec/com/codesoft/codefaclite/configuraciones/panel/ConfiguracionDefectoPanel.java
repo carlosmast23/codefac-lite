@@ -170,6 +170,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbMostrarCostosFacturar = new javax.swing.JComboBox<>();
         jLabel90 = new javax.swing.JLabel();
         cmbDatoAdicionalRidePlaca = new javax.swing.JComboBox<>();
+        jLabel93 = new javax.swing.JLabel();
+        cmbAgregarProductoDirectoLectorBarras = new javax.swing.JComboBox<>();
         jPanel13 = new javax.swing.JPanel();
         jLabel55 = new javax.swing.JLabel();
         cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
@@ -1128,10 +1130,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbModificarPrecioMenor, gridBagConstraints);
 
         jLabel81.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel81.setText("Modificar Precio Menor:");
+        jLabel81.setText("Agregar Producto Directo Lector Barras:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel81, gridBagConstraints);
@@ -1211,6 +1213,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbDatoAdicionalRidePlaca, gridBagConstraints);
+
+        jLabel93.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel93.setText("Modificar Precio Menor:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel93, gridBagConstraints);
+
+        cmbAgregarProductoDirectoLectorBarras.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbAgregarProductoDirectoLectorBarras, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -1951,6 +1970,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarLoteFactura;
+    private javax.swing.JComboBox<EnumSiNo> cmbAgregarProductoDirectoLectorBarras;
     private javax.swing.JComboBox<EnumSiNo> cmbBuscadorSoloInventario;
     private javax.swing.JComboBox<EnumSiNo> cmbCalculaDescuentoCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbCalcularUtilidadUltimoCosto;
@@ -2096,6 +2116,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel90;
     private javax.swing.JLabel jLabel91;
     private javax.swing.JLabel jLabel92;
+    private javax.swing.JLabel jLabel93;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -2811,6 +2832,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.txtDiasAlertaComprobantesPendientes = txtDiasAlertaComprobantesPendientes;
     }
 
+    public JComboBox<EnumSiNo> getCmbAgregarProductoDirectoLectorBarras() {
+        return cmbAgregarProductoDirectoLectorBarras;
+    }
+
+    public void setCmbAgregarProductoDirectoLectorBarras(JComboBox<EnumSiNo> cmbAgregarProductoDirectoLectorBarras) {
+        this.cmbAgregarProductoDirectoLectorBarras = cmbAgregarProductoDirectoLectorBarras;
+    }
+
+    
     
     
     
