@@ -635,26 +635,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTblDetalleFactura().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int fila = getTblDetalleFactura().getSelectedRow();
-                if(fila>=0)
-                {
-                    modoEdicionDetalle=true;
-                    //setear valores para cargar de nuevo en los campos de la factura
-                    FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
-                    getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
-                    getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
-                    getTxtDescripcion().setText(facturaDetalle.getDescripcion());
-                    getTxtDescripcion().setCaretPosition(0);
-                    //getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
-                    getCmbDescuento().addItem(facturaDetalle.getDescuento()+"");
-                    getCmbDescuento().setSelectedItem(facturaDetalle.getDescuento()+"");
-                    getCheckPorcentaje().setSelected(false);
-                    getBtnEditarDetalle().setEnabled(true);
-                    getBtnAgregarDetalleFactura().setEnabled(false);
-                    getBtnAgregarProducto().setEnabled(false);
-                    getBtnCrearProducto().setEnabled(false);
-                    getCmbIva().setSelectedItem(EnumSiNo.NO);
-                }
+                seleccionarFilaTablaDetalleFactura();
             }
         });
         
@@ -666,14 +647,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     
                     controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null);
-                    
-                    /*new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            getTblDetalleFactura().requestFocus();                    
-                            getTblDetalleFactura().editCellAt(1,2);
-                        }
-                    }).start();*/
                     
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -823,6 +796,29 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getBtnAplicarDescuentoGlobal().addActionListener(listenerDescuentoGlobal);
 
+    }
+    
+    private void seleccionarFilaTablaDetalleFactura()
+    {
+        int fila = getTblDetalleFactura().getSelectedRow();
+        if (fila >= 0) {
+            modoEdicionDetalle = true;
+            //setear valores para cargar de nuevo en los campos de la factura
+            FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
+            getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
+            getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
+            getTxtDescripcion().setText(facturaDetalle.getDescripcion());
+            getTxtDescripcion().setCaretPosition(0);
+            //getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
+            getCmbDescuento().addItem(facturaDetalle.getDescuento() + "");
+            getCmbDescuento().setSelectedItem(facturaDetalle.getDescuento() + "");
+            getCheckPorcentaje().setSelected(false);
+            getBtnEditarDetalle().setEnabled(true);
+            getBtnAgregarDetalleFactura().setEnabled(false);
+            getBtnAgregarProducto().setEnabled(false);
+            getBtnCrearProducto().setEnabled(false);
+            getCmbIva().setSelectedItem(EnumSiNo.NO);
+        }
     }
     
     private void cargarDetalleProducto()
@@ -2719,9 +2715,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         String cantidadAnteriorTxt=facturaDetalle.getCantidad()+"";
         
         //Si existe un cambio muy grande del codigo anterior con el actual significa que se esta leyendo por el codigo de barras y tiene que hacer otro proceso
-        if((cantidadTxt.length()-cantidadAnteriorTxt.length())>2)
+        Integer tamanioDiferencia=cantidadTxt.length()-cantidadAnteriorTxt.length();
+        if(tamanioDiferencia>2)
         {
-            ingresarProductoDesdeCodigoDirecto(cantidadTxt);
+            String codigoLectorBarras=cantidadTxt.substring(0,tamanioDiferencia);
+            modoEdicionDetalle=false;
+            ingresarProductoDesdeCodigoDirecto(codigoLectorBarras);
+            editarCeldaFacturaDetalle();
         }
         else //Proceso normal para editar
         {
@@ -3905,7 +3905,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void keyPressed(KeyEvent e) {
                 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    ingresarProductoDesdeCodigoDirecto(getTxtCodigoDetalle().getText());
+                    ingresarProductoDesdeCodigoDirecto(getTxtCodigoDetalle().getText());                                        
+                    editarCeldaFacturaDetalle();
                 }
 
             }
@@ -3913,6 +3914,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+    }
+    
+    private void editarCeldaFacturaDetalle()
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getTblDetalleFactura().requestFocus();
+                getTblDetalleFactura().setRowSelectionInterval(getTblDetalleFactura().getRowCount() - 1, getTblDetalleFactura().getRowCount() - 1);
+                seleccionarFilaTablaDetalleFactura();
+                getTblDetalleFactura().editCellAt(getTblDetalleFactura().getRowCount() - 1, 3);
+
+            }
+        }).start();
     }
     
     private void ingresarProductoDesdeCodigoDirecto(String codigoDetalle)
@@ -3991,9 +4006,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     @Override
                     public void keyPressed(KeyEvent e) {
                         //Evento cuando se desea eliminar un dato de los detalles
-                        if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                        /*if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                             btnListenerEliminar();
-                        }      
+                        } */     
                         
                         //Permite salir del modo edicion y regresa al modo ingreso
                         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
