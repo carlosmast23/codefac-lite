@@ -580,6 +580,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         }
         
                 
+                
         //La validacion de los secuenciales solo debe funcionar cuando no es un documento interno por que puede ser que no tenga datos de secuenciales
         DocumentoEnum documentoEnum=compra.getCodigoDocumentoEnum();
         if(!documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
@@ -609,6 +610,15 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             if(compra.getPuntoEstablecimiento().toString().length()>3 && compra.getPuntoEmision().toString().length()>3 && compra.getPuntoEmision().toString().length()>9)
             {
                 throw new ServicioCodefacException("Revise el formato del secuencial de la compra que es incorrecto");
+            }
+        }
+        
+        //Validar que las facturas no permitan grabar con cedulas
+        if(documentoEnum.equals(DocumentoEnum.FACTURA))
+        {
+            if(compra.getCliente().getTipoIdentificacionEnum().equals(Persona.TipoIdentificacionEnum.CEDULA))
+            {
+                throw new ServicioCodefacException("No se puede grabar compras de proveedores con cédula ");
             }
         }
         

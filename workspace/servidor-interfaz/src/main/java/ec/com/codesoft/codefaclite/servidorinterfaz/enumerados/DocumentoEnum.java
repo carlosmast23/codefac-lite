@@ -17,13 +17,6 @@ import java.util.List;
  */
 public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
 
-    LIQUIDACION_COMPRA("Liquidación Compra",
-            "LDC",
-            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
-            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
-            true,
-            true,
-            "03"),
     /**
      * Documento de la factura que puede ser electronica o fisica
      * TODO:Crear otro documento para facturacion fisica y poder tener clasificado
@@ -72,6 +65,13 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
             false
     
     ),
+    LIQUIDACION_COMPRA("Liquidación Compra",
+            "LDC",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
+            true,
+            true,
+            "03"),
     
     COMANDA("Comanda",
             "CMD",
