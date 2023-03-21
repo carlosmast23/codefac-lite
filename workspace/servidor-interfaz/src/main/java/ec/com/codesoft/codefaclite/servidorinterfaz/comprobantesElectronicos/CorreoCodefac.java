@@ -46,6 +46,11 @@ public class CorreoCodefac {
         
     //}
     
+    public void enviarCorreo(Empresa empresa,String mensaje, String titulo, List<String> destinatorios, Map<String, String> pathFiles) throws ExcepcionCorreoCodefac
+    {
+        enviarCorreo(empresa, mensaje, titulo, destinatorios, pathFiles, true);
+    }
+    
     /**
      * TODO: Mejorar esta parte para parametrizar mejor desde donde tengo que enviar los correos
      * @param empresa
@@ -55,21 +60,57 @@ public class CorreoCodefac {
      * @param pathFiles key=alias_nombre , value=path archivo
      * @throws ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac.ExcepcionCorreoCodefac 
      */
-    public void enviarCorreo(Empresa empresa,String mensaje, String titulo, List<String> destinatorios, Map<String, String> pathFiles) throws ExcepcionCorreoCodefac
+    public void enviarCorreo(Empresa empresa,String mensaje, String titulo, List<String> destinatorios, Map<String, String> pathFiles,Boolean modoForzado) throws ExcepcionCorreoCodefac
     {
         try
         {
             //ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO);
             String correo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO,empresa).getValor();
+            String clave=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_CLAVE,empresa).getValor();            
+            String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST,empresa).getValor();
+            String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT,empresa).getValor();
+            enviarCorreo(empresa, correo, clave,smtpHost,smtpPort, mensaje, titulo, destinatorios, pathFiles, modoForzado);
+            
+            
+        }catch(RemoteException ex)
+        {
+            Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            
+            if(modoForzado)
+            {
+                try {
+                    //Si estaba en modo forzado y falla el envio de correo automaticamente selecciono con los datos del sistema para intentar reenviar desde el correo de la empresa
+                    correoElectronico=null;
+                    String claveEncriptada=ParametrosSistemaCodefac.CORREO_DEFECTO_CLAVE;
+                    enviarCorreo(empresa, ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO, claveEncriptada, ParametrosSistemaCodefac.CORREO_DEFECTO_HOST,ParametrosSistemaCodefac.CORREO_DEFECTO_PUERTO,mensaje, titulo, destinatorios, pathFiles, false);
+                } catch (Exception ex1) {
+                    Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+            }
+            
+            throw new ExcepcionCorreoCodefac(ex.getMessage());
+        }
+
+        
+    }
+    
+    public void enviarCorreo(Empresa empresa,String correoUsuario,String clave,String smtpHost,String smtpPort, String mensaje, String titulo, List<String> destinatorios, Map<String, String> pathFiles,Boolean modoForzado) throws ExcepcionCorreoCodefac
+    {
+        try
+        {
+            //ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO);
+            //String correo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO,empresa).getValor();
             
 
-            String clave=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_CLAVE,empresa).getValor();
+            //String clave=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_CLAVE,empresa).getValor();
             //Obtener clave desencriptada
             //clave=UtilidadesEncriptar.desencriptar(clave,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             
             //Construir los datos de las propiedades si existen
-            String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST,empresa).getValor();
-            String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT,empresa).getValor();
+            //String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST,empresa).getValor();
+            //String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT,empresa).getValor();
             
             //PropiedadCorreo propiedadCorreo=null;
             //if(!smtpHost.isEmpty() && !smtpPort.isEmpty())
@@ -95,7 +136,7 @@ public class CorreoCodefac {
             //}
             
             
-            enviarCorreo(correo, clave, smtpHost, smtpPort, alias, mensaje, titulo, destinatorios, pathFiles);
+            enviarCorreo(correoUsuario, clave, smtpHost, smtpPort, alias, mensaje, titulo, destinatorios, pathFiles);
             //correoElectronico.setPathFiles(getPathFiles());
             
             try
@@ -111,9 +152,6 @@ public class CorreoCodefac {
             }
             
             
-        }catch(RemoteException ex)
-        {
-            Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCorreoCodefac(ex.getMessage());

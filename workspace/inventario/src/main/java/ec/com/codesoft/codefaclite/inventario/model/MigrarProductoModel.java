@@ -209,7 +209,7 @@ public class MigrarProductoModel extends MigrarModel {
                     if(productoTmp != null) 
                     {
                         //Grabar o Actualizar los precios de los productos
-                        cargarPreciosVenta(productoTmp, fila);
+                        //cargarPreciosVenta(productoTmp, fila);
                         //TODO:Unificar la migracion con el dato d abajo
                         productoTmp.setUbicacion((String) fila.getByEnum(ExcelMigrarProductos.Enum.UBICACION).valor);
                         Logger.getLogger(MigrarProductoModel.class.getName()).log(Level.WARNING,"Producto actualizado : "+productoTmp.getNombre());
@@ -230,7 +230,7 @@ public class MigrarProductoModel extends MigrarModel {
                     else
                     {
                         //Grabar o Actualizar los precios de los productos
-                        //cargarPreciosVenta(producto, fila);
+                        cargarPreciosVenta(producto, fila);
                         /**
                          * =====================================================
                          *          SI NO TIENE CREADO PREVIAMENTE EL PRODUCTO CREO LOS DATOS
