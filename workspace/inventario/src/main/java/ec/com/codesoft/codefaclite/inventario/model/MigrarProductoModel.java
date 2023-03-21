@@ -230,7 +230,7 @@ public class MigrarProductoModel extends MigrarModel {
                     else
                     {
                         //Grabar o Actualizar los precios de los productos
-                        cargarPreciosVenta(producto, fila);
+                        //cargarPreciosVenta(producto, fila);
                         /**
                          * =====================================================
                          *          SI NO TIENE CREADO PREVIAMENTE EL PRODUCTO CREO LOS DATOS
