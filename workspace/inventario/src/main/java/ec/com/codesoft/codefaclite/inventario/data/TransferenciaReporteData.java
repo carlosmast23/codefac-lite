@@ -23,8 +23,9 @@ public class TransferenciaReporteData implements ExcelDatosInterface{
     private String cantidad;
     private String empresa;
     private String tipoTransaccion;
+    private String costo;
 
-    public TransferenciaReporteData(String producto, String bodegaDestino,String bodegaOrigen, String fechaIngreso, String cantidad, String empresa,String tipoTransaccion) {
+    public TransferenciaReporteData(String producto, String bodegaDestino,String bodegaOrigen, String fechaIngreso, String cantidad, String empresa,String tipoTransaccion,String costo) {
         this.producto = producto;
         this.bodegaDestino = bodegaDestino;
         this.bodegaOrigen=bodegaOrigen;
@@ -32,6 +33,7 @@ public class TransferenciaReporteData implements ExcelDatosInterface{
         this.cantidad = cantidad;
         this.empresa = empresa;
         this.tipoTransaccion=tipoTransaccion;
+        this.costo=costo;
     }
 
     public String getProducto() {
@@ -89,6 +91,17 @@ public class TransferenciaReporteData implements ExcelDatosInterface{
     public void setTipoTransaccion(String tipoTransaccion) {
         this.tipoTransaccion = tipoTransaccion;
     }
+
+    public String getCosto() {
+        return costo;
+    }
+
+    public void setCosto(String costo) {
+        this.costo = costo;
+    }
+    
+    
+    
 
     @Override
     public List<TipoDato> getDatos() {

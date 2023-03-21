@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.main.test;
 
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  *
@@ -17,6 +19,7 @@ public class TestVarios {
     public static void main(String args[])
     {
         System.out.println(UtilidadesSistema.generarClaveSoporte());
+        BigDecimal.ONE.setScale(2, RoundingMode.HALF_UP);
     }
     
 }

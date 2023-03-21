@@ -258,7 +258,8 @@ public class TransferenciaReporteModel extends TransferenciasReportePanel{
                     simpleDateFormat.format(respuesta.kardexDetalle.getFechaIngreso()), 
                     respuesta.kardexDetalle.getCantidad()+"", 
                     empresaNombre,
-                    respuesta.kardexDetalle.getCodigoTipoDocumentoEnum().getNombre()
+                    respuesta.kardexDetalle.getCodigoTipoDocumentoEnum().getNombre(),
+                    respuesta.kardexDetalle.getKardex().getPrecioUltimoConIva().multiply(respuesta.kardexDetalle.getCantidad())+""
             );  
             
             datosReporte.add(reportData);
