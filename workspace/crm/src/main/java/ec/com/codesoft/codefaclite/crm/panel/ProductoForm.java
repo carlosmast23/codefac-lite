@@ -124,6 +124,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel52 = new javax.swing.JLabel();
         txtUltimoCosto2 = new javax.swing.JTextField();
         jLabel53 = new javax.swing.JLabel();
+        btnCrearCategoria = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -540,6 +541,17 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel53, gridBagConstraints);
 
+        btnCrearCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnCrearCategoria.setFocusable(false);
+        btnCrearCategoria.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCrearCategoria.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnCrearCategoria, gridBagConstraints);
+
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         tabMenu.addTab("Info General", jPanel3);
@@ -826,7 +838,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         btnCrearMarca.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnCrearMarca.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel5.add(btnCrearMarca, gridBagConstraints);
@@ -1535,6 +1547,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarEnsamble;
     private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnBuscarProductoEnsamble;
+    private javax.swing.JButton btnCrearCategoria;
     private javax.swing.JButton btnCrearMarca;
     private javax.swing.JButton btnCrearPresentacion;
     private javax.swing.JButton btnEditarEmpaque;
@@ -2364,9 +2377,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public void setCmbIvaOpcionPrecioVentaPresentacion(JComboBox<IvaOpcionEnum> cmbIvaOpcionPrecioVentaPresentacion) {
         this.cmbIvaOpcionPrecioVentaPresentacion = cmbIvaOpcionPrecioVentaPresentacion;
     }
-    
-    
-    
-    
 
+    public JButton getBtnCrearCategoria() {
+        return btnCrearCategoria;
+    }
+
+    public void setBtnCrearCategoria(JButton btnCrearCategoria) {
+        this.btnCrearCategoria = btnCrearCategoria;
+    }
+    
+   
 }

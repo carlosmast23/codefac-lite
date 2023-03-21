@@ -46,6 +46,17 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         return c;
     }*/
 
+    @Override
+    public CategoriaProducto grabar(CategoriaProducto entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.persist(entity);
+            }
+        });
+        return entity;
+    }
+
     public void editar(CategoriaProducto c) {
         categoriaProductoFacade.edit(c);
     }

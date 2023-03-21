@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -45,7 +46,8 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
             catProducto = new CategoriaProducto();
             setearValoresCatProducto(catProducto);
             try {
-                catProductoService.grabar(catProducto);
+                //ServiceFactory.getFactory().getCategoriaProductoServiceIf().buscarPorNombre(empresa, title);
+                catProducto=catProductoService.grabar(catProducto);
             } catch (RemoteException ex) {
                 Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -91,7 +93,23 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
 
     @Override
     public CategoriaProducto getResult() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            
+            if(estadoFormularioEnum.equals(EstadoFormularioEnum.GRABAR))
+            {
+                grabar();
+            }
+            else if(estadoFormularioEnum.equals(EstadoFormularioEnum.EDITAR))
+            {
+                editar();
+            }
+            
+            return catProducto;
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(MarcaProducto.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        //return  null;
     }
 
     @Override

@@ -53,6 +53,7 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
         setMaximizable(true);
         setResizable(true);
         setTitle("Categoria del Producto");
+        setPreferredSize(new java.awt.Dimension(550, 208));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N

@@ -560,6 +560,29 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             }
         });
         
+        getBtnCrearCategoria().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<CategoriaProducto>() {
+                    @Override
+                    public void updateInterface(CategoriaProducto entity) {
+                        controlador.cargarCategoriasActivas();
+                        //controlador.producto.setMarcaProducto(entity);
+                        //actualizarBindingCompontValues();
+                        getCmbCategoriaProducto().setSelectedItem(entity);
+                        actualizarBindingComponent(true, true);
+                        //controlador.getMarcaProductoList().add(entity);
+                        //controlador.getProducto().setMarcaProducto(entity);
+
+                        //actualizarBindingComponent(true, true);
+                    }
+                }, VentanaEnum.CATEGORIA_PRODUCTO, false, formularioActual);
+                
+            }
+        });
+        
         getBtnCrearMarca().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

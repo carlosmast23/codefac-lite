@@ -212,6 +212,15 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
 
     }
     
+    public void cargarCategoriasActivas()
+    {
+        try {
+            categoriaProductosList=ServiceFactory.getFactory().getCategoriaProductoServiceIf().obtenerTodosPorEmpresa(session.getEmpresa());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void cargarMarcasActivas()
     {
         try {
