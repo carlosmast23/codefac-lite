@@ -2721,7 +2721,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             String codigoLectorBarras=cantidadTxt.substring(0,tamanioDiferencia);
             modoEdicionDetalle=false;
             ingresarProductoDesdeCodigoDirecto(codigoLectorBarras);
-            editarCeldaFacturaDetalle();
+            //editarCeldaFacturaDetalle();
         }
         else //Proceso normal para editar
         {
@@ -3906,7 +3906,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     ingresarProductoDesdeCodigoDirecto(getTxtCodigoDetalle().getText());                                        
-                    editarCeldaFacturaDetalle();
+                    //editarCeldaFacturaDetalle();
                 }
 
             }
@@ -3978,6 +3978,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     setFacturaDetalleSeleccionado(facturaDetalle);
                     controlador.setearValoresProducto(facturaDetalle);
                     controlador.agregarDetallesFactura(facturaDetalle, null, documentoSeleccionado, kardexSeleccionado, EnumSiNo.NO, BigDecimal.ONE);
+                    editarCeldaFacturaDetalle();
                 } else {
                     controlador.agregarProductoVista(producto, lote, null, (kardexSeleccionado != null) ? kardexSeleccionado.getStock() : BigDecimal.ZERO, ultimoCosto, fechaCaducidad);
                 }
