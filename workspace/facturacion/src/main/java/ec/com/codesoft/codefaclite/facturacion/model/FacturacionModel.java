@@ -645,6 +645,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 try {
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                    verificarIngresoCantidadConPresentacion(getTxtCantidad().getText());
                     
                     controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null);
                     
@@ -927,6 +928,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             try {
                 //Si esta habilitado el boton de agregar funciona para agregar
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                verificarIngresoCantidadConPresentacion(getTxtCantidad().getText());
                 controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -2740,7 +2742,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 switch(columnaModificada)
                 {
                     case 3:
-                        FacturaDetalle datoOriginal=(FacturaDetalle) getTblDetalleFactura().getModel().getValueAt(filaModificada, INDICE_OBJECTO_TABLA_FACTURA);
+                        FacturaDetalle datoOriginal=(FacturaDetalle) getTblDetalleFactura().getModel().getValueAt(filaModificada, INDICE_OBJECTO_TABLA_FACTURA);                        
                         modificarCantidadesOIngresarCodigoBarras(datoOriginal, dato.toString());
                         //getTxtCantidad().setText(dato.toString());
                         //btnListenerEditar();
@@ -2768,8 +2770,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //editarCeldaFacturaDetalle();
         }
         else //Proceso normal para editar
-        {
+        {            
             getTxtCantidad().setText(cantidadTxt);
+            verificarIngresoCantidadConPresentacion(cantidadTxt);
             btnListenerEditar();
         }
     }
@@ -3958,6 +3961,43 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+        
+        getTxtCantidad().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) { }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                //Verificar si esta ingresando un numero con texto para cargar automaticamente la presentacion
+                /*if (!UtilidadesTextos.verificarCaracterEsNumerico(e.getKeyChar())) 
+                {
+                    verificarIngresoCantidadConPresentacion();
+                }*/
+            }
+        });
+    }
+    
+    private void verificarIngresoCantidadConPresentacion(String cantidadStr)
+    {
+        //Si la ultima letra ingresada no fue un caracteres entonces empiezo a buscar si esta buscando una presentacion                   
+        Object[] resultado = UtilidadesTextos.separarTextoAlfanumerico(cantidadStr);
+
+        BigDecimal cantidad = (BigDecimal) resultado[0];
+        String codigoPresentacion = (String) resultado[1];
+
+        PresentacionProducto presentacion = productoSeleccionado.buscarPresentacionPorCodigo(codigoPresentacion);
+        if (presentacion != null) 
+        {
+            //cargarPresentaciones(productoSeleccionado);
+            cargarNuevaPresentacionVista(productoSeleccionado, kardexSeleccionado, presentacion);
+            //Todo: Mejorar esta parte por que deberia haber un metodo generarl que permita setear las cantidades
+            getTxtCantidad().setText(cantidad + "");
+        }
+
     }
     
     private void editarCeldaFacturaDetalle()

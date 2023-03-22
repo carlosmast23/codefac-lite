@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
@@ -270,6 +272,73 @@ public abstract class UtilidadesTextos {
             return true;
         }
         
+        return false;
+    }
+    
+    /**
+     * Metodo que me permite separar la primero parte numerica y la segunda parte de texto
+     * @param textoAlfanumerico
+     * @return [0].- tiene la parte numerica, [1].- tiene la parte de texto
+     */
+    public static Object[] separarTextoAlfanumerico(String textoAlfanumerico) 
+    {
+        Object[] partes = new Object[2];
+        String numeros = "";
+        String texto = "";
+        //Utilizo esta bandera para acumular hasta que lea numeros seguidos y si encuentra un texto ya no lo considero como parte del numero
+        boolean esNumero = true;
+
+        for (int i = 0; i < textoAlfanumerico.length(); i++) {
+            char caracter = textoAlfanumerico.charAt(i);
+
+            if (Character.isDigit(caracter) || caracter=='.') {
+                if(esNumero)
+                {
+                    numeros += caracter;
+                }
+                else
+                {
+                    texto += caracter;
+                }
+            } else {
+                
+                esNumero = false;
+                texto += caracter;
+            }
+            
+        }
+        
+        BigDecimal parteNumerica=new BigDecimal(numeros);        
+
+        partes[0] = parteNumerica;
+        partes[1] = texto;
+
+        return partes;
+    }
+    
+    public static Boolean verificarCaracterEsNumerico(char caracter)
+    {
+        if(Character.isDigit(caracter))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Metodo que me permite comparar 2 textos sin tener en cuenta que se mayuscula o minuscula
+     * @return 
+     */
+    public static Boolean compararTextosSinSensibilidad(String texto1,String texto2)
+    {
+        if(texto1!=null && texto2!=null)
+        {
+            if(texto1.toLowerCase().equals(texto2.toLowerCase()))
+            {
+                return true;
+            }
+        }
         return false;
     }
     

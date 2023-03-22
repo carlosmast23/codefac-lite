@@ -1188,6 +1188,24 @@ public class Producto implements Serializable, Comparable<Producto> {
     }
     
     /**
+     * Optimizar esta funcion para tener en un mismo cache y no hacer varias consultas
+     * @param codigo
+     * @return 
+     */
+    public PresentacionProducto buscarPresentacionPorCodigo(String codigo)
+    {
+        List<PresentacionProducto> presentacionList= obtenerPresentacionesList();
+        for (PresentacionProducto presentacion : presentacionList) 
+        {
+            if(UtilidadesTextos.compararTextosSinSensibilidad(presentacion.getNombre(),codigo))
+            {
+                return presentacion;
+            }
+        }
+        return null;
+    }
+    
+    /**
      * Obtiene una presentacion cualquiera que sea disntinta de la ingresada en el producto
      * @return 
      */
