@@ -166,6 +166,7 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     
     /**
      * Metodos adicionales
+     * TODO: Poner un nombre más facil como getProducto o obtenerProducto
      */
     
     public Producto consultarProductoEnlazado()

@@ -818,6 +818,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getBtnAgregarProducto().setEnabled(false);
             getBtnCrearProducto().setEnabled(false);
             getCmbIva().setSelectedItem(EnumSiNo.NO);
+            
+            //Cargar los datos de producto cuando sea el caso
+            Producto producto=facturaDetalle.consultarProductoEnlazado();
+            if(producto!=null)
+            {
+                productoSeleccionado=producto;
+                kardexSeleccionado=facturaDetalle.getKardex();
+                //PresentacionProducto presentacionProducto= productoSeleccionado.buscarPresentacionProducto();
+                cargarPresentaciones(producto);
+            }
         }
     }
     
@@ -952,8 +962,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 switch (tipoDocumentoEnum) {
                     case LIBRE:
                     case INVENTARIO:
-                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                        productoSeleccionado = producto;
+                        //Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                        //productoSeleccionado = producto;
+                        //Actualizo de nuevo la referencia por si fue modificada la presentacion
+                        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                         break;
                         
                     case PRESUPUESTOS:
@@ -1407,12 +1419,45 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
     
+    private void cargarNuevaPresentacionVista(Producto producto,Kardex kardex,PresentacionProducto presentacion)
+    {
+        //PresentacionProducto presentacion = (PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
+
+        if (presentacion != null) {
+            //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
+            Producto productoTmp = producto.buscarProductoPorPresentacion(presentacion);
+            //Si la presentacion es igual al mismo producto entonces no hago nada mas
+            if (productoTmp.equals(producto)) {
+                return;
+            }
+
+            producto = productoTmp;
+
+            try {
+                TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
+                EnumSiNo enumBusqueda = EnumSiNo.NO;
+                switch (tipoDocumentoEnum) {
+                    case INVENTARIO:
+                        enumBusqueda = EnumSiNo.SI;
+
+                }
+                //Volver a cargar los productos pero con la nueva presentacion
+                cargarProductoInventario(enumBusqueda, kardex, producto);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     public ActionListener listenerCmbPresentacion=new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             PresentacionProducto presentacion = (PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
+            cargarNuevaPresentacionVista(productoSeleccionado, kardexSeleccionado, presentacion);
 
-            if (presentacion != null) {
+            /*if (presentacion != null) {
                 //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
                 Producto productoTmp = productoSeleccionado.buscarProductoPorPresentacion(presentacion);
                 //Si la presentacion es igual al mismo producto entonces no hago nada mas
@@ -1437,7 +1482,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+            }*/
         }
     };
     
@@ -1464,8 +1509,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbPresentacionProducto().removeAllItems();
         if(producto!=null)
         {
-            //Por defecto agrego la presentacion del mismo producto            
-            //getCmbPresentacionProducto().addItem(producto.getPresentacion());
+            //Por defecto agrego la presentacion del mismo producto  
             List<PresentacionProducto> presentacionList=producto.obtenerPresentacionesList();
             
             
