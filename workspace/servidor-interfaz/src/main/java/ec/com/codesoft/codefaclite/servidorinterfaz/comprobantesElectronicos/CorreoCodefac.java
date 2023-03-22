@@ -5,10 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.email.PropiedadCorreo;
 import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
@@ -79,18 +81,32 @@ public class CorreoCodefac {
             Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
             
             if(modoForzado)
-            {
+            {                
                 try {
-                    //Si estaba en modo forzado y falla el envio de correo automaticamente selecciono con los datos del sistema para intentar reenviar desde el correo de la empresa
-                    correoElectronico=null;
-                    String claveEncriptada=ParametrosSistemaCodefac.CORREO_DEFECTO_CLAVE;
-                    enviarCorreo(empresa, ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO, claveEncriptada, ParametrosSistemaCodefac.CORREO_DEFECTO_HOST,ParametrosSistemaCodefac.CORREO_DEFECTO_PUERTO,mensaje, titulo, destinatorios, pathFiles, false);
+                    //Verificar que esta en modo Producción para intentar enviar los correos de modo forzado
+                    if(ParametroUtilidades.compararTexto(empresa, ParametroCodefac.MODO_FACTURACION,ComprobanteElectronicoService.MODO_PRODUCCION))
+                    {
+                        Logger.getLogger(CorreoCodefac.class.getName()).log(Level.WARNING,"Intentando enviar mensaje desde el correo de la empresa");
+                        //Si estaba en modo forzado y falla el envio de correo automaticamente selecciono con los datos del sistema para intentar reenviar desde el correo de la empresa
+                        correoElectronico=null;
+                        String claveEncriptada=ParametrosSistemaCodefac.CORREO_DEFECTO_CLAVE;
+                        enviarCorreo(empresa, ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO, claveEncriptada, ParametrosSistemaCodefac.CORREO_DEFECTO_HOST,ParametrosSistemaCodefac.CORREO_DEFECTO_PUERTO,mensaje, titulo, destinatorios, pathFiles, false);
+                    }
+                    else
+                    {
+                        throw new ExcepcionCorreoCodefac(ex.getMessage());
+                    }
                 } catch (Exception ex1) {
                     Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex1);
+                    throw new ExcepcionCorreoCodefac(ex.getMessage());
                 }
             }
+            else
+            {
+                throw new ExcepcionCorreoCodefac(ex.getMessage());
+            }
             
-            throw new ExcepcionCorreoCodefac(ex.getMessage());
+            
         }
 
         

@@ -43,6 +43,19 @@ public abstract class ParametroUtilidades {
         return false;
     }*/
     
+    public static Boolean compararTexto(Empresa empresa,String nombreParametro,String textoComparar)
+    {
+        String valorParametro=obtenerValorParametro(empresa, nombreParametro);
+        if(valorParametro!=null)
+        {
+            if(textoComparar.equals(valorParametro))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public static <T extends ComparadorInterface> Boolean comparar(Empresa empresa,String nombreParametro,T valorComparar) throws RemoteException
     {
         String valorParametro=obtenerValorParametro(empresa, nombreParametro);
