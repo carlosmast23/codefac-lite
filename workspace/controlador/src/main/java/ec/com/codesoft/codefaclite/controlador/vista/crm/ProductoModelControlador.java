@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -334,7 +335,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         }
         
     }
-
+    
+ 
     @Override
     public void eliminar() throws ExcepcionCodefacLite, RemoteException {
         //if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) 
@@ -345,14 +347,34 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
                 if (!respuesta) {
                     throw new ExcepcionCodefacLite("Cancelacion usuario");
                 }
-                ServiceFactory.getFactory().getProductoServiceIf().eliminarProducto(producto);
-                DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                
+                ServiceFactory.getFactory().getProductoServiceIf().eliminarProducto(producto,ModoProcesarEnum.NORMAL);
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
             } catch (RemoteException ex) {
                 Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
+                
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-                throw new ExcepcionCodefacLite(ex.getMessage());
+                
+                //Preguntar si desea procesar el producto de forma forzada
+                Boolean continuar = DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.PROCESAR_MODO_FORZADO);
+                if(continuar)
+                {
+                    try {
+                        ServiceFactory.getFactory().getProductoServiceIf().eliminarProducto(producto,ModoProcesarEnum.FORZADO);
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+                    } catch (ServicioCodefacException ex1) {                        
+                        Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex1);
+                        DialogoCodefac.mensaje(new CodefacMsj(ex1.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+                        throw new ExcepcionCodefacLite(ex.getMessage());
+                    }
+                }
+                else
+                {
+                    throw new ExcepcionCodefacLite(ex.getMessage());
+                }
+                
             }
         //}
     }

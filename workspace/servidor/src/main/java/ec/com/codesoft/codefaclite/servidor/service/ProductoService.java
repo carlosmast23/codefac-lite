@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
@@ -730,7 +731,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
     }
     
-    public void eliminarProducto(Producto p) throws ServicioCodefacException, RemoteException
+    public void eliminarProducto(Producto p,ModoProcesarEnum modoProcesar) throws ServicioCodefacException, RemoteException
     {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -766,8 +767,12 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         }
                     }
 
-                    if (stockPositivoBodega.size() > 0) {
-                        throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: " + UtilidadesLista.castListToString(stockPositivoBodega, ","));
+                    //Solo procesar esta comprobacion cuando sea en modo normal
+                    if(modoProcesar.equals(ModoProcesarEnum.NORMAL))
+                    {
+                        if (stockPositivoBodega.size() > 0) {
+                            throw new ServicioCodefacException("No se puede eliminar el producto porque tiene stock en las bodegas: " + UtilidadesLista.castListToString(stockPositivoBodega, ","));
+                        }
                     }
                 }
 

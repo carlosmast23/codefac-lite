@@ -40,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -152,7 +153,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             if(ex.getProcesarModoForzado())
             {
-                Boolean coninuar= DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea procesar en MODO FORZADO ?", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                Boolean coninuar = DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.PROCESAR_MODO_FORZADO);
                 if(coninuar)
                 {
                     procesarModoForzado=true;
