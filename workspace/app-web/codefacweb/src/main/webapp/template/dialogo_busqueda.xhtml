@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
         <title>Buscador</title>
@@ -21,6 +22,8 @@
                 selectionMode="single"
                 selection="#{dialogoBuscarMb.objetoSeleccionado}"
                 lazy="true"
+                scrollable="true" 
+                scrollHeight="100%"
                 >
 
                 <p:ajax event="rowSelect" listener="#{dialogoBuscarMb.filaSeleccionada}" update="@this" />
@@ -44,8 +47,16 @@
                     >
 
 <!--<h:outputText value="#{objeto}"/>   -->
-                    <h:outputText value="#{dialogoBuscarMb.buscarValorObjecto(objeto,propiedad)}"/>
-
+                    <ui:fragment rendered="#{dialogoBuscarMb.verificarValorEsImagen(objeto, propiedad)}">                        
+                        <p:graphicImage  value="${imagenMb.imageProducto}" width="200px">
+                            <f:param name="imagenPath" value="#{dialogoBuscarMb.buscarValorObjecto(objeto,propiedad)}" />
+                            <f:param name="empresaId" value="#{sessionMb.session.empresa.id.toString()}" />
+                        </p:graphicImage>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!dialogoBuscarMb.verificarValorEsImagen(objeto, propiedad)}">
+                        <h:outputText value="#{dialogoBuscarMb.buscarValorObjecto(objeto,propiedad)}"/>
+                    </ui:fragment>
+                    
                 </p:columns>
 
                 <!--<p:column style="width:32px;text-align: center">

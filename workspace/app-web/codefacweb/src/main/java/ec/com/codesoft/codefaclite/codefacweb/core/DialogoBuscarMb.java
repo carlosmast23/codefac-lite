@@ -33,7 +33,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PrimeFaces;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
+import java.util.Map;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import java.util.HashMap;
 import org.primefaces.event.SelectEvent;
@@ -174,6 +175,15 @@ public class DialogoBuscarMb implements Serializable {
         }
         return propiedades;
     }*/
+    public Boolean verificarValorEsImagen(Object objetoBase, String propiedad) {
+        Object valorBuscado= buscarValorObjecto(objetoBase,propiedad);
+        if(valorBuscado instanceof String)
+        {
+            return UtilidadImagen.verificarTextoEsImagen(valorBuscado+"");
+        }
+        return false;  
+    }
+    
 
     public Object buscarValorObjecto(Object objetoBase, String propiedad) {
 

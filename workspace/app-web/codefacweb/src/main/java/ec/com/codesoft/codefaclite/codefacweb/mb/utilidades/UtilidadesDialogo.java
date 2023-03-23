@@ -20,7 +20,6 @@ import org.primefaces.PrimeFaces;
 public abstract class UtilidadesDialogo {
     
     public static void abrirDialogoBusqueda(InterfaceModelFind modeloBusqueda) {
-        //find();
         //System.out.println("Abriendo dialogo busqueda");
 
         //Establecer objeto de la clase que tiene la implemetacion del dialogo de busqueda que necesito para construir el dialogo web
@@ -34,7 +33,9 @@ public abstract class UtilidadesDialogo {
         options.put("draggable", false);
         options.put("modal", true);
         options.put("responsive", true);
-        options.put("width", "80%");
+        options.put("width", "100%");
+        options.put("height", "100%");
+        options.put("contentHeight", "100%");
         options.put("contentWidth", "100%");
         //responsive="true"
         //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto

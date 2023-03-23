@@ -164,5 +164,20 @@ public abstract class UtilidadImagen {
         // Return the buffered image
         return bimage;
     }
+    
+    /**
+     * Verifica si la cadena ingresada es una imagen
+     * @param text
+     * @return 
+     */
+    public static boolean verificarTextoEsImagen(String text) {
+        String[] imageExtensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp"};
+        for (String extension : imageExtensions) {
+            if (text.toLowerCase().endsWith(extension)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

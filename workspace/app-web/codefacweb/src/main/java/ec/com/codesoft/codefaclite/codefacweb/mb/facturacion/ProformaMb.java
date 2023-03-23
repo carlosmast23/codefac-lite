@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Client
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ComandaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoImagenBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
@@ -443,7 +444,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
 
     public void abrirDialogoBusquedaProducto() {
-        ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa(),true,false);
+        //ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa(),true,false);
+        ProductoBusquedaDialogo dialogModel= new ProductoImagenBusquedaDialogo(sessionMb.getSession().getEmpresa(), true, false);
         //dialogModel.setBuscarFiltroMarca(false);
         //abrirDialogoBusqueda(dialogModel);
         UtilidadesDialogo.abrirDialogoBusqueda(dialogModel);

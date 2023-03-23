@@ -22,7 +22,7 @@ public class TestEncriptar {
             //String datosEncriptado=UtilidadesEncriptar.encriptar("2020-09-01",ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             //System.out.println(datosEncriptado);
             //System.out.println(UtilidadesEncriptar.desencriptar("5gdOfWztXqM\\=", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-            String datosSinEncriptar=UtilidadesEncriptar.desencriptar("4L1OV/0Q2Bk/bFIlKhK0n4yPiBAXFxq5", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            String datosSinEncriptar=UtilidadesEncriptar.desencriptar("Ks/dlVSXNhQ\\=", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
             
             //String datosSinEncriptar=UtilidadesEncriptar.encriptar("oxalenyxgrdgdlrs", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR); 
             System.out.println(datosSinEncriptar);

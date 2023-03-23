@@ -85,7 +85,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
                 queryStringFecha+=" AND  cs.fechaHoraCierre<=?5 ";
             }
 
-            stringQuery += queryStringFecha;
+            stringQuery += queryStringFecha+" ORDER BY cs.fechaHoraApertura DESC";
             Query query = getEntityManager().createQuery(stringQuery);
                         
             //query.setParameter(3, CajaSessionEnum.FINALIZADO.getEstado());

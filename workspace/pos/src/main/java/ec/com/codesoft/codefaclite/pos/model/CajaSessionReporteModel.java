@@ -111,7 +111,9 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                         fechaCierreStr=format.format(cs.getFechaHoraCierre());
                     }
                     
-                    dataReporte.add(
+                    if(cs.getCaja()!=null)
+                    {
+                        dataReporte.add(
                             new CajaSessionReporteData(
                                     cs,
                                     cs.getCaja().getNombre(),
@@ -124,6 +126,12 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                                     (cs.getValorCierre()!=null)?cs.getValorCierre().toString():"",
                                     (cs.getEstadoCierreCaja()!=null)?cs.getEstadoCierreCaja():""
                             ));
+                    }          
+                    else
+                    {
+                        Logger.getLogger(CajaSessionReporteModel.class.getName()).log(Level.WARNING,"Erro con caja session que no tiene asignado un caja: "+cs.getId());
+                    }
+                    
                 });
             }
             
