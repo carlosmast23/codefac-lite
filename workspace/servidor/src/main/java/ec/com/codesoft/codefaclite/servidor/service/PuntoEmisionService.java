@@ -159,5 +159,22 @@ public class PuntoEmisionService extends ServiceAbstract<PuntoEmision,PuntoEmisi
         
     }
     
+    public List<PuntoEmision> obtenerTodosActivos() throws ServicioCodefacException, RemoteException
+    {
+        return (List<PuntoEmision>)ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                List<PuntoEmision> resultados = getFacade().findByMap(mapParametros);
+                //if (resultados.size() > 0) {
+                //    return resultados.get(0);
+                //}
+                return resultados;
+            }
+        });
+    }
+    
     
 }

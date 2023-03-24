@@ -59,6 +59,21 @@ public class UtilidadesArchivos {
         }
     }
     
+    public static boolean verificarExiteArchivoOCrear(String path)
+    {
+        if(!verificarExiteArchivo(path))
+        {
+            try {
+                File file = new File(path);
+                file.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(UtilidadesArchivos.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public static boolean renombrarArchivo(File file,String nuevoNombre)
     {
         try {

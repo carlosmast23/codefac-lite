@@ -5,15 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.main.archivos;
 
-import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.configuration.ConfigurationException;

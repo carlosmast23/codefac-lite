@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.licence.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaExcepcion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac.ModoActualizacionEnum;
 import ec.com.codesoft.codefaclite.main.model.ConfiguracionesInicalesModel;
 import ec.com.codesoft.codefaclite.main.model.DescargaModel;
@@ -487,6 +488,7 @@ public class Main {
                 PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
                 String ipServidorDefecto=propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_IP_SERVIDOR);
                 
+                
                 //Si no encuentra una ip fija ,el sistema busca una ip por defecto
                 if(ipServidorDefecto==null || ipServidorDefecto.isEmpty())
                 {
@@ -502,6 +504,11 @@ public class Main {
                 cargarRecursosRmiServidor(ipServidor); 
                                 
                 cargarRecursosRmiCliente(ipServidor);
+                
+                /**
+                 * COMPROBACION DE INTEGRIDAD DE LOS DATOS
+                 */
+                comprobacionIntegridadDatosConArchivo();
                 
                 //Iniciar proceso de tareas programadas
                 TareasProgramadasCodefac.getInstance().iniciar();
@@ -625,6 +632,21 @@ public class Main {
 
     }
     
+    /**
+     * Este metodo va a permitir verificar si existe integridad de los datos para evitar problemas
+     * por ejemplo cuando se apaga o se cierra de golpe el sistema
+     */
+    public static void comprobacionIntegridadDatosConArchivo()
+    {
+        LOG.log(Level.INFO, "Verificando Integridad de los Datos ...");
+        ArchivoComprobacionCodefac archivo = ArchivoComprobacionCodefac.getInstance();
+        List<String> errorList=archivo.comprobarIntegridadDatos();
+        if(errorList.size()>0)
+        {
+            String errores=UtilidadesLista.castListToString(errorList,"\n");
+            DialogoCodefac.mensaje(new CodefacMsj("Error GRAVE DE INTEGRIDAD DE DATOS, porfavor antes de continuar llame a una persona de soporte.\n"+errores, CodefacMsj.TipoMensajeEnum.ERROR));
+        }
+    }
     
     
     private static void cargarConfiguracionIpPublica(PropertiesConfiguration propiedadesIniciales)

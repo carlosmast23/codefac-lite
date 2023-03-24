@@ -69,6 +69,7 @@ import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
 import static ec.com.codesoft.codefaclite.main.init.Main.modoAplicativo;
 import static ec.com.codesoft.codefaclite.main.init.Main.obtenerPerfilesUsuario;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
@@ -513,6 +514,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             {
                 try {
                     //opcion de salir
+                    
+                    //Grabar datos para saber la concurrencia de los datos
+                    ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
                     
                     DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
                         @Override

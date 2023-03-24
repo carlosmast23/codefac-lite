@@ -83,6 +83,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleF
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
@@ -531,9 +532,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
                 //Genero un LOG DE LAS VENTAS para tener un registro en los logs por algun caso si la base de datos falla
                 Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Procesando factura # :"+ factura.getPreimpreso()+" | fecha de emisión: "+factura.getFechaEmision()+" | cliente: "+factura.getRazonSocial()+" | documento: "+factura.getCodigoDocumentoEnum().getNombre()+" | iva: "+factura.getIva()+" | total: "+factura.getTotal());
-                
+                //Genero un Log de los detalles de las ventas
+                for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
+                {
+                    Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Código: "+ facturaDetalle.getCodigoPrincipal()+" | Nombre: "+facturaDetalle.getDescripcion()+" | ValUnit: "+facturaDetalle.getPrecioUnitario()+" | Cantidad: "+facturaDetalle.getCantidad()+" | Desc: "+facturaDetalle.getDescuento());
+                }
             }
         });
+        ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
         return factura;
     }
 
