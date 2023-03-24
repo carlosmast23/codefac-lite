@@ -556,7 +556,6 @@ public class FacturaReporteModel extends FacturaReportePanel {
          * Cargar los tipos de reporte
          */
         UtilidadesComboBox.llenarComboBox(getCmbTipoReporte(),TipoReporteEnum.values());
-        //getCmbTipoReporte().
         
         ///Para el reporte de facturacion no me importa que sean visibles estos campos del referido
         getLblReferido().setVisible(false);
@@ -661,6 +660,18 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 }
             }
         });
+        
+        getCmbTipoReporte().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tipoReporteListener();
+            }
+        });
+    }
+    
+    private void tipoReporteListener()
+    {
+        getBtnBuscar().doClick();
     }
 
     protected void listenerChecks() {
