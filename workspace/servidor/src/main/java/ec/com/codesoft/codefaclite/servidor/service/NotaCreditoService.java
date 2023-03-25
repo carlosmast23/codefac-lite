@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -211,7 +212,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
 
             }
         });
-        
+        ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
         return notaCredito;
     }
     

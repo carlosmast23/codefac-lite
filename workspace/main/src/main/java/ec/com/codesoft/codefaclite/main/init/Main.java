@@ -74,6 +74,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
@@ -645,6 +646,21 @@ public class Main {
         {
             String errores=UtilidadesLista.castListToString(errorList,"\n");
             DialogoCodefac.mensaje(new CodefacMsj("Error GRAVE DE INTEGRIDAD DE DATOS, porfavor antes de continuar llame a una persona de soporte.\n"+errores, CodefacMsj.TipoMensajeEnum.ERROR));
+            //Preguntar si desea continuar para que ingresen la clave de seguridad y que los secuenciales se muevan de forma automatica
+            String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+            if(UtilidadesSistema.verificarClaveSoporte(claveIngresada))
+            {
+                //Actualizar los secuenciales en el archivo de comprobacion en la base de datos para que por el momento puedan seguir continuando
+                if(DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea corregir los secuenciales?\nNOTA: Recuerde que los comprobantes con problemas tienen que ingresar manualmente.   ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
+                {
+                    archivo.corregirDatosComprobacion();
+                }                
+            }
+            else
+            {
+                //Si la clave es incorrecto termino el sistema y no les permito abrir
+                System.exit(0);
+            }
         }
     }
     

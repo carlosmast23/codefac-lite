@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.main.model.DescargaModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
@@ -80,8 +81,7 @@ public class ActualizarVersionCodefac {
                     }
                     
                     //Poner una clave para Actualizar el sistema y evitar que los usuarios actualicen sin autorización
-                    //UtilidadesSistema.
-                    String claveIngresada=JOptionPane.showInputDialog(null,"Ingrese la clave otorgada por el soporte de Codefac: ");
+                    String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
                     if(!UtilidadesSistema.verificarClaveSoporte(claveIngresada))
                     {
                         DialogoCodefac.mensaje(new CodefacMsj("Proceso cancelado, error con las credenciales", CodefacMsj.TipoMensajeEnum.ERROR));

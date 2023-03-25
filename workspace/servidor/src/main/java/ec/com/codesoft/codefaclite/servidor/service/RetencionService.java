@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac.CODIGO_NO_APLICA_RETENCIONES;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -130,6 +131,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         //EntityTransaction transaction = getTransaccion();
         //transaction.begin();        
         //transaction.commit();
+        ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
         return entity;
     }
     

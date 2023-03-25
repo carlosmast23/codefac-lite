@@ -29,17 +29,36 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
     
     private static final String NOMBRE_ARCHIVO_CONFIGURACION = "comprobacion.codefac";
     
+    private List<PuntoEmision> puntoEmisionCorregidoList;
+    
     @Override
     public String getNombreArchivo() {
         return NOMBRE_ARCHIVO_CONFIGURACION;
     }
+    /**
+     * Metodo que por el momento va a corregir en la base de datos los secuenciales para que puedan seguir trabajando
+     */
+    public void corregirDatosComprobacion()
+    {
+        //TODO: Mejorar esta parte creando un servicio para mandar directamente una lista al servicio en el servidor
+        for (PuntoEmision puntoEmision : puntoEmisionCorregidoList) {
+            try {
+                ServiceFactory.getFactory().getPuntoVentaServiceIf().editar(puntoEmision);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ArchivoComprobacionCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ArchivoComprobacionCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     
     public List<String> comprobarIntegridadDatos()
     {
+        puntoEmisionCorregidoList=new ArrayList<PuntoEmision>();
         List<String> errores=new ArrayList<String>();
         HashMap<String,String> mapValores= obtenerTodosLosValores();
          
-        PuntoEmision puntoEmision=null;
+        //PuntoEmision puntoEmision=null;
         for (Map.Entry<String, String> entry : mapValores.entrySet()) 
         {
             try {
@@ -53,42 +72,51 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
                 String nombreDocumento=claveDatos[1];
                 
                 //Consultar si es el mismo punto de emision o tengo que consultar otro
-                if(!(puntoEmision!=null && puntoEmision.getId().equals(idPuntoEmision)))
-                {
-                    ServiceFactory.getFactory();
-                    ServiceFactory.getFactory().getPuntoVentaServiceIf();
-                    
+                PuntoEmision puntoEmision=buscarPuntoEmisionPorId(idPuntoEmision);
+                if(puntoEmision==null)
+                {               
+                    //Si no existe el punto de emision entonces consulto de nuevo
                     puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().buscarPorId(idPuntoEmision);
                 }
+                
+                
                 
                 Integer secuencial=null;
                 if(nombreDocumento.equals(DocumentoEnum.FACTURA.getNombre()))
                 {
                     secuencial=puntoEmision.getSecuencialFactura();
+                    puntoEmision.setSecuencialFactura(secuencialArchivo);
                 }
                 else if(nombreDocumento.equals(DocumentoEnum.NOTA_VENTA_INTERNA.getNombre()))
                 {
                     secuencial=puntoEmision.getSecuencialNotaVentaInterna();
+                    puntoEmision.setSecuencialNotaVentaInterna(secuencialArchivo);
                 }
                 else if(nombreDocumento.equals(DocumentoEnum.NOTA_VENTA.getNombre()))
                 {
                     secuencial=puntoEmision.getSecuencialNotaVenta();
+                    puntoEmision.setSecuencialNotaVenta(secuencialArchivo);
                 }
                 else if(nombreDocumento.equals(DocumentoEnum.RETENCIONES.getNombre()))
                 {
                     secuencial=puntoEmision.getSecuencialRetenciones();
+                    puntoEmision.setSecuencialRetenciones(secuencialArchivo);
                 }
                 else if(nombreDocumento.equals(DocumentoEnum.GUIA_REMISION.getNombre()))
                 {
                     secuencial=puntoEmision.getSecuencialGuiaRemision();
+                    puntoEmision.setSecuencialGuiaRemision(secuencialArchivo);
                 }
                 else if(nombreDocumento.equals(DocumentoEnum.NOTA_CREDITO.getNombre()))
                 {
                     secuencial=puntoEmision.getSecuencialNotaCredito();
+                    puntoEmision.setSecuencialNotaCredito(secuencialArchivo);
                 }
                 
                 compararSecuencialConDocumento(nombreDocumento, secuencialArchivo, secuencial, errores);
                 
+                //Gragar el punto de emision corregido para ver si luego quiere actualizar esos datos
+                agregarPuntoEmisionCorregido(puntoEmision);
 
                 
             } catch (RemoteException ex) {
@@ -98,9 +126,37 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
         return errores;
     }
     
+    private PuntoEmision buscarPuntoEmisionPorId(Long id)
+    {
+        for (PuntoEmision puntoEmision : puntoEmisionCorregidoList) {
+            if(puntoEmision.getId().equals(id))
+            {
+                return puntoEmision;
+            }
+        }
+        return null;
+    }
+   
+    private void agregarPuntoEmisionCorregido(PuntoEmision puntoEmision)
+    {
+        int indiceElemento=puntoEmisionCorregidoList.indexOf(puntoEmision);
+        if(indiceElemento!=-1)
+        {
+            puntoEmisionCorregidoList.remove(indiceElemento);
+            //Si ya encuentra el dato actualizar
+            //puntoEmisionCorregidoList.set(indiceElemento, puntoEmision);
+        }
+        puntoEmisionCorregidoList.add(puntoEmision);
+        //else
+        //{
+            
+        //}
+    }
+    
     private void compararSecuencialConDocumento(String nombreDocumento,Integer secuencialArchivo,Integer secuencialBaseDatos,List<String> errores)
     {
         if (!secuencialBaseDatos.equals(secuencialArchivo)) {
+            Logger.getLogger(ArchivoComprobacionCodefac.class.getName()).log(Level.SEVERE,"Error de comprobacion secuencial: "+nombreDocumento+" | SecuencialDB: "+secuencialBaseDatos+" | SecuencialArchivo: "+secuencialArchivo);
             errores.add(nombreDocumento + "[" + (secuencialArchivo-secuencialBaseDatos) + "]");
         }
     }
@@ -154,5 +210,6 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
             return nombre;
         }
     }
+    
     
 }

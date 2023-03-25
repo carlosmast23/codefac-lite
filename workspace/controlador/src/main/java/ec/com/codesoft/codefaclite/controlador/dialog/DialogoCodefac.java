@@ -51,6 +51,11 @@ public abstract class DialogoCodefac {
         mensaje(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje.getCodigo());
     }
     
+    public static String mensajeTextoIngreso(CodefacMsj codefacMsj)
+    {
+       return JOptionPane.showInputDialog(null,codefacMsj.mensaje);
+    }
+    
     @Deprecated
     public static void mensaje(String mensaje,Integer tipoMensaje)
     {
