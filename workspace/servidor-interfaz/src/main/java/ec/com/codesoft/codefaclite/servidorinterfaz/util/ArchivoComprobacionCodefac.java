@@ -27,7 +27,7 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
     private final static String SEPARADOR="-"; 
     private static ArchivoComprobacionCodefac instanciaEstatica;
     
-    private static final String NOMBRE_ARCHIVO_CONFIGURACION = "comprobacion.txt";
+    private static final String NOMBRE_ARCHIVO_CONFIGURACION = "comprobacion.codefac";
     
     @Override
     public String getNombreArchivo() {
