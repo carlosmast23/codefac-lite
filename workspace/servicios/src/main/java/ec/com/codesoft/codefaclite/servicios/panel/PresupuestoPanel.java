@@ -143,6 +143,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         lblTotalServicios = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
         txtKilometraje = new javax.swing.JTextField();
+        jLabel31 = new javax.swing.JLabel();
+        txtVentaRelacionada = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -580,7 +582,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel8, gridBagConstraints);
 
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         btnAgregarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
@@ -910,10 +911,10 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         getContentPane().add(jToolBar3, gridBagConstraints);
 
         jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel30.setText("Tiempo Validez:");
+        jLabel30.setText("Venta Relacionada:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel30, gridBagConstraints);
@@ -926,6 +927,28 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtKilometraje, gridBagConstraints);
+
+        jLabel31.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel31.setText("Tiempo Validez:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel31, gridBagConstraints);
+
+        txtVentaRelacionada.setEditable(false);
+        txtVentaRelacionada.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtVentaRelacionada.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtVentaRelacionada, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -974,6 +997,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1027,6 +1051,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JTextField txtProductoDetalle;
     private javax.swing.JTextField txtProveedorDetalle;
     private javax.swing.JTextField txtSubtotalVentas;
+    private javax.swing.JTextField txtVentaRelacionada;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnCliente() {
@@ -1422,6 +1447,13 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         this.txtKilometraje = txtKilometraje;
     }
 
-    
+    public JTextField getTxtVentaRelacionada() {
+        return txtVentaRelacionada;
+    }
+
+    public void setTxtVentaRelacionada(JTextField txtVentaRelacionada) {
+        this.txtVentaRelacionada = txtVentaRelacionada;
+    }
+
     
 }

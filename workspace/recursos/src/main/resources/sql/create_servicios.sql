@@ -101,13 +101,15 @@ create table PRESUPUESTO
     DESCRIPCION varchar(150),
     OBSERVACIONES varchar(150),
     ESTADO varchar(1),
-    FECHA_CREACION date,
+    FECHA_CREACION timestamp,
     FECHA_PRESUPUESTO date,
     FECHA_VALIDEZ date,
     DESCUENTO_COMPRA decimal(13,2),
     DESCUENTO_VENTA decimal(13,2),
     TOTAL_COMPRA decimal(13,2),
     TOTAL_VENTA decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.0.7)*/
+    FACTURA_ID BIGINT,
     
     ORDEN_TRABAJO_DETALLE_ID BIGINT,
     primary key(ID)

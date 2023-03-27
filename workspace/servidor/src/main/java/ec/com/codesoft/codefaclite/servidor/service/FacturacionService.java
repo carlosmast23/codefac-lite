@@ -999,7 +999,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             OrdenTrabajoService ordenTrabajoService=new OrdenTrabajoService();
             ordenTrabajoService.actualizarEstadoSinTransaccion(presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
             
-        
+            //Agregado una referencia de la venta al presupuesto para luego consultar de una manera más rapida
+            presupuesto.setFactura(detalle.getFactura());
+            entityManager.flush();
 
     }
     

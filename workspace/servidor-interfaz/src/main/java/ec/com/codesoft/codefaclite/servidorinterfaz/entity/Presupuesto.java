@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +69,7 @@ public class Presupuesto implements Serializable
     
     //Todo: Cambiar el nombre por fecha creacion , para saber que es la fecha cuando se creo
     @Column(name = "FECHA_CREACION")
-    private Date fechaCreacion;
+    private Timestamp fechaCreacion;
     
     @Column(name = "FECHA_PRESUPUESTO")
     private Date fechaPresupuesto;    
@@ -106,6 +107,9 @@ public class Presupuesto implements Serializable
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne
     private CatalogoProducto catalogoProducto;
+    
+    @JoinColumn(name = "FACTURA_ID")
+    private Factura factura;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuesto", fetch = FetchType.EAGER)
     private List<PresupuestoDetalle>  presupuestoDetalles;
@@ -151,11 +155,11 @@ public class Presupuesto implements Serializable
         this.estado = estadoEnum.getLetra();
     }
 
-    public Date getFechaCreacion() {
+    public Timestamp getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(Timestamp fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
@@ -284,6 +288,15 @@ public class Presupuesto implements Serializable
     public void setSucursal(Sucursal sucursal) {
         this.sucursal = sucursal;
     }
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
+    }
+    
     
     
     

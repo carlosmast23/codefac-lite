@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -33,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -61,28 +63,40 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         this.presupuestoFacade = new PresupuestoFacade();
     }
     
+    private void validacion(Presupuesto entity) throws ServicioCodefacException
+    {
+        if (entity.getTotalVenta() == null || entity.getTotalVenta().compareTo(BigDecimal.ZERO) == 0) {
+            throw new ServicioCodefacException("Error al grabar, el total del presupuesto no puede ser 0");
+        }
+    }
+    
     public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
     {
         return (Presupuesto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
         {
             @Override
             public Object transaccion() throws ServicioCodefacException, RemoteException 
-            {
-                if (entity.getTotalVenta() == null || entity.getTotalVenta().compareTo(BigDecimal.ZERO) == 0) 
-                {
-                    throw new ServicioCodefacException("Error al grabar, el total del presupuesto no puede ser 0");
-                }
-                
+            {                
+                validacion(entity);
                 entity.getOrdenTrabajoDetalle().setEstado(OrdenTrabajoDetalle.EstadoEnum.PRESUPUESTADO.getLetra());
+                entity.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
+                
+                //Grabar la entidad de PRESUPUESTO sin tomar en cuenta los detalles para evitar duplicaciones
+                List<PresupuestoDetalle> presupuestoDetalleList=entity.getPresupuestoDetalles();
+                entity.setPresupuestoDetalles(null);
+                
+                //Grabando la factura si la referencia de los detalles
+                entityManager.persist(entity);
+                entityManager.flush();
 
                 /**
                  * Recorro todos los detalles para verificar si existe todos los
                  * productos proveedor o los grabo o los edito con los nuevos
                  * valores
                  */
-                if (entity.getPresupuestoDetalles() != null) 
+                if (presupuestoDetalleList != null) 
                 {
-                    for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) 
+                    for (PresupuestoDetalle presupuestoDetalle : presupuestoDetalleList) 
                     {
                         
                         //Uso este artificio para cuando utilizo id negativos para hacer comprobaciones en la vista
@@ -97,10 +111,16 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                             entityManager.merge(presupuestoDetalle.getProductoProveedor());
                         }
                         entityManager.flush();
+                        
+                        //GRABAR los detalles de los presupuestos
+                        presupuestoDetalle.setPresupuesto(entity);
+                        entityManager.persist(presupuestoDetalle);
+                        
                         crearActividadesPresupuesto(presupuestoDetalle);
                     }
                 }
                 
+                entity.setPresupuestoDetalles(presupuestoDetalleList);
                 ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(entity);
                 
                 entityManager.persist(entity);
@@ -153,7 +173,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
 
     }
     
-    private void crearActividadesPresupuesto(PresupuestoDetalle presupuestoDetalle)throws ServicioCodefacException
+    private void crearActividadesPresupuesto(PresupuestoDetalle presupuestoDetalle)throws ServicioCodefacException, RemoteException
     {
         Producto producto=presupuestoDetalle.getProducto();
         if(producto.getTipoProductoEnum().equals(TipoProductoEnum.SERVICIO))
@@ -165,15 +185,16 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                 PresupuestoDetalleActividad actividadPresupuesto=new PresupuestoDetalleActividad();
                 actividadPresupuesto.setProductoActividad(actividad);
                 actividadPresupuesto.setTerminado(EnumSiNo.NO);
-                entityManager.persist(actividadPresupuesto);
-                
-                //Hago este artificio porque si no se hace de esa manera genera un error de persistencia
-                presupuestoDetalle=entityManager.merge(presupuestoDetalle);
                 actividadPresupuesto.setPresupuestoDetalle(presupuestoDetalle);
-                //entityManager.flush();
+                entityManager.persist(actividadPresupuesto);
+                entityManager.flush();
+                //Hago este artificio porque si no se hace de esa manera genera un error de persistencia
+                //presupuestoDetalle=ServiceFactory.getFactory().getPresupuestoDetalleServiceIf().buscarPorId(presupuestoDetalle.getId());
+                
+                
                 
                 productoActividadList.add(actividadPresupuesto);
-                entityManager.flush();                
+                //entityManager.flush();                
             }
            
             //Agregar toda la lista al presupuesto detalle

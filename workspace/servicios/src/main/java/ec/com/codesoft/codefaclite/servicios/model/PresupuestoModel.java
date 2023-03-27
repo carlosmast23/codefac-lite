@@ -432,6 +432,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             cargarDetallesOrdenTrabajo(this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
             getCmbFechaPresupuesto().setDate(this.presupuesto.getFechaPresupuesto());
             
+            //Cargar los datos de la factura en el caso que tenga relacionada una venta
+            getTxtVentaRelacionada().setText((presupuesto.getFactura()!=null)?presupuesto.getFactura().getPreimpreso():"");
+            
             if(this.presupuesto.getFechaValidez()!=null)
             {
                 getTxtDiasPresupuesto().setText("" + UtilidadesFecha.obtenerDistanciaDias(this.presupuesto.getFechaPresupuesto(), this.presupuesto.getFechaValidez()));
@@ -465,6 +468,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getTxtKilometraje().setText("");
         this.getLblTotalProductos().setText("0.00");
         this.getLblTotalServicios().setText("0.00");
+        this.getTxtVentaRelacionada().setText("");
         getBtnAgregarDetalle().setEnabled(true);
         initDatosTabla();
     }
@@ -1392,7 +1396,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             {
                 DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
-            this.presupuesto.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+            //Todo: Setear este dato al momento de crear en el servidor
+            this.presupuesto.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
             
             /**
              * Grabar los totales de la venta
