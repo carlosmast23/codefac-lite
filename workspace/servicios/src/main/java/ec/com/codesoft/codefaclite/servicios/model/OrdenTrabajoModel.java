@@ -130,20 +130,20 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     @Override
     public void editar() throws ExcepcionCodefacLite {
-      try {
-          
+        try {
             setearDatos();
             OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf(); 
             servicio.editar(this.ordenTrabajo);
             DialogoCodefac.mensaje("Correcto","La Ordem de Trabajo fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             limpiar();
-            
-      } 
-      catch (RemoteException ex) 
-      {
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
-      }
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
+        } catch (RemoteException ex) {
+            Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+
     }
 
     @Override

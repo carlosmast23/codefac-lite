@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
@@ -70,10 +71,32 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     public List<OrdenTrabajo> obtenerTodos() {
         return ordenTrabajoFacade.findAll();
     }
+    
+    private void validar(OrdenTrabajo ordenTrabajo,CrudEnum crudEnum) throws RemoteException,ServicioCodefacException
+    {
+        if(crudEnum.equals(CrudEnum.EDITAR))
+        {
+            //Consultar la orden Original para saber el estado
+            OrdenTrabajo ordenTrabajoTmp=getFacade().find(ordenTrabajo.getId());
+            //OrdenTrabajo ordenTrabajoTmp= buscarPorId(ordenTrabajo.getId());
+            if(ordenTrabajoTmp.getEstadoEnum().equals(OrdenTrabajo.EstadoEnum.FINALIZADO))
+            {
+                throw new ServicioCodefacException("No se pueden editar ordenes Finalizadas");
+            }
+        }
+    }
 
     @Override
-    public void editar(OrdenTrabajo ordenTrabajo) {
-        ordenTrabajoFacade.edit(ordenTrabajo);
+    public void editar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException {        
+        validar(ordenTrabajo,CrudEnum.EDITAR);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {                
+                entityManager.merge(ordenTrabajo);
+                //ordenTrabajoFacade.edit(ordenTrabajo);
+            }
+        });
+        
     }
 
     @Override
