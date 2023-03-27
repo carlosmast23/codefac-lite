@@ -1403,7 +1403,7 @@ public class CompraModel extends CompraPanel{
      */
     private void mostrarDatosTabla()
     {
-        String[] titulo={"","Código","Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Desc","Val Unit","Total"};
+        String[] titulo={"","Código","Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Desc","Val Unit","Utilidad","Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         for (CompraDetalle detalle : detalles) {
@@ -1424,6 +1424,7 @@ public class CompraModel extends CompraPanel{
             fila.add((detalle.getValorSriRetencionRenta()!=null)?detalle.getValorSriRetencionRenta().setScale(3,RoundingMode.HALF_UP)+"":"");
             fila.add(detalle.getDescuento()+"");
             fila.add(detalle.getPrecioUnitario().setScale(4, RoundingMode.HALF_UP)+"");
+            fila.add(detalle.calcularUtilidadRedondeada()+"");
             fila.add(detalle.getSubtotal().setScale(4, RoundingMode.HALF_UP)+"");
             this.modeloTablaDetallesCompra.addRow(fila);
         }

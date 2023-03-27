@@ -337,6 +337,13 @@ public class CompraDetalle extends DetalleFacturaNotaCeditoAbstract implements S
      * Metodos adicionales
      */
     
+    public BigDecimal calcularUtilidadRedondeada()
+    {
+        //TODO: Tomar en cuenta que el calculo se esta tomando en cuenta no que lleva iva y el calculo se lo esta haciendo por unidad
+        BigDecimal valorTotal= productoProveedor.getProducto().getValorUnitario().subtract(getPrecioUnitario()).setScale(2, RoundingMode.HALF_UP);
+        return valorTotal;
+    }
+    
     
     /**
      * Verificar si el producto esta cobrando iva 0
