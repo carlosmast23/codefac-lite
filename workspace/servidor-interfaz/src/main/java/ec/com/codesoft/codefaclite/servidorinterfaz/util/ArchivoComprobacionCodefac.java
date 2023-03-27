@@ -77,6 +77,10 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
                 {               
                     //Si no existe el punto de emision entonces consulto de nuevo
                     puntoEmision=ServiceFactory.getFactory().getPuntoVentaServiceIf().buscarPorId(idPuntoEmision);
+                    if(puntoEmision==null)
+                    {
+                        continue;
+                    }
                 }
                 
                 

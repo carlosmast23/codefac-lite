@@ -28,6 +28,10 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 /**
  *
@@ -42,8 +46,10 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
     public void iniciar() throws ExcepcionCodefacLite, RemoteException 
     {
         controlador = new CajaSesionModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
-        this.controlador.iniciar();
+        
     }
+    
+    
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
@@ -130,19 +136,7 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         }
         else
         {    
-            /*BigDecimal totalVentas = BigDecimal.ZERO;
-            totalVentas = cajaSession.getValorApertura();
-            
-            if(totalVentas==null)
-            {
-                totalVentas=BigDecimal.ZERO;
-            }
 
-            //Total mejorar esta parte
-            for(IngresoCaja ingresoCaja: cajaSession.getIngresosCaja())
-            {
-                totalVentas = totalVentas.add(ingresoCaja.getValor());
-            }*/
             BigDecimal totalVentas =cajaSession.calcularValorCierreTeorico();
             
             getjTextValorCierreTeorico().setText("" + totalVentas);

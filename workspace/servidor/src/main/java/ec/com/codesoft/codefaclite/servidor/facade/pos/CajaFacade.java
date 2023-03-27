@@ -36,7 +36,8 @@ public class CajaFacade extends AbstractFacade<Caja>{
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(1, usuario);
             query.setParameter(2, CajaEnum.ACTIVO.getEstado());
-            return query.getResultList();
+            List resultado=query.getResultList();
+            return resultado;
            
         } 
         catch (NoResultException e) 

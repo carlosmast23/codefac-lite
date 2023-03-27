@@ -55,35 +55,43 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         
-        cajaSession = new CajaSession();       
+        //limpiarDatos();
+    }
+    
+    public void cargarDatosIniciales()
+    {
+        try {
+            CajaServiceIf cajaServiceIf = ServiceFactory.getFactory().getCajaServiceIf();
+            cajasList = cajaServiceIf.buscarCajasAutorizadasPorUsuario(session.getUsuario());
+            System.out.println("cargando datos una sola vez ...");
+            
+            cajaSessionList = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuario(session.getUsuario());
+        } catch (RemoteException ex) {
+            Logger.getLogger(CajaSesionModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void limpiarDatos() 
+    {
+        cajaSession = new CajaSession();
         cajaSession.setUsuario(this.session.getUsuario());
         cajaSession.setEstadoSessionEnum(CajaSessionEnum.ACTIVO);
         cajaSession.setValorCierreReal(BigDecimal.ZERO);
-        
         estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
         estadoCajaSessionList = UtilidadesLista.arrayToList(CajaSessionEnum.values());
-        
-        CajaServiceIf cajaServiceIf = ServiceFactory.getFactory().getCajaServiceIf();
-        cajasList = cajaServiceIf.buscarCajasAutorizadasPorUsuario(session.getUsuario());
-        
-        if(cajasList.size()>0)
-        {
-            cajaSession.setCaja(cajasList.get(0));       
+        if (cajasList!=null && cajasList.size() > 0) {
+            cajaSession.setCaja(cajasList.get(0));
         }
-        
         //Consultar las cajas session que tenga activas
-        cajaSessionList=ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuario(session.getUsuario());
-        if(cajaSessionList.size()>0)
-        {
-            cajaSessionSeleccionada=cajaSessionList.get(0);
+        if (cajaSessionList!=null && cajaSessionList.size() > 0) {
+            cajaSessionSeleccionada = cajaSessionList.get(0);
             cargarDatosPantalla(cajaSessionSeleccionada);
         }
-        
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
-        this.iniciar();
+        //limpiarDatos();
     }
 
     @Override
@@ -156,11 +164,8 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
 
     @Override
     public void limpiar(){
-        try {
-            this.iniciar();
-        } catch (ExcepcionCodefacLite | RemoteException ex) {
-            Logger.getLogger(CajaSesionModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        cargarDatosIniciales();
+        limpiarDatos();
     }
 
     @Override

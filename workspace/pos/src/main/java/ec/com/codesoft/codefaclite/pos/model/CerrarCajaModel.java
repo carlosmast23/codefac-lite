@@ -49,19 +49,31 @@ public class CerrarCajaModel extends CajaSessionModel
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        //super.iniciar(); //To change body of generated methods, choose Tools | Templates.
-        //super.cicloVida=false;
-        //super.validacionDatosIngresados=false;
-        //cajaSessionA = null;
-        //limpiar();
-        //getjTextValorApertura().setEnabled(false);
-        //getjCmbCajaPermiso().removeAllItems();
-        //getjComboBoxEstadoCierre().removeAllItems();
-        //cargarDatos();
-        //addListenerCombo();
+        //super.iniciar();
+
         getPnlCierreCaja().setVisible(true);
         getPnlCierreCajaOpciones().setVisible(true);
+        super.iniciar();
         
+        /**
+         * TODO: Solucion temporal, lo correcto seria tener una variable general del formulario para saber que ya se termino el proceso de carga o para llevar una bandera para saber que se termino de cargar
+         */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    agregarListenerRecuperarDatos();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }).start();
+        
+    }
+    
+    private void agregarListenerRecuperarDatos()
+    {
         addInternalFrameListener(new InternalFrameListener() {
             @Override
             public void internalFrameOpened(InternalFrameEvent e) {
@@ -90,13 +102,8 @@ public class CerrarCajaModel extends CajaSessionModel
 
             @Override
             public void internalFrameActivated(InternalFrameEvent e) {
-                try {
-                    iniciar();
-                } catch (ExcepcionCodefacLite ex) {
-                    Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                System.out.println("estado formulario: "+estadoFormulario);
+                controlador.limpiar();
             }
 
             @Override
@@ -104,52 +111,11 @@ public class CerrarCajaModel extends CajaSessionModel
                 
             }
         });
-                        
-        this.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                DialogoCodefac.mensaje(new CodefacMsj("focusGained", CodefacMsj.TipoMensajeEnum.CORRECTO));
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                DialogoCodefac.mensaje(new CodefacMsj("focusLost", CodefacMsj.TipoMensajeEnum.CORRECTO));
-            }
-        });
-        //set
-        super.iniciar();
     }
     
-    
-    @Override
-    public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        //super.cicloVida=false;
-        //super.validacionDatosIngresados = false;
-        
-        /*if(ca != null)
-        {
-            try {
-                ServiceFactory.getFactory().getCajaSesionServiceIf().editar(cajaSessionA);
-                //Mensaje
-                DialogoCodefac.mensaje("Correcto","La caja se ha cerrado", DialogoCodefac.MENSAJE_CORRECTO);              
-                this.iniciar();
-            } catch (ServicioCodefacException ex) {
-                Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } */      
-    }
-
-    @Override
-    public void limpiar() {
-        /*getjTextFechaApertura().setText("");
-        getjTextFechaCierre().setText("");
-        getjTextHoraApertura().setText("");
-        getjTextHoraCierre().setText("");
-        getjTextValorApertura().setText("");
-        getjTextValorCierre().setText("");*/
-    }
+ 
    
-    private void cargarDatos()
+    /*private void cargarDatos()
     {
         List<Caja> cajas = new ArrayList<>();
         try {
@@ -165,36 +131,8 @@ public class CerrarCajaModel extends CajaSessionModel
         }
         UtilidadesComboBox.llenarComboBox(getjCmbCajaPermiso(), cajas);
         UtilidadesComboBox.llenarComboBox(getjComboBoxEstadoCierre(), CajaSessionEnum.values()); 
-    }
+    } */   
     
-    /*public void addListenerCombo(){
-        getjCmbCajaPermiso().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Caja caja = (Caja) getjCmbCajaPermiso().getSelectedItem();
-                cajaSessionA=controlador.buscarSessionDesdeCaja(caja);
-                cargarDatosPantalla(cajaSessionA);
-                
-                /*if(caja != null)
-                {
-                    try {
-                        List<CajaSession> cajasSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuarioYSucursal(session.getUsuario(), session.getSucursal());
-                        if(cajasSession.size()>0)
-                        {
-                            cajasSession.forEach(cajaSession ->{
-                                if(cajaSession.getCaja().equals(caja)){
-                                    cajaSessionA = cajaSession;
-                                    cargarDatosPantalla(cajaSessionA);
-                                }
-                            });
-                        }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(CerrarCajaModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
-    }*/
     
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
@@ -301,74 +239,6 @@ public class CerrarCajaModel extends CajaSessionModel
     public void generarReporte()
     {
         generarReporteCaja(getControlador().getCajaSession(), panelPadre);
-        /*InputStream path = RecursoCodefac.JASPER_POS.getResourceInputStream("reporteCierreCaja.jrxml");
-        Map<String,Object> parametros = new HashMap<String,Object>();
-        
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        CajaSession cajaSession=getControlador().getCajaSession();
-        String fechaAperturaStr= format.format(cajaSession.getFechaHoraApertura());
-        
-        String fechaCierreStr="";
-        if(cajaSession.getFechaHoraCierre()!=null)
-        {
-            fechaCierreStr=format.format(cajaSession.getFechaHoraCierre());
-        }
-        
-        //Cargar los datos de los parametros
-        
-        parametros.put("caja", cajaSession.getCaja().getNombre());
-        parametros.put("usuario", cajaSession.getUsuario().getNick());
-        parametros.put("fecha_apertura", fechaAperturaStr);
-        parametros.put("fecha_cierre", fechaCierreStr);
-        parametros.put("valor_apertura", cajaSession.getValorApertura()+"");
-        parametros.put("valor_cierre_teorico", cajaSession.getValorCierre()+"");
-        parametros.put("valor_ciere_practico", cajaSession.getValorCierreReal()+"");
-        parametros.put("observacion", cajaSession.getObservacionCierreCaja());
-        
-        
-        //Cargar los datos de los detalles
-        List<VentaReporteData> detalleData=new ArrayList<VentaReporteData>();
-        
-        List<IngresoCaja> ingresoCajaList=cajaSession.getIngresosCaja();
-        
-        if(ingresoCajaList!=null)
-        {
-            for (IngresoCaja ingresoCaja : ingresoCajaList) 
-            {
-                VentaReporteData reporteData=new VentaReporteData(
-                        ingresoCaja.getFactura().getSecuencial()+"", 
-                        ingresoCaja.getFactura().getIdentificacion(), 
-                        ingresoCaja.getFactura().getRazonSocial(), 
-                        ingresoCaja.getFactura().getTotal()+"",
-                        ingresoCaja.getFactura().getEstadoEnum().getNombre());
-
-                detalleData.add(reporteData);            
-            }
-        }
-        
-        DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
-                @Override
-                public void excel() {
-                    try{
-                        Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Secuencial", "Identificación","Cliente", "Total"};
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, detalleData);
-                        excel.abrirDocumento();
-                    }
-                    catch(Exception exc)
-                    {
-                        exc.printStackTrace();
-                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
-                    }  
-                }
-
-                @Override
-                public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, detalleData, panelPadre,"Cierre Caja");
-                }
-            });*/
-        
-        //Llenar datos para el reporte
     
     }
 
