@@ -156,7 +156,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.setEnabled(false);
         validacionDatosIngresados=false;
     }
-
+    
+    
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
         this.presupuesto=new Presupuesto();
@@ -423,6 +424,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             getCmbEstadoPresupuesto().setSelectedItem(generalEnumEstadoTemp);
             getTxtCodigo().setText(""+this.presupuesto.getId());
             getTxtCliente().setText(this.presupuesto.getPersona().getIdentificacion()+" - "+this.presupuesto.getPersona().getRazonSocial());  
+            getTxtAreaObservaciones().setText(this.presupuesto.getObservaciones());
             getCmbTipoPresupuesto().setSelectedItem(presupuesto.getCatalogoProducto());
             /**
              * Cargar detalles que existian de la Orden de trabajo
@@ -463,6 +465,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getTxtKilometraje().setText("");
         this.getLblTotalProductos().setText("0.00");
         this.getLblTotalServicios().setText("0.00");
+        getBtnAgregarDetalle().setEnabled(true);
         initDatosTabla();
     }
 

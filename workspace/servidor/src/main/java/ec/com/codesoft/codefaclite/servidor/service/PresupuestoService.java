@@ -163,17 +163,17 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
             {
                 
                 PresupuestoDetalleActividad actividadPresupuesto=new PresupuestoDetalleActividad();
-                //presupuestoDetalle=entityManager.merge(presupuestoDetalle);
-                //actividadPresupuesto.setPresupuestoDetalle(presupuestoDetalle);
                 actividadPresupuesto.setProductoActividad(actividad);
                 actividadPresupuesto.setTerminado(EnumSiNo.NO);
                 entityManager.persist(actividadPresupuesto);
+                
+                //Hago este artificio porque si no se hace de esa manera genera un error de persistencia
+                presupuestoDetalle=entityManager.merge(presupuestoDetalle);
+                actividadPresupuesto.setPresupuestoDetalle(presupuestoDetalle);
                 //entityManager.flush();
                 
-                actividadPresupuesto.setPresupuestoDetalle(presupuestoDetalle);
-                //entityManager.merge(actividadPresupuesto);
-                
                 productoActividadList.add(actividadPresupuesto);
+                entityManager.flush();                
             }
            
             //Agregar toda la lista al presupuesto detalle
