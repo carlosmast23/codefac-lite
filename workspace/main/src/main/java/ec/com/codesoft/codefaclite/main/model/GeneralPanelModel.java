@@ -1597,10 +1597,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.session=sessionCodefac;
             
             try {
+                panel.estadoIniciado=false;
                 //Ejecuta la vista por defecto
                 UtilidadesCoreCodefac.ejecutarIniciar(panel);
                 //Ejecuta el iniciar del controlador general si existe 
                 UtilidadesCoreCodefac.ejecutarIniciar(UtilidadesCoreCodefac.getControladorTodoVista(panel));          
+                
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 //Si ocurre un problema al momento de iniciar cancelo la apertura
@@ -1657,6 +1659,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             UtilidadesCoreCodefac.ejecutarNuevo(panel);
             UtilidadesCoreCodefac.ejecutarNuevo(UtilidadesCoreCodefac.getControladorTodoVista(panel));
+            
+            //Cuando termina los eventos principales seteo la variable de terminando de iniciar
+            //NOTA: Este proceso me puede servir para evitar listener de combos de manera repetida la primera vez que carga datos
+            panel.estadoIniciado=true;
             
             //================================================================//
             //         CONSTRUIR LOS CONTROLADORES PARA MANEJAR EL MVVC

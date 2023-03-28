@@ -713,15 +713,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
 
         
-        getCmbDocumento().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(getCmbDocumento().getSelectedItem()!=null)
-                {
-                    cargarSecuencial();
-                }
-            }
-        });
+
         
         getBtnLimpiarVendedor().addActionListener(new ActionListener() {
             @Override
@@ -943,6 +935,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     public void cargarSecuencial()
     {
+        
         DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
         ComprobanteElectronicoComponente.cargarSecuencial(session.getUsuario(),documentoEnum,session.getSucursal(), getCmbPuntoEmision(), getLblEstablecimiento(), getLblSecuencial());
     }
@@ -3589,15 +3582,30 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-        
-        
+        getCmbDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getCmbDocumento().getSelectedItem() != null) 
+                {
+                    if(estadoIniciado)
+                    {
+                        System.err.println("getCmbDocumento().addActionListener -> cargarSecuencial()... ");
+                        cargarSecuencial();
+                    }
+                }
+            }
+        });
         
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(estadoFormulario.equals(ESTADO_GRABAR))
                 {
-                    cargarSecuencial();
+                    if(estadoIniciado)
+                    {
+                        System.err.println("getCmbPuntoEmision().addActionListener -> cargarSecuencial()... ");
+                        cargarSecuencial();
+                    }
                 }
             }
         });

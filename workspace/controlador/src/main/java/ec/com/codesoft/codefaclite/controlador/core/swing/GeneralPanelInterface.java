@@ -96,6 +96,10 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
      * TODO: Hacer que tengan un estado private
      */
     public String estadoFormulario;
+    /**
+     * Variable que me va permitir saber si el formulario ya paso la primera etapa de iniciar
+     */
+    public Boolean estadoIniciado;
     public EstadoFormularioEnum estadoFormularioEnum;
     
     
@@ -143,6 +147,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
 
     public GeneralPanelInterface() {
         this.formularioActual=this;
+        this.estadoIniciado=false;
         this.listaExclusionComponentes=new ArrayList<JComponent>();
         this.mapDatosIngresadosDefault=new HashMap<JComponent,Object>();
         this.mapComponentesLaterales=new HashMap<String,List<Component>>();
