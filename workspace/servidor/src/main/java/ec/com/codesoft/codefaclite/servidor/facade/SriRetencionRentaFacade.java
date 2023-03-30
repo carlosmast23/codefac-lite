@@ -24,10 +24,11 @@ public class SriRetencionRentaFacade extends AbstractFacade<SriRetencionRenta>{
     public List<SriRetencionRenta> obtenerTodosOrdenadoPorCodigoFacade() throws RemoteException
     {
         SriRetencionRenta srr;
+        //srr.getFechaFin()
         //srr.getCodigo().get
         try {
             
-            String queryString = "SELECT u FROM SriRetencionRenta u WHERE u. CURRENT_DATE order by u.codigo desc";
+            String queryString = "SELECT u FROM SriRetencionRenta u WHERE ( u.fechaFin >= CURRENT_DATE OR u.fechaFin is NULL ) order by u.codigo desc";
             Query query = getEntityManager().createQuery(queryString);
             return (List<SriRetencionRenta>) query.getResultList();
         } catch (NoResultException e) {
