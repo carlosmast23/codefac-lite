@@ -355,7 +355,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbPresentacionProducto().removeAllItems();
     }
     
-    public void cargarFacturaDesdeProforma(Factura proforma) 
+    public void cargarFacturaDesdeProforma(Factura proforma,DocumentoEnum documentoEnum) 
     {
         //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
         //Todo: Ver como se puede optimizar
@@ -370,6 +370,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         factura.setProforma(proforma);
         factura.setSecuencial(null);
+        
+        //Si viene seteado con un tipo de documento diferente de presupuesto lo seteo en la vista para la carga
+        if(documentoEnum!=null && !documentoEnum.equals(DocumentoEnum.PROFORMA))
+        {
+            getCmbDocumento().setSelectedItem(documentoEnum);
+            factura.setCodigoDocumentoEnum(documentoEnum);
+        }
 
         controlador.verificarFacturaConNotaVentaInterna(factura);
         //Todo: revisar que el cambio sea correcto
@@ -400,7 +407,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             proforma = (Factura) resultadoLista.get(0);
                             List<Factura> facturasList = (List<Factura>) (List<?>) resultadoLista;
                             proforma.agregarDetalleDesdeVariasFacturas(facturasList);
-                            cargarFacturaDesdeProforma(proforma);
+                            cargarFacturaDesdeProforma(proforma,null);
                         }
                     }
                     
@@ -470,7 +477,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(buscarDialogoModel.getResultado()!=null)
                 {
                     Factura proforma = (Factura) buscarDialogoModel.getResultado();
-                    cargarFacturaDesdeProforma(proforma);
+                    cargarFacturaDesdeProforma(proforma,null);
                 }
             }
         });
@@ -3636,6 +3643,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
        getCmbDocumento().addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
+                
+                //Si no tiene detalles no hago ninguna validacion
+                if(factura==null || factura.getDetalles()==null || factura.getDetalles().size()==0)
+                {
+                    return;
+                }
                 
                 if(!ejecutarListenerComboDocumento)
                 {

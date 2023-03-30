@@ -584,7 +584,18 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 facturaDetalle.setIvaPorcentaje(0);
             }
         };
-        verificarProductoConNotaVentaInternaGenerico(facturaDetalle.getCatalogoProducto(), facturaDetalle.getPrecioUnitario(),interfazSetearDatos);
+        
+        /**
+         * TODO:Solucion temporal cuando se tiene varios productos iguales
+         * porque en la siguiente funciona modifica los valores del catalogo y si utiliza el mismo catalogo editado para los mismos productos luego no funciona
+         */
+        CatalogoProducto catalogoProducto=facturaDetalle.getCatalogoProducto();
+        try {
+            catalogoProducto=ServiceFactory.getFactory().getCatalogoProductoServiceIf().buscarPorId(facturaDetalle.getCatalogoProducto().getId());
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        verificarProductoConNotaVentaInternaGenerico(catalogoProducto, facturaDetalle.getPrecioUnitario(),interfazSetearDatos);
         //facturaDetalle.setPrecioUnitario(valorUnitario);
         facturaDetalle.calcularTotalesDetallesFactura();
     }
@@ -622,6 +633,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             if(catalogoProducto.getIva().getTarifa()!=0)
             {
                 try {
+                    //TODO: Este artificio puede causar problemas cuando se tiene varios productos del mismo porque al resto 
                     catalogoProducto.getIva().setTarifa(0);
                     catalogoProducto.getIva().setPorcentaje(BigDecimal.ZERO);
                     //producto.getCatalogoProducto().getIva().setTarifa(0);

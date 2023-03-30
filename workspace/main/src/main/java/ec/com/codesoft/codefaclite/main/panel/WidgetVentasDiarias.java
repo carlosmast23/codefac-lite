@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.main.panel;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.main.model.ObjetoEscritorioAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import javax.swing.JButton;
@@ -63,6 +63,8 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jLabel4 = new javax.swing.JLabel();
         txtCodigoProducto = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        cmbDocumento = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         btnEliminarProducto = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
@@ -197,7 +199,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel1.add(btnBuscarProducto, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -221,13 +223,31 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel1.add(txtCodigoProducto, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel5.setText("Tipo Documento:");
+        jLabel5.setText("Documento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel7.setText("Tipo Documento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel7, gridBagConstraints);
+
+        cmbDocumento.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbDocumento, gridBagConstraints);
 
         jTabbedPanel.addTab("Producto", new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/camion.png")), jPanel1); // NOI18N
 
@@ -457,6 +477,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JButton btnFacturar;
+    private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -467,6 +488,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -526,6 +548,15 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     public void setTxtCodigoProducto(JTextField txtCodigoProducto) {
         this.txtCodigoProducto = txtCodigoProducto;
     }
+
+    public JComboBox<DocumentoEnum> getCmbDocumento() {
+        return cmbDocumento;
+    }
+
+    public void setCmbDocumento(JComboBox<DocumentoEnum> cmbDocumento) {
+        this.cmbDocumento = cmbDocumento;
+    }
+    
     
     
 

@@ -37,6 +37,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -299,7 +300,9 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                         panelPadre.crearVentanaCodefac(facturacionModel, true);
                         try {
                             facturacionModel.iniciar();
-                            facturacionModel.cargarFacturaDesdeProforma(factura);
+                            DocumentoEnum documentEnum= (DocumentoEnum)getCmbDocumento().getSelectedItem();
+                            //factura.setCodigoDocumentoEnum(documentEnum);
+                            facturacionModel.cargarFacturaDesdeProforma(factura,documentEnum);
                             //facturacionModel.setFactura(factura);
                             //facturacionModel.cargarSecuencial();
                             
@@ -353,6 +356,9 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
             }
             
+            //Cargar los documentos disponibles para las ventas
+            UtilidadesComboBox.llenarComboBox(getCmbDocumento(),new Object[]{DocumentoEnum.FACTURA,DocumentoEnum.NOTA_VENTA_INTERNA});
+            
         } catch (RemoteException ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -389,6 +395,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         }
     }
     
+    //TODO: Esto se tiene que unificar con la logica de agregar a la vista de los productos
     public boolean agregarDetallesFactura (FacturaDetalle facturaDetalle)
     {
         //Primero verifica o crea si existe o no una venta diaria pendiente
@@ -424,7 +431,8 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             facturaDetalle.setCantidad(new BigDecimal(getTxtCantidadProducto().getText()));
             facturaDetalle.setDescripcion(getTxtDescripcionProducto().getText());
             BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitarioProducto().getText());
-            facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
+            //TODO: Solucion temporal de redondeo pero deberia cargar todos los decimales del archivo de configuracion
+            facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(5, BigDecimal.ROUND_HALF_UP));
             //facturaDetalle.setProducto(productoSeleccionado);
             facturaDetalle.setValorIce(BigDecimal.ZERO);
             facturaDetalle.setDescuento(BigDecimal.ZERO);
@@ -527,7 +535,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         this.factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
         this.factura.setIva(BigDecimal.ZERO);
         this.factura.setTotal(BigDecimal.ZERO);
-        this.factura.setDescuentoImpuestos(new BigDecimal(0));
+        this.factura.setDescuentoImpuestos(new BigDecimal(0));        
         //Limpiar detalles
         initModelTablaDetalleFactura();
         //Limpiar valores totales
