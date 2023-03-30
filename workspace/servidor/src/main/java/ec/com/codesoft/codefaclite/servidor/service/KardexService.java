@@ -71,6 +71,8 @@ import javax.persistence.EntityTransaction;
  */
 public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implements KardexServiceIf
 {
+    private BodegaService bodegaService=new BodegaService();
+    private ProductoService productoService=new ProductoService();
     
     /**
      * Entidad de control para manejar transacciones con la base de datos
@@ -221,7 +223,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
            //Solo crear el kardex si no existe para esa bodega
            if (kardexList.size() == 0) 
            {
-               Kardex kardex = ServiceFactory.getFactory().getKardexServiceIf().crearObjeto(bodega, producto,null);
+               Kardex kardex = crearObjeto(bodega, producto,null);
                entityManager.persist(kardex);
            }
        }
@@ -249,8 +251,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //Map<String,Object> mapParametros=new HashMap<String,Object>();
                 //mapParametros.put("producto",componente);
                 //mapParametros.put("bodega",bodega);
-                KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
-                Kardex kardexComponente= servicioKardex.buscarKardexPorProductoyBodegayLote(bodega,componente,null);
+                Kardex kardexComponente= buscarKardexPorProductoyBodegayLote(bodega,componente,null);
                 
                 //Si no existe el kardex del componente que intento facturar lo debo crear
                 if(kardexComponente==null)
@@ -315,7 +316,6 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     public  Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega,Lote lote) throws RemoteException, ServicioCodefacException
     {
         
-        //Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
         //Map<String,Object> mapParametros=new HashMap<String,Object>();
         //mapParametros.put("producto", producto);
         KardexService kardexService = new KardexService();
@@ -467,8 +467,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         for(ProductoEnsamble componenteProducto: productoEnsamble.getDetallesEnsamble())
         {
             Producto componente=componenteProducto.getComponenteEnsamble();
-            KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
-            Kardex kardexResultado= servicioKardex.buscarKardexPorProductoyBodegayLote(bodega,componente,null);
+            Kardex kardexResultado= buscarKardexPorProductoyBodegayLote(bodega,componente,null);
             
             if(kardexResultado==null)
             {
@@ -664,7 +663,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
         
         lote.setStock(lote.getStock().add(cantidadMovimiento));
-        ServiceFactory.getFactory().getLoteSeviceIf().editarSinTransaccion(lote);*/
+        ServiceFactor.getFactory().getLoteSeviceIf().editarSinTransaccion(lote);*/
         //Cuando hago una modificacion de este tema guardo la fecha de edicion
         //TODO: Ver si mejor la fecha de debe recalcular al momento de hacer la edicion global
         kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
@@ -734,7 +733,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     public Kardex buscarKardexPorBodegaDefecto(Producto producto,Sucursal sucursal) throws RemoteException, ServicioCodefacException
     {
-        Bodega bodegaVenta= ServiceFactory.getFactory().getBodegaServiceIf().obtenerBodegaVenta(sucursal);
+        Bodega bodegaVenta= bodegaService.obtenerBodegaVenta(sucursal);
         
         List<Kardex> kardexList=buscarPorProductoYBodega(producto, bodegaVenta);
         UtilidadesLista.ordenarLista(kardexList,new Comparator<Kardex>() 
@@ -1422,13 +1421,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     public KardexDetalle afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento) throws RemoteException,ServicioCodefacException
     {
         try {
-            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaProductoId);
+            Producto producto=productoService.buscarPorId(referenciaProductoId);
             
             //Map<String,Object> mapParametros=new HashMap<String,Object>();
             //mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
             //Kardex kardexProducto=kardexService.buscarKardexPorProductoyBodega(bodega, producto);
-            Kardex kardexProducto=ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega,null);
+            Kardex kardexProducto=consultarOCrearStockSinPersistencia(producto, bodega,null);
             //List<Kardex> kardexs= kardexService.getFacade().findByMap(mapParametros);
             //TODO: Definir especificamente cual es la bodega principal
             //if(kardexProducto!=null && kardexProducto.size()>0)
@@ -1518,7 +1517,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     public void grabarProductosReservadosSinTransaccion(Factura factura) throws RemoteException,ServicioCodefacException
     {
-        //ServiceFactory.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
+        //ServiceFactordy.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
         List<FacturaDetalle> detalles=factura.getDetalles();
         for (FacturaDetalle detalle : detalles) 
         {
@@ -1539,7 +1538,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     public void grabarProductosReservadosSinTransaccion(Presupuesto presupuesto) throws RemoteException,ServicioCodefacException
     {
-        //ServiceFactory.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
+        //ServiceFactosry.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
         List<PresupuestoDetalle> detalles=presupuesto.getPresupuestoDetalles();
         for (PresupuestoDetalle detalle : detalles) 
         {

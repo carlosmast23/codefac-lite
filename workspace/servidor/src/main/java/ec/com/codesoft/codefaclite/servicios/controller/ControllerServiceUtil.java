@@ -112,12 +112,6 @@ import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionServi
 import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.HerramientasCodefacServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoEstablecimiento;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.CuentaBanco;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
@@ -239,7 +233,6 @@ public abstract class ControllerServiceUtil {
     
     public static void cargarRecursosServidor(String host) {
         try {
-            //AbstractFacade.cargarEntityManager();
 
             Map<Class, Class> mapRecursos = new HashMap<Class, Class>();
 

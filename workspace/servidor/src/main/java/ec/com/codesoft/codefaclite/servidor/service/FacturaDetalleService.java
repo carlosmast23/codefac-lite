@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -28,6 +29,11 @@ import java.util.logging.Logger;
  */
 public class FacturaDetalleService extends ServiceAbstract<FacturaDetalle, FacturaDetalleFacade> implements FacturaDetalleServiceIf {
 
+    RubroEstudianteService rubroEstudianteService=new RubroEstudianteService();
+    PresupuestoService presupuestoService=new PresupuestoService();
+    ProductoService productoService=new ProductoService();
+    
+    
     public FacturaDetalleService() throws RemoteException {
         super(FacturaDetalleFacade.class);
     }
@@ -39,16 +45,16 @@ public class FacturaDetalleService extends ServiceAbstract<FacturaDetalle, Factu
             TipoDocumentoEnum tipoReferenciaEnum=facturaDetalle.getTipoDocumentoEnum();
             switch (tipoReferenciaEnum) {
                 case ACADEMICO:
-                    RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    RubroEstudiante rubroEstudiante = rubroEstudianteService.buscarPorId(facturaDetalle.getReferenciaId());
                     return rubroEstudiante;
                     
                 case PRESUPUESTOS:
-                    Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    Presupuesto presupuesto=presupuestoService.buscarPorId(facturaDetalle.getReferenciaId());
                     return presupuesto;
                     
                 case INVENTARIO:
                 case LIBRE:
-                    Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    Producto producto = productoService.buscarPorId(facturaDetalle.getReferenciaId());
                     return producto;
                     
             }

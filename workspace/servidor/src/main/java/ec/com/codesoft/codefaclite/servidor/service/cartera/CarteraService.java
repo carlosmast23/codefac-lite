@@ -65,6 +65,8 @@ import org.apache.commons.net.ntp.TimeStamp;
  */
 public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> implements CarteraServiceIf{
     
+    private CarteraCruceService carteraCruceService=new CarteraCruceService();
+    
     CarteraFacade carteraFacade;
     
     public CarteraService() throws RemoteException {
@@ -1064,7 +1066,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      */
     public void eliminarCrucesPorCartera(Cartera carteraPadre) throws ServicioCodefacException, RemoteException
     {
-        List<CarteraCruce> cruceList = ServiceFactory.getFactory().getCarteraCruceServiceIf().buscarPorCarteraAfecta(carteraPadre);
+        List<CarteraCruce> cruceList = carteraCruceService.buscarPorCarteraAfecta(carteraPadre);
 
         for (CarteraCruce carteraCruce : cruceList) {
             CarteraDetalle carteraDetalle = carteraCruce.getCarteraDetalle();

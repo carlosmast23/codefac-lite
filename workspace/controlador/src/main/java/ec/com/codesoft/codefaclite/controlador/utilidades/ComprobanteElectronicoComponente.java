@@ -22,7 +22,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
@@ -134,6 +136,10 @@ public class ComprobanteElectronicoComponente {
 
     public static void cargarSecuencialConsulta(ComprobanteEntity comprobante, JComboBox<PuntoEmision> cmbPuntoEmision, JLabel lblEstablecimiento, JLabel lblSecuencial) {
 
+        //Quitar los listener de forma temporal para evitar activar un ciclo repetitivo hasta cargar los datos
+        ActionListener[] listerTmp=cmbPuntoEmision.getActionListeners();
+        UtilidadesComboBox.eliminarTodosLosListener(cmbPuntoEmision);
+        
         try {
             PuntoEmision puntoEmision=null;
             if(comprobante.getPuntoEmision()!=null)
@@ -155,6 +161,7 @@ public class ComprobanteElectronicoComponente {
             }
             
         } catch (ServicioCodefacException ex) {
+            UtilidadesComboBox.agregarActionListeners(cmbPuntoEmision, listerTmp);
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
             PuntoEmision puntoEmisionTmp = new PuntoEmision();
             puntoEmisionTmp.setPuntoEmision(Integer.valueOf(comprobante.getPuntoEmision()));
@@ -172,10 +179,17 @@ public class ComprobanteElectronicoComponente {
         {
             lblSecuencial.setText(ComprobantesUtilidades.formatoSecuencial(comprobante.getSecuencial().toString()));
         }
+        
+        UtilidadesComboBox.agregarActionListeners(cmbPuntoEmision, listerTmp);
 
     }
 
     public static void cargarSecuencial(Usuario usuario, DocumentoEnum documentoEnum, Sucursal sucursal, JComboBox<PuntoEmision> cmbPuntoEmision, JLabel lblEstablecimiento, JLabel lblSecuencial) {
+        
+        //Quitar los listener de forma temporal para evitar activar un ciclo repetitivo hasta cargar los datos
+        ActionListener[] listerTmp = cmbPuntoEmision.getActionListeners();
+        UtilidadesComboBox.eliminarTodosLosListener(cmbPuntoEmision);
+        
         int indiceSeleccionado = cmbPuntoEmision.getSelectedIndex();
         //Cargar Puntos de Venta disponibles para la sucursal
 
@@ -212,6 +226,7 @@ public class ComprobanteElectronicoComponente {
             }
 
         } catch (ServicioCodefacException ex) {
+            UtilidadesComboBox.agregarActionListeners(cmbPuntoEmision, listerTmp);
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteElectronicoComponente.class.getName()).log(Level.SEVERE, null, ex);
@@ -267,5 +282,6 @@ public class ComprobanteElectronicoComponente {
             }
             lblSecuencial.setText("-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0"));
         }
+        UtilidadesComboBox.agregarActionListeners(cmbPuntoEmision, listerTmp);
     }
 }

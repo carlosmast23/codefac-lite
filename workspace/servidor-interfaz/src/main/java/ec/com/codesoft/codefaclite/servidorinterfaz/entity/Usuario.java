@@ -389,6 +389,10 @@ public class Usuario implements Serializable{
      * ========================================================================
      */
     
+    @Deprecated
+    /**
+     * Solucion no optima porque 
+     */
     public List<CajaPermiso> buscarPermisosCajasActivosService()
     {
         try {

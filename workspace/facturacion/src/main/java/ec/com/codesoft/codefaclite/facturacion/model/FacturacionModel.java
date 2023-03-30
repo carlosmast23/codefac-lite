@@ -152,6 +152,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -1677,8 +1678,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     
                 }
                 else                
-                {                    
+                {                   
                     factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro);
+                    
+                    /*UtilidadVarios.medirTiempoProceso(new UtilidadVarios.ProcesoTiempoIf() {
+                        @Override
+                        public void proceso() {
+                            try {
+                                factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro);
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ServicioCodefacException ex) {
+                                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    });*/
+                    
                     if(session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
                     {
                         DialogoCodefac.mensaje(new CodefacMsj("Gracias por utilizar la versión GRATUITA de CODEFAC para facturar, si te gusto nuestro sistema puedes contratar planes de pago con SOPORTE y MÁS CARACTERISTICAS. \n Presione aceptar para continuar con el proceso.", CodefacMsj.TipoMensajeEnum.CORRECTO));
@@ -1722,7 +1737,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }
             
-            actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
+            //actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
      
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -3487,12 +3502,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
        
     }
     
-    private void actualizaCombosPuntoVenta()
+    /*private void actualizaCombosPuntoVenta()
     {
         int indiceSeleccionado=getCmbPuntoEmision().getSelectedIndex();
         cargarComboPuntosVenta();
         getCmbPuntoEmision().setSelectedIndex(indiceSeleccionado);
-    }
+    }*/
     
     private void cargarComboPuntosVenta()
     {
@@ -3502,8 +3517,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         try {
             List<PuntoEmision> puntosVenta = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(session.getSucursal());
             getCmbPuntoEmision().removeAllItems();
-            //Canfigurar un cell render para las sucursales
-            //getCmbPuntoEmision().setRenderer(new RenderPersonalizadoCombo());
 
             for (PuntoEmision puntoVenta : puntosVenta) {
                 getCmbPuntoEmision().addItem(puntoVenta);
@@ -3767,17 +3780,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void seleccionarComboPuntoEmisionPorNumero(Integer puntoEmisionNumero)
     {
-        //UtilidadesComboBox.crearCabeceraComboBox(comboBox, title);
-        
-        /*for (int i = 0; i < getCmbPuntoEmision().getItemCount(); i++) 
-        {
-            PuntoEmision puntoEmision= getCmbPuntoEmision().getItemAt(i);
-            if(puntoEmision.getPuntoEmision().equals(puntoEmisionNumero))
-            {
-                getCmbPuntoEmision().setSelectedIndex(i);
-                break;
-            }
-        }*/
+
         UtilidadesComboBox.seleccionarItemPorCriterio(getCmbPuntoEmision(),puntoEmisionNumero,new UtilidadesComboBox.CriterioCompararComboEnum<PuntoEmision>() {
             @Override
             public Object objectoComparador(PuntoEmision objeto) {

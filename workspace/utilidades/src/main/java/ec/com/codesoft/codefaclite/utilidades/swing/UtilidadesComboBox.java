@@ -5,8 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.swing;
 
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.event.EventListenerList;
 
 /**
  *
@@ -41,6 +43,24 @@ public class UtilidadesComboBox {
 
     }
     
+    public static void eliminarTodosLosListener(JComboBox comboBox) 
+    {
+        // Obtenemos un array de ActionListener del JComboBox
+        ActionListener[] listeners = comboBox.getActionListeners();
+
+        // Quitamos todos los ActionListener del JComboBox
+        for (ActionListener listener : listeners) {
+            comboBox.removeActionListener(listener);
+        }
+    }
+
+    public static void agregarActionListeners(JComboBox comboBox, ActionListener[] listeners) {
+        // Agregamos cada ActionListener del arreglo al JComboBox
+        for (ActionListener listener : listeners) 
+        {
+            comboBox.addActionListener(listener);
+        }
+    }
     
     public static void llenarComboBox(JComboBox comboBox,Object[] datos)
     {
@@ -82,5 +102,10 @@ public class UtilidadesComboBox {
     public interface CriterioCompararComboEnum<T>
     {
         public abstract Object objectoComparador(T objeto );
+    }
+    
+    public interface EliminarListenerIf
+    {
+        public void proceso(JComboBox combo);
     }
 }

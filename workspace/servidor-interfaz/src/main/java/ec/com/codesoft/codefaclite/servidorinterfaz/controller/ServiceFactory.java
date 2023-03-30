@@ -43,7 +43,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MarcaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MesaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
-//import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MatriculaEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -290,10 +289,7 @@ public abstract class ServiceFactory {
         {
             try {
                 Registry registro= LocateRegistry.getRegistry(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);    
-                //for (String object : registro.list()) {
-                //    System.out.println("Algo==>"+object);
-                //}
-                
+                                
                 //Naming.lookup(ipServidor);
                 //String ipServidorInterno="192.168.100.13";
                 //remote= registro.lookup("rmi://"+ipServidor+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+clase.getSimpleName());

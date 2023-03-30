@@ -26,7 +26,9 @@ import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.PrestamoService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaPermisoService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.CajaSesionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
@@ -82,6 +84,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversion
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
@@ -90,6 +93,7 @@ import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.math.BigDecimal;
@@ -115,6 +119,14 @@ import org.eclipse.persistence.internal.sessions.factories.SessionsFactory;
  */
 public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> implements FacturacionServiceIf
 {
+    CajaPermisoService cajaPermisoService=new CajaPermisoService();
+    CajaSesionService cajaSesionService=new CajaSesionService();
+    KardexService kardexService=new KardexService();
+    FacturaDetalleService facturaDetalleService=new FacturaDetalleService();
+    ProductoService productoService=new ProductoService();
+    LoteService loteService=new LoteService();
+    RubroEstudianteService rubroEstudianteService=new RubroEstudianteService();
+    PresupuestoService presupuestoService=new PresupuestoService();
     
 
     FacturaFacade facturaFacade;
@@ -193,7 +205,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
          * Gestionar el tema de reservas en el INVENTARIO
          */
         //grabarProductosReservados(proforma);
-        ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(proforma);
+        kardexService.grabarProductosReservadosSinTransaccion(proforma);
         return proforma;
     }
     
@@ -287,7 +299,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      */
     /*private void grabarProductosReservados(Factura factura)
     {
-        //ServiceFactory.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
         List<FacturaDetalle> detalles=factura.getDetalles();
         for (FacturaDetalle detalle : detalles) 
         {
@@ -401,7 +412,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 setearDatosClienteYDistribuidor(proforma);
                 entityManager.merge(proforma);
                 
-                eliminarDetalles(ServiceFactory.getFactory().getFacturaDetalleServiceIf().buscarPorFactura(proforma), proforma.getDetalles());
+                eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma), proforma.getDetalles());
                 
             }
         });
@@ -460,7 +471,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //Por defecto solo genera un unico codigo
             detalle.setCantidadPresentacion(BigDecimal.ONE);
             TipoDocumentoEnum tipoReferenciaEnum=detalle.getTipoDocumentoEnum();
-            ReferenciaDetalleFacturaRespuesta respuesta = ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(tipoReferenciaEnum, detalle.getReferenciaId());
+            
+            //TODO: @Deprecated, Optimizar como un cache
+            ReferenciaDetalleFacturaRespuesta respuesta =obtenerReferenciaDetalleFactura(tipoReferenciaEnum, detalle.getReferenciaId());
             if (respuesta.objecto != null) {
                 switch (respuesta.tipoDocumentoEnum) {
                     case LIBRE:
@@ -497,6 +510,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException 
             {   
+                
                 setearDatosClienteYDistribuidor(factura);
                 
                 //Validaciones iniciales de la factura
@@ -520,7 +534,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
                 
                 //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
-                List<CajaPermiso> cajasPermisosList=factura.getUsuario().buscarPermisosCajasActivosService();
+                List<CajaPermiso> cajasPermisosList=cajaPermisoService.buscarPermisosCajasActivos(factura.getUsuario());
+                //List<CajaPermiso> cajasPermisosList=factura.getUsuario().buscarPermisosCajasActivosService();
                 if(cajasPermisosList != null && !cajasPermisosList.isEmpty())
                 {
                     agregarDatosParaCajaSession(factura);
@@ -539,7 +554,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
             }
         });
-        ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
+        
+        /**
+         * Ejecuto en un proceso independiente para no interferir con la velocidad el proceso actual
+         * TODO: Buscar una solucion mas elegante
+         */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
+            }
+        });
+        
         return factura;
     }
 
@@ -843,8 +869,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         asignarClaveAccesoDocumentosNoElectronicos(factura);
 
         ComprobantesService servicioComprobante = new ComprobantesService();
-        
-        
         servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
         grabarDetallesFacturaSinTransaccion(factura);
         grabarCarteraSinTransaccion(factura,carteraParametro);
@@ -1008,7 +1032,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     private void afectarAcademico(FacturaDetalle detalle) throws RemoteException
     {
         
-            RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+            RubroEstudiante rubroEstudiante=rubroEstudianteService.buscarPorId(detalle.getReferenciaId());
             
             BigDecimal totalBruto=detalle.getSubtotalSinDescuentos();
             //El total es sin impuestos
@@ -1044,7 +1068,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     /*private Kardex consultarOCrearStock(Producto producto, Bodega bodega) throws RemoteException, ServicioCodefacException
     {
         
-        //Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
         //Map<String,Object> mapParametros=new HashMap<String,Object>();
         //mapParametros.put("producto", producto);
         KardexService kardexService = new KardexService();
@@ -1070,21 +1093,20 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      */
     private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException
     {        
-        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+        Producto producto = productoService.buscarPorId(detalle.getReferenciaId());
         BigDecimal cantidad=detalle.getCantidad();
         BigDecimal precioUnitario=detalle.getPrecioUnitario();
         
         //Si el producto es un empaque busco el producto original
         if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
         {
-            //ProductoPresentacionDetalle presentacionDetalle =ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacion(producto.buscarPresentacionOriginal(), producto);
             /*ProductoPresentacionDetalle presentacionDetalle=producto.buscarPresentacionDetalleProducto();
             BigDecimal cantidadEquivalencia=presentacionDetalle.getCantidad();
             cantidad=detalle.getCantidad().multiply(cantidadEquivalencia);
             precioUnitario=(detalle.getPrecioUnitario().divide(cantidadEquivalencia,6,BigDecimal.ROUND_HALF_UP));
             //Finalmente dejo seleccionado el producto principal para que continue con el proceso
             producto=presentacionDetalle.getProductoOriginal();*/
-            ProductoConversionPresentacionRespuesta respuesta=ServiceFactory.getFactory().getProductoServiceIf().convertirProductoEmpaqueSecundarioEnPrincipal(producto, detalle.getCantidad(), detalle.getPrecioUnitario());
+            ProductoConversionPresentacionRespuesta respuesta=productoService.convertirProductoEmpaqueSecundarioEnPrincipal(producto, detalle.getCantidad(), detalle.getPrecioUnitario());
             
             producto=respuesta.productoPresentacionPrincipal;
             precioUnitario=respuesta.precioUnitario;
@@ -1113,12 +1135,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         Lote lote=null;
         if(detalle.getLote()!=null)
         {
-            lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorId(detalle.getLote().getId());
+            lote=loteService.buscarPorId(detalle.getLote().getId());
         }
 
         if(kardex==null)
         {
-            kardex =ServiceFactory.getFactory().getKardexServiceIf().consultarOCrearStockSinPersistencia(producto, bodega,lote);
+            kardex =kardexService.consultarOCrearStockSinPersistencia(producto, bodega,lote);
         }
         //Kardex kardex = consultarOCrearStock(producto, bodega);
 
@@ -1210,9 +1232,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     {
         if(ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(),ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
         {
-            //ServiceFactory.getFactory().getBodegaServiceIf().obtenerActivosPorEmpresa(empresa);
             //Cuando intenta construir los ensambles siempre va a coger de la misma bodega
-            return ServiceFactory.getFactory().getKardexServiceIf().ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(),kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA,validarStockComponentes);
+            return kardexService.ingresoEgresoInventarioEnsambleSinTransaccion(kardex.getBodega(),kardex.getBodega(), kardex.getProducto(), cantidadFaltante,ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA,validarStockComponentes);
         }
         //Todo: Verificar que no genere problemas el NULL
         return null;
@@ -1430,7 +1451,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     switch (tipoDocumentoEnum) {
                         case ACADEMICO:
                             RubroEstudiante rubroEstudiante;
-                            rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(referenciaId);
+                            rubroEstudiante = rubroEstudianteService.buscarPorId(referenciaId);
 
                             catalogoProducto = rubroEstudiante.getRubroNivel().getCatalogoProducto();
                             respuesta=new ReferenciaDetalleFacturaRespuesta(
@@ -1443,7 +1464,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
                         case LIBRE:
                         case INVENTARIO:
-                            Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(referenciaId);
+                            Producto producto = productoService.buscarPorId(referenciaId);
                             if(producto!=null)
                             {
                                 catalogoProducto = producto.getCatalogoProducto();
@@ -1459,7 +1480,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
                         case ORDEN_TRABAJO:    
                         case PRESUPUESTOS:
-                            Presupuesto presupuesto = ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(referenciaId);
+                            Presupuesto presupuesto = presupuestoService.buscarPorId(referenciaId);
                             catalogoProducto = presupuesto.getCatalogoProducto();
                             respuesta=new ReferenciaDetalleFacturaRespuesta(
                                     catalogoProducto,
@@ -1499,7 +1520,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         CajaPermiso cajaPermisoParaUsuario = null;
         
         Usuario usuario = factura.getUsuario();
-        List<CajaPermiso> cajaPermisoList= usuario.buscarPermisosCajasActivosService();
+        
+        List<CajaPermiso> cajaPermisoList=cajaPermisoService.buscarPermisosCajasActivos(usuario);
+        //List<CajaPermiso> cajaPermisoList= usuario.buscarPermisosCajasActivosService();
         
         //Verifico si el usuario tiene cajas con permisos para el método POS
         if(cajaPermisoList.isEmpty())
@@ -1536,14 +1559,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
         
         //TODO: Este artificio solo es temporal por que esta referencia no se esta actualizando de forma automatica y toca cerrar y abrir el sistema para que se actualice
-        List<CajaSession> cajasSessionUsuarioList=ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuario(usuario);
+        List<CajaSession> cajasSessionUsuarioList=cajaSesionService.obtenerCajaSessionPorUsuario(usuario);
         if(cajasSessionUsuarioList.isEmpty())
         {            
             throw new ServicioCodefacException("No se activado una caja para el procedimiento POS");
         }
         
-        //TODO preguntar donde puedo
-        cajaSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorPuntoEmisionYUsuario(factura.getPuntoEmision(), factura.getUsuario());
+        cajaSession =cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(factura.getPuntoEmision(), factura.getUsuario());
         
         if(cajaSession == null)
         {
