@@ -98,11 +98,12 @@ public class Usuario implements Serializable{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
     private List<PuntoEmisionUsuario> puntosEmisionUsuario;
     
+    //TODO: Ver si esta relacion es necesaria porque se pueden cargar datos de forma incesaria
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
     private List<CajaPermiso> cajasPermisoUsuario;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
-    private List<CajaSession> cajasSessionUsuario;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
+    //private List<CajaSession> cajasSessionUsuario;
     
     public Usuario(String nick, String clave) {
         this.nick = nick;
@@ -224,13 +225,13 @@ public class Usuario implements Serializable{
         this.cajasPermisoUsuario = cajasPermisoUsuario;
     }
 
-    public List<CajaSession> getCajasSessionUsuario() {
+    /*public List<CajaSession> getCajasSessionUsuario() {
         return cajasSessionUsuario;
     }
 
     public void setCajasSessionUsuario(List<CajaSession> cajasSessionUsuario) {
         this.cajasSessionUsuario = cajasSessionUsuario;
-    }
+    }*/
 
     public String getRepetirClave() {
         return repetirClave;
@@ -316,7 +317,7 @@ public class Usuario implements Serializable{
         }
     }
     
-    public void addCajaSessionUsuario(CajaSession cajaSession)
+    /*public void addCajaSessionUsuario(CajaSession cajaSession)
     {
         if(this.cajasSessionUsuario == null)
         {
@@ -324,7 +325,7 @@ public class Usuario implements Serializable{
         }
         cajaSession.setUsuario(this);
         this.cajasSessionUsuario.add(cajaSession);
-    }
+    }*/
     
     public boolean NoRepetirCajaPermisoUsuario(CajaPermiso cajaPermiso){
         for (CajaPermiso cp : this.cajasPermisoUsuario) {

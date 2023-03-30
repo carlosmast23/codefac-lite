@@ -58,11 +58,11 @@ public class Caja implements Serializable {
     @JoinColumn(name = "PUNTO_EMISION_2_ID")
     private PuntoEmision puntoEmision2;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "caja", fetch = FetchType.EAGER)
-    private List<CajaPermiso> cajasPermiso;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "caja", fetch = FetchType.EAGER)
+    //private List<CajaPermiso> cajasPermiso;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "caja", fetch = FetchType.EAGER)
-    private List<CajaSession> cajasSession;
+    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "caja", fetch = FetchType.EAGER)
+    private List<CajaSession> cajasSession;*/
 
     public Caja() {
     }
@@ -130,9 +130,9 @@ public class Caja implements Serializable {
         this.puntoEmision = puntoEmision;
     }
     
-    public List<CajaPermiso> getCajasPermiso() {
+    /*public List<CajaPermiso> getCajasPermiso() {
         return cajasPermiso;
-    }
+    }*/
 
     public PuntoEmision getPuntoEmision2() {
         return puntoEmision2;
@@ -142,17 +142,17 @@ public class Caja implements Serializable {
         this.puntoEmision2 = puntoEmision2;
     }
 
-    public void setCajasPermiso(List<CajaPermiso> cajasPermiso) {
+    /*public void setCajasPermiso(List<CajaPermiso> cajasPermiso) {
         this.cajasPermiso = cajasPermiso;
-    }
+    }*/
 
-    public List<CajaSession> getCajasSession() {
+    /*public List<CajaSession> getCajasSession() {
         return cajasSession;
     }
 
     public void setCajasSession(List<CajaSession> cajasSession) {
         this.cajasSession = cajasSession;
-    }  
+    } */ 
     
     /*
     * Equals and Hascode
