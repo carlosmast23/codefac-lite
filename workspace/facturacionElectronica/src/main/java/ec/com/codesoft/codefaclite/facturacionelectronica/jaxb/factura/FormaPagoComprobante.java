@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -30,6 +31,7 @@ public class FormaPagoComprobante implements Serializable{
     private String unidadTiempo;
 
     public FormaPagoComprobante() {
+        System.out.println("creando Forma Pago");
     }
 
     @XmlElement(name = "formaPago")
@@ -76,7 +78,34 @@ public class FormaPagoComprobante implements Serializable{
     public void setNombreTmp(String nombreTmp) {
         this.nombreTmp = nombreTmp;
     }
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.formaPago);
+        hash = 23 * hash + Objects.hashCode(this.total);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FormaPagoComprobante other = (FormaPagoComprobante) obj;
+        if (!Objects.equals(this.formaPago, other.formaPago)) {
+            return false;
+        }
+        if (!Objects.equals(this.total, other.total)) {
+            return false;
+        }
+        return true;
+    }
     
 }
