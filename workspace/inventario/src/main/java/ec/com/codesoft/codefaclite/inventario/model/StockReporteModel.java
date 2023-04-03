@@ -167,8 +167,8 @@ public class StockReporteModel extends StockMinimoPanel{
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Código","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad"};
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras,listaData);
+                        //String nombreCabeceras[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad"};
+                        excel.gestionarIngresoInformacionExcel(StockMinimoData.NOMBRE_CABECERA_EXCEL,listaData);
                         excel.abrirDocumento();
                     }
                     catch(Exception exc)
@@ -389,6 +389,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         }
                         //System.out.println(producto.getNombre());
                         data.setCodigo(codigoPersonalizado);
+                        data.setCodigo2((producto.getCodigoUPC()!=null)?producto.getCodigoUPC():"");
                         data.setProducto(producto.getNombre());
                         data.setStock(cantidad.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP)+"");
                         data.setReserva(reserva.setScale(obtenerCantidadDecimales(),RoundingMode.HALF_UP));

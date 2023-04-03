@@ -151,7 +151,6 @@ public class Excel<T>
                             System.out.println("detener");
                         }
                         Object valor3 = (valorDato.valor!=null)?valorDato.valor:"0";
-                        System.out.println(valor3);
                         celda.setCellValue(Double.parseDouble(valor3.toString()));
                         if(b)
                         {

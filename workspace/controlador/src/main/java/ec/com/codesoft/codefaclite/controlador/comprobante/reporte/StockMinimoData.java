@@ -19,7 +19,11 @@ import java.util.List;
  * @author Carlos
  */
 public class StockMinimoData implements ExcelDatosInterface{
+    
+    public static String NOMBRE_CABECERA_EXCEL[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad"};
+    
     private String codigo;
+    private String codigo2;
     private String lote;
     private String producto;
     private String stock;
@@ -58,6 +62,14 @@ public class StockMinimoData implements ExcelDatosInterface{
         this.codigo = codigo;
     }
 
+    public String getCodigo2() {
+        return codigo2;
+    }
+
+    public void setCodigo2(String codigo2) {
+        this.codigo2 = codigo2;
+    }
+    
     public String getProducto() {
         return producto;
     }
@@ -239,6 +251,7 @@ public class StockMinimoData implements ExcelDatosInterface{
         
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();        
         tiposDatos.add(new TipoDato(this.codigo,Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.codigo2,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.lote,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.bodega,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.producto, Excel.TipoDataEnum.TEXTO));
