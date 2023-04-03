@@ -40,6 +40,12 @@ public class UtilidadReporteModel extends FacturaReporteModel
     
     private UtilidadReport utilidadReport;
 
+    /*public UtilidadReporteModel() 
+    {
+        super();
+    }*/
+    
+
     @Override
     public void iniciar()  
     {
@@ -53,7 +59,7 @@ public class UtilidadReporteModel extends FacturaReporteModel
         listenerBotones();        
     }
     
-    public void listenerBotones()
+    /*public void listenerBotones()
     {
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
@@ -61,7 +67,14 @@ public class UtilidadReporteModel extends FacturaReporteModel
                 listenerBuscar();
             }
         });
+    }*/
+
+    @Override
+    public void listenerBotonBuscar() {
+        listenerBuscar();
     }
+    
+    
     
     private void listenerBuscar()
     {

@@ -588,6 +588,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
         }
         
     }
+    
+    public void listenerBotonBuscar()
+    {
+        generarReporte(); //codigo que genera el reporte
+    }
 
     protected void listenerBotones() {
         
@@ -621,7 +626,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                generarReporte(); //codigo que genera el reporte
+                //generarReporte(); //codigo que genera el reporte
+                listenerBotonBuscar();
             }
         });
         getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {

@@ -90,10 +90,14 @@ public abstract class ReportDataAbstract<T> implements Serializable{
      */
     public BigDecimal getTotal(DataReportIf dataReport)
     {
-        BigDecimal total= mapTotales.get(dataReport);
-        if(total==null)
+        BigDecimal total=BigDecimal.ZERO;
+        if(mapTotales!=null)
         {
-            total=BigDecimal.ZERO;
+            total= mapTotales.get(dataReport);
+            if(total==null)
+            {
+                total=BigDecimal.ZERO;
+            }
         }
         return total;
     }
