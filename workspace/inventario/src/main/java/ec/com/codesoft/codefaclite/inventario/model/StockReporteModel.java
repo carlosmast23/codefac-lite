@@ -167,7 +167,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Código","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación", "Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad"};
+                        String nombreCabeceras[] = {"Código","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras,listaData);
                         excel.abrirDocumento();
                     }
@@ -416,6 +416,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         data.setTipo(producto.getTipoProducto());
                         data.setSegmento(producto.getSegmentoProducto());
                         data.setMarca((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
+                        data.setIvaPorcentaje(producto.getCatalogoProducto().getIva().getTarifa());
                         
                         //Agregar los detalles adicional cuando el producto tiene garantia
                         if(producto.getGarantiaEnum().equals(EnumSiNo.SI) && getCmbMostrarDetalle().getSelectedItem().equals(EnumSiNo.SI))

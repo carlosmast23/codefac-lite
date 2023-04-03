@@ -40,6 +40,7 @@ public class StockMinimoData implements ExcelDatosInterface{
     private String rucProveedor;
     private String nombreProveedor;
     private String marca;
+    private Integer ivaPorcentaje;
     
     private List<StockUnicoData> detalles;
     
@@ -220,6 +221,14 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setReserva(BigDecimal reserva) {
         this.reserva = reserva;
     }
+
+    public Integer getIvaPorcentaje() {
+        return ivaPorcentaje;
+    }
+
+    public void setIvaPorcentaje(Integer ivaPorcentaje) {
+        this.ivaPorcentaje = ivaPorcentaje;
+    }
     
     
     
@@ -237,6 +246,7 @@ public class StockMinimoData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.categoria, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.aplicacion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.ubicacion, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.ivaPorcentaje, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.stock,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.pvp1,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.cantidadMinima, Excel.TipoDataEnum.NUMERO));        
