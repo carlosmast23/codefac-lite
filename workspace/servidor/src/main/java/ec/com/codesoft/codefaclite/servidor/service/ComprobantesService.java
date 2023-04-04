@@ -1712,9 +1712,9 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             }
         }*/
         
-        
+        //TODO: Parece que esta parte no necesito porque ya esta incluida en la funcion de (cargarConfiguraciones)
         //Agregar datos adicionales del Reporte
-        comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(comprobanteData.getEmpresa()));
+        //comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(comprobanteData.getEmpresa()));
         
         //Cargar los correos que se van a usar para enviar los datos
         comprobanteElectronico.setCorreosElectronicos(comprobanteData.getCorreos());
@@ -2113,10 +2113,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
 
     private Map<String, Object> mapReportePlantilla(Empresa empresa) throws RemoteException {
-        RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+        RecursosServiceIf service= new RecursosService();
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
-        
-        Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap(empresa);
         
         //TODO:Revisar esta parte porque va a salir con la informacion de la matriz princiapl ,talvez deberia salir con la informacion de la sucursal que estan usando
         SucursalService sucursalService=new SucursalService();
@@ -2128,7 +2126,6 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         
         
-        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("pl_telefonos",(matriz.getTelefono()!=null)?matriz.getTelefono():matriz.getTelefono());        
         parametros.put("pl_celular", (matriz.getCelular()!=null)?matriz.getCelular():matriz.getCelular());
@@ -2185,12 +2182,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
         InputStream input=null;
         
-        //Si la licencia es gratis entonces cargar por defecto una imagen por defecto
+        //Si la LICENCIA ES GRATIS entonces cargar por defecto una imagen por defecto
         if(UtilidadesServidor.mapEmpresasLicencias.get(empresa).pathEmpresa.equals(TipoLicenciaEnum.GRATIS))
         {
             input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream(ParametrosSistemaCodefac.ComprobantesElectronicos.LOGO_SIN_FOTO);
         }
-        else //Si la licencia es de pago entonces carga la imagen de la empresa
+        else //Si la LICENCIA ES DE PAGO entonces carga la imagen de la empresa
         {
             //Verifica si esta guardado el path de la imagen 
             if(empresa.getImagenLogoPath()!=null && !empresa.getImagenLogoPath().equals("") )

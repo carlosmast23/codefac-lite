@@ -635,17 +635,23 @@ public class ComprobanteElectronicoService implements Runnable {
      */
     private void enviarComprobante(String carpetaComprobante) throws ComprobanteElectronicoException {
         //enviarComprobanteCorreo(this.claveAcceso);
-        try {
+        try {            
+            //TODO: Mejorar esta parte en especial con la clave de acceso que esta mesclado
             ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
-            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            //Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
-            String pathComprobanteFirmado=getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, this.claveAcceso);
-            File file=new File(pathComprobanteFirmado);
+            //Si no tengo el comprobante en memoria busco cargar el archivo
+            if(comprobante==null)
+            {
+                
+                JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                //Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
+                String pathComprobanteFirmado=getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, this.claveAcceso);
+                File file=new File(pathComprobanteFirmado);
 
-            //StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
-
+                //ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+                comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+            }
+            
             String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)); //Si utilizo dos modos para enviar al correo de veria 
             Map<String,String> archivosPath=new HashMap<String,String>();
             archivosPath.put(claveAcceso.getTipoComprobante().getPrefijo()+"-"+comprobante.getInformacionTributaria().getPreimpreso()+".pdf",pathFile);
@@ -1009,10 +1015,15 @@ public class ComprobanteElectronicoService implements Runnable {
             String pathComprobanteFirmado=getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAccesoTemp);
             File file=new File(pathComprobanteFirmado);
             
-            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                        
-            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+            //Verifico si ya existe creado en memoria el comprobante ya no necesito leer del archivo
+            if(comprobante==null)            
+            {
+                JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();                        
+                //ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+                comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
+            }
+            
             generarRideIndividual(comprobante, carpetaOrigenXml, claveAcceso);
                         
         } catch (JAXBException ex) {
