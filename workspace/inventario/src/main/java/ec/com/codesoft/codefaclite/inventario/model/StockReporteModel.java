@@ -126,9 +126,9 @@ public class StockReporteModel extends StockMinimoPanel{
             getCmbMostrarDetalle().addItem(EnumSiNo.SI);
             
             //Cargar los datos para saber si se debe incluir el iva en el reporte
-            getCmbIncluirIva().removeAllItems();
-            getCmbIncluirIva().addItem(EnumSiNo.NO);
+            getCmbIncluirIva().removeAllItems();            
             getCmbIncluirIva().addItem(EnumSiNo.SI);
+            getCmbIncluirIva().addItem(EnumSiNo.NO);
             
         } catch (RemoteException ex) {
             Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
