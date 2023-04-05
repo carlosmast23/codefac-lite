@@ -7,12 +7,13 @@ package ec.com.codesoft.codefaclite.contabilidad.model;
 
 import ec.com.codesoft.codefaclite.contabilidad.other.NodoTreeCuenta;
 import ec.com.codesoft.codefaclite.contabilidad.panel.PlanCuentasPanel;
+import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Cuenta;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PlanCuenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.contabilidad.CuentaContable;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.contabilidad.PlanCuenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JMenuItem;
@@ -69,39 +71,39 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         listenerTree();
         componentesIniciales();
         //cargarValoresPorDefectoTemp();
-        construirPlanCuentas();
-        construirArbolPlanCuentas();
+        //construirPlanCuentas();
+        construirArbolPlanCuentaVista();
     }
     
     private void construirPlanCuentas()
     {
         planCuenta=new PlanCuenta();
-        List<Cuenta> cuentas=new ArrayList<Cuenta>();
+        List<CuentaContable> cuentas=new ArrayList<CuentaContable>();
     
         //Cuentas Principales //
-        Cuenta cuentaActivo=new Cuenta();
+        CuentaContable cuentaActivo=new CuentaContable();
         cuentaActivo.setCodigo("1");
         cuentaActivo.setNombre("Activo");
         cuentaActivo.setImputable(EnumSiNo.NO.getLetra());
         
-        Cuenta cuentaPasivo=new Cuenta();
+        CuentaContable cuentaPasivo=new CuentaContable();
         cuentaPasivo.setCodigo("2");
         cuentaPasivo.setNombre("Pasivo");
         cuentaPasivo.setImputable(EnumSiNo.NO.getLetra());
         
-        Cuenta cuentaPatrimonio=new Cuenta();
+        CuentaContable cuentaPatrimonio=new CuentaContable();
         cuentaPatrimonio.setCodigo("3");
         cuentaPatrimonio.setNombre("Patrimonio");
         cuentaPatrimonio.setImputable(EnumSiNo.NO.getLetra());
         
         //Sub Cuentas
-        Cuenta cuentaActivoCorriente=new Cuenta();
+        CuentaContable cuentaActivoCorriente=new CuentaContable();
         cuentaActivoCorriente.setCodigo("11");
         cuentaActivoCorriente.setNombre("Activo Corriente");
         cuentaActivoCorriente.setImputable(EnumSiNo.NO.getLetra());
         cuentaActivoCorriente.setCuentaPadre(cuentaActivo);
         
-        Cuenta cuentaActivoNoCorriente=new Cuenta();
+        CuentaContable cuentaActivoNoCorriente=new CuentaContable();
         cuentaActivoNoCorriente.setCodigo("12");
         cuentaActivoNoCorriente.setNombre("Activo No Corriente");
         cuentaActivoNoCorriente.setImputable(EnumSiNo.NO.getLetra());
@@ -109,14 +111,14 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         
         
         //Cuentas Imputables
-        Cuenta cuenta1=new Cuenta();
+        CuentaContable cuenta1=new CuentaContable();
         cuenta1.setCodigo("1101");
         cuenta1.setNombre("Cuenta Activo 1");
         cuenta1.setImputable(EnumSiNo.SI.getLetra());
         cuenta1.setCuentaPadre(cuentaActivoCorriente);
         
         
-        Cuenta cuenta2=new Cuenta();
+        CuentaContable cuenta2=new CuentaContable();
         cuenta2.setCodigo("1102");
         cuenta2.setNombre("Cuenta Activo 2");
         cuenta2.setImputable(EnumSiNo.SI.getLetra());
@@ -132,10 +134,10 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         cuentas.add(cuenta2);
         
 
-        planCuenta.setCuentas(cuentas);
+        planCuenta.setCuentaContableList(cuentas);
     }
     
-    private NodoTreeCuenta buscarCuentaEnNodo(Cuenta cuenta)
+    private NodoTreeCuenta buscarCuentaEnNodo(CuentaContable cuenta)
     {
         TreeNode nodoRaiz=(TreeNode) modeloTree.getRoot();
         return buscarNodo(nodoRaiz,cuenta);
@@ -147,7 +149,7 @@ public class PlanCuentasModel extends PlanCuentasPanel {
      * @param cuentaBuscar
      * @return 
      */
-    private  NodoTreeCuenta buscarNodo(TreeNode nodo, Cuenta cuentaBuscar) {
+    private  NodoTreeCuenta buscarNodo(TreeNode nodo, CuentaContable cuentaBuscar) {
 
         if (nodo.getChildCount() >= 0) {
             for (Enumeration e = nodo.children(); e.hasMoreElements();) {
@@ -171,11 +173,10 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         }
         return null;
     }
-
-    
-    public void construirArbolPlanCuentas()
+     
+    public void construirArbolPlanCuentaVista()
     {
-        Cuenta cuentaRaiz=new Cuenta();
+        CuentaContable cuentaRaiz=new CuentaContable();
         cuentaRaiz.setCodigo("");
         cuentaRaiz.setNombre("Plan de Cuenta");        
         
@@ -183,18 +184,19 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         nodoCuentaRaiz=new NodoTreeCuenta(cuentaRaiz);
         modeloTree=new DefaultTreeModel(nodoCuentaRaiz);
         
-        List<Cuenta> cuentas=planCuenta.getCuentas();
+        List<CuentaContable> cuentas=planCuenta.getCuentaContableList();
+        
         //Ordenera cuentas para imprimir en orden de menor a mayor
-        Collections.sort(cuentas,new Comparator<Cuenta>() {
+        Collections.sort(cuentas,new Comparator<CuentaContable>() {
             @Override
-            public int compare(Cuenta o1, Cuenta o2) {
+            public int compare(CuentaContable o1, CuentaContable o2) {
                 return o2.getCodigo().compareTo(o1.getCodigo());
             }
         });
         
         
         //Va a construir todos los nodos partiendo de los principal
-        for (Cuenta cuenta : cuentas) {
+        for (CuentaContable cuenta : cuentas) {
             NodoTreeCuenta nodoCuenta=buscarCuentaEnNodo(cuenta);
             
             //Si me devuelve null significa que este nodo aun no esta insertado
@@ -209,7 +211,7 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         getTreePlanCuentas().setModel(modeloTree);
     }
     
-    private NodoTreeCuenta construirNodoCuenta(Cuenta cuentaCrear)
+    private NodoTreeCuenta construirNodoCuenta(CuentaContable cuentaCrear)
     {
         //Si no tiene referencia le ligo al nodo por defecto de la raiz
         NodoTreeCuenta nodoCuentaPadre=null;
@@ -236,41 +238,7 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         return nodoCuentaCrear; //Retornar el nodo creado
     }
     
-    private void cargarValoresPorDefectoTemp()
-    {
-        DefaultMutableTreeNode abuelo = new DefaultMutableTreeNode("plan contable");
-        modeloTree=new DefaultTreeModel(abuelo);
-        
-        getTreePlanCuentas().setModel(modeloTree);
-        
-        //Crear entidades 
-        DefaultMutableTreeNode activos = new DefaultMutableTreeNode("activos");
-        DefaultMutableTreeNode pasivos = new DefaultMutableTreeNode("pasivos");
-        DefaultMutableTreeNode patrimonio = new DefaultMutableTreeNode("patrimonio");
-        
-       
-        DefaultMutableTreeNode cuenta1 = new DefaultMutableTreeNode("cuenta1");
-        DefaultMutableTreeNode cuenta2 = new DefaultMutableTreeNode("cuenta2");
-        DefaultMutableTreeNode cuenta3 = new DefaultMutableTreeNode("cuenta3");
-        DefaultMutableTreeNode cuenta4 = new DefaultMutableTreeNode("cuenta4");
-        DefaultMutableTreeNode cuenta5 = new DefaultMutableTreeNode("cuenta5");
-
-        
-        //Relacionar entidades
-        modeloTree.insertNodeInto(activos,abuelo,0);
-        modeloTree.insertNodeInto(pasivos, abuelo, 1);
-        modeloTree.insertNodeInto(patrimonio, abuelo, 2);
-
-        modeloTree.insertNodeInto(cuenta1, activos, 0);
-        modeloTree.insertNodeInto(cuenta2, activos, 0);
-        modeloTree.insertNodeInto(cuenta3, pasivos, 0);
-        modeloTree.insertNodeInto(cuenta4, pasivos, 0);
-        modeloTree.insertNodeInto(cuenta5, patrimonio, 0);
-        
-        
-        
     
-    }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
@@ -314,7 +282,14 @@ public class PlanCuentasModel extends PlanCuentasPanel {
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -399,6 +374,16 @@ public class PlanCuentasModel extends PlanCuentasPanel {
     }
 
     private void listenerBotones() {
+        
+        getBtnCargarPlantilla().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlanCuenta.PlanCuentaPlantillaEnum planillaEnum= (PlanCuenta.PlanCuentaPlantillaEnum) getCmbPlantilla().getSelectedItem();
+                planCuenta.setCuentaContableList(planillaEnum.getPlanCuenta().getCuentaContableList());
+                construirArbolPlanCuentaVista();
+            }
+        });
+        
         getBtnEditar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -406,7 +391,7 @@ public class PlanCuentasModel extends PlanCuentasPanel {
                 {
                     setearDatosPantalla(nodoCuentaSeleccionada.cuenta);
                     DialogoCodefac.mensaje("Correcto","La cuenta se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-                    construirArbolPlanCuentas();
+                    construirArbolPlanCuentaVista();
                     getBtnEditar().setEnabled(false);
                 }
             }
@@ -419,12 +404,12 @@ public class PlanCuentasModel extends PlanCuentasPanel {
                 //Solo dejar agregar si esta activo el boton
                 if(getBtnGuardar().isEnabled())
                 {
-                    Cuenta cuenta=new Cuenta();
+                    CuentaContable cuenta=new CuentaContable();
                     setearDatosPantalla(cuenta);
                     cuenta.setCuentaPadre(nodoCuentaSeleccionada.cuenta); //Setear la cuenta del padre
-                    planCuenta.getCuentas().add(cuenta);
+                    planCuenta.getCuentaContableList().add(cuenta);
                     DialogoCodefac.mensaje("Correcto","La cuenta se agrego correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-                    construirArbolPlanCuentas();
+                    construirArbolPlanCuentaVista();
                     getBtnGuardar().setEnabled(false);
                    
                 }
@@ -432,7 +417,7 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         });
     }
     
-    private void setearDatosPantalla(Cuenta cuenta)
+    private void setearDatosPantalla(CuentaContable cuenta)
     {
         cuenta.setCodigo(getTxtCodigo().getText());
         cuenta.setNombre(getTxtNombre().getText());

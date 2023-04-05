@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.contabilidad.other;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Cuenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.contabilidad.CuentaContable;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -13,9 +13,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author Carlos
  */
 public class NodoTreeCuenta extends DefaultMutableTreeNode{
-    public Cuenta cuenta;    
+    public CuentaContable cuenta;    
 
-    public NodoTreeCuenta(Cuenta cuenta) {
+    public NodoTreeCuenta(CuentaContable cuenta) {
         this.cuenta = cuenta;
     }
     

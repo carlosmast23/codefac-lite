@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.contabilidad.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.contabilidad.PlanCuenta.PlanCuentaPlantillaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -50,6 +51,15 @@ public abstract class PlanCuentasPanel extends ControladorCodefacInterface {
         jToolBar1 = new javax.swing.JToolBar();
         btnGuardar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        txtCodigoPlanCuenta = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtNombrePlanCuenta = new javax.swing.JTextField();
+        lblEspacio132812 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        cmbPlantilla = new javax.swing.JComboBox<>();
+        btnCargarPlantilla = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -157,26 +167,96 @@ public abstract class PlanCuentasPanel extends ControladorCodefacInterface {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel4.setText("Código:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        jPanel3.add(jLabel4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        jPanel3.add(txtCodigoPlanCuenta, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel5.setText("Plantilla Defecto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        jPanel3.add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        jPanel3.add(txtNombrePlanCuenta, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.ipady = 70;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(lblEspacio132812, gridBagConstraints);
+
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel6.setText("Código:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        jPanel3.add(jLabel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(cmbPlantilla, gridBagConstraints);
+
+        btnCargarPlantilla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/Document.png"))); // NOI18N
+        btnCargarPlantilla.setText("Cargar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(btnCargarPlantilla, gridBagConstraints);
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_START);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCargarPlantilla;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<EnumSiNo> cmbImputable;
+    private javax.swing.JComboBox<PlanCuentaPlantillaEnum> cmbPlantilla;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio1;
+    private javax.swing.JLabel lblEspacio132812;
     private javax.swing.JLabel lblEspacio2;
     private org.jdesktop.swingx.JXTree treePlanCuentas;
     private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtCodigoPlanCuenta;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtNombrePlanCuenta;
     // End of variables declaration//GEN-END:variables
 
     public JXTree getTreePlanCuentas() {
@@ -227,5 +307,21 @@ public abstract class PlanCuentasPanel extends ControladorCodefacInterface {
         this.btnEditar = btnEditar;
     }
 
+    public JButton getBtnCargarPlantilla() {
+        return btnCargarPlantilla;
+    }
+
+    public void setBtnCargarPlantilla(JButton btnCargarPlantilla) {
+        this.btnCargarPlantilla = btnCargarPlantilla;
+    }
+
+    public JComboBox<PlanCuentaPlantillaEnum> getCmbPlantilla() {
+        return cmbPlantilla;
+    }
+
+    public void setCmbPlantilla(JComboBox<PlanCuentaPlantillaEnum> cmbPlantilla) {
+        this.cmbPlantilla = cmbPlantilla;
+    }
     
+
 }
