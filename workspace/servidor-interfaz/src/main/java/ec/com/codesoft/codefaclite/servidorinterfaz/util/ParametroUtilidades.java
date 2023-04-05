@@ -90,7 +90,7 @@ public abstract class ParametroUtilidades {
         return false; */
     }
     
-    public static <T extends ComparadorInterface> Boolean compararParametro(String valorParametro,T valorComparar) throws RemoteException
+    private static <T extends ComparadorInterface> Boolean compararParametro(String valorParametro,T valorComparar) throws RemoteException
     {
         //String valorParametro=obtenerValorParametro(empresa, nombreParametro);
         if(valorParametro!=null)

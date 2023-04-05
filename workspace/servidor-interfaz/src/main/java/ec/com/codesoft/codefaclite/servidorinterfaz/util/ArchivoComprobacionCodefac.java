@@ -65,7 +65,18 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
                 String clave = entry.getKey();
                 String valor = entry.getValue();
                 
-                Integer secuencialArchivo=Integer.valueOf(valor);
+                Integer secuencialArchivo=null;
+                //Si tiene problemas al leer el secuencial continua con el siguiente
+                try
+                {
+                    secuencialArchivo=Integer.valueOf(valor);
+                }
+                catch(NumberFormatException nfe)
+                {
+                    Logger.getLogger(ArchivoComprobacionCodefac.class.getName()).log(Level.SEVERE,"Error leyendo el secuencial de "+clave);
+                    //nfe.printStackTrace();
+                    continue;
+                }
                 //Bigde
                 String[] claveDatos= clave.split(SEPARADOR);
                 Long idPuntoEmision=Long.valueOf(claveDatos[0]);

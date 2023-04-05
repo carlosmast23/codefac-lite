@@ -222,6 +222,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbBuscadorSoloInventario(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbCalculaDescuentoCostos(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbCalcularUtilidadUltimoCosto(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbMostrarPreciosConIva(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbVentanasMultiples(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbPermitirEditarCodigo(),EnumSiNo.values());
@@ -633,6 +634,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroCalcularUtilidadUltimoCosto != null) ? parametroCalcularUtilidadUltimoCosto.getValor() : null);
             getCmbCalcularUtilidadUltimoCosto().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
             
+            ParametroCodefac parametroMostrarPreciosConIva = parametrosTodos.get(ParametroCodefac.MOSTRAR_PRECIO_CON_IVA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarPreciosConIva != null) ? parametroMostrarPreciosConIva.getValor() : null);
+            getCmbMostrarPreciosConIva().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
+            
             ParametroCodefac parametroVentasMultiples = parametrosTodos.get(ParametroCodefac.VENTANAS_MULTIPLES);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroVentasMultiples != null) ? parametroVentasMultiples.getValor() : null);
             getCmbVentanasMultiples().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -878,6 +883,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbCalcularUtilidadUltimoCosto().getSelectedItem();
         agregarParametro(ParametroCodefac.CALCULAR_UTILIDAD_ULTIMO_COSTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.CALCULAR_UTILIDAD_ULTIMO_COSTO);
+        
+        enumSiNo = (EnumSiNo) getCmbMostrarPreciosConIva() .getSelectedItem();
+        agregarParametro(ParametroCodefac.MOSTRAR_PRECIO_CON_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.MOSTRAR_PRECIO_CON_IVA);
         
         enumSiNo = (EnumSiNo) getCmbVentanasMultiples().getSelectedItem();
         agregarParametro(ParametroCodefac.VENTANAS_MULTIPLES, (enumSiNo != null) ? enumSiNo.getLetra() : null);

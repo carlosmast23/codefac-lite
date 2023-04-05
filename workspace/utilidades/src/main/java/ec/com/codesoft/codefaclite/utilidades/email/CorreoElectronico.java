@@ -146,7 +146,8 @@ public class CorreoElectronico {
             }
         });
         
-        session.setDebug(true);
+        //TODO: Hacer una forma de activar o desactivar el debug del correo electronico
+        //session.setDebug(true);
         return session;
     }
     

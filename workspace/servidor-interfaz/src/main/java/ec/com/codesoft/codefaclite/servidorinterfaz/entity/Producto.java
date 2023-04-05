@@ -987,6 +987,33 @@ public class Producto implements Serializable, Comparable<Producto> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    /**
+     * Metodo que depende de la configuracion del iva para poder mostrar el valorUnitario
+     * @return 
+     */
+    public BigDecimal getValorUnitarioDefecto()
+    {
+        //if(ParametrosSistemaCodefac.mostrarPreciosConIva())
+        //{
+        BigDecimal valorConIva=getValorUnitarioConIva();
+        return valorConIva;
+        //}
+        //else
+        //{
+        //    return getValorUnitario();
+        //}
+    }
+    
+    public void setValorUnitarioDefecto(BigDecimal valorUnitario)
+    {
+        /*if(ParametrosSistemaCodefac.mostrarPreciosConIva())
+        {
+            return getValorUnitarioConIva();
+        } */
+        //Asumo que siempre me manda los valores sin iva
+        //this.valorUnitario=valorUnitario;        
+    }
+    
     public BigDecimal getValorUnitarioConIva()
     {
         if(valorUnitario==null || valorUnitario.compareTo(BigDecimal.ZERO)==0)
@@ -1015,6 +1042,8 @@ public class Producto implements Serializable, Comparable<Producto> {
         return UtilidadesImpuestos.agregarValorIva(tarifa, precioDistribuidor);
     }
     
+    public void setPrecioDistribuidorConIva(BigDecimal valor) {}
+    
     public BigDecimal getPrecioTarjetaConIva() {
 
         if (precioTarjeta == null || precioTarjeta.compareTo(BigDecimal.ZERO) == 0) 
@@ -1026,6 +1055,8 @@ public class Producto implements Serializable, Comparable<Producto> {
         return UtilidadesImpuestos.agregarValorIva(tarifa, precioTarjeta);
     }
     
+    public void setPrecioTarjetaConIva(BigDecimal valor) {};
+    
     public BigDecimal getPvp4ConIva() {
 
         if (pvp4 == null || pvp4.compareTo(BigDecimal.ZERO) == 0) {
@@ -1035,6 +1066,8 @@ public class Producto implements Serializable, Comparable<Producto> {
         BigDecimal tarifa = new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
         return UtilidadesImpuestos.agregarValorIva(tarifa, pvp4);
     }
+    
+    public void setPvp4ConIva(BigDecimal valor) {};
     
     public BigDecimal getPvp5ConIva() {
 
@@ -1046,6 +1079,8 @@ public class Producto implements Serializable, Comparable<Producto> {
         return UtilidadesImpuestos.agregarValorIva(tarifa, pvp5);
     }
     
+    public void setPvp5ConIva(BigDecimal valor) {};
+    
     public BigDecimal getPvp6ConIva() {
 
         if (pvp6 == null || pvp6.compareTo(BigDecimal.ZERO) == 0) {
@@ -1056,6 +1091,7 @@ public class Producto implements Serializable, Comparable<Producto> {
         return UtilidadesImpuestos.agregarValorIva(tarifa, pvp6);
     }
 
+    public void setPvp6ConIva(BigDecimal valor) {};
     
     public void setValorUnitarioConIva(BigDecimal valorUnitarioConIva)
     {

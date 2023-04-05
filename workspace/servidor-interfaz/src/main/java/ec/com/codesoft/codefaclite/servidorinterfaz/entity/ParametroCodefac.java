@@ -321,6 +321,11 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String CALCULAR_UTILIDAD_ULTIMO_COSTO="calcular_utilidad_ultimo_costo";
     
+    /**
+     * Mostrar precios con iva en las pantallas
+     */
+    public static final String MOSTRAR_PRECIO_CON_IVA="mostrar_precio_con_iva";
+    
     public static final String PVP1_MARGEN_UTILIDAD = "pvp1_margen_utilidad";
     public static final String PVP2_MARGEN_UTILIDAD = "pvp2_margen_utilidad";
     public static final String PVP3_MARGEN_UTILIDAD = "pvp3_margen_utilidad";

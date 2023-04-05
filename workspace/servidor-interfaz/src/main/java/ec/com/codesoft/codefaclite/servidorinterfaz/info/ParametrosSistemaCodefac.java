@@ -6,11 +6,18 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.info;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.awt.Image;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase que contiene los parametros generales del sistema 
@@ -20,7 +27,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.3.0.1.1";
+    public static final String VERSION="1.3.0.1.2";
     /**
      * El modo de conf9.6.7guracion del sistema
      */
@@ -169,10 +176,42 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final Integer TOLERACION_DIAS_SIN_RESPALDO=5;
     
+    public static Boolean MOSTRAR_PRECIOS_CON_IVA=null;
+    
     public static final BigDecimal obtenerIvaDefecto()
     {
         String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
         return new BigDecimal(tarifaStr);
+    }
+    
+    
+    /**
+     * TODO: Metodo temporal para poder configurar si mostrar o no el iva, desde una variable global teniendo un proxy
+     * pero el problema es que no permite configurar por el numero de empresa
+     * pero la ventaja es que pueda cambiar y mostrar resultado distintos directamente desde las entidades
+     * @return 
+     */
+    @Deprecated
+    public static final Boolean mostrarPreciosConIva()
+    {
+        if(MOSTRAR_PRECIOS_CON_IVA==null)
+        {
+            try {
+                if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.MOSTRAR_PRECIO_CON_IVA,EnumSiNo.SI))
+                {
+                    MOSTRAR_PRECIOS_CON_IVA=true;
+                }
+                else
+                {
+                    MOSTRAR_PRECIOS_CON_IVA=false;
+                }
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(ParametrosSistemaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+                MOSTRAR_PRECIOS_CON_IVA=false;
+            }
+        }
+        return MOSTRAR_PRECIOS_CON_IVA;
     }
     
     public abstract class ComprobantesElectronicos

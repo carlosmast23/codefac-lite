@@ -400,6 +400,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         producto.setValorUnitario(BigDecimal.ZERO);
         producto.setMarcaProducto(null);
         producto.setAplicacionProducto("");
+        
         ivaOpcionSeleccionado=IvaOpcionEnum.SIN_IVA;
         ivaOpcion2=IvaOpcionEnum.SIN_IVA;
         ivaOpcion3=IvaOpcionEnum.SIN_IVA;
