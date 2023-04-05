@@ -234,14 +234,15 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
             public Object[] addData(DescuentoProductoDetalle value) {
                 
                 String categoria="";
-                if(value.getProducto().getCatalogoProducto().getCategoriaProducto()!=null)
-                {
-                    categoria=value.getProducto().getCatalogoProducto().getCategoriaProducto().getNombre();
-                }
                 
                 if(value.getProducto()==null)
                 {
                     return new Object[]{value,null,null,null};
+                }
+                
+                if(value.getProducto().getCatalogoProducto()!=null && value.getProducto().getCatalogoProducto().getCategoriaProducto()!=null)
+                {
+                    categoria=value.getProducto().getCatalogoProducto().getCategoriaProducto().getNombre();
                 }
                 
                 return new Object[]{

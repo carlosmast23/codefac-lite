@@ -380,8 +380,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         //cargarPrecios(productoSeleccionado);
         interfaz.cargarPrecios(productoSeleccionado);
-        interfaz.cargarPreciosPorcentaje(consultarDescuentoPorProducto(productoSeleccionado,1));
+        List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado,1);
+        interfaz.cargarPreciosPorcentaje(descuentos);
         interfaz.cargarPresentaciones(productoSeleccionado);
+        
+        //TODO
+        //Por el momento busco un descuento por defecto cuando tiene varios
+        BigDecimal descuentoDefecto=BigDecimal.ZERO;
+        for (BigDecimal descuento : descuentos) {
+            if(descuento.compareTo(BigDecimal.ZERO)>0)
+            {
+                descuentoDefecto=descuento;
+            }
+        }
+        
         if(stock!=null)
         {
             stock=stock.setScale(2, RoundingMode.HALF_UP);
@@ -432,7 +444,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 itemEspecifico,
                 EnumSiNo.NO,
                 interfaz.obtenerTipoDocumentoSeleccionado(),
-                BigDecimal.ZERO);
+                descuentoDefecto);
         
         //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
         interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
