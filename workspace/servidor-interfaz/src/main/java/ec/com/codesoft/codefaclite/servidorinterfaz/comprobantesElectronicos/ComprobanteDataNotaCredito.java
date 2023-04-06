@@ -212,7 +212,7 @@ public class ComprobanteDataNotaCredito extends ComprobanteDataFacturaNotaCredit
                 CatalogoProducto catalogoProducto=null;
                 DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();                
                 ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(detalleNotaCredito.getTipoDocumentoEnum(),detalleNotaCredito.getReferenciaId());
-                detalle.setCodigoInterno(respuesta.referenciaId+"");
+                detalle.setCodigoInterno(respuesta.codigoPrincipal+"");
                 
                 detalle.setCantidad(detalleNotaCredito.getCantidad());
                 detalle.setDescripcion(UtilidadValidador.normalizarTexto(detalleNotaCredito.getDescripcion()));
