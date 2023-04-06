@@ -177,7 +177,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         /*
         if (!session.verificarExistePerfil(Perfil.PERFIl_ADMINISTRADOR)) {
             getCmbModoFacturacion().setEnabled(false);
-            getCmbIvaDefault().setEnabled(false);
+            
         }*/
     }
 

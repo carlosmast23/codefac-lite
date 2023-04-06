@@ -299,6 +299,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String PERMITIR_EDITAR_CODIGO="permitir_editar_codigo";
     
+    public static final String ACTIVAR_IVA_FERIADO="activar_iva_feriado";
+    
     public static final String LEYENDA_ADICIONAL_COMPROBANTE="leyenda_adicional_comprobante";
     
     /**

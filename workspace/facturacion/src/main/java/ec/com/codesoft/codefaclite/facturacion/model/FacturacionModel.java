@@ -3158,7 +3158,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
+        
         getjDateFechaEmision().setDate(new java.util.Date());
+        try {
+            //TODO: Mejorar esta parte
+            //Consultar si esta activo la opcion de iva en el feriado
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_IVA_FERIADO,EnumSiNo.SI))
+            {
+                controlador.activarIvaFeriado=true;
+            }
+            else
+            {
+                controlador.activarIvaFeriado=false;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
         
 

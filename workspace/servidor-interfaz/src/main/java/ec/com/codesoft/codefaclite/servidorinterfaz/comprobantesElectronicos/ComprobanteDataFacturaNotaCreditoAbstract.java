@@ -106,34 +106,10 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             if(respuesta!=null)
             {
                 CatalogoProducto catalogoProducto = respuesta.catalogoProducto;            
-                /*List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
-                ImpuestoComprobante impuesto = new ImpuestoComprobante();
-                impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
-                impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo() + "");
-                impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa() + ""));
-                impuesto.setBaseImponible(comprobanteDetalle.totalSinImpuestosConIce());*/
-
-                //Obtengo nuevamente el iva calculado por que necesito todos los decimales para tener el valor exacto y en la base de datos esta grabado solo con 2 decimales y eso puede generar problemas
-                //TODO: Analizar si tengo que mandar este dato del valor redondeado o del valor origina
-
-                //impuesto.setValor(comprobanteDetalle.recalcularIva());
-                //System.out.println("valor: "+impuesto.getValor());
-
-                /**
-                 * Verificar valores para el total de impuesto
-                 */
-                //sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIva(), impuesto);
-
-                /**
-                 * Redondedo los impuestos despues de hacer los calculos por que el Sri solo acepta con 2 decimales
-                 */
-                /*impuesto.setValor(impuesto.getValor().setScale(2, RoundingMode.HALF_UP));
-                impuesto.setBaseImponible(impuesto.getBaseImponible().setScale(2, RoundingMode.HALF_UP));
-
-
-                listaComprobantes.add(impuesto);*/
+                
                 List<ImpuestoComprobante> listaComprobantes = crearImpuestoDetalles(
-                        catalogoProducto, 
+                        catalogoProducto.getIce(),
+                        comprobanteDetalle.getIvaPorcentaje(),
                         comprobanteDetalle.totalSinImpuestosConIce(), 
                         comprobanteDetalle.recalcularIva(), 
                         comprobanteDetalle.getTotal(),
@@ -150,7 +126,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         return null;
     }
     
-    public static List<ImpuestoComprobante> crearImpuestoDetalles(CatalogoProducto catalogoProducto,BigDecimal totalSinImpuestosConIce,BigDecimal ivaRecalculado,BigDecimal total,BigDecimal valorIce)
+    public static List<ImpuestoComprobante> crearImpuestoDetalles(ImpuestoDetalle iceImpuesto,Integer tarifaIva,BigDecimal totalSinImpuestosConIce,BigDecimal ivaRecalculado,BigDecimal total,BigDecimal valorIce)
     {
         //TODO: SOLUCION TEMPORAL PARA SOLUCIONAR EL TEMA DEL IVA, por que como ahora no depende el producto del iva, el mismo producto puede tener iva 12 o iva cero
         ImpuestoDetalle impuestoIva=null;
@@ -164,12 +140,13 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        else
+        else //Em este caso busco el IVA Activo
         {
             try 
             {
-                Integer ivaDefecto=Integer.parseInt(ParametrosSistemaCodefac.IVA_DEFECTO);
-                impuestoIva=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorTarifa(ivaDefecto);
+                //Integer ivaDefecto=Integer.parseInt(ParametrosSistemaCodefac.IVA_DEFECTO);
+                //Integer ivaDefecto=catalogoProducto.getIva().getTarifa();
+                impuestoIva=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorTarifa(tarifaIva);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex) {
@@ -201,11 +178,11 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         /**
          * Agregando el valor del ICE
          */
-        if (catalogoProducto.getIce() != null) {
+        if (iceImpuesto != null) {
             ImpuestoComprobante impuestoIce = new ImpuestoComprobante();
-            impuestoIce.setCodigo(catalogoProducto.getIce().getImpuesto().getCodigoSri());
-            impuestoIce.setCodigoPorcentaje(catalogoProducto.getIce().getCodigo() + "");
-            impuestoIce.setTarifa(new BigDecimal(catalogoProducto.getIce().getPorcentaje() + ""));
+            impuestoIce.setCodigo(iceImpuesto.getImpuesto().getCodigoSri());
+            impuestoIce.setCodigoPorcentaje(iceImpuesto.getCodigo() + "");
+            impuestoIce.setTarifa(new BigDecimal(iceImpuesto.getPorcentaje() + ""));
             impuestoIce.setBaseImponible(total.setScale(2, RoundingMode.HALF_UP));
             impuestoIce.setValor(valorIce.setScale(2, RoundingMode.HALF_UP));
             //sumarizarTotalesImpuestos(mapTotalImpuestos, catalogoProducto.getIce(), impuestoIce);
@@ -242,6 +219,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         
     }
     
+    //TODO:Mejorar esta parte para que funcione para cualaquier iva
     public List<TotalImpuesto> crearImpuestosTotales(ComprobanteVentaNotaCreditoAbstract comprobante)
     {
         List<TotalImpuesto> totalImpuestos = new ArrayList<TotalImpuesto>();
@@ -252,6 +230,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             //Buscar los tipos de impuestos disponibles en los detalles para los totales
             Boolean impuestoDoce=false;
             Boolean impuestoCero=false;
+            Boolean impuestoOcho=false;
             
             List<DetalleFacturaNotaCeditoAbstract> detalles= comprobante.getDetallesComprobante();
             for (DetalleFacturaNotaCeditoAbstract detalle : detalles) 
@@ -261,6 +240,11 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                     if(detalle.getCatalogoProducto().getIva().getTarifa()==12)
                     {
                         impuestoDoce=true;
+                    }
+                    
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==8)
+                    {
+                        impuestoOcho=true;
                     }
                     
                     if(detalle.getCatalogoProducto().getIva().getTarifa()==0)
@@ -273,6 +257,11 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                     if(detalle.getIvaPorcentaje()==12)
                     {
                         impuestoDoce=true;
+                    }
+                    
+                    if(detalle.getIvaPorcentaje()==8)
+                    {
+                        impuestoOcho=true;
                     }
                     
                     if(detalle.getIvaPorcentaje()==0)
@@ -304,11 +293,23 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 totalImpuestos.add(totalImpuestoIva);
             }
             
+           
             //Crear el IMPUESTO DEL IVA cuando exista
             //if(comprobante.getIva().compareTo(BigDecimal.ZERO)>0)
-            if(impuestoDoce)
-            {                
-                ImpuestoDetalle impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE);
+            if(impuestoDoce || impuestoOcho)
+            {   
+                ImpuestoDetalle impuestoDetalleIva=null;
+                if(impuestoDoce)
+                {
+                    impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE);
+                    
+                }else if(impuestoOcho)
+                {
+                    impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_OCHO);
+                    
+                }
+                
+                
                 TotalImpuesto totalImpuestoIva=new TotalImpuesto();
                 totalImpuestoIva.setBaseImponible(comprobante.getSubtotalImpuestosMenosDescuento());
                 totalImpuestoIva.setCodigo(impuestoDetalleIva.getImpuesto().getCodigoSri());

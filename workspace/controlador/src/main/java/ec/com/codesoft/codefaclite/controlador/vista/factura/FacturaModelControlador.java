@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
@@ -107,6 +108,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     private SriFormaPago formaPagoDefecto;
     
     private SriFormaPago formaPagoConCartera;
+    
+    public Boolean activarIvaFeriado=false;
     
 
     public FacturaModelControlador(SessionCodefacInterface session,FacturaModelInterface interfaz,MensajeVistaInterface mensajeVista) {
@@ -488,7 +491,22 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             if(catalogoProducto.getIva()!=null)
             {
-                facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
+                //En esta parte voy a clasificar cuando necesite hacer la facturacion solo por FERIADO agregar el 8% de iva
+                
+                Integer tarifa= catalogoProducto.getIva().getTarifa() ;
+                if(tarifa>0)
+                {
+                    //NOTA: Este parametro se actualizar siempre que se hace una nueva venta
+                    if(activarIvaFeriado)
+                    {
+                        //Editar el catalogo para luego poder manejar con el 8%
+                        facturaDetalle.getCatalogoProducto().getIva().setCodigo(ImpuestoDetalle.CODIGO_IVA_OCHO);
+                        facturaDetalle.getCatalogoProducto().getIva().setTarifa(ImpuestoDetalle.TARIFA_IVA_OCHO);
+                        tarifa=ImpuestoDetalle.TARIFA_IVA_OCHO;
+                    }
+                }                
+                facturaDetalle.setIvaPorcentaje(tarifa);
+                
             }
         }
         else

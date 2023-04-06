@@ -190,7 +190,8 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
                 BigDecimal baseImponible=detalle.getSubtotal();
                 
                 List<ImpuestoComprobante> impuestoListTemp= ComprobanteDataFacturaNotaCreditoAbstract.crearImpuestoDetalles(
-                    detalle.getProductoProveedor().getProducto().getCatalogoProducto(), 
+                    detalle.getProductoProveedor().getProducto().getCatalogoProducto().getIce(), 
+                    detalle.getProductoProveedor().getProducto().getCatalogoProducto().getIva().getTarifa(),
                     baseImponible,  //Falta tomar en cuenta el iva revisar en ComprobanteDataFacturaNotaCreditoAbstract
                     detalle.obtenerIvaCalculado(), 
                     detalle.getTotal(), 

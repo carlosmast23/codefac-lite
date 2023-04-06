@@ -266,6 +266,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbPermitirEditarCodigo = new javax.swing.JComboBox<>();
         jLabel92 = new javax.swing.JLabel();
         txtDiasAlertaComprobantesPendientes = new javax.swing.JSpinner();
+        jLabel95 = new javax.swing.JLabel();
+        cmbActivarIvaFeriado = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -1823,7 +1825,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.add(cmbDatosCompartidosEmpresas, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel9.add(lblEspacio637, gridBagConstraints);
@@ -1920,10 +1922,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel9.add(jLabel63, gridBagConstraints);
 
         jLabel66.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel66.setText("Permitir Editar Códigos:");
+        jLabel66.setText("Activar IVA Feriado (8%):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(jLabel66, gridBagConstraints);
@@ -1969,6 +1971,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(txtDiasAlertaComprobantesPendientes, gridBagConstraints);
 
+        jLabel95.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel95.setText("Permitir Editar Códigos:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jLabel95, gridBagConstraints);
+
+        cmbActivarIvaFeriado.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(cmbActivarIvaFeriado, gridBagConstraints);
+
         jTabbedPane1.addTab("General", jPanel9);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
@@ -1984,6 +2003,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkImpresoraTickets;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarComprobanteVenta;
+    private javax.swing.JComboBox<EnumSiNo> cmbActivarIvaFeriado;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarModuloCartera;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarNotaVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
@@ -2138,6 +2158,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel92;
     private javax.swing.JLabel jLabel93;
     private javax.swing.JLabel jLabel94;
+    private javax.swing.JLabel jLabel95;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -2869,8 +2890,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.cmbMostrarPreciosConIva = cmbMostrarPreciosConIva;
     }
 
-    
-    
+    public JComboBox<EnumSiNo> getCmbActivarIvaFeriado() {
+        return cmbActivarIvaFeriado;
+    }
+
+    public void setCmbActivarIvaFeriado(JComboBox<EnumSiNo> cmbActivarIvaFeriado) {
+        this.cmbActivarIvaFeriado = cmbActivarIvaFeriado;
+    }
+
     
     
     
