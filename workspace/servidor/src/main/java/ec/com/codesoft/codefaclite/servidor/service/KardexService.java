@@ -1418,7 +1418,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * TODO: Unificar este metodo con la de factura que existe un metodo similar
      * @param detalle 
      */
-    public KardexDetalle afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento) throws RemoteException,ServicioCodefacException
+    public KardexDetalle afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento,String usuarioNick) throws RemoteException,ServicioCodefacException
     {
         try {
             Producto producto=productoService.buscarPorId(referenciaProductoId);
@@ -1441,6 +1441,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 kardexDetalle.setCodigoTipoDocumento(tipoDocumento.getCodigo());
                 kardexDetalle.setPrecioTotal(total);
                 kardexDetalle.setPrecioUnitario(precioUnitario);
+                kardexDetalle.setUsuarioNick(usuarioNick);
                 kardexDetalle.setReferenciaDocumentoId(referenciaKardexId);
                 kardexDetalle.setPuntoEmision(puntoEmision);
                 kardexDetalle.setPuntoEstablecimiento(puntoEstablecimiento);

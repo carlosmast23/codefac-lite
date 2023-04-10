@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UtilidadFacade;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.CatalogoProductoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.dataExport.ProductoExportar;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
@@ -212,11 +213,16 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             CategoriaProducto categoriaProducto = catalogoProducto.getCategoriaProducto();
             if(categoriaProducto!=null)
             {
-                if (categoriaProducto.getIdCatProducto() == null)//Si no existe la categoria tambien se los crea
+                CategoriaProductoService categoriaProductoService=new CategoriaProductoService();
+                CategoriaProducto categoriaTmp=categoriaProductoService.buscarPorId(categoriaProducto.getIdCatProducto());
+                //Si no existe la categoria entonces la voy a crear
+                if(categoriaTmp==null)
                 {
+                    categoriaProducto.setIdCatProducto(null);
                     entityManager.persist(categoriaProducto);
                     entityManager.flush();
                 }
+                
             }
 
             entityManager.persist(catalogoProducto);

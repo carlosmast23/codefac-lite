@@ -93,6 +93,9 @@ public class KardexDetalle implements Serializable ,Cloneable {
     @Column(name = "SIGNO")
     private Integer signo;
     
+    @Column(name = "USUARIO_NICK")
+    private String usuarioNick;
+    
     /**
      * Variable para almacenar el tipo de documento de la referencia para luego poder hacar una consulta
      */
@@ -280,6 +283,15 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public void setDescuento(BigDecimal descuento) {
         this.descuento = descuento;
     }
+
+    public String getUsuarioNick() {
+        return usuarioNick;
+    }
+
+    public void setUsuarioNick(String usuarioNick) {
+        this.usuarioNick = usuarioNick;
+    }
+    
     
     
     

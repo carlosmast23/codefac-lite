@@ -39,6 +39,8 @@ public class KardexData implements ExcelDatosInterface,Cloneable{
     private String documentoTransaccion;
     private String descripcion;
     
+    private String usuario;
+    
 
     public KardexData() {
     }
@@ -170,7 +172,14 @@ public class KardexData implements ExcelDatosInterface,Cloneable{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
     
     
     //////////////////////////////////////////////////////////////////

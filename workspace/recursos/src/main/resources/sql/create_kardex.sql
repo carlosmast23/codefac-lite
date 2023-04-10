@@ -49,6 +49,8 @@ create table KARDEX_DETALLE(
     SIGNO INT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.6.5)*/
     DESCUENTO decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.1.5)*/
+    USUARIO_NICK varchar(100),
     primary key (ID)
 );
 

@@ -414,6 +414,7 @@ public class KardexModel extends KardexPanel {
 
             //fila.add(i+""); //numeracion
             kardexData.setDocumento(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre());
+            kardexData.setUsuario(kardexDetalle.getUsuarioNick());
             //fila.add(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre()); //tipo del documento
             TipoDocumentoEnum tipoDocumentoEnum = kardexDetalle.getCodigoTipoDocumentoEnum();
 

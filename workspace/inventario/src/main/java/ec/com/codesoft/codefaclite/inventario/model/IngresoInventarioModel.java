@@ -884,6 +884,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 
                 KardexDetalle kardexDetalleNuevo=kardexDetalle.obtenerObjetoOriginal();                
                 kardexDetalleNuevo.setKardex(kardex);
+                kardexDetalleNuevo.setUsuarioNick(session.getUsuario().getNick());
                 //kardexDetalleNuevo.setCodigoTipoDocumentoReferenciaEnum(compraDetalle.getCompra().getCodigoTipoDocumentoEnum());
                 
                 

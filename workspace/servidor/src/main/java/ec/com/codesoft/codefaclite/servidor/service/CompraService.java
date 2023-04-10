@@ -778,7 +778,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 compraDetalle.getCompra().getPuntoEmision().toString(),
                 compraDetalle.getCompra().getPuntoEstablecimiento().toString(),
                 compraDetalle.getCompra().getSecuencial(),
-                compraDetalle.getCompra().getFechaEmision()
+                compraDetalle.getCompra().getFechaEmision(),
+                compraDetalle.getCompra().getUsuario().getNick()
         );
 
         

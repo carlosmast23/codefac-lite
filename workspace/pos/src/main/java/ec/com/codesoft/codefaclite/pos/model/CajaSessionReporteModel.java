@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -225,6 +226,13 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
         try {
            
             List<Caja> cajas = ServiceFactory.getFactory().getCajaServiceIf().buscarCajasPorSucursal(session);
+            
+            if(cajas==null || cajas.size()==0)
+            {
+                DialogoCodefac.mensaje(new CodefacMsj("No tiene configurado cajas para el módulo de POS", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                return;
+            }
+            
             List<Usuario> usuarios = ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarUsuariosPorSucursalYLigadosACaja(session.getSucursal(), cajas.get(0));
             
             UtilidadesComboBox.llenarComboBox(getCmbCaja(), cajas,true);
