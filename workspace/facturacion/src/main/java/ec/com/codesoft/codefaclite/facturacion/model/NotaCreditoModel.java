@@ -7,61 +7,41 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
-import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
-import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
-import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.NotaCreditoModelControlador.NotaCreditoModelInterface;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
-import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteNotaCreditoImplComprobante;
-import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
 import ec.com.codesoft.codefaclite.facturacion.nocallback.NotaCreditoNoCallBack;
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
-import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
-import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -71,14 +51,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
-import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
-import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -91,15 +69,17 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -1058,12 +1038,24 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
     
     private void btnListenerEliminar() {
-        int fila = getTblDetalleNotaCredito().getSelectedRow();
+        int[] filas = getTblDetalleNotaCredito().getSelectedRows();
         DefaultTableModel modeloTablaDetallesProductos=(DefaultTableModel) getTblDetalleNotaCredito().getModel();
-        if(fila>=0)
+        if(filas.length>0)
         {
-            modeloTablaDetallesProductos.removeRow(fila);
-            notaCredito.getDetalles().remove(fila);
+            //TODO: Mejorar esta parte, por el momento solo queda un ARTIFICIO para que funcione
+            List<Integer> filaList = IntStream.of(filas)
+                               .boxed()
+                               .collect(Collectors.toList());
+            
+            UtilidadesLista.invertir(filaList);
+            
+            for (Integer fila : filaList) 
+            {
+                modeloTablaDetallesProductos.removeRow(fila.intValue());
+                //List<NotaCredito> detalles=notaCredito.getDetalles()
+                notaCredito.getDetalles().remove(fila.intValue());                
+            }                   
+            
             cargarTotales();
             getBtnEditarDetalle().setEnabled(false);
             getBtnQuitarDetalle().setEnabled(false);

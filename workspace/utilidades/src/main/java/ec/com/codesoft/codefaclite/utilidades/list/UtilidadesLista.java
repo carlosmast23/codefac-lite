@@ -109,6 +109,11 @@ public abstract class UtilidadesLista {
         return lista;
     }
     
+    public static void invertir(List lista)
+    {
+        Collections.reverse(lista);
+    }
+    
     public static List<List> dividirLista(Integer tamanioDividir,List listaOriginal)
     {
         //TODO: Comentado por que algo esta afectando al proyecto

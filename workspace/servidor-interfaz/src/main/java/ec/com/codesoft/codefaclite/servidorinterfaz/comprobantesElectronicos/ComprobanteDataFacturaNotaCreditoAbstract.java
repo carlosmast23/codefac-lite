@@ -315,10 +315,10 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 totalImpuestoIva.setCodigo(impuestoDetalleIva.getImpuesto().getCodigoSri());
                 totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIva.getCodigo()+"");
                 //totalImpuestoIva.setDescuentoAdicional(descuentoAdicional);
-                if(!comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
-                {
-                    totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIva.getTarifa()+""));
-                }
+                //if(!comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
+                //{
+                totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIva.getTarifa()+""));
+                //}
                 
                 totalImpuestoIva.setValor(comprobante.getIva());
                 totalImpuestos.add(totalImpuestoIva);
