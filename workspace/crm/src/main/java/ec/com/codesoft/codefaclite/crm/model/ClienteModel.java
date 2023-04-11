@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal.TipoSucursalEnum;
@@ -220,6 +221,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setEmpresa(session.getEmpresa());
         persona.setObservaciones(getTxtObservaciones().getText());
         persona.setCampoAdicional(getTxtCampoAdicional().getText());
+        persona.setPvpDefecto(getCmbPrecioVentaDefecto().getSelectedItem()+"");
                 
         
         //Grabar la variable de obligado a llevar contabilidad
@@ -421,6 +423,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getCmbFormaPagoDefecto().setSelectedItem(persona.getSriFormaPago());
         getTxtNombreContacto().setText(persona.getContactoClienteNombre());
         getTxtObservaciones().setText(persona.getObservaciones());
+        getCmbPrecioVentaDefecto().setSelectedItem(persona.getPvpDefecto());
         
         if(persona.getDiasCreditoCliente()!=null)
             getTxtDiasCredito().setValue(persona.getDiasCreditoCliente());
@@ -503,6 +506,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getTxtDiasCredito().setValue(0);
             getTxtDiasCreditoProveedor().setValue(0);
             getTxtNombreLegal().setText("");
+            getCmbPrecioVentaDefecto().setSelectedItem(null);
             this.razonSocial = "";
             limpiarCrearEstablecimiento();
             getTblEstablecimientos().setModel(new DefaultTableModel());
@@ -653,6 +657,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             {
                 getCmbFormaPagoDefecto().addItem(formaPago);
             }
+            
+            //Cargar los distintos precios disponibles
+            UtilidadesComboBox.llenarComboBox(getCmbPrecioVentaDefecto(),Producto.PrecioVenta.getListadoPrecios());
             
             ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
             

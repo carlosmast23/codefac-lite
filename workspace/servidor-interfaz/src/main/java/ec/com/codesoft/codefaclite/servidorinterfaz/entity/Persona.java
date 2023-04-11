@@ -147,6 +147,9 @@ public class Persona implements Serializable, Comparable<Persona> {
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
     
+    @Column(name = "PVP_DEFECTO")
+    private String pvpDefecto;
+    
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona", fetch = FetchType.EAGER)
     private List<PersonaEstablecimiento> establecimientos;
@@ -570,6 +573,15 @@ public class Persona implements Serializable, Comparable<Persona> {
         }
         return "";
     }
+
+    public String getPvpDefecto() {
+        return pvpDefecto;
+    }
+
+    public void setPvpDefecto(String pvpDefecto) {
+        this.pvpDefecto = pvpDefecto;
+    }
+    
     
     
 

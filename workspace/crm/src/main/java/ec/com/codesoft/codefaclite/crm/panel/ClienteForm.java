@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal.TipoSucursalEnum;
@@ -132,6 +133,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         txtObservaciones = new javax.swing.JTextArea();
         jLabel42 = new javax.swing.JLabel();
         cmbHabilitarCredito = new javax.swing.JComboBox<>();
+        jLabel45 = new javax.swing.JLabel();
+        cmbPrecioVentaDefecto = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         chkContacto = new javax.swing.JCheckBox();
@@ -529,7 +532,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel16.setText("Días de Credito Proveedor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel16, gridBagConstraints);
@@ -545,17 +548,17 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         lblOligadoLlevarContabilidad.setText("Obligado a Llevar Contabilidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(lblOligadoLlevarContabilidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(chkObligadoLlevarContabilidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridy = 18;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio7, gridBagConstraints);
@@ -567,16 +570,16 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanel1.add(lblEspacio4, gridBagConstraints);
 
         jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel19.setText("Forma Pago Defecto:");
+        jLabel19.setText("Pvp Por Defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel19, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(txtDiasCredito, gridBagConstraints);
@@ -585,13 +588,13 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel28.setText("Habilitar Crédito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel28, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(txtDiasCreditoProveedor, gridBagConstraints);
@@ -666,7 +669,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel42.setText("Días de Credito Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel42, gridBagConstraints);
@@ -674,10 +677,26 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         cmbHabilitarCredito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         jPanel1.add(cmbHabilitarCredito, gridBagConstraints);
+
+        jLabel45.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel45.setText("Forma Pago Defecto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel45, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbPrecioVentaDefecto, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Adicionales", jPanel1);
 
@@ -1017,6 +1036,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarCredito;
     private javax.swing.JComboBox<Nacionalidad> cmbNacionalidad;
+    private javax.swing.JComboBox<Producto.PrecioVenta> cmbPrecioVentaDefecto;
     private javax.swing.JComboBox<TipoEstablecimiento> cmbTipoCliente;
     private javax.swing.JComboBox<TipoEstablecimiento> cmbTipoClienteOficina;
     private javax.swing.JComboBox<TipoSucursalEnum> cmbTipoEstablecimiento;
@@ -1064,6 +1084,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1520,6 +1541,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     public void setBtnAbriWhatsapp(JButton btnAbriWhatsapp) {
         this.btnAbriWhatsapp = btnAbriWhatsapp;
+    }
+
+    public JComboBox<Producto.PrecioVenta> getCmbPrecioVentaDefecto() {
+        return cmbPrecioVentaDefecto;
+    }
+
+    public void setCmbPrecioVentaDefecto(JComboBox<Producto.PrecioVenta> cmbPrecioVentaDefecto) {
+        this.cmbPrecioVentaDefecto = cmbPrecioVentaDefecto;
     }
     
     

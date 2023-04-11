@@ -50,6 +50,8 @@ create table CLIENTE(
     HABILITAR_CREDITO varchar(1),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.9.8.1)*/
     CAMPO_ADICIONAL varchar(300),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.1.6)*/
+    PVP_DEFECTO varchar(4),
 
 
     primary key (CLIENTE_ID)
