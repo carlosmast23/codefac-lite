@@ -32,9 +32,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDiscapacidadEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
@@ -161,6 +164,7 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
         }
     }
 
+    //TODO: Mejorar esta parte
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
@@ -169,13 +173,31 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
                 if (!respuesta) {
                     throw new ExcepcionCodefacLite("Cancelacion aula");
                 }
-                estudianteService.eliminarEstudiante(estudiante);
+                estudianteService.eliminarEstudiante(estudiante,ModoProcesarEnum.NORMAL);
                 DialogoCodefac.mensaje("Datos correctos", "El estudiante se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
+                
+                //Mostrar el mensaje de error anterior primero
                 DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                 Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+                
+                if(ex.getProcesarModoForzado())
+                {
+                    if(DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.PROCESAR_MODO_FORZADO))
+                    {
+                        try {
+                            estudianteService.eliminarEstudiante(estudiante,ModoProcesarEnum.FORZADO);
+                            DialogoCodefac.mensaje("Datos correctos", "El estudiante se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                        } catch (RemoteException ex1) {
+                            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex1);
+                        } catch (ServicioCodefacException ex1) {
+                            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex1);
+                            DialogoCodefac.mensaje(new CodefacMsj(ex1.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                        }
+                    }
+                }
             }
         }
     }

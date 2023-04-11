@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcadem
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -75,25 +76,28 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
     
     
 
-    public void eliminarEstudiante(Estudiante e)  throws RemoteException ,ServicioCodefacException {
+    public void eliminarEstudiante(Estudiante e,ModoProcesarEnum modoProceso)  throws RemoteException ,ServicioCodefacException {
         try {
             EstudianteInscritoService service=new EstudianteInscritoService();
-            Long cantidadEstudiantesInscritos=service.obtenerTamanioPorEstudiante(e);
-            if(cantidadEstudiantesInscritos>0)
+            
+            //Solo cuando es modo normal realiza las validaciones
+            if(modoProceso.equals(ModoProcesarEnum.NORMAL))
             {
-                throw new ServicioCodefacException("No se puede eliminar porque el estudiante esta inscrito");
-            }
-            else
-            {
-                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                    @Override
-                    public void transaccion() {
-                        e.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-                        entityManager.merge(e);
-                    }
-                });
+                Long cantidadEstudiantesInscritos=service.obtenerTamanioPorEstudiante(e);
+                if(cantidadEstudiantesInscritos>0)
+                {
+                    //Bota el la expecion pero comunica que tiene la opcion de ejecutar de forma forzada de nuevo
+                    throw new ServicioCodefacException("No se puede eliminar porque el estudiante esta inscrito",true);
+                }
             }
             
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    e.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(e);
+                }
+            });
            
         } catch (RemoteException ex) {
             Logger.getLogger(EstudianteService.class.getName()).log(Level.SEVERE, null, ex);

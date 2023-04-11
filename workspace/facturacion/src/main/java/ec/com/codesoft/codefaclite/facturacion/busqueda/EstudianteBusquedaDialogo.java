@@ -24,7 +24,7 @@ public class EstudianteBusquedaDialogo implements InterfaceModelFind<Estudiante>
         titulo.add(new ColumnaDialogo("Cedula", 0.2d));
         titulo.add(new ColumnaDialogo("Nombres", 0.3d));
         titulo.add(new ColumnaDialogo("Apellidos", 0.3d));
-        titulo.add(new ColumnaDialogo("Correo", 0.2d));
+        titulo.add(new ColumnaDialogo("Correos", 0.2d));
         return titulo;
     }
 
@@ -35,8 +35,8 @@ public class EstudianteBusquedaDialogo implements InterfaceModelFind<Estudiante>
         estudiante.getApellidos();
         estudiante.getCedula();*/
         
-        String queryString = "SELECT u FROM Estudiante u WHERE (u.estado=?1) and";
-        queryString += " u.cedula LIKE ?3 OR ( CONCAT(LOWER(u.nombres),' ',LOWER(u.apellidos)) LIKE ?2 )";
+        String queryString = "SELECT u FROM Estudiante u WHERE (u.estado=?1) ";
+        queryString += " AND ( u.cedula LIKE ?3 OR ( CONCAT(LOWER(u.nombres),' ',LOWER(u.apellidos)) LIKE ?2 ))";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2, filter);

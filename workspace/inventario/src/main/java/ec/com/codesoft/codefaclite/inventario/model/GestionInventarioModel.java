@@ -82,6 +82,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         getCmbTipoDocumento().setSelectedIndex(0);
+        getTxtCodigoProducto().requestFocus();
     }
 
     @Override
@@ -312,7 +313,9 @@ public class GestionInventarioModel extends GestionInventarioPanel{
             getTxtCodigoUnico().setEnabled(true);
             getTxtCantidad().setText("1");
             getTxtCantidad().setEnabled(false);
+            
         }
+        getTxtCantidad().requestFocus();
     }
     
     private void setearVariables()
