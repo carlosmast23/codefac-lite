@@ -401,8 +401,34 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             //productoEmpaquetado.setPresentacionList(productoPresentacionList);
                                                     
                             //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
-                            if (presentacionDetalle.getPvpTmp() == null) {
+                            if (presentacionDetalle.getPvpTmp() == null) 
+                            {
                                 productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
+                                if(productoEmpaquetado.getPrecioDistribuidor()!=null)
+                                {
+                                    productoEmpaquetado.setPrecioDistribuidor(productoEmpaquetado.getPrecioDistribuidor().multiply(presentacionDetalle.getCantidad()));
+                                }
+                                
+                                if(productoEmpaquetado.getPrecioTarjeta()!=null)
+                                {
+                                    productoEmpaquetado.setPrecioTarjeta(productoEmpaquetado.getPrecioTarjeta().multiply(presentacionDetalle.getCantidad()));
+                                }
+                                
+                                if(productoEmpaquetado.getPvp4()!=null)
+                                {
+                                    productoEmpaquetado.setPvp4(productoEmpaquetado.getPvp4().multiply(presentacionDetalle.getCantidad()));
+                                }
+                                
+                                if(productoEmpaquetado.getPvp5()!=null)
+                                {
+                                    productoEmpaquetado.setPvp5(productoEmpaquetado.getPvp5().multiply(presentacionDetalle.getCantidad()));
+                                }
+                                
+                                if(productoEmpaquetado.getPvp6()!=null)
+                                {
+                                    productoEmpaquetado.setPvp6(productoEmpaquetado.getPvp6().multiply(presentacionDetalle.getCantidad()));
+                                }
+                                
                             } else {
                                 productoEmpaquetado.setValorUnitario(presentacionDetalle.getPvpTmp());
                             }
