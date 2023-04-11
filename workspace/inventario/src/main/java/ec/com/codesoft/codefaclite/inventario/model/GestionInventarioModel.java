@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.inventario.panel.GestionInventarioPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -37,6 +38,8 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -71,6 +74,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         valoresIniciales();
         listenerBotones();
+        listenerTextField();
         kardexDetalle=new KardexDetalle();
        
     }
@@ -289,23 +293,27 @@ public class GestionInventarioModel extends GestionInventarioPanel{
 
             if (buscarDialogo.getResultado() != null) 
             {
-                limpiar();
-                productoSeleccionado = (Producto) buscarDialogo.getResultado();                
-                getTxtProducto().setText(productoSeleccionado.toString());
-                
-                getTxtCodigoUnico().setEnabled(false);
-                getTxtCantidad().setEnabled(true);                
-                if(productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI))
-                {
-                    getTxtCodigoUnico().setEnabled(true);
-                    getTxtCantidad().setText("1");
-                    getTxtCantidad().setEnabled(false);
-                }
-
+                cargarProductoVista((Producto) buscarDialogo.getResultado());
             }
 
         }
     };
+    
+    private void cargarProductoVista(Producto producto)
+    {
+        limpiar();
+        productoSeleccionado = producto;
+        getTxtProducto().setText(productoSeleccionado.toString());
+        getTxtCodigoProducto().setText(productoSeleccionado.getCodigoPersonalizado());
+
+        getTxtCodigoUnico().setEnabled(false);
+        getTxtCantidad().setEnabled(true);
+        if (productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI)) {
+            getTxtCodigoUnico().setEnabled(true);
+            getTxtCantidad().setText("1");
+            getTxtCantidad().setEnabled(false);
+        }
+    }
     
     private void setearVariables()
     {
@@ -364,6 +372,30 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     @Override
     public void buscar() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void listenerTextField() {
+        getTxtCodigoProducto().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) 
+                {
+                    Producto producto = FacturaModelControlador.listenerBuscarProducto(getTxtCodigoProducto().getText(), TipoDocumentoEnum.INVENTARIO, session.getEmpresa());
+                    if(producto!=null)
+                    {
+                        cargarProductoVista(producto);
+                    }
+                    //editarCeldaFacturaDetalle();
+                }
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
     
     
