@@ -113,7 +113,7 @@ public class CompraModel extends CompraPanel{
     /**
      * Referencia donde se va a almacenar la compra gestionado
      */
-    //private Empresa empresa;
+    //private Empresa empresa;tblDetalleProductos
     private Compra compra;
     private Producto productoSeleccionado;
     private Lote loteSeleccionado;
@@ -183,7 +183,7 @@ public class CompraModel extends CompraPanel{
             public void updateInterface(Object entity) {
                 
             }
-        }, VentanaEnum.UTILIDAD_PRECIO, false,parametros, this);
+        }, VentanaEnum.UTILIDAD_PRECIO, true,parametros, this);
         
     }
 

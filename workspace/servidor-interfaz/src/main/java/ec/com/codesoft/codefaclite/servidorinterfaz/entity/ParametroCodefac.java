@@ -42,6 +42,7 @@ public class ParametroCodefac implements Serializable {
     public static final String EDITAR_DESCUENTO_FACTURA= "edit_descuento_factura";
     public static final String EDITAR_PRECIO_UNIT_FACTURA= "edit_precio_unit_factura";
     public static final String MOSTRAR_COSTOS_FACTURAR="mostrar_costos_facturar";
+    public static final String MOSTRAR_AHORRO_VENTA="mostrar_ahorro_venta";
     
     /**
      * Esta opcion me permite controlar en las ventas que no puedan ingresar un valor inferior al precio original
@@ -190,6 +191,8 @@ public class ParametroCodefac implements Serializable {
     public static final String DATOS_COMPARTIDOS_EMPRESA="datos_compartidos_empresa";
     
     public static final String CONFIGURACION_IMPRESORA_FACTURA="config_impresora_factura";
+    
+    public static final String PRECIO_VENTA_DEFECTO="precio_venta_defecto";
     
     public static final String FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE="formal_pago_defecto_pantalla_cliente";
     

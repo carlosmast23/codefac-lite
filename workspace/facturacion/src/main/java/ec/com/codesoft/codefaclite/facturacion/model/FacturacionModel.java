@@ -3606,11 +3606,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 if(precioVenta!=null)
                 {
-                    controlador.cargarPrecioUnitario((productoSeleccionado.getCatalogoProducto().getIce()!=null)?productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje():BigDecimal.ZERO,precioVenta.precio);
-                    
-                    //Cargar los descuentos disponibles por cada precio
-                    List<BigDecimal> descuentosList=controlador.consultarDescuentoPorProducto(productoSeleccionado,precioVenta.numero);
-                    cargarPreciosPorcentaje(descuentosList);
+                    controlador.cargarPrecioUnitario((productoSeleccionado.getCatalogoProducto().getIce()!=null)?productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje():BigDecimal.ZERO,precioVenta.precio,precioVenta.numero,productoSeleccionado);
                     
                     //getTxtValorUnitario().setText(precioVenta.precio.toString());
                 }

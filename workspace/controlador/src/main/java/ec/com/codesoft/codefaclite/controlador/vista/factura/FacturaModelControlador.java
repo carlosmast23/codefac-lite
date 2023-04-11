@@ -709,14 +709,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         else
         {
             //getCmbIva().setEnabled(true);
-            cargarPrecioUnitario(facturaDetalle.getIcePorcentaje(),facturaDetalle.getPrecioUnitario());
+            cargarPrecioUnitario(facturaDetalle.getIcePorcentaje(),facturaDetalle.getPrecioUnitario(),null,null);
             //facturaDetalle.getPrecioUnitario()
            
             
         }
     }
     
-    public void cargarPrecioUnitario(BigDecimal icePorcentaje,BigDecimal precioUnitario)
+    public void cargarPrecioUnitario(BigDecimal icePorcentaje,BigDecimal precioUnitario,Integer numeroPvp,Producto productoSeleccionado)
     {
         try {
             interfaz.habilitarComboIva(true);
@@ -738,6 +738,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 interfaz.setComboIva(EnumSiNo.NO);
                 interfaz.setTxtValorUnitario(precioUnitario.toString());
             }
+            
+            //Cargar los descuentos disponibles por cada precio
+            if(numeroPvp!=null && productoSeleccionado!=null)
+            {
+                List<BigDecimal> descuentosList = consultarDescuentoPorProducto(productoSeleccionado, numeroPvp);
+                interfaz.cargarPreciosPorcentaje(descuentosList);
+            }
+            
+            //Cargar
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }

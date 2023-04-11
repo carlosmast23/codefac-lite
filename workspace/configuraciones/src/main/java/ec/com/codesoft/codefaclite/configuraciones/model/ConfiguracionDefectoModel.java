@@ -176,9 +176,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         }
        
         
-        //getCmbConfiguracionImpresora().removeAllItems();
         UtilidadesComboBox.llenarComboBox(getCmbConfiguracionImpresora(),ConfiguracionImpresoraEnum.values());
         getCmbConfiguracionImpresora().setSelectedItem(ConfiguracionImpresoraEnum.NINGUNA);
+        
+        UtilidadesComboBox.llenarComboBox(getCmbPrecioVentaDefecto(),Producto.PrecioVenta.getListadoPrecios());
         
         UtilidadesComboBox.llenarComboBox(getCmbRideNombrePrincipal(),RideNombrePrincipalEnum.values());
 
@@ -249,6 +250,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbEditarDescuentoFactura(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbEditarPrecioUnitFactura(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbMostrarCostosFacturar(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbMostrarAhorroVenta(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbModificarPrecioMenor(), EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbAgregarProductoDirectoLectorBarras(), EnumSiNo.values());
@@ -360,6 +362,13 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             {
                 ConfiguracionImpresoraEnum configuracionImpresoraEnum=ConfiguracionImpresoraEnum.buscarPorLetra(parametroConfiguracionImpresora.getValor());
                 getCmbConfiguracionImpresora().setSelectedItem(configuracionImpresoraEnum);
+                
+            }
+            
+            ParametroCodefac parametroPrecioVentaDefecto = parametrosTodos.get(ParametroCodefac.PRECIO_VENTA_DEFECTO);
+            if(parametroPrecioVentaDefecto!=null )
+            {
+                getCmbPrecioVentaDefecto().setSelectedItem(parametroPrecioVentaDefecto.getValor());
                 
             }
             
@@ -599,6 +608,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarCostosFacturar != null) ? parametroMostrarCostosFacturar.getValor() : null);
             getCmbMostrarCostosFacturar().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac parametroMostrarAhorroVenta = parametrosTodos.get(ParametroCodefac.MOSTRAR_AHORRO_VENTA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarAhorroVenta != null) ? parametroMostrarAhorroVenta.getValor() : null);
+            getCmbMostrarAhorroVenta().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             ParametroCodefac parametroEditarDescuentoFactura = parametrosTodos.get(ParametroCodefac.EDITAR_DESCUENTO_FACTURA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarDescuentoFactura != null) ? parametroEditarDescuentoFactura.getValor() : null);
             getCmbEditarDescuentoFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -778,6 +791,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,configuracionImpresoraEnum.getLetra());
         agregarParametroEditar(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
         
+        String pvpDefecto =(String) getCmbPrecioVentaDefecto().getSelectedItem();
+        agregarParametro(ParametroCodefac.PRECIO_VENTA_DEFECTO,pvpDefecto);
+        agregarParametroEditar(ParametroCodefac.PRECIO_VENTA_DEFECTO);
+        
         RideNombrePrincipalEnum rideNombrePrincipal =(RideNombrePrincipalEnum) getCmbRideNombrePrincipal().getSelectedItem();
         agregarParametro(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL,(rideNombrePrincipal!=null)?rideNombrePrincipal.getLetra():null);
         agregarParametroEditar(ParametroCodefac.RIDE_NOMBRE_PRINCIPAL);
@@ -861,9 +878,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA);
         
-        enumSiNo = (EnumSiNo) getCmbMostrarCostosFacturar().getSelectedItem();
-        agregarParametro(ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
-        agregarParametroEditar(ParametroCodefac.MOSTRAR_COSTOS_FACTURAR);
+        enumSiNo = (EnumSiNo) getCmbMostrarAhorroVenta().getSelectedItem();
+        agregarParametro(ParametroCodefac.MOSTRAR_AHORRO_VENTA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.MOSTRAR_AHORRO_VENTA);
         
         enumSiNo = (EnumSiNo) getCmbActivarNotaVenta().getSelectedItem();
         agregarParametro(ParametroCodefac.ACTIVAR_NOTA_VENTA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
