@@ -50,9 +50,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -64,6 +66,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaS
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -908,7 +911,7 @@ public class CompraModel extends CompraPanel{
                             /*String identificacion = compra.getProveedor().getIdentificacion();
                             String nombre = compra.getProveedor().getRazonSocial();
                             desbloquearIngresoDetalleProducto();*/
-                            cargarProductoVistaAgregar(entity);
+                            cargarProductoVistaAgregar(entity,CrudEnum.CREAR);
                         }
                     }
                 };
@@ -979,7 +982,7 @@ public class CompraModel extends CompraPanel{
                     //Producto productoTmp = (Producto) buscarDialogo.getResultado();
                     ProductoBusquedaDialogoFactory busquedaFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(), ProductoBusquedaDialogoFactory.ResultadoEnum.PRODUCTO);
                     Producto productoTmp = (Producto) busquedaFactory.ejecutarDialogo();
-                    cargarProductoVistaAgregar(productoTmp);
+                    cargarProductoVistaAgregar(productoTmp,CrudEnum.CREAR);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                     new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.CORRECTO);
@@ -1085,6 +1088,7 @@ public class CompraModel extends CompraPanel{
                     agregarDetalleCompraConDatosVista(compraDetalle);
                     calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
                     calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                    bloquearDesbloquearBotones(true);
                 }
             }
         });
@@ -1119,7 +1123,7 @@ public class CompraModel extends CompraPanel{
             public void actionPerformed(ActionEvent e) {
                 PresentacionProducto presentacion=(PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
                 
-                if(presentacion!=null)
+                if(presentacion!=null && productoSeleccionado!=null)
                 {
                     //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
                     Producto productoTmp= productoSeleccionado.buscarProductoPorPresentacion(presentacion);
@@ -1131,7 +1135,7 @@ public class CompraModel extends CompraPanel{
                     
                     productoSeleccionado=productoTmp;
                     
-                    cargarProductoVistaAgregar(productoTmp);
+                    cargarProductoVistaAgregar(productoTmp,CrudEnum.EDITAR);
                 }
             }
         });
@@ -1141,9 +1145,9 @@ public class CompraModel extends CompraPanel{
                 
     }
     
-    private void cargarProductoVistaAgregar(Producto productoTmp)
+    private void cargarProductoVistaAgregar(Producto productoTmp,CrudEnum cruEnum)
     {
-        agregarProductoVista(productoTmp);
+        agregarProductoVista(productoTmp,cruEnum);
 
         //Cuando seleccione otro producto por seguridad debo limpiar el lote para que seleccione de nuevo
         //TODO:Mejorar esta parte para tener desde un mismo lugar donde limpiar los datos
@@ -1154,25 +1158,29 @@ public class CompraModel extends CompraPanel{
     
     public void cargarPresentaciones(Producto producto)
     {
-        getCmbPresentacionProducto().removeAllItems();
-        if(producto.getPresentacionList()!=null)
-        {
-            //Por defecto agrego la presentacion del mismo producto            
-            //getCmbPresentacionProducto().addItem(producto.getPresentacion());
-            List<PresentacionProducto> presentacionList=producto.obtenerPresentacionesList();
-            
-            for (PresentacionProducto detallePresentacion : presentacionList) 
-            {
-                getCmbPresentacionProducto().addItem(detallePresentacion);
+        UtilidadesComboBox.ejecutarProcesoSinListener(getCmbPresentacionProducto(),new UtilidadesComboBox.ProcesoComboBoxIf() {
+            @Override
+            public void proceso() {
+                getCmbPresentacionProducto().removeAllItems();
+                if(producto.getPresentacionList()!=null)
+                {
+                    //Por defecto agrego la presentacion del mismo producto                                
+                    List<PresentacionProducto> presentacionList=producto.obtenerPresentacionesList();
+
+                    for (PresentacionProducto detallePresentacion : presentacionList) 
+                    {
+                        getCmbPresentacionProducto().addItem(detallePresentacion);
+                    }
+
+                    //Volver a seleccionar la presentacion correcta en el caso que existe el producto
+                    if(productoSeleccionado!=null)
+                    {
+                        //getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
+                        getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionProducto());
+                    }
+                }
             }
-            
-            //Volver a seleccionar la presentacion correcta en el caso que existe el producto
-            if(productoSeleccionado!=null)
-            {
-                //getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
-                getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionProducto());
-            }
-        }
+        });        
     }
     
     private ActionListener listenerCrearLote=new ActionListener() {
@@ -1308,11 +1316,19 @@ public class CompraModel extends CompraPanel{
         }
     };
     
-    private void agregarProductoVista(Producto producto)
+    private void agregarProductoVista(Producto producto,CrudEnum crudEnum)
     {
         productoSeleccionado = producto;
         verificarExistenciadeProductoProveedor();
-        bloquearDesbloquearBotones(true);
+        if(crudEnum.equals(CrudEnum.CREAR))
+        {
+            bloquearDesbloquearBotones(true);
+        }
+        else
+        {
+            bloquearDesbloquearBotones(false);
+        }
+        
         getTxtCantidadItem().requestFocus();
     }
     
@@ -1348,40 +1364,46 @@ public class CompraModel extends CompraPanel{
     
     private void verificarExistenciadeProductoProveedor()
     {
-        if(productoSeleccionado!=null)
-                {
-                    try {
-                        //Buscar si existe el producto vinculado con un proveedor
-                        ProductoProveedorServiceIf serviceProductoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf();
-                        //Map<String, Object> mapParametros = new HashMap<String, Object>();
-                        //mapParametros.put("producto", productoSeleccionado);
-                        //mapParametros.put("proveedor", compra.getProveedor());
-                        List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoCompraActivo(productoSeleccionado,compra);
-                        
-                        if (resultados != null && resultados.size() > 0) {
-                            productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
-                            getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto()+"");
-                            //EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
-                        }
-                        else
-                        {//Cuando no existe crea un nuevo producto proveedor
-                            productoProveedor=new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
-                            productoProveedor.setDescripcion("");
-                            productoProveedor.setEstado("a");
-                            productoProveedor.setProducto(productoSeleccionado);
-                            productoProveedor.setProveedor(compra.getProveedor());
-                            getTxtPrecionUnitarioItem().setText("0"); //Seteo con el valor de 0 porque no existe el costo grabado
-                        }
-                        
-                        getTxtProductoItem().setText(productoSeleccionado.getCodigoPersonalizado());
-                        getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
-                        seleccionarComboTipoIva(productoSeleccionado.getCatalogoProducto().getIva().getTarifa());
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+        if (productoSeleccionado != null) 
+        {
+
+            
+            try 
+            {
+                //Buscar si existe el producto vinculado con un proveedor
+                ProductoProveedorServiceIf serviceProductoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf();
+                //Map<String, Object> mapParametros = new HashMap<String, Object>();
+                //mapParametros.put("producto", productoSeleccionado);
+                //mapParametros.put("proveedor", compra.getProveedor());
+                List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoCompraActivo(productoSeleccionado, compra);
+
+                if (resultados != null && resultados.size() > 0) {
+                    productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
+                    getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto() + "");
+                    //EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
+                } else {//Cuando no existe crea un nuevo producto proveedor
+                    productoProveedor = new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
+                    productoProveedor.setDescripcion("");
+                    productoProveedor.setEstado("a");
+                    productoProveedor.setProducto(productoSeleccionado);
+                    productoProveedor.setProveedor(compra.getProveedor());
+                    //Si se esta seleccionado un empaque por el momento no hago nada
+                    
+                    if (!productoSeleccionado.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) {
+                        getTxtPrecionUnitarioItem().setText("0"); //Seteo con el valor de 0 porque no existe el costo grabado
                     }
+                    
                 }
+
+                getTxtProductoItem().setText(productoSeleccionado.getCodigoPersonalizado());
+                getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
+                seleccionarComboTipoIva(productoSeleccionado.getCatalogoProducto().getIva().getTarifa());
+            } catch (RemoteException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     private void seleccionarComboTipoIva(Integer porcentajeIva)
@@ -1903,7 +1925,7 @@ public class CompraModel extends CompraPanel{
                         
                         if (producto != null) 
                         { 
-                            agregarProductoVista(producto);
+                            agregarProductoVista(producto,CrudEnum.CREAR);
                         }
                         
                     } catch (ServicioCodefacException ex) {

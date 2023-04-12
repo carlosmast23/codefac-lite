@@ -62,6 +62,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -684,9 +685,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //Validar temas de los detalles de la factura de compra
         for (CompraDetalle detalle : compra.getDetalles()) 
         {
-            if(detalle.getSubtotal().compareTo(BigDecimal.ZERO)<0)
+            BigDecimal subtotal=detalle.getSubtotal().setScale(2, RoundingMode.HALF_UP);
+            if(subtotal.compareTo(BigDecimal.ZERO)<0)
             {
-                throw new ServicioCodefacException("Existe un problema con el producto: "+detalle.getProductoProveedor().getProducto().getNombre()+", por que esta generando valores negativos");
+                throw new ServicioCodefacException("Existe un problema con el producto: "+detalle.getProductoProveedor().getProducto().getNombre()+", por que esta generando valores negativos : "+subtotal);
             }
         }
         
