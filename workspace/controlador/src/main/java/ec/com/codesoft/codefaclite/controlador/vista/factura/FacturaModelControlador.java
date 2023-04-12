@@ -116,6 +116,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      */
     private String pvpDefecto=Producto.PrecioVenta.PV1;
     
+    /**
+     * Varaible que me permite saber si esta activo el calculo para los ahorros en la pantalla de venta
+     */
+    private Boolean calcularAhorro=Boolean.FALSE;
+    
 
     public FacturaModelControlador(SessionCodefacInterface session,FacturaModelInterface interfaz,MensajeVistaInterface mensajeVista) {
         super(mensajeVista);
@@ -143,12 +148,28 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     public void nuevo()
     {
-        //Buscar cual es el precio por defecto que se debe cargar cuando se esta utilizando otro adicional
-        String pvpDefecto=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.PRECIO_VENTA_DEFECTO);        
-        if(!UtilidadesTextos.verificarNullOVacio(pvpDefecto))
-        {
-            this.pvpDefecto=pvpDefecto;
-        }        
+        try {
+            //Buscar cual es el precio por defecto que se debe cargar cuando se esta utilizando otro adicional
+            String pvpDefecto=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.PRECIO_VENTA_DEFECTO);
+            if(!UtilidadesTextos.verificarNullOVacio(pvpDefecto))
+            {
+                this.pvpDefecto=pvpDefecto;
+            }
+            
+            //Verificar si se deben mostrar el campo de ahorro total de los productos
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_AHORRO_VENTA,EnumSiNo.SI))
+            {
+                this.interfaz.mostrarEtiquetasAhorro(Boolean.TRUE);
+                this.calcularAhorro=Boolean.TRUE;
+            }
+            else
+            {
+                this.interfaz.mostrarEtiquetasAhorro(Boolean.FALSE);
+                this.calcularAhorro=Boolean.FALSE;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -401,6 +422,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         //Consultar el Valor Unitario segun el PVP confgurado por defecto
         BigDecimal valorUnitario=productoSeleccionado.buscarPrecioPorNombre(pvpDefecto);
+        //Si no tiene valor unitario cargar por defecto el primer valor que exista
+        //if(valorUnitario==null)
+        //{
+        //    valorUnitario=productoSeleccionado.buscarPrecioPorNombre(Producto.PrecioVenta.PV1);
+        //}
         
         //Consultar los descuentos que se deben cargar segun el precio seleccionado
         List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado, pvpDefecto);
@@ -476,6 +502,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 EnumSiNo.NO,
                 interfaz.obtenerTipoDocumentoSeleccionado(),
                 descuentoDefecto);
+        
+        if(calcularAhorro)
+        {
+            //El precio para hacer e calculo del ahorro siempre va a hacer el primero
+            facturaDetalle.setPrecioSinAhorro(productoSeleccionado.getValorUnitario());
+        }
         
         //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
         interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
@@ -657,7 +689,6 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         verificarProductoConNotaVentaInternaGenerico(catalogoProducto, facturaDetalle.getPrecioUnitario(),interfazSetearDatos);
-        //facturaDetalle.setPrecioUnitario(valorUnitario);
         facturaDetalle.calcularTotalesDetallesFactura();
     }
     
@@ -2037,6 +2068,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado);
         public Kardex obtenerKardexDesdeProducto(Producto producto);
         public void seleccionarPvpPorNombre(String nombrePvp);
+        public void mostrarEtiquetasAhorro(Boolean activar);
         
     }
     

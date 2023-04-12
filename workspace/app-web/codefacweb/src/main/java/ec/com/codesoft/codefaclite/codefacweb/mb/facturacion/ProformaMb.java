@@ -1262,11 +1262,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
 
     public void cargarCliente(PersonaEstablecimiento cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     public Kardex obtenerKardexDesdeProducto(Producto producto) {
@@ -1275,6 +1275,16 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     @Override
     public void cargarPreciosPorcentaje(List<BigDecimal> descuentos) {
+        
+    }
+
+    @Override
+    public void seleccionarPvpPorNombre(String nombrePvp) {
+        
+    }
+
+    @Override
+    public void mostrarEtiquetasAhorro(Boolean activar) {
         
     }
 

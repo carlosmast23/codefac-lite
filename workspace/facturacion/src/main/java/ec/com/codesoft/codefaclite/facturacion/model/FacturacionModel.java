@@ -4710,6 +4710,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblValorIce().setText(""+factura.getIce());
         getLblIva12().setText("" + factura.getIva());
         getTxtValorTotal().setText("" + this.factura.getTotal());
+        getLblAhorro().setText(""+factura.getAhorro());
         getLblSubTotalDescuentoConImpuesto().setText("" + factura.getDescuentoImpuestos());
         getLblSubTotalDescuentoSinImpuesto().setText("" + factura.getDescuentoSinImpuestos());
         getLblTotalDescuento().setText("" + factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
@@ -4785,6 +4786,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado) {
         this.presupuestoSeleccionado=presupuestoSeleccionado;
+    }
+    
+    public void mostrarEtiquetasAhorro(Boolean activar)
+    {
+        this.getLblAhorro().setVisible(activar);
+        this.getLblTituloAhorro().setVisible(activar);
     }
 
 }

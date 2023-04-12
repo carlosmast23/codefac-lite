@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 /**
  *
@@ -35,6 +36,13 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     private BigDecimal cantidad;
     @Column(name = "PRECIO_UNITARIO")
     private BigDecimal precioUnitario;
+    
+    /**
+     * Esta variable me va permitir utilizar para grabar los precios sin ahorro cuando luego tenga que hacer calculos para ver cuanto fue mi ahorro
+     */
+    @Column(name = "PRECIO_SIN_AHORRO")
+    private BigDecimal precioSinAhorro;
+    
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
     @Column(name = "VALOR_ICE")
@@ -435,7 +443,14 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void setCodigoPrincipal(String codigoPrincipal) {
         this.codigoPrincipal = codigoPrincipal;
     }
-    
+
+    public BigDecimal getPrecioSinAhorro() {
+        return precioSinAhorro;
+    }
+
+    public void setPrecioSinAhorro(BigDecimal precioSinAhorro) {
+        this.precioSinAhorro = precioSinAhorro;
+    }
     
 
 }

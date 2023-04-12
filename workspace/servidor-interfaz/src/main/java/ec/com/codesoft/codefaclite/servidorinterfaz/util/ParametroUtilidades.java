@@ -56,6 +56,8 @@ public abstract class ParametroUtilidades {
         return false;
     }
     
+    //TODO: Quitar el remote expetion porque no es necesario
+    @Deprecated 
     public static <T extends ComparadorInterface> Boolean comparar(Empresa empresa,String nombreParametro,T valorComparar) throws RemoteException
     {
         String valorParametro=obtenerValorParametro(empresa, nombreParametro);

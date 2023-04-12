@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 /**
  *
@@ -43,6 +45,9 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
 
     @Column(name = "TOTAL")
     protected BigDecimal total;
+    
+    @Column(name = "AHORRO")
+    protected BigDecimal ahorro;
     
     /**
      * Valor del descuento de los productos que no cobran iva
@@ -155,6 +160,14 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     public void setSucursal(PersonaEstablecimiento sucursal) {
         this.sucursal = sucursal;
     }
+
+    public BigDecimal getAhorro() {
+        return ahorro;
+    }
+
+    public void setAhorro(BigDecimal ahorro) {
+        this.ahorro = ahorro;
+    }
     
     
 
@@ -223,11 +236,51 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         //controlador.cargarTotales();
     }
     
+    //TODO: Mejorar esta parte
+    public ResultadoTotales calcularTotalesConPrecioUnitario(List<DetalleFacturaNotaCeditoAbstract> detalles,Boolean precioNormal)
+    {
+        ResultadoTotales resultado=new ResultadoTotales();
+        
+        for (DetalleFacturaNotaCeditoAbstract detalle : detalles) 
+        {
+
+            //Sumar el valor del Ice
+            resultado.ice = resultado.ice.add(detalle.getValorIce());
+            
+            BigDecimal precio=(precioNormal?detalle.getPrecioUnitario():detalle.getPrecioSinAhorro());
+            //Sumar los subtotales
+            //TODO: Ver si estos calculos los puede hacer internamente en la clase FacturaDetalle
+            if (detalle.getIvaPorcentaje().equals(0)) {
+                
+                resultado.subTotalSinImpuestos = resultado.subTotalSinImpuestos.add(precio.multiply(detalle.getCantidad()));
+                resultado.descuentoSinImpuestos = resultado.descuentoSinImpuestos.add((detalle.getDescuento() != null) ? detalle.getDescuento() : BigDecimal.ZERO);
+            } else {
+                resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(precio.multiply(detalle.getCantidad()));
+                resultado.descuentoConImpuestos = resultado.descuentoConImpuestos.add((detalle.getDescuento() != null) ? detalle.getDescuento() : BigDecimal.ZERO);
+                
+                //Artificio para no perder la referencia
+                resultado.ivaDecimal = new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
+                resultado.impuestoIva = resultado.subTotalConImpuestos.add(resultado.ice).subtract(resultado.descuentoConImpuestos).multiply(resultado.ivaDecimal);
+            }
+
+        }
+
+    
+        //Calcula el total de los totales
+        resultado.total = resultado.subTotalSinImpuestos.subtract(resultado.descuentoSinImpuestos)
+                .add(resultado.subTotalConImpuestos.subtract(resultado.descuentoConImpuestos))
+                .add(resultado.impuestoIva)
+                .add(resultado.ice);
+    
+        return resultado;
+    }
+    
     public void calcularTotalesDesdeDetalles() {
         List<DetalleFacturaNotaCeditoAbstract> detalles=(List<DetalleFacturaNotaCeditoAbstract>) getDetallesComprobante();
         //Solo calcular si la variables de detalles fue creada
         if (detalles == null || detalles.size() == 0) {
             this.total = BigDecimal.ZERO;
+            this.ahorro=BigDecimal.ZERO;
             this.descuentoSinImpuestos = BigDecimal.ZERO;
             this.descuentoImpuestos = BigDecimal.ZERO;
             this.subtotalSinImpuestos = BigDecimal.ZERO;
@@ -237,17 +290,31 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
             return;
         }
 
-        BigDecimal total = BigDecimal.ZERO; //total de la factura        
-        BigDecimal subTotalSinImpuestos = BigDecimal.ZERO;//Sin el descuento
-        BigDecimal subTotalConImpuestos = BigDecimal.ZERO;//Sin los descuentos        
-        BigDecimal descuentoSinImpuestos = BigDecimal.ZERO; //
-        BigDecimal descuentoConImpuestos = BigDecimal.ZERO; //        
-        BigDecimal impuestoIva = BigDecimal.ZERO; //        
-        BigDecimal ivaDecimal = BigDecimal.ZERO; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
-        BigDecimal ice = BigDecimal.ZERO;
+        //Calcular el total de la compra
+        ResultadoTotales resultado =calcularTotalesConPrecioUnitario(detalles,true);
         
+        BigDecimal total = resultado.total; //total de la factura        
+        //BigDecimal ahorro=B;
+        BigDecimal subTotalSinImpuestos = resultado.subTotalSinImpuestos;//Sin el descuento
+        BigDecimal subTotalConImpuestos = resultado.subTotalConImpuestos;//Sin los descuentos        
+        BigDecimal descuentoSinImpuestos = resultado.descuentoSinImpuestos; //
+        BigDecimal descuentoConImpuestos = resultado.descuentoConImpuestos; //        
+        BigDecimal impuestoIva = resultado.impuestoIva; //        
+        BigDecimal ivaDecimal = resultado.ivaDecimal; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
+        BigDecimal ice = resultado.ice;
+        
+        //TODO: Me parece que ese codigo se debe setear directo
+        this.ice = ice;
+        
+        //Antes de hacer calculos verifico si el sistema tiene grabados esos datos para no hacer calculos inecesarios
+        if(detalles.get(0).getPrecioSinAhorro()!=null)
+        {
+            //Calcular el total de la compra pero sin ahorro cuando sea el caso para calcular
+            ResultadoTotales resultadoTotales =calcularTotalesConPrecioUnitario(detalles,false);
+            this.ahorro=resultadoTotales.total.subtract(total).setScale(2, RoundingMode.HALF_UP);
+        }
 
-        for (DetalleFacturaNotaCeditoAbstract detalle : detalles) {
+        /*for (DetalleFacturaNotaCeditoAbstract detalle : detalles) {
 
             //Sumar el valor del Ice
             ice = ice.add(detalle.getValorIce());
@@ -275,7 +342,8 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         total = subTotalSinImpuestos.subtract(descuentoSinImpuestos)
                 .add(subTotalConImpuestos.subtract(descuentoConImpuestos))
                 .add(impuestoIva)
-                .add(ice);
+                .add(ice);*/
+        
 
         /**
          * ============================================================================================================
@@ -390,6 +458,24 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
             Logger.getLogger(ComprobanteVentaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }
         return mapResultado;
+    }
+    
+    public class ResultadoTotales
+    {
+        BigDecimal total = BigDecimal.ZERO; //total de la factura        
+        BigDecimal subTotalSinImpuestos = BigDecimal.ZERO;//Sin el descuento
+        BigDecimal subTotalConImpuestos = BigDecimal.ZERO;//Sin los descuentos        
+        BigDecimal descuentoSinImpuestos = BigDecimal.ZERO; //
+        BigDecimal descuentoConImpuestos = BigDecimal.ZERO; //        
+        BigDecimal impuestoIva = BigDecimal.ZERO; //        
+        BigDecimal ivaDecimal = BigDecimal.ZERO; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
+        BigDecimal ice = BigDecimal.ZERO;
+
+        public ResultadoTotales() 
+        {
+            
+        }
+        
     }
 
 }
