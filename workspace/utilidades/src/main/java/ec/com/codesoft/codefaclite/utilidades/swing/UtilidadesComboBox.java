@@ -99,13 +99,28 @@ public class UtilidadesComboBox {
         }
     }
     
+    /**
+     * Metodo que me va permitir ejecutar un conjunto de acciones sobre el modelo del combo pero sin ejecutar listener de forma imnecesario
+     * @param comboBox
+     * @param procesoIf 
+     */
+    public static void ejecutarProcesoSinListener(JComboBox comboBox,ProcesoComboBoxIf procesoIf)
+    {
+        
+        ActionListener[] listerTmp=comboBox.getActionListeners();        
+        UtilidadesComboBox.eliminarTodosLosListener(comboBox);
+        procesoIf.proceso();
+        UtilidadesComboBox.agregarActionListeners(comboBox, listerTmp);
+    }
+    
     public interface CriterioCompararComboEnum<T>
     {
         public abstract Object objectoComparador(T objeto );
     }
     
-    public interface EliminarListenerIf
+    public interface ProcesoComboBoxIf
     {
-        public void proceso(JComboBox combo);
+        public void proceso();
     }
+    
 }

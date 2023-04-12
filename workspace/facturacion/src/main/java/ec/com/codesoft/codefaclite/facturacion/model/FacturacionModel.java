@@ -1404,11 +1404,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     
     
-    public void cargarPrecios(Producto producto) {
-        getCmbPreciosVenta().removeAllItems();
-        for (Producto.PrecioVenta precioVenta : producto.obtenerPreciosVenta()) {
-            getCmbPreciosVenta().addItem(precioVenta);            
-        }
+    public void cargarPrecios(Producto producto) {        
+        
+        UtilidadesComboBox.ejecutarProcesoSinListener(getCmbPreciosVenta(),new UtilidadesComboBox.ProcesoComboBoxIf() {
+            @Override
+            public void proceso() {                
+                getCmbPreciosVenta().removeAllItems();
+                for (Producto.PrecioVenta precioVenta : producto.obtenerPreciosVenta()) {
+                    getCmbPreciosVenta().addItem(precioVenta);
+                }
+            }
+        });
     }
     
     public void cargarPreciosPorcentaje(List<BigDecimal> descuentos ) {
@@ -3174,6 +3180,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        controlador.nuevo();
     }
         
 
@@ -4501,7 +4509,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
     
-    
+    public void seleccionarPvpPorNombre(String nombrePvp)
+    {
+        UtilidadesComboBox.seleccionarItemPorCriterio(getCmbPreciosVenta(),nombrePvp,new UtilidadesComboBox.CriterioCompararComboEnum<Producto.PrecioVenta>() {
+            @Override
+            public Object objectoComparador(Producto.PrecioVenta precioVenta) {
+                return precioVenta.alias;
+            }
+        });
+        
+    }
 
     @Override
     public ClienteInterfaceComprobante getInterfaceComprobante() throws RemoteException{

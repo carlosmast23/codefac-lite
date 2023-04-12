@@ -621,6 +621,20 @@ public class Producto implements Serializable, Comparable<Producto> {
         return BigDecimal.ZERO;        
     }
     
+    public BigDecimal buscarPrecioPorNombre(String pvpNombre)
+    {
+        switch(pvpNombre)
+        {
+            case Producto.PrecioVenta.PV1: return valorUnitario;
+            case Producto.PrecioVenta.PV2: return precioDistribuidor;
+            case Producto.PrecioVenta.PV3: return precioTarjeta;
+            case Producto.PrecioVenta.PV4: return pvp4;
+            case Producto.PrecioVenta.PV5: return pvp5;
+            case Producto.PrecioVenta.PV6: return pvp6;
+        }
+        return null;
+    }
+    
     public List<PrecioVenta> obtenerPreciosVenta()
     {
         List<PrecioVenta> valores=new ArrayList<PrecioVenta>();
@@ -1320,6 +1334,35 @@ public class Producto implements Serializable, Comparable<Producto> {
             return precioList;
             
         }
+        
+        public static String buscaTextoPorPosicion(Integer numeroPvp)
+        {
+            switch(numeroPvp)
+            {
+                case 1:return PrecioVenta.PV1;
+                case 2:return PrecioVenta.PV2;
+                case 3:return PrecioVenta.PV3;
+                case 4:return PrecioVenta.PV4;
+                case 5:return PrecioVenta.PV5;
+                case 6:return PrecioVenta.PV6;
+            }
+            return null;
+        }
+        
+        public static Integer buscarPosicionPorTexto(String pvp)
+        {
+            switch(pvp)
+            {
+                case PrecioVenta.PV1: return 1;
+                case PrecioVenta.PV2: return 2;
+                case PrecioVenta.PV3: return 3;
+                case PrecioVenta.PV4: return 4;
+                case PrecioVenta.PV5: return 5;
+                case PrecioVenta.PV6: return 6;
+            }
+            return -1;
+        }
+        
         
 
     }

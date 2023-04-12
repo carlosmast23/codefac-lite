@@ -111,6 +111,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     public Boolean activarIvaFeriado=false;
     
+    /**
+     * Variable para saber cual es el precio por defecto que debe cargar el sistema para mantener en memoria cuando cargue el resto de productos
+     */
+    private String pvpDefecto=Producto.PrecioVenta.PV1;
+    
 
     public FacturaModelControlador(SessionCodefacInterface session,FacturaModelInterface interfaz,MensajeVistaInterface mensajeVista) {
         super(mensajeVista);
@@ -134,6 +139,16 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void nuevo()
+    {
+        //Buscar cual es el precio por defecto que se debe cargar cuando se esta utilizando otro adicional
+        String pvpDefecto=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.PRECIO_VENTA_DEFECTO);        
+        if(!UtilidadesTextos.verificarNullOVacio(pvpDefecto))
+        {
+            this.pvpDefecto=pvpDefecto;
+        }        
     }
     
     /**
@@ -353,6 +368,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return null;
     }
     
+    public List<BigDecimal> consultarDescuentoPorProducto(Producto producto,String pvpNombre)
+    {
+        Integer posicion= Producto.PrecioVenta.buscarPosicionPorTexto(pvpNombre);
+        return consultarDescuentoPorProducto(producto, posicion);
+    }
+    
     public List<BigDecimal> consultarDescuentoPorProducto(Producto producto,Integer numeroPrecio)
     {
         try {
@@ -377,13 +398,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         if (productoSeleccionado == null) {
             return;
         }
+        
+        //Consultar el Valor Unitario segun el PVP confgurado por defecto
+        BigDecimal valorUnitario=productoSeleccionado.buscarPrecioPorNombre(pvpDefecto);
+        
+        //Consultar los descuentos que se deben cargar segun el precio seleccionado
+        List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado, pvpDefecto);
+        
         verificarProductoConNotaVentaInterna(productoSeleccionado);
         //this.productoSeleccionado=productoSeleccionado;
         interfaz.setProductoSeleccionado(productoSeleccionado);
         
         //cargarPrecios(productoSeleccionado);
         interfaz.cargarPrecios(productoSeleccionado);
-        List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado,1);
+        //List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado,1);
         interfaz.cargarPreciosPorcentaje(descuentos);
         interfaz.cargarPresentaciones(productoSeleccionado);
         
@@ -437,7 +465,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         FacturaDetalle facturaDetalle=crearFacturaDetalle(
                 BigDecimal.ONE,
-                productoSeleccionado.getValorUnitario(), 
+                valorUnitario, 
                 productoSeleccionado.getPrecioSinSubsidio(),
                 descripcion, 
                 productoSeleccionado.getCodigoPersonalizado(), 
@@ -452,6 +480,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
         interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
         setearValoresProducto(facturaDetalle);
+        
+        //Seleccionar el precio por defecto para cargar en la vista
+        interfaz.seleccionarPvpPorNombre(pvpDefecto);
     }
     
     public FacturaDetalle crearFacturaDetalle(
@@ -746,7 +777,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 interfaz.cargarPreciosPorcentaje(descuentosList);
             }
             
-            //Cargar
+            //Dejar seleccionado el ultimo precio por defecto para que las siguientes veces continue con ese mismo precio
+            if(numeroPvp!=null)
+            {
+                pvpDefecto=Producto.PrecioVenta.buscaTextoPorPosicion(numeroPvp);
+            }
+            
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2000,6 +2036,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public void cargarCliente(PersonaEstablecimiento cliente);
         public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado);
         public Kardex obtenerKardexDesdeProducto(Producto producto);
+        public void seleccionarPvpPorNombre(String nombrePvp);
         
     }
     
