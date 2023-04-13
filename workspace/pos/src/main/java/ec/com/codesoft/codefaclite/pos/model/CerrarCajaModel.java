@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.controlador.vista.pos.CajaSesionModelControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.pos.reportdata.VentaReporteData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -21,6 +22,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -154,7 +157,7 @@ public class CerrarCajaModel extends CajaSessionModel
     //TODO: Optimizar esta parte para poner en otro lado más general por ejemplo el contralador
     public static void generarReporteCaja(CajaSession cajaSession,InterfazComunicacionPanel panelPadre)
     {
-        InputStream path = RecursoCodefac.JASPER_POS.getResourceInputStream("reporteCierreCaja.jrxml");
+        
         Map<String,Object> parametros = new HashMap<String,Object>();
         
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -212,27 +215,49 @@ public class CerrarCajaModel extends CajaSessionModel
             }
         });
         
-        DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
-                @Override
-                public void excel() {
-                    try{
-                        Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Secuencial", "Identificación","Cliente", "Total"};
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, detalleData);
-                        excel.abrirDocumento();
-                    }
-                    catch(Exception exc)
-                    {
-                        exc.printStackTrace();
-                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
-                    }  
-                }
+        String[] opciones = {"A4", "Ticket", "Cancelar"};
+        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
+        switch (opcionSeleccionada) {
+            case 0: 
+                imprimirFormatoA4(detalleData,parametros,panelPadre);
+                break;
 
-                @Override
-                public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, detalleData, panelPadre,"Cierre Caja");
+            case 1:
+                imprimirFormatoTicket(parametros, detalleData, panelPadre);
+                break;
+        }
+        
+        
+    }
+    
+    private static void imprimirFormatoTicket(Map<String,Object> parametros,List<VentaReporteData> detalleData,InterfazComunicacionPanel panelPadre)
+    {
+        String nombreReporte="cierreCajaTicket.jrxml";
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_POS,nombreReporte, parametros, detalleData, panelPadre, "Cierre Caja", OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.TICKET,ConfiguracionImpresoraEnum.NINGUNA);        
+    }
+    
+    private static void imprimirFormatoA4(List<VentaReporteData> detalleData,Map<String,Object> parametros,InterfazComunicacionPanel panelPadre)
+    {
+        DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+            @Override
+            public void excel() {
+                try {
+                    Excel excel = new Excel();
+                    String nombreCabeceras[] = {"Secuencial", "Identificación", "Cliente", "Total"};
+                    excel.gestionarIngresoInformacionExcel(nombreCabeceras, detalleData);
+                    excel.abrirDocumento();
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                    DialogoCodefac.mensaje("Error", "El archivo Excel se encuentra abierto", DialogoCodefac.MENSAJE_INCORRECTO);
                 }
-            });
+            }
+
+            @Override
+            public void pdf() {
+                InputStream path = RecursoCodefac.JASPER_POS.getResourceInputStream("reporteCierreCaja.jrxml");
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, detalleData, panelPadre, "Cierre Caja");
+            }
+        });
     }
     
     @Override

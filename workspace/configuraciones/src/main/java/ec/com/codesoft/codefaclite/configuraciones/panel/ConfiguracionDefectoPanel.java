@@ -311,6 +311,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtDiasAlertaComprobantesPendientes = new javax.swing.JSpinner();
         jLabel95 = new javax.swing.JLabel();
         cmbActivarIvaFeriado = new javax.swing.JComboBox<>();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel112 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -2365,6 +2367,12 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("General", jPanel9);
 
+        jLabel112.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel112.setText("Reporte Cierre de Caja:");
+        jPanel14.add(jLabel112);
+
+        jTabbedPane1.addTab("Pos", jPanel14);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         pack();
@@ -2472,6 +2480,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel110;
     private javax.swing.JLabel jLabel111;
+    private javax.swing.JLabel jLabel112;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -2573,6 +2582,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
