@@ -1128,8 +1128,12 @@ public class CompraModel extends CompraPanel{
                     //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
                     Producto productoTmp= productoSeleccionado.buscarProductoPorPresentacion(presentacion);
                     //Si la presentacion es igual al mismo producto entonces no hago nada mas
-                    if(productoTmp.equals(productoSeleccionado))
+                    if(productoTmp==null || productoTmp.equals(productoSeleccionado))
                     {
+                        if(productoTmp==null)
+                        {
+                            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE,"No existe la presentacion :"+presentacion.getNombre()+" para el producto: "+productoSeleccionado.getNombre());
+                        }
                         return ;
                     }
                     
@@ -1425,7 +1429,21 @@ public class CompraModel extends CompraPanel{
      */
     private void mostrarDatosTabla()
     {
-        String[] titulo={"","Código","Cantidad","Descripción","lote","ValorRetIVA","ValorRetRent","Desc","Val Unit","Utilidad","Total"};
+        String[] titulo={
+            "",
+            "Código",
+            "Cantidad",
+            "Unidad",
+            "Descripción",
+            "lote",
+            "ValorRetIVA",
+            "ValorRetRent",
+            "Desc",
+            "Val Unit",
+            "Utilidad",
+            "Total"
+        };
+        
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         for (CompraDetalle detalle : detalles) {
@@ -1437,9 +1455,18 @@ public class CompraModel extends CompraPanel{
             }
             
             Vector<Object> fila=new Vector<Object>();
+            Producto producto=detalle.getProductoProveedor().getProducto();
+            PresentacionProducto presentacionProducto=producto.buscarPresentacionProducto();
+            String presentacionProductoNombre="";
+            if(presentacionProducto!=null)
+            {
+                presentacionProductoNombre=presentacionProducto.getNombre();
+            }
+            
             fila.add(detalle);
-            fila.add(detalle.getProductoProveedor().getProducto().getCodigoPersonalizado());
+            fila.add(producto.getCodigoPersonalizado());
             fila.add(detalle.getCantidad()+"");
+            fila.add(presentacionProductoNombre);
             fila.add(detalle.getDescripcion()+"");
             fila.add(loteCodigo);
             fila.add((detalle.getValorSriRetencionIVA()!=null)?detalle.getValorSriRetencionIVA().setScale(3, RoundingMode.HALF_UP)+"":"");
@@ -1453,7 +1480,7 @@ public class CompraModel extends CompraPanel{
                 
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
         UtilidadesTablas.ocultarColumna(getTblDetalleProductos(),0);
-        UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleProductos(),new Integer[]{0,150,50,250,100,50,50,50,50,50});
+        UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleProductos(),new Integer[]{0,150,50,50,250,100,50,50,50,50,50});
         
     }
     
@@ -1483,38 +1510,6 @@ public class CompraModel extends CompraPanel{
         UtilidadesTablas.ocultarColumna(getTblFacturaReembolso(),0);  
     }
     
-    /*private void mostrarDatosTablaSinRetencion()
-    {
-        String[] titulo={"Cantidad","Código","Descripción","Presentación","Valor Unitario","Valor Total"};
-        this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
-        List<CompraDetalle> detalles= compra.getDetalles();
-        
-        if(detalles!=null)
-        {            
-            for (CompraDetalle detalle : detalles) 
-            {
-                String presentacionProductoStr="";
-                PresentacionProducto presentacionProducto=detalle.getProductoProveedor().getProducto().buscarPresentacionProducto();
-                
-                if(presentacionProducto!=null)
-                {
-                    presentacionProductoStr=presentacionProducto.getNombre();
-                }
-                
-                Vector<String> fila=new Vector<String>();
-                fila.add(detalle.getCantidad()+"");
-                fila.add(detalle.getProductoProveedor().getProducto().getCodigoPersonalizado()+"");
-                fila.add(detalle.getDescripcion()+"");
-                fila.add(presentacionProductoStr);
-                fila.add(detalle.getPrecioUnitario()+"");
-                fila.add(detalle.getSubtotal()+"");
-                this.modeloTablaDetallesCompra.addRow(fila);
-            }
-        }
-        
-        
-        getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
-    }*/
     
     
     

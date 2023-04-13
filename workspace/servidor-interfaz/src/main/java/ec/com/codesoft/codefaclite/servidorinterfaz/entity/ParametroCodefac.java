@@ -518,4 +518,20 @@ public class ParametroCodefac implements Serializable {
         public static String NOTA_VENTA_INTERNA_ALIAS="NOTA_VENTA_INTERNA_ALIAS";
     }
     
+    public static class Inventario
+    {
+        public static String F1_PRODUCTO="f1_producto";
+        public static String F2_PRODUCTO="f2_producto";
+        public static String F3_PRODUCTO="f3_producto";
+        public static String F4_PRODUCTO="f4_producto";
+        public static String F5_PRODUCTO="f5_producto";
+        public static String F6_PRODUCTO="f6_producto";
+        public static String F7_PRODUCTO="f7_producto";
+        public static String F8_PRODUCTO="f8_producto";
+        public static String F9_PRODUCTO="f9_producto";
+        public static String F10_PRODUCTO="f10_producto";
+        public static String F11_PRODUCTO="f11_producto";
+        public static String F12_PRODUCTO="f12_producto";
+        
+    }
 }

@@ -65,7 +65,7 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
             cajasList = cajaServiceIf.buscarCajasAutorizadasPorUsuario(session.getUsuario());
             System.out.println("cargando datos una sola vez ...");
             
-            cajaSessionList = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuario(session.getUsuario());
+            cajaSessionList = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuarioYSucursal(session.getUsuario(),session.getSucursal());
         } catch (RemoteException ex) {
             Logger.getLogger(CajaSesionModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }

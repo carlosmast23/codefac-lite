@@ -1561,7 +1561,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
         
         //TODO: Este artificio solo es temporal por que esta referencia no se esta actualizando de forma automatica y toca cerrar y abrir el sistema para que se actualice
-        List<CajaSession> cajasSessionUsuarioList=cajaSesionService.obtenerCajaSessionPorUsuario(usuario);
+        List<CajaSession> cajasSessionUsuarioList=cajaSesionService.obtenerCajaSessionPorUsuarioYSucursal(usuario,factura.getSucursalEmpresa());
         if(cajasSessionUsuarioList.isEmpty())
         {            
             throw new ServicioCodefacException("No se activado una caja para el procedimiento POS");

@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
 import java.math.BigDecimal;
@@ -113,8 +114,11 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
     {
         CajaSession cajaSession = (CajaSession)entidad;
         
-        getjTextFechaApertura().setText("" + UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())));
-        getjTextHoraApertura().setText("" + UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())));
+        String fechaAperturaStr= UtilidadesFecha.formatDate(UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())), ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA_SIN_SEGUNDOS);
+        String HoraAperturaStr= UtilidadesFecha.formatDate(UtilidadesFecha.castDateSqlToUtil(UtilidadesFecha.getFechaDeTimeStamp(cajaSession.getFechaHoraApertura())), ParametrosSistemaCodefac.FORMATO_ESTANDAR_HORA);
+        
+        getjTextFechaApertura().setText(fechaAperturaStr);
+        getjTextHoraApertura().setText(HoraAperturaStr);
         
         getjTextFechaCierre().setText("" + UtilidadesFecha.getFechaHoy());
         getjTextHoraCierre().setText("" + UtilidadesHora.horaActual());

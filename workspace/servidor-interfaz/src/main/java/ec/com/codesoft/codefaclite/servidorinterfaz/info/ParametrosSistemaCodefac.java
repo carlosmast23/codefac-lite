@@ -27,7 +27,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.3.0.1.7";
+    public static final String VERSION="1.3.0.1.8";
     /**
      * El modo de conf9.6.7guracion del sistema
      */
@@ -109,6 +109,8 @@ public abstract class ParametrosSistemaCodefac {
     public static final SimpleDateFormat FORMATO_ESTANDAR_FECHA = new SimpleDateFormat("dd/MM/yyyy");  
     
     public static final SimpleDateFormat FORMATO_ESTANDAR_FECHA_HORA = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+    
+    public static final SimpleDateFormat FORMATO_ESTANDAR_HORA = new SimpleDateFormat("HH:mm:ss");  
     
     public static final SimpleDateFormat FORMATO_ESTANDAR_FECHA_HORA_SIN_SEGUNDOS = new SimpleDateFormat("dd/MM/yyyy HH:mm");  
     

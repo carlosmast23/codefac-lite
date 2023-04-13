@@ -4460,7 +4460,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
 
     private void listenerComponentes() {
+        
         getPnlDatosAdicionales().setComprobante(this);
+        
+        //Agrega un evento para escuchar cuando se presiona el boton de control + i para agreagar productos
         KeyStroke keyStroke=javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_DOWN_MASK);
         
         getPnlPrincipal().registerKeyboardAction(new ActionListener() {
@@ -4470,13 +4473,36 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         }, keyStroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
         
-        /*getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "someAction");
-        getActionMap().put("someAction", new AbstractAction() {
+        //Agregar evento para cargar un producto de forma automatica cuando se presiona un boton
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F1, ParametroCodefac.Inventario.F1_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F2, ParametroCodefac.Inventario.F2_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F3, ParametroCodefac.Inventario.F3_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F4, ParametroCodefac.Inventario.F4_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F5, ParametroCodefac.Inventario.F5_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F6, ParametroCodefac.Inventario.F6_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F7, ParametroCodefac.Inventario.F7_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F8, ParametroCodefac.Inventario.F8_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F9, ParametroCodefac.Inventario.F9_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F10, ParametroCodefac.Inventario.F10_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F11, ParametroCodefac.Inventario.F11_PRODUCTO);
+        crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F12, ParametroCodefac.Inventario.F12_PRODUCTO);
+        
+    }
+    
+    private void crearListenerKeyStrokeProductosRapidos(int keyEvent,String parametroCodefac)
+    {
+        KeyStroke keyStrokeF=javax.swing.KeyStroke.getKeyStroke(keyEvent,0);
+        getPnlPrincipal().registerKeyboardAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"evento de prueba 2 ...");
+                
+                String codigoProducto=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),parametroCodefac);
+                if(!UtilidadesTextos.verificarNullOVacio(codigoProducto))
+                {
+                    ingresarProductoDesdeCodigoDirecto(codigoProducto);
+                }
             }
-        });*/
+        }, keyStrokeF, JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     @Override

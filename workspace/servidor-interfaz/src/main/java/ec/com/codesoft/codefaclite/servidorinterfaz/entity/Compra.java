@@ -759,7 +759,6 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
         {            
             BigDecimal sriRetencion=detalle.getValorSriRetencionRenta();
             
-            System.out.println("Rentencion: "+sriRetencion);
             if(sriRetencion!=null)
             {
                 total=total.add(sriRetencion);

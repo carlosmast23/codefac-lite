@@ -6,12 +6,14 @@
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.ConfiguracionDefectoPanel;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImpresora;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FormatoReporteEnum;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -32,6 +34,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.rmi.RemoteException;
@@ -41,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
 
 /**
  *
@@ -55,6 +60,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarVariables();
         listenerComponentes();
+        listenerBotones();
         cargarDatos();
         
         /**
@@ -591,6 +597,45 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro=parametrosTodos.get(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
             getTxtNotaVentaInternaAlias().setText((parametro != null) ? parametro.getValor():"");
             
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F1_PRODUCTO);
+            getTxtProductoF1().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F2_PRODUCTO);
+            getTxtProductoF2().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F3_PRODUCTO);
+            getTxtProductoF3().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F4_PRODUCTO);
+            getTxtProductoF4().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F5_PRODUCTO);
+            getTxtProductoF5().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F6_PRODUCTO);
+            getTxtProductoF6().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F7_PRODUCTO);
+            getTxtProductoF7().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F8_PRODUCTO);
+            getTxtProductoF8().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F9_PRODUCTO);
+            getTxtProductoF9().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F10_PRODUCTO);
+            getTxtProductoF10().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F11_PRODUCTO);
+            getTxtProductoF11().setText((parametro != null) ? parametro.getValor():"");
+            
+            parametro=parametrosTodos.get(ParametroCodefac.Inventario.F12_PRODUCTO);
+            getTxtProductoF12().setText((parametro != null) ? parametro.getValor():"");
+            
+            
+            
             parametro=parametrosTodos.get(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);
             getTxtLeyendaAdicionalComprobante().setText((parametro != null) ? parametro.getValor():"");
             
@@ -1102,6 +1147,47 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS, getTxtNotaVentaInternaAlias().getText());
         agregarParametroEditar(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);    
         
+        
+        agregarParametro(ParametroCodefac.Inventario.F1_PRODUCTO, getTxtProductoF1().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F1_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F2_PRODUCTO, getTxtProductoF2().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F2_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F3_PRODUCTO, getTxtProductoF3().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F3_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F4_PRODUCTO, getTxtProductoF4().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F4_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F5_PRODUCTO, getTxtProductoF5().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F5_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F6_PRODUCTO, getTxtProductoF6().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F6_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F7_PRODUCTO, getTxtProductoF7().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F7_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F8_PRODUCTO, getTxtProductoF8().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F8_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F9_PRODUCTO, getTxtProductoF9().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F9_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F10_PRODUCTO, getTxtProductoF10().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F10_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F11_PRODUCTO, getTxtProductoF11().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F11_PRODUCTO);  
+        
+        agregarParametro(ParametroCodefac.Inventario.F12_PRODUCTO, getTxtProductoF12().getText());
+        agregarParametroEditar(ParametroCodefac.Inventario.F12_PRODUCTO);  
+        
+        
+        
+        
+        
         agregarParametro(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE, getTxtLeyendaAdicionalComprobante().getText());
         agregarParametroEditar(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);  
 
@@ -1213,6 +1299,105 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
                 getjEditorPanelVistaPrevia().setText(getTxtCodigoHtml().getText());
             }
         });
+    }
+    
+    private void buscarProducto(JTextField jTextField)
+    {
+        ProductoBusquedaDialogoFactory busquedaFactory = new ProductoBusquedaDialogoFactory(session.getSucursal(), ProductoBusquedaDialogoFactory.ResultadoEnum.PRODUCTO);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaFactory.construirDialogo());
+        buscarDialogoModel.setVisible(true);
+        Producto producto = (Producto) buscarDialogoModel.getResultado();
+        jTextField.setText(producto.getCodigoPersonalizado());
+        //getTxtProductoF2().setText(producto.getCodigoPersonalizado());
+    }
+
+    private void listenerBotones() {
+        
+        getBtnBuscarProductoF1().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF1());
+            }
+        });
+        
+        getBtnBuscarProductoF2().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF2());
+            }
+        });
+        
+        getBtnBuscarProductoF3().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF3());
+            }
+        });
+        
+        getBtnBuscarProductoF4().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF4());
+            }
+        });
+        
+        getBtnBuscarProductoF5().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF5());
+            }
+        });
+        
+        
+        getBtnBuscarProductoF6().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF6());
+            }
+        });
+        
+        getBtnBuscarProductoF7().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF7());
+            }
+        });
+        
+        getBtnBuscarProductoF8().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF8());
+            }
+        });
+        
+        getBtnBuscarProductoF9().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF9());
+            }
+        });
+        
+        getBtnBuscarProductoF10().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF10());
+            }
+        });
+        
+        getBtnBuscarProductoF11().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF11());
+            }
+        });
+        
+        getBtnBuscarProductoF12().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarProducto(getTxtProductoF12());
+            }
+        });
+        
     }
     
     

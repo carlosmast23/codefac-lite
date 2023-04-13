@@ -769,6 +769,13 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         
         Bodega bodega = obtenerBodegaDevolucion(compraDetalle);
         KardexService kardexService=new KardexService();
+        
+        String usuario=null;
+        if(compraDetalle.getCompra().getUsuario()!=null)
+        {
+            usuario=compraDetalle.getCompra().getUsuario().getNick();
+        }
+        
         kardexService.afectarInventario(
                 bodega,
                 compraDetalle.getCantidad(),
@@ -781,7 +788,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 compraDetalle.getCompra().getPuntoEstablecimiento().toString(),
                 compraDetalle.getCompra().getSecuencial(),
                 compraDetalle.getCompra().getFechaEmision(),
-                compraDetalle.getCompra().getUsuario().getNick()
+                usuario
         );
 
         
