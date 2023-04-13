@@ -68,13 +68,9 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         this.bodega = bodega;
         this.mostrarStockNegativo=mostrarStockNegativo;
         
-        try {
-            if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
-            {
-                this.mostrarCosto=false;
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoInventarioBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
+        {
+            this.mostrarCosto=false;
         }
     }
 
@@ -110,11 +106,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         
         String queryFiltroEmpresa=" and u.empresa=?4";
         Boolean datosCompartidosEmpresas=false;
-        try {
-            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClienteEstablecimientoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);
         
         if (datosCompartidosEmpresas) 
         {

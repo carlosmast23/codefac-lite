@@ -479,26 +479,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void generarRespaldoBaseDatosPorCorreo()
     {
         generarRespaldoAutomaticoSistema();
-        try {
-            //Respaldar solo cuando tiene configurado el parametro de grabar la base de datos
-            if(ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,EnumSiNo.SI))
+        //Respaldar solo cuando tiene configurado el parametro de grabar la base de datos
+        if(ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,EnumSiNo.SI))
+        {
+            //Validar que solo se ejectute en el SERVIDOR o en CLIENTE-SERVIDOR
+            if(modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE))
             {
-                //Validar que solo se ejectute en el SERVIDOR o en CLIENTE-SERVIDOR
-                if(modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE))
-                {
-                    return;
-                }                
-                
-                try {
-                    //Enviar al correo y generar el respaldo de la base de datos
-                    RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa(),null,false);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                }
+                return;
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            
+            try {
+                //Enviar al correo y generar el respaldo de la base de datos
+                RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa(),null,false);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            }
         }
     }
     
@@ -786,13 +782,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         cambiarCursorEspera();
         Boolean pantallasMultiples=false;
-        try {
-            //TODO: Optimizar esta parte para cargar estos datos de session una sola vez para evitar hacer multiples consultas al servidor
-            //ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
-            pantallasMultiples=ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.VENTANAS_MULTIPLES,EnumSiNo.SI);
-        } catch (RemoteException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //TODO: Optimizar esta parte para cargar estos datos de session una sola vez para evitar hacer multiples consultas al servidor
+        //ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
+        pantallasMultiples=ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.VENTANAS_MULTIPLES,EnumSiNo.SI);
         
         if (!verificarPantallaCargada(ventana) || pantallasMultiples) 
         {
@@ -1535,17 +1527,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void agregarEtiquetaConvertirMayuscula(ControladorCodefacInterface panel)
     {
-        //Verificar si tiene activo la opcion de configuracion en el sistema
-        //Obtendo de la sesión temporal por que tiene que hacer muchas consultas de forma locals
-        //ParametroCodefac parametroCodefa= sessionCodefac.getParametrosCodefac().get(ParametroCodefac.INGRESO_MAYUSCULAS);
-        try {
-            //Si no tiene configuracion para mayusculas entonces no hace nada en ese caso
-            if(!ParametroUtilidades.comparar(ParametroCodefac.INGRESO_MAYUSCULAS,EnumSiNo.SI ,sessionCodefac.getParametrosCodefac()))
-            {
-                return;
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        //Si no tiene configuracion para mayusculas entonces no hace nada en ese caso
+        if(!ParametroUtilidades.comparar(ParametroCodefac.INGRESO_MAYUSCULAS,EnumSiNo.SI ,sessionCodefac.getParametrosCodefac()))
+        {
+            return;
         }
         
        //ConsolaGeneral consola=new ConsolaGeneral();

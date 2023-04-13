@@ -348,20 +348,14 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
         
-        try {
-            //Consultar valor por defecto para cargar
-            TipoDocumentoEnum tipoDocumentoEnum=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA, TipoDocumentoEnum.ACADEMICO);
-            if(tipoDocumentoEnum!=null)
-            {
-                getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
-            }
-            
-            //Cargar los documentos disponibles para las ventas
-            UtilidadesComboBox.llenarComboBox(getCmbDocumento(),new Object[]{DocumentoEnum.FACTURA,DocumentoEnum.NOTA_VENTA_INTERNA});
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        //Consultar valor por defecto para cargar
+        TipoDocumentoEnum tipoDocumentoEnum=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA, TipoDocumentoEnum.ACADEMICO);
+        if(tipoDocumentoEnum!=null)
+        {
+            getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
         }
+        //Cargar los documentos disponibles para las ventas
+        UtilidadesComboBox.llenarComboBox(getCmbDocumento(),new Object[]{DocumentoEnum.FACTURA,DocumentoEnum.NOTA_VENTA_INTERNA});
         
         crearOCargarPedidoVentaDiaria(true);
     }

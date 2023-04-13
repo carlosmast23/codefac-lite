@@ -198,18 +198,12 @@ public abstract class ParametrosSistemaCodefac {
     {
         if(MOSTRAR_PRECIOS_CON_IVA==null)
         {
-            try {
-                if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.MOSTRAR_PRECIO_CON_IVA,EnumSiNo.SI))
-                {
-                    MOSTRAR_PRECIOS_CON_IVA=true;
-                }
-                else
-                {
-                    MOSTRAR_PRECIOS_CON_IVA=false;
-                }
-                
-            } catch (RemoteException ex) {
-                Logger.getLogger(ParametrosSistemaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            if(ParametroUtilidades.compararSinEmpresa(ParametroCodefac.MOSTRAR_PRECIO_CON_IVA,EnumSiNo.SI))
+            {
+                MOSTRAR_PRECIOS_CON_IVA=true;
+            }
+            else
+            {
                 MOSTRAR_PRECIOS_CON_IVA=false;
             }
         }

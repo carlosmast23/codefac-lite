@@ -38,11 +38,7 @@ public class PersonaEstablecimientoService extends ServiceAbstract<PersonaEstabl
     {
         
         Boolean datosCompartidosEmpresas=false;
-        try {
-            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
-        } catch (RemoteException ex) {
-            Logger.getLogger(PersonaEstablecimientoService.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);        
         
         //PersonaEstablecimiento pe;
         //pe.getPersona().getEstadoEnum()
@@ -61,11 +57,7 @@ public class PersonaEstablecimientoService extends ServiceAbstract<PersonaEstabl
     {
         
         Boolean datosCompartidosEmpresas=false;
-        try {
-            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
-        } catch (RemoteException ex) {
-            Logger.getLogger(PersonaEstablecimientoService.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);        
         
         //PersonaEstablecimiento pe;
         //pe.getNombreComercial();

@@ -120,11 +120,7 @@ public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind
         
         Boolean datosCompartidosEmpresas=false;
         
-        try {
-            datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);           
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClienteEstablecimientoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);
         
         if (datosCompartidosEmpresas) 
         {

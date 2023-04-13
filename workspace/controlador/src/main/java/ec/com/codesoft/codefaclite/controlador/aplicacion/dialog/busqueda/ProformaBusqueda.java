@@ -54,15 +54,10 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
     
     private void cargarConfiguracionesGenerales()
     {
-        try {
-            this.mostrarFacturados=false;
-            
-            if(ParametroUtilidades.comparar(empresa, ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES, EnumSiNo.SI))
-            {
-                this.mostrarFacturados=true;
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProformaBusqueda.class.getName()).log(Level.SEVERE, null, ex);
+        this.mostrarFacturados=false;
+        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.PROFORMA_FACTURAR_VARIAS_VECES, EnumSiNo.SI))
+        {
+            this.mostrarFacturados=true;
         }
         
     }

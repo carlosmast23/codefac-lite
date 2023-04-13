@@ -601,16 +601,12 @@ public class KardexModel extends KardexPanel {
     {
         //Por defecto si no tiene un valor redondea al numero de decimales
         Integer decimalesCantidadRedondear = null;
-        try {
-            decimalesCantidadRedondear = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, new ParametroUtilidades.ComparadorInterface() {
-                @Override
-                public Object consultarParametro(String nombreParametro) {
-                    return Integer.parseInt(nombreParametro);
-                }
-            });
-        } catch (RemoteException ex) {
-            Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        decimalesCantidadRedondear = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, new ParametroUtilidades.ComparadorInterface() {
+            @Override
+            public Object consultarParametro(String nombreParametro) {
+                return Integer.parseInt(nombreParametro);
+            }
+        });
         
         if(decimalesCantidadRedondear==null)
         {

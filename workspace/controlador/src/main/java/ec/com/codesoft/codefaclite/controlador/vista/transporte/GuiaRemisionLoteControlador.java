@@ -180,26 +180,17 @@ public class GuiaRemisionLoteControlador extends ModelControladorAbstract<GuiaRe
     
     public void listenerConsultarGuiasRemision()
     {        
-        try {
-            
-            //Si el estado de los documento es nota de venta interna entonce filtro por el estado sin autorizar
-            ComprobanteEnumEstado comprobanteEnum=ComprobanteEnumEstado.AUTORIZADO;
-            if(documentoFiltro.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
-            {
-                comprobanteEnum=ComprobanteEnumEstado.SIN_AUTORIZAR;
-            }
-            
-            ventasList=consultarFacturas(fechaInicial, fechaFin, comprobanteEnum, documentoFiltro, vendedorSeleccionado);
-            
-            //Consultar facturas sin autorizar cuando esta activo el modo en las configuraciones
-            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.MODO_FACTURACION_GUIA_REMISION,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
-            {
-                ventasList.addAll(consultarFacturas(fechaInicial, fechaFin, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR, DocumentoEnum.FACTURA, vendedorSeleccionado));
-            }            
-
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(GuiaRemisionLoteControlador.class.getName()).log(Level.SEVERE, null, ex);
+        //Si el estado de los documento es nota de venta interna entonce filtro por el estado sin autorizar
+        ComprobanteEnumEstado comprobanteEnum=ComprobanteEnumEstado.AUTORIZADO;
+        if(documentoFiltro.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            comprobanteEnum=ComprobanteEnumEstado.SIN_AUTORIZAR;
+        }
+        ventasList=consultarFacturas(fechaInicial, fechaFin, comprobanteEnum, documentoFiltro, vendedorSeleccionado);
+        //Consultar facturas sin autorizar cuando esta activo el modo en las configuraciones
+        if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.MODO_FACTURACION_GUIA_REMISION,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
+        {
+            ventasList.addAll(consultarFacturas(fechaInicial, fechaFin, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR, DocumentoEnum.FACTURA, vendedorSeleccionado));
         }
     }
     

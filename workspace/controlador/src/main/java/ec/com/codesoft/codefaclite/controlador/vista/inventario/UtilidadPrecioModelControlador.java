@@ -218,61 +218,47 @@ public class UtilidadPrecioModelControlador extends ModelControladorAbstract<Uti
     
     private void cargarValorPorDefectoMargenUtilidades()
     {
-        try {
-            ParametroUtilidades.ComparadorInterface<Integer>comparador=new ParametroUtilidades.ComparadorInterface<Integer>() {
-                @Override
-                public Integer consultarParametro(String nombreParametro) 
+        ParametroUtilidades.ComparadorInterface<Integer>comparador=new ParametroUtilidades.ComparadorInterface<Integer>() {
+            @Override
+            public Integer consultarParametro(String nombreParametro)
+            { 
+                if(!UtilidadesTextos.verificarNullOVacio(nombreParametro))
                 {
-                    if(!UtilidadesTextos.verificarNullOVacio(nombreParametro))
+                    try
                     {
-                        try
-                        {
-                            return Integer.parseInt(nombreParametro+"");
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }                        
+                        return Integer.parseInt(nombreParametro+"");                        
                     }
-                    return 0; //Si no tiene valores por defecto devuelvo cero
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
-            };
-            
-            
-            pvp1Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP1_MARGEN_UTILIDAD,comparador);
-            pvp2Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP2_MARGEN_UTILIDAD,comparador);
-            pvp3Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP3_MARGEN_UTILIDAD,comparador);
-            pvp4Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP4_MARGEN_UTILIDAD,comparador);
-            pvp5Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP5_MARGEN_UTILIDAD,comparador);
-            pvp6Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP6_MARGEN_UTILIDAD,comparador);
-            
-            if (pvp1Porcentaje == null) {
-                pvp1Porcentaje = -1;
+                return 0; //Si no tiene valores por defecto devuelvo cero
             }
-
-            if (pvp2Porcentaje == null) {
-                pvp2Porcentaje = -1;
-            }
-
-            if (pvp3Porcentaje == null) {
-                pvp3Porcentaje = -1;
-            }
-
-            if (pvp4Porcentaje == null) {
-                pvp4Porcentaje = -1;
-            }
-
-            if (pvp5Porcentaje == null) {
-                pvp5Porcentaje = -1;
-            }
-            if (pvp6Porcentaje == null) {
-                pvp6Porcentaje = -1;
-            }
-                                                            
-            
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(UtilidadPrecioModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        };
+        pvp1Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP1_MARGEN_UTILIDAD,comparador);
+        pvp2Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP2_MARGEN_UTILIDAD,comparador);
+        pvp3Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP3_MARGEN_UTILIDAD,comparador);
+        pvp4Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP4_MARGEN_UTILIDAD,comparador);
+        pvp5Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP5_MARGEN_UTILIDAD,comparador);
+        pvp6Porcentaje= ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.PVP6_MARGEN_UTILIDAD,comparador);
+        if (pvp1Porcentaje == null) {
+            pvp1Porcentaje = -1;
+        }
+        if (pvp2Porcentaje == null) {
+            pvp2Porcentaje = -1;
+        }
+        if (pvp3Porcentaje == null) {
+            pvp3Porcentaje = -1;
+        }
+        if (pvp4Porcentaje == null) {
+            pvp4Porcentaje = -1;
+        }
+        if (pvp5Porcentaje == null) {
+            pvp5Porcentaje = -1;
+        }
+        if (pvp6Porcentaje == null) {
+            pvp6Porcentaje = -1;
         }
     }
 

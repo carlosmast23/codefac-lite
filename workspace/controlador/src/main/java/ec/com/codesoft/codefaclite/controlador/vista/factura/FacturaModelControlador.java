@@ -148,27 +148,22 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     public void nuevo()
     {
-        try {
-            //Buscar cual es el precio por defecto que se debe cargar cuando se esta utilizando otro adicional
-            String pvpDefecto=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.PRECIO_VENTA_DEFECTO);
-            if(!UtilidadesTextos.verificarNullOVacio(pvpDefecto))
-            {
-                this.pvpDefecto=pvpDefecto;
-            }
-            
-            //Verificar si se deben mostrar el campo de ahorro total de los productos
-            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_AHORRO_VENTA,EnumSiNo.SI))
-            {
-                this.interfaz.mostrarEtiquetasAhorro(Boolean.TRUE);
-                this.calcularAhorro=Boolean.TRUE;
-            }
-            else
-            {
-                this.interfaz.mostrarEtiquetasAhorro(Boolean.FALSE);
-                this.calcularAhorro=Boolean.FALSE;
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        //Buscar cual es el precio por defecto que se debe cargar cuando se esta utilizando otro adicional
+        String pvpDefecto=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.PRECIO_VENTA_DEFECTO);
+        if(!UtilidadesTextos.verificarNullOVacio(pvpDefecto))
+        {
+            this.pvpDefecto=pvpDefecto;
+        }
+        //Verificar si se deben mostrar el campo de ahorro total de los productos
+        if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_AHORRO_VENTA,EnumSiNo.SI))
+        {
+            this.interfaz.mostrarEtiquetasAhorro(Boolean.TRUE);
+            this.calcularAhorro=Boolean.TRUE;
+        }
+        else
+        {
+            this.interfaz.mostrarEtiquetasAhorro(Boolean.FALSE);
+            this.calcularAhorro=Boolean.FALSE;
         }
     }
     
@@ -211,26 +206,18 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloCodefacEnum.FACTURACION,tipoEmisionEnum);
             
-            try {
-                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_NOTA_VENTA,EnumSiNo.SI))
-                {
-                    tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros 
-                }
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            /*
-            ParametroCodefac paramCodefacNotaVenta=session.getParametrosCodefac().get(ParametroCodefac.ACTIVAR_NOTA_VENTA);
-                    
-            if(paramCodefacNotaVenta!=null)
-            {
-                EnumSiNo enumSino=EnumSiNo.getEnumByLetra(paramCodefacNotaVenta.getValor());
-                if(enumSino.equals(EnumSiNo.SI))
-                {
-                    tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros 
-                }
-            }*/
-        //}
+        if (ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_NOTA_VENTA,EnumSiNo.SI)) {
+            tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros 
+        } /*
+        ParametroCodefac paramCodefacNotaVenta=session.getParametrosCodefac().get(ParametroCodefac.ACTIVAR_NOTA_VENTA);
+        if(paramCodefacNotaVenta!=null)
+        {
+        EnumSiNo enumSino=EnumSiNo.getEnumByLetra(paramCodefacNotaVenta.getValor());
+        if(enumSino.equals(EnumSiNo.SI))
+        {
+        tiposDocumento.add(DocumentoEnum.NOTA_VENTA_INTERNA); //Todo ver si utilizar este documento para grabar o crearme otros
+        }
+        }*/ //}
         //else //Cuando la factura es fisica
         //{
         //    tiposDocumento=DocumentoEnum.obtenerPorDocumentosFisico(ModuloCodefacEnum.FACTURACION);
@@ -461,20 +448,16 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         interfaz.setearCostoDetalleTxt("");
         if(costo!=null)
         {
-            try {
-                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.SI))
-                {
-                    //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
-                    //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
-                    costo= UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costo);
-                    interfaz.setearCostoDetalleTxt(costo+"");
-                }
-                else
-                {
-                    interfaz.setearCostoDetalleTxt(costo+"");
-                }
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.SI))
+            {
+                //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+                //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
+                costo= UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costo);
+                interfaz.setearCostoDetalleTxt(costo+"");
+            }
+            else
+            {
+                interfaz.setearCostoDetalleTxt(costo+"");
             }
         }
         
@@ -724,29 +707,24 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Si el producto es distinto de 0 convierto a producto sin iva y cambio el costo
             if(catalogoProducto.getIva().getTarifa()!=0)
             {
-                try {
-                    //TODO: Este artificio puede causar problemas cuando se tiene varios productos del mismo porque al resto 
-                    catalogoProducto.getIva().setTarifa(0);
-                    catalogoProducto.getIva().setPorcentaje(BigDecimal.ZERO);
-                    //producto.getCatalogoProducto().getIva().setTarifa(0);
-                    //producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
-                    
-                    BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
-                    //Por defecto si no tiene configurada ninguna opcion asume que el valor de la nota de venta interna debe ser con el valor
-                    if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.NVI_TOTAL_CON_IVA,EnumSiNo.NO))
-                    {
-                        nuevoValorUnitario=valorUnitario;
-                    }                    
-                    //producto.setValorUnitario(nuevoValorUnitario);
-                    if(setearDatosNVI!=null)
-                    {
-                        setearDatosNVI.setValores(nuevoValorUnitario,BigDecimal.ZERO);
-                        
-                    }
-                    //return nuevoValorUnitario;
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                //TODO: Este artificio puede causar problemas cuando se tiene varios productos del mismo porque al resto
+                catalogoProducto.getIva().setTarifa(0);
+                catalogoProducto.getIva().setPorcentaje(BigDecimal.ZERO);
+                //producto.getCatalogoProducto().getIva().setTarifa(0);
+                //producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
+                BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
+                //Por defecto si no tiene configurada ninguna opcion asume que el valor de la nota de venta interna debe ser con el valor
+                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.NVI_TOTAL_CON_IVA,EnumSiNo.NO))
+                {
+                    nuevoValorUnitario=valorUnitario;
                 }
+                //producto.setValorUnitario(nuevoValorUnitario);
+                if(setearDatosNVI!=null)
+                {
+                    setearDatosNVI.setValores(nuevoValorUnitario,BigDecimal.ZERO);
+                    
+                }
+                //return nuevoValorUnitario;
             }
         }
         
@@ -780,42 +758,34 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     public void cargarPrecioUnitario(BigDecimal icePorcentaje,BigDecimal precioUnitario,Integer numeroPvp,Producto productoSeleccionado)
     {
-        try {
-            interfaz.habilitarComboIva(true);
-            
-            //TODO: Ver alguna forma de cargar por defecto el precio guardado en la base de datos
-            if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI)) {
-                //getCmbIva().setSelectedItem(EnumSiNo.SI);
-                interfaz.setComboIva(EnumSiNo.SI);
-                //BigDecimal porcentajeIce = (facturaDetalle.getIcePorcentaje() != null) ? facturaDetalle.getIcePorcentaje() : null;
-                BigDecimal porcentajeIce = (icePorcentaje != null) ? icePorcentaje : null;
-                BigDecimal valorConIva = UtilidadIva.calcularValorConIvaIncluido(
-                        session.obtenerIvaActualDecimal(),
-                        porcentajeIce,
-                        precioUnitario);
-                //getTxtValorUnitario().setText(valorConIva.toString());
-                interfaz.setTxtValorUnitario(valorConIva.toString());
-            } else {
-                //getCmbIva().setSelectedItem(EnumSiNo.NO);
-                interfaz.setComboIva(EnumSiNo.NO);
-                interfaz.setTxtValorUnitario(precioUnitario.toString());
-            }
-            
-            //Cargar los descuentos disponibles por cada precio
-            if(numeroPvp!=null && productoSeleccionado!=null)
-            {
-                List<BigDecimal> descuentosList = consultarDescuentoPorProducto(productoSeleccionado, numeroPvp);
-                interfaz.cargarPreciosPorcentaje(descuentosList);
-            }
-            
-            //Dejar seleccionado el ultimo precio por defecto para que las siguientes veces continue con ese mismo precio
-            if(numeroPvp!=null)
-            {
-                pvpDefecto=Producto.PrecioVenta.buscaTextoPorPosicion(numeroPvp);
-            }
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        interfaz.habilitarComboIva(true);
+        //TODO: Ver alguna forma de cargar por defecto el precio guardado en la base de datos
+        if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI)) {
+            //getCmbIva().setSelectedItem(EnumSiNo.SI);
+            interfaz.setComboIva(EnumSiNo.SI);
+            //BigDecimal porcentajeIce = (facturaDetalle.getIcePorcentaje() != null) ? facturaDetalle.getIcePorcentaje() : null;
+            BigDecimal porcentajeIce = (icePorcentaje != null) ? icePorcentaje : null;
+            BigDecimal valorConIva = UtilidadIva.calcularValorConIvaIncluido(
+                    session.obtenerIvaActualDecimal(),
+                    porcentajeIce,
+                    precioUnitario);
+            //getTxtValorUnitario().setText(valorConIva.toString());
+            interfaz.setTxtValorUnitario(valorConIva.toString());
+        } else {
+            //getCmbIva().setSelectedItem(EnumSiNo.NO);
+            interfaz.setComboIva(EnumSiNo.NO);
+            interfaz.setTxtValorUnitario(precioUnitario.toString());
+        }
+        //Cargar los descuentos disponibles por cada precio
+        if(numeroPvp!=null && productoSeleccionado!=null)
+        {
+            List<BigDecimal> descuentosList = consultarDescuentoPorProducto(productoSeleccionado, numeroPvp);
+            interfaz.cargarPreciosPorcentaje(descuentosList);
+        }
+        //Dejar seleccionado el ultimo precio por defecto para que las siguientes veces continue con ese mismo precio
+        if(numeroPvp!=null)
+        {
+            pvpDefecto=Producto.PrecioVenta.buscaTextoPorPosicion(numeroPvp);
         }
     }
     
@@ -865,47 +835,41 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     private boolean validarAgregarInventario(FacturaDetalle facturaDetalle,Kardex kardex,DocumentoEnum documentoEnum)
     {
-        try {
-            
-            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, EnumSiNo.NO))
-            {
-                try {                    
-                    //Verifico si el producto es inventario y esta activo la opción de construir ensamble en la venta porque en ese caso
-                    //tampoco debe validar el inventario en la vista para el ensamble
-                    //Validacion para saber si se debe validar en la vista o no los productos cuando vienen desde inventario
-                    ReferenciaDetalleFacturaRespuesta referenciaDetalle=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
-                    if(referenciaDetalle.tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
+        if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, EnumSiNo.NO))
+        {
+            try {
+                //Verifico si el producto es inventario y esta activo la opción de construir ensamble en la venta porque en ese caso
+                //tampoco debe validar el inventario en la vista para el ensamble
+                //Validacion para saber si se debe validar en la vista o no los productos cuando vienen desde inventario
+                ReferenciaDetalleFacturaRespuesta referenciaDetalle=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
+                if(referenciaDetalle.tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
+                {
+                    Producto producto=(Producto) referenciaDetalle.objecto;
+                    if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
                     {
-                        Producto producto=(Producto) referenciaDetalle.objecto;
-                        if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
-                        {
-                             //Si tengo que construir el ensamble no valido en la vista porque puede tener stock insuficiente pero despues de construir si puede generar
-                            return true;
-                        }
+                        //Si tengo que construir el ensamble no valido en la vista porque puede tener stock insuficiente pero despues de construir si puede generar
+                        return true;
                     }
-                    
-                    //Solo hago la validacion del inventario cuando es un producto diferente de proforma , por que para ese tema no deberia importar
-                    if(!documentoEnum.equals(DocumentoEnum.PROFORMA))
-                    {                    
-                        boolean verifadorStock = verificarExistenciaStockProducto(facturaDetalle,kardex);
-                        //Verificar si agrego los datos al fomurlaro cuando no existe inventario
-                        if (!verifadorStock) {
-                            mostrarMensaje(new CodefacMsj("No existe stock para el producto", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                            //DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                            return false;
-                        } else {                        
-                            return true;
-                        }
-                    }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                //Solo hago la validacion del inventario cuando es un producto diferente de proforma , por que para ese tema no deberia importar
+                if(!documentoEnum.equals(DocumentoEnum.PROFORMA))
+                {
+                    boolean verifadorStock = verificarExistenciaStockProducto(facturaDetalle,kardex);
+                    //Verificar si agrego los datos al fomurlaro cuando no existe inventario
+                    if (!verifadorStock) {
+                        mostrarMensaje(new CodefacMsj("No existe stock para el producto", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                        //DialogoCodefac.mensaje("Advertencia", "No existe stock para el producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         //Por defecto si no tiene nada seleccionado si permito agregar el inventario
         return true;
@@ -952,19 +916,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     public void agregarDetallesFacturaValidacion(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal) throws ServicioCodefacException
     {
-        try {
-            if(precioVentaOriginal!=null)
+        if(precioVentaOriginal!=null)
+        {
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MODIFICAR_PRECIO_MENOR,EnumSiNo.NO))
             {
-                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MODIFICAR_PRECIO_MENOR,EnumSiNo.NO))
+                if(facturaDetalle.getPrecioUnitario().compareTo(precioVentaOriginal)<0)
                 {
-                    if(facturaDetalle.getPrecioUnitario().compareTo(precioVentaOriginal)<0)
-                    {
-                        throw new ServicioCodefacException("No se puede ingresar un valor menor al precio de venta");
-                    }
+                    throw new ServicioCodefacException("No se puede ingresar un valor menor al precio de venta");
                 }
             }
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -1128,37 +1088,32 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     private void validacionDescuentoMenorQueElCosto(FacturaDetalle facturaDetalle,Kardex kardex) throws ServicioCodefacException
     {
-        try {
-            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.PERMITIR_DESCUENTO_MENOR_COSTO,EnumSiNo.NO))
+        if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.PERMITIR_DESCUENTO_MENOR_COSTO,EnumSiNo.NO))
+        {
+            if(kardex!=null)
             {
-                if(kardex!=null)
+                BigDecimal ultimoCosto=kardex.getPrecioUltimo();
+                if(ultimoCosto!=null && ultimoCosto.compareTo(BigDecimal.ZERO)!=0 )
                 {
-                    BigDecimal ultimoCosto=kardex.getPrecioUltimo();
-                    if(ultimoCosto!=null && ultimoCosto.compareTo(BigDecimal.ZERO)!=0 )
+                    
+                    BigDecimal subtotalMenosDescuento = facturaDetalle.getSubtotalRestadoDescuentos();
+                    System.out.println(subtotalMenosDescuento + " < " + ultimoCosto);
+                    
+                    //Si tiene configurada la opcion de margen minimo de venta, le aumento el porcentaje minimo al ultimo costo antes de comparar
+                    String margenMinimoStr=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.MARGEN_MINIMO_DESCUENTO_VENTA);
+                    if(!UtilidadesTextos.verificarNullOVacio(margenMinimoStr))
                     {
-
-                        BigDecimal subtotalMenosDescuento = facturaDetalle.getSubtotalRestadoDescuentos();
-                        System.out.println(subtotalMenosDescuento + " < " + ultimoCosto);
-                        
-                        //Si tiene configurada la opcion de margen minimo de venta, le aumento el porcentaje minimo al ultimo costo antes de comparar
-                        String margenMinimoStr=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.MARGEN_MINIMO_DESCUENTO_VENTA);
-                        if(!UtilidadesTextos.verificarNullOVacio(margenMinimoStr))
-                        {
-                            BigDecimal margenMinimo=new BigDecimal(margenMinimoStr);
-                            BigDecimal valorAdicional=UtilidadesPorcentajes.calcularPorcentaje(margenMinimo,ultimoCosto);                            
-                            ultimoCosto=ultimoCosto.add(valorAdicional);
-                        }
-                        
-                        if (subtotalMenosDescuento.compareTo(ultimoCosto) < 0) {
-                            throw new ServicioCodefacException("El precio no puede ser menor que " + ultimoCosto);
-                        }
+                        BigDecimal margenMinimo=new BigDecimal(margenMinimoStr);
+                        BigDecimal valorAdicional=UtilidadesPorcentajes.calcularPorcentaje(margenMinimo,ultimoCosto);
+                        ultimoCosto=ultimoCosto.add(valorAdicional);
+                    }
+                    
+                    if (subtotalMenosDescuento.compareTo(ultimoCosto) < 0) {
+                        throw new ServicioCodefacException("El precio no puede ser menor que " + ultimoCosto);
                     }
                 }
-
             }            
             
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -1270,13 +1225,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public void agregarFormaPagoConCartera()
     {        
         //Primero verificar que esta activo el tema de manejar con cartera
-        try {            
-            if(!ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_CARTERA,EnumSiNo.SI))
-            {
-                return;
-            }            
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        if (!ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_CARTERA,EnumSiNo.SI)) {
+            return;
         }
         
         Factura factura=interfaz.obtenerFactura();
@@ -1414,36 +1364,28 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
 
     public void iniciar() {
-        try {
-            tipoDocumentoList= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION,session.getModulos());
-            
-            if(tipoDocumentoList.size()==0)
-            {
-                mostrarMensaje(new CodefacMsj("No tiene disponible ningun modo para facturar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-            }
-            
-            //Quitar documentos que no se necesitan mostrar
-            //TODO: Revisar por que estaba saliendo este dato adicional
-            tipoDocumentoList.remove(TipoDocumentoEnum.VENTA);
-            
-            //Seleccionar el tipo de documento configurado por defecto
-            TipoDocumentoEnum tipoDocumentoEnumDefault=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA,TipoDocumentoEnum.ACADEMICO);
-            tipoDocumentoEnumSeleccionado=TipoDocumentoEnum.LIBRE;
-            if(tipoDocumentoEnumDefault!=null)
-            {
-                tipoDocumentoEnumSeleccionado=tipoDocumentoEnumDefault;
-            }
-            
-            /*ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
-            if(parametroCodefac!=null)
-            {
-            TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
-            getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
-            }*/
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        tipoDocumentoList= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION,session.getModulos());
+        if(tipoDocumentoList.size()==0)
+        {
+            mostrarMensaje(new CodefacMsj("No tiene disponible ningun modo para facturar", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
         }
+        //Quitar documentos que no se necesitan mostrar
+        //TODO: Revisar por que estaba saliendo este dato adicional
+        tipoDocumentoList.remove(TipoDocumentoEnum.VENTA);
+        //Seleccionar el tipo de documento configurado por defecto
+        TipoDocumentoEnum tipoDocumentoEnumDefault=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA,TipoDocumentoEnum.ACADEMICO);
+        tipoDocumentoEnumSeleccionado=TipoDocumentoEnum.LIBRE;
+        if(tipoDocumentoEnumDefault!=null)
+        {
+            tipoDocumentoEnumSeleccionado=tipoDocumentoEnumDefault;
+        }
+        
+        /*ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
+        if(parametroCodefac!=null)
+        {
+        TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
+        getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
+        }*/
         
     }
     
@@ -1844,35 +1786,27 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     //TODO: poner en otra parte como utilidades
     public static Integer obtenerDecimalesRedondeo(Empresa empresa)
     {
-        try {
-            return ParametroUtilidades.obtenerValorBaseDatos(empresa
-                    , ParametroCodefac.NUMERO_DECIMALES_RIDE, new ParametroUtilidades.ComparadorInterface() {
-                @Override
-                public Object consultarParametro(String nombreParametro) {
-                    return Integer.parseInt(nombreParametro);
-                }
-            });
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return ParametroUtilidades.obtenerValorBaseDatos(empresa
+                , ParametroCodefac.NUMERO_DECIMALES_RIDE, new ParametroUtilidades.ComparadorInterface() {
+                    @Override
+                    public Object consultarParametro(String nombreParametro) {
+                        return Integer.parseInt(nombreParametro);
+                    }
+                });
+        //return null;
     }
     
     //TODO: poner en otra parte como utilidades
     public static Integer obtenerCantidadProducto(Empresa empresa)
     {
-        try {
-            return ParametroUtilidades.obtenerValorBaseDatos(empresa
-                    , ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, new ParametroUtilidades.ComparadorInterface() {
-                @Override
-                public Object consultarParametro(String nombreParametro) {
-                    return Integer.parseInt(nombreParametro);
-                }
-            });
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return ParametroUtilidades.obtenerValorBaseDatos(empresa
+                , ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, new ParametroUtilidades.ComparadorInterface() {
+                    @Override
+                    public Object consultarParametro(String nombreParametro) {
+                        return Integer.parseInt(nombreParametro);
+                    }
+                });
+        //return null;
     }
         
     public static List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando)

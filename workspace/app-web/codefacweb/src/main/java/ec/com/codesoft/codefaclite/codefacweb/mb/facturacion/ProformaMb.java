@@ -644,16 +644,12 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             imprimirProforma();
         }else if(tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA))
         {
-            try {
-                if (ParametroUtilidades.comparar(sessionMb.getSession().getEmpresa(), ParametroCodefac.IMPRESORA_TICKETS_VENTAS, EnumSiNo.SI)) {
-                    imprimirTicket(factura);
-                } else {
-                    imprimirFactura(factura);
-                }
-                //imprimirFactura(factura);s
-            } catch (RemoteException ex) {
-                Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+            if (ParametroUtilidades.comparar(sessionMb.getSession().getEmpresa(), ParametroCodefac.IMPRESORA_TICKETS_VENTAS, EnumSiNo.SI)) {
+                imprimirTicket(factura);
+            } else {
+                imprimirFactura(factura);
             }
+            //imprimirFactura(factura);s
         }
     }
     

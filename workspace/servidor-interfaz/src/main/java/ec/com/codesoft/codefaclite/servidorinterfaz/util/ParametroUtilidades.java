@@ -58,41 +58,42 @@ public abstract class ParametroUtilidades {
     
     //TODO: Quitar el remote expetion porque no es necesario
     @Deprecated 
-    public static <T extends ComparadorInterface> Boolean comparar(Empresa empresa,String nombreParametro,T valorComparar) throws RemoteException
+    public static <T extends ComparadorInterface> Boolean comparar(Empresa empresa,String nombreParametro,T valorComparar)
     {
-        String valorParametro=obtenerValorParametro(empresa, nombreParametro);
+        String valorParametro = obtenerValorParametro(empresa, nombreParametro);
         return compararParametro(valorParametro, valorComparar);
         /*if(valorParametro!=null)
-        {
+            {
             T resultadoValor=(T) valorComparar.
-                    consultarParametro(valorParametro);
+            consultarParametro(valorParametro);
             
             if(resultadoValor!=null && resultadoValor.equals(valorComparar))
             {
-                return true;
+            return true;
             }        
-        }
-        return false; */
+            }
+            return false; */
+        
     }
     
-    public static <T extends ComparadorInterface> Boolean comparar(String nombreParametro,T valorComparar, Map<String,ParametroCodefac> mapParametros) throws RemoteException
+    public static <T extends ComparadorInterface> Boolean comparar(String nombreParametro,T valorComparar, Map<String,ParametroCodefac> mapParametros)
     {
         String valorParametro=obtenerValorParametro(mapParametros, nombreParametro);
         return compararParametro(valorParametro, valorComparar);
         /*if(valorParametro!=null)
         {
-            T resultadoValor=(T) valorComparar.
-                    consultarParametro(valorParametro);
-            
-            if(resultadoValor!=null && resultadoValor.equals(valorComparar))
-            {
-                return true;
-            }        
+        T resultadoValor=(T) valorComparar.
+        consultarParametro(valorParametro);
+        
+        if(resultadoValor!=null && resultadoValor.equals(valorComparar))
+        {
+        return true;
+        }
         }
         return false; */
     }
     
-    private static <T extends ComparadorInterface> Boolean compararParametro(String valorParametro,T valorComparar) throws RemoteException
+    private static <T extends ComparadorInterface> Boolean compararParametro(String valorParametro,T valorComparar)
     {
         //String valorParametro=obtenerValorParametro(empresa, nombreParametro);
         if(valorParametro!=null)
@@ -108,7 +109,7 @@ public abstract class ParametroUtilidades {
         return false; 
     }
     
-    public static <T extends ComparadorInterface> Boolean compararSinEmpresa(String nombreParametro,T valorComparar) throws RemoteException
+    public static <T extends ComparadorInterface> Boolean compararSinEmpresa(String nombreParametro,T valorComparar)
     {
         String valorParametro=obtenerValorParametroSinEmpresa(nombreParametro);
         if(valorParametro!=null)
@@ -203,7 +204,7 @@ public abstract class ParametroUtilidades {
      * @return
      * @throws RemoteException 
      */
-    public static <T extends Object> T obtenerValorBaseDatos(Empresa empresa , String nombreParametro,ComparadorInterface interfaceConsulta) throws RemoteException
+    public static <T extends Object> T obtenerValorBaseDatos(Empresa empresa , String nombreParametro,ComparadorInterface interfaceConsulta)
     {
         String idParametro=obtenerValorParametro(empresa, nombreParametro);
         if(idParametro!=null && !idParametro.toString().isEmpty())

@@ -577,14 +577,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
         /**
          * Seleccionar el documento por defecto configurado para facturar
          */
-        try {
-            DocumentoEnum documentoEnum=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,DocumentoEnum.FACTURA);
-            if(documentoEnum!=null)
-            {
-                getCmbDocumento().setSelectedItem(documentoEnum);
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        DocumentoEnum documentoEnum = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,DocumentoEnum.FACTURA);
+        if(documentoEnum!=null)
+        {
+            getCmbDocumento().setSelectedItem(documentoEnum);
         }
         
     }

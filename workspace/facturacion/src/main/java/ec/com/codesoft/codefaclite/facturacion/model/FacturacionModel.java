@@ -237,30 +237,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      */
     private void setearVisibilidadComponentes()
     {
-        try {
+        getChkPagoConCartera().setVisible(false);
+        if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_CARTERA,EnumSiNo.SI))
+        {
+            getChkPagoConCartera().setVisible(true);
             
-            getChkPagoConCartera().setVisible(false);
-            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_CARTERA,EnumSiNo.SI))
-            {
-                getChkPagoConCartera().setVisible(true);
-                
-            }  
-            
-            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
-            {
-                getLblCostoDetalle().setVisible(false);
-                getLblTextoCosto().setVisible(false);
-            }
-            else
-            {
-                getLblCostoDetalle().setVisible(true);
-                getLblTextoCosto().setVisible(true);
-            }
-            
-            
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
+        {
+            getLblCostoDetalle().setVisible(false);
+            getLblTextoCosto().setVisible(false);
+        }
+        else
+        {
+            getLblCostoDetalle().setVisible(true);
+            getLblTextoCosto().setVisible(true);
         }
         
         JXTaskPane panelLateral=buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA);
@@ -2485,24 +2476,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void habilitarPermisosEdicionFactura()
     {
-        try {
-            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA, EnumSiNo.NO))
-            {
-                getTxtValorUnitario().setEnabled(false);
-            }
-            
-            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_DESCUENTO_FACTURA, EnumSiNo.NO))
-            {
-                //getTxtDescuento().setEnabled(false);
-                getCmbDescuento().setEnabled(false);
-            }
-            
-            if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_DESCRIPCION_FACTURA, EnumSiNo.NO))
-            {
-                getTxtDescripcion().setEnabled(false);
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_PRECIO_UNIT_FACTURA, EnumSiNo.NO))
+        {
+            getTxtValorUnitario().setEnabled(false);
+        }
+        if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_DESCUENTO_FACTURA, EnumSiNo.NO))
+        {
+            //getTxtDescuento().setEnabled(false);
+            getCmbDescuento().setEnabled(false);
+        }
+        if(ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.EDITAR_DESCRIPCION_FACTURA, EnumSiNo.NO))
+        {
+            getTxtDescripcion().setEnabled(false);
         }
         
         
@@ -3166,19 +3151,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void nuevo() throws ExcepcionCodefacLite {
         
         getjDateFechaEmision().setDate(new java.util.Date());
-        try {
-            //TODO: Mejorar esta parte
-            //Consultar si esta activo la opcion de iva en el feriado
-            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_IVA_FERIADO,EnumSiNo.SI))
-            {
-                controlador.activarIvaFeriado=true;
-            }
-            else
-            {
-                controlador.activarIvaFeriado=false;
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        //TODO: Mejorar esta parte
+        //Consultar si esta activo la opcion de iva en el feriado
+        if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_IVA_FERIADO,EnumSiNo.SI))
+        {
+            controlador.activarIvaFeriado=true;
+        }
+        else
+        {
+            controlador.activarIvaFeriado=false;
         }
         
         controlador.nuevo();
@@ -3508,15 +3489,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         UtilidadesComboBox.llenarComboBox(getCmbDocumento(),tiposDocumento);
         //Setear valores por defecto
         //TODO: Esta logica esta de unificar con la pantalla web
-        try {            
-            DocumentoEnum documentoSeleccionado=ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,DocumentoEnum.PROFORMA);
-            if(documentoSeleccionado!=null)
-            {
-                getCmbDocumento().setSelectedItem(documentoSeleccionado);
-            }
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        DocumentoEnum documentoSeleccionado = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(),ParametroCodefac.DOCUMENTO_DEFECTO_VISTA_FACTURA,DocumentoEnum.PROFORMA);
+        if(documentoSeleccionado!=null)
+        {
+            getCmbDocumento().setSelectedItem(documentoSeleccionado);
         }
         
         getCmbIva().removeAllItems();
@@ -4109,8 +4085,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 } else {
                     controlador.agregarProductoVista(producto, lote, null, (kardexSeleccionado != null) ? kardexSeleccionado.getStock() : BigDecimal.ZERO, ultimoCosto, fechaCaducidad);
                 }
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -4486,6 +4460,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F10, ParametroCodefac.Inventario.F10_PRODUCTO);
         crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F11, ParametroCodefac.Inventario.F11_PRODUCTO);
         crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F12, ParametroCodefac.Inventario.F12_PRODUCTO);
+        
         
     }
     

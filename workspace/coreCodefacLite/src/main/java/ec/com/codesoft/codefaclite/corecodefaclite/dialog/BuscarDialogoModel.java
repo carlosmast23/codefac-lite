@@ -689,15 +689,10 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
 
             @Override
             public void keyReleased(KeyEvent e) {
-                try {
-                    Boolean filtroRapido = ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA, EnumSiNo.SI);
-                    
-                    if (filtroRapido) 
-                    {
-                        ejecutarConsulta();                        
-                    }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+                Boolean filtroRapido = ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA, EnumSiNo.SI);
+                if (filtroRapido)
+                {
+                    ejecutarConsulta();
                 }
             }
         });
@@ -767,21 +762,14 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             @Override
             public void keyPressed(KeyEvent e) {
                 
-                try {
-                    Boolean filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.NO);
-                    
-                    if(filtroRapido || e.getKeyCode()==KeyEvent.VK_ENTER)
-                    {
-                        ejecutarConsulta();
-                    }
-                    //else
-                    //{
-                    //    ejecutarConsulta();
-                    
-                    
-                } catch (RemoteException ex) {
-                    Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+                Boolean filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.NO);
+                if(filtroRapido || e.getKeyCode()==KeyEvent.VK_ENTER)
+                {
+                    ejecutarConsulta();
                 }
+                //else
+                //{
+                //    ejecutarConsulta();
             }
 }); 
         
