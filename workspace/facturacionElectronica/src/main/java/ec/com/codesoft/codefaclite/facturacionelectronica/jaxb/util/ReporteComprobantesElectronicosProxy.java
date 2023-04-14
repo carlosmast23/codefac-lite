@@ -15,34 +15,60 @@ import net.sf.jasperreports.engine.JasperReport;
  * @author Carlos
  */
 public class ReporteComprobantesElectronicosProxy {
-    public URL pathRecursos;
-    public JasperReport jasperReport;
+    //public URL pathRecursos;
+    //public JasperReport jasperReport;
     
+    public Object clave;
+    public Object valor;
+    
+    //public static List<ReporteComprobantesElectronicosProxy> lista=new ArrayList<ReporteComprobantesElectronicosProxy>();
     public static List<ReporteComprobantesElectronicosProxy> lista=new ArrayList<ReporteComprobantesElectronicosProxy>();
 
-    public ReporteComprobantesElectronicosProxy(URL pathRecursos) {
-        this.pathRecursos = pathRecursos;
+    public ReporteComprobantesElectronicosProxy(Object clave) {
+        this.clave = clave;
     }
 
-    public ReporteComprobantesElectronicosProxy(URL pathRecursos, JasperReport jasperReport) {
-        this.pathRecursos = pathRecursos;
-        this.jasperReport = jasperReport;
+    public ReporteComprobantesElectronicosProxy(Object clave, Object valor) {
+        this.clave = clave;
+        this.valor = valor;
     }
     
     
-    public static void agregar(URL pathRecursos,JasperReport jasperReport)
+    /*public static void agregar(URL pathRecursos,JasperReport jasperReport)
     {
         ReporteComprobantesElectronicosProxy reporte=new ReporteComprobantesElectronicosProxy(pathRecursos, jasperReport);
         lista.add(reporte);
+    }*/
+    
+    public static void agregar(Object clave,Object valor)
+    {
+        ReporteComprobantesElectronicosProxy reporte=new ReporteComprobantesElectronicosProxy(clave, valor);
+        lista.add(reporte);
+    }
+    
+    public static Object obtenerObjeto(Object clave)
+    {
+        for (ReporteComprobantesElectronicosProxy reporte : lista) 
+        {
+            if(reporte.clave.equals(clave))
+            {
+                return reporte.valor;
+            }
+        }
+        return null;
     }
     
     public static JasperReport obtenerReporte(URL pathRecursos)
     {
         for (ReporteComprobantesElectronicosProxy reporte : lista) 
         {
-            if(reporte.pathRecursos.getPath().equals(pathRecursos.getPath()))
+            if(reporte.clave instanceof URL)
             {
-                return reporte.jasperReport;
+                URL pathRecursosTmp=(URL) reporte.clave;
+                if(pathRecursosTmp.getPath().equals(pathRecursos.getPath()))
+                {
+                    return(JasperReport) reporte.valor;
+                }
             }
         }
         return null;

@@ -125,25 +125,51 @@ public class ServicioSri {
     
             
     public boolean verificarConexionRecepcion() throws ComprobanteElectronicoException{
-        try {
-            URL url = new URL(uri_recepcion);
-            QName qname = new QName(namespaceURI,localPort);
-            servicio = new RecepcionComprobantesOfflineService(url, qname);
-            System.out.println("si existe servicio con sri");
-            return true;
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("no existe servicio");
-            throw new ComprobanteElectronicoException("Error de formato de la url"+"\n"+ex.getMessage(),"Verificar conexion recibir documentos SRI",ComprobanteElectronicoException.ERROR_COMPROBANTE);
-            
-        } catch(javax.xml.ws.WebServiceException wse)
+        
+        //TODO: Poner esta constante en algun otro lugar
+        final int numeroIntentos = 10;
+        for (int i = 0; i < numeroIntentos; i++) 
         {
-            wse.printStackTrace();
-            System.out.println("No se puede acceder al web servicio");
-            throw new ComprobanteElectronicoException("No existe conexion con el SRI para enviar documentos"+"\n"+wse.getMessage(),"Verificar conexion recibir documentos SRI",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+           
+            //Pongo en esta parte porque al final genera error
+            if(i>0)
+            {
+                try {                
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             
+            try {
+
+                URL url = new URL(uri_recepcion);
+                QName qname = new QName(namespaceURI, localPort);
+                servicio = new RecepcionComprobantesOfflineService(url, qname);
+                System.out.println("si existe servicio con sri");
+                return true;
+            } catch (MalformedURLException ex) {
+                
+                ex.printStackTrace();
+                Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("no existe servicio");
+                throw new ComprobanteElectronicoException("Error de formato de la url" + "\n" + ex.getMessage(), "Verificar conexion recibir documentos SRI", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+
+            } catch (javax.xml.ws.WebServiceException wse) {
+                Logger.getLogger(ServicioSri.class.getName()).log(Level.WARNING,"Intentando revisar conexión Sri, # intento: "+(i+1));
+                //Si no llega al final no ejecuta la expecion
+                if((i+1)<numeroIntentos)
+                {
+                    continue;
+                }                
+                wse.printStackTrace();
+                System.out.println("No se puede acceder al web servicio");
+                throw new ComprobanteElectronicoException("No existe conexion con el SRI para enviar documentos" + "\n" + wse.getMessage(), "Verificar conexion recibir documentos SRI", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+
+            }
+           
         }
+        return false;
     }
 
     public boolean verificarConexionAutorizar()

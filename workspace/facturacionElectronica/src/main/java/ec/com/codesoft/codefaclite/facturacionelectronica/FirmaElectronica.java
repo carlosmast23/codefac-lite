@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ReporteComprobantesElectronicosProxy;
 import ec.com.codesoft.codefaclite.facturacionelectronica.util.X509Utils;
 import ec.com.codesoft.codefaclite.facturacionelectronica.util.sri.ValidacionBasica;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadTratarNodo;
@@ -128,8 +129,14 @@ public class FirmaElectronica {
             
             
             PrivateKey llavePrivada = null;
-            
-            llavePrivada = (PrivateKey) keyStore.getPrivateKey(certificado);
+                        
+            //Obtener esto objeto de cache porque demora mucho en crear esta parte
+            llavePrivada=(PrivateKey) ReporteComprobantesElectronicosProxy.obtenerObjeto(almacenCertificadoClave+"private");
+            if(llavePrivada==null)
+            {
+                llavePrivada = (PrivateKey) keyStore.getPrivateKey(certificado);
+                ReporteComprobantesElectronicosProxy.agregar(almacenCertificadoClave+"private", llavePrivada);
+            }
 
             Provider proveedor = keyStore.getProvider(certificado);
             DataToSign datosParaFirmar = createDataToSign(recursoParaFirmar);
@@ -281,6 +288,13 @@ public class FirmaElectronica {
     {
         try {
             IPKStoreManager storeManager = null;
+            //Verificar si tengo creado previamten el objeto para no consultar de nuevo
+            storeManager= (IPKStoreManager) ReporteComprobantesElectronicosProxy.obtenerObjeto(rutaAlmacenCertificado);
+            if(storeManager!=null)
+            {
+                return storeManager;
+            }
+            
             KeyStore clave=null;
             clave=KeyStore.getInstance("PKCS12");
             FileInputStream file=new FileInputStream(rutaAlmacenCertificado);
@@ -288,6 +302,8 @@ public class FirmaElectronica {
                     passwordAlmacenCertificado.toCharArray());     
             
             storeManager = new KSStore(clave, new PassStoreKS(passwordAlmacenCertificado));
+            //Almaceno en memoria para ya no consultar de nuevo
+            ReporteComprobantesElectronicosProxy.agregar(rutaAlmacenCertificado, storeManager);
             return storeManager;
         } catch (KeyStoreException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);

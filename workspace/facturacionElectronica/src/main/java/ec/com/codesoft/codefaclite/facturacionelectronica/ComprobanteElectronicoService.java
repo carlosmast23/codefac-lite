@@ -1338,22 +1338,28 @@ public class ComprobanteElectronicoService implements Runnable {
      */
     public boolean disponibilidadServidorSri(Integer intentos)
     {
-        servicioSri = new ServicioSri();
-        servicioSri.setUri_autorizacion(uriAutorizacion);
-        servicioSri.setUri_recepcion(uriRecepcion);
         try {
+            servicioSri = new ServicioSri();
+            servicioSri.setUri_autorizacion(uriAutorizacion);
+            servicioSri.setUri_recepcion(uriRecepcion);
+            /*try {
             for (int i = 0; i < intentos; i++) {
-                if (!servicioSri.verificarConexionRecepcion() || !servicioSri.verificarConexionAutorizar())
-                {
-                    return false;
-                }
+            if (!servicioSri.verificarConexionRecepcion() || !servicioSri.verificarConexionAutorizar())
+            {
+            return false;
+            }
             }
             
-        } catch (ComprobanteElectronicoException ex) {
+            } catch (ComprobanteElectronicoException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+            }*/
+            //return true;
+            return servicioSri.verificarConexionRecepcion();
+        } catch (ComprobanteElectronicoException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return true;
+        return false;
     }
 
     private void enviarSri() throws ComprobanteElectronicoException {
