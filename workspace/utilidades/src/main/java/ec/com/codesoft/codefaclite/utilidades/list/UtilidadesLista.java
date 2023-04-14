@@ -24,6 +24,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 public abstract class UtilidadesLista {
     
+    public static <T> T obtenerDatoMayor(List<T> lista,Comparator<T> comparador)
+    {
+        T resultado= Collections.max(lista, comparador);
+        return resultado;
+    }
+    
     public static <T> Set<T> buscarDuplicados(List<T> list) {
         return list.stream().distinct()
                 .filter(i -> Collections.frequency(list, i) > 1)

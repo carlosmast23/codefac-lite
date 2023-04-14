@@ -1130,10 +1130,12 @@ public class Producto implements Serializable, Comparable<Producto> {
     }
     
     /**
+     * TODO: Ver alguna forma de evitar consultar a la base de datos especilamente desde el servidor porque genera redundacia y problemas de rendimiento bastante fuerte
      * Esto sirve cuando tiene varias presentaciones y se tiene que buscar el producto principal
      * para hacer esta busqueda se tiene que buscar el que tenga el tipo distinto de Empaque
      * @return 
      */
+    @Deprecated
     public Producto buscarProductoEmpaquePrincipal()
     {
         try {

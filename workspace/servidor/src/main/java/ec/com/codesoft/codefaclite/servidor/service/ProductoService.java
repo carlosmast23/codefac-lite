@@ -51,6 +51,8 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +93,43 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         ProductoConversionPresentacionRespuesta respuesta=new ProductoConversionPresentacionRespuesta(productoEmpaqueSecundario, presentacionDetalle.getProductoOriginal(), cantidad, precioUnitario);
         return  respuesta;
     }
+    
+    /**
+     * Metodo que me va a permitir enviar un producto y buscar cuando tenga varios empaques cual es el que se debe utilizar para las compras
+     * //TODO: Por el momento va a buscar siempre el que tenga la mayor cantidad en la presentacion
+     * @return 
+     */
+    public Producto buscarProductoDefectoCompras( Producto producto)throws RemoteException,ServicioCodefacException
+    {
+        List<ProductoPresentacionDetalle> presentacionList=this.buscarPresentacionesPorProducto(producto);
+        ProductoPresentacionDetalle presentacionDetalle=null;
+        if(presentacionList.size()>0)
+        {
+            presentacionDetalle=UtilidadesLista.obtenerDatoMayor(presentacionList, new Comparator<ProductoPresentacionDetalle>() 
+            {
+                @Override
+                public int compare(ProductoPresentacionDetalle o1, ProductoPresentacionDetalle o2) {
+                    return o1.getCantidad().compareTo(o2.getCantidad());
+                }
+
+            });
+        }
         
+        //Si el sistema no detecta ninguna presentacion entonces retorno el mismo producto
+        if(presentacionDetalle==null)
+        {
+            return producto;
+        }
+        
+        return presentacionDetalle.getProductoEmpaquetado();
+    }
+    
+    public  List<ProductoPresentacionDetalle> buscarPresentacionesPorProducto(Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        //Producto productoPrincipal= buscarProductoEmpaquePrincipal(producto);
+        return getFacade().buscarPresentacionesPorProductoFacade(producto);
+        
+    }
     
     public Producto buscarProductoEmpaquePrincipal(Producto producto) throws RemoteException,ServicioCodefacException
     {

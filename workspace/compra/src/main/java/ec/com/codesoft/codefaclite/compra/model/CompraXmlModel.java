@@ -341,6 +341,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
         actualizarBindingCompontValues();
     }
     
+    //Este proceso deberia estar en el servidor al momento de constuir la compra y no en la vista
+    @Deprecated
     private void cargarProductosPorDefecto(Compra compraXml)
     {
         for(CompraDetalle compraDetalle : compraXml.getDetalles())
@@ -353,6 +355,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     Producto producto= ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(compraDetalle.getCodigoProveedor(), session.getEmpresa());
                     if(producto!=null)
                     {
+                        producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoDefectoCompras(producto);
                         ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(producto, compraXml.getProveedor());
                         compraDetalle.setProductoProveedor(productoProveedor);
                     }
@@ -362,6 +365,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                         producto= ServiceFactory.getFactory().getProductoServiceIf().buscarPorNombreyEstado(compraDetalle.getDescripcion(), GeneralEnumEstado.ACTIVO, session.getEmpresa());
                         if(producto!=null)
                         {
+                            producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoDefectoCompras(producto);
                             ProductoProveedor productoProveedor= ServiceFactory.getFactory().getProductoProveedorServiceIf().construirSinTransaccion(producto, compraXml.getProveedor());
                             compraDetalle.setProductoProveedor(productoProveedor);
                         }

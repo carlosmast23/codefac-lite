@@ -69,7 +69,16 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
         //mapParametros.put("proveedor", proveedor);
         List<ProductoProveedor> resultadoList = getFacade().findByMap(mapParametros);
 
-        if (resultadoList.size() > 0) {
+        if (resultadoList.size() > 0) 
+        {
+            Producto producto=new Producto();
+            ProductoService productoService=new ProductoService();
+            
+            producto=productoService.buscarProductoDefectoCompras(producto);            
+            
+            ProductoProveedor productoProveedor=resultadoList.get(0);
+            productoProveedor.setProducto(producto);
+            
             return resultadoList.get(0);
         }
 

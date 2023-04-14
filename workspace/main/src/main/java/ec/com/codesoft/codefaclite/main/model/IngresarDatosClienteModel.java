@@ -8,7 +8,6 @@ package ec.com.codesoft.codefaclite.main.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio.TipoClienteSwingEnum;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
-import static ec.com.codesoft.codefaclite.main.init.Main.modoAplicativo;
 import ec.com.codesoft.codefaclite.main.panel.IngresarDatosClienteDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;

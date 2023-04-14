@@ -193,7 +193,7 @@ public abstract class ComprobanteElectronicoReporte
     {
         for (TotalImpuesto impuesto : impuestos) 
         {
-            if(impuesto.getTarifa().compareTo(BigDecimal.ZERO)>0)
+            if(impuesto.getTarifa()!=null && impuesto.getTarifa().compareTo(BigDecimal.ZERO)>0)
             {
                 return impuesto.getTarifa().intValue();
             }

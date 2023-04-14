@@ -70,4 +70,6 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public String actualizarProductoExportados(ProductoExportar productoExportar,Empresa empresa) throws  ServicioCodefacException, RemoteException;
     
     public List<Producto> buscarPorCategoria(CategoriaProducto categoria) throws RemoteException,ServicioCodefacException;
+    
+    public Producto buscarProductoDefectoCompras( Producto producto)throws RemoteException,ServicioCodefacException;
 }

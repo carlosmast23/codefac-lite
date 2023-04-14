@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.main.other;
 
-import static ec.com.codesoft.codefaclite.main.init.Main.modoAplicativo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.io.FileReader;

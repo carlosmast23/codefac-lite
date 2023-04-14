@@ -982,10 +982,13 @@ public class CompraModel extends CompraPanel{
                     //Producto productoTmp = (Producto) buscarDialogo.getResultado();
                     ProductoBusquedaDialogoFactory busquedaFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(), ProductoBusquedaDialogoFactory.ResultadoEnum.PRODUCTO);
                     Producto productoTmp = (Producto) busquedaFactory.ejecutarDialogo();
+                    productoTmp= ServiceFactory.getFactory().getProductoServiceIf().buscarProductoDefectoCompras(productoTmp);
                     cargarProductoVistaAgregar(productoTmp,CrudEnum.CREAR);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                     new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.CORRECTO);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
