@@ -58,6 +58,9 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     
     @Column(name = "RESERVADO")
     private String reservado;
+    
+    @Column(name = "NUMERO_PVP")
+    private Integer numeroPvp;
 
 
     public FacturaDetalle() {
@@ -124,6 +127,16 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     public void setResponsable(Empleado responsable) {
         this.responsable = responsable;
     }
+
+    public Integer getNumeroPvp() {
+        return numeroPvp;
+    }
+
+    public void setNumeroPvp(Integer numeroPvp) {
+        this.numeroPvp = numeroPvp;
+    }
+    
+    
     
     
     @Override

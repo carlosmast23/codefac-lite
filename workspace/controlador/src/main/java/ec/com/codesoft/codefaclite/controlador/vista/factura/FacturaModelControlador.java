@@ -305,7 +305,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 try {
                     //DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     DocumentoEnum documentoSeleccionado=interfaz.obtenerDocumentoSeleccionado();
-                    agregarDetallesFactura(facturaDetalle,null, documentoSeleccionado, null,null,null);
+                    agregarDetallesFactura(facturaDetalle,null, documentoSeleccionado, null,null,null,null);
                     
                     //Cargar los productos adicionales para la factura
                     for (PresupuestoDetalle presupuestoDetalle : presupuestoTmp.getPresupuestoDetalles()) 
@@ -340,7 +340,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         this.setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum.INVENTARIO);
                         this.interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
                         setearValoresProducto(facturaDetalle);
-                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null,facturaDetalle.getReservadoEnum(),facturaDetalle.getCantidad());
+                        agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado, null,facturaDetalle.getReservadoEnum(),facturaDetalle.getCantidad(),null);
                     }
                     
                 } catch (ServicioCodefacException ex) {
@@ -933,7 +933,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param facturaDetalle
      * @return 
      */
-    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex,EnumSiNo reservaEnum,BigDecimal cantidad) throws ServicioCodefacException {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex,EnumSiNo reservaEnum,BigDecimal cantidad,Integer numeroPvp) throws ServicioCodefacException {
 
         
         agregarDetallesFacturaValidacion(facturaDetalle, precioVentaOriginal);
@@ -960,7 +960,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             lote=kardex.getLote();
         }
         
-        
+        facturaDetalle.setNumeroPvp(numeroPvp);
         facturaDetalle.setLote((lote!=null)?lote:null);
         
         //Solo leer la cantidad de la pantalla si no estan enviando una cantidad
