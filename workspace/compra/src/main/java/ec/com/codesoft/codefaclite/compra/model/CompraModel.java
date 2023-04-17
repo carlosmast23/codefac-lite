@@ -1142,7 +1142,15 @@ public class CompraModel extends CompraPanel{
                     
                     productoSeleccionado=productoTmp;
                     
-                    cargarProductoVistaAgregar(productoTmp,CrudEnum.EDITAR);
+                    //TODO: Arreglo temporal pero ver como mejorar esta parte porque da problemas al momento de cambiar de presentacion al momento de editar                    
+                    CrudEnum crudEnum=CrudEnum.EDITAR;
+                    if(getBtnAgregarItem().isEnabled())
+                    {
+                        crudEnum=CrudEnum.CREAR;
+                    }
+                    
+                    cargarProductoVistaAgregar(productoTmp,crudEnum);
+                    
                 }
             }
         });
@@ -1152,14 +1160,17 @@ public class CompraModel extends CompraPanel{
                 
     }
     
-    private void cargarProductoVistaAgregar(Producto productoTmp,CrudEnum cruEnum)
+    private void cargarProductoVistaAgregar(Producto productoTmp,CrudEnum crudEnum)
     {
-        agregarProductoVista(productoTmp,cruEnum);
+        agregarProductoVista(productoTmp,crudEnum);
 
         //Cuando seleccione otro producto por seguridad debo limpiar el lote para que seleccione de nuevo
         //TODO:Mejorar esta parte para tener desde un mismo lugar donde limpiar los datos
-        loteSeleccionado = null;
-        getTxtLoteNombre().setText("");
+        if(crudEnum.equals(CrudEnum.CREAR))
+        {
+            loteSeleccionado = null;
+            getTxtLoteNombre().setText("");
+        }
         cargarPresentaciones(productoTmp);
     }
     
@@ -1195,7 +1206,8 @@ public class CompraModel extends CompraPanel{
         public void actionPerformed(ActionEvent e) {
             
             Object[] paramPostConstruct = new Object[1];
-            paramPostConstruct[0] = productoSeleccionado;
+            Producto productoCrearLote= productoSeleccionado.buscarProductoEmpaquePrincipal();
+            paramPostConstruct[0] = productoCrearLote;
             
             ObserverUpdateInterface observerCreate=new ObserverUpdateInterface<Lote>() 
             {
@@ -1217,7 +1229,7 @@ public class CompraModel extends CompraPanel{
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            LoteBusqueda busqueda=new LoteBusqueda(session.getEmpresa(),productoSeleccionado);
+            LoteBusqueda busqueda=new LoteBusqueda(session.getEmpresa(),productoSeleccionado.buscarProductoEmpaquePrincipal());
             BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(busqueda);            
             buscarDialogo.setVisible(true);
 
