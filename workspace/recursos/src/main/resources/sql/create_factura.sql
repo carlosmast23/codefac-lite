@@ -139,7 +139,7 @@ create table FACTURA_DETALLE
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.1.7)*/
     PRECIO_SIN_AHORRO decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.1.9)*/
-    NUMERO_PVP,
+    NUMERO_PVP INT,
     primary key (ID)
 );
 

@@ -70,7 +70,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         }
     }
     
-    public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
+    public Presupuesto grabar(Presupuesto entity,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException
     {
         return (Presupuesto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
         {
@@ -126,7 +126,11 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                 entityManager.persist(entity);
                 entityManager.flush();
                 Presupuesto presupuestoEdit=entityManager.merge(entity);
-                enviarCorreoPresupuesto(presupuestoEdit);
+                
+                if(enviarCorreo!=null && enviarCorreo)
+                {
+                    enviarCorreoPresupuesto(presupuestoEdit);
+                }
                 //entity=entityManager.merge(presupuestoEdit);
                 return presupuestoEdit;
             } 
@@ -146,7 +150,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
             
             //Empresa empresa=presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getCliente().getEmpresa();
             
-            String secuencialStr = presupuesto.getCodigo() + "";
+            String secuencialStr = presupuesto.getId() + "";
             Map<String, String> mapParametro = new HashMap<String, String>();
             mapParametro.put("numeroPresupuesto", secuencialStr);
             mapParametro.put("nombreCliente", presupuesto.getPersona().getRazonSocial());
@@ -167,6 +171,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                     destinatarios,
                     mapPathFiles
             );
+            Logger.getLogger(PresupuestoService.class.getName()).log(Level.SEVERE,"Presupuesto: "+presupuesto.getCodigo()+" enviado al correo");
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(PresupuestoService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -204,9 +209,13 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         }
     }
     
-    public void editar(Presupuesto p)
+    public void editar(Presupuesto p,Boolean enviarCorreo) throws RemoteException, ServicioCodefacException
     {
         presupuestoFacade.edit(p);
+        if(enviarCorreo!=null && enviarCorreo)
+        {
+            enviarCorreoPresupuesto(p);
+        }
     }
     
     public void eliminar(Presupuesto p) throws ServicioCodefacException,RemoteException

@@ -47,7 +47,10 @@ public class LoteBusqueda implements InterfaceModelFind<Lote>{
 
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
-        String queryString=" SELECT u FROM Lote u where u.estado=?1 and u.empresa=?2 and u.codigo like ?3 ";
+        //Lote l;
+        //l.getProducto().getNombre();
+        
+        String queryString=" SELECT u FROM Lote u where u.estado=?1 and u.empresa=?2 and ( u.codigo like ?3 OR LOWER(u.producto.nombre) LIKE ?3  ) ";
         
         if(productoFiltro!=null)
         {

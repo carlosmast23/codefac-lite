@@ -141,10 +141,11 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jToolBar3 = new javax.swing.JToolBar();
         jLabel29 = new javax.swing.JLabel();
         lblTotalServicios = new javax.swing.JLabel();
-        jLabel30 = new javax.swing.JLabel();
         txtKilometraje = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
         txtVentaRelacionada = new javax.swing.JTextField();
+        jLabel32 = new javax.swing.JLabel();
+        chkEnviarCorreo = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -157,7 +158,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel1.setText("Código:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel1, gridBagConstraints);
@@ -167,7 +168,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         txtCodigo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -186,7 +187,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -217,7 +218,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel5.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel5, gridBagConstraints);
@@ -226,7 +227,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel6.setText("Fecha Creación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel6, gridBagConstraints);
@@ -234,7 +235,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/persona-ico.png"))); // NOI18N
         btnCliente.setToolTipText("Agregar Cliente");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -252,7 +253,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -266,7 +267,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel16.setText("Observaciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel16, gridBagConstraints);
@@ -277,7 +278,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -305,7 +306,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         btnOrdenTrabajo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnOrdenTrabajo.setToolTipText("Buscar Detalle de Ordenes Pendientes");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnOrdenTrabajo, gridBagConstraints);
@@ -478,7 +479,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -504,13 +505,13 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel14.setText("Tipo Facturación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel14, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.08;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -519,7 +520,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         cmbOpcionDiaMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dia", "Mes" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbOpcionDiaMes, gridBagConstraints);
@@ -529,7 +530,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         lblIndicarFechaValidez.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -810,7 +811,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -828,20 +829,20 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbTipoPresupuesto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(llblEspacio50, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -868,7 +869,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -890,7 +891,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         getContentPane().add(jToolBar2, gridBagConstraints);
 
@@ -906,18 +907,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 7;
         getContentPane().add(jToolBar3, gridBagConstraints);
-
-        jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel30.setText("Venta Relacionada:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel30, gridBagConstraints);
 
         txtKilometraje.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -932,7 +924,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel31.setText("Tiempo Validez:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel31, gridBagConstraints);
@@ -942,13 +934,31 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         txtVentaRelacionada.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 130;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtVentaRelacionada, gridBagConstraints);
+
+        jLabel32.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel32.setText("Venta Relacionada:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel32, gridBagConstraints);
+
+        chkEnviarCorreo.setFont(new java.awt.Font("Arial", 3, 12)); // NOI18N
+        chkEnviarCorreo.setText("Enviar Correo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(chkEnviarCorreo, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -965,6 +975,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JButton btnOrdenTrabajo;
     private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnProveedor;
+    private javax.swing.JCheckBox chkEnviarCorreo;
     private javax.swing.JCheckBox chkInventarioProveedor;
     private javax.swing.JCheckBox chkReserva;
     private javax.swing.JComboBox<OrdenTrabajoDetalle> cmbDetallesOrdenTrabajo;
@@ -996,8 +1007,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1453,6 +1464,14 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
     public void setTxtVentaRelacionada(JTextField txtVentaRelacionada) {
         this.txtVentaRelacionada = txtVentaRelacionada;
+    }
+
+    public JCheckBox getChkEnviarCorreo() {
+        return chkEnviarCorreo;
+    }
+
+    public void setChkEnviarCorreo(JCheckBox chkEnviarCorreo) {
+        this.chkEnviarCorreo = chkEnviarCorreo;
     }
 
     

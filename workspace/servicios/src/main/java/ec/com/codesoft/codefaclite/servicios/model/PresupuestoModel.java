@@ -212,7 +212,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
             
             servicio.consultarActividadPresupuesto(empleado);
-            presupuesto=servicio.grabar(presupuesto);
+            presupuesto=servicio.grabar(presupuesto,getChkEnviarCorreo().isSelected());
             
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             imprimir();
@@ -233,7 +233,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             { 
                 setearDatos();
                 PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
-                servicio.editar(this.presupuesto);
+                servicio.editar(this.presupuesto,getChkEnviarCorreo().isSelected());
                 DialogoCodefac.mensaje("Correcto","El presupuesto fue editado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             }else
             {
@@ -469,6 +469,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getLblTotalProductos().setText("0.00");
         this.getLblTotalServicios().setText("0.00");
         this.getTxtVentaRelacionada().setText("");
+        this.getChkEnviarCorreo().setSelected(false);
         getBtnAgregarDetalle().setEnabled(true);
         initDatosTabla();
     }
