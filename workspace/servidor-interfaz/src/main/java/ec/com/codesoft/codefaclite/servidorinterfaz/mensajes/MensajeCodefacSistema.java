@@ -80,6 +80,7 @@ public abstract class MensajeCodefacSistema {
     public static abstract class IngresoInformacion
     {
         public static final CodefacMsj INGRESO_CLAVE_CODEFAC = new CodefacMsj("Ingresar Clave","Ingrese la clave otorgada por el soporte de Codefac para continuar:", MENSAJE_CORRECTO);
+        public static final CodefacMsj MENSAJE_CLAVE_INCORRECTA = new CodefacMsj("Ingresar Clave","Clave incorrecta, proceso cancelado", MENSAJE_INCORRECTO);
     }
     
     public static abstract class PresupuestoMensajes

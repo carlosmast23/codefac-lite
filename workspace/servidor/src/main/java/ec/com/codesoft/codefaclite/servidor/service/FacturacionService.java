@@ -410,12 +410,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 setearDatosClienteYDistribuidor(proforma);
-                entityManager.merge(proforma);
-                
-                eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma), proforma.getDetalles());
-                
+                entityManager.merge(proforma);                
+                eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma), proforma.getDetalles());                
             }
         });
+        imprimirLogFactura(proforma, CrudEnum.EDITAR);
         return proforma;
     }
     
@@ -545,13 +544,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();
                 
-                //Genero un LOG DE LAS VENTAS para tener un registro en los logs por algun caso si la base de datos falla
-                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Procesando factura # :"+ factura.getPreimpreso()+" | fecha de emisión: "+factura.getFechaEmision()+" | cliente: "+factura.getRazonSocial()+" | documento: "+factura.getCodigoDocumentoEnum().getNombre()+" | iva: "+factura.getIva()+" | total: "+factura.getTotal());
-                //Genero un Log de los detalles de las ventas
-                for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
-                {
-                    Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Código: "+ facturaDetalle.getCodigoPrincipal()+" | Nombre: "+facturaDetalle.getDescripcion()+" | ValUnit: "+facturaDetalle.getPrecioUnitario()+" | Cantidad: "+facturaDetalle.getCantidad()+" | Desc: "+facturaDetalle.getDescuento());
-                }
+                imprimirLogFactura(factura, CrudEnum.CREAR);
             }
         });
         
@@ -568,6 +561,20 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }).start();
         
         return factura;
+    }
+    private void imprimirLogFactura(Factura factura,CrudEnum crudEnum)
+    {
+        String accionFactura="Creando Factura # :";
+        if(crudEnum.equals(CrudEnum.EDITAR))
+        {
+            accionFactura="Editando Factura #: ";
+        }
+        //Genero un LOG DE LAS VENTAS para tener un registro en los logs por algun caso si la base de datos falla
+        Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO, accionFactura + factura.getPreimpreso() + " | fecha de emisión: " + factura.getFechaEmision() + " | cliente: " + factura.getRazonSocial() + " | documento: " + factura.getCodigoDocumentoEnum().getNombre() + " | iva: " + factura.getIva() + " | total: " + factura.getTotal());
+        //Genero un Log de los detalles de las ventas
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO, "Código: " + facturaDetalle.getCodigoPrincipal() + " | Nombre: " + facturaDetalle.getDescripcion() + " | ValUnit: " + facturaDetalle.getPrecioUnitario() + " | Cantidad: " + facturaDetalle.getCantidad() + " | Desc: " + facturaDetalle.getDescuento());
+        }
     }
 
     //TODO: Tomar en cuenta que este metodo no toma en cuenta la cartera y luego puede generar problemas

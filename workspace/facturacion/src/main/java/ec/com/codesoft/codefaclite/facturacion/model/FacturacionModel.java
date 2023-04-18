@@ -154,6 +154,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import static java.awt.image.ImageObserver.WIDTH;
@@ -2115,6 +2116,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             throw new ExcepcionCodefacLite("cancelar el evento editar");
         }
         
+        ;
+        //Actualizar los secuenciales en el archivo de comprobacion en la base de datos para que por el momento puedan seguir continuando
+        String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+        if(!UtilidadesSistema.verificarClaveSoporte(claveIngresada))
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);
+            throw new ExcepcionCodefacLite("cancelar el evento editar clave incorrecta");
+        }
+        
         try {
             setearValoresDefaultFactura(CrudEnum.EDITAR);
             ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
@@ -4026,13 +4036,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BigDecimal cantidad = (BigDecimal) resultado[0];
         String codigoPresentacion = (String) resultado[1];
 
-        PresentacionProducto presentacion = productoSeleccionado.buscarPresentacionPorCodigo(codigoPresentacion);
-        if (presentacion != null) 
+        if(productoSeleccionado!=null)
         {
-            //cargarPresentaciones(productoSeleccionado);
-            cargarNuevaPresentacionVista(productoSeleccionado, kardexSeleccionado, presentacion);
-            //Todo: Mejorar esta parte por que deberia haber un metodo generarl que permita setear las cantidades
-            getTxtCantidad().setText(cantidad + "");
+            PresentacionProducto presentacion = productoSeleccionado.buscarPresentacionPorCodigo(codigoPresentacion);
+            if (presentacion != null) 
+            {
+                //cargarPresentaciones(productoSeleccionado);
+                cargarNuevaPresentacionVista(productoSeleccionado, kardexSeleccionado, presentacion);
+                //Todo: Mejorar esta parte por que deberia haber un metodo generarl que permita setear las cantidades
+                getTxtCantidad().setText(cantidad + "");
+            }
         }
 
     }
