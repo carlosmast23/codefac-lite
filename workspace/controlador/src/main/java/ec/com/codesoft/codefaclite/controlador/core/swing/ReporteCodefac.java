@@ -631,7 +631,19 @@ public class ReporteCodefac {
             }        
 
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
-            String nombreImagen=sucursal.getEmpresa().getImagenLogoPath();
+            
+            String nombreImagen=null;            
+            //Si el formato es pequeño utilizo la imagen para impresoras pequeñas
+            if(formatoReporte.equals(FormatoHojaEnum.TICKET))
+            {
+                nombreImagen=sucursal.getEmpresa().getImagenLogoPequenioPath();
+            }
+            
+            //Si el formato es grando o no encuentra por defecto utilizo el formato normal
+            if(nombreImagen==null)
+            {
+                nombreImagen=sucursal.getEmpresa().getImagenLogoPath();
+            }
             //service.getResourceInputStream(RecursoCodefac.AYUDA, file);
             
            if(tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))

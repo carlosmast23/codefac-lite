@@ -27,9 +27,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,6 +50,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -58,16 +61,15 @@ public class EmpresaModel extends EmpresaForm
 {
     private Empresa empresa;
     private EmpresaServiceIf empresaService;
-    private JFileChooser jFileChooser;
+    //private JFileChooser jFileChooser;
     private Path origen = null;
+    private Path logoPequenioPath = null;
     //private Path destino = null;
 
 
     public EmpresaModel() 
     {
-        jFileChooser = new JFileChooser();
-        jFileChooser.setDialogTitle("Elegir archivo");
-        jFileChooser.setFileFilter(new FileNameExtensionFilter("Logo Imagen", "png", "jpg","jpeg","bmp","gif"));   
+        
         //this.empresa = new Empresa();
         this.empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
         agregarListener();
@@ -128,6 +130,7 @@ public class EmpresaModel extends EmpresaForm
             }
             
             getjTextLogo().setText(e.getImagenLogoPath());
+            getjTextLogoPequeño().setText(e.getImagenLogoPequenioPath());
             
             if(e.getOrden()!=null)
             {
@@ -146,6 +149,7 @@ public class EmpresaModel extends EmpresaForm
                 empresa=empresaService.grabar(setDatosEmisor());
                 //session.setEmpresa(empresa);
                 moverArchivo();
+
                 DialogoCodefac.mensaje("Exito","Empresa grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -167,6 +171,12 @@ public class EmpresaModel extends EmpresaForm
             }
         }
         dispose();*/
+    }
+    
+    private void moverArchivo()
+    {
+        grabarArchivoServidor(origen);
+        grabarArchivoServidor(logoPequenioPath);
     }
 
     @Override
@@ -226,6 +236,7 @@ public class EmpresaModel extends EmpresaForm
     @Override
     public void limpiar() {
         getjTextLogo().setText("");    
+        getjTextLogoPequeño().setText("");
         getTxtOrden().setValue(0);
         getChkContribuyenteRegimenMicroempresas().setSelected(false);
         getChkRIMPEEmprendedores().setSelected(false);
@@ -314,6 +325,7 @@ public class EmpresaModel extends EmpresaForm
         
         
         empresa.setImagenLogoPath(getjTextLogo().getText());
+        empresa.setImagenLogoPequenioPath(getjTextLogoPequeño().getText());
         //empresa.setContribuyenteEspecial("");
         empresa.setEstado(((GeneralEnumEstado)getjComboEstado().getSelectedItem()).getEstado());
         return empresa;
@@ -362,33 +374,59 @@ public class EmpresaModel extends EmpresaForm
         getBtnCargarImagen().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int seleccion = jFileChooser.showDialog(null, "Abrir");
-                switch (seleccion) {
-                    case JFileChooser.APPROVE_OPTION:
-                        cargarDatosArchivos(jFileChooser.getSelectedFile());
-                        break;
-                    case JFileChooser.CANCEL_OPTION:
-
-                        break;
-                    case JFileChooser.ERROR_OPTION:
-
-                        break;
+                File archivo= listenerBotonBuscarImagen(getjTextLogo());
+                if(archivo!=null)
+                {
+                    origen=archivo.toPath();
+                }
+            }
+        });
+        
+        getBtnCargarImagenPequeña().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File archivo= listenerBotonBuscarImagen(getjTextLogoPequeño());
+                if(archivo!=null)
+                {
+                    logoPequenioPath=archivo.toPath();
                 }
             }
         });
     }
     
-    public void cargarDatosArchivos(File archivoEscogido) {
+    private File listenerBotonBuscarImagen(JTextField textField)
+    {
+        File archivo= UtilidadesDirectorios.buscarArchivo("Elegir archivo",new String[]{"Logo Imagen", "png", "jpg","jpeg","bmp","gif"});
+        if(archivo!=null)
+        {
+            cargarDatosArchivos(archivo,textField);
+            return archivo;
+        }
+        return null;
+        /*JFileChooser jFileChooser = new JFileChooser();
+        jFileChooser.setDialogTitle("Elegir archivo");
+        jFileChooser.setFileFilter(new FileNameExtensionFilter("Logo Imagen", "png", "jpg","jpeg","bmp","gif"));   */
+        
+        /*int seleccion = jFileChooser.showDialog(null, "Abrir");
+        switch (seleccion) {
+            case JFileChooser.APPROVE_OPTION:
+                cargarDatosArchivos(jFileChooser.getSelectedFile());
+                break;
+            case JFileChooser.CANCEL_OPTION:
+
+                break;
+            case JFileChooser.ERROR_OPTION:
+
+                break;
+        }*/
+    }
+    
+    public void cargarDatosArchivos(File archivoEscogido,JTextField jtextField) 
+    {
         File archivo = archivoEscogido;
-        //String rutaArchivo = archivo.getPath();
         String nombreArchivo = archivo.getName();
-        getjTextLogo().setText(nombreArchivo);
-        origen=archivoEscogido.toPath();
-        //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
-        //String rutaDestino ="";
-        //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
-        //rutaDestino += nombreArchivo;
-        //establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
+        jtextField.setText(nombreArchivo);
+        //origen=archivoEscogido.toPath();
     }
 
     
@@ -407,7 +445,29 @@ public class EmpresaModel extends EmpresaForm
         return respuesta;
     }
     
-    public void moverArchivo() {
+    public void grabarArchivoServidor(Path origen)
+    {
+        try {
+            //Verifica que solo cuando exista un origen y destino exista se copien los datos
+            if (origen == null) {
+                return;
+            }
+            
+            SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
+                    new FileInputStream(origen.toFile()));
+            
+            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.IMAGENES, istream,origen.getFileName().toString(),session.getEmpresa());
+            
+            
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /*public void moverArchivo() {
         try {
             //Verifica que solo cuando exista un origen y destino exista se copien los datos
             if (origen == null) {
@@ -427,7 +487,7 @@ public class EmpresaModel extends EmpresaForm
         } catch (Exception ex) {
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 
     @Override
     public InterfaceModelFind obtenerDialogoBusqueda() {
@@ -444,6 +504,7 @@ public class EmpresaModel extends EmpresaForm
         getTxtAgenteRetencionResolucion().setText(empresa.getAgenteRetencionResolucion());
         getjCheckBLlevaContabilidad().setSelected(empresa.getObligadoLlevarContabilidadEnum().getBool());
         getjTextLogo().setText(empresa.getImagenLogoPath());
+        getjTextLogoPequeño().setText(empresa.getImagenLogoPequenioPath());
         getTxtFacebook().setText(empresa.getFacebook());
         getTxtInstagram().setText(empresa.getInstagram());
         getTxtAdicional().setText(empresa.getAdicional());

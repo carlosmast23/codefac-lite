@@ -170,6 +170,9 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jLabel17 = new javax.swing.JLabel();
         chkRIMPEEmprendedores = new javax.swing.JCheckBox();
         lblFoto = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jTextLogoPequeño = new javax.swing.JTextField();
+        btnCargarImagenPequeña = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lblCelular = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -274,10 +277,10 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanelConfiguracionEmisor.add(jCheckBLlevaContabilidad, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText("Logo(Imagen):");
+        jLabel10.setText("Logo(Pequeño):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel10, gridBagConstraints);
@@ -307,7 +310,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanelConfiguracionEmisor.add(btnCargarImagen, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -338,14 +341,14 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jLabel7.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jComboEstado, gridBagConstraints);
@@ -418,6 +421,31 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.gridheight = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanelConfiguracionEmisor.add(lblFoto, gridBagConstraints);
+
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel18.setText("Logo(Imagen):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelConfiguracionEmisor.add(jLabel18, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanelConfiguracionEmisor.add(jTextLogoPequeño, gridBagConstraints);
+
+        btnCargarImagenPequeña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnCargarImagenPequeña.setToolTipText("Buscar imagen en su computador");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        jPanelConfiguracionEmisor.add(btnCargarImagenPequeña, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos generales", jPanelConfiguracionEmisor);
 
@@ -569,6 +597,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarImagen;
+    private javax.swing.JButton btnCargarImagenPequeña;
     private javax.swing.JCheckBox chkContribuyenteRegimenMicroempresas;
     private javax.swing.JCheckBox chkRIMPEEmprendedores;
     private javax.swing.JCheckBox chkRIMPENegociosPopulares;
@@ -583,6 +612,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -596,6 +626,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextCodigoEmpresa;
     private javax.swing.JTextField jTextLogo;
+    private javax.swing.JTextField jTextLogoPequeño;
     private javax.swing.JTextField jTextNombreComercial;
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextNumContribuyente;
@@ -698,6 +729,25 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     {
         this.lblFoto = lblFoto;
     }
+
+    public JButton getBtnCargarImagenPequeña() {
+        return btnCargarImagenPequeña;
+    }
+
+    public void setBtnCargarImagenPequeña(JButton btnCargarImagenPequeña) {
+        this.btnCargarImagenPequeña = btnCargarImagenPequeña;
+    }
+
+    public JTextField getjTextLogoPequeño() {
+        return jTextLogoPequeño;
+    }
+
+    public void setjTextLogoPequeño(JTextField jTextLogoPequeño) {
+        this.jTextLogoPequeño = jTextLogoPequeño;
+    }
+    
+    
+    
     
     
 }

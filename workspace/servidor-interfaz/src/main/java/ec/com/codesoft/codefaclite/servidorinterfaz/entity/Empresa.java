@@ -55,6 +55,9 @@ public class Empresa implements Serializable {
     private String contribuyenteEspecial;
     @Column(name = "LOGO_IMAGEN_PATH")
     private String imagenLogoPath;
+    
+    @Column(name = "LOGO_IMAGEN_PEQUENIO_PATH")
+    private String imagenLogoPequenioPath;
     //@Column(name = "CELULAR")
     //private String celular;
     @Column(name = "FACEBOOK")
@@ -89,6 +92,7 @@ public class Empresa implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa",fetch = FetchType.EAGER)
     private List<Sucursal> sucursales;
+    
 
     public Empresa() {
     }
@@ -344,6 +348,16 @@ public class Empresa implements Serializable {
     public void setInstagram(String instagram) {
         this.instagram = instagram;
     }
+
+    public String getImagenLogoPequenioPath() {
+        return imagenLogoPequenioPath;
+    }
+
+    public void setImagenLogoPequenioPath(String imagenLogoPequenioPath) {
+        this.imagenLogoPequenioPath = imagenLogoPequenioPath;
+    }
+    
+    
     
     public String obtenerLeyendaRimpe()
     {
