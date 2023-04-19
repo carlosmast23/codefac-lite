@@ -853,6 +853,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         int datosEliminados=0; //TODO: Optimizar como contar los datos eliminados porque por ejemplo en los productos que tienen garantia solo debe contar una vez por los detalles especificos
         detallesKardexFinal=new ArrayList<KardexDetalle>();
         
+        Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE,"Pantalla Ingreso Compras << Agregando Detalles >>");
         for (Map.Entry<KardexDetalleTmp, CompraDetalle> entry : detallesKardex.entrySet()) {
             KardexDetalleTmp kardexDetalle = entry.getKey();
             CompraDetalle compraDetalle = entry.getValue();
@@ -889,6 +890,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 
                 
                 detallesKardexFinal.add(kardexDetalleNuevo);
+                Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE,"Producto: "+compraDetalle.getProductoProveedor().getProducto().getNombre()+", Cantidad: "+kardexDetalleNuevo.getCantidad());
                 
                 //Si existen mas items especificos los guardo
                 if(kardexDetalle.getDetallesEspecificos()!=null && kardexDetalle.getDetallesEspecificos().size()>0)

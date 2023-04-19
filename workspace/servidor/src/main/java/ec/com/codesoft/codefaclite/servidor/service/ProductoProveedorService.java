@@ -39,6 +39,8 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
         return getFacade().findByMap(mapParametros);
     }
 
+    //TODO: Hacer que solo devuelva si el producto existe porque me parece que cuando se borra datos puede generar problemas    
+    @Deprecated
     @Override
     public List<ProductoProveedor> buscarProductoProveedorActivo(Producto producto, Persona proveedor) throws ServicioCodefacException, java.rmi.RemoteException {
         Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -93,7 +95,7 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
 
             List<ProductoProveedor> resultados = serviceProductoProveedor.buscarProductoProveedorActivo(productoSeleccionado, proveedor);
 
-            if (resultados != null && resultados.size() > 0) {
+            if (resultados != null && resultados.size() > 0 && resultados.get(0).getProducto().getIdProducto()!=null) {
                 productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
 
             } else {//Cuando no existe crea un nuevo producto proveedor

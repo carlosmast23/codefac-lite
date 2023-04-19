@@ -825,7 +825,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         Kardex kardex =buscarKardexPorProductoyBodegayLote(detalle.getKardex().getBodega(), detalle.getKardex().getProducto(), lote);
 
         //List<Kardex> kardexList = getFacade().findByMap(map);
-
+        System.out.println("grabando detalles kardex etapa 0... ");
+        em.flush();
         //TODO:Ver si se puede crear una sola funcion estandar de Kardex
         //Kardex kardex = null;
         if (kardex == null ) {
@@ -847,20 +848,40 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 if(kardex.getLote().getId()==null)
                 {
                     entityManager.persist(kardex.getLote());
+                    System.out.println("grabando detalles kardex etapa 0... ");
+                    em.flush();
                 }
             }
             else
             {
-                kardex.setLote(lote);
+                if(lote!=null)
+                {
+                    if(lote.getId()==null)
+                    {
+                        em.persist(lote);
+                    }
+                    else
+                    {
+                        em.merge(lote);
+                    }
+                    kardex.setLote(lote);
+                    em.flush();
+                }
             }
             
             if(kardex.getId()==null)
             {
                 em.persist(kardex); //grabando la persistencia
+
+                System.out.println("grabando detalles kardex etapa 0... ");
+                em.flush();
             }
             else
             {
                 em.merge(kardex); //grabando la persistencia
+
+                System.out.println("grabando detalles kardex etapa 0... ");
+                em.flush();
             }
         } 
         else
@@ -899,13 +920,20 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         kardex.addDetalleKardex(detalle);
         em.persist(detalle);
         
+        System.out.println("grabando detalles kardex etapa 1... ");
+        em.flush();
         
         recalcularValoresKardex(kardex, detalle); //Actualiza los valores desde un mismo lugar
         
         //Actualizar costos de otro lotes cuando graben con CERO
         actualizarCostosAutomaticoLote(kardex);
 
+        em.flush();
+        System.out.println("grabando detalles kardex etapa 2... ");
         kardex = em.merge(kardex);
+        
+        em.flush();
+        System.out.println("grabando detalles kardex etapa 3... ");
 
         //Actualizar la compra de referencia para saber que ya fue ingresada
         switch (detalle.getCodigoTipoDocumentoEnum()) 

@@ -107,7 +107,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                 List<ProductoProveedor> productoProveedorList = ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(productoSeleccionado, compra.getProveedor());
 
                 ProductoProveedor productoProveedor = null;
-                if (productoProveedorList.size() > 0) {
+                //TODO: La segunda verificacion es porque 
+                if (productoProveedorList.size() > 0 && productoProveedorList.get(0).getProducto().getIdProducto()!=null ) {
                     //Si existe el enlace solo consulto el smimo para editar el CODIGO_PROVEEDOR
                     productoProveedor = productoProveedorList.get(0);
                 } else {

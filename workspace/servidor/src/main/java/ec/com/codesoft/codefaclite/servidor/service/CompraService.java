@@ -481,7 +481,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-               
+                //TODO: por el momento dejo para pruebas
+                entityManager.flush();
                 compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo NO para poder ingresar al inventario
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
                 for (CompraDetalle compraDetalle : compra.getDetalles()) 
@@ -489,10 +490,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     if (compraDetalle.getProductoProveedor().getId() == null) 
                     {
                         entityManager.persist(compraDetalle.getProductoProveedor());
+                        //TODO: por el momento dejo para pruebas
+                        entityManager.flush();
                     } 
                     else 
                     {
                         entityManager.merge(compraDetalle.getProductoProveedor());
+                        //TODO: por el momento dejo para pruebas
+                        entityManager.flush();
                     }
                 }
                 

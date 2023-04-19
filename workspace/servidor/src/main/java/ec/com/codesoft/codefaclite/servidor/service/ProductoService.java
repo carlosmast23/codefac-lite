@@ -86,6 +86,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     public ProductoConversionPresentacionRespuesta convertirProductoEmpaqueSecundarioEnPrincipal(Producto productoEmpaqueSecundario,BigDecimal cantidad,BigDecimal precioUnitario) throws RemoteException,ServicioCodefacException
     {
         ProductoPresentacionDetalle presentacionDetalle = productoEmpaqueSecundario.buscarPresentacionDetalleProducto();
+        
+        //TODO: Codigo por el momento para encontrar un error que puede dar al querer convertir un empaque en producto normal
+        if (!presentacionDetalle.getProductoOriginal().getTipoProductoEnum().equals(TipoProductoEnum.PRODUCTO)) {
+            String mensajeError = "Error al convertir el Producto:" + presentacionDetalle.getProductoOriginal().getNombre() + " en la presentacion original para poder guardar.\\n Error con id producto original: " + presentacionDetalle.getProductoOriginal().getIdProducto() + " id producto secundario: " + productoEmpaqueSecundario.getIdProducto();
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, mensajeError);
+            throw new ServicioCodefacException(mensajeError);
+
+        }
+        
         BigDecimal cantidadEquivalencia = presentacionDetalle.getCantidad();
         cantidad = cantidad.multiply(cantidadEquivalencia);
         precioUnitario = (precioUnitario.divide(cantidadEquivalencia, 6, BigDecimal.ROUND_HALF_UP));
