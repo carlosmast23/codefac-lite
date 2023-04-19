@@ -3865,7 +3865,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     @Override
     public void actualizarTituloCodefac()
     {
-        ParametroCodefac parametroCodefac=sessionCodefac.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION);
+        ParametroCodefac parametroCodefac=sessionCodefac.getParametrosCodefac(true).get(ParametroCodefac.MODO_FACTURACION);
         if(parametroCodefac==null)
         {
             setTitle(ParametrosSistemaCodefac.NOMBRE_SISTEMA);

@@ -71,9 +71,15 @@ public class SessionCodefac implements SessionCodefacInterface,Serializable{
 
     @Override
     public Map<String,ParametroCodefac>  getParametrosCodefac() {
+        return getParametrosCodefac(false);
+    }
+    
+    @Override
+    public Map<String,ParametroCodefac>  getParametrosCodefac(Boolean recargarBaseDatos)
+    {
         try {
             //return parametrosCodefac;
-            if(this.parametrosCodefac==null)
+            if(this.parametrosCodefac==null || recargarBaseDatos)
             {
                 System.out.println("==============> CONSULTANDO PARAMETROS <===============");
                 this.parametrosCodefac=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametrosMap(empresa);
@@ -84,6 +90,7 @@ public class SessionCodefac implements SessionCodefacInterface,Serializable{
             Logger.getLogger(SessionCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    
     }
 
     @Override

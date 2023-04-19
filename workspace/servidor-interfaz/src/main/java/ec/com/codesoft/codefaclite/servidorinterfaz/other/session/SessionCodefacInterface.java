@@ -52,6 +52,8 @@ public interface SessionCodefacInterface {
      */
     public Map<String,ParametroCodefac> getParametrosCodefac();
     
+    public Map<String,ParametroCodefac>  getParametrosCodefac(Boolean recargarBaseDatos);
+    
     /**
      * Verifica si el nombre de perfil existe para poder hacer las comprobaciones
      * @param nombre
