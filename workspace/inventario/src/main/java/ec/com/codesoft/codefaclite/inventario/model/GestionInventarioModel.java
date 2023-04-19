@@ -350,8 +350,8 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     
         kardexDetalle.setKardex(kardex);
         
-        //Agregar un detalle personalizado si el prodicto maneja GARANTIA
-        if(productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI))
+        //Agregar un detalle personalizado si el producto maneja GARANTIA
+        if(productoSeleccionado.getGarantiaEnum()!=null && productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI))
         {
             KardexItemEspecifico kardexItemEspecifico=new KardexItemEspecifico();
             kardexItemEspecifico.setCodigoEspecifico(getTxtCodigoUnico().getText());

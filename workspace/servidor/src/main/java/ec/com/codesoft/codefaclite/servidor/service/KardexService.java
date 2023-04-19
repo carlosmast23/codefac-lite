@@ -182,7 +182,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
         
         return null;
-    }
+   }
+   
+   private Kardex buscarKardexConCostos(Producto producto)
+   {
+       return getFacade().buscarKardexConCostoFacade(producto);
+   }
    
    public CostoProductoRespuesta buscarCostoProductoRespuesta(Producto producto) throws java.rmi.RemoteException
    {
@@ -836,7 +841,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardex.setStock(BigDecimal.ZERO);
             kardex.setReserva(BigDecimal.ZERO);
             kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-            
+                       
             if(lote==null && kardex.getLote()!=null)
             {
                 if(kardex.getLote().getId()==null)
@@ -872,6 +877,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //Actualizar cambios adicionales que vengan desde el kardex cuano ya existe
             em.merge(kardex);
         }
+        
         //else {
             //Si existe el kardex solo busco el primer registro
         //    kardex = kardexList.get(0);
@@ -895,6 +901,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         
         recalcularValoresKardex(kardex, detalle); //Actualiza los valores desde un mismo lugar
+        
+        //Actualizar costos de otro lotes cuando graben con CERO
+        actualizarCostosAutomaticoLote(kardex);
+
         kardex = em.merge(kardex);
 
         //Actualizar la compra de referencia para saber que ya fue ingresada
@@ -909,6 +919,25 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 em.merge(compra);
                 break;
 
+        }
+    }
+    
+    /**
+     * Metodo que permite cuando se crea un kardex nuevo y no tiene costo que permita verificar si tiene otro lote para poder migrar los costos
+     */
+    private void actualizarCostosAutomaticoLote(Kardex kardex)
+    {
+        if(kardex.getCostoPromedio()==null || kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)==0)
+        {
+            //Buscar si existe otro kardex de diferente lote para migrar los valores
+            Kardex kardexTmp= buscarKardexConCostos(kardex.getProducto());
+            if(kardexTmp!=null)
+            {
+                kardex.setCostoPromedio(kardexTmp.getCostoPromedio());                
+                kardex.setPrecioUltimo(kardexTmp.getPrecioUltimo());
+                //Por defecto asume que compro al ultimo precio anterior
+                //kardexDetalle.setPrecioUnitario(kardexTmp.getPrecioUltimo());
+            }
         }
     }
     
