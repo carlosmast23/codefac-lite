@@ -1571,7 +1571,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         List<CajaSession> cajasSessionUsuarioList=cajaSesionService.obtenerCajaSessionPorUsuarioYSucursal(usuario,factura.getSucursalEmpresa());
         if(cajasSessionUsuarioList.isEmpty())
         {            
-            throw new ServicioCodefacException("No se activado una caja para el procedimiento POS");
+            throw new ServicioCodefacException("No esta activa una CAJA para el usuario: "+usuario.getNick());
         }
         
         cajaSession =cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(factura.getPuntoEmision(), factura.getUsuario());

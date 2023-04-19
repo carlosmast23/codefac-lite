@@ -270,18 +270,18 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         
         List<CajaSession> cajasSession = getFacade().findByMap(map);
         
-        if(cajasSession.size() > 0)
-        {
-            return cajasSession;
-        }
+        //if(cajasSession.size() > 0)
+        //{
+        return cajasSession;
+        //}
         
-        return null;
+        //return null;
     }
 
     @Override
-    public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin) throws RemoteException {
+    public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin,CajaEnum estado) throws RemoteException {
         
-        List<CajaSession> cajasSession = cajaSesionFacade.obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicio, fechaFin);
+        List<CajaSession> cajasSession = cajaSesionFacade.obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicio, fechaFin,estado);
         if(cajasSession.size() > 0)
         {
             return cajasSession;

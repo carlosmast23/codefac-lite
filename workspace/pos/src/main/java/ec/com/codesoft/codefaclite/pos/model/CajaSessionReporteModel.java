@@ -19,10 +19,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -89,8 +91,9 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
             Usuario usuario = (Usuario) getCmbUsuario().getSelectedItem();
             java.sql.Date fechaInicial = (getDateFechaInicio().getDate() != null) ? new java.sql.Date(getDateFechaInicio().getDate().getTime()) : null;
             java.sql.Date fechaFinal = (getDateFechaFin().getDate() != null) ? new java.sql.Date(getDateFechaFin().getDate().getTime()) : null;
+            CajaEnum cajaEnum=(CajaEnum) getCmbEstado().getSelectedItem();
             
-            List<CajaSession> cajasSession = (List<CajaSession>) ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicial, fechaFinal);
+            List<CajaSession> cajasSession = (List<CajaSession>) ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicial, fechaFinal,cajaEnum);
             
             
             
@@ -237,12 +240,13 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
             
             UtilidadesComboBox.llenarComboBox(getCmbCaja(), cajas,true);
             UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarios,true);
+            UtilidadesComboBox.llenarComboBox(getCmbEstado(),UtilidadesLista.arrayToList(CajaEnum.values()),true);
             
             modeloTablaCajasSession = new DefaultTableModel();
             getTblCajasSession().setModel(modeloTablaCajasSession);
             
             getDateFechaInicio().setDate(fechaInicioMes(hoy()));
-            getDateFechaFin().setDate(hoy());
+            //getDateFechaFin().setDate(hoy());
             
         } catch (RemoteException ex) {
             Logger.getLogger(CajaSessionReporteModel.class.getName()).log(Level.SEVERE, null, ex);

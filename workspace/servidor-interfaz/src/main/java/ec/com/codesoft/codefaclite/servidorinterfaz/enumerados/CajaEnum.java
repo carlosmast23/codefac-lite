@@ -18,7 +18,7 @@ public enum CajaEnum {
     /**
      * Valor cuando se produce un desperfecto en la Caja utilizada
      */
-    FINALIZADO("D", "Dañada"),
+    FINALIZADO("F", "Finalizado"),
     
     /**
      * Valor para no cerrar definitivamente el estado de la sesion de la caja, por alguna razon o motivo

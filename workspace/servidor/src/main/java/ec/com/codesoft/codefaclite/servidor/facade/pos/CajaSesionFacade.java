@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.sql.Date;
@@ -53,7 +54,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
         return null;
     }
     
-    public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin)
+    public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin,CajaEnum estado)
     {
         try
         {
@@ -71,8 +72,13 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
             {
                 usuarioStr=" and cs.usuario = ?2 ";
             }
+
+            String estadoStr = "";
+            if (estado != null) {
+                estadoStr = " and cs.estadoCierreCaja= ?7 ";
+            }
             
-            String stringQuery = "Select cs from CajaSession cs where 1=1  "+cajaStr+usuarioStr;
+            String stringQuery = "Select cs from CajaSession cs where 1=1  "+cajaStr+usuarioStr+estadoStr;
             String queryStringFecha="";
             
             if(fechaInicio!=null)
@@ -84,6 +90,8 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
             {
                 queryStringFecha+=" AND  cs.fechaHoraCierre<=?5 ";
             }
+            
+
 
             stringQuery += queryStringFecha+" ORDER BY cs.fechaHoraApertura DESC";
             Query query = getEntityManager().createQuery(stringQuery);
@@ -108,6 +116,11 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
             if(fechaFin!=null)
             {
                 query.setParameter(5, fechaFinTimeStamp);
+            }
+            
+            if(estado!=null)
+            {
+                query.setParameter(7, estado.getEstado());
             }
 
             return query.getResultList();

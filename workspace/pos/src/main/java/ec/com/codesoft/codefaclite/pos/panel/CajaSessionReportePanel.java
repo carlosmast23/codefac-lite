@@ -9,6 +9,7 @@ import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -52,6 +53,8 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         lblFechaFin = new javax.swing.JLabel();
         dateFechaFin = new com.toedter.calendar.JDateChooser();
         btnLimpiarFechaFin = new javax.swing.JButton();
+        lblBuscar1 = new javax.swing.JLabel();
+        cmbEstado = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -61,11 +64,10 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         lblBuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblBuscar.setText("Usuario:");
+        lblBuscar.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblBuscar, gridBagConstraints);
@@ -76,8 +78,9 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -86,9 +89,8 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
@@ -97,7 +99,7 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
@@ -123,12 +125,13 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbCaja, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.2;
@@ -147,9 +150,8 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(dateFechaInicio, gridBagConstraints);
 
@@ -164,7 +166,7 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         lblFechaFin.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblFechaFin.setText("Fecha final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -172,21 +174,44 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
 
         dateFechaFin.setDateFormatString("yyyy-MM-dd");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(dateFechaFin, gridBagConstraints);
 
         btnLimpiarFechaFin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnLimpiarFechaFin, gridBagConstraints);
+
+        lblBuscar1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblBuscar1.setText("Usuario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblBuscar1, gridBagConstraints);
+
+        cmbEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEstadoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbEstado, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -199,17 +224,23 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbUsuarioActionPerformed
 
+    private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbEstadoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLimpiarFechaFin;
     private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JComboBox<Caja> cmbCaja;
+    private javax.swing.JComboBox<CajaEnum> cmbEstado;
     private javax.swing.JComboBox<Usuario> cmbUsuario;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
+    private javax.swing.JLabel lblBuscar1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblFechaFin;
     private javax.swing.JLabel lblFechaInicio;
@@ -241,62 +272,85 @@ public abstract class CajaSessionReportePanel extends ControladorCodefacInterfac
         this.cmbUsuario = cmbUsuario;
     }
 
-    public JTable getTblCajasSession() {
+    public JTable getTblCajasSession() 
+    {
         return tblCajasSession;
     }
 
-    public void setTblCajasSession(JTable tblCajasSession) {
+    public void setTblCajasSession(JTable tblCajasSession) 
+    {
         this.tblCajasSession = tblCajasSession;
     }
 
-    public JButton getBtnLimpiarFechaFin() {
+    public JButton getBtnLimpiarFechaFin() 
+    {
         return btnLimpiarFechaFin;
     }
 
-    public void setBtnLimpiarFechaFin(JButton btnLimpiarFechaFin) {
+    public void setBtnLimpiarFechaFin(JButton btnLimpiarFechaFin) 
+    {
         this.btnLimpiarFechaFin = btnLimpiarFechaFin;
     }
 
-    public JButton getBtnLimpiarFechaInicio() {
+    public JButton getBtnLimpiarFechaInicio() 
+    {
         return btnLimpiarFechaInicio;
     }
 
-    public void setBtnLimpiarFechaInicio(JButton btnLimpiarFechaInicio) {
+    public void setBtnLimpiarFechaInicio(JButton btnLimpiarFechaInicio) 
+    {
         this.btnLimpiarFechaInicio = btnLimpiarFechaInicio;
     }
 
-    public JDateChooser getDateFechaFin() {
+    public JDateChooser getDateFechaFin() 
+    {
         return dateFechaFin;
     }
 
-    public void setDateFechaFin(JDateChooser dateFechaFin) {
+    public void setDateFechaFin(JDateChooser dateFechaFin) 
+    {
         this.dateFechaFin = dateFechaFin;
     }
 
-    public JDateChooser getDateFechaInicio() {
+    public JDateChooser getDateFechaInicio() 
+    {
         return dateFechaInicio;
     }
 
-    public void setDateFechaInicio(JDateChooser dateFechaInicio) {
+    public void setDateFechaInicio(JDateChooser dateFechaInicio) 
+    {
         this.dateFechaInicio = dateFechaInicio;
     }
 
-    public JLabel getLblFechaFin() {
+    public JLabel getLblFechaFin() 
+    {
         return lblFechaFin;
     }
 
-    public void setLblFechaFin(JLabel lblFechaFin) {
+    public void setLblFechaFin(JLabel lblFechaFin) 
+    {
         this.lblFechaFin = lblFechaFin;
     }
 
-    public JLabel getLblFechaInicio() {
+    public JLabel getLblFechaInicio() 
+    {
         return lblFechaInicio;
     }
 
-    public void setLblFechaInicio(JLabel lblFechaInicio) {
+    public void setLblFechaInicio(JLabel lblFechaInicio) 
+    {
         this.lblFechaInicio = lblFechaInicio;
     }
+
+    public JComboBox<CajaEnum> getCmbEstado() 
+    {
+        return cmbEstado;
+    }
+
+    public void setCmbEstado(JComboBox<CajaEnum> cmbEstado) 
+    {
+        this.cmbEstado = cmbEstado;
+    }
     
-    
-   
+       
 }
