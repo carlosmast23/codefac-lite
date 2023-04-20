@@ -43,10 +43,11 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
     @Deprecated
     @Override
     public List<ProductoProveedor> buscarProductoProveedorActivo(Producto producto, Persona proveedor) throws ServicioCodefacException, java.rmi.RemoteException {
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        /*Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("producto", producto);
         mapParametros.put("proveedor", proveedor);
-        return getFacade().findByMap(mapParametros);
+        this.getFacade().*/
+        return getFacade().buscarProductoProveedorActivoFacade(producto, proveedor);
     }
 
     public List<ProductoProveedor> buscarPorProveedorActivo(Persona proveedor) throws ServicioCodefacException, java.rmi.RemoteException {
@@ -76,7 +77,7 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
             Producto producto=new Producto();
             ProductoService productoService=new ProductoService();
             
-            producto=productoService.buscarProductoDefectoCompras(producto);            
+            producto=productoService.buscarProductoDefectoCompras(resultadoList.get(0).getProducto());            
             
             ProductoProveedor productoProveedor=resultadoList.get(0);
             productoProveedor.setProducto(producto);

@@ -9,10 +9,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -52,7 +54,11 @@ public class ProductoProveedor implements Serializable{
     private String codigoProveedor;
     
     @JoinColumn(name = "PRODUCTO_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
     private Producto producto;
+    
+    @Column (name = "PRODUCTO_ID",insertable=false, updatable=false)
+    private Long productoId;
     
     @JoinColumn(name = "PROVEEDOR_ID")
     private Persona proveedor;
@@ -126,6 +132,16 @@ public class ProductoProveedor implements Serializable{
     public void setCodigoProveedor(String codigoProveedor) {
         this.codigoProveedor = codigoProveedor;
     }
+
+    public Long getProductoId() {
+        return productoId;
+    }
+
+    public void setProductoId(Long productoId) {
+        this.productoId = productoId;
+    }
+    
+    
      
     
 }

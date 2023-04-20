@@ -347,7 +347,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     private void cargarProductosPorDefecto(Compra compraXml)
     {
         for(CompraDetalle compraDetalle : compraXml.getDetalles())
-        {
+        {            
             //Si no tiene un enlace entonces le busco directamente el producto
             if(compraDetalle.getProductoProveedor()==null || compraDetalle.getProductoProveedor().getId()==null )
             {
