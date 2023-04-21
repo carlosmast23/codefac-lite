@@ -37,12 +37,22 @@ public class UtilidadBigDecimal {
     
     public static BigDecimal redondearDosDecimales(BigDecimal valor)
     {
+        return redondear(valor,2);
+    }
+    
+    public static BigDecimal redondearCuatroDecimales(BigDecimal valor)
+    {
+        return redondear(valor,4);
+    }
+    
+    public static BigDecimal redondear(BigDecimal valor, Integer numeroDecimales)
+    {
         if(valor==null)
         {
             return BigDecimal.ZERO;
         }
         
-        return valor.setScale(2, RoundingMode.HALF_UP);
+        return valor.setScale(numeroDecimales, RoundingMode.HALF_UP);
     }
     
 }

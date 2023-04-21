@@ -25,6 +25,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -233,8 +235,10 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
             "Seleccion",
             "Código",
             "Nombre Producto",
-            "Último Costo",
-            "Costo Promedio",
+            "Costo U",
+            "CU+IVA ",
+            "Costo P",
+            "CP+IVA ",
             "Pvp1",
             "Pvp2",
             "Pvp3",
@@ -258,6 +262,8 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
                     Object.class,
                     Object.class,
                     Object.class,
+                    Object.class,
+                    Object.class,
                 }
         );
         
@@ -271,7 +277,7 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
         getTblProductos().setComponentPopupMenu(popup);
         
 
-        UtilidadesTablas.definirTamanioColumnas(getTblProductos(),new Integer[]{0,50,250,600,80,80});
+        UtilidadesTablas.definirTamanioColumnas(getTblProductos(),new Integer[]{0,50,250,450,80,80});
     }
     
     
@@ -285,13 +291,19 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
                 String nombreProducto=producto.getNombre();
                                
                 valueTmp.recalcularValoresDesdePorcentajes(valueTmp.costoCalculo);
+                
+                BigDecimal costoUltimoConIva= UtilidadesImpuestos.agregarValorIva(new BigDecimal(producto.getCatalogoProducto().getIva().getTarifa()),valueTmp.costoCalculo);
+                BigDecimal costoPromedioConIva= UtilidadesImpuestos.agregarValorIva(new BigDecimal(producto.getCatalogoProducto().getIva().getTarifa()),valueTmp.costoPromedio);
+                
                                                                 
                 return new Object[]{
                     valueTmp,
                     codigo,
                     nombreProducto,
-                    valueTmp.costoUltimo,
-                    valueTmp.costoPromedio,
+                    UtilidadBigDecimal.redondearCuatroDecimales(valueTmp.costoUltimo),
+                    UtilidadBigDecimal.redondearCuatroDecimales(costoUltimoConIva),
+                    UtilidadBigDecimal.redondearCuatroDecimales(valueTmp.costoPromedio),
+                    UtilidadBigDecimal.redondearCuatroDecimales(costoPromedioConIva),
                     valueTmp.pvp1,
                     valueTmp.pvp2,
                     valueTmp.pvp3,
@@ -304,12 +316,12 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
             @Override
             public void setData(ProductoPrecioDataTable objetoOriginal, Object objetoModificado, Integer columnaModificada) {
                 final int COLUMNA_OBJETO=0;
-                final int COLUMNA_PVP1_PORCENTAJE=6;
-                final int COLUMNA_PVP2_PORCENTAJE=7;
-                final int COLUMNA_PVP3_PORCENTAJE=8;
-                final int COLUMNA_PVP4_PORCENTAJE=9;
-                final int COLUMNA_PVP5_PORCENTAJE=10;
-                final int COLUMNA_PVP6_PORCENTAJE=11;
+                final int COLUMNA_PVP1_PORCENTAJE=8;
+                final int COLUMNA_PVP2_PORCENTAJE=COLUMNA_PVP1_PORCENTAJE+1;
+                final int COLUMNA_PVP3_PORCENTAJE=COLUMNA_PVP2_PORCENTAJE+1;
+                final int COLUMNA_PVP4_PORCENTAJE=COLUMNA_PVP3_PORCENTAJE+1;
+                final int COLUMNA_PVP5_PORCENTAJE=COLUMNA_PVP4_PORCENTAJE+1;
+                final int COLUMNA_PVP6_PORCENTAJE=COLUMNA_PVP5_PORCENTAJE+1;
                 
                 BigDecimal valorModificado=null;
                 

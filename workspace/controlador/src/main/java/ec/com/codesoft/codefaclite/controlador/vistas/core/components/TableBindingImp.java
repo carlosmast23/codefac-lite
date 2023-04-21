@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
@@ -72,6 +74,10 @@ public class TableBindingImp extends ComponentBindingAbstract<JTable, TableBindi
                                 addDataInterface.setData(objetoOriginal, objetoEditado, e.getColumn());
                             }catch(UnsupportedOperationException uoe)
                             {}
+                            catch(ClassCastException cce)
+                            {
+                                Logger.getLogger(TableBindingImp.class.getName()).log(Level.SEVERE,"Error al recibir el dato de la tabla para el metodo getTableBindingAddData()\n Dato Original: "+objetoOriginal+"\n Dato modificado: "+objetoEditado);
+                            }
                         }
                     }
                 }
