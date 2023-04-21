@@ -75,8 +75,6 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @Column(name = "ESTADO_NOTA_CREDITO")
     private String estadoNotaCredito;
 
-    @Column(name = "TIPO_IDENTIFICACION_CODIGO_SRI")
-    private String tipoIdentificacionCodigoSri;
 
     @Column(name = "ESTADO_ENVIADO_GUIA_REMISION")
     private String estadoEnviadoGuiaRemision;
@@ -220,13 +218,6 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         this.sriIdentificacion = sriIdentificacion;
     }
 
-    public String getTipoIdentificacionCodigoSri() {
-        return tipoIdentificacionCodigoSri;
-    }
-
-    public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
-        this.tipoIdentificacionCodigoSri = tipoIdentificacionCodigoSri;
-    }
 
     public Date getFechaVencimiento() {
         return fechaVencimiento;

@@ -52,15 +52,17 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         //informacionComprobante.setDireccion(); //TODO: Este campo no son iguales en factura y nota de credito
         informacionComprobante.setDirEstablecimiento(UtilidadValidador.normalizarTexto(comprobante.getDireccionEstablecimiento()));
         
+        informacionComprobante.setIdentificacion(comprobante.getCliente().getIdentificacion());
+        
         //SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
-        SriIdentificacion sriIdentificacion = getSriIdentificacion(comprobante);
+        //SriIdentificacion sriIdentificacion = getSriIdentificacion(comprobante);
         /*try {
             sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(comprobante.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobanteDataFacturaNotaCreditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }*/
 
-        if (sriIdentificacion != null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION)) 
+        /*if (sriIdentificacion != null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION)) 
         {
             informacionComprobante.setIdentificacion(comprobante.getCliente().getIdentificacion());
         } 
@@ -72,13 +74,14 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         else
         {
             informacionComprobante.setIdentificacion(comprobante.getCliente().getIdentificacion());
-        }
+        }*/
         //informacionComprobante.setIdentificacion(comprobante.getIdentificacion());
         
         //informacionComprobante.setImporteTotal(BigDecimal.ONE); //NOTA:Solo tiene en factura
         informacionComprobante.setObligadoContabilidad(comprobante.getObligadoLlevarContabilidad());
         //informacionComprobante.setRazonSocial(comprobante.getCliente().getRazonSocial()); /TODO: NO se puede generaliar porque solo tiene la factura
-        informacionComprobante.setTipoIdentificacion(getSriIdentificacion(comprobante).getCodigo());
+        //informacionComprobante.setTipoIdentificacion(getSriIdentificacion(comprobante).getCodigo());
+        informacionComprobante.setTipoIdentificacion(comprobante.getTipoIdentificacionCodigoSri());
         
         if(comprobante.getContribuyenteEspecial()!=null && !comprobante.getContribuyenteEspecial().trim().isEmpty())
         {
@@ -195,7 +198,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
     }
    
    
-    
+    @Deprecated //Esta opcion esta de modificar para que devuelva el tipo de identificacion grabada en el comprobante
     public SriIdentificacion getSriIdentificacion(ComprobanteVentaNotaCreditoAbstract comprobante)
     {
         SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();

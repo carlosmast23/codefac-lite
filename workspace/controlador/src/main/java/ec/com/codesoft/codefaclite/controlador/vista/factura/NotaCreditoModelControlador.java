@@ -286,6 +286,13 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         notaCredito.setUsuario(session.getUsuario());
         notaCredito.setSucursalEmpresa(session.getSucursal());
         
+        Persona.TipoIdentificacionEnum tipoIdentificacionEnum = notaCredito.getCliente().getTipoIdentificacionEnum();
+        String codigoSri = "";
+        if (tipoIdentificacionEnum != null) {
+            codigoSri = tipoIdentificacionEnum.getCodigoSriVenta();
+        }
+        notaCredito.setTipoIdentificacionCodigoSri(codigoSri); //TODO: Ver si esta variable se debe grabar en el servidor
+        
         switch(tipoDocumentoEnum)
         {
             case LIBRE:

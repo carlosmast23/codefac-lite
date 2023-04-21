@@ -72,6 +72,9 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     @Column(name = "VALOR_ICE")
     private BigDecimal ice;
     
+    @Column(name = "TIPO_IDENTIFICACION_CODIGO_SRI")
+    private String tipoIdentificacionCodigoSri;
+    
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne
     private Persona cliente;
@@ -168,6 +171,16 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     public void setAhorro(BigDecimal ahorro) {
         this.ahorro = ahorro;
     }
+
+    public String getTipoIdentificacionCodigoSri() {
+        return tipoIdentificacionCodigoSri;
+    }
+
+    public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
+        this.tipoIdentificacionCodigoSri = tipoIdentificacionCodigoSri;
+    }
+    
+    
     
     
 

@@ -145,8 +145,8 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra",fetch = FetchType.EAGER)
     private List<CompraDetalle> detalles;
     
-    @Column(name ="TIPO_IDENTIFICACION_CODIGO_SRI")
-    private String tipoIdentificacionCodigoSri;
+    //@Column(name ="TIPO_IDENTIFICACION_CODIGO_SRI")
+    //private String tipoIdentificacionCodigoSri;
     
     /**
      * Este campo va a servir para los ats y saber cual es el codigo del documento segun el sri
@@ -245,9 +245,9 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
         return estado;
     }
 
-    public String getTipoIdentificacionCodigoSri() {
+    /*public String getTipoIdentificacionCodigoSri() {
         return tipoIdentificacionCodigoSri;
-    }
+    }*/
 
     public String getCodigoComprobanteSri() {
         return codigoDocumentoSri;
@@ -501,9 +501,9 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
         this.observacion = observacion;
     }
 
-    public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
+    /*public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
         this.tipoIdentificacionCodigoSri = tipoIdentificacionCodigoSri;
-    }
+    }*/
 
     public String getAutorizacion() {
         return autorizacion;

@@ -2331,13 +2331,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum)                        
 
                     FacturaAdicional facturaAdicional = buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
-                    Long estudianteInscritoId = Long.parseLong(facturaAdicional.getValor());
-                    estudiante = ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
+                    if(facturaAdicional!=null)
+                    {
+                        Long estudianteInscritoId = Long.parseLong(facturaAdicional.getValor());
+                        estudiante = ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
 
-                    //setearValoresAcademicos(estudiante);
-                    getTxtEstudiante().setText(estudiante.getNombreCompleto());
-                    getCmbRepresentante().removeAllItems();
-                    getCmbRepresentante().addItem(factura.getCliente());
+                        //setearValoresAcademicos(estudiante);
+                        getTxtEstudiante().setText(estudiante.getNombreCompleto());
+                        getCmbRepresentante().removeAllItems();
+                        getCmbRepresentante().addItem(factura.getCliente());
+                    }
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
