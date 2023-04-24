@@ -675,6 +675,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.calcularTotalesDetallesFactura();
     }
     
+    /**
+     * Este metodo me permite hacer los cambios en el catalogo producto del iva y recalcular el total cuando es una NOTA DE VENTA INTERNA
+     * @param catalogoProducto
+     * @param valorUnitario
+     * @param setearDatosNVI 
+     */
     private void verificarProductoConNotaVentaInternaGenerico(CatalogoProducto catalogoProducto,BigDecimal valorUnitario,SetearDatosNVI setearDatosNVI)
     {
         DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
@@ -708,8 +714,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             if(catalogoProducto.getIva().getTarifa()!=0)
             {
                 //TODO: Este artificio puede causar problemas cuando se tiene varios productos del mismo porque al resto
+                catalogoProducto.getIva().setTarifaOriginal(catalogoProducto.getIva().getTarifa());
                 catalogoProducto.getIva().setTarifa(0);
                 catalogoProducto.getIva().setPorcentaje(BigDecimal.ZERO);
+                
                 //producto.getCatalogoProducto().getIva().setTarifa(0);
                 //producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
                 BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
@@ -724,11 +732,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     setearDatosNVI.setValores(nuevoValorUnitario,BigDecimal.ZERO);
                     
                 }
-                //return nuevoValorUnitario;
             }
         }
         
-        //return valorUnitario;
     }
     
     public  void setearValoresProducto(FacturaDetalle facturaDetalle) {
@@ -779,10 +785,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     precioUnitario);
             //getTxtValorUnitario().setText(valorConIva.toString());
             interfaz.setTxtValorUnitario(valorConIva.toString());
-        } else {
+        } else {            
+            interfaz.setTxtValorUnitario(precioUnitario.toString());
             //getCmbIva().setSelectedItem(EnumSiNo.NO);
             interfaz.setComboIva(EnumSiNo.NO);
-            interfaz.setTxtValorUnitario(precioUnitario.toString());
+            
+            
         }
         //Cargar los descuentos disponibles por cada precio
         if(numeroPvp!=null && productoSeleccionado!=null)

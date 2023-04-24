@@ -3624,10 +3624,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     CatalogoProducto catalogoProducto=productoSeleccionado.getCatalogoProducto();
                     BigDecimal icePorcentaje=(catalogoProducto.getIce()!=null)?catalogoProducto.getIce().getPorcentaje():BigDecimal.ZERO;
                     Integer ivaPorcentaje=(catalogoProducto.getIva()!=null)?catalogoProducto.getIva().getTarifa().intValue():0;
+                    BigDecimal pvp=precioVenta.precio;
                     
-                    controlador.cargarPrecioUnitario(ivaPorcentaje,icePorcentaje,precioVenta.precio,precioVenta.numero,productoSeleccionado);
+                    //SOLUCION TEMPORAL con las notas de venta interna porque tiene un artificio que sabe modificar el porcentaje y la tarifa y los precios se cargan antes para esta opcion, pero al agregar en ese momento hace el calculo por eso tengo inconvenientes para este problema
+                    if(catalogoProducto.getIva().getTarifaOriginal()!=null)
+                    {
+                        DocumentoEnum documentoSeleccionado=obtenerDocumentoSeleccionado();                     
+                        Integer ivaPorcentajeTmp=(catalogoProducto.getIva()!=null)?catalogoProducto.getIva().getTarifaOriginal().intValue():0;
+                        if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && ivaPorcentajeTmp>0)
+                        {
+                            pvp=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),pvp);
+                        }
+                    }
                     
-                    //getTxtValorUnitario().setText(precioVenta.precio.toString());
+                    //BigDecimal ivaTemp= facturaDetalleSeleccionado.getIva;
+                    
+                    controlador.cargarPrecioUnitario(ivaPorcentaje,icePorcentaje,pvp,precioVenta.numero,productoSeleccionado);
+                    
                 }
             }
         });
@@ -4833,4 +4846,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         this.getLblTituloAhorro().setVisible(activar);
     }
 
+    @Override
+    public void copiar() throws ExcepcionCodefacLite, RemoteException {
+        //ada
+        //cargarFacturaDesdeProforma(,null);
+        
+    }
+
+    
 }

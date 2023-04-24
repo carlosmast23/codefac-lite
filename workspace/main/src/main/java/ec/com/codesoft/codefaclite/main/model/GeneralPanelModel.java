@@ -1139,6 +1139,34 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     //browser=null;
                 }
             });
+         
+        JPopupMenu popupMenu=crearMenuSecundario();
+        getBtnMenuAuxiliar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popupMenu.show(getBtnMenuAuxiliar(), getBtnMenuAuxiliar().getWidth()/2, getBtnMenuAuxiliar().getHeight()/2);
+            }
+        });
+        
+    }
+    
+    private JPopupMenu crearMenuSecundario()
+    {
+        // Crear el menú emergente
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem menuItem1 = new JMenuItem("Opción 1");
+        JMenuItem menuItem2 = new JMenuItem("Opción 2");
+        popupMenu.add(menuItem1);
+        popupMenu.add(menuItem2);
+        return popupMenu;
+    }
+    
+    private void listenerBotonMenuAuxiliar()
+    {
+        listenerBotonMenuAuxiliar();
+        
+        
+        
         
     }
     

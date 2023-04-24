@@ -172,8 +172,15 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
         throw new UnsupportedOperationException("Metodo no implementado"); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
-    
+    /**
+     * Metodo temporal que me va permitir utilizar la interfaz de copiar para buscar otro objecto y cargar en la vista
+     * @throws ExcepcionCodefacLite
+     * @throws RemoteException 
+     */
+    public void copiar() throws ExcepcionCodefacLite,RemoteException
+    {
+        throw new UnsupportedOperationException("Metodo no implementado"); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     /**

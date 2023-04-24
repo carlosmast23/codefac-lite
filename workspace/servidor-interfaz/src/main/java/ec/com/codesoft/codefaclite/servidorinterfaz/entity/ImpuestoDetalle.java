@@ -18,6 +18,7 @@ import java.sql.Date;
 import java.util.Objects;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 /**
  *
@@ -65,6 +66,13 @@ public class ImpuestoDetalle implements Serializable
     
     @Column (name= "FECHA_FIN")
     private Date fechaFin;
+    
+    /**
+     * TODO: Atributo temporal solo para poder solucionar un problema temporal en la pantalla de facturacion pero toca ver otra forma mas elegante     * 
+     */
+    @Transient
+    @Deprecated
+    private Integer tarifaOriginal;
         
     //@ManyToOne
     @JoinColumn(name="ID_IMPUESTO")
@@ -146,6 +154,17 @@ public class ImpuestoDetalle implements Serializable
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
+
+    @Deprecated
+    public Integer getTarifaOriginal() {
+        return tarifaOriginal;
+    }
+
+    @Deprecated
+    public void setTarifaOriginal(Integer tarifaOriginal) {
+        this.tarifaOriginal = tarifaOriginal;
+    }
+    
 
     @Override
     public String toString() {
