@@ -593,48 +593,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param producto 
      */
     public void verificarProductoConNotaVentaInterna(Producto producto)
-    {
-        /*DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
-        BigDecimal valorUnitario=producto.getValorUnitario();
-        
-        Boolean agregarIva=false;
-        EnumSiNo agregarIvaSiNo=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.NOTA_VENTA_INTERNA_IVA, EnumSiNo.SI);
-        if(agregarIvaSiNo!=null)
-        {
-            agregarIva=agregarIvaSiNo.getBool();
-        }
-        
-        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && !agregarIva)        
-        {*/
-            /**
-             * Si el producto tiene ice calculo el nuevo subtotal
-             */
-        /*    CatalogoProducto catalogoProducto=producto.getCatalogoProducto();
-            if(catalogoProducto.getIce()!=null && catalogoProducto.getIce().getPorcentaje()!=null)
-            {
-                BigDecimal porcentajeIce = (catalogoProducto.getIce() != null) ? catalogoProducto.getIce().getPorcentaje() : null;
-                valorUnitario = UtilidadIva.calcularValorConIce(
-                        porcentajeIce,
-                        valorUnitario).setScale(5,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
-                
-                catalogoProducto.setIce(null);//Pongo el null para que posteriormente no realice este calculo
-
-            }
-            
-            //Si el producto es distinto de 0 convierto a producto sin iva y cambio el costo
-            if(catalogoProducto.getIva().getTarifa()!=0)
-            {
-                producto.getCatalogoProducto().getIva().setTarifa(0);
-                producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
-                
-                BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
-                producto.setValorUnitario(nuevoValorUnitario);
-            }
-        }*/
+    {              
+        //ALERTA: Esto no se deberia usar porque estoy modificando las propiedades del producto y eso puede afectar a todos los objectos del resto de pantallas sincronizadas y por ese artificio puede generar problemas medios graves de inconsistena
         SetearDatosNVI interfazSetearDatos=new SetearDatosNVI() {
+            
+            @Deprecated
             @Override
             public void setValores(BigDecimal valorUnitario, BigDecimal iva) {
-                producto.setValorUnitario(valorUnitario);
+                //producto.setValorUnitario(valorUnitario);
             }
         };
         verificarProductoConNotaVentaInternaGenerico(producto.getCatalogoProducto(), producto.getValorUnitario(),interfazSetearDatos);
