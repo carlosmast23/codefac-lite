@@ -473,6 +473,7 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         return mapResultado;
     }
     
+    
     public class ResultadoTotales
     {
         BigDecimal total = BigDecimal.ZERO; //total de la factura        

@@ -3114,7 +3114,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     FacturaAdicional datoAdicional = new FacturaAdicional();
                     datoAdicional.setCampo(campo);
                     datoAdicional.setValor(valor);
-                    datoAdicional.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_SISTEMA);
                     datoAdicional.setFactura(factura);
                     factura.addDatoAdicional(datoAdicional);
                     return datoAdicional;
@@ -3126,7 +3126,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     RetencionAdicional datoAdicional2 = new RetencionAdicional();
                     datoAdicional2.setCampo(campo);
                     datoAdicional2.setValor(valor);
-                    datoAdicional2.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional2.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_SISTEMA);
                     datoAdicional2.setRetencion(retencion);
                     retencion.addDatoAdicional(datoAdicional2);
                     return datoAdicional2;
@@ -3136,7 +3136,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     NotaCreditoAdicional datoAdicional3 = new NotaCreditoAdicional();
                     datoAdicional3.setCampo(campo);
                     datoAdicional3.setValor(valor);
-                    datoAdicional3.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional3.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_SISTEMA);
                     datoAdicional3.setNotaCredito(notaCredito);
                     notaCredito.addDatoAdicional(datoAdicional3);
                     return datoAdicional3;
@@ -3146,7 +3146,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     GuiaRemisionAdicional datoAdicional4 = new GuiaRemisionAdicional();
                     datoAdicional4.setCampo(campo);
                     datoAdicional4.setValor(valor);
-                    datoAdicional4.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
+                    datoAdicional4.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_SISTEMA);
                     datoAdicional4.setGuiaRemision(guiaRemision);
                     //guiaRemision.addDatoAdic(datoAdicional4); //Todo: Faclta setear valores para este caso
                     return datoAdicional4;

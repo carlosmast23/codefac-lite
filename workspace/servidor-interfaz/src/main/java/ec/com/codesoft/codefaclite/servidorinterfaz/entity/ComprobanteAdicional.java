@@ -174,7 +174,19 @@ public class ComprobanteAdicional implements Serializable{
     
     public enum Tipo
     {
+        /**
+         * Este tipo me va a servir para identificar cuando el sistema esta agregando un tipo de dato adicional
+         * TODO: Esto puede causar conflicto cuando el sistema tiene que agregar un dato de otro tipo
+         * SOLUCION: Talvez en vez de ser otro dato deberia ser otro atributo que diga manual o automatico para estos casos
+         */
+        TIPO_SISTEMA("s","sistema"),
+        /**
+         * Identifica un correo
+         */
         TIPO_CORREO("c","correo"),
+        /**
+         * Identifica el numero de celular
+         */
         TIPO_CELULAR("t","celular"),
         TIPO_GUIA_REMISION("g","Guía Remisión"),
         TIPO_OTRO("o","otro"),

@@ -267,12 +267,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     private List<IconoPanel> listaIconos;
     
+    private JMenuItem menuCopiar;
+    
    
     public GeneralPanelModel() 
     {
         getjPanelSeleccion().setVisible(false);//Asumo que cuando se abre por primera vez la pantalla esta oculta
         mapPantallaAbiertas=new HashMap<GeneralPanelInterface, JMenuItem>();
-       
+        this.menuCopiar=new JMenuItem("Copiar");
         
     }
     
@@ -1083,6 +1085,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
         });
         
+        menuCopiar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
+                    ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
+                    frameInterface.copiar();
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
         getBtnImprimir().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1154,9 +1171,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         // Crear el menú emergente
         JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem menuItem1 = new JMenuItem("Opción 1");
-        JMenuItem menuItem2 = new JMenuItem("Opción 2");
-        popupMenu.add(menuItem1);
+        //JMenuItem menuItem1 = new JMenuItem("Opción 1");
+        JMenuItem menuItem2 = new JMenuItem("Otras Opciones");
+        popupMenu.add(menuCopiar);
         popupMenu.add(menuItem2);
         return popupMenu;
     }

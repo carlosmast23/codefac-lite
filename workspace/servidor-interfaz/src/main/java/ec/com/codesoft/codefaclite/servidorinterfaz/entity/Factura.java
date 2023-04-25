@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -622,6 +623,26 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         }
         datoAdicional.setFactura(this);
         this.datosAdicionales.add(datoAdicional);
+    }
+    
+        /**
+     * Metodo que me permite eliminar todos los datos adicionales que se generan con el sistema
+     * por ejemplo esta parte es util si se quiere quitar datos agregados por el sistema y no por el usuario
+     */
+    public void eliminarDatosAdicionalesSistema()
+    {
+        if(datosAdicionales!=null)
+        {
+            Iterator<FacturaAdicional> iterador = datosAdicionales.iterator();
+            while (iterador.hasNext()) 
+            {                
+                FacturaAdicional facturaAdicional=iterador.next();
+                if(facturaAdicional.getTipoEnum().equals(ComprobanteAdicional.Tipo.TIPO_SISTEMA))
+                {
+                    iterador.remove();
+                }
+            }
+        }
     }
 
     @Override

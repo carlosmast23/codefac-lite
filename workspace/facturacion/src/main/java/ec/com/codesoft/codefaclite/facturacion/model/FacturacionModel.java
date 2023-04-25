@@ -357,6 +357,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         factura.setProforma(proforma);
         factura.setSecuencial(null);
+        factura.setClaveAcceso(null);
         
         //Si viene seteado con un tipo de documento diferente de presupuesto lo seteo en la vista para la carga
         if (documentoEnum != null && !documentoEnum.equals(DocumentoEnum.PROFORMA)) 
@@ -4864,8 +4865,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void copiar() throws ExcepcionCodefacLite, RemoteException {
-        //ada
-        //cargarFacturaDesdeProforma(,null);
+        InterfaceModelFind busquedaInterface=getBusquedaInterface();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaInterface);
+        buscarDialogoModel.setVisible(true);
+        Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
+        
+        if(facturaTmp!=null)
+        {
+            cargarFacturaDesdeProforma(facturaTmp,null);
+            //Metodo que me permite quitar datos adicionales que no deberian aparecer porque se va a duplicar la informacion
+            factura.eliminarDatosAdicionalesSistema();
+        } 
+        
         
     }
 

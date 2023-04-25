@@ -251,6 +251,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         estadoList.add(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
         estadoList.add(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
         estadoList.add(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI);
+        estadoList.add(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
         componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"estado: ",96,estadoList);
         componenteFiltro.filtroParametroIf=new ComponenteFiltro.FiltroParametroIf<ComprobanteEntity.ComprobanteEnumEstado>() {
             @Override
