@@ -335,7 +335,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         int diasToleraciaVerificacion=3;
         
         try {
-            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
+            ParametroCodefacServiceIf servicio = new ParametroCodefacService();
             /**
              * Verificar si la licencia actual es la misma que tiene el servidor
              */
@@ -376,7 +376,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                         //Revisar la licencia cada 5 dias con un rango maximo de 14 dias 
                         if (dias > diasToleraciaVerificacion && dias < diasLimiteVerificacion) {
                             if (verificarLicenciaOnline(validacion)) {
-                                grabarFechaRevision(parametroFechaValidacion,empresa,false);
+                                grabarFechaRevision(parametroFechaValidacion,empresa);
                             }
                             else
                             {
@@ -392,7 +392,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                         if (dias >= diasLimiteVerificacion) 
                         {
                             if (verificarLicenciaOnline(validacion)) {
-                                grabarFechaRevision(parametroFechaValidacion,empresa, false);
+                                grabarFechaRevision(parametroFechaValidacion,empresa);
                             } else {
                                 //Si no se logro validar la licencia durante 30 dias ya no se abre el software
                                 //throw new ServicioCodefacException("No se puede validar su licencia , verifique su conexión a internet");                                
@@ -409,7 +409,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                 } else {
                     if (verificarLicenciaOnline(validacion)) //no se pone en un if, porque esta controlado en el metodo si no existe salir
                     {
-                        grabarFechaRevision(parametroFechaValidacion,empresa, false);
+                        grabarFechaRevision(parametroFechaValidacion,empresa);
                     } else {
                         //Si no se logro validar la licencia por primera vez  no se abre el software
                         //throw new ServicioCodefacException("No se puede validar su licencia , verifique su conexión a internet");    
@@ -424,7 +424,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             } else //cuando no se tiene registro de la fecha de validacion
             {
                 if (verificarLicenciaOnline(validacion)) {
-                    grabarFechaRevision(parametroFechaValidacion,empresa, true);
+                    grabarFechaRevision(parametroFechaValidacion,empresa);
                 } else {
                     //Si no se logro validar la licencia por primera vez  no se abre el software
                     //throw new ServicioCodefacException("No se puede validar su licencia , verifique su conexión a internet");    
@@ -505,9 +505,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
      * @param parametroFechaValidacion
      * @param crear
      */
-    private static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion,Empresa empresa ,boolean crear) {
+    private static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion,Empresa empresa) {
+        
+        
         try {
-            if (crear) {
+            if (parametroFechaValidacion==null) 
+            {
                 parametroFechaValidacion = new ParametroCodefac();
                 parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
                 parametroFechaValidacion.setEmpresa(empresa);
@@ -527,11 +530,16 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             
             String dateStr=format.format(fechaRevisar);
             parametroFechaValidacion.setValor(UtilidadesEncriptar.encriptar(dateStr,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-            if (crear) {
+            
+            if (parametroFechaValidacion.getId()==null) 
+            {
                 servicio.grabar(parametroFechaValidacion);
-            } else {
+            } 
+            else 
+            {
                 servicio.editar(parametroFechaValidacion);
             }
+            
         } catch (RemoteException ex) {
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

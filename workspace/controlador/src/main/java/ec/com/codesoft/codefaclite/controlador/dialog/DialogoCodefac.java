@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import java.awt.Component;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -54,6 +55,11 @@ public abstract class DialogoCodefac {
     public static String mensajeTextoIngreso(CodefacMsj codefacMsj)
     {
        return JOptionPane.showInputDialog(null,codefacMsj.mensaje);
+    }
+    
+    public static String mensajeTextoIngreso(Component parent, CodefacMsj codefacMsj)
+    {
+       return JOptionPane.showInputDialog(parent,codefacMsj.mensaje);
     }
     
     @Deprecated

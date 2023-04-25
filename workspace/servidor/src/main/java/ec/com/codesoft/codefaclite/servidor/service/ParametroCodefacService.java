@@ -77,7 +77,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
             return (ParametroCodefac) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
                 public Object consulta() throws ServicioCodefacException, RemoteException {
-                    Map<String, Object> map = new HashMap<String, Object>();
+                    /*Map<String, Object> map = new HashMap<String, Object>();
                     map.put("nombre", nombre);
                     map.put("empresa", empresa);
                     List<ParametroCodefac> parametroCodefacList = getFacade().findByMap(map);
@@ -85,7 +85,10 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
                         return parametroCodefacList.get(0);
                     else
                         return null;
+                }*/
+                return getFacade().getParametroByNombreFacade(nombre, empresa);
                 }
+                
             });
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
