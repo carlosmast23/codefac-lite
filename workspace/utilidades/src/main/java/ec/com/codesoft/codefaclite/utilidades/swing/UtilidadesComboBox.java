@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.utilidades.swing;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.event.EventListenerList;
@@ -45,13 +46,20 @@ public class UtilidadesComboBox {
     
     public static void eliminarTodosLosListener(JComboBox comboBox) 
     {
-        // Obtenemos un array de ActionListener del JComboBox
+        // Obtenemos un array de ActionListener del JComboBox        
         ActionListener[] listeners = comboBox.getActionListeners();
 
         // Quitamos todos los ActionListener del JComboBox
         for (ActionListener listener : listeners) {
             comboBox.removeActionListener(listener);
         }
+        
+        ItemListener[] itemListenerList=comboBox.getItemListeners();
+        for (ItemListener itemListener : itemListenerList) 
+        {
+            comboBox.removeItemListener(itemListener);
+        }
+        
     }
 
     public static void agregarActionListeners(JComboBox comboBox, ActionListener[] listeners) {
@@ -59,6 +67,14 @@ public class UtilidadesComboBox {
         for (ActionListener listener : listeners) 
         {
             comboBox.addActionListener(listener);
+        }
+    }
+    
+    public static void agregarItemListeners(JComboBox comboBox, ItemListener[] listeners) {
+        // Agregamos cada ActionListener del arreglo al JComboBox
+        for (ItemListener listener : listeners) 
+        {
+            comboBox.addItemListener(listener);
         }
     }
     
@@ -108,9 +124,11 @@ public class UtilidadesComboBox {
     {
         
         ActionListener[] listerTmp=comboBox.getActionListeners();        
+        ItemListener[] itemListerTmp=comboBox.getItemListeners();
         UtilidadesComboBox.eliminarTodosLosListener(comboBox);
         procesoIf.proceso();
         UtilidadesComboBox.agregarActionListeners(comboBox, listerTmp);
+        UtilidadesComboBox.agregarItemListeners(comboBox, itemListerTmp);
     }
     
     public interface CriterioCompararComboEnum<T>

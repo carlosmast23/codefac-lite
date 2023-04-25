@@ -44,7 +44,6 @@ import ec.com.codesoft.codefaclite.controlador.reportexml.ManagerReporteFacturaF
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaFisicaDataMap;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.FacturaModelInterface;
-import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
@@ -199,11 +198,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private FacturaModelControlador controlador;
     
-    /**
-     * Esta variable utilizo para corregir el comportamiento del listener y evitar ciclos en ese combo
-     */
-    private Boolean ejecutarListenerComboDocumento=false;
-    
+        
     /**
      * Referencia que permite tener cual es el detalle que se va a agregar o a editar
      */
@@ -364,10 +359,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setSecuencial(null);
         
         //Si viene seteado con un tipo de documento diferente de presupuesto lo seteo en la vista para la carga
-        if(documentoEnum!=null && !documentoEnum.equals(DocumentoEnum.PROFORMA))
+        if (documentoEnum != null && !documentoEnum.equals(DocumentoEnum.PROFORMA)) 
         {
-            getCmbDocumento().setSelectedItem(documentoEnum);
-            factura.setCodigoDocumentoEnum(documentoEnum);
+            UtilidadesComboBox.ejecutarProcesoSinListener(getCmbDocumento(), new UtilidadesComboBox.ProcesoComboBoxIf() 
+            {
+                @Override
+                public void proceso() {
+                    getCmbDocumento().setSelectedItem(documentoEnum);
+                    factura.setCodigoDocumentoEnum(documentoEnum);
+                }
+            });
         }
 
         controlador.verificarFacturaConNotaVentaInterna(factura);
@@ -3645,7 +3646,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-        getCmbDocumento().addActionListener(new ActionListener() {
+        /*getCmbDocumento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (getCmbDocumento().getSelectedItem() != null) 
@@ -3653,11 +3654,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if(estadoIniciado)
                     {
                         System.err.println("getCmbDocumento().addActionListener -> cargarSecuencial()... ");
+                        DocumentoEnum documentoEnum=obtenerDocumentoSeleccionado();
+                        cargarFacturaDesdeProforma(factura,documentoEnum);
                         cargarSecuencial();
                     }
                 }
             }
-        });
+        });*/
         
         getCmbPuntoEmision().addActionListener(new ActionListener() {
             @Override
@@ -3693,11 +3696,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     return;
                 }
                 
-                if(!ejecutarListenerComboDocumento)
+                /*if(!ejecutarListenerComboDocumento)
                 {
                     ejecutarListenerComboDocumento=true;
                     return;
-                }
+                }*/
                 
                 DocumentoEnum documentoAnterior= (DocumentoEnum) e.getItem();
                 DocumentoEnum documentoNuevo=(DocumentoEnum) getCmbDocumento().getSelectedItem();
@@ -3717,31 +3720,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     controlador.limpiarDetalleFactura();
                     if(factura!=null && factura.getDetalles()!=null && factura.getDetalles().size()>0)
-                    {
-                        if(DialogoCodefac.dialogoPregunta("Si cambia el tipo de documento los detalles ingresados se perderan , desea continuar ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
-                        {                               
-                            eliminarTodosLosDetalles();
-                            controlador.cargarTotales();
+                    {                        
+                        if(DialogoCodefac.dialogoPregunta("Si cambia el tipo de documento los detalles pueden sufrir cambios en el iva , desea continuar ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                        {                            
+                            cargarSecuencial();
+                            cambiarDocumentoVenta(documentoNuevo, documentoAnterior, factura);
+                            //eliminarTodosLosDetalles();
+                            cargarFacturaDesdeProforma(factura,documentoNuevo);
+                            //controlador.cargarTotales();
                         }
                         else
                         {
                             (new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ejecutarListenerComboDocumento=false;
+                                    //ejecutarListenerComboDocumento=false;
                                     getCmbDocumento().setSelectedItem(documentoAnterior);
                                 }
                             })).start();
-                        
-                            //throw new Error("No se debe cambiar de item");
-                            /*e.setSource(documentoAnterior);
-                            getCmbDocumento().setSelectedItem(documentoAnterior);
-                            getCmbDocumento().SETsE
-                            //e.notify();
-                            getCmbDocumento().validate();
-                            getCmbDocumento().repaint();
-                            DialogoCodefac.mensaje("hicimos todo",DialogoCodefac.MENSAJE_ADVERTENCIA);*/
-                            
                         }
                     }
                 }
@@ -3796,6 +3792,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
     }
+    
+    private void cambiarDocumentoVenta(DocumentoEnum documentoNuevo, DocumentoEnum documentoAnterior,Factura factura)
+    {
+        ///Caso para cuando se cambia de NOTA DE VENTA INTERNA A FACTURA
+        if(documentoAnterior.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && documentoNuevo.equals(DocumentoEnum.FACTURA))
+        {
+            for (FacturaDetalle detalle : factura.getDetalles()) 
+            {
+                //Hacer el calculo inverso asumiendo que en los productos que tiene IVA, ya esta agregado el iva en el valor Unitario
+                detalle.invertirCalculoNVIaFactura();
+            }
+        }
+        
+    }
+    
+    
     
     
     private void seleccionarPanelTipoDocumento(TipoDocumentoEnum tipoDocumentoEnum)

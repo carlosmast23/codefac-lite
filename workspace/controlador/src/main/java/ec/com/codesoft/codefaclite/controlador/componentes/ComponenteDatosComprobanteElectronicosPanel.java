@@ -422,7 +422,10 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     
     public void habiliarBotonAutorizar()
     {
-        if(comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR) && comprobante.getComprobante().getEstadoEnum()!=null)
+        //System.out.println(comprobante);
+        //System.out.println(comprobante.getComprobante());
+        //System.out.println(comprobante.getComprobante().getEstadoEnum());
+        if(comprobante.getComprobante().getEstadoEnum()!=null && comprobante.getComprobante().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR) && comprobante.getComprobante().getEstadoEnum()!=null)
         {
             btnAutorizarDocumento.setEnabled(true);
             btnReProcesarComprobante.setEnabled(true);

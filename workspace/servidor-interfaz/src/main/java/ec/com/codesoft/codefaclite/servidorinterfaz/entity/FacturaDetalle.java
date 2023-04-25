@@ -7,9 +7,12 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 //import com.sun.imageio.plugins.common.BogusColorSpace;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -162,6 +165,30 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Esto proceso permite reinvertir los calculos cuando ya se tiene un detalle incluido el iva
+     */
+    public void invertirCalculoNVIaFactura()
+    {
+        CatalogoProducto catalogoProducto= this.getCatalogoProducto();
+        //Si el producto tiene IVA entonces proceso a realizar el proceso inverso de cambiar el iva
+        if(catalogoProducto.getIva().getTarifa()>0)
+        {
+            //Guardo el precio anterior
+            BigDecimal precioUnitarioTmp=new BigDecimal(this.getPrecioUnitario()+"");
+            //Obtengo el nuevo precio sin iva
+            this.setPrecioUnitario(UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(),this.getPrecioUnitario(), 4));
+            
+            //Seteo el valor del IVA, que en este caso es la resta del valor anterior y el valor nuevo
+            this.setIva(precioUnitarioTmp.subtract(this.getPrecioUnitario()));
+            
+            //Seteo que el producto si debe llevar IVA
+            this.setIvaPorcentaje(ParametrosSistemaCodefac.obtenerIvaDefecto().intValue());
+            
+        }
+        
     }
 
     /**
