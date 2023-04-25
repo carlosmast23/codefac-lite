@@ -1047,7 +1047,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void updateInterface(Producto entity) {
                 if (entity != null) {
-                    controlador.verificarProductoConNotaVentaInterna(entity);
+                    
                     productoSeleccionado = entity;                    
                     
                     FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
@@ -1063,6 +1063,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             EnumSiNo.NO,
                             TipoDocumentoEnum.LIBRE,
                             BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
+                    
+                    controlador.verificarProductoConNotaVentaInterna(facturaDetalle);
                     
                     controlador.setearValoresProducto(facturaDetalle);
                     setFacturaDetalleSeleccionado(facturaDetalle);
@@ -3628,10 +3630,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     BigDecimal pvp=precioVenta.precio;
                     
                     //SOLUCION TEMPORAL con las notas de venta interna porque tiene un artificio que sabe modificar el porcentaje y la tarifa y los precios se cargan antes para esta opcion, pero al agregar en ese momento hace el calculo por eso tengo inconvenientes para este problema
-                    if(catalogoProducto.getIva().getTarifaOriginal()!=null)
+                    if(catalogoProducto.getIva().getTarifa()!=null)
                     {
                         DocumentoEnum documentoSeleccionado=obtenerDocumentoSeleccionado();                     
-                        Integer ivaPorcentajeTmp=(catalogoProducto.getIva()!=null)?catalogoProducto.getIva().getTarifaOriginal().intValue():0;
+                        Integer ivaPorcentajeTmp=(catalogoProducto.getIva()!=null)?catalogoProducto.getIva().getTarifa().intValue():0;
                         if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && ivaPorcentajeTmp>0)
                         {
                             pvp=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),pvp);
@@ -3689,7 +3691,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
        getCmbDocumento().addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                
+                cargarSecuencial();
                 //Si no tiene detalles no hago ninguna validacion
                 if(factura==null || factura.getDetalles()==null || factura.getDetalles().size()==0)
                 {
@@ -3722,11 +3724,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if(factura!=null && factura.getDetalles()!=null && factura.getDetalles().size()>0)
                     {                        
                         if(DialogoCodefac.dialogoPregunta("Si cambia el tipo de documento los detalles pueden sufrir cambios en el iva , desea continuar ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
-                        {                            
-                            cargarSecuencial();
+                        {   
                             cambiarDocumentoVenta(documentoNuevo, documentoAnterior, factura);
                             //eliminarTodosLosDetalles();
                             cargarFacturaDesdeProforma(factura,documentoNuevo);
+                            //Este artificio lo hago por que el metodo anterior solo sirve para agregar cuando vienen desde una proforma grabada previamente
+                            factura.setProforma(null);
                             //controlador.cargarTotales();
                         }
                         else
@@ -3736,6 +3739,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 public void run() {
                                     //ejecutarListenerComboDocumento=false;
                                     getCmbDocumento().setSelectedItem(documentoAnterior);
+                                    cargarSecuencial();
                                 }
                             })).start();
                         }

@@ -417,8 +417,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         //Consultar los descuentos que se deben cargar segun el precio seleccionado
         List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado, pvpDefecto);
-        
-        verificarProductoConNotaVentaInterna(productoSeleccionado);
+                
         //this.productoSeleccionado=productoSeleccionado;
         interfaz.setProductoSeleccionado(productoSeleccionado);
         
@@ -486,6 +485,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 interfaz.obtenerTipoDocumentoSeleccionado(),
                 descuentoDefecto);
         
+        verificarProductoConNotaVentaInterna(facturaDetalle);
+        
         if(calcularAhorro)
         {
             //El precio para hacer e calculo del ahorro siempre va a hacer el primero
@@ -545,6 +546,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     //NOTA: Este parametro se actualizar siempre que se hace una nueva venta
                     if(activarIvaFeriado)
                     {
+                        //TODO: Corregir esta parte para que no dependa del catalago del producto
                         //Editar el catalogo para luego poder manejar con el 8%
                         facturaDetalle.getCatalogoProducto().getIva().setCodigo(ImpuestoDetalle.CODIGO_IVA_OCHO);
                         facturaDetalle.getCatalogoProducto().getIva().setTarifa(ImpuestoDetalle.TARIFA_IVA_OCHO);
@@ -592,7 +594,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * Este metodo sirve para que cuando algun producto que vaya a ingresarse a la factura y no tiene que llevar iva cambiar las propiedades
      * @param producto 
      */
-    public void verificarProductoConNotaVentaInterna(Producto producto)
+    public void verificarProductoConNotaVentaInterna(FacturaDetalle facturaDetalle)
     {              
         //ALERTA: Esto no se deberia usar porque estoy modificando las propiedades del producto y eso puede afectar a todos los objectos del resto de pantallas sincronizadas y por ese artificio puede generar problemas medios graves de inconsistena
         SetearDatosNVI interfazSetearDatos=new SetearDatosNVI() {
@@ -603,7 +605,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 //producto.setValorUnitario(valorUnitario);
             }
         };
-        verificarProductoConNotaVentaInternaGenerico(producto.getCatalogoProducto(), producto.getValorUnitario(),interfazSetearDatos);
+        verificarProductoConNotaVentaInternaGenerico(facturaDetalle, facturaDetalle.getPrecioUnitario(),interfazSetearDatos);
         //producto.setValorUnitario(valorUnitario);
     
     }
@@ -637,7 +639,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
-        verificarProductoConNotaVentaInternaGenerico(catalogoProducto, facturaDetalle.getPrecioUnitario(),interfazSetearDatos);
+        verificarProductoConNotaVentaInternaGenerico(facturaDetalle, facturaDetalle.getPrecioUnitario(),interfazSetearDatos);
         facturaDetalle.calcularTotalesDetallesFactura();
     }
     
@@ -647,8 +649,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param valorUnitario
      * @param setearDatosNVI 
      */
-    private void verificarProductoConNotaVentaInternaGenerico(CatalogoProducto catalogoProducto,BigDecimal valorUnitario,SetearDatosNVI setearDatosNVI)
+    private void verificarProductoConNotaVentaInternaGenerico(FacturaDetalle facturaDetalle,BigDecimal valorUnitario,SetearDatosNVI setearDatosNVI)
     {
+        BigDecimal icePorcentaje= facturaDetalle.getIcePorcentaje();
+        Integer ivaPorcentaje=facturaDetalle.getIvaPorcentaje();
+        
         DocumentoEnum documentoEnum=interfaz.obtenerDocumentoSeleccionado() ;
         //BigDecimal valorUnitario=producto.getValorUnitario();
         
@@ -665,24 +670,26 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
              * Si el producto tiene ice calculo el nuevo subtotal
              */
             //CatalogoProducto catalogoProducto=producto.getCatalogoProducto();
-            if(catalogoProducto.getIce()!=null && catalogoProducto.getIce().getPorcentaje()!=null)
+            if(icePorcentaje!=null)
             {
-                BigDecimal porcentajeIce = (catalogoProducto.getIce() != null) ? catalogoProducto.getIce().getPorcentaje() : null;
+                //BigDecimal porcentajeIce = (catalogoProducto.getIce() != null) ? catalogoProducto.getIce().getPorcentaje() : null;
                 valorUnitario = UtilidadIva.calcularValorConIce(
-                        porcentajeIce,
+                        icePorcentaje,
                         valorUnitario).setScale(5,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
                 
-                catalogoProducto.setIce(null);//Pongo el null para que posteriormente no realice este calculo
+                facturaDetalle.setIcePorcentaje(null);
+                //catalogoProducto.setIce(null);//Pongo el null para que posteriormente no realice este calculo
 
             }
             
             //Si el producto es distinto de 0 convierto a producto sin iva y cambio el costo
-            if(catalogoProducto.getIva().getTarifa()!=0)
+            if(ivaPorcentaje!=0)
             {
                 //TODO: Este artificio puede causar problemas cuando se tiene varios productos del mismo porque al resto
-                catalogoProducto.getIva().setTarifaOriginal(catalogoProducto.getIva().getTarifa());
-                catalogoProducto.getIva().setTarifa(0);
-                catalogoProducto.getIva().setPorcentaje(BigDecimal.ZERO);
+                //catalogoProducto.getIva().setTarifaOriginal(catalogoProducto.getIva().getTarifa());
+                //catalogoProducto.getIva().setTarifa(0);
+                //catalogoProducto.getIva().setPorcentaje(BigDecimal.ZERO);
+                facturaDetalle.setIvaPorcentaje(0);
                 
                 //producto.getCatalogoProducto().getIva().setTarifa(0);
                 //producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
