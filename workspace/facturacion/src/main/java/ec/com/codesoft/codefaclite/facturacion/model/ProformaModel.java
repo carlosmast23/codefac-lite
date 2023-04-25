@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -333,6 +334,21 @@ public class ProformaModel extends FacturacionModel{
     public void eventoCambiarEstado() {
         getBtnCargarProforma().setEnabled(false);
     }
+
+    @Override
+    public void copiar() throws ExcepcionCodefacLite, RemoteException {
+        InterfaceModelFind interfaceModelFind= getBusquedaInterface();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(interfaceModelFind);
+        buscarDialogoModel.setVisible(true);
+        Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
+        
+        if(facturaTmp!=null)
+        {
+            this.factura = facturaTmp;
+            cargarFacturaDesdeProforma(factura, DocumentoEnum.PROFORMA);
+        }
+    }
    
+    
     
 }
