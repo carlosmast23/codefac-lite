@@ -628,6 +628,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             //Set<ProductoPresentacionDetalle> repetidoList= UtilidadesLista.buscarDuplicados(p.getPresentacionList());
             for (ProductoPresentacionDetalle detalle: p.getPresentacionList()) 
             {
+                //Verificar que la presentacion no tenga una cantidad en CERO o NEGATIVO lo cual es imposible
+                if(detalle.getCantidad()==null || detalle.getCantidad().compareTo(BigDecimal.ZERO)<=0)
+                {
+                    throw new ServicioCodefacException("No se puede ingresar una cantidad en CERO O NEGATIVO para las presentaciones");
+                }
+                
+                
                 Boolean detalleRepetido=null;
                 for (ProductoPresentacionDetalle detalleTmp : p.getPresentacionList()) 
                 {

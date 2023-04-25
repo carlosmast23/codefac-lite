@@ -1249,9 +1249,12 @@ public class Producto implements Serializable, Comparable<Producto> {
         List<PresentacionProducto> presentacionList= obtenerPresentacionesList();
         for (PresentacionProducto presentacion : presentacionList) 
         {
-            if(UtilidadesTextos.compararTextosSinSensibilidad(presentacion.getNombre(),codigo))
+            if(presentacion!=null)
             {
-                return presentacion;
+                if(UtilidadesTextos.compararTextosSinSensibilidad(presentacion.getNombre(),codigo))
+                {
+                    return presentacion;
+                }
             }
         }
         return null;
