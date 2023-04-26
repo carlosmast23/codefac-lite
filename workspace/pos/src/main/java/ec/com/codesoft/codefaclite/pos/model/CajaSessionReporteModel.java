@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                     {
                         Logger.getLogger(CajaSessionReporteModel.class.getName()).log(Level.WARNING,"Erro con caja session que no tiene asignado un caja: "+cs.getId());
                     }
-                    
+                    //BigDecimal nuevo=("123".equals("Eliminado"))?new BigDecimal("2"):BigDecimal.ZERO;
                 });
             }
             

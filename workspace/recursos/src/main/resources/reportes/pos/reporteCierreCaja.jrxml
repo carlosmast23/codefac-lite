@@ -42,6 +42,9 @@
 	<variable name="SUBTOTAL_GROUP" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
 		<variableExpression><![CDATA[new BigDecimal($F{total})]]></variableExpression>
 	</variable>
+	<variable name="ELIMINADOS_TOT" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
+		<variableExpression><![CDATA[($F{estado}.equals("Eliminado"))?new BigDecimal($F{total}):BigDecimal.ZERO;]]></variableExpression>
+	</variable>
 	<group name="GROUP_FORMA_PAGO">
 		<groupExpression><![CDATA[$F{formaPago}]]></groupExpression>
 		<groupHeader>
@@ -128,22 +131,22 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="24">
+			<band height="52">
 				<staticText>
-					<reportElement mode="Opaque" x="432" y="0" width="67" height="17" forecolor="#FFFFFF" backcolor="#666666" uuid="6377b6af-7845-4d25-a350-a710e49bc341"/>
+					<reportElement mode="Opaque" x="432" y="0" width="67" height="17" forecolor="#FFFFFF" backcolor="#999999" uuid="6377b6af-7845-4d25-a350-a710e49bc341"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
 						<bottomPen lineWidth="1.0"/>
 						<rightPen lineWidth="1.0"/>
 					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="11" isBold="true"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Total]]></text>
+					<text><![CDATA[Subtotal: ]]></text>
 				</staticText>
 				<textField>
-					<reportElement mode="Opaque" x="499" y="0" width="56" height="17" forecolor="#FFFFFF" backcolor="#666666" uuid="e7a27e5b-2397-408b-afc2-5b0be52f7e1c"/>
+					<reportElement mode="Opaque" x="499" y="0" width="56" height="17" forecolor="#FFFFFF" backcolor="#999999" uuid="e7a27e5b-2397-408b-afc2-5b0be52f7e1c"/>
 					<box>
 						<pen lineWidth="0.75"/>
 						<topPen lineWidth="0.75"/>
@@ -152,10 +155,66 @@
 						<rightPen lineWidth="0.75"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="11" isBold="true"/>
+						<font size="10" isBold="true"/>
 						<paragraph leftIndent="3" rightIndent="3"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{SUBTOTAL_GROUP}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="432" y="17" width="67" height="17" forecolor="#FFFFFF" backcolor="#999999" uuid="9f981da7-afbf-467e-a398-133c85950de1"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Eliminado: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="499" y="17" width="56" height="17" forecolor="#FFFFFF" backcolor="#999999" uuid="afd9fcaa-8c85-495f-bc05-e3e958c709f8"/>
+					<box>
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+						<paragraph leftIndent="3" rightIndent="3"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ELIMINADOS_TOT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="432" y="34" width="67" height="17" forecolor="#FFFFFF" backcolor="#666666" uuid="d81c888b-e106-4aed-b517-c016d22e42e4"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="499" y="34" width="56" height="17" forecolor="#FFFFFF" backcolor="#666666" uuid="33d8de5f-40fc-4ce7-a2ba-1dd3449054d2"/>
+					<box>
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+						<paragraph leftIndent="3" rightIndent="3"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUBTOTAL_GROUP}.subtract($V{ELIMINADOS_TOT})]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
