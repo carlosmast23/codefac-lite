@@ -4799,6 +4799,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public Boolean validarIngresoDetalle() {
+        
+        //TODO: Por el momento ejecuto un mensaje directo pero si este metodo se usa para la parte WEB puede generar problemas
+        if(facturaDetalleSeleccionado==null)
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("No tiene SELECCIONADO un PRODUCTO para agregar a la FACTURA", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            return false;
+        }
+        
         return panelPadre.validarPorGrupo("detalles");
     }
 
