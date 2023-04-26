@@ -1019,6 +1019,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             eliminarDetalleModelo(fila);
             controlador.cargarTotales();
+            modoEdicionDetalle=false;
             getBtnEditarDetalle().setEnabled(false);
             getBtnAgregarDetalleFactura().setEnabled(true);
             getBtnAgregarProducto().setEnabled(true);
