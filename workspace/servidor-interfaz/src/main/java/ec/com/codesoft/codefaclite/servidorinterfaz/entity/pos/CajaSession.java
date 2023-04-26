@@ -5,19 +5,24 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -84,8 +89,8 @@ public class CajaSession implements Serializable
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaSession", fetch = FetchType.EAGER)
     private List<ArqueoCaja> arqueosCaja;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaSession", fetch = FetchType.EAGER)
-    private List<IngresoCaja> ingresosCaja;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaSession", fetch = FetchType.EAGER)
+    //private List<IngresoCaja> ingresosCaja;
     /*
     * Constructor
     */
@@ -226,11 +231,23 @@ public class CajaSession implements Serializable
         this.arqueosCaja = arqueosCaja;
     }
 
-    public List<IngresoCaja> getIngresosCaja() {
-        return ingresosCaja;
+    @Deprecated //TODO: Las entidades no deberian hacer consulta a la base de datos, pero resulta usar de esta forma más practico    
+    public List<IngresoCaja> getIngresosCaja() 
+    {
+        List<IngresoCaja> resultadoList=new ArrayList<IngresoCaja>();
+        try {
+            resultadoList=ServiceFactory.getFactory().getIngresoCajaServiceIf().consultarPorCajaSession(this);
+            
+            //return ingresosCaja;            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSession.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CajaSession.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultadoList;
     }
 
-    public void setIngresosCaja(List<IngresoCaja> ingresosCaja) {
+    /*public void setIngresosCaja(List<IngresoCaja> ingresosCaja) {
         this.ingresosCaja = ingresosCaja;
     }
     
@@ -242,7 +259,7 @@ public class CajaSession implements Serializable
         
         ingresoCaja.setCajaSession(this);
         this.ingresosCaja.add(ingresoCaja);
-    }
+    }*/
     
     /*
     * Equals
@@ -291,7 +308,7 @@ public class CajaSession implements Serializable
 
         //Todo: mejorar esta parte 
         //List<IngresoCaja> ingresoCajaList=new ArrayList<IngresoCaja>();
-        List<IngresoCaja> ingresoCajaList=ingresosCaja;
+        List<IngresoCaja> ingresoCajaList=getIngresosCaja();
         
         
         if(ingresoCajaList!=null)

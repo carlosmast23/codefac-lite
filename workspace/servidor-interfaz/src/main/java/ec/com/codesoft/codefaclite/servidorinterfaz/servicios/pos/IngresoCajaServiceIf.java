@@ -5,8 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
+import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -14,4 +18,5 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
  */
 public interface IngresoCajaServiceIf extends ServiceAbstractIf<IngresoCaja>{
     
+    public List<IngresoCaja> consultarPorCajaSession(CajaSession cajaSession) throws ServicioCodefacException, RemoteException;
 }

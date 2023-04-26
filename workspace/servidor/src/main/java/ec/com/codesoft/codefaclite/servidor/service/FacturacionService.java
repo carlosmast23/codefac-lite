@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidor.service.cartera.PrestamoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaPermisoService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaSesionService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.IngresoCajaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
@@ -1588,8 +1589,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ingresoCaja.setFactura(factura);
         
         entityManager.persist(ingresoCaja);
-    
-        cajaSession.addIngresoCaja(ingresoCaja);
+            
+        //cajaSession.addIngresoCaja(ingresoCaja);
+        IngresoCajaService ingresoCajaService=new IngresoCajaService();
+        ingresoCajaService.grabar(ingresoCaja);
   
         entityManager.merge(cajaSession);
     }
