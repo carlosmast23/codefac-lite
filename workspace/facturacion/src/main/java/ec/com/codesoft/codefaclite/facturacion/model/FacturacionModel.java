@@ -2121,19 +2121,30 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             throw new ExcepcionCodefacLite("cancelar el evento editar");
         }
         
-        ;
-        //Actualizar los secuenciales en el archivo de comprobacion en la base de datos para que por el momento puedan seguir continuando
-        String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
-        if(!UtilidadesSistema.verificarClaveSoporte(claveIngresada))
+        ///IMPORTANTE: Cuando sea factura tengo que solicitar clave para modificar
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
         {
-            DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);
-            throw new ExcepcionCodefacLite("cancelar el evento editar clave incorrecta");
+            //Actualizar los secuenciales en el archivo de comprobacion en la base de datos para que por el momento puedan seguir continuando
+            String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+            if (!UtilidadesSistema.verificarClaveSoporte(claveIngresada)) 
+            {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);
+                throw new ExcepcionCodefacLite("cancelar el evento editar clave incorrecta");
+            }
         }
-        
+                
         try {
             setearValoresDefaultFactura(CrudEnum.EDITAR);
             ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
-            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+            {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            }
+            else
+            {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO_VENTA_CON_ADVERTENCIA);
+            }
             
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);

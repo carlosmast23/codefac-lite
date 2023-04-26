@@ -29,6 +29,7 @@ public abstract class MensajeCodefacSistema {
 
         public static final CodefacMsj GUARDADO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La información fue guardada correctamente",MENSAJE_CORRECTO);
         public static final CodefacMsj EDITADO = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La información fue editada correctamente",MENSAJE_CORRECTO);
+        public static final CodefacMsj EDITADO_VENTA_CON_ADVERTENCIA = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La información fue editada correctamente,recuerde en caso de ser necesario realizar los AJUSTES DE INVENTARIO Y CARTERA de manera manual para evitar INCONSISTENCIA en los datos",MENSAJE_ADVERTENCIA);
         public static final CodefacMsj ELIMINADO_CORRECTAMENTE = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La información fue eliminada correctamente",MENSAJE_CORRECTO);
         public static final CodefacMsj NO_PERMITE_EDITAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"La pantalla no permite modificaciones",MENSAJE_INCORRECTO);
         public static final CodefacMsj NO_PERMITE_ELIMINAR = new CodefacMsj(CodefacMsj.TITULO_CORRECTO,"Solo se puede eliminar en modo edición",MENSAJE_INCORRECTO);
