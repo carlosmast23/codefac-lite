@@ -1121,10 +1121,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             controlador.cargarFormaPago();
             setearValoresCliente();
             controlador.cargarDatosAdicionales(factura);
+            volverCargarDatosAdicionalesPorTipoDocumento(factura);
             cargarTablaDatosAdicionales();
             getTxtCodigoDetalle().requestFocus();
             
         };
+    }
+    
+    /**
+     * Metodo que me permite que cuando se borren los datos adicionales por algun motivo pueda volver a crear los datos adicionales que se necesite
+     * Este metodo deberia ser unico para volver a llamar siempre que se necesite
+     */
+    private void volverCargarDatosAdicionalesPorTipoDocumento(Factura factura)
+    {
+        TipoDocumentoEnum tipoDocumentoEnum=obtenerTipoDocumentoSeleccionado();
+        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
+        {
+            controlador.agregarDatosAdicionalesPresupuesto(factura, presupuestoSeleccionado);
+        }
     }
     
     private boolean verificaDatoComboRepresentante(Persona persona)

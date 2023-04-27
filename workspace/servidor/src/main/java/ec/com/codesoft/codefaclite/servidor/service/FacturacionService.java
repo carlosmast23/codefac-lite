@@ -1591,8 +1591,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         entityManager.persist(ingresoCaja);
             
         //cajaSession.addIngresoCaja(ingresoCaja);
-        IngresoCajaService ingresoCajaService=new IngresoCajaService();
-        ingresoCajaService.grabar(ingresoCaja);
+        //IngresoCajaService ingresoCajaService=new IngresoCajaService();
+        //ingresoCajaService.grabar(ingresoCaja);
   
         entityManager.merge(cajaSession);
     }

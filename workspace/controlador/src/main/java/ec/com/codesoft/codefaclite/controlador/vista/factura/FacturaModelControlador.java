@@ -270,7 +270,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             interfaz.setPresupuestoSeleccionado(presupuestoTmp);
             //EnumSiNo.SI
             
-            String objetoVehiculoTxt="";
+            /*String objetoVehiculoTxt="";
             String kilometrajeTxt="";
             ObjetoMantenimiento objetoMantenimiento=presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
             
@@ -278,10 +278,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             {
                 objetoVehiculoTxt= " "+objetoMantenimiento.toString()+" ";                
                 kilometrajeTxt=objetoMantenimiento.getKilometraje()+"";
-            }
+            }*/
             
             
-            String descripcion="P "+presupuestoTmp.getId()+objetoMantenimiento+" OT"+presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoTmp.getDescripcion();
+            String descripcion="P "+presupuestoTmp.getId()+" OT"+presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoTmp.getDescripcion();
             FacturaDetalle facturaDetalle=crearFacturaDetalle(
                     BigDecimal.ONE,
                     presupuestoTmp.calcularValorServicio(), 
@@ -355,7 +355,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             }
             
             Factura factura=interfaz.obtenerFactura();
-            if(objetoMantenimiento!=null)
+            /*if(objetoMantenimiento!=null)
             {
                 
                 factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.VEHICULO.getNombre(), objetoVehiculoTxt,ComprobanteAdicional.Tipo.TIPO_OTRO));
@@ -364,16 +364,48 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 
                 //Factura facturaTmp= interfaz.obtenerFactura();
                 //System.out.println(facturaTmp.getDatosAdicionales().size());
-            }
+            }*/
+            agregarDatosAdicionalesPresupuesto(factura, presupuestoTmp);
             
             //Setear el tipo de documento de presupuesto cuando venga de un presupuesto
             factura.setNombreTipoDocumento(TipoDocumentoEnum.PRESUPUESTOS.getNombre());
             factura.setCodigoTipoDocumento(TipoDocumentoEnum.PRESUPUESTOS.getCodigo());
             
+            //Despues de terminar de agregar todo dejo seleccionado el documento de presupuesto
+            this.setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum.PRESUPUESTOS);
+            
             
             return facturaDetalle;            
         }
         return null;
+    }
+    
+    public void agregarDatosAdicionalesPresupuesto(Factura factura,Presupuesto presupuestoTmp)
+    {
+        //Si no tengo datos no hago nada con el proceso
+        if(factura==null || presupuestoTmp==null)
+        {
+            return;
+        }
+        
+        String objetoVehiculoTxt = "";
+        String kilometrajeTxt = "";
+        ObjetoMantenimiento objetoMantenimiento = presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
+        
+        if (objetoMantenimiento != null) {
+            objetoVehiculoTxt = " " + objetoMantenimiento.toString() + " ";
+            kilometrajeTxt = objetoMantenimiento.getKilometraje() + "";
+        }
+        
+        if (objetoMantenimiento != null) {
+
+            factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.VEHICULO.getNombre(), objetoVehiculoTxt, ComprobanteAdicional.Tipo.TIPO_OTRO));
+            factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.KILOMETRAJE.getNombre(), kilometrajeTxt, ComprobanteAdicional.Tipo.TIPO_OTRO));
+            factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.ORDEN_TRABAJO.getNombre(), presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId() + "", ComprobanteAdicional.Tipo.TIPO_OTRO));
+
+            //Factura facturaTmp= interfaz.obtenerFactura();
+            //System.out.println(facturaTmp.getDatosAdicionales().size());
+        }
     }
     
     public List<BigDecimal> consultarDescuentoPorProducto(Producto producto,String pvpNombre)
