@@ -3459,17 +3459,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     facturaDetalle.setIva(iva);
                 }
                 
-                if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
+                //if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
                     
                     factura.addDetalle(facturaDetalle);
 
                     cargarDatosDetalles();
                     controlador.limpiarDetalleFactura();
                     controlador.cargarTotales();
-                } else {
+                /*} else {
                     DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     controlador.limpiarDetalleFactura();
-                }
+                }*/
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -4815,10 +4815,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public Boolean validarIngresoDetalle() {
         
         //TODO: Por el momento ejecuto un mensaje directo pero si este metodo se usa para la parte WEB puede generar problemas
-        if(facturaDetalleSeleccionado==null)
+        if(!modoEdicionDetalle)
         {
-            DialogoCodefac.mensaje(new CodefacMsj("No tiene SELECCIONADO un PRODUCTO para agregar a la FACTURA", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-            return false;
+            if(facturaDetalleSeleccionado==null)
+            {
+                DialogoCodefac.mensaje(new CodefacMsj("No tiene SELECCIONADO un PRODUCTO para agregar a la FACTURA", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                return false;
+            }
         }
         
         return panelPadre.validarPorGrupo("detalles");

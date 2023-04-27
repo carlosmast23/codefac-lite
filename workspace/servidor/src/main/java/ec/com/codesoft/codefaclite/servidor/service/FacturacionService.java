@@ -805,6 +805,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
             }
             
+            //Verificar que por algun motivo los detalles del descuento no pueden ser superiores a los valores de los precios unitarios
+            if(detalle.getTotal().compareTo(BigDecimal.ZERO)<0)
+            {
+                throw new ServicioCodefacException("El producto "+detalle.getDescripcion()+" tiene un tipo un descuento superior al permitido");
+            }
+            
         }   
         
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
