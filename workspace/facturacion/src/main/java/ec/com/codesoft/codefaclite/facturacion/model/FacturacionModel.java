@@ -174,7 +174,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public static final String NOMBRE_REPORTE_FACTURA_INTERNA="Comprobante de Venta Interna";
     
     public static final int INDICE_OBJECTO_TABLA_FACTURA=0;
-    public static final int INDICE_CANTIDAD_TABLA_FACTURA=2;
+    public static final int INDICE_CANTIDAD_TABLA_FACTURA=4;
     public static final int INDICE_ELIMINAR_TABLA_FACTURA=8;
     //private Persona persona;
     protected Factura factura;
@@ -2808,7 +2808,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 switch(columnaModificada)
                 {
-                    case 3:
+                    case INDICE_CANTIDAD_TABLA_FACTURA:
                         FacturaDetalle datoOriginal=(FacturaDetalle) getTblDetalleFactura().getModel().getValueAt(filaModificada, INDICE_OBJECTO_TABLA_FACTURA);                        
                         modificarCantidadesOIngresarCodigoBarras(datoOriginal, dato.toString());
                         //getTxtCantidad().setText(dato.toString());
@@ -4121,7 +4121,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 getTblDetalleFactura().requestFocus();
                 getTblDetalleFactura().setRowSelectionInterval(getTblDetalleFactura().getRowCount() - 1, getTblDetalleFactura().getRowCount() - 1);
                 seleccionarFilaTablaDetalleFactura();
-                getTblDetalleFactura().editCellAt(getTblDetalleFactura().getRowCount() - 1, 3);
+                getTblDetalleFactura().editCellAt(getTblDetalleFactura().getRowCount() - 1, INDICE_CANTIDAD_TABLA_FACTURA);
 
             }
         }).start();
