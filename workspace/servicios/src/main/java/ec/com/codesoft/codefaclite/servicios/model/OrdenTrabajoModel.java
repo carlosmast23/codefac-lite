@@ -782,7 +782,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         if(indiceSeleccionado>=0)
         {
             ObjetoMantenimiento objetoMantenimiento=(ObjetoMantenimiento) getCmbObjetoMantenimiento().getSelectedItem();
-            getSpnKilometraje().setValue(objetoMantenimiento.getKilometraje());
+            //System.out.println(objetoMantenimiento.getKilometraje());
+            if(objetoMantenimiento.getKilometraje()!=null)
+            {
+                getSpnKilometraje().setValue(objetoMantenimiento.getKilometraje());
+            }
         }
         else
         {

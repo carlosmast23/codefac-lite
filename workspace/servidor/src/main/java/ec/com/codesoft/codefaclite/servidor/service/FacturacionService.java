@@ -1022,11 +1022,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             PresupuestoService servicio = new PresupuestoService();
             Presupuesto presupuesto = servicio.buscarPorId(detalle.getReferenciaId());
             
+            presupuesto.setPersona(detalle.getFactura().getCliente());
+            
             //Cambiar el estado al presupuesto para saber que ya fue facturadp
             presupuesto.setEstado(Presupuesto.EstadoEnum.FACTURADO.getLetra()); 
             
             //Cambiar el estado a la orden de trabajo del detalle para saber que ya no puede usar
             presupuesto.getOrdenTrabajoDetalle().setEstado(OrdenTrabajoDetalle.EstadoEnum.TERMINADO.getLetra());//Cambio el estado a terminado
+            presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().setCliente(detalle.getFactura().getCliente());
             
             //Actualiza el estado de la orde de trabajo principal
             OrdenTrabajoService ordenTrabajoService=new OrdenTrabajoService();
@@ -1034,6 +1037,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
             //Agregado una referencia de la venta al presupuesto para luego consultar de una manera más rapida
             presupuesto.setFactura(detalle.getFactura());
+            
+            //Actualizar los datos de la OT y PRESUPUESTOS
+            entityManager.merge(presupuesto);
+            entityManager.merge(presupuesto.getOrdenTrabajoDetalle());
+            entityManager.merge(presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
             entityManager.flush();
 
     }
