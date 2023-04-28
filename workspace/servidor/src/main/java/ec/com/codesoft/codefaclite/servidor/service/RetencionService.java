@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import static ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac.CODIGO_NO_APLICA_RETENCIONES;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -58,7 +59,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
              @Override
              public void transaccion() throws ServicioCodefacException, RemoteException {
-                validarRetencion(entity);
+                validarRetencion(entity,CrudEnum.EDITAR);
                 entityManager.merge(entity);
              }             
          });
@@ -66,13 +67,27 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
          return entity;
     }
 
+    @Override
+    public void editar(Retencion entity) throws ServicioCodefacException, RemoteException 
+    {
+        validarRetencion(entity,CrudEnum.EDITAR);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                //Editado la retencion directamente
+                entityManager.merge(entity);
+            }
+        });
+    }
+    
     public Retencion grabar(Retencion entity) throws ServicioCodefacException, RemoteException {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
-                validarRetencion(entity);
+                validarRetencion(entity,CrudEnum.CREAR);
                 
                 
                 //Verificar si es una retencion libre o tiene una referencia
@@ -142,8 +157,9 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null,CrudEnum.CREAR,ModoProcesarEnum.NORMAL);
     }
     
-    private void validarRetencion(Retencion retencion) throws ServicioCodefacException, RemoteException
+    private void validarRetencion(Retencion retencion,CrudEnum crudEnum) throws ServicioCodefacException, RemoteException
     {
+        
         if(retencion.getDetalles()==null|| retencion.getDetalles().size()==0)
         {
             throw new ServicioCodefacException("No se puede grabar retenciones sin detalles");
@@ -159,13 +175,29 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
             throw new ServicioCodefacException("No se permite emitir retenciones a consumidor final");
         }
         
-        //Validar que no existan retenciones activas aplicadas a la misma compra+
-        Retencion retencionExistente=obtenerRetencionPorPreimpresoyProveedor(retencion.getPreimpresoDocumento(),retencion.getProveedor());
-        if(retencionExistente!=null)
+        if(crudEnum.equals(CrudEnum.CREAR))
         {
-            throw new ServicioCodefacException("La compra ya fue aplicada la retención en el comprobante "+retencionExistente.getPreimpreso());
+            //Validar que no existan retenciones activas aplicadas a la misma compra+
+            Retencion retencionExistente=obtenerRetencionPorPreimpresoyProveedor(retencion.getPreimpresoDocumento(),retencion.getProveedor());
+            if(retencionExistente!=null)
+            {
+                throw new ServicioCodefacException("La compra ya fue aplicada la retención en el comprobante "+retencionExistente.getPreimpreso());
+            }
         }
         
+        //Validar que no existan 2 retenciones duplicadas con el mismo codigo por error de ingreso de informacion desde la VISTA
+        //if(retencion.getDireccion())
+        Boolean verificarCodigosDuplicados=UtilidadesLista.verificarListadoDuplicadoPorCriterio(retencion.getDetalles(), new UtilidadesLista.DatoCompararIf<RetencionDetalle>() {
+            @Override
+            public Object getDato(RetencionDetalle objeto) {
+                return objeto.getCodigoRetencionSri();
+            }
+        });
+        
+        if(verificarCodigosDuplicados)
+        {
+            throw new ServicioCodefacException("La retención tiene CÓDIGOS DUPLICADOS en el detalle");
+        }
         
         //TODO: Por el momento quito esta validacion porque ese problema de los duplicados puedo manejar en los ats agrupando nuevamente
         ///Validar que no existan codigos duplicados porque eso no permite el Sri
@@ -181,6 +213,8 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
             }
             
         }*/
+        
+        
         
     }
     

@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
@@ -105,10 +104,6 @@ public abstract class UtilidadesLista {
         Collections.sort(lista,comparator);
     }
     
-    public interface CastListInterface<T>
-    {
-        public String getString(T dato);
-    }
     
     public static <T> List<T> arrayToList(T[] array){
         List<T> lista = Arrays.asList(array);
@@ -127,6 +122,39 @@ public abstract class UtilidadesLista {
         return null;
         
     }
+    
+    public static boolean  verificarListadoDuplicadoPorCriterio(List datos,DatoCompararIf compararIf)
+    {
+        Set<Object> comprobacionListSet = new HashSet<Object>();
+        if(datos!=null)
+        {
+            for (Object dato : datos) 
+            {
+                Object datoComparar= compararIf.getDato(dato);
+                if(comprobacionListSet.contains(datoComparar))
+                {
+                    return true;
+                }
+                else
+                {
+                    comprobacionListSet.add(datoComparar);
+                }
+            }
+        }
+        return false;
+    }
+    
+    public interface CastListInterface<T> 
+    {
+
+        public String getString(T dato);
+    }
+
+    public interface DatoCompararIf<T>
+    {
+        public Object getDato(T objeto);
+    }
+        
     
     
 }
