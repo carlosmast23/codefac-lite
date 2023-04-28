@@ -30,7 +30,7 @@
 				<textFieldExpression><![CDATA[$P{pl_titulo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="75" width="160" height="8" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
+				<reportElement x="0" y="69" width="160" height="16" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
 				<textElement textAlignment="Center">
 					<font size="6" isItalic="true"/>
 					<paragraph rightIndent="20"/>
@@ -56,7 +56,7 @@
 				<textFieldExpression><![CDATA[$P{pl_ruc}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="83" width="160" height="10" uuid="6bdfa40d-6699-4c27-abd7-9202d3e05945"/>
+				<reportElement x="0" y="84" width="160" height="9" uuid="6bdfa40d-6699-4c27-abd7-9202d3e05945"/>
 				<box>
 					<pen lineStyle="Dotted"/>
 					<topPen lineWidth="0.5" lineStyle="Double"/>
@@ -68,14 +68,6 @@
 					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_rimpe}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="68" width="160" height="8" uuid="9d069bbf-70a4-4a6c-8915-db3839ee97c6"/>
-				<textElement textAlignment="Center">
-					<font size="6" isItalic="true"/>
-					<paragraph rightIndent="20"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{pl_telefonos}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
