@@ -192,7 +192,6 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     public void agregarObjeto(Factura t, Vector dato) {
         //dato.add(t.getId());
         dato.add(t.getPreimpreso());
-        System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
         DocumentoEnum documentoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());        
         dato.add(documentoEnum.getNombre()); //TODO: Veri si para cosnultar por documento sea una propiedad intrinsica de la factura

@@ -86,7 +86,17 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     }
 
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map,TipoQueryEnum tipoQueryEnum, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
-        return AbstractFacade.findStaticDialog(query, map,tipoQueryEnum, limiteMinimo, limiteMaximo);
+        try {
+            return (List<Object>) ServiceAbstract.ejecutarConsultaStatic(new MetodoInterfaceConsulta() {
+                @Override
+                public Object consulta() throws ServicioCodefacException, RemoteException {
+                    return AbstractFacade.findStaticDialog(query, map,tipoQueryEnum, limiteMinimo, limiteMaximo);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<Object>();
     }
     
     /*public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {

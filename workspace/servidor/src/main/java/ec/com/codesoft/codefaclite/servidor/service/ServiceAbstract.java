@@ -154,6 +154,47 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     
     protected Object ejecutarConsulta(MetodoInterfaceConsulta interfaz) throws ServicioCodefacException
     {
+        return ejecutarConsultaStatic(interfaz);
+        /*try {
+            return interfaz.consulta();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            throw new ServicioCodefacException("Error de conexión con el servidor");
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            //ex.printStackTrace();
+            throw ex;
+        }catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
+            //ex.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            
+            ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
+            //Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
+            if(excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO))
+            {
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
+            }
+            else
+            {
+                String mensaje="sin mensaje";
+                if(ex!=null)
+                   mensaje=ex.getMessage();
+                    
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje()+"\n Causa: "+ mensaje);
+            }  
+        }catch(Exception e)
+        {
+            //e.printStackTrace();
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, e);
+            //LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
+            throw new ServicioCodefacException(e.getMessage());
+        }*/
+        
+    }
+    
+    public static Object ejecutarConsultaStatic(MetodoInterfaceConsulta interfaz) throws ServicioCodefacException
+    {
         try {
             return interfaz.consulta();
         } catch (RemoteException ex) {

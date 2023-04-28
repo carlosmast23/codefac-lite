@@ -16,29 +16,29 @@
 	<title>
 		<band height="93" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="68" width="160" height="8" uuid="cd48d5fa-c3a3-4c0a-9514-838fa8011953"/>
+				<reportElement x="0" y="62" width="160" height="8" uuid="cd48d5fa-c3a3-4c0a-9514-838fa8011953"/>
 				<textElement textAlignment="Center">
 					<font size="6" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_razon_social}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="38" width="160" height="12" uuid="6d32c61e-7403-4e29-ae20-cc34c0e33104"/>
+				<reportElement x="0" y="35" width="160" height="12" uuid="6d32c61e-7403-4e29-ae20-cc34c0e33104"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_titulo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="15" y="75" width="145" height="8" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
+				<reportElement x="0" y="75" width="160" height="8" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
 				<textElement textAlignment="Center">
 					<font size="6" isItalic="true"/>
 					<paragraph rightIndent="20"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{pl_direccion}+" / "+$P{pl_telefonos}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{pl_direccion}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="58" width="160" height="11" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
+				<reportElement x="0" y="53" width="160" height="11" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
@@ -49,7 +49,7 @@
 				<imageExpression><![CDATA[$P{pl_url_img1}]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="48" width="160" height="11" uuid="0fa52b3f-49f0-4fc7-882d-66a40e80e265"/>
+				<reportElement x="0" y="45" width="160" height="11" uuid="0fa52b3f-49f0-4fc7-882d-66a40e80e265"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false" isItalic="false"/>
 				</textElement>
@@ -68,6 +68,14 @@
 					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_rimpe}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="68" width="160" height="8" uuid="9d069bbf-70a4-4a6c-8915-db3839ee97c6"/>
+				<textElement textAlignment="Center">
+					<font size="6" isItalic="true"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pl_telefonos}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
