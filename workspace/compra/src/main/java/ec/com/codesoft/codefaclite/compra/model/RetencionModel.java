@@ -59,6 +59,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.PreimpresoFormato;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
@@ -189,6 +190,14 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         }
         else
         {
+            //Verificar que ingrese la clave de soporte para poder editar
+            String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+            if (!UtilidadesSistema.verificarClaveSoporte(claveIngresada)) 
+            {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);
+                throw new ExcepcionCodefacLite("cancelar el evento editar clave incorrecta");
+            }
+            
             try {
                 validarSetearDatos();
                 ServiceFactory.getFactory().getRetencionServiceIf().editar(retencion);
