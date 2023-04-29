@@ -1,15 +1,20 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +26,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -92,7 +98,9 @@ public class Kardex implements Serializable,Cloneable {
     @ManyToOne
     private Lote lote;    
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardex" ,fetch = FetchType.EAGER )
+    //Variable solo de paso para grabar los detalles que luego necesito para grabar o hacer algun tema temporal
+    @Transient
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "kardex" ,fetch = FetchType.EAGER )
     private List<KardexDetalle> detallesKardex;
 
     public Kardex() {
@@ -170,13 +178,22 @@ public class Kardex implements Serializable,Cloneable {
         this.producto = producto;
     }
 
-    public List<KardexDetalle> getDetallesKardex() {
-        return detallesKardex;
+    @Deprecated
+    public List<KardexDetalle> getDetallesKardexPersistencia() {
+        try {
+            //return detallesKardex;
+            return ServiceFactory.getFactory().getKardexDetalleServiceIf().consultarPorKardex(this);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Kardex.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Kardex.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<KardexDetalle>();
     }
 
-    public void setDetallesKardex(List<KardexDetalle> detallesKardex) {
+    /*public void setDetallesKardex(List<KardexDetalle> detallesKardex) {
         this.detallesKardex = detallesKardex;
-    }
+    }*/
 
     public BigDecimal getReserva() {
         return reserva;
@@ -290,6 +307,7 @@ public class Kardex implements Serializable,Cloneable {
     public BigDecimal recalcularStock()
     {
         BigDecimal stock=BigDecimal.ZERO;
+        List<KardexDetalle> detallesKardex=getDetallesKardexPersistencia();
         if(detallesKardex!=null)
         {
             for (KardexDetalle kardexDetalle: detallesKardex) 

@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexDetalleFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
 import java.rmi.RemoteException;
@@ -46,6 +48,16 @@ public class KardexDetalleService extends ServiceAbstract<KardexDetalle, KardexD
         }
         
         return null;
+    }
+    
+    public List<KardexDetalle> consultarPorKardex(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        KardexDetalle kd;
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("kardex",kardex);
+        List<KardexDetalle> resultado=getFacade().findByMap(mapParametros);
+        
+        return resultado;
     }
     
 }

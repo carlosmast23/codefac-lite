@@ -104,7 +104,7 @@ public class KardexDetalle implements Serializable ,Cloneable {
     
 
     @JoinColumn(name = "KARDEX_ID")
-    @ManyToOne
+    //@ManyToOne
     private Kardex kardex;
     
     //@JoinColumn(name = "LOTE_ID")

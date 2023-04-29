@@ -5,8 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.Remote;
+import java.util.List;
 
 /**
  *
@@ -14,5 +17,5 @@ import java.rmi.Remote;
  */
 public interface KardexDetalleServiceIf extends ServiceAbstractIf<KardexDetalle>
 {
-    
+    public List<KardexDetalle> consultarPorKardex(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException;
 }
