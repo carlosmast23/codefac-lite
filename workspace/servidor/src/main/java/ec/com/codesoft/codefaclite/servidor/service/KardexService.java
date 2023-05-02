@@ -1296,9 +1296,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return getFacade().consultarStockMinimoCantidadFacade(empresa).intValue();
     }
     
-    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria,Empresa empresa,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException
+    public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria,String nombre,String codigo,Empresa empresa,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException
     {
-        return getFacade().consultarStockMinimoFacade(bodega,categoria,ordenEnum);
+        return getFacade().consultarStockMinimoFacade(bodega,categoria,nombre,codigo,ordenEnum);
     }
     
     public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa) throws java.rmi.RemoteException

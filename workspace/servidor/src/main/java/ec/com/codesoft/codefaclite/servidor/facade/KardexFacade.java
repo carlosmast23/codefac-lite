@@ -218,8 +218,24 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         return Long.parseLong(totalMinimo+"");
     }
 
-    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria,String nombre,String codigo,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException {
 
+        /*Producto p;
+        p.getManejarInventario():*/
+        
+        String whereNombre="";
+        if(!UtilidadesTextos.verificarNullOVacio(nombre))
+        {
+            whereNombre=" and k.producto.nombre=?6 ";
+        }
+        
+        
+        String whereCodigo="";
+        if(!UtilidadesTextos.verificarNullOVacio(codigo))
+        {
+            whereCodigo=" and k.producto.codigoPersonalizado=?7 ";
+        }
+        
         String whereBodega="";
         if(bodega!=null)
         {
@@ -234,7 +250,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
         }
         
-        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+" "
+        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 AND k.producto.manejarInventario=?99 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+whereNombre+whereCodigo+" "
                 + " group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
         
         String orderBy="";
@@ -263,6 +279,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         
         Query query = getEntityManager().createQuery(queryString);        
+        
+        query.setParameter(99,EnumSiNo.SI.getLetra());
+        
         if(bodega!=null)
         {
             query.setParameter(1,bodega);
@@ -272,6 +291,16 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         if(categoria!=null)
         {
             query.setParameter(2,categoria);
+        }
+        
+        if(!UtilidadesTextos.verificarNullOVacio(nombre))
+        {
+            query.setParameter(6, nombre);
+        }
+        
+        if(!UtilidadesTextos.verificarNullOVacio(codigo))
+        {
+            query.setParameter(7, codigo);
         }
         
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
