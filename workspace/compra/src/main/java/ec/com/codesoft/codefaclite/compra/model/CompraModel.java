@@ -1180,7 +1180,7 @@ public class CompraModel extends CompraPanel{
             @Override
             public void proceso() {
                 getCmbPresentacionProducto().removeAllItems();
-                if(producto.getPresentacionList()!=null)
+                if(producto!=null && producto.getPresentacionList()!=null)
                 {
                     //Por defecto agrego la presentacion del mismo producto                                
                     List<PresentacionProducto> presentacionList=producto.obtenerPresentacionesList();

@@ -81,7 +81,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     /**
      * Variable temporal para solo generar los detalles del kardex a generar
      */
-    private List<KardexDetalle> detallesKardexFinal;
+    //private List<KardexDetalle> detallesKardexFinal;
     /**
      * Listado de todos los detalles de los kardex que se crearon
      */
@@ -115,20 +115,12 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            int datosNoSeleccionados=generarKardexDetalleSeleccionados();
+            List<KardexDetalle> kardesList=generarKardexDetalleSeleccionados();
             
-            if(datosNoSeleccionados>0)
+                        
+            if (validarKardexGrabar(kardesList)) //Validación para ver que todos los datos esten ingresados para grabar
             {
-                boolean respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Hay datos que no esta seleccionados para el ingreso. \nDesea continuar de todos modos?",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    if(!respuesta)
-                    {
-                        throw new  ExcepcionCodefacLite("Cancelado por el usuario");
-                    }
-            }
-            
-            if (validarKardexGrabar()) //Validación para ver que todos los datos esten ingresados para grabar
-            {
-                ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(detallesKardexFinal);
+                ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(kardesList);
                 
                 DialogoCodefac.mensaje("Correcto", "El producto fue ingresado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                 verificarActualizarPreciosVenta();
@@ -210,7 +202,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
       getCmbFechaIngreso().setDate(new Date());
       compraInventario=null;
       detallesKardex=null;
-      detallesKardexFinal=null;
+      //detallesKardexFinal=null;
       
     }
 
@@ -848,12 +840,12 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
      * Funcion que me permite generar solo los detalles del kardex seleccionados
      * @return devuelve el numero de items no seleccionados
      */
-    private int generarKardexDetalleSeleccionados() throws ServicioCodefacException, RemoteException
+    private List<KardexDetalle> generarKardexDetalleSeleccionados() throws ServicioCodefacException, RemoteException
     {
-        int datosEliminados=0; //TODO: Optimizar como contar los datos eliminados porque por ejemplo en los productos que tienen garantia solo debe contar una vez por los detalles especificos
-        detallesKardexFinal=new ArrayList<KardexDetalle>();
+        //int datosEliminados=0; //TODO: Optimizar como contar los datos eliminados porque por ejemplo en los productos que tienen garantia solo debe contar una vez por los detalles especificos
+        ArrayList<KardexDetalle> detallesKardexFinal=new ArrayList<KardexDetalle>();
         
-        Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE,"Pantalla Ingreso Compras << Agregando Detalles >>");
+        Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE,"Pantalla Ingreso Compras << Agregando Detalles Finales Incluido Conversiones de Presentaciones >>");
         for (Map.Entry<KardexDetalleTmp, CompraDetalle> entry : detallesKardex.entrySet()) {
             KardexDetalleTmp kardexDetalle = entry.getKey();
             CompraDetalle compraDetalle = entry.getValue();
@@ -866,15 +858,16 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 
                 //Buscar el producto para realizar el kardex, si es un empaque buscar el producto original y hacer la respectiva reconstruccion
                 Producto producto=compraDetalle.getProductoProveedor().getProducto();
+                KardexDetalle kardexDetalleNuevo=kardexDetalle.obtenerObjetoOriginal();                
+                
                 if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
                 {
-
-                    ProductoConversionPresentacionRespuesta respuesta  = ServiceFactory.getFactory().getProductoServiceIf().convertirProductoEmpaqueSecundarioEnPrincipal(producto,kardexDetalle.getCantidad(), kardexDetalle.getPrecioUnitario());
+                    ProductoConversionPresentacionRespuesta respuesta  = ServiceFactory.getFactory().getProductoServiceIf().convertirProductoEmpaqueSecundarioEnPrincipal(producto,kardexDetalle.getCantidad(), kardexDetalle.getPrecioUnitario());                   
                     
                     producto=respuesta.productoPresentacionPrincipal;
-                    kardexDetalle.setCantidad(respuesta.cantidad);
+                    kardexDetalleNuevo.setCantidad(respuesta.cantidad);
                     //kardexDetalle.setDescuento(respuesta);
-                    kardexDetalle.setPrecioUnitario(respuesta.precioUnitario);
+                    kardexDetalleNuevo.setPrecioUnitario(respuesta.precioUnitario);
                 }
                 
                 
@@ -882,8 +875,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 kardex.setBodega(kardexDetalle.bodega);
                 kardex.setProducto(producto);
                 kardex.setLote(compraDetalle.getLote());
-                
-                KardexDetalle kardexDetalleNuevo=kardexDetalle.obtenerObjetoOriginal();                
+                                
                 kardexDetalleNuevo.setKardex(kardex);
                 kardexDetalleNuevo.setUsuarioNick(session.getUsuario().getNick());
                 //kardexDetalleNuevo.setCodigoTipoDocumentoReferenciaEnum(compraDetalle.getCompra().getCodigoTipoDocumentoEnum());
@@ -892,7 +884,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 detallesKardexFinal.add(kardexDetalleNuevo);
                 Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE,"Producto: "+compraDetalle.getProductoProveedor().getProducto().getNombre()+", Cantidad: "+kardexDetalleNuevo.getCantidad());
                 
-                //Si existen mas items especificos los guardo
+                //INGRESO de productos CON GARANTIA
                 if(kardexDetalle.getDetallesEspecificos()!=null && kardexDetalle.getDetallesEspecificos().size()>0)
                 {
                     ArrayList<KardexItemEspecifico> detalleItemsNuevo=new ArrayList<KardexItemEspecifico>();
@@ -908,7 +900,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                         }
                         else
                         {
-                            datosEliminados++;
+                            //datosEliminados++;
                         }
                     }
                     
@@ -919,18 +911,19 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             }
             else
             {
-                datosEliminados++;
+                //datosEliminados++;
             }
 
         }
-        return datosEliminados;
+        //return datosEliminados;
+        return detallesKardexFinal;
     }
     
     /**
      * Validacion para saber si todos los datos necesarios para grabar fueron ingresados
      * @return 
      */
-    private boolean validarKardexGrabar()
+    private boolean validarKardexGrabar(List<KardexDetalle> detallesKardexFinal)
     {
         if(detallesKardexFinal==null || detallesKardexFinal.size()==0)
         {

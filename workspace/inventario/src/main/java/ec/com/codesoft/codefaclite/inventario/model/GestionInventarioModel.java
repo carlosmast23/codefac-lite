@@ -103,11 +103,7 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     private void verificarActualizarPreciosVenta()
     {
         try {
-            /*
-<<<<<<< HEAD
-            Producto productoActualizado= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(kardexDetalle.getKardex().getProducto().getIdProducto());
-            if(productoActualizado!=null && productoActualizado.getActualizarPrecioEnum()!=null && productoActualizado.getActualizarPrecioEnum().equals(EnumSiNo.SI))
-=======*/
+            
             if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO, EnumSiNo.SI)) 
             {
                 Producto productoActualizado= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(kardexDetalle.getKardex().getProducto().getIdProducto());
