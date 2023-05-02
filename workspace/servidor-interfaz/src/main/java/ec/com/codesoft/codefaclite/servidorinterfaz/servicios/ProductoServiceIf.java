@@ -72,4 +72,6 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public List<Producto> buscarPorCategoria(CategoriaProducto categoria) throws RemoteException,ServicioCodefacException;
     
     public Producto buscarProductoDefectoCompras( Producto producto)throws RemoteException,ServicioCodefacException;
+    
+    public void actualizarPreciosPresentaciones(Producto producto) throws RemoteException, ServicioCodefacException;
 }

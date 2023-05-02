@@ -95,6 +95,11 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     
     public Producto producto;
     
+    /**
+     * Variable para saber si se modificaron los precios
+     */
+    public Boolean valoresModificados=false;
+    
 
     public ProductoModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session,ProductoModelControlador.CommonIf interfaz,TipoVista tipoVista) {
         super(mensajeVista, session,interfaz,tipoVista);
@@ -323,6 +328,26 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             UtilidadesImagenesCodefac.moverArchivo(producto.getPathFotoTmp(),session.getEmpresa());
             setearValoresProducto(producto);            
             ServiceFactory.getFactory().getProductoServiceIf().editarProducto(producto);
+            
+            //Preguntar si desea actualizar los precios de las presentaciones en el caso que tenga presentaciones
+            /*if(producto.getPresentacionList().size()>0 && valoresModificados)
+            {
+                Boolean confirmar= dialogoPregunta(new CodefacMsj("Desea recalcular los precios de las presentaciones? ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                if(confirmar)
+                {
+                    try {
+                        ServiceFactory.getFactory().getProductoServiceIf().actualizarPreciosPresentaciones(producto);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                        //DialogoCodefac.mensaje("Datos correctos", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                        mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+                        throw new ExcepcionCodefacLite(ex.getMessage());
+                    }
+                }
+            }*/
+            
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             //DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {

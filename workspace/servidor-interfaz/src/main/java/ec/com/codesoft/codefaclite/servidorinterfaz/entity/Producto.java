@@ -1225,6 +1225,65 @@ public class Producto implements Serializable, Comparable<Producto> {
         this.pathFotoTmp = pathFotoTmp;
     }
     
+    public Boolean verificarPreciosModificados(Producto productoTmp)
+    {
+        if(verificarPrecioModificado(this.valorUnitario,productoTmp.valorUnitario))
+        {
+            return true;
+        }
+        
+        if(verificarPrecioModificado(this.precioDistribuidor,productoTmp.precioDistribuidor))
+        {
+            return true;
+        }
+        
+        if(verificarPrecioModificado(this.precioTarjeta,productoTmp.precioTarjeta))
+        {
+            return true;
+        }
+        
+        if(verificarPrecioModificado(this.pvp4,productoTmp.pvp4))
+        {
+            return true;
+        }
+        
+        if(verificarPrecioModificado(this.pvp5,productoTmp.pvp5))
+        {
+            return true;
+        }
+        
+        if(verificarPrecioModificado(this.pvp6,productoTmp.pvp6))
+        {
+            return true;
+        }
+        
+        return false;
+        
+        
+    }
+    
+    private Boolean verificarPrecioModificado(BigDecimal precioAntiguo, BigDecimal precioNuevo)
+    {
+        if(precioAntiguo==null && precioNuevo!=null)
+        {
+            return true;
+        }
+        
+        if(precioNuevo==null && precioAntiguo!=null)
+        {
+            return true;
+        }
+        
+        if(precioAntiguo!=null && precioNuevo!=null)
+        {
+            if(precioAntiguo.compareTo(precioNuevo)!=0)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
     
     public List<PresentacionProducto> obtenerPresentacionesList()
     {

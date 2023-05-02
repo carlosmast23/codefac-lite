@@ -749,6 +749,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //Buscar componentes ensambles eliminados
                 List<ProductoEnsamble> productoEnsambleEliminar=productoEnsamblesEliminados(producto);
                 
+                actualizarPreciosPresentacionesSinTransaccion(producto);
+                
                 //TODO: Por el momento ELIMINO directamente de la base de datos pero se deberia manejar por ESTADOS
                 for (ProductoEnsamble productoEnsamble : productoEnsambleEliminar) 
                 {
@@ -771,6 +773,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 
                 entityManager.merge(producto.getCatalogoProducto());
                 entityManager.merge(producto);
+                
+                //actualizarPreciosPresentaciones(producto);
+                
 
                 //Crear los KARDEX CUANDO NO EXISTA
                 if (producto.getManejarInventarioEnum().equals(EnumSiNo.SI)) {
@@ -960,6 +965,47 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
         return null;
     }
+    
+    public void actualizarPreciosPresentaciones(Producto producto) throws RemoteException, ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                actualizarPreciosPresentacionesSinTransaccion(producto);
+            }
+        });
+        
+    }
+    
+    public void actualizarPreciosPresentacionesSinTransaccion(Producto producto) throws RemoteException, ServicioCodefacException
+    {
+        //Consultar el producto original para ver si ha tenido cambios
+        Producto productoOriginal=buscarPorId(producto.getIdProducto());
+        
+        ///////////  Verificar si existen cambios en los productos
+        if(productoOriginal!=null)
+        {
+            //Si no tiene cambios no hago ningun proceso adicional
+            if(!productoOriginal.verificarPreciosModificados(producto))
+            {   
+                return ;
+            }
+        }
+        
+        List<ProductoPresentacionDetalle> presentacionList = producto.getPresentacionList();
+        for (ProductoPresentacionDetalle detalle : presentacionList) {
+            //Modificar los precios solo de los productos que son EMPAQUES
+            Producto productoEmpaque = detalle.getProductoEmpaquetado();
+            if(productoEmpaque!=null)
+            {
+                if (productoEmpaque.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) {
+                    detalle.calcularPreciosEmpaquesDesdeOriginal();
+                    entityManager.merge(detalle.getProductoEmpaquetado());
+                }
+            }
+        }
+    }
+
     
     public void actualizarPrecios(List<ProductoPrecioDataTable> productos ) throws RemoteException, ServicioCodefacException
     {

@@ -219,7 +219,41 @@ public class ProductoPresentacionDetalle implements Serializable{
         return true;
     }
     
+    //////////////////////////////////////////////////////////////////////////////
+    ///                 METODOS PERSONALIZADOS
+    //////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Metodo para calcular los valores de las presentaciones en funcion de los precios de la presentacion original
+     */
+    public void calcularPreciosEmpaquesDesdeOriginal()
+    {
+        
+        if (productoOriginal.getValorUnitario() != null) {
+            productoEmpaquetado.setValorUnitario(productoOriginal.getValorUnitario().multiply(cantidad));
+        }
+        
+        if (productoOriginal.getPrecioDistribuidor() != null) {
+            productoEmpaquetado.setPrecioDistribuidor(productoOriginal.getPrecioDistribuidor().multiply(cantidad));
+        }
+
+        if (productoOriginal.getPrecioTarjeta() != null) {
+            productoEmpaquetado.setPrecioTarjeta(productoOriginal.getPrecioTarjeta().multiply(cantidad));
+        }
+
+        if (productoOriginal.getPvp4() != null) {
+            productoEmpaquetado.setPvp4(productoOriginal.getPvp4().multiply(cantidad));
+        }
+
+        if (productoOriginal.getPvp5() != null) {
+            productoEmpaquetado.setPvp5(productoOriginal.getPvp5().multiply(cantidad));
+        }
+
+        if (productoOriginal.getPvp6() != null) {
+            productoEmpaquetado.setPvp6(productoOriginal.getPvp6().multiply(cantidad));
+        }
+    }
+   
 
     
     
