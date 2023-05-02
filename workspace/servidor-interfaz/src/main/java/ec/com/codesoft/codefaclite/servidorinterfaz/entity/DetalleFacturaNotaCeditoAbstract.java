@@ -69,6 +69,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     
     @Column(name = "CODIGO_PRINCIPAL")
     private String codigoPrincipal;
+    
+    @Column(name = "PRESENTACION_CODIGO")
+    private String presentacionCodigo;
     /**
      * El total del detalle corresonde a la siguiente formular
      * Total=cantidad*valorUnitario-descuento
@@ -451,6 +454,16 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void setPrecioSinAhorro(BigDecimal precioSinAhorro) {
         this.precioSinAhorro = precioSinAhorro;
     }
+
+    public String getPresentacionCodigo() {
+        return presentacionCodigo;
+    }
+
+    public void setPresentacionCodigo(String presentacionCodigo) {
+        this.presentacionCodigo = presentacionCodigo;
+    }
+    
+    
     
 
 }

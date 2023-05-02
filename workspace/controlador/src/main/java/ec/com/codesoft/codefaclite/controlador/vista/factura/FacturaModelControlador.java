@@ -949,12 +949,16 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
     }
     
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex,EnumSiNo reservaEnum,BigDecimal cantidad,Integer numeroPvp) throws ServicioCodefacException {
+        return agregarDetallesFactura(facturaDetalle, precioVentaOriginal, documentoEnum, kardex, reservaEnum, cantidad, numeroPvp,null);
+    }
+    
     /**
      * TODO: VER SIS ESTE METODO SE PUEDE UNIR CON EL DE ABAJO PORQUE EISTE 2 SIMILARES !IMPORTANTE!
      * @param facturaDetalle
      * @return 
      */
-    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex,EnumSiNo reservaEnum,BigDecimal cantidad,Integer numeroPvp) throws ServicioCodefacException {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle,BigDecimal precioVentaOriginal,DocumentoEnum documentoEnum,Kardex kardex,EnumSiNo reservaEnum,BigDecimal cantidad,Integer numeroPvp,String codigoPresentacion) throws ServicioCodefacException {
 
         
         agregarDetallesFacturaValidacion(facturaDetalle, precioVentaOriginal);
@@ -981,6 +985,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             lote=kardex.getLote();
         }
         
+        facturaDetalle.setPresentacionCodigo(codigoPresentacion);
         facturaDetalle.setNumeroPvp(numeroPvp);
         facturaDetalle.setLote((lote!=null)?lote:null);
         
@@ -1859,6 +1864,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Datos adicionales para las proformas
             data.setDescuento(detalle.getDescuento().toString());
             data.setDescripcion(detalle.getDescripcion());
+            data.setUnidad(detalle.getPresentacionCodigo());
 
             dataReporte.add(data);
         }

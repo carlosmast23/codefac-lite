@@ -174,8 +174,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public static final String NOMBRE_REPORTE_FACTURA_INTERNA="Comprobante de Venta Interna";
     
     public static final int INDICE_OBJECTO_TABLA_FACTURA=0;
-    public static final int INDICE_CANTIDAD_TABLA_FACTURA=4;
-    public static final int INDICE_ELIMINAR_TABLA_FACTURA=8;
+    public static final int INDICE_CANTIDAD_TABLA_FACTURA=5;
+    public static final int INDICE_ELIMINAR_TABLA_FACTURA=9;
     //private Persona persona;
     protected Factura factura;
     private Estudiante estudiante;
@@ -648,8 +648,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     verificarIngresoCantidadConPresentacion(getTxtCantidad().getText());
-                    Producto.PrecioVenta precioVenta=(Producto.PrecioVenta) getCmbPreciosVenta().getSelectedItem();
-                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null,(precioVenta!=null)?precioVenta.getNumero():null);
+                    Producto.PrecioVenta precioVenta=(Producto.PrecioVenta) getCmbPreciosVenta().getSelectedItem();                    
+                    String codigoPresentacion=obtenerCodigoPresentacionSeleccionado();
+                    controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null,(precioVenta!=null)?precioVenta.getNumero():null,codigoPresentacion);
                     
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -791,6 +792,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getBtnAplicarDescuentoGlobal().addActionListener(listenerDescuentoGlobal);
 
+    }
+    
+    private String obtenerCodigoPresentacionSeleccionado()
+    {
+        if(productoSeleccionado!=null)
+        {
+            PresentacionProducto presentacionProducto=productoSeleccionado.buscarPresentacionProducto();
+            if(presentacionProducto!=null)
+            {
+                return presentacionProducto.getNombre();
+            }
+        }
+        return null;
     }
     
     private void seleccionarFilaTablaDetalleFactura()
@@ -936,7 +950,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 //Si esta habilitado el boton de agregar funciona para agregar
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 verificarIngresoCantidadConPresentacion(getTxtCantidad().getText());
-                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null,null);
+                String codigoPresentacion=obtenerCodigoPresentacionSeleccionado();
+                controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null,null,codigoPresentacion);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -2696,6 +2711,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         String[] titulo ={
         "",
         "Codigo",
+        "UNI",
         "PVP",
         "ValorUni",
         "Cantidad",
@@ -2709,6 +2725,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         DefaultTableModel modeloTablaDetallesProductos=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{
             Object.class,
+            String.class,
             String.class,
             String.class,
             String.class,
@@ -2752,6 +2769,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                 }
                 
+                //Agregar la presentacion del Producto
+                fila.add((detalle.getPresentacionCodigo()!=null)?detalle.getPresentacionCodigo():"");                                
                 fila.add((detalle.getNumeroPvp()!=null)?detalle.getNumeroPvp():"");
                 
                 //Cargar los totales
@@ -2783,7 +2802,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
         
-        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,100,30,100,80,600,80,100,100}); //Definir los tamanios definidos para la tabla principal
+        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,100,30,30,100,80,600,80,100,100}); //Definir los tamanios definidos para la tabla principal
         
         ButtonColumn botonEliminar=new ButtonColumn(getTblDetalleFactura(),new AbstractAction() { //Agregado boton de eliminar a la tabla
             @Override

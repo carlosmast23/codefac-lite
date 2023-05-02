@@ -16,6 +16,7 @@ public class ComprobanteVentaData {
     private String precioUnitario;
     private String total;
     private String iva;
+    private String unidad;
     
     /**
      * Datos adicionales en especial para el reporte de las proformas
@@ -90,14 +91,17 @@ public class ComprobanteVentaData {
     public void setIva(String iva) {
         this.iva = iva;
     }
+
+    public String getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
+    }
     
     /**
      * Datos adicionales
      */
-    
-    
-    
-    
-    
     
 }
