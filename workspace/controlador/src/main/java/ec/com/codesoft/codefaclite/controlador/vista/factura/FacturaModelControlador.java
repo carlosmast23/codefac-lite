@@ -939,6 +939,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     {
         if(precioVentaOriginal!=null)
         {
+            //Validacion para no permitir ingresar una valor inferior al precio de venta
             if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MODIFICAR_PRECIO_MENOR,EnumSiNo.NO))
             {
                 if(facturaDetalle.getPrecioUnitario().compareTo(precioVentaOriginal)<0)
@@ -1087,7 +1088,18 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
          * TODO: Ver si este codigo es correcto poner al final o se debe agrupar todos las validaciones en un bloque
          * para tener mas organiado porque en la parte superior de este metodo existen mas validaciones
          */
-        if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) {
+        if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) 
+        {
+            //TODO: Poner en otro lado esta Validacion
+            if (facturaDetalle.getPrecioUnitario() != null) {
+                if (facturaDetalle.getPrecioUnitario().compareTo(BigDecimal.ZERO) == 0) {
+                    Boolean respuesta = dialogoPregunta(new CodefacMsj("¿Está seguro que desea agregar un producto con precio en CERO?", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                    if (!respuesta) {
+                        throw new ServicioCodefacException("Cancelado al agregar un producto en CERO");
+                    }
+                }
+            }
+            
             
             //Solo agregar si no esta en modo edicion
             if (!interfaz.getModoEdicionDetalle()) {
@@ -1103,7 +1115,6 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //limpiarDetalleFactura();
             return false;
         }
-        
         
         interfaz.setModoEdicionDetalle(false); //Por defecto pongo este valor en falso porque aunque este editando o agregando pongo terminar modo edicion
         return true; //si pasa todas las validaciones asumo que se edito correctamente
