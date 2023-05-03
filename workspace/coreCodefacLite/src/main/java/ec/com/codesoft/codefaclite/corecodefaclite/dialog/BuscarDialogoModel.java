@@ -145,7 +145,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         agregarOyenteParaCerrarElDialogo();
         
         //Consultar una sola vez cual es la configuracion de busqueda
-        filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.NO);        
+        filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.SI);        
     }
     
     /**

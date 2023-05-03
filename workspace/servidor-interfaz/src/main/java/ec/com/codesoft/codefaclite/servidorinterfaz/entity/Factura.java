@@ -138,8 +138,8 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaAdicional> datosAdicionales;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
-    private List<NotaCredito> notasCredito;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
+    //private List<NotaCredito> notasCredito;
 
     public Factura() {
         this.datosAdicionales = new ArrayList<FacturaAdicional>();
