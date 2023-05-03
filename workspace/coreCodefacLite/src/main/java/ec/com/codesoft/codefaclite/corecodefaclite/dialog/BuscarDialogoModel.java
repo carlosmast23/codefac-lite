@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
 import java.awt.DefaultKeyboardFocusManager;
 import java.awt.Dimension;
@@ -47,6 +48,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -96,6 +98,11 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
      * Variable que va a tener las dimenciones de la ventana
      */
     private Dimension dimensionVentana;
+    
+    /**
+     * Timer que me permite controlar el tiempo de escritura para no hacer varias peticiones al servidor
+     */
+    private Timer timerControlEscritura;
 
     /*
     public BuscarDialogoModel(DefaultTableModel modeloTablaBuscar) 
@@ -655,6 +662,19 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     private void initListener()
     {        
+        
+        //Timer que se va a ejecutar despues de un segundo
+        timerControlEscritura = new Timer(500, e -> {
+            String text = getTxtBuscar().getText();
+            if (text!=null) {
+                Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.INFO, "Ejecutando busqueda dialogo ...");
+                ejecutarConsulta();
+                //Cuando realiza la consulta lo detengo para evitar seguir consultado de nuevo hasta que vuelvan a presionar una tecla
+                timerControlEscritura.stop();
+            }
+        });
+        //timerControlEscritura.setRepeats(false);
+        
         //Todo agregado artificio para setear el focus porque no funciona con un tema
         addComponentListener(new ComponentListener() {
             @Override
@@ -692,7 +712,16 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 Boolean filtroRapido = ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA, EnumSiNo.SI);
                 if (filtroRapido)
                 {
-                    ejecutarConsulta();
+                    //Si el timer no esta ejecutandose y se presiona una tecla lo vuelvo a iniciar
+                    if(!timerControlEscritura.isRunning())
+                    {
+                        timerControlEscritura.start();
+                    }                    
+                    else
+                    {
+                        timerControlEscritura.restart();
+                    }
+                    
                 }
             }
         });
@@ -851,7 +880,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         });
     }
     
-
+    
+ 
     private void establecerPropiedadesIniciales() {
         
         //Verificar si tiene una ventana de datos adicionales se tiene que sumar el alto de esa ventana
