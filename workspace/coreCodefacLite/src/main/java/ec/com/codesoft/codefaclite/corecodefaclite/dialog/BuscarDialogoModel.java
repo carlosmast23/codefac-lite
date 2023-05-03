@@ -16,7 +16,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import java.awt.DefaultKeyboardFocusManager;
 import java.awt.Dimension;
 import java.awt.KeyEventPostProcessor;
@@ -89,6 +91,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     private List<Object> listaResultados;
     private List<ComponenteFiltro> componenteFiltroList=new ArrayList<ComponenteFiltro>();
     
+    private Boolean filtroRapido;
+    
     /**
      * Variable que me permite configurar si la variable de busqueda quiero que normalize sin acentos o buscar de forma identica a lo escrito
      */
@@ -140,6 +144,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         normalizarTextoBusqueda=false;
         agregarOyenteParaCerrarElDialogo();
         
+        //Consultar una sola vez cual es la configuracion de busqueda
+        filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.NO);        
     }
     
     /**
@@ -300,56 +306,56 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
      */
     private void consultaSecundaria()
     {
-        try {
-            String filtro=getTxtBuscar().getText().toLowerCase();
-            filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
-            
-            String filtroConsuta=filtro;
-            
-            TipoBusquedaEnum tipoBusquedaEnum=(TipoBusquedaEnum) getCmbTipoBusqueda().getSelectedItem();
-            if(tipoBusquedaEnum.equals(TipoBusquedaEnum.EXACTO))
+
+        String filtro=getTxtBuscar().getText().toLowerCase();
+        filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
+        String filtroConsuta=filtro;
+        TipoBusquedaEnum tipoBusquedaEnum=(TipoBusquedaEnum) getCmbTipoBusqueda().getSelectedItem();
+        if(tipoBusquedaEnum.equals(TipoBusquedaEnum.EXACTO))
+        {
+            //Quito los filtro de porcentaje para hacer la busqueda exacta
+            filtroConsuta=filtroConsuta.replace("%","");
+        }
+        else if(tipoBusquedaEnum.equals(TipoBusquedaEnum.COINCIDENCIA))
+        {
+            if(!filtro.contains("%"))
             {
-                //Quito los filtro de porcentaje para hacer la busqueda exacta
-                filtroConsuta=filtroConsuta.replace("%","");
-            } 
-            else if(tipoBusquedaEnum.equals(TipoBusquedaEnum.COINCIDENCIA))
-            {            
-                if(!filtro.contains("%"))
-                {
-                    filtroConsuta="%"+filtroConsuta+"%";
+                filtroConsuta="%"+filtroConsuta+"%";
+            }
+        }
+        Map<Integer,Object> mapFiltro=obtenerDatosFiltro();
+        QueryDialog queryDialog=this.model.getConsulta(filtroConsuta,mapFiltro);
+        agregarParametrosFiltros(queryDialog,this.model);
+        //queryDialog.agregarParametro(1000,"%"+filtro+"%");
+        
+        int limiteInferior=CANTIDAD_FILAS*(paginaActual-1);
+        int limiteSuperior=CANTIDAD_FILAS*(paginaActual);
+        //Limpiar los resutados anteriores
+        if(listaResultados!=null)
+        {
+            listaResultados.clear();
+        }
+        convertirMinusculasParametros(queryDialog);
+        
+        //TODO: Metodo temporal para ir analizando los tiempos de consulta para ver donde se va demorando más
+        UtilidadVarios.medirTiempoProceso(new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                try {
+                    listaResultados=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),queryDialog.tipoQuery,limiteInferior,CANTIDAD_FILAS);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
-            Map<Integer,Object> mapFiltro=obtenerDatosFiltro();
-            QueryDialog queryDialog=this.model.getConsulta(filtroConsuta,mapFiltro);
-            agregarParametrosFiltros(queryDialog,this.model);
-            
-            //queryDialog.agregarParametro(1000,"%"+filtro+"%");
-            
-            int limiteInferior=CANTIDAD_FILAS*(paginaActual-1);
-            int limiteSuperior=CANTIDAD_FILAS*(paginaActual);
-            //Limpiar los resutados anteriores
-            if(listaResultados!=null)
-            {
-                listaResultados.clear();
-            }
-            
-            convertirMinusculasParametros(queryDialog);
-            listaResultados=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),queryDialog.tipoQuery,limiteInferior,CANTIDAD_FILAS);
-            
-            if(model instanceof DialogoConfigAuxIf)
-            {
-                DialogoConfigAuxIf configIf=(DialogoConfigAuxIf) model;
-                listaResultados=configIf.preProcessResult(listaResultados);
-            }
-            
-            cargarDatos(listaResultados);
-            
-            setearBotonesSiguienteAtras();
-            imprimirTexto();
-        } catch (RemoteException ex) {
-            Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+        });
+        if(model instanceof DialogoConfigAuxIf)
+        {
+            DialogoConfigAuxIf configIf=(DialogoConfigAuxIf) model;
+            listaResultados=configIf.preProcessResult(listaResultados);
         }
+        cargarDatos(listaResultados);
+        setearBotonesSiguienteAtras();
+        imprimirTexto();
         
     }
     
@@ -709,7 +715,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
 
             @Override
             public void keyReleased(KeyEvent e) {
-                Boolean filtroRapido = ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA, EnumSiNo.SI);
+                /*Boolean filtroRapido = ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA, EnumSiNo.SI);
                 if (filtroRapido)
                 {
                     //Si el timer no esta ejecutandose y se presiona una tecla lo vuelvo a iniciar
@@ -722,7 +728,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                         timerControlEscritura.restart();
                     }
                     
-                }
+                }*/
             }
         });
         
@@ -791,14 +797,23 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             @Override
             public void keyPressed(KeyEvent e) {
                 
-                Boolean filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.NO);
-                if(filtroRapido || e.getKeyCode()==KeyEvent.VK_ENTER)
+                //Primero verifico si no se esta presionando un enter en la busqueda
+                if(e.getKeyCode()==KeyEvent.VK_ENTER)
                 {
                     ejecutarConsulta();
+                    return;
                 }
-                //else
-                //{
-                //    ejecutarConsulta();
+                
+                if(filtroRapido)
+                {
+                    //Si el timer no esta ejecutandose y se presiona una tecla lo vuelvo a iniciar
+                    if (!timerControlEscritura.isRunning()) {
+                        timerControlEscritura.start();
+                    } else {
+                        timerControlEscritura.restart();
+                    }                    
+                }
+                
             }
 }); 
         
