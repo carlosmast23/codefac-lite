@@ -434,6 +434,41 @@ public class UtilidadesFecha {
         return true;
     
     }
+
+    public static java.util.Date eliminarHorasFecha(java.util.Date fechaConHoras) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(fechaConHoras);
+
+        // Establece las horas, minutos, segundos y milisegundos a cero
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        // Devuelve la fecha sin horas
+        return cal.getTime();
+    }
+
+    public static int compararFechaSinImportarHora(java.util.Date fecha1, java.util.Date fecha2)
+    {
+        fecha1=eliminarHorasFecha(fecha1);
+        fecha2=eliminarHorasFecha(fecha2);
+        
+        return fecha1.compareTo(fecha2);
+    }
+    
+    /**
+     * Metodo que puede verificar si una fecha es superior al día actual sin tomar en cuentas las horas
+     * @return 
+     */
+    public static Boolean verificarFechaEsSuperiorAlDiaActual(java.util.Date fecha)
+    {        
+        if(compararFechaSinImportarHora(fecha,UtilidadesFecha.getFechaHoy())>0)
+        {
+            return true;
+        }
+        return false;
+    }
     
     public static int obtenerAnioActual()
     {

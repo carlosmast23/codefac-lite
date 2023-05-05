@@ -29,7 +29,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import static ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac.CODIGO_NO_APLICA_RETENCIONES;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -173,6 +175,12 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         if(retencion.getProveedor().getIdentificacion().equals(Persona.IDENTIFICACION_CONSUMIDOR_FINAL))
         {
             throw new ServicioCodefacException("No se permite emitir retenciones a consumidor final");
+        }
+        
+        //Comprobar que la fecha de la retencion no se superior a la fecha actual        
+        if(UtilidadesFecha.verificarFechaEsSuperiorAlDiaActual(retencion.getFechaEmision()))
+        {
+            throw new ServicioCodefacException("La fecha de emisión no puede ser superior a la fecha actual");
         }
         
         if(crudEnum.equals(CrudEnum.CREAR))
