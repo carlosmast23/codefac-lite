@@ -6,8 +6,6 @@
 package ec.com.codesoft.codefaclite.main.test;
 
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
-import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
-import ec.com.codesoft.codefaclite.servidor.service.PuntoEmisionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;

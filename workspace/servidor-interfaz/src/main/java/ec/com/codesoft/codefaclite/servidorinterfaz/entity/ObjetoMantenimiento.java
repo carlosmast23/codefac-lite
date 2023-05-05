@@ -61,6 +61,15 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
     @Column(name = "COLOR")
     private String color;
     
+    /**
+     * El VIN es el codigo del vehiculo a nivel internacional
+     */
+    @Column(name = "VIN")
+    private String vin;
+
+    @Column(name = "MODELO")
+    private String modelo;
+    
 
     public ObjetoMantenimiento() {
     }
@@ -172,9 +181,24 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
     public void setColor(String color) {
         this.color = color;
     }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
  
-    
-    
+     
     
     
     ////////////////////////////////////////////////

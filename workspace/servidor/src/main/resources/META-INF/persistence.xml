@@ -125,6 +125,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoCondicionPrecio</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.Banco</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.CuentaBanco</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

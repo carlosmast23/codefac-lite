@@ -1234,10 +1234,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 } 
                 else //Si no esta grabado una forma de pago en el cliente asigno a forma de pago por defecto de las configuraciones
                 {
-                    if (formaPagoDefecto != null) 
-                    {
-                        formaPago.setSriFormaPago(formaPagoDefecto);
-                    }
+                    //Por el momento no se cambia nada si no tiene una forma de pago por defecto se quedo la anterior ingresada
+                    //if (formaPagoDefecto != null) 
+                    //{
+                    //    formaPago.setSriFormaPago(formaPagoDefecto);
+                    //}
                 }
                 
                 agregarFormaPagoConCartera();

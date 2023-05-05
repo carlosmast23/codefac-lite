@@ -1936,7 +1936,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
 
         public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-            fb.replace(offset, length, text.toUpperCase(), attrs);
+            if(fb!=null && text!=null)
+            {
+                fb.replace(offset, length, text.toUpperCase(), attrs);
+            }
         }
     }
     
