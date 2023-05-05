@@ -1091,11 +1091,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) >= 0) 
         {
             //TODO: Poner en otro lado esta Validacion
-            if (facturaDetalle.getPrecioUnitario() != null) {
-                if (facturaDetalle.getPrecioUnitario().compareTo(BigDecimal.ZERO) == 0) {
-                    Boolean respuesta = dialogoPregunta(new CodefacMsj("¿Está seguro que desea agregar un producto con precio en CERO?", CodefacMsj.TipoMensajeEnum.CORRECTO));
-                    if (!respuesta) {
-                        throw new ServicioCodefacException("Cancelado al agregar un producto en CERO");
+            if(!facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.PRESUPUESTOS))
+            {
+                if (facturaDetalle.getPrecioUnitario() != null) {
+                    if (facturaDetalle.getPrecioUnitario().compareTo(BigDecimal.ZERO) == 0) {
+                        Boolean respuesta = dialogoPregunta(new CodefacMsj("¿Está seguro que desea agregar un producto con precio en CERO?", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                        if (!respuesta) {
+                            throw new ServicioCodefacException("Cancelado al agregar un producto en CERO");
+                        }
                     }
                 }
             }

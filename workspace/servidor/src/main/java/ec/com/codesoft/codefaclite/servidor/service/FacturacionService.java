@@ -1033,21 +1033,25 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //Cambiar el estado al presupuesto para saber que ya fue facturadp
             presupuesto.setEstado(Presupuesto.EstadoEnum.FACTURADO.getLetra()); 
             
+            OrdenTrabajoDetalle ordenTrabajoDetalle=presupuesto.getOrdenTrabajoDetalle();
+            OrdenTrabajo ordenTrabajo=ordenTrabajoDetalle.getOrdenTrabajo();
+            
             //Cambiar el estado a la orden de trabajo del detalle para saber que ya no puede usar
-            presupuesto.getOrdenTrabajoDetalle().setEstado(OrdenTrabajoDetalle.EstadoEnum.TERMINADO.getLetra());//Cambio el estado a terminado
-            presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().setCliente(detalle.getFactura().getCliente());
+            ordenTrabajoDetalle.setEstado(OrdenTrabajoDetalle.EstadoEnum.TERMINADO.getLetra());//Cambio el estado a terminado
+            ordenTrabajo.setCliente(detalle.getFactura().getCliente());
+            //ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FACTURADO);
             
             //Actualiza el estado de la orde de trabajo principal
             OrdenTrabajoService ordenTrabajoService=new OrdenTrabajoService();
-            ordenTrabajoService.actualizarEstadoSinTransaccion(presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
+            ordenTrabajoService.actualizarEstadoSinTransaccion(ordenTrabajo);
             
             //Agregado una referencia de la venta al presupuesto para luego consultar de una manera más rapida
             presupuesto.setFactura(detalle.getFactura());
             
             //Actualizar los datos de la OT y PRESUPUESTOS
             entityManager.merge(presupuesto);
-            entityManager.merge(presupuesto.getOrdenTrabajoDetalle());
-            entityManager.merge(presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
+            //entityManager.merge(ordenTrabajo);
+            entityManager.merge(ordenTrabajoDetalle);            
             entityManager.flush();
 
     }

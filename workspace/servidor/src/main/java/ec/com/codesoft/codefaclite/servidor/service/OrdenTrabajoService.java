@@ -232,7 +232,7 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                 return ;
             }
         }
-        ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FINALIZADO);
+        ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FACTURADO);
         entityManager.merge(ordenTrabajo);
         
     }

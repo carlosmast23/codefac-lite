@@ -8,7 +8,7 @@
       <property name="eclipselink.allow-zero-id" value="true"/>
       <!-- Esta propiedad me permite ejecutar siempre un commit despues de cada transaccion para evitar perdida de datos -->
       <property name="javax.persistence.flushMode" value="COMMIT"/>
-      <property name="eclipselink.cache.shared.default" value="false"/>
+      <!--<property name="eclipselink.cache.shared.default" value="false"/>-->
       <!-- Estas dos lines sirven para activar los logs del eclipseLink -->
       <!-- <property name="eclipselink.logging.level.sql" value="FINE"/>-->
       <!--<property name="eclipselink.logging.level" value="FINE"/>-->
