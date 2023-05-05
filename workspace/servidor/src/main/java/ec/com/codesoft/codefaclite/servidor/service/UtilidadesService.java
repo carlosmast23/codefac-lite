@@ -206,7 +206,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         SessionCodefac session = new SessionCodefac();
         session.setEmpresa(empresa);
         
-        if(empresa==null) //Si no tiene seleccionado construyo una session en blanco , esto es util para ingresar por primera vez al sistema
+        if(empresa==null ) //Si no tiene seleccionado construyo una session en blanco , esto es util para ingresar por primera vez al sistema
         {
             session.setTipoLicenciaEnum(TipoLicenciaEnum.GRATIS);
             List<ModuloCodefacEnum> modulosCodefacPorDefecto=new ArrayList<ModuloCodefacEnum>();
@@ -225,7 +225,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         return session;
     }
     
-    public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa) throws RemoteException,ServicioCodefacException
+    public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa,Boolean modoForzado) throws RemoteException,ServicioCodefacException
     {
         //Verificar si tengo que validar la licencia o solo devolver los datos grabados en memoria
         if(UtilidadesServidor.mapEmpresasLicencias.get(empresa)!=null)
@@ -270,10 +270,15 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                 
                 //Verifico que si tiene un problema la licencia retorno falso y muestros las alertas
                 empresaLicencia.alertas=validacionResp.alertas;
-                if(!validacionResp.estadoEnum.equals(LoginRespuesta.EstadoLoginEnum.LICENCIA_CORRECTA))
+                
+                //Si esta activo el modo forzado continuo con el proceso para obtener el resto de 
+                if(!modoForzado)
                 {
-                    empresaLicencia.estadoEnum=validacionResp.estadoEnum;                    
-                    return empresaLicencia;
+                    if(!validacionResp.estadoEnum.equals(LoginRespuesta.EstadoLoginEnum.LICENCIA_CORRECTA))
+                    {
+                        empresaLicencia.estadoEnum=validacionResp.estadoEnum;                    
+                        return empresaLicencia;
+                    }
                 }
                     
                 validacion = new ValidacionLicenciaCodefac(pathBase);
@@ -718,6 +723,11 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     public String obtenerVersionServidor() throws RemoteException,ServicioCodefacException
     {
         return ParametrosSistemaCodefac.VERSION;
+    }
+
+    @Override
+    public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa) throws RemoteException, ServicioCodefacException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 

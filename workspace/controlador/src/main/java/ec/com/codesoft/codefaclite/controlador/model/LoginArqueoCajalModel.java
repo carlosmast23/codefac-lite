@@ -46,7 +46,7 @@ public class LoginArqueoCajalModel extends LoginArqueoCajaDialog{
         String usuarioTxt = getTxtUsuario().getText();
         if (!usuarioTxt.equals("") && !clave.equals("")) {
             try {
-                LoginRespuesta loginRespuesta = ServiceFactory.getFactory().getUsuarioServicioIf().login(usuarioTxt, clave, session.getEmpresa());
+                LoginRespuesta loginRespuesta = ServiceFactory.getFactory().getUsuarioServicioIf().login(usuarioTxt, clave, session.getEmpresa(),false);
                 
                 //Mostrar las alertas del sistema 
                 if(loginRespuesta.alertas!=null)

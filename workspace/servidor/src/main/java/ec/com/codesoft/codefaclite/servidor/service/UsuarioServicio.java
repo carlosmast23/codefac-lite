@@ -108,17 +108,18 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
      * @throws java.rmi.RemoteException
      * @throws ServicioCodefacException 
      */
-    public LoginRespuesta login(String nick,String clave,Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException
+    public LoginRespuesta login(String nick,String clave,Empresa empresa,Boolean modoForzado) throws java.rmi.RemoteException,ServicioCodefacException
     {
         LoginRespuesta loginRespuesta=new LoginRespuesta();
         
         /////////==========> VALIDAR LA LICENCIA DE LA EMPRESA PARA VER SI TIENE PERMISO PARA ABRIR EL SISTEMA <==========//////
                
         //Solo hago la validación cuando ya tiene creado la empresa porque la primera vez debe dejar ingresar al sistema para que puedan configurar los datos principales
+        //y no tenga activo el modo forzado
         if(empresa!=null)
         {
             UtilidadesService servicioUtilidades=new UtilidadesService();
-            EmpresaLicencia empresaLicencia = servicioUtilidades.obtenerLicenciaEmpresa(empresa);
+            EmpresaLicencia empresaLicencia = servicioUtilidades.obtenerLicenciaEmpresa(empresa,modoForzado);
             loginRespuesta.usuarioLicencia=empresaLicencia.usuarioLicencia;
             //Si no logro validar la licencia devuelvo la respuesta que fue agregado en el metodo validacionLicencia
             if(!validacionLicencia(empresaLicencia, loginRespuesta))

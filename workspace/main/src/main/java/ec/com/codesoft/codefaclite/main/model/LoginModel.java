@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
@@ -29,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.awt.Frame;
@@ -124,21 +126,21 @@ public class LoginModel extends LoginFormDialog{
         getBtnIngresar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ingresarSistema();
+                ingresarSistema(false);
             }
         });
         
         getTxtClave().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ingresarSistema();
+                ingresarSistema(false);
             }
         });
         
         getTxtUsuario().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ingresarSistema();
+                ingresarSistema(false);
             }
         });
     }
@@ -175,7 +177,7 @@ public class LoginModel extends LoginFormDialog{
         return matriz;
     }
     
-    private void ingresarSistema()
+    private void ingresarSistema(Boolean modoForzado)
     {
         
         String clave = new String(getTxtClave().getPassword());
@@ -185,7 +187,7 @@ public class LoginModel extends LoginFormDialog{
             try {
                 //usuario = usuarioServicio.login(usuarioTxt, clave, (Empresa) getCmbEmpresa().getSelectedItem());
                 UsuarioServicioIf usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
-                LoginRespuesta loginRespuesta = usuarioServicio.login(usuarioTxt, clave, empresaSeleccionada);
+                LoginRespuesta loginRespuesta = usuarioServicio.login(usuarioTxt, clave, empresaSeleccionada,modoForzado);
                 
                 //Mostrar las alertas del sistema 
                 if(loginRespuesta.alertas!=null)
@@ -242,6 +244,7 @@ public class LoginModel extends LoginFormDialog{
                     default:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
                         DialogoCodefac.mensaje("Error Login",loginRespuesta.estadoEnum.getMensaje(), MENSAJE_INCORRECTO);
+                        solicitarIngresoForzadoSistema();
                         break;
                 }
                 
@@ -254,6 +257,19 @@ public class LoginModel extends LoginFormDialog{
             }
         }
     
+    }
+    
+    public void solicitarIngresoForzadoSistema()
+    {
+        String claveIngresada = DialogoCodefac.mensajeTextoIngreso(new CodefacMsj("Existen problemas al comprobar la licencia, ingrese la clave de soporte para continuar: ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+        if (!UtilidadesSistema.verificarClaveSoporte(claveIngresada)) {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);            
+        }
+        else
+        {
+            //Si quiere volver a ingresar pero de manera forzada llamo al mismo metodo
+            ingresarSistema(true);
+        }
     }
     
     public void pantallaRegistrarLicencia()

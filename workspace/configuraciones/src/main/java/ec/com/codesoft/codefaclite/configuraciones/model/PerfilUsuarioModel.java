@@ -180,7 +180,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 else
                 {
                     try {
-                        LoginRespuesta loginRespuesta= ServiceFactory.getFactory().getUsuarioServicioIf().login(usuario.getNick(),claveAnterior,session.getEmpresa());
+                        LoginRespuesta loginRespuesta= ServiceFactory.getFactory().getUsuarioServicioIf().login(usuario.getNick(),claveAnterior,session.getEmpresa(),false);
                         //Si la clave tiene alguna advertencia mando el mensaje
                         if(!loginRespuesta.estadoEnum.equals(loginRespuesta.estadoEnum.CORRECTO_USUARIO))
                         {

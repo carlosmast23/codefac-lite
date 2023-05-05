@@ -602,7 +602,7 @@ public class Main {
             
             //TODO:Analizar que este codigo de activar o desactivar el tema de la publicidad deberia ejecutar el login de manera independiente
             //Agregando Hilo de Publicidad si es usuario Gratuito
-            if (    session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) && 
+            if ( session.getTipoLicenciaEnum()==null || session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) && 
                     ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION) ) {
                 HiloPublicidadCodefac hiloPublicidad = new HiloPublicidadCodefac(panel);
                 hiloPublicidad.setPublicidades(obtenerPublicidades());

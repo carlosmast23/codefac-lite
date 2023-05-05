@@ -69,7 +69,7 @@ public class LoginMb extends GeneralPublicoAbstractMb{
     public String login() {
         try {
             
-            LoginRespuesta loginRespuesta = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave,empresaSeleccionada);
+            LoginRespuesta loginRespuesta = ServiceFactory.getFactory().getUsuarioServicioIf().login(nick, clave,empresaSeleccionada,false);
             
             switch (loginRespuesta.estadoEnum) {
                 case CORRECTO_USUARIO:
