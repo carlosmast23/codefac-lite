@@ -11,8 +11,10 @@ import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
+import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
+import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -27,6 +29,7 @@ import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.M
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesDirectorios;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -202,6 +205,10 @@ public class LoginModel extends LoginFormDialog{
                         setVisible(false);
                         usuario=loginRespuesta.usuario;
                         panelPrincipal.setSessionCodefac(getDatosLogin());
+                        //Grabar los datos de comprobacion de licencia para saber que se esta accediendo
+                        //TODO: Hago esto de forma temporal porque aveces en el proceso interno de comprobar no se graba en la base de datos la fecha
+                        UtilidadesServiceIf utilidadesService=ServiceFactory.getFactory().getUtilidadesServiceIf();
+                        utilidadesService.grabarFechaRevisionLicencia(null, empresaSeleccionada);
                         break;
                     case INCORRECTO_USUARIO:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());

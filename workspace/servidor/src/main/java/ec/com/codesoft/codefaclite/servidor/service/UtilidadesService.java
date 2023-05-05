@@ -403,7 +403,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                             }
                         }
 
-                        //Si execede los dias limite sin validar por internet ya no permite el acceso, la única opción es validar por internet
+                        //Si execede los dias limite sin validar por internet ya no permite el acceso, la única opción es validar por internet o poner la CLAVE DE SOPORTE                        
                         if (dias >= diasLimiteVerificacion) 
                         {
                             if (verificarLicenciaOnline(validacion)) {
@@ -430,9 +430,6 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                         //throw new ServicioCodefacException("No se puede validar su licencia , verifique su conexión a internet");    
                         validacionRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.LICENCIA_ERROR_INTERNET;
                         return validacionRespuesta;
-                        //DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-                        //System.exit(0);
-
                     }
                 }
 
@@ -445,8 +442,6 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
                     //throw new ServicioCodefacException("No se puede validar su licencia , verifique su conexión a internet");    
                     validacionRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.LICENCIA_ERROR_INTERNET;
                     return validacionRespuesta;
-                    //DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-                    //System.exit(0);
                 }
 
             }
@@ -454,7 +449,8 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
-
+            //Si existe un error informar a la siguiente capa para detener el proceso
+            throw new ServicioCodefacException(ex.getMessage());
         }
         
         validacionRespuesta.estadoEnum=LoginRespuesta.EstadoLoginEnum.LICENCIA_CORRECTA;
@@ -520,18 +516,26 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
      * @param parametroFechaValidacion
      * @param crear
      */
-    private static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion,Empresa empresa) {
+    public static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion,Empresa empresa) {
         
         
         try {
+            
+            ParametroCodefacService servicio = new ParametroCodefacService();
+            
             if (parametroFechaValidacion==null) 
             {
-                parametroFechaValidacion = new ParametroCodefac();
-                parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-                parametroFechaValidacion.setEmpresa(empresa);
+                //Primero intento consultar para ver si existe un parametro ya creado
+                parametroFechaValidacion=servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION, empresa);
+                
+                if(parametroFechaValidacion==null)
+                {
+                    parametroFechaValidacion = new ParametroCodefac();
+                    parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
+                    parametroFechaValidacion.setEmpresa(empresa);
+                }
             }
 
-            ParametroCodefacService servicio = new ParametroCodefacService();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             
             Date fechaRevisar = UtilidadesFecha.hoy(); //Por feecto compara con la hora del sistema
@@ -549,10 +553,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             if (parametroFechaValidacion.getId()==null) 
             {
                 servicio.grabar(parametroFechaValidacion);
+                Logger.getLogger(UtilidadesService.class.getName()).log(Level.INFO, null,"Grabando fecha de ultima verificación de la licencia el "+dateStr);
             } 
             else 
             {
                 servicio.editar(parametroFechaValidacion);
+                Logger.getLogger(UtilidadesService.class.getName()).log(Level.INFO, null,"Editando fecha de ultima verificación de la licencia el "+dateStr);
             }
             
         } catch (RemoteException ex) {
@@ -728,6 +734,11 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     @Override
     public EmpresaLicencia obtenerLicenciaEmpresa(Empresa empresa) throws RemoteException, ServicioCodefacException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void grabarFechaRevisionLicencia(ParametroCodefac parametroFechaValidacion,Empresa empresa)throws RemoteException,ServicioCodefacException
+    {
+        UtilidadesService.grabarFechaRevision(parametroFechaValidacion, empresa);
     }
 
 
