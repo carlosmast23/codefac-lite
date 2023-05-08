@@ -19,6 +19,7 @@ public class UtilidadesComboBox {
     
     public static void seleccionarItemPorCriterio(JComboBox comboBox,Object valor,CriterioCompararComboEnum criterio)
     {
+        Boolean datoEncontrado=false;
         for (int i = 0; i < comboBox.getItemCount(); i++) 
         {
             Object puntoEmision= comboBox.getItemAt(i);
@@ -27,11 +28,22 @@ public class UtilidadesComboBox {
             {
                 if(comparador.equals(valor))
                 {
+                    datoEncontrado=true;
                     comboBox.setSelectedIndex(i);
                     break;
                 }
             }
         }
+        
+        //Si no encuentra ningun dato por defecto selecciona el primero que exista
+        if(datoEncontrado!=null)
+        {
+            if(comboBox.getItemCount()>0)
+            {
+                comboBox.setSelectedIndex(0);
+            }
+        }
+        
     }
     
 

@@ -804,10 +804,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             interfaz.cargarPreciosPorcentaje(descuentosList);
         }
         //Dejar seleccionado el ultimo precio por defecto para que las siguientes veces continue con ese mismo precio
-        if(numeroPvp!=null)
+        if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.AGREGAR_PVP_ANTERIOR,EnumSiNo.SI))
         {
-            pvpDefecto=Producto.PrecioVenta.buscaTextoPorPosicion(numeroPvp);
-        }
+            if (numeroPvp != null) {
+                pvpDefecto = Producto.PrecioVenta.buscaTextoPorPosicion(numeroPvp);
+            }        
+        }        
+        
     }
     
     

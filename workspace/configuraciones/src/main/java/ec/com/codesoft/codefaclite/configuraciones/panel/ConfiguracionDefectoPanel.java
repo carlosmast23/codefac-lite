@@ -178,6 +178,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbMostrarAhorroVenta = new javax.swing.JComboBox<>();
         jLabel98 = new javax.swing.JLabel();
         cmbPrecioVentaDefecto = new javax.swing.JComboBox<>();
+        jLabel113 = new javax.swing.JLabel();
+        cmbAgregarPvpAnterior = new javax.swing.JComboBox<>();
         jPanel13 = new javax.swing.JPanel();
         jLabel55 = new javax.swing.JLabel();
         cmbNotaVentaInternaIva = new javax.swing.JComboBox<>();
@@ -1199,7 +1201,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel82.setText("Pvp Defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel82, gridBagConstraints);
@@ -1317,10 +1319,27 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbPrecioVentaDefecto, gridBagConstraints);
+
+        jLabel113.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel113.setText("Agregar Pvp Anterior:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel113, gridBagConstraints);
+
+        cmbAgregarPvpAnterior.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbAgregarPvpAnterior, gridBagConstraints);
 
         jTabbedPane1.addTab("Facturas", jPanel4);
 
@@ -2409,6 +2428,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarLoteFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarProductoDirectoLectorBarras;
+    private javax.swing.JComboBox<EnumSiNo> cmbAgregarPvpAnterior;
     private javax.swing.JComboBox<EnumSiNo> cmbBuscadorSoloInventario;
     private javax.swing.JComboBox<EnumSiNo> cmbCalculaDescuentoCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbCalcularUtilidadUltimoCosto;
@@ -2481,6 +2501,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel110;
     private javax.swing.JLabel jLabel111;
     private javax.swing.JLabel jLabel112;
+    private javax.swing.JLabel jLabel113;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -3541,10 +3562,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setTxtProductoF9(JTextField txtProductoF9) {
         this.txtProductoF9 = txtProductoF9;
     }
-    
-    
-    
-    
-    
+
+    public JComboBox<EnumSiNo> getCmbAgregarPvpAnterior() {
+        return cmbAgregarPvpAnterior;
+    }
+
+    public void setCmbAgregarPvpAnterior(JComboBox<EnumSiNo> cmbAgregarPvpAnterior) {
+        this.cmbAgregarPvpAnterior = cmbAgregarPvpAnterior;
+    }
     
 }

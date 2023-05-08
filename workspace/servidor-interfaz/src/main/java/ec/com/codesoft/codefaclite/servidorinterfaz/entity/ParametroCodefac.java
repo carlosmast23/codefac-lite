@@ -304,6 +304,11 @@ public class ParametroCodefac implements Serializable {
     
     public static final String ACTIVAR_IVA_FERIADO="activar_iva_feriado";
     
+    /**
+     * Varaible que me permite configurar que en la pantalla de facturacion se quede grabado el precio por defecto (pvp1,pvp2,pvp3,pvp4) anterior para seguir agregando el resto de productos con el mismo pvp
+     */
+    public static final String AGREGAR_PVP_ANTERIOR="agregar_pvp_anterior";
+    
     public static final String LEYENDA_ADICIONAL_COMPROBANTE="leyenda_adicional_comprobante";
     
     /**
