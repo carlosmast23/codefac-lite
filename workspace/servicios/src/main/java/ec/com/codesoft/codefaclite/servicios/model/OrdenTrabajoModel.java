@@ -263,6 +263,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             OrdenTrabajo.EstadoEnum generalEstadoEnum = this.ordenTrabajo.getEstadoEnum();
             getCmbEstadoDetallesOrdenTrabajo().setSelectedItem(generalEstadoEnum);
             getCmbTipoFacturacion().setSelectedItem(this.ordenTrabajo.getCatalogoProducto());
+            
+            if(ordenTrabajoTemp.getObjetoMantenimiento()!=null)
+            {
+                getCmbObjetoMantenimiento().setSelectedItem(ordenTrabajoTemp.getObjetoMantenimiento());
+            }
                         
             mostrarDatosTabla();           
         }
