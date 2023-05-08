@@ -597,6 +597,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return facturaDetalle;
     }
     
+    /**
+     * Parece que esta linea de codigo no van a utilizar porque se supone que la primera vez que se agregan los productos luego no se tiene que volver a poner estos datos
+     * @param facturaDetalle
+     * @return
+     * @deprecated
+     */
+    @Deprecated
     public FacturaDetalle actualizarFacturaDetalleCatalogo(FacturaDetalle facturaDetalle)
     {
         CatalogoProducto catalogoProducto=facturaDetalle.getCatalogoProducto();
@@ -610,7 +617,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             if(catalogoProducto.getIva()!=null)
             {
-                facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
+                //TODO: Esta linea esta generando problemas porque se supone que al agregar ya se pone los datos del IVA PORCENTAJE
+                //facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
             }
         }
         else
