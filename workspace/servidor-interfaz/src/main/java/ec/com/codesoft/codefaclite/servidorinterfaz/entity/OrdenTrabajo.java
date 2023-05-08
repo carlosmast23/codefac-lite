@@ -239,6 +239,11 @@ public class OrdenTrabajo implements Serializable
          * Estado utilizado para indicar que todos los detalles de la orden de trabajo han sido finculadas a un presupuesto
          */
         FINALIZADO("F","Finalizado"),
+        
+         /**
+         * Estado utilizado para indicar que todos los detalles de la orden de trabajo han sido finculadas a un presupuesto
+         */
+        TERMINADO("T","Terminado"),
         /**
          * Estado para indicar que esa orden de trabajo ya esta facturada
          */

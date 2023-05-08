@@ -70,6 +70,18 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         }
     }
     
+    public void editar(Presupuesto p, Boolean enviarCorreo) throws RemoteException, ServicioCodefacException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(p);
+                procesosRelacionados(p);
+                verificarEnviarCorreo(enviarCorreo, p);
+            }
+        });
+
+    }
+    
     public Presupuesto grabar(Presupuesto entity,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException
     {
         return (Presupuesto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
@@ -125,18 +137,34 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                 
                 entityManager.persist(entity);
                 entityManager.flush();
-                Presupuesto presupuestoEdit=entityManager.merge(entity);
-                
-                if(enviarCorreo!=null && enviarCorreo)
-                {
-                    enviarCorreoPresupuesto(presupuestoEdit);
-                }
+                procesosRelacionados(entity);
+                Presupuesto presupuestoEdit=entityManager.merge(entity);                
+                verificarEnviarCorreo(enviarCorreo, presupuestoEdit);
                 //entity=entityManager.merge(presupuestoEdit);
                 return presupuestoEdit;
             } 
         });
          
         
+    }
+    
+    private void procesosRelacionados(Presupuesto presupuesto)
+    {
+        //Cambiar de estado la orden de trabajo cuando el presupuesto tenga estado TERMINADO
+        if(presupuesto.getEstadoEnum().equals(Presupuesto.EstadoEnum.TERMINADO))
+        {
+            OrdenTrabajo ordenTrabajo=presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo();
+            ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.TERMINADO);
+            entityManager.merge(ordenTrabajo);
+        }
+    }
+    
+    private void verificarEnviarCorreo(Boolean enviarCorreo,Presupuesto presupuesto) throws RemoteException, ServicioCodefacException
+    {
+
+        if (enviarCorreo != null && enviarCorreo) {
+            enviarCorreoPresupuesto(presupuesto);
+        }
     }
     
     public void enviarCorreoPresupuesto(Presupuesto presupuesto) throws RemoteException,ServicioCodefacException
@@ -209,14 +237,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         }
     }
     
-    public void editar(Presupuesto p,Boolean enviarCorreo) throws RemoteException, ServicioCodefacException
-    {
-        presupuestoFacade.edit(p);
-        if(enviarCorreo!=null && enviarCorreo)
-        {
-            enviarCorreoPresupuesto(p);
-        }
-    }
+
     
     public void eliminar(Presupuesto p) throws ServicioCodefacException,RemoteException
     {

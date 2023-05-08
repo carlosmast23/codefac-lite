@@ -22,7 +22,9 @@ public class OrdenTrabajoBusqueda implements InterfaceModelFind<OrdenTrabajo>
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Código",0.2d));
+        titulo.add(new ColumnaDialogo("Código OT",0.2d));
+        titulo.add(new ColumnaDialogo("Código ",0.2d));
+        titulo.add(new ColumnaDialogo("Modelo ",0.2d));
         titulo.add(new ColumnaDialogo("Cliente",0.5d));
         titulo.add(new ColumnaDialogo("Descripción",0.3d));
         titulo.add(new ColumnaDialogo("Estado",0.15d));
@@ -47,6 +49,8 @@ public class OrdenTrabajoBusqueda implements InterfaceModelFind<OrdenTrabajo>
     public void agregarObjeto(OrdenTrabajo o, Vector dato) 
     {
         dato.add(o.getId());
+        dato.add((o.getObjetoMantenimiento()!=null)?o.getObjetoMantenimiento().getCodigo():"");
+        dato.add((o.getObjetoMantenimiento()!=null)?o.getObjetoMantenimiento().getModelo():"");
         dato.add(o.getCliente().getNombresCompletos());
         dato.add(o.getDetalles().get(0).getDescripcion());
         dato.add(o.getEstadoEnum().getNombre());
