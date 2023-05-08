@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -410,7 +411,16 @@ public class Persona implements Serializable, Comparable<Persona> {
     {
         String nombresTmp = (nombres != null) ? nombres : "";
         String apellidosTmp = (apellidos != null) ? apellidos : "";
-        return apellidosTmp.split(" ")[0] + " " + nombresTmp.split(" ")[0];
+        
+        //Si no tengo ningun texto busco la razon social
+        if(UtilidadesTextos.verificarNullOVacio((nombresTmp+apellidosTmp)))
+        {
+            return razonSocial;
+        }
+        else
+        {
+            return apellidosTmp.split(" ")[0] + " " + nombresTmp.split(" ")[0];
+        }
     }
 
     /*
