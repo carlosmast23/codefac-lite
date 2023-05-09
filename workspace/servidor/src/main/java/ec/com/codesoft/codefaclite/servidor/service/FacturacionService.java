@@ -96,6 +96,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
+import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -755,13 +756,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 //Validacion automatica de los espacios en blanco de los productos
                 if (puntoEmision != null) {
                     if (puntoEmision.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA)) {
-                        detalle.setDescripcion(detalle.getDescripcion().replace("\n", " "));
+                        detalle.setDescripcion(UtilidadesXml.normalizarCaracteresNoPermitidosUTF8(detalle.getDescripcion()));
+                        detalle.setCodigoPrincipal(UtilidadesXml.normalizarCaracteresNoPermitidosUTF8(detalle.getCodigoPrincipal()));
+                        /*detalle.setDescripcion(detalle.getDescripcion().replace("\n", " "));
                         detalle.setDescripcion(detalle.getDescripcion().replace("\r", " "));
                         
                         //TODO: Ver si se puede poner estos codigos en otra seccion 
+                        detalle.setCodigoPrincipal(codigoPrincipal);
                         detalle.setDescripcion(detalle.getDescripcion().replace("”","''"));
                         detalle.setDescripcion(detalle.getDescripcion().replace(""," "));
-                        detalle.setDescripcion(detalle.getDescripcion().replace("Ð","Ñ"));
+                        detalle.setDescripcion(detalle.getDescripcion().replace("Ð","Ñ"));*/
+                        
+                        //UtilidadesXml.convertirDocumentToString(path)
                     }
                     
                 }

@@ -246,73 +246,58 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         List<FacturaDetalle> detallesFactura = factura.getDetallesOrdenados();
 
         for (FacturaDetalle facturaDetalle : detallesFactura) {
-            try {
-                DetalleFacturaComprobante detalle = new DetalleFacturaComprobante();
-
-                ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
-                
-                //Esta opcion me permite ocultar el codigo principal de los productos por ejemplo para que no puedan encontrar los clientes en otros proveedores
-                if(ParametroUtilidades.comparar(factura.getEmpresa(),ParametroCodefac.IMPRIMIR_CODIGO_INTERNO_PRODUCTO, EnumSiNo.SI))
-                {
-                    detalle.setCodigoPrincipal(facturaDetalle.getReferenciaId()+"");
-                }
-                else
-                {       
-                    detalle.setCodigoPrincipal(respuesta.obtenerCodigoPrincipal()+"");
-                }
-
-                
-                detalle.setCantidad(facturaDetalle.getCantidad());
-                /*
-                *   UTF-8 Validad caracteres no imprimibles Á y Í
-                */
-                detalle.setDescripcion(facturaDetalle.getDescripcion()); //Supuestamente ya no tengo que validar porque esta validad en el ingreso de los detalles
-                //Establecer el descuento en el aplicativo
-                detalle.setDescuento((facturaDetalle.getDescuento()!=null)?facturaDetalle.getDescuento():BigDecimal.ZERO);
-                detalle.setPrecioTotalSinImpuesto(facturaDetalle.getTotal());
-                
-                //Todo: redondear valor porque en los comprobantes electronicos no me permite enviar con mas de 2 decimales aunque en los archivos xsd si permite
-                //detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2, RoundingMode.HALF_UP));
-                                
-                Integer decimalesRedondear=ParametroUtilidades.obtenerValorBaseDatos(factura.getEmpresa(),ParametroCodefac.NUMERO_DECIMALES_RIDE,new ParametroUtilidades.ComparadorInterface() {
-                    @Override
-                    public Object consultarParametro(String nombreParametro) {
-                        return Integer.parseInt(nombreParametro);
-                    }
-                });
-                
-                if(decimalesRedondear==null)
-                {
-                    decimalesRedondear=2;
-                }
-                
-                
-                detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(decimalesRedondear,BigDecimal.ROUND_HALF_UP));
-                //detalle.setDescuento(detalle.getDescuento().setScale(2,RoundingMode.HALF_UP));
-                detalle.setDescuento(detalle.getDescuento());
-
-                /**
-                 * Agregado impuesto que se cobran a cada detalle individual
-                 */
-                //List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
-
-                //calcularImpuestos(mapTotalImpuestos, facturaDetalle);                
-                detalle.setImpuestos(calcularImpuestos(facturaDetalle));
-                
-                /**
-                 * Agregar valor del subsidio si existe o es mayor que cero
-                 */
-                if(facturaDetalle.getPrecioSinSubsidio()!=null && facturaDetalle.getPrecioSinSubsidio().compareTo(BigDecimal.ZERO)!=0)
-                {
-                    detalle.setPrecioSinSubsidio(facturaDetalle.getPrecioSinSubsidio());
-                }
-                
-                detallesComprobante.add(detalle);
-            } catch (RemoteException ex) {
-                Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
-                Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
+            DetalleFacturaComprobante detalle = new DetalleFacturaComprobante();
+            //ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(facturaDetalle.getTipoDocumentoEnum(),facturaDetalle.getReferenciaId());
+            
+            //Esta opcion me permite ocultar el codigo principal de los productos por ejemplo para que no puedan encontrar los clientes en otros proveedores
+            if(ParametroUtilidades.comparar(factura.getEmpresa(),ParametroCodefac.IMPRIMIR_CODIGO_INTERNO_PRODUCTO, EnumSiNo.SI))
+            {
+                detalle.setCodigoPrincipal(facturaDetalle.getReferenciaId()+"");
             }
+            else
+            {
+                //detalle.setCodigoPrincipal(respuesta.obtenerCodigoPrincipal()+"");
+                detalle.setCodigoPrincipal(detalle.getCodigoPrincipal());
+            }
+            detalle.setCantidad(facturaDetalle.getCantidad());
+            /*
+            *   UTF-8 Validad caracteres no imprimibles Á y Í
+            */
+            detalle.setDescripcion(facturaDetalle.getDescripcion()); //Supuestamente ya no tengo que validar porque esta validad en el ingreso de los detalles
+            //Establecer el descuento en el aplicativo
+            detalle.setDescuento((facturaDetalle.getDescuento()!=null)?facturaDetalle.getDescuento():BigDecimal.ZERO);
+            detalle.setPrecioTotalSinImpuesto(facturaDetalle.getTotal());
+            //Todo: redondear valor porque en los comprobantes electronicos no me permite enviar con mas de 2 decimales aunque en los archivos xsd si permite
+            //detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2, RoundingMode.HALF_UP));
+            
+            Integer decimalesRedondear=ParametroUtilidades.obtenerValorBaseDatos(factura.getEmpresa(),ParametroCodefac.NUMERO_DECIMALES_RIDE,new ParametroUtilidades.ComparadorInterface() {
+                @Override
+                public Object consultarParametro(String nombreParametro) {
+                    return Integer.parseInt(nombreParametro);
+                }
+            });
+            if(decimalesRedondear==null)
+            {
+                decimalesRedondear=2;
+            }
+            detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(decimalesRedondear,BigDecimal.ROUND_HALF_UP));
+            //detalle.setDescuento(detalle.getDescuento().setScale(2,RoundingMode.HALF_UP));
+            detalle.setDescuento(detalle.getDescuento());
+            /**
+             * Agregado impuesto que se cobran a cada detalle individual
+             */
+            //List<ImpuestoComprobante> listaComprobantes = new ArrayList<ImpuestoComprobante>();
+            
+            //calcularImpuestos(mapTotalImpuestos, facturaDetalle);
+            detalle.setImpuestos(calcularImpuestos(facturaDetalle));
+            /**
+             * Agregar valor del subsidio si existe o es mayor que cero
+             */
+            if(facturaDetalle.getPrecioSinSubsidio()!=null && facturaDetalle.getPrecioSinSubsidio().compareTo(BigDecimal.ZERO)!=0)
+            {
+                detalle.setPrecioSinSubsidio(facturaDetalle.getPrecioSinSubsidio());
+            }
+            detallesComprobante.add(detalle);
         }
         /**
          * Agregar el valor del Subsidio al xml en el caso de que exista

@@ -59,6 +59,19 @@ public abstract class UtilidadesXml {
     }
     
     /**
+     * 
+     */
+    public static String normalizarCaracteresNoPermitidosUTF8(String textoOriginal)
+    {        
+        textoOriginal=textoOriginal.replace("\n", " ");
+        textoOriginal=textoOriginal.replace("\r", " ");
+        textoOriginal=textoOriginal.replace("”", "''");
+        textoOriginal=textoOriginal.replace("", " ");
+        textoOriginal=textoOriginal.replace("Ð", "Ñ");
+        return textoOriginal;
+    }
+    
+    /**
      * Este metodo unicamente sirve si esta trabajando con jaxb para guardar en un archivo fisico
      * @return 
      */
