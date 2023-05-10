@@ -173,8 +173,9 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     public void invertirCalculoNVIaFactura()
     {
         CatalogoProducto catalogoProducto= this.getCatalogoProducto();
-        //Si el producto tiene IVA entonces proceso a realizar el proceso inverso de cambiar el iva
-        if(catalogoProducto.getIva().getTarifa()>0)
+        System.out.println("IVA: "+this.getIvaPorcentaje());
+        //Si el producto original tiene IVA y el iva temporal del detalle es CERO entonces proceso a realizar el proceso inverso de cambiar el iva 
+        if(this.getIvaPorcentaje()==0 && catalogoProducto.getIva().getTarifa()>0)
         {
             //Guardo el precio anterior
             BigDecimal precioUnitarioTmp=new BigDecimal(this.getPrecioUnitario()+"");

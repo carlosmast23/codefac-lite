@@ -84,9 +84,9 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             throw new ServicioCodefacException("La fecha de emisión no puede estar vacia");
         }
         
-        if (notaCredito.getCliente().isClienteFinal()) {
+        /*if (notaCredito.getCliente().isClienteFinal()) {
             throw new ServicioCodefacException("No se puede emitir Notas de Crédito al Consumidor Final , Anule la factura en el Portal del Sri");
-        }
+        }*/
         
         if(notaCredito.getRazonModificado()==null || notaCredito.getRazonModificado().trim().isEmpty())
         {

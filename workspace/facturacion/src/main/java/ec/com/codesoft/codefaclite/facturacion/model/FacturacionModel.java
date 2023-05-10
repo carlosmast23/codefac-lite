@@ -3680,9 +3680,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     {
                         DocumentoEnum documentoSeleccionado=obtenerDocumentoSeleccionado();                     
                         Integer ivaPorcentajeTmp=(catalogoProducto.getIva()!=null)?catalogoProducto.getIva().getTarifa().intValue():0;
-                        if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && ivaPorcentajeTmp>0)
+                        
+                        if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
                         {
-                            pvp=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),pvp);
+                            if(ivaPorcentajeTmp>0)
+                            {
+                                //Verificar si esta activa la opcion que los comprobates de venta deben llevar iva en ese caso no agrego el iva
+                                //ParametroUtilidades.comparar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA,EnumSiNo.NO,session.getEmpresa());
+                                Boolean noAgregarIvaNVI=ParametroUtilidades.comparar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA,EnumSiNo.NO,session.getParametrosCodefac());
+                                
+                                if(noAgregarIvaNVI)
+                                {
+                                    pvp=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),pvp);
+                                }
+                                
+                            }
                         }
                     }
                     

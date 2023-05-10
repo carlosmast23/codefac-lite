@@ -524,6 +524,15 @@ public abstract class ExcelMigrar {
         }
         
         
+        public String getValueByEnum(CampoMigrarInterface campoEnum)
+        {
+            CampoResultado campoResultado=getByEnum(campoEnum);
+            if(campoResultado!=null)
+            {
+                return campoResultado.valor+"";
+            }
+            return null;
+        }
               
         
     }

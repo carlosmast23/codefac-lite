@@ -47,6 +47,56 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     @Column(name = "FECHA_SALIDA")
     private Timestamp fechaSalida;
     
+    @JoinColumn(name = "OBJETO_MANTENIMIENTO_ID")
+    private ObjetoMantenimiento vehiculo;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
+
+    public Empleado getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Empleado supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public Timestamp getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Timestamp fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+
+    public Timestamp getFechaSalida() {
+        return fechaSalida;
+    }
+
+    public void setFechaSalida(Timestamp fechaSalida) {
+        this.fechaSalida = fechaSalida;
+    }
+
+    public ObjetoMantenimiento getVehiculo() {
+        return vehiculo;
+    }
+
+    public void setVehiculo(ObjetoMantenimiento vehiculo) {
+        this.vehiculo = vehiculo;
+    }
     
     
     

@@ -1200,6 +1200,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //Si encuentra el producto lo que tengo que hacer es actualiar en el sistema
                 if(productoBuscado!=null)
                 {
+                    productoImportar.setIdProducto(productoBuscado.getIdProducto());
                     editarProducto(productoImportar);
                     cantidadActualizada++;
                 }

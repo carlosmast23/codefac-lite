@@ -31,7 +31,7 @@ public class FormaPagoComprobante implements Serializable{
     private String unidadTiempo;
 
     public FormaPagoComprobante() {
-        System.out.println("creando Forma Pago");
+        //System.out.println("creando Forma Pago");
     }
 
     @XmlElement(name = "formaPago")

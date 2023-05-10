@@ -342,6 +342,12 @@ public class ControllerCodefacMb implements Serializable {
 
     public String getTituloPagina() {
         try {
+            //Si la ventana no tiene nombre por el momento le pongo sin titulo
+            if(this.generalAbstractMb==null)
+            {
+                return "Sin Titulo" ;
+            }
+            
             String tituloPagina = this.generalAbstractMb.titulo();
             return estadoEnum.construirFormato(tituloPagina);
             //return "Errro Nombre";

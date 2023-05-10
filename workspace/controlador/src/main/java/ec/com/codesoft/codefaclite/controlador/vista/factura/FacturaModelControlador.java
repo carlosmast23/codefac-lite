@@ -729,6 +729,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 //catalogoProducto.getIva().setTarifaOriginal(catalogoProducto.getIva().getTarifa());
                 //catalogoProducto.getIva().setTarifa(0);
                 //catalogoProducto.getIva().setPorcentaje(BigDecimal.ZERO);
+                
                 facturaDetalle.setIvaPorcentaje(0);
                 
                 //producto.getCatalogoProducto().getIva().setTarifa(0);

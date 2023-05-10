@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -54,7 +55,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = Producto.NOMBRE_TABLA)
 @XmlRootElement
-public class Producto implements Serializable, Comparable<Producto> {
+public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     
     /**
      * Variable global que me permite saber cual es el código maximo de los productos que acepta la facturación electrónica
@@ -1018,6 +1019,16 @@ public class Producto implements Serializable, Comparable<Producto> {
         //}
     }
     
+    public BigDecimal getValorUnitarioDefectoFormat()
+    {
+        return getValorUnitarioDefecto().setScale(3, RoundingMode.HALF_UP);
+    }
+    
+    public void setValorUnitarioDefectoFormat(BigDecimal valorUnitario)
+    {
+        getValorUnitarioDefecto().setScale(3, RoundingMode.HALF_UP);
+    }
+    
     public void setValorUnitarioDefecto(BigDecimal valorUnitario)
     {
         /*if(ParametrosSistemaCodefac.mostrarPreciosConIva())
@@ -1055,6 +1066,14 @@ public class Producto implements Serializable, Comparable<Producto> {
         BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
         return UtilidadesImpuestos.agregarValorIva(tarifa, precioDistribuidor);
     }
+    
+    public BigDecimal getPrecioDistribuidorConIvaFormat() {
+        
+        return getPrecioDistribuidorConIva().setScale(3, RoundingMode.HALF_UP);
+    }
+    
+    public void setPrecioDistribuidorConIvaFormat(BigDecimal valor) {}
+    
     
     public void setPrecioDistribuidorConIva(BigDecimal valor) {}
     
@@ -1318,6 +1337,33 @@ public class Producto implements Serializable, Comparable<Producto> {
         }
         return null;
     }
+
+    /**
+     * Obtiene una presentacion cualquiera que sea disntinta de la ingresada en el producto
+     * @return
+     */
+    /*public ProductoPresentacionDetalle obtenerProductoPresentacionPorDefecto()
+    {
+    if(presentacionList!=null)
+    {
+    for (ProductoPresentacionDetalle detallePresentacion : presentacionList)
+    {
+    PresentacionProducto presentacionProducto= detallePresentacion.getPresentacionProducto();
+    if(presentacionProducto!=null)
+    {
+    if(!presentacionProducto.equals(presentacion))
+    {
+    return detallePresentacion;
+    }
+    }
+    }
+    }
+    return null;
+    }*/
+    @Override
+    protected Producto clone() throws CloneNotSupportedException {
+        return (Producto)super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
     
     /**
      * Obtiene una presentacion cualquiera que sea disntinta de la ingresada en el producto
@@ -1341,6 +1387,8 @@ public class Producto implements Serializable, Comparable<Producto> {
         }
         return null;
     }*/
+    
+    
     
     public static class PrecioVenta implements Serializable{
         public static final String PV1="pv1";

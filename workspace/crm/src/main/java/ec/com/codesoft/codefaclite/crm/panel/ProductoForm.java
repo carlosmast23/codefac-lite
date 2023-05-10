@@ -2514,17 +2514,16 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.btnCrearCategoria = btnCrearCategoria;
     }
 
-    @TextFieldBinding(value = "controlador.producto.valorUnitarioDefecto",converter = StringToBigDecimalConverter.class)
+    @TextFieldBinding(value = "controlador.producto.valorUnitarioDefectoFormat",converter = StringToBigDecimalConverter.class)
     public JTextField getTxtPvp1ConIva() {
         return txtPvp1ConIva;
     }
-
     
     public void setTxtPvp1ConIva(JTextField txtPvp1ConIva) {
         this.txtPvp1ConIva = txtPvp1ConIva;
     }
 
-    @TextFieldBinding(value = "controlador.producto.precioDistribuidorConIva",converter = StringToBigDecimalConverter.class)
+    @TextFieldBinding(value = "controlador.producto.precioDistribuidorConIvaFormat",converter = StringToBigDecimalConverter.class)
     public JTextField getTxtPvp2ConIva() {
         return txtPvp2ConIva;
     }

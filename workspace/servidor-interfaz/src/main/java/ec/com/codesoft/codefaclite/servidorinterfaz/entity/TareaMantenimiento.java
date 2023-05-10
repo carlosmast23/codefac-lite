@@ -28,6 +28,9 @@ public class TareaMantenimiento extends EntityAbstract<GeneralEnumEstado>
     
     @Column(name = "ORDEN")
     private Integer Orden;
+    
+    @Column(name = "TIPO")
+    private String tipo;
 
     public TareaMantenimiento() {
     }
@@ -47,6 +50,49 @@ public class TareaMantenimiento extends EntityAbstract<GeneralEnumEstado>
     public void setOrden(Integer Orden) {
         this.Orden = Orden;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
     
+    /////////////////////////////////////////////////////////////
+    ///             DATOS ADICIONALES
+    /////////////////////////////////////////////////////////////
     
+    public enum TipoEnum
+    {
+        
+        /**
+         * Este proceso me va a identificar cuando es uno normal del proceso
+         */
+        NORMAL("n","Normal"),
+        
+        /**
+         * Este proceso me sirve para identificar cuando se asigna una novedad
+         */
+        NOVEDAD("v","Novedad");
+        
+        private String letra;
+        private String nombre;
+
+        private TipoEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        
+        
+    }
 }
