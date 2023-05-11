@@ -162,8 +162,10 @@ public abstract class ExcelMigrar {
         });
         
         for (CampoMigrarInterface dato : datosList) 
-        {            
-            tiposDatos.add(dato.getTipoDato());
+        {
+            Class claseTipoDato= dato.getTipoDato();
+            System.out.println("Agregando tipo de dato: "+claseTipoDato);
+            tiposDatos.add(claseTipoDato);
         }
         
         return tiposDatos;

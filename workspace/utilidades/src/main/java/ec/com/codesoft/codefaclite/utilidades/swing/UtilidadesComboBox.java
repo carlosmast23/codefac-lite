@@ -36,7 +36,7 @@ public class UtilidadesComboBox {
         }
         
         //Si no encuentra ningun dato por defecto selecciona el primero que exista
-        if(datoEncontrado!=null)
+        if(!datoEncontrado)
         {
             if(comboBox.getItemCount()>0)
             {

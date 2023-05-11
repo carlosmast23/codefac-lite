@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.excel.entidades;
 
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
+import java.util.Date;
 
 /**
  *
@@ -15,7 +16,7 @@ public class ExcelMigrarVehiculosMantenimiento extends ExcelMigrar{
 
     @Override
     public CampoMigrarInterface[] obtenerCampos() {
-        return ExcelMigrarCursos.Enum.values();
+        return ExcelMigrarVehiculosMantenimiento.Enum.values();
     }
 
     @Override
@@ -25,22 +26,25 @@ public class ExcelMigrarVehiculosMantenimiento extends ExcelMigrar{
     
     public enum Enum implements CampoMigrarInterface
     {
-        NUMERO("NUMERO",0),
-        MODELO("MODELO",1),
-        COLOR("COLOR",2),
-        VIN("VIN",3),
-        CLIENTE("CLIENTE",4),
-        FECHA_INGRESO("F.INGRESO",5),
-        ESTADO("ESTADO",6);
+        NUMERO("NUMERO",0,Double.class,false),
+        MODELO("MODELO",1,String.class,false),
+        COLOR("COLOR",2,String.class,false),
+        VIN("VIN",3,String.class,true),
+        ESTADO_VEHICULO("ESTADO_VEHICULO",4,String.class,false),
+        FECHA_INGRESO("F.INGRESO",5,Date.class,false),
+        ESTADO("ESTADO",6,String.class,false),;
 
-        private Enum(String nombre,Integer posicion) {
+        private Enum(String nombre,Integer posicion,Class tipoDato,Boolean requerido) {
             this.nombre = nombre;
             this.posicion=posicion;
+            this.tipoDato=tipoDato;
+            this.requerido=requerido;
         }
         
         public String nombre;
         public Integer posicion;
-        private boolean requerido;
+        public Class tipoDato;
+        private Boolean requerido;
 
         @Override
         public String getNombre() {
@@ -54,7 +58,7 @@ public class ExcelMigrarVehiculosMantenimiento extends ExcelMigrar{
 
         @Override
         public Class getTipoDato() {
-            return String.class;
+            return tipoDato;
         }
 
         @Override
