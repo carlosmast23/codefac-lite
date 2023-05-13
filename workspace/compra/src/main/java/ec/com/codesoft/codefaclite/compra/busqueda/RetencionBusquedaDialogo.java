@@ -34,6 +34,7 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Preimpreso",0.2d));
         titulo.add(new ColumnaDialogo("Proveedor",0.3d));
+        titulo.add(new ColumnaDialogo("Compra",0.3d));
         titulo.add(new ColumnaDialogo("Fecha Emisión",0.15d));
         titulo.add(new ColumnaDialogo("Estado",0.15d));
         return titulo;
@@ -61,6 +62,7 @@ public class RetencionBusquedaDialogo implements InterfaceModelFind<Retencion> {
     public void agregarObjeto(Retencion t, Vector dato) {
         dato.add(t.getPreimpreso());
         dato.add(t.getProveedor().getNombresCompletos());
+        dato.add(t.getPreimpresoDocumentoEnum().formatoConLineas());
         dato.add(FechaFormatoEnum.ANIO_MES_DIA.getFecha(t.getFechaEmision()));
         if(t.getEstadoEnum()!=null)
         {

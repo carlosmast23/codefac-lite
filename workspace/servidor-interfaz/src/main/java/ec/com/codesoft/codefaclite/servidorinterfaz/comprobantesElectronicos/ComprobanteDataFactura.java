@@ -257,7 +257,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
             else
             {
                 //detalle.setCodigoPrincipal(respuesta.obtenerCodigoPrincipal()+"");
-                detalle.setCodigoPrincipal(detalle.getCodigoPrincipal());
+                detalle.setCodigoPrincipal(facturaDetalle.getCodigoPrincipal());
             }
             detalle.setCantidad(facturaDetalle.getCantidad());
             /*
