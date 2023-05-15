@@ -78,6 +78,11 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj PROFORMA_ENVIADA_CORREO = new CodefacMsj("La proforma ?numeroProforma fue generada correctamente", "Estimado ?nombreCliente, ?empresa le informa que su Proforma esta generada correctamente y puede descargar como archivo adjunto. Saludos", MENSAJE_CORRECTO);
     }
     
+    public static abstract class VentasMensaje
+    {
+        public static final CodefacMsj NVI_ENVIADA_CORREO = new CodefacMsj("?nombre_documento ?secuencial fue generada correctamente", "Estimado ?nombreCliente, ?empresa le informa que el documento esta generado correctamente y puede descargar como archivo adjunto. Saludos", MENSAJE_CORRECTO);
+    }
+    
     public static abstract class IngresoInformacion
     {
         public static final CodefacMsj INGRESO_CLAVE_CODEFAC = new CodefacMsj("Ingresar Clave","Ingrese la clave otorgada por el soporte de Codefac para continuar:", MENSAJE_CORRECTO);

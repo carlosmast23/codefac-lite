@@ -170,6 +170,8 @@ public enum VentanaEnum implements Serializable{
     BANCO("ec.com.codesoft.codefaclite.cartera.model.BancoModel", "BANC", "Banco", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     CUENTA_BANCO("ec.com.codesoft.codefaclite.cartera.model.CuentaBanco", "CUBA", "Cuenta Banco", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     CARGAR_VEHICULOS("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "CAVH", "Cargar Vehiculos", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,"cargar_vehiculos"),
+    MANTENIMIENTOS_PENDIENTES("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "MAPE", "Mantenimientos Pendientes", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,"mantenimientos_pendientes"),
+    TAREA_MANTENIMIENTO("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "TAMA", "Tarea Mantenimiento", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,"tarea_mantenimiento"),
     ;
     
 

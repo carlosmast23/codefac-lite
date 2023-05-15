@@ -264,5 +264,27 @@
                 </view-param>
             </redirect>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>mantenimientos_pendientes</from-outcome>
+            <to-view-id>sistema/servicios/mantenimientos_pendientes.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>tarea_mantenimiento</from-outcome>
+            <to-view-id>sistema/servicios/tarea_mantenimiento.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

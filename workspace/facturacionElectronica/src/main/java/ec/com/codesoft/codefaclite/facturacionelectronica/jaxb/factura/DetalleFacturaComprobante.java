@@ -93,6 +93,36 @@ public class DetalleFacturaComprobante extends DetalleComprobanteAbstract {
     public void setPrecioSinSubsidio(BigDecimal precioSinSubsidio) {
         this.precioSinSubsidio = precioSinSubsidio;
     }
+    
+    @Deprecated //TODO: Mejorar esta parte
+    public BigDecimal obtenerIce()
+    {       
+        BigDecimal resultado=BigDecimal.ZERO;
+        for (ImpuestoComprobante impuesto : impuestos) 
+        {
+            //TODO: Parametrizar de mejor manera pero por el momento asumo que el codigo 3 es para el ICE
+            if(impuesto.getCodigo().equals("3"))
+            {
+                resultado=impuesto.getValor();
+            }
+        }
+        return resultado;
+    }
+    
+    @Deprecated //TODO: Mejorar esta parte
+    public BigDecimal obtenerIcePorcentaje()
+    {       
+        BigDecimal resultado=BigDecimal.ZERO;
+        for (ImpuestoComprobante impuesto : impuestos) 
+        {
+            //TODO: Parametrizar de mejor manera pero por el momento asumo que el codigo 3 es para el ICE
+            if(impuesto.getCodigo().equals("3"))
+            {
+                resultado=impuesto.getTarifa();
+            }
+        }
+        return resultado;
+    }
 
     /**
      * Metodos Adicionales

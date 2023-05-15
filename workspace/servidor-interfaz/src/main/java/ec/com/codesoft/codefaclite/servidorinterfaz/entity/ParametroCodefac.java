@@ -261,6 +261,8 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String NVI_TOTAL_CON_IVA="NVI_TOTAL_CON_IVA";
     
+    public static final String ENVIAR_NVI_CORREO="ENVIAR_NVI_CORREO";
+    
     /**
      * Filtro rapido que me permite hacer la busqueda de forma rapida
      */

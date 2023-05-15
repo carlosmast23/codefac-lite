@@ -35,6 +35,8 @@ import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexItemEspecificoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidor.service.LoteService;
+import ec.com.codesoft.codefaclite.servidor.service.MantenimientoService;
+import ec.com.codesoft.codefaclite.servidor.service.MantenimientoTareaDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.MarcaProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.MesaService;
 import ec.com.codesoft.codefaclite.servidor.service.NacionalidadService;
@@ -70,11 +72,13 @@ import ec.com.codesoft.codefaclite.servidor.service.SriRetencionRentaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriRetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.SucursalService;
+import ec.com.codesoft.codefaclite.servidor.service.TareaMantenimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoDocumentoService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoEstablecimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
+import ec.com.codesoft.codefaclite.servidor.service.VehiculoService;
 import ec.com.codesoft.codefaclite.servidor.service.ZonaService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraDetalleService;
@@ -145,6 +149,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MantenimientoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MantenimientoTareaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MarcaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MesaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
@@ -204,9 +210,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuari
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TareaMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.VehiculoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
@@ -344,6 +352,10 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(DescuentoCondicionPrecioService .class,DescuentoCondicionPrecioServiceIf.class);
             mapRecursos.put(BancoService.class,BancoServiceIf.class);
             mapRecursos.put(CuentaBancoService.class,CuentaBancoServiceIf.class);
+            mapRecursos.put(VehiculoService.class,VehiculoServiceIf.class);
+            mapRecursos.put(TareaMantenimientoService.class,TareaMantenimientoServiceIf.class);
+            mapRecursos.put(MantenimientoService.class,MantenimientoServiceIf.class);
+            mapRecursos.put(MantenimientoTareaDetalleService.class,MantenimientoTareaDetalleServiceIf.class);
             
             
             

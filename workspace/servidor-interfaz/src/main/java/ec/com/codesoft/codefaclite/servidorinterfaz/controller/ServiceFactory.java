@@ -40,6 +40,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MantenimientoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MantenimientoTareaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MarcaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MesaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
@@ -103,9 +105,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuari
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TareaMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.VehiculoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
@@ -255,6 +259,10 @@ public abstract class ServiceFactory {
     public DescuentoCondicionPrecioServiceIf getDescuentoCondicionPrecioServiceIf(){return (DescuentoCondicionPrecioServiceIf) getRecursosRMI(DescuentoCondicionPrecioServiceIf.class);};
     public BancoServiceIf getBancoServiceIf(){return (BancoServiceIf) getRecursosRMI(BancoServiceIf.class);};
     public CuentaBancoServiceIf getCuentaBancoServiceIf(){return (CuentaBancoServiceIf) getRecursosRMI(CuentaBancoServiceIf.class);};
+    public VehiculoServiceIf getVehiculoServiceIf(){return (VehiculoServiceIf) getRecursosRMI(VehiculoServiceIf.class);};
+    public TareaMantenimientoServiceIf getTareaMantenimientoServiceIf(){return (TareaMantenimientoServiceIf) getRecursosRMI(TareaMantenimientoServiceIf.class);};
+    public MantenimientoServiceIf getMantenimientoServiceIf(){return (MantenimientoServiceIf) getRecursosRMI(MantenimientoServiceIf.class);};
+    public MantenimientoTareaDetalleServiceIf getMantenimientoTareaDetalleServiceIf(){return (MantenimientoTareaDetalleServiceIf) getRecursosRMI(MantenimientoTareaDetalleServiceIf.class);};
     
     
     /**

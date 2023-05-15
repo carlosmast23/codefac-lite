@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImpresora;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
+import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.obtenerComprobanteData;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -30,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudi
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaPermisoService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaSesionService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.IngresoCajaService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
@@ -84,6 +86,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespues
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
@@ -92,12 +95,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -318,36 +323,82 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }*/
     
+    public void enviarCorreoNVI(Factura notaVentaInterna) throws RemoteException,ServicioCodefacException
+    {
+        try {
+            ComprobanteDataInterface dataFactura= obtenerComprobanteData(notaVentaInterna);
+            ComprobanteServiceIf comprobanteService=ServiceFactory.getFactory().getComprobanteServiceIf();
+            byte[] byteReporte=comprobanteService.getReporteComprobanteComprobante(dataFactura,notaVentaInterna.getUsuario(),notaVentaInterna.getClaveAcceso());
+            JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+            
+            String secuencialStr=notaVentaInterna.getSecuencial()+"";
+            Map<String, String> mapParametro = new HashMap<String, String>();
+            mapParametro.put("nombre_documento","Nota Venta Interna");
+            mapParametro.put("numeroProforma",secuencialStr);
+            mapParametro.put("nombreCliente", notaVentaInterna.getRazonSocial());
+            mapParametro.put("empresa", notaVentaInterna.getEmpresa().obtenerNombreEmpresa());
+            //mapParametro
+            CodefacMsj mensaje = MensajeCodefacSistema.VentasMensaje.NVI_ENVIADA_CORREO.agregarParametros(mapParametro);
+            
+            enviarReporteCorreo(jasperPrint, notaVentaInterna.getEmpresa(), "Comprobante", notaVentaInterna.getPreimpreso(), mensaje,Arrays.asList(notaVentaInterna.obtenerCorreosStr()));
+        } catch (IOException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    
     public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
         //TODO: Agregar para poner un validacion previa para evitar construir un reporte cuando no tenga correos a donde enviar
+        List<String> destinatarios = Arrays.asList(proforma.obtenerCorreosStr());
+
+        String secuencialStr=proforma.getSecuencial()+"";
+        Map<String, String> mapParametro = new HashMap<String, String>();
+        mapParametro.put("numeroProforma",secuencialStr);
+        mapParametro.put("nombreCliente", proforma.getRazonSocial());
+        mapParametro.put("empresa", proforma.getEmpresa().obtenerNombreEmpresa());
+        //mapParametro
+        CodefacMsj mensaje = MensajeCodefacSistema.ProformasMensajes.PROFORMA_ENVIADA_CORREO.agregarParametros(mapParametro);
+        //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
+        
+        JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
+        enviarReporteCorreo(jasperReporte, proforma.getEmpresa(), "Proforma", secuencialStr, mensaje, destinatarios);
+        //Controlador
+        /*JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
+        String pathReporte = UtilidadReportes.grabarArchivoJasperTemporal(jasperReporte);
+        Map<String, String> mapPathFiles = new HashMap<String, String>();
+        mapPathFiles.put("proforma #" + secuencialStr+".pdf", pathReporte);
+        
+        CorreoCodefac correoCodefac = new CorreoCodefac();
+        correoCodefac.enviarCorreo(
+        proforma.getEmpresa(),
+        mensaje.getMensaje(),
+        mensaje.getTitulo(),
+        destinatarios,
+        mapPathFiles);*/
+    }
+    
+    /**
+     * Ver si se puede hacer un metodo muy general para enviar cualquier comprobante
+     */
+    private void enviarReporteCorreo(JasperPrint jasperReporte,Empresa empresa,String nombreArchivo,String secuencialStr,CodefacMsj mensaje,List<String> destinatarios)
+    {
         try {
-            
-            List<String> destinatarios = Arrays.asList(proforma.obtenerCorreosStr());            
             //Si no existen destinarios cancelo el envio a los correos
-            if(destinatarios.size()==0 || destinatarios.get(0).trim().isEmpty())
-            {
+            if (destinatarios.size() == 0 || destinatarios.get(0).trim().isEmpty()) {
                 return;
             }
             
-            String secuencialStr=proforma.getSecuencial()+"";
-            Map<String, String> mapParametro = new HashMap<String, String>();
-            mapParametro.put("numeroProforma",secuencialStr);
-            mapParametro.put("nombreCliente", proforma.getRazonSocial());
-            mapParametro.put("empresa", proforma.getEmpresa().obtenerNombreEmpresa());
-            //mapParametro
-            CodefacMsj mensaje = MensajeCodefacSistema.ProformasMensajes.PROFORMA_ENVIADA_CORREO.agregarParametros(mapParametro);
-            //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
-                      
-            //Controlador
-            JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
             String pathReporte = UtilidadReportes.grabarArchivoJasperTemporal(jasperReporte);
             Map<String, String> mapPathFiles = new HashMap<String, String>();
-            mapPathFiles.put("proforma #" + secuencialStr+".pdf", pathReporte);
+            mapPathFiles.put( nombreArchivo+ "#"+ secuencialStr + ".pdf", pathReporte);
             
             CorreoCodefac correoCodefac = new CorreoCodefac();
             correoCodefac.enviarCorreo(
-                    proforma.getEmpresa(),
+                    empresa,
                     mensaje.getMensaje(),
                     mensaje.getTitulo(),
                     destinatarios,
@@ -356,7 +407,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
     /**
      * Estos datos se graban en la misma factura para poder hacer un reporte mas rapido y evitar hacer tantas consultas
      * @param proforma 
@@ -546,6 +596,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();
                 
+                //Si se grabo una nota de venta interna intento enviar al correo
+                if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+                {
+                    enviarCorreoProforma(factura);
+                }
+                
                 imprimirLogFactura(factura, CrudEnum.CREAR);
             }
         });
@@ -648,7 +704,16 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     throw new ServicioCodefacException("Error al grabar el documento, no se puede grabar con fecha superior a la actual ");
                 }
             }
+           
+
         }
+        
+        /*if (factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
+            if(factura.getIva().compareTo(BigDecimal.ZERO)>0)
+            {
+                throw new ServicioCodefacException("Error las NOTAS DE VENTA INTERNA no pueden llevar IVA ");
+            }
+        }*/
         
         //Solo valido los datos de clientes cuando es un DOCUMENTO diferente de proforma, por que si se puede grabar sin datos para proforma en especial para las comandas
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) && !factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))

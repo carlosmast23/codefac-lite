@@ -175,7 +175,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     public static final int INDICE_OBJECTO_TABLA_FACTURA=0;
     public static final int INDICE_CANTIDAD_TABLA_FACTURA=5;
-    public static final int INDICE_ELIMINAR_TABLA_FACTURA=9;
+    public static final int INDICE_ELIMINAR_TABLA_FACTURA=10;
     //private Persona persona;
     protected Factura factura;
     private Estudiante estudiante;
@@ -223,7 +223,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         addListerFechas();
         initComponenesGraficos();
         initModelTablaFormaPago();
-        initModelTablaDetalleFactura();
+        //initModelTablaDetalleFactura();
+        cargarDatosDetalles();
         initModelTablaDatoAdicional();        
         //setearVariablesIniciales();
     }
@@ -2484,7 +2485,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCheckPorcentaje().setSelected(false);
 
         //Limpiar los datos de la tabla factura
-        initModelTablaDetalleFactura();
+        //initModelTablaDetalleFactura();
+        cargarDatosDetalles();
         //Limpiar los datos forma pago
         initModelTablaFormaPago();
         //Limpiar los datos adicional
@@ -2630,18 +2632,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTblFormasPago().setModel(modeloTablaFormasPago);
     }
 
-    private void initModelTablaDetalleFactura() {
+    /*private void initModelTablaDetalleFactura() {
         Vector<String> titulo = new Vector<>();
         titulo.add("Codigo");
         titulo.add("Valor Uni");
         titulo.add("Cantidad");
         titulo.add("Descripcion");
+        titulo.add("IVA");
         titulo.add("Descuento");
         titulo.add("Valor Total");
         DefaultTableModel modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         //this.modeloTablaDetallesProductos.isCellEditable
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
-    }
+    }*/
 
     private void initModelTablaDatoAdicional() {
         //Vector<String> titulo = new Vector<>();
@@ -2716,15 +2719,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         "ValorUni",
         "Cantidad",
         "Descripcion",
+        "IVA",
         "Descuento",
         "Valor Total",
         ""}; //Columna para el boton de eliminar
 
+        if(factura==null || factura.getDetalles()==null)
+        {
+            getTblDetalleFactura().setModel(new DefaultTableModel());
+            return;
+        }
+        
         List<FacturaDetalle> detalles = factura.getDetallesOrdenados();
 
         //this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         DefaultTableModel modeloTablaDetallesProductos=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{
             Object.class,
+            String.class,
             String.class,
             String.class,
             String.class,
@@ -2790,6 +2801,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                 fila.add(detalle.getCantidad().toString());
                 fila.add(detalle.getDescripcion());
+                fila.add((detalle.getIva()!=null)?detalle.getIva().toString():"");
                 fila.add((detalle.getDescuento()!=null)?detalle.getDescuento().toString():"");
                 fila.add(detalle.getTotal().toString());
                 fila.add("Eliminar"); //Boton de eliminar para la tabla
@@ -2802,7 +2814,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
         
-        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,100,30,30,100,80,600,80,100,100}); //Definir los tamanios definidos para la tabla principal
+        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,100,30,30,100,80,600,80,80,100,100}); //Definir los tamanios definidos para la tabla principal
         
         ButtonColumn botonEliminar=new ButtonColumn(getTblDetalleFactura(),new AbstractAction() { //Agregado boton de eliminar a la tabla
             @Override

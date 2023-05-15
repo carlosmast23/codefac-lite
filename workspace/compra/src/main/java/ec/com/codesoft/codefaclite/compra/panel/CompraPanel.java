@@ -934,7 +934,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.ipadx = 35;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel2.add(txtCantidadItem, gridBagConstraints);
 
@@ -952,7 +952,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 45;
+        gridBagConstraints.ipadx = 55;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtPrecionUnitarioItem, gridBagConstraints);
@@ -1112,7 +1112,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 45;
+        gridBagConstraints.ipadx = 55;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtDescuentoItem, gridBagConstraints);

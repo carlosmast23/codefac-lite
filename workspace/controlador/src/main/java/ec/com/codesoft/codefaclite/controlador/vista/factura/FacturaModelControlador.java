@@ -169,9 +169,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     /**
      * TODO: Ver si esta parte no debe manejar el cliente si no directamente en el servidor para todos los casos
+     * NOTA: Metodo duplicado
      * @param factura
      * @return 
      */
+    @Deprecated
     public static ComprobanteDataInterface obtenerComprobanteData(Factura factura)
     {
         if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))

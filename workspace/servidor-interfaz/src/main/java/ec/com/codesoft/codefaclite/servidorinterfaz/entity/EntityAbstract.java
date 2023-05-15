@@ -4,6 +4,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -20,7 +21,7 @@ import javax.persistence.MappedSuperclass;
  * @author DellWin10
  */
 @MappedSuperclass
-public class EntityAbstract<T> implements Serializable {
+public class EntityAbstract<T extends EstadoEntidadIf> implements Serializable {
     
     @Id
     @Column(name = "ID")
@@ -128,9 +129,10 @@ public class EntityAbstract<T> implements Serializable {
         return estadoEnum;
     }
 
+    @Deprecated //No esta funcionando como un men
     public void setEstadoEnum(T estadoEnum) {
-        GeneralEnumEstado estadoEnumOriginal=(GeneralEnumEstado) estadoEnum;
-        this.estado = estadoEnumOriginal.getEstado();
+        T estadoEnumOriginal=estadoEnum;
+        this.estado = estadoEnumOriginal.getLetra();
     }
     
     

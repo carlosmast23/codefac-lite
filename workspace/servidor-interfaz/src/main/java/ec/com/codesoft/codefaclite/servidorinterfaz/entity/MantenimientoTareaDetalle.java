@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.sql.Timestamp;
 import javax.persistence.Basic;
@@ -70,7 +71,7 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
     }
     
     
-    public enum EstadoEnum 
+    public enum EstadoEnum implements EstadoEntidadIf
     {
         GENERADO("G","Generado"),
         INICIADO("I","Iniciado"),

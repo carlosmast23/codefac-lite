@@ -186,6 +186,11 @@ public class ComprobanteElectronicoComponente {
 
     public static void cargarSecuencial(Usuario usuario, DocumentoEnum documentoEnum, Sucursal sucursal, JComboBox<PuntoEmision> cmbPuntoEmision, JLabel lblEstablecimiento, JLabel lblSecuencial) {
         
+        if(documentoEnum==null)
+        {
+            return;
+        }
+        
         //Quitar los listener de forma temporal para evitar activar un ciclo repetitivo hasta cargar los datos
         ActionListener[] listerTmp = cmbPuntoEmision.getActionListeners();
         UtilidadesComboBox.eliminarTodosLosListener(cmbPuntoEmision);

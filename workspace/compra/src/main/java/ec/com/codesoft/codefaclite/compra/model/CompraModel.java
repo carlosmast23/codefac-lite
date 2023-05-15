@@ -433,7 +433,7 @@ public class CompraModel extends CompraPanel{
         this.getTxtDescuentoImpuestos().setText(this.compra.getDescuentoImpuestos() + "");
         this.getTxtDescuentoSinImpuestos().setText(this.compra.getDescuentoSinImpuestos() + "");
         //Valores a mostrar del subtotal
-        this.getLblSubtotalImpuestoSinDescuento().setText(compra.getSubtotalImpuestosSinDescuentos().toString());
+        this.getLblSubtotalImpuestoSinDescuento().setText(compra.getSubtotalImpuestosSinDescuentos().setScale(3, RoundingMode.HALF_UP)+"");
         this.getLblSubtotalSinImpuestoSinDescuento().setText(compra.getSubtotalSinImpuestosSinDescuentos().toString());
         
         this.getCmbDocumento().setSelectedItem(DocumentoEnum.obtenerDocumentoPorCodigo(compra.getCodigoDocumento()));
@@ -1455,6 +1455,7 @@ public class CompraModel extends CompraPanel{
             "ValorRetRent",
             "Desc",
             "Val Unit",
+            "Ice",
             "Utilidad",
             "Total"
         };
@@ -1488,14 +1489,17 @@ public class CompraModel extends CompraPanel{
             fila.add((detalle.getValorSriRetencionRenta()!=null)?detalle.getValorSriRetencionRenta().setScale(3,RoundingMode.HALF_UP)+"":"");
             fila.add(detalle.getDescuento()+"");
             fila.add(detalle.getPrecioUnitario().setScale(4, RoundingMode.HALF_UP)+"");
+            fila.add(detalle.getValorIce());
             fila.add(detalle.calcularUtilidadRedondeada()+"");
             fila.add(detalle.getSubtotal().setScale(4, RoundingMode.HALF_UP)+"");
             this.modeloTablaDetallesCompra.addRow(fila);
+            
+            System.out.println(producto.getCodigoPersonalizado()+";"+detalle.getCantidad()+";"+detalle.getPrecioUnitario()+";"+detalle.getDescuento());
         }
                 
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
         UtilidadesTablas.ocultarColumna(getTblDetalleProductos(),0);
-        UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleProductos(),new Integer[]{0,150,50,50,250,100,50,50,50,50,50});
+        UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleProductos(),new Integer[]{0,150,50,50,250,100,50,50,50,30,50,50});
         
     }
     
@@ -1531,12 +1535,13 @@ public class CompraModel extends CompraPanel{
     private void mostrarDatosTotales()
     {
         getLblSubtotalSinImpuestoSinDescuento().setText(compra.getSubtotalSinImpuestosSinDescuentos().toString());
-        getLblSubtotalImpuestoSinDescuento().setText(compra.getSubtotalImpuestosSinDescuentos().toString());
+        getLblSubtotalImpuestoSinDescuento().setText(compra.getSubtotalImpuestosSinDescuentos().setScale(3,RoundingMode.HALF_UP)+"");
         getTxtDescuentoImpuestos().setText(compra.getDescuentoImpuestos()+"");
         getTxtDescuentoSinImpuestos().setText(compra.getDescuentoSinImpuestos()+"");
-        getLblSubtotalImpuestos().setText(compra.getSubtotalImpuestos()+"");
+        getLblSubtotalImpuestos().setText(compra.getSubtotalImpuestos().setScale(3, RoundingMode.HALF_UP)+"");
         getLblSubtotalSinImpuestos().setText(compra.getSubtotalSinImpuestos()+"");
         getLblIva().setText(compra.getIva()+"");
+        getTxtIce().setText(compra.getIce()+"");
         getLblTotal().setText(compra.getTotal()+"");
         
         getLblTotalIvaRet().setText(compra.calcularTotalRentencionIva()+"");
@@ -1704,7 +1709,7 @@ public class CompraModel extends CompraPanel{
             
             //compraDetalle.setTotal(compraDetalle.getTotal().subtract(valorTotalRetencion));
             
-            compraDetalle.setValorIce(BigDecimal.ZERO);
+            //compraDetalle.setValorIce(BigDecimal.ZERO);
             
             
             compraDetalle.setCodigoSustentoSriEnum((SriSustentoComprobanteEnum)getCmbSustentoComprobante().getSelectedItem());

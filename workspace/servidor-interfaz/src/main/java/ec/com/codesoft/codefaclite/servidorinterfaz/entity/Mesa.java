@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -129,7 +130,7 @@ public class Mesa extends EntityAbstract<Mesa.MesaEstadoEnum>{
     
     
     
-    public enum MesaEstadoEnum 
+    public enum MesaEstadoEnum implements EstadoEntidadIf
     {
         LIBRE("L","Libre"),
         ELIMINADO("E","Eliminado"),

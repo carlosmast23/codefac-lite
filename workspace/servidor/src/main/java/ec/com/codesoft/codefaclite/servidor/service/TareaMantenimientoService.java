@@ -55,7 +55,8 @@ public class TareaMantenimientoService extends ServiceAbstract<TareaMantenimient
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException, RemoteException 
+            {
                 mesa.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 setDatosAuditoria(mesa,usuarioCreacion,CrudEnum.CREAR);
                 //setearDatosGrabar(mesa, empresa,CrudEnum.CREAR);

@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
+
 /**
  *
  * @author CodesoftDesarrollo
  */
-public enum GeneralEnumEstado {
+public enum GeneralEnumEstado implements EstadoEntidadIf{
     /**
      * Valor por defecto del cliente
      */
@@ -61,5 +63,10 @@ public enum GeneralEnumEstado {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getLetra() {
+        return estado;
     }
 }

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.servicios;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelMigrar;
 import ec.com.codesoft.codefaclite.controlador.excel.entidades.ExcelMigrarVehiculosMantenimiento;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
@@ -13,13 +14,17 @@ import ec.com.codesoft.codefaclite.controlador.inventario.ReporteInventarioStock
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,19 +45,27 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class CargarVehiculoMb extends GeneralAbstractMb implements ControladorVistaIf, ReporteInventarioStockControlador.WebIf
+public class CargarVehiculoMb extends GeneralAbstractMb implements ReporteInventarioStockControlador.WebIf,Serializable
 {
     //Variable para almacenar los datos que se deben almacenar o cargar de forma temporal que se van a realizar el mantenimiento    
     private List<Mantenimiento> mantenimientoList;
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mantenimientoList=new ArrayList<Mantenimiento>();
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            ServiceFactory.getFactory().getMantenimientoServiceIf().grabarPorLote(mantenimientoList,sessionMb.getSession().getEmpresa(),sessionMb.getSession().getUsuario());
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        } catch (ServicioCodefacException ex) {
+            MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            Logger.getLogger(CargarVehiculoMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CargarVehiculoMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -120,10 +133,7 @@ public class CargarVehiculoMb extends GeneralAbstractMb implements ControladorVi
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public ModelControladorAbstract getControladorVista() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
     
     @PostConstruct
     public void init() {
@@ -154,6 +164,9 @@ public class CargarVehiculoMb extends GeneralAbstractMb implements ControladorVi
     public void cargarTablaExcel(UploadedFile uploadedFile)
     {
         try {
+            //Primero limpia los datos anteriores de la vista para cargar de nuevo
+            mantenimientoList.clear();
+            
             ExcelMigrarVehiculosMantenimiento migrarExcel=new ExcelMigrarVehiculosMantenimiento();
             migrarExcel.setArchivoExel(convertUploadedFileToFile(uploadedFile));
             migrarExcel.leerDatos();

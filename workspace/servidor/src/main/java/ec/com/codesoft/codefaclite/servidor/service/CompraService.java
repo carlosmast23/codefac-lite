@@ -273,6 +273,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //Cargar los DETALLES DE LA COMPRA
         List<CompraDetalle> detallesCompra=cargarProductoCompraDetalleDesdeXml(comprobanteElectronico, compraNueva);
         compraNueva.setDetalles(detallesCompra);
+        compraNueva.calcularTotalesDesdeDetalles();
         
         
         return compraNueva;
@@ -302,10 +303,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 //Crear temporalmente los datos para mandar los impuestos que deben crear en el nuevo producto}
                 ProductoProveedor productoProveedorTmp=new ProductoProveedor();
                 Producto productoTmp=new Producto();
+                
                 CatalogoProducto catalogoProductoTmp=new CatalogoProducto();
                 ImpuestoDetalle impuestoDetalleIvaTmp=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorCodigo(Integer.parseInt(detalleXml.getImpuestos().get(0).getCodigoPorcentaje()));
-                
-                
+                                
                 
                 productoProveedorTmp.setProducto(productoTmp);
                 productoTmp.setCatalogoProducto(catalogoProductoTmp);
@@ -319,6 +320,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             Integer ivaPorcentaje=detalleXml.getImpuestos().get(0).getTarifa().intValue();
             compraDetalle.setIvaPorcentaje(ivaPorcentaje);            
             
+            if(detalleXml.getCodigoPrincipal().equals("5062651/h52"))
+            {
+                System.out.println("revisar ...");
+            }
+            
+            //Consulta el valor del ICE
+            compraDetalle.setIcePorcentaje(detalleXml.obtenerIcePorcentaje());
+            compraDetalle.setValorIce(detalleXml.obtenerIce());
             
             //Agregar la CANTIDAD del detalle
             BigDecimal cantidad = detalleXml.getCantidad();
@@ -340,6 +349,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             compraDetalle.setCodigoProveedor(codigoPrincipal);
             //Calculor los totales previos
             compraDetalle.calcularSubtotalSinIva();
+            
+            //detalleXml.getImpuestos();
             
             detalles.add(compraDetalle);
             

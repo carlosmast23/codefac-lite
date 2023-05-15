@@ -30,6 +30,29 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         super(MantenimientoFacade.class);
     }
     
+    public void grabarPorLote(List<Mantenimiento> mantenimientoList,Empresa empresa,Usuario usuarioCreacion)  throws ServicioCodefacException, RemoteException 
+    {
+        for (Mantenimiento mantenimiento : mantenimientoList) 
+        {
+            grabar(mantenimiento, empresa, usuarioCreacion);
+        }
+        
+    }
+    
+    public List<Mantenimiento> obtenerPendientes(Empresa empresa) throws ServicioCodefacException, RemoteException 
+    {
+        return (List<Mantenimiento>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Map<String,Object> mapParametros=new HashMap<String,Object>();
+                mapParametros.put("estado", Mantenimiento.MantenimientoEnum.INGRESADO.getLetra());
+                return getFacade().findByMap(mapParametros);
+            }
+        });
+        
+    }
+    
+    
     //TODO: Terminar de programar para que salgan todos los estados menos el eliminado
     public List<Mantenimiento> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException 
     {
@@ -51,20 +74,21 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
     }
     
     @Override
-    public Mantenimiento grabar(Mantenimiento mesa,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException {
+    public Mantenimiento grabar(Mantenimiento objeto,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                mesa.setEstadoEnum(Mantenimiento.MantenimientoEnum.INGRESADO);
-                setDatosAuditoria(mesa,usuarioCreacion,CrudEnum.CREAR);
+            public void transaccion() throws ServicioCodefacException, RemoteException {                
+                objeto.setEstadoEnum(Mantenimiento.MantenimientoEnum.INGRESADO);
+                setDatosAuditoria(objeto,usuarioCreacion,CrudEnum.CREAR);
                 //setearDatosGrabar(mesa, empresa,CrudEnum.CREAR);
-                validarGrabar(mesa, CrudEnum.CREAR);
-                entityManager.persist(mesa);
+                validarGrabar(objeto, CrudEnum.CREAR);
+                entityManager.persist(objeto.getVehiculo());
+                entityManager.persist(objeto);
                 
             }
         });
-        return mesa;
+        return objeto;
     }
     
     @Override

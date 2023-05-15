@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -125,9 +126,20 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
         return true;
     }
 
+    @Override
+    public void setEstadoEnum(MantenimientoEnum estadoEnum) {
+        super.setEstadoEnum(estadoEnum); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MantenimientoEnum getEstadoEnum() {
+        return super.getEstadoEnum(); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
     
-    public enum MantenimientoEnum 
+    
+    public enum MantenimientoEnum implements EstadoEntidadIf
     {
         INGRESADO("I","Ingresado"),
         FACTURADO("F","Facturado"),
@@ -156,7 +168,14 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
             }
         }
         return null;
+        
+        
     }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
         
         
     }

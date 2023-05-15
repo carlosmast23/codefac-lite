@@ -186,6 +186,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacio3345 = new javax.swing.JLabel();
         jLabel75 = new javax.swing.JLabel();
         cmbNVITotalConIva = new javax.swing.JComboBox<>();
+        jLabel114 = new javax.swing.JLabel();
+        cmbEnviarNVIalCorreo = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         lblEspacioVertical1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -1346,11 +1348,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel13.setLayout(new java.awt.GridBagLayout());
 
         jLabel55.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel55.setText("Incluir total producto con Iva:");
+        jLabel55.setText("Enviar NVI al correo");
         jLabel55.setToolTipText("Esta opción permite incluir al valor del producto con el iva, para que puedan hacer una nota de venta por el mismo valor que si hubieran hecho una factura con iva");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel13.add(jLabel55, gridBagConstraints);
@@ -1364,7 +1366,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel13.add(cmbNotaVentaInternaIva, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -1388,6 +1390,24 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel13.add(cmbNVITotalConIva, gridBagConstraints);
+
+        jLabel114.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel114.setText("Incluir total producto con Iva:");
+        jLabel114.setToolTipText("Esta opción permite incluir al valor del producto con el iva, para que puedan hacer una nota de venta por el mismo valor que si hubieran hecho una factura con iva");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel13.add(jLabel114, gridBagConstraints);
+
+        cmbEnviarNVIalCorreo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel13.add(cmbEnviarNVIalCorreo, gridBagConstraints);
 
         jTabbedPane1.addTab("NVI", jPanel13);
 
@@ -2449,6 +2469,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescripcionFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarDescuentoFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbEditarPrecioUnitFactura;
+    private javax.swing.JComboBox<EnumSiNo> cmbEnviarNVIalCorreo;
     private javax.swing.JComboBox<EnumSiNo> cmbFacturarInventarioNegativo;
     private javax.swing.JComboBox<EnumSiNo> cmbFiltroRapidoBusqueda;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
@@ -2502,6 +2523,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel111;
     private javax.swing.JLabel jLabel112;
     private javax.swing.JLabel jLabel113;
+    private javax.swing.JLabel jLabel114;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -3569,6 +3591,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbAgregarPvpAnterior(JComboBox<EnumSiNo> cmbAgregarPvpAnterior) {
         this.cmbAgregarPvpAnterior = cmbAgregarPvpAnterior;
+    }
+
+    public JComboBox<EnumSiNo> getCmbEnviarNVIalCorreo() {
+        return cmbEnviarNVIalCorreo;
+    }
+
+    public void setCmbEnviarNVIalCorreo(JComboBox<EnumSiNo> cmbEnviarNVIalCorreo) {
+        this.cmbEnviarNVIalCorreo = cmbEnviarNVIalCorreo;
     }
     
 }

@@ -8,29 +8,21 @@
 
     <ui:composition  template="/template/codefac_template.xhtml">
         <ui:define name="contenido" >
-            <f:event listener="#{controllerCodefacMb.agregarVista(cargarVehiculoMb)}" type="preRenderComponent" /> 
+            <f:event listener="#{controllerCodefacMb.agregarVista(mantenimientosPendientesMb)}" type="preRenderComponent" /> 
             <div class="p-grid" style="text-align: left" >
                 <div class="p-col-12 p-md-6 p-lg-6" >
-                    <div><h:outputLabel id="cmbBodega"  value="Ingreso de archivo carga masiva: "/></div>
+                    <div><h:outputLabel id="cmbBodega"  value="Esta pantalla contiene los vehiculos ingresados pero que aun no tienen asignadas tareas "/></div>
                 </div> 
                 <div class="p-col-12 p-md-6 p-lg-6" >
                     <div>
-                        <p:fileUpload
-                            label="Seleccionar Archivo"
-                            mode="advanced"
-                            multiple="false"
-                            accept=".xlsx, .xls"
-                            fileUploadListener="#{cargarVehiculoMb.handleFileUpload}"
-                            update="tblMantenimiento"
-                            auto="true"
-                            />
+
                     </div>
                 </div> 
             </div>
-
-            <!-- Cargar una tabla para que pueda visualizar el contenido -->
+            
+            <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
             <div class="card">
-                <p:dataTable id="tblMantenimiento" var="m" value="#{cargarVehiculoMb.mantenimientoList}" rowIndexVar="rowIndex" >
+                <p:dataTable id="tblMantenimiento" var="m" value="#{mantenimientosPendientesMb.mantenimientoPendienteList}" rowIndexVar="rowIndex" >
 
                     <p:column headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />
@@ -52,9 +44,23 @@
                         <h:outputText value="#{m.fechaIngreso}" />
                     </p:column>
                     
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{m.estado}" />
+                    </p:column>
+                    
+                    <p:column exportable="false">
+                        <p:commandButton
+                                        title="Asignar nueva tarea"
+                                        action="#{mantenimientosPendientesMb.agregarTarea(m)}"
+                                        icon="pi pi-check"                                         
+                                        styleClass="edit-button rounded-button ui-button-success" process="@this">                                                        
+                        </p:commandButton>                    
+                    </p:column>
                     
                 </p:dataTable>
             </div>
+
+            
         </ui:define>
     </ui:composition>
 
