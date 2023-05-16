@@ -27,7 +27,7 @@ import javax.persistence.Table;
 public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTareaDetalle.EstadoEnum>
 {
     
-    @JoinColumn(name = "OPERADOR")
+    @JoinColumn(name = "OPERADOR_ID")
     private Empleado operador;
     
     @Column(name = "FECHA_INICIO")
@@ -36,8 +36,14 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
     @Column(name = "FECHA_FIN")
     private Timestamp fechaFin;
     
-    @JoinColumn(name = "MANTENIMIENTO")
+    @Column(name = "OBSERVACION")
+    private String observacion;
+    
+    @JoinColumn(name = "MANTENIMIENTO_ID")
     private Mantenimiento mantenimiento;
+    
+    @JoinColumn(name = "TAREA_MANTENIMIENTO_ID")
+    private TareaMantenimiento tarea;
 
     public MantenimientoTareaDetalle() {
     }
@@ -69,6 +75,33 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
     public MantenimientoTareaDetalle(Mantenimiento mantenimiento) {
         this.mantenimiento = mantenimiento;
     }
+
+    public TareaMantenimiento getTarea() {
+        return tarea;
+    }
+
+    public void setTarea(TareaMantenimiento tarea) {
+        this.tarea = tarea;
+    }
+
+    public Mantenimiento getMantenimiento() {
+        return mantenimiento;
+    }
+
+    public void setMantenimiento(Mantenimiento mantenimiento) {
+        this.mantenimiento = mantenimiento;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+    
+    
+    
     
     
     public enum EstadoEnum implements EstadoEntidadIf

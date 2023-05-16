@@ -60,7 +60,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         
         //mesa.getEstadoEnum();
         Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado", Mantenimiento.MantenimientoEnum.INGRESADO);
+        mapParametros.put("estado", Mantenimiento.MantenimientoEnum.INGRESADO.getLetra());
         return getFacade().findByMap(mapParametros);
     }
     

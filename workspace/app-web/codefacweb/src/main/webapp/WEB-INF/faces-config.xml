@@ -286,5 +286,16 @@
                 </view-param>
             </redirect>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>tareas_pendientes</from-outcome>
+            <to-view-id>sistema/servicios/tareas_pendientes.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

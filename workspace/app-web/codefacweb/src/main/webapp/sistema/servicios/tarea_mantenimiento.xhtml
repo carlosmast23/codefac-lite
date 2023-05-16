@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
+
+    <ui:composition  template="/template/codefac_template.xhtml">
+        <ui:define name="contenido" >
+            <f:event listener="#{controllerCodefacMb.agregarVista(tareaMantenimientoMb)}" type="preRenderComponent" /> 
+            <p:tabView>
+                <p:tab title="Datos Principales">
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12">
+                            <h:outputLabel   value="Mantenimiento :  " class="etiqueta_titulo" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:selectOneMenu   value="#{tareaMantenimientoMb.tareaMantenimieto.mantenimiento}" converter="mantenimientoConverter" >
+                                <f:selectItems value="#{tareaMantenimientoMb.mantenimientoList}" var="opcion" itemValue="#{opcion.id.toString()}" />
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12"><h:outputLabel   value="Operador :  " class="etiqueta_titulo" /></div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:selectOneMenu   value="#{tareaMantenimientoMb.tareaMantenimieto.operador}" converter="empleadoConverter" >
+                                <f:selectItems value="#{tareaMantenimientoMb.operadorList}" var="opcion" itemValue="#{opcion.id.toString()}" />
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12"><h:outputLabel   value="Tarea :  " class="etiqueta_titulo" /></div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:selectOneMenu   value="#{tareaMantenimientoMb.tareaMantenimieto.tarea}" converter="tareaMantenimientoConverter" >
+                                <f:selectItems value="#{tareaMantenimientoMb.tareaList}" var="opcion" itemValue="#{opcion.id.toString()}" />
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12"><h:outputLabel   value="OBSERVACION :  " class="etiqueta_titulo" /></div>
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <h:inputText value="#{tareaMantenimientoMb.tareaMantenimieto.observacion}" required="false"  class="componente-responsive" />
+                        </div>
+                    </div>
+                    
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <p:commandButton actionListener="#{tareaMantenimientoMb.crearNuevaTarea()}" process="@this" value="Crear Tarea"/>
+                            <p:commandButton actionListener="#{tareaMantenimientoMb.finalizarMantenimiento()}" process="@this" value="Finalizar Tarea"/>
+                            <p:commandButton actionListener="#{tareaMantenimientoMb.finalizarTareaYCrearOtra()}" process="@this" value="Finalizar y Crear Nueva Tarea"/>
+                        </div>
+                    </div>
+                </p:tab>
+            </p:tabView>
+
+        </ui:define>
+    </ui:composition>
+
+</html>
+

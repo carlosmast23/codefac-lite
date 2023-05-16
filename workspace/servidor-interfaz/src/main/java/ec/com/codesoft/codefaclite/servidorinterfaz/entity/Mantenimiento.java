@@ -136,13 +136,16 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
         return super.getEstadoEnum(); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
-    
+    @Override
+    public String toString() {
+        return vehiculo.getModelo()+" : "+vehiculo.getColor()+" : "+vehiculo.getVin();
+    }
     
     public enum MantenimientoEnum implements EstadoEntidadIf
     {
         INGRESADO("I","Ingresado"),
         FACTURADO("F","Facturado"),
+        TERMINADO("T","Terminado"),
         ELIMINADO("E","Eliminado");
 
         private MantenimientoEnum(String letra, String nombre) {
