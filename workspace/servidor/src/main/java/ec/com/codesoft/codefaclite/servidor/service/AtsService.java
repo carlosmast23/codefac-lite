@@ -438,6 +438,11 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     
     public void compraAtsDatosAdicionales(Compra compra,CompraAts compraAts,SriRetencion sriRetencionIva,SriRetencion sriRetencionRenta,List<String> alertas) throws RemoteException, ServicioCodefacException
     {
+        if(compra.getSecuencial()==11)
+        {
+            System.out.println("revisando ...");
+        }
+        
         Map<BigDecimal, BigDecimal> mapRetenciones = consultarRetencionesIva(compra, sriRetencionIva);
         ///=======> DATOS DE LAS RETENCIONES <============///
         compraAts.setValRetBien10(obtenerValorMapRetenciones(mapRetenciones, 10).setScale(2, RoundingMode.HALF_UP)); //10% TODO:completar

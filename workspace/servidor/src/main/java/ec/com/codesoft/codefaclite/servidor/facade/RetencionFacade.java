@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.ComprobanteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -222,18 +223,39 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
     
     public List<Object[]> obtenerRetencionesIvaPorCompraFacade(Compra compra,SriRetencion sriRetencion)throws RemoteException
     {
-        RetencionDetalle rd;
+        //RetencionDetalle rd;
+        //rd.getRetencion().getEstado()
         //rd.getRetencion().getCompra();
         //rd.setCodigoSri(claveDb);
         //rd.getPorcentajeRetener();
         //rd.getValorRetenido();
         //rd.getRetencion().getEstado();
+        
+        /*String queryString2="SELECT rd, rd.porcentajeRetener,rd.valorRetenido FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.codigoSri=?3 ";
+        Query query2 = getEntityManager().createQuery(queryString2);
+        query2.setParameter(1,compra);
+        query2.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
+        query2.setParameter(3, sriRetencion.getCodigo());
+        
+        List<Object[]> tmpList= query2.getResultList();
+        for (Object[] datos : tmpList) 
+        {
+            RetencionDetalle rdt=(RetencionDetalle) datos[0];
+            Object porcentaje=datos[1];
+            Object valor=datos[2];
+            
+            System.out.println(porcentaje);
+            System.out.println(valor);
+        }*/
+        
+        
        
-        String queryString="SELECT rd.porcentajeRetener,sum(rd.valorRetenido) FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.codigoSri=?3 group by rd.porcentajeRetener ";
+        String queryString="SELECT rd.porcentajeRetener,sum(rd.valorRetenido) FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.codigoSri=?3 and rd.retencion.estado=?4 group by rd.porcentajeRetener ";
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1,compra);
         query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         query.setParameter(3, sriRetencion.getCodigo());
+        query.setParameter(4, ComprobanteEnumEstado.AUTORIZADO.getEstado());
         
         return query.getResultList();
     }
