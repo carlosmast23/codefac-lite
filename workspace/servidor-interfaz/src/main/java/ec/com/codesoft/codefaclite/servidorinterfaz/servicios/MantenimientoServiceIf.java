@@ -12,7 +12,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,5 +27,6 @@ public interface MantenimientoServiceIf extends ServiceAbstractIf<Mantenimiento>
     public List<Mantenimiento> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException;
     public void grabarPorLote(List<Mantenimiento> mantenimientoList,Empresa empresa,Usuario usuarioCreacion)  throws ServicioCodefacException, RemoteException;
     public List<Mantenimiento> obtenerPendientes(Empresa empresa) throws ServicioCodefacException, RemoteException ;
+    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin) throws ServicioCodefacException, RemoteException;
     
 }

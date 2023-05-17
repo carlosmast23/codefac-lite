@@ -128,12 +128,19 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
 
     @Override
     public void setEstadoEnum(MantenimientoEnum estadoEnum) {
-        super.setEstadoEnum(estadoEnum); //To change body of generated methods, choose Tools | Templates.
+        if(estadoEnum!=null)
+        {
+            estado=estadoEnum.getLetra();
+        }
+        else
+        {
+            estado=null;
+        }
     }
 
     @Override
     public MantenimientoEnum getEstadoEnum() {
-        return super.getEstadoEnum(); //To change body of generated methods, choose Tools | Templates.
+        return MantenimientoEnum.getEnum(estado);
     }
 
     @Override

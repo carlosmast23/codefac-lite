@@ -13,9 +13,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +106,40 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             }
         });
         return entity;
+    }
+    
+    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin) throws ServicioCodefacException, RemoteException
+    {
+        return (List<MantenimientoResult>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException 
+            {                
+                List<Mantenimiento> resultado=getFacade().findByMap(new HashMap<String, Object>());
+                return convertirDatos(resultado);
+            }
+        });
+    }
+    
+    private List<MantenimientoResult> convertirDatos(List<Mantenimiento> datos)
+    {
+        List<MantenimientoResult> resultadoList=new ArrayList<MantenimientoResult>();
+        for (Mantenimiento dato : datos) {
+            Mantenimiento.MantenimientoEnum estadoEnum=dato.getEstadoEnum();
+            
+            MantenimientoResult mantenimientoResult=new MantenimientoResult();
+            mantenimientoResult.modelo=dato.getVehiculo().getModelo();
+            mantenimientoResult.color=dato.getVehiculo().getColor();
+            mantenimientoResult.vin=dato.getVehiculo().getVin();
+            mantenimientoResult.estado=(estadoEnum!=null)?estadoEnum.getNombre():"";
+            mantenimientoResult.fechaIngreso=dato.getFechaIngreso()+"";
+            
+            //Falta implemtar el resto de los procesos
+            
+            
+            resultadoList.add(mantenimientoResult);
+        }
+        
+        return resultadoList;
     }
     
     @Override

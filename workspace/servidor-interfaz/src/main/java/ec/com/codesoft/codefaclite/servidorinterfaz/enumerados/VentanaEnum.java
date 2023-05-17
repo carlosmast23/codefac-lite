@@ -184,7 +184,7 @@ public enum VentanaEnum implements Serializable{
         this.nombre = nombre;
         this.modulo = modulo;
         this.categoriaMenu = categoriaMenu;
-        this.maximizado = true;
+        this.maximizado = true; 
         this.tipoLicenciaEnum=TipoLicenciaEnum.PRO;
         this.teclaAtajo=teclaAtajo;
     }

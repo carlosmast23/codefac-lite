@@ -288,8 +288,8 @@
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>tareas_pendientes</from-outcome>
-            <to-view-id>sistema/servicios/tareas_pendientes.xhtml</to-view-id>
+            <from-outcome>reporte_mantenimiento</from-outcome>
+            <to-view-id>sistema/servicios/reporte_mantenimiento.xhtml</to-view-id>
             <redirect>
                 <view-param>
                     <name>faces-redirect</name>
