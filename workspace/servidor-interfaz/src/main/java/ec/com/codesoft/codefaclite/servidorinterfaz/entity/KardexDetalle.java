@@ -358,7 +358,14 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public void recalcularTotalSinGarantia()
     {
         //this.cantidad=(getDetallesEspecificos()!=null)?getDetallesEspecificos().size():0;
-        this.precioTotal=precioUnitario.multiply(cantidad);
+        if(precioUnitario!=null)
+        {
+            this.precioTotal=precioUnitario.multiply(cantidad);
+        }
+        else
+        {
+            this.precioTotal=BigDecimal.ZERO;
+        }
     }
     
     /*
@@ -383,9 +390,17 @@ public class KardexDetalle implements Serializable ,Cloneable {
         }
         else
         {
-            //Por el momento se redondea con 2 decimales
-            //se divide el DESCUENTO por la CANTIDAD, por que el ingreso en las compras se hace por el valor total no individual
-            return precioUnitario.subtract(descuento.divide(cantidad,2,BigDecimal.ROUND_HALF_UP));
+            //Si el precio Unitario es null devuelvo Cero, esto pasa por ejemplo al momento que mando un null al hacer ajustes de inventario y evitar que se mueva el ultimo precio
+            if(precioUnitario==null)
+            {
+                return BigDecimal.ZERO;
+            }
+            else
+            {
+                //Por el momento se redondea con 2 decimales
+                //se divide el DESCUENTO por la CANTIDAD, por que el ingreso en las compras se hace por el valor total no individual
+                return precioUnitario.subtract(descuento.divide(cantidad,2,BigDecimal.ROUND_HALF_UP));
+            }
         }
         
         

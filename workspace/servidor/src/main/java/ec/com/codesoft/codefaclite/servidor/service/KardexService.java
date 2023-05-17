@@ -626,27 +626,36 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //Si el movimiento del kardex detalle esta clasificado como que afecta a el inventario entonces hago el resto de calculos
         if(kardexDetalle.getCodigoTipoDocumentoEnum().getAfectaCostoInventario())
         {
-            ///Verificar si quieren hacer los calculos de los costos tomando en cuenta los descuentos
-            if(ParametroUtilidades.comparar(kardex.getProducto().getEmpresa(),ParametroCodefac.CALCULAR_DESCUENTO_COSTO, EnumSiNo.SI))
-            {
-                //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
-                kardex.setPrecioUltimo(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+            //Si el precio unitario tiene Null significa que no se tiene que recalcular los valores
+            if(kardexDetalle.getPrecioUnitario()!=null)
+            {            
+                ///Verificar si quieren hacer los calculos de los costos tomando en cuenta los descuentos
+                if(ParametroUtilidades.comparar(kardex.getProducto().getEmpresa(),ParametroCodefac.CALCULAR_DESCUENTO_COSTO, EnumSiNo.SI))
+                {
+                    //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
+                    kardex.setPrecioUltimo(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+                }
+                else
+                {
+                    kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                }
+
+
+                //Calcular el precio promedio con respecto al nuevo valor
+                if(kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)>0)
+                {
+                    costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle);
+                    kardex.setCostoPromedio(costoPonderado);            
+                }
+                else
+                {
+                    kardex.setCostoPromedio(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+                }
             }
             else
             {
-                kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
-            }
-            
-            
-            //Calcular el precio promedio con respecto al nuevo valor
-            if(kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)>0)
-            {
-                costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle);
-                kardex.setCostoPromedio(costoPonderado);            
-            }
-            else
-            {
-                kardex.setCostoPromedio(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+                //Si el valor unitario era null no recalculo precios y le deje en cero para luego no tener problemas con el null
+                kardexDetalle.setPrecioUnitario(BigDecimal.ZERO);
             }
             
             

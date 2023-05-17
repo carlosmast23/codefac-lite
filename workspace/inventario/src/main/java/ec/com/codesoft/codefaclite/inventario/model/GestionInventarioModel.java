@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -320,8 +321,11 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         kardexDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
         kardexDetalle.setUsuarioNick(session.getUsuario().getNick());
         //Si no tiene ingresado un precio unitario grabo como null
-        String precioUnitarioTxt=(!getTxtPrecio().getText().isEmpty())?getTxtPrecio().getText():"0";
-        kardexDetalle.setPrecioUnitario(new BigDecimal(precioUnitarioTxt));
+        String costo=getTxtPrecio().getText();
+        if(!UtilidadesTextos.verificarNullOVacio(costo))
+        {
+            kardexDetalle.setPrecioUnitario(new BigDecimal(costo));
+        }
         kardexDetalle.recalcularTotalSinGarantia();
         
         //Setear el documento que esta usando el usuario 
