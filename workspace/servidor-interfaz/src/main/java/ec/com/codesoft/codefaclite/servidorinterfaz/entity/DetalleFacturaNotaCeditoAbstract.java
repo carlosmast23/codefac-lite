@@ -342,7 +342,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
             
             descuento = total.multiply(porcentajeDescuento).setScale(2,BigDecimal.ROUND_HALF_UP); //Si esta seleccionada la opcion asumo que el descuento se esta aplicando incluido iva
             
-            descuento = UtilidadesImpuestos.quitarValorIva(ivaDefecto, descuento, 6);
+            descuento = UtilidadesImpuestos.quitarValorIva(ivaDefecto, descuento, 2);
         }
         else
         {

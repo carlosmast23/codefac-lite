@@ -104,6 +104,23 @@ public abstract class UtilidadesLista {
         Collections.sort(lista,comparator);
     }
     
+    public static Boolean verificarListaVaciaONull(List lista)
+    {
+        if(lista==null)
+        {
+            return true;
+        }
+        
+        if(lista.size()==0)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    
+    
     
     public static <T> List<T> arrayToList(T[] array){
         List<T> lista = Arrays.asList(array);

@@ -9,19 +9,24 @@ import ec.com.codesoft.codefaclite.servidor.facade.MantenimientoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MantenimientoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -76,14 +81,40 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         
     }
     
+    public Boolean verificarMantenimientoActivo(Mantenimiento objeto) throws ServicioCodefacException, RemoteException 
+    {
+        String vin=objeto.getVehiculo().getVin();
+        Map<String,Object> mapConsulta=new HashMap<String,Object>();
+        mapConsulta.put("vehiculo.vin",vin);
+        mapConsulta.put("estado", Mantenimiento.MantenimientoEnum.INGRESADO.getLetra());
+        List resultadoList= getFacade().findByMap(mapConsulta);
+        if(resultadoList.size()>0)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private void validarArchivoMantenimiento(Mantenimiento objeto) throws ServicioCodefacException, RemoteException 
+    {
+        //TODO: Verificar que el vehiculo previamente no este ingresado y estado pendiente
+        if(verificarMantenimientoActivo(objeto))
+        {
+            throw new ServicioCodefacException("No se puede ingresar el vehiculo con placa : "+objeto.getVehiculo().getVin()+" porque ya fue ingresado previamente y sigue en mantenimiento");
+        }
+        
+    }
+    
     @Override
     public Mantenimiento grabar(Mantenimiento objeto,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException {
         
+        validarArchivoMantenimiento(objeto);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {                
                 objeto.setEstadoEnum(Mantenimiento.MantenimientoEnum.INGRESADO);
                 setDatosAuditoria(objeto,usuarioCreacion,CrudEnum.CREAR);
+                objeto.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
                 //setearDatosGrabar(mesa, empresa,CrudEnum.CREAR);
                 validarGrabar(objeto, CrudEnum.CREAR);
                 entityManager.persist(objeto.getVehiculo());
@@ -124,19 +155,31 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
     {
         List<MantenimientoResult> resultadoList=new ArrayList<MantenimientoResult>();
         for (Mantenimiento dato : datos) {
-            Mantenimiento.MantenimientoEnum estadoEnum=dato.getEstadoEnum();
-            
-            MantenimientoResult mantenimientoResult=new MantenimientoResult();
-            mantenimientoResult.modelo=dato.getVehiculo().getModelo();
-            mantenimientoResult.color=dato.getVehiculo().getColor();
-            mantenimientoResult.vin=dato.getVehiculo().getVin();
-            mantenimientoResult.estado=(estadoEnum!=null)?estadoEnum.getNombre():"";
-            mantenimientoResult.fechaIngreso=dato.getFechaIngreso()+"";
-            
-            //Falta implemtar el resto de los procesos
-            
-            
-            resultadoList.add(mantenimientoResult);
+            try {
+                Mantenimiento.MantenimientoEnum estadoEnum=dato.getEstadoEnum();
+                
+                MantenimientoResult mantenimientoResult=new MantenimientoResult();
+                mantenimientoResult.modelo=dato.getVehiculo().getModelo();
+                mantenimientoResult.color=dato.getVehiculo().getColor();
+                mantenimientoResult.vin=dato.getVehiculo().getVin();
+                mantenimientoResult.estado=(estadoEnum!=null)?estadoEnum.getNombre():"";
+                mantenimientoResult.fechaIngreso=dato.getFechaIngreso()+"";
+                
+                //Falta implemtar el resto de los procesos
+                MantenimientoTareaDetalleService tareaService=new MantenimientoTareaDetalleService();
+                List<MantenimientoTareaDetalle> detalleList= tareaService.buscarPorMantenimiento(dato);
+                for (MantenimientoTareaDetalle mantenimientoTareaDetalle : detalleList) 
+                {
+                    MantenimientoResult.DetalleTareaResult detalleResult= new MantenimientoResult.DetalleTareaResult(mantenimientoTareaDetalle.getTarea().getNombre(),mantenimientoTareaDetalle.getObservacion());
+                    
+                    mantenimientoResult.agregarTarea(detalleResult);
+                }
+                resultadoList.add(mantenimientoResult);
+            } catch (RemoteException ex) {
+                Logger.getLogger(MantenimientoService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(MantenimientoService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         return resultadoList;

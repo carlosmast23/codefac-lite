@@ -78,7 +78,7 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         try {
-            mantenimientoTareaList=ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().obtenerTareasPendientesPorEmpleado(null);
+            mantenimientoTareaList=ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().obtenerTareasPendientesPorEmpleado(sessionMb.getSession().getUsuario().getEmpleado());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         }

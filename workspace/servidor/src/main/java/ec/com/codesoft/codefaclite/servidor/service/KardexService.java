@@ -660,6 +660,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             
             
         }
+        
+        //Si el kardex es null los seteo en cero
+        if(kardexDetalle.getPrecioUnitario()==null)
+        {
+            kardexDetalle.setPrecioUnitario(BigDecimal.ZERO);
+        }
+        
          
         BigDecimal signo=new BigDecimal(kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero());
         kardexDetalle.setSigno(signo.intValue());

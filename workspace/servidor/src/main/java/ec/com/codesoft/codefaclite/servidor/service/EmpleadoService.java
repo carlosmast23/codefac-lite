@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -81,5 +82,15 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
         return getFacade().findByMap(mapParametros);
     }
     
+    /*public Empleado buscarPorUsuario(Usuario usuario) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        Usuario u;
+        u.getEmpleado()
+        //Empleado empleado;
+        //empleado.getEstado()
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }*/
     
 }

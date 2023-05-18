@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -19,6 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -112,6 +115,13 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     public void agregarTarea(Mantenimiento mantenimiento)
     {
         System.out.println("Agregar Tarea "+mantenimiento.getId());
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        try {
+            externalContext.redirect("tarea_mantenimiento.xhtml?mantenimientoId="+mantenimiento.getId());
+        } catch (IOException e) {
+            // Manejar cualquier excepción
+            e.printStackTrace();
+        }
     }
     
     /*

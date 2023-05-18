@@ -6,6 +6,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -25,4 +26,6 @@ public interface MantenimientoTareaDetalleServiceIf extends ServiceAbstractIf<Ma
     public List<MantenimientoTareaDetalle> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException;
     public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorEmpleado(Empleado empleado) throws ServicioCodefacException, RemoteException;
     public void finalizarTarea(MantenimientoTareaDetalle tareaDetalle,Boolean terminarMantenimiento) throws ServicioCodefacException, RemoteException;
+    public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorUsuario(Usuario usuario) throws ServicioCodefacException, RemoteException ;
+    public List<MantenimientoTareaDetalle> buscarPorMantenimiento(Mantenimiento mantenimiento) throws ServicioCodefacException, RemoteException ;
 }

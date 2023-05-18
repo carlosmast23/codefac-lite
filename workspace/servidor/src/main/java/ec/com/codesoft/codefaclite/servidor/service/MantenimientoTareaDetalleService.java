@@ -34,6 +34,16 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
         super(MantenimientoTareaDetalleFacade.class);
     }
     
+    public List<MantenimientoTareaDetalle> buscarPorMantenimiento(Mantenimiento mantenimiento) throws ServicioCodefacException, RemoteException 
+    {
+        /*MantenimientoTareaDetalle md;
+        md.getMantenimiento()*/
+        
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("mantenimiento",mantenimiento);
+        return getFacade().findByMap(mapParametros);
+    }
+    
     public void finalizarTarea(MantenimientoTareaDetalle tareaDetalle,Boolean terminarMantenimiento) throws ServicioCodefacException, RemoteException 
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -60,6 +70,14 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
         mapParametros.put("operador", empleado);
         mapParametros.put("estado",MantenimientoTareaDetalle.EstadoEnum.INICIADO.getLetra());
         return getFacade().findByMap(mapParametros);
+    }
+    
+    public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorUsuario(Usuario usuario) throws ServicioCodefacException, RemoteException 
+    {
+        UsuarioServicio usuarioServicio=new UsuarioServicio();
+        Usuario usuarioTemp= usuarioServicio.buscarPorId(usuario.getId());
+        
+        return obtenerTareasPendientesPorEmpleado(usuarioTemp.getEmpleado());
     }
     
     
