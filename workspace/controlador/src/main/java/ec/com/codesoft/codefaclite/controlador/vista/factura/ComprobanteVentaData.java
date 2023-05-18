@@ -23,6 +23,7 @@ public class ComprobanteVentaData {
      */
     private String descripcion;
     private String descuento;
+    private String tmp;
     
 
     public ComprobanteVentaData() {
@@ -98,6 +99,14 @@ public class ComprobanteVentaData {
 
     public void setUnidad(String unidad) {
         this.unidad = unidad;
+    }
+
+    public String getTmp() {
+        return tmp;
+    }
+
+    public void setTmp(String tmp) {
+        this.tmp = tmp;
     }
     
     /**

@@ -707,13 +707,33 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
            
 
         }
+       
+               
         
-        /*if (factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
-            if(factura.getIva().compareTo(BigDecimal.ZERO)>0)
-            {
-                throw new ServicioCodefacException("Error las NOTAS DE VENTA INTERNA no pueden llevar IVA ");
+        if (factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
+            
+            //TODO: Mejorar esta parte, no utilizo el metodo de utilidades parametro porque si utilizo voy a tener problemas de rendimiento
+            //ALERTA: Ver una solución alterna
+            ParametroCodefacService parametroService = new ParametroCodefacService();
+            ParametroCodefac parametroCodefac = parametroService.getParametroByNombre(ParametroCodefac.NOTA_VENTA_INTERNA_IVA, factura.getEmpresa());
+            EnumSiNo agregarIvaNVI = EnumSiNo.NO;
+            if (parametroCodefac != null) {
+                if (!UtilidadesTextos.verificarNullOVacio(parametroCodefac.valor)) {
+                    EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra(parametroCodefac.valor);
+                    if (enumSiNo != null && enumSiNo.equals(EnumSiNo.SI)) {
+                        agregarIvaNVI = EnumSiNo.SI;
+                    }
+                }
             }
-        }*/
+            
+            if(agregarIvaNVI.equals(EnumSiNo.NO))
+            {
+                if(factura.getIva().compareTo(BigDecimal.ZERO)>0)
+                {
+                    throw new ServicioCodefacException("Error las NOTAS DE VENTA INTERNA no pueden llevar IVA ");
+                }
+            }
+        }
         
         //Solo valido los datos de clientes cuando es un DOCUMENTO diferente de proforma, por que si se puede grabar sin datos para proforma en especial para las comandas
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) && !factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))

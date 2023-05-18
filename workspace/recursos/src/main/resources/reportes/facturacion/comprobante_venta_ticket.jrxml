@@ -77,8 +77,9 @@
 	<field name="precioUnitario" class="java.lang.String"/>
 	<field name="total" class="java.lang.String"/>
 	<field name="iva" class="java.lang.String"/>
+	<field name="tmp" class="java.lang.String"/>
 	<group name="ejemplo">
-		<groupExpression><![CDATA[$F{iva}]]></groupExpression>
+		<groupExpression><![CDATA[$F{tmp}]]></groupExpression>
 		<groupHeader>
 			<band height="11">
 				<staticText>
