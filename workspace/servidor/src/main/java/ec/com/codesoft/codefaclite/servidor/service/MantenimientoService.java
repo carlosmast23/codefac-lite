@@ -60,6 +60,12 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         
     }
     
+    public List<Mantenimiento> obtenerPendientesClasificarUbicacion(Empresa empresa) throws ServicioCodefacException, RemoteException 
+    {
+        return getFacade().obtenerPendientesClasificarUbicacionFacade(empresa);
+        
+    }
+    
     
     //TODO: Terminar de programar para que salgan todos los estados menos el eliminado
     public List<Mantenimiento> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException 
@@ -123,6 +129,15 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             }
         });
         return objeto;
+    }
+    
+    public void editarLote(List<Mantenimiento> mantenimientoList,Usuario usuarioEditar) throws ServicioCodefacException, RemoteException
+    {
+        for (Mantenimiento mantenimiento : mantenimientoList) 
+        {            
+            editar(mantenimiento, mantenimiento.getVehiculo().getEmpresa(), usuarioEditar);
+            System.out.println("Editando Vin: "+mantenimiento.getVehiculo().getVin());
+        }
     }
     
     @Override

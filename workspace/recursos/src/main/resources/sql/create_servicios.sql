@@ -209,6 +209,8 @@ create table MANTENIMIENTO
     SUPERVISOR_ID BIGINT,  
     FECHA_INGRESO timestamp, 
     FECHA_SALIDA timestamp, 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.3.8)*/
+    UBICACION varchar(2),
 
     FECHA_CREACION timestamp, 
     FECHA_ULTIMA_EDICION timestamp, 

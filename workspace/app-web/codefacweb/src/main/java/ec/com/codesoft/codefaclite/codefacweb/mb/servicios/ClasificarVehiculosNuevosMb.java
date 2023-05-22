@@ -6,12 +6,14 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.servicios;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import java.io.IOException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -20,19 +22,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-@ManagedBean 
+@ManagedBean
 @ViewScoped
-public class MantenimientosPendientesMb extends GeneralAbstractMb implements Serializable{
-
-    List<Mantenimiento> mantenimientoPendienteList; 
+public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  Serializable{
     
+    private List<Mantenimiento> mantenimientoList;  
+    private List<Mantenimiento.UbicacionEnum> ubicacionList;
+
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -40,7 +41,16 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoList,sessionMb.getSession().getUsuario());
+            //ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoList,sessionMb.getSession().getUsuario());
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ClasificarVehiculosNuevosMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClasificarVehiculosNuevosMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -75,12 +85,19 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        try {
-            mantenimientoPendienteList=ServiceFactory.getFactory().getMantenimientoServiceIf().obtenerPendientes(sessionMb.getSession().getEmpresa());
+        try 
+        {
+            mantenimientoList = ServiceFactory.getFactory().getMantenimientoServiceIf().obtenerPendientesClasificarUbicacion(sessionMb.getSession().getEmpresa());
+            for (Mantenimiento mantenimiento : mantenimientoList) 
+            {
+                mantenimiento.setUbicacionEnum(Mantenimiento.UbicacionEnum.DIRECTO);
+            }
+            ubicacionList=UtilidadesLista.arrayToList(Mantenimiento.UbicacionEnum.values());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 
     @Override
     public void actualizar() throws ExcepcionCodefacLite, RemoteException {
@@ -111,31 +128,24 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public List<Mantenimiento> getMantenimientoList() {
+        return mantenimientoList;
+    }
+
+    public void setMantenimientoList(List<Mantenimiento> mantenimientoList) {
+        this.mantenimientoList = mantenimientoList;
+    }
+
+    public List<Mantenimiento.UbicacionEnum> getUbicacionList() {
+        return ubicacionList;
+    }
+
+    public void setUbicacionList(List<Mantenimiento.UbicacionEnum> ubicacionList) {
+        this.ubicacionList = ubicacionList;
+    }
+
     
-    public void agregarTarea(Mantenimiento mantenimiento)
-    {
-        System.out.println("Agregar Tarea "+mantenimiento.getId());
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        try {
-            externalContext.redirect("tarea_mantenimiento.xhtml?mantenimientoId="+mantenimiento.getId());
-        } catch (IOException e) {
-            // Manejar cualquier excepción
-            e.printStackTrace();
-        }
-    }
-    
-    /*
-    =======================/ METODOS GET AND SET /=====================
-    */
-
-    public List<Mantenimiento> getMantenimientoPendienteList() {
-        return mantenimientoPendienteList;
-    }
-
-    public void setMantenimientoPendienteList(List<Mantenimiento> mantenimientoPendienteList) {
-        this.mantenimientoPendienteList = mantenimientoPendienteList;
-    }
-
     
     
 }

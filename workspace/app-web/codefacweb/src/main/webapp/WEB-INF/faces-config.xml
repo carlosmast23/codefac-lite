@@ -297,5 +297,16 @@
                 </view-param>
             </redirect>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>clasificar_vehiculos_nuevos</from-outcome>
+            <to-view-id>sistema/servicios/clasificar_vehiculos_nuevos.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

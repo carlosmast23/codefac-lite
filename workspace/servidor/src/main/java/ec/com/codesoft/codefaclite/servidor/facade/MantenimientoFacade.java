@@ -5,8 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.Query;
 
 /**
  *
@@ -18,5 +28,14 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         super(Mantenimiento.class);
     }
     
+    public List<Mantenimiento> obtenerPendientesClasificarUbicacionFacade(Empresa empresa) throws ServicioCodefacException, RemoteException 
+    {
+        //Mantenimiento mantenimiento;
+        //mantenimiento.getUbicacion();
+        String queryStr = " SELECT m FROM Mantenimiento m WHERE M.ubicacion IS NULL ";
+        Query query = getEntityManager().createQuery(queryStr);
+        
+        return query.getResultList();
+    }
     
 }

@@ -48,6 +48,9 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     @Column(name = "FECHA_SALIDA")
     private Timestamp fechaSalida;
     
+    @Column(name = "UBICACION")
+    private String ubicacion;
+    
     @JoinColumn(name = "OBJETO_MANTENIMIENTO_ID")
     private ObjetoMantenimiento vehiculo;
 
@@ -98,6 +101,26 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     public void setVehiculo(ObjetoMantenimiento vehiculo) {
         this.vehiculo = vehiculo;
     }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+    
+    public UbicacionEnum getUbicacionEnum() {
+        return UbicacionEnum.getEnum(ubicacion);
+    }
+
+    public void setUbicacionEnum(UbicacionEnum ubicacionEnum) {
+        if(ubicacionEnum!=null)
+        {
+            this.ubicacion = ubicacionEnum.letra;
+        }        
+    }
+    
     
     
     
@@ -146,6 +169,47 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     @Override
     public String toString() {
         return vehiculo.getModelo()+" : "+vehiculo.getColor()+" : "+vehiculo.getVin();
+    }
+    
+    public enum UbicacionEnum
+    {
+        TALLER("T","Taller"),
+        DIRECTO("D","Directo");
+        
+        private String letra;
+        private String nombre;
+
+        private UbicacionEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static UbicacionEnum getEnum(String letra) {
+            for (UbicacionEnum enumerador : UbicacionEnum.values()) {
+                if (enumerador.letra.equals(letra)) 
+                {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return nombre; 
+        }
+        
+        
+        
+        
     }
     
     public enum MantenimientoEnum implements EstadoEntidadIf
