@@ -21,6 +21,7 @@
                     id="tblMantenimiento" 
                     var="m" 
                     editable="true"
+                    editMode="cell"
                     value="#{clasificarVehiculosNuevosMb.mantenimientoList}" 
                     rowIndexVar="rowIndex" >
 
@@ -53,11 +54,9 @@
                     </p:column>
 
                     <p:column headerText="Fecha Ingreso">
-                        <h:outputText value="#{m.fechaIngreso}" />
-                    </p:column>
-
-                    <p:column style="width:6rem">
-                        <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row"/>
+                        <h:outputText value="#{m.fechaIngreso}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                        </h:outputText>
                     </p:column>
 
 

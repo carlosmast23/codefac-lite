@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento.MantenimientoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +40,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 @ViewScoped
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
-    List<Mantenimiento.MantenimientoEnum> estadoMantenimietoList;
-    List<MantenimientoResult> mantenimientoList;
+    private List<MantenimientoEnum> estadoMantenimietoList;
+    private List<MantenimientoResult> mantenimientoList;
+    
+    private java.util.Date fechaInicial;
+    private java.util.Date fechaFinal;
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -136,7 +140,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void consultarMantenimientos()
     {
         try {
-            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(null,null);
+            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal);
             System.out.println("Datos consultados: "+mantenimientoList.size());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -153,13 +157,31 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         this.mantenimientoList = mantenimientoList;
     }
 
-    public List<Mantenimiento.MantenimientoEnum> getEstadoMantenimietoList() {
+    public List<MantenimientoEnum> getEstadoMantenimietoList() {
         return estadoMantenimietoList;
     }
 
-    public void setEstadoMantenimietoList(List<Mantenimiento.MantenimientoEnum> estadoMantenimietoList) {
+    public void setEstadoMantenimietoList(List<MantenimientoEnum> estadoMantenimietoList) {
         this.estadoMantenimietoList = estadoMantenimietoList;
     }
+
+    public Date getFechaInicial() {
+        return fechaInicial;
+    }
+
+    public void setFechaInicial(Date fechaInicial) {
+        this.fechaInicial = fechaInicial;
+    }
+
+    public Date getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(Date fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+    
+    
 
     
     

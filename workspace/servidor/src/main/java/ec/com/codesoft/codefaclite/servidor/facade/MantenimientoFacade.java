@@ -11,8 +11,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,4 +40,36 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         return query.getResultList();
     }
     
+    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin) throws ServicioCodefacException, RemoteException
+    {
+        //Mantenimiento m;
+        //m.getFechaSalida();
+        
+        String fechaIngresoStr="";
+        if(fechaInicio!=null)
+        {
+            fechaIngresoStr=" AND m.fechaIngreso>=?1  ";
+        }
+        
+        String fechaFinStr="";
+        if(fechaFin!=null)
+        {
+            fechaFinStr=" AND m.fechaIngreso<=?2  ";
+        }
+        
+        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr;
+        Query query = getEntityManager().createQuery(queryStr);
+        
+        if(fechaInicio!=null)
+        {
+            query.setParameter(1,fechaInicio);
+        }
+        
+        if(fechaFin!=null)
+        {
+            query.setParameter(2,fechaFin);
+        }
+        
+        return query.getResultList();
+    }
 }

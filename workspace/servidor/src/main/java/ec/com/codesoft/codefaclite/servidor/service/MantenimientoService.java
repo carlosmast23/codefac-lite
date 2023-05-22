@@ -160,9 +160,8 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         return (List<MantenimientoResult>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException 
-            {                
-                List<Mantenimiento> resultado=getFacade().findByMap(new HashMap<String, Object>());
-                return convertirDatos(resultado);
+            {  
+                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin));
             }
         });
     }
@@ -180,6 +179,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 mantenimientoResult.vin=dato.getVehiculo().getVin();
                 mantenimientoResult.estado=(estadoEnum!=null)?estadoEnum.getNombre():"";
                 mantenimientoResult.fechaIngreso=dato.getFechaIngreso()+"";
+                mantenimientoResult.ubicacion=(dato.getUbicacionEnum()!=null)?dato.getUbicacionEnum().getNombre():"";
                 
                 //Falta implemtar el resto de los procesos
                 MantenimientoTareaDetalleService tareaService=new MantenimientoTareaDetalleService();

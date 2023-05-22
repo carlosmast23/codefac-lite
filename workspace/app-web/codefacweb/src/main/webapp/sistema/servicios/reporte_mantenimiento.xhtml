@@ -22,7 +22,7 @@
                     <p:outputLabel for="fechaInicial" value="Fecha Inicial:" class="label-responsive"/>                    
                     <div class="p-grid div-resposive" >
                         <div class="p-col-fixed" >
-                            <p:datePicker size="" id="fechaInicial" value="#{facturaReporteMb.fechaInicial}" showIcon="true" />
+                            <p:datePicker size="" id="fechaInicial" value="#{reporteMantenimientoMb.fechaInicial}" showIcon="true" />
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
 
                     <div class="p-grid div-resposive" >
                         <div class="p-col-fixed" >
-                            <p:datePicker id="fechaFinal" value="#{facturaReporteMb.fechaFinal}" showIcon="true" />
+                            <p:datePicker id="fechaFinal" value="#{reporteMantenimientoMb.fechaFinal}" showIcon="true" />
                         </div>
                     </div>
                 </div>
@@ -69,35 +69,6 @@
                     <p:column headerText="Estado">
                         <h:outputText value="#{m.estado}" />
                     </p:column>
-
-                    <p:column headerText="Fecha Ingreso">
-                        <h:outputText value="#{m.fechaIngreso}" />
-                    </p:column>
-
-                    <p:column headerText="Enderezada">
-                        <h:outputText value="" />
-                    </p:column>
-                    
-                    <p:column headerText="Pintura">
-                        <h:outputText value="" />
-                    </p:column>
-                    
-                    <p:column headerText="Vidrios">
-                        <h:outputText value="" />
-                    </p:column>
-                    
-                    <p:column headerText="Faltante">
-                        <h:outputText value="" />
-                    </p:column>
-                    
-                    <p:column headerText="Electromecanico">
-                        <h:outputText value="" />
-                    </p:column>
-                    
-                    <p:column headerText="Otros">
-                        <h:outputText value="" />
-                    </p:column>
-
 
                 </p:dataTable>
             </div>

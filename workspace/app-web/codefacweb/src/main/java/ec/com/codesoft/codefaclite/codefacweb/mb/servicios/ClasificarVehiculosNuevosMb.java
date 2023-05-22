@@ -38,7 +38,7 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+ 
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
         

@@ -23,6 +23,7 @@ public class MantenimientoResult implements Serializable,Cloneable{
     public String vin;
     public String estado;
     public String fechaIngreso;
+    public String ubicacion;
     
     private String tareaTitulo;
     private String tareaDescripcion;
@@ -137,6 +138,14 @@ public class MantenimientoResult implements Serializable,Cloneable{
 
     public void setTareaLista(List<DetalleTareaResult> tareaLista) {
         this.tareaLista = tareaLista;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
     }
     
     
