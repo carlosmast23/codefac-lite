@@ -3699,9 +3699,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             {
                                 //Verificar si esta activa la opcion que los comprobates de venta deben llevar iva en ese caso no agrego el iva
                                 //ParametroUtilidades.comparar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA,EnumSiNo.NO,session.getEmpresa());
-                                Boolean noAgregarIvaNVI=ParametroUtilidades.comparar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA,EnumSiNo.NO,session.getParametrosCodefac());
+                                Boolean agregarIvaNVI=ParametroUtilidades.comparar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA,EnumSiNo.SI,session.getParametrosCodefac());
                                 
-                                if(noAgregarIvaNVI)
+                                //Cuando se tenga que agregar el iva no tiene que sumar el iva al subtotal
+                                if(!agregarIvaNVI)
                                 {
                                     pvp=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),pvp);
                                 }

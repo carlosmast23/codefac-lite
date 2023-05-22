@@ -294,7 +294,7 @@ create table VEHICULO
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.3.2)*/
     VIN varchar(32),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.3.2)*/
-    MODELO varchar(32),
+    MODELO varchar(512),
 
     primary key (ID),
     CONSTRAINT id_duenio_fk FOREIGN KEY (PROPIETARIO_ID) REFERENCES CLIENTE(CLIENTE_ID)

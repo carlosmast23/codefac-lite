@@ -54,6 +54,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             public Object consulta() throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new HashMap<String,Object>();
                 mapParametros.put("estado", Mantenimiento.MantenimientoEnum.INGRESADO.getLetra());
+                mapParametros.put("ubicacion", Mantenimiento.UbicacionEnum.TALLER.getLetra());
                 return getFacade().findByMap(mapParametros);
             }
         });
