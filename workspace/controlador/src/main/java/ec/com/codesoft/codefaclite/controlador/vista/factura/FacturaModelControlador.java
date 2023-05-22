@@ -645,6 +645,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             @Override
             public void setValores(BigDecimal valorUnitario, BigDecimal iva) {
                 //producto.setValorUnitario(valorUnitario);
+                facturaDetalle.setPrecioUnitario(valorUnitario);
             }
         };
         verificarProductoConNotaVentaInternaGenerico(facturaDetalle, facturaDetalle.getPrecioUnitario(),interfazSetearDatos);

@@ -99,6 +99,11 @@ public abstract class ExcelMigrar {
          */
         Row primeraFila = sheet.getRow(1);        
         List<Class> tiposDatosCabecera= getTipoDatos();
+        
+        if(primeraFila==null)
+        {
+            System.out.println("revisar ...");
+        }
                        
         //for (int i = 0; i < primeraFila.getLastCellNum(); i++) {
         for (int i = 0; i < tiposDatosCabecera.size(); i++) {
