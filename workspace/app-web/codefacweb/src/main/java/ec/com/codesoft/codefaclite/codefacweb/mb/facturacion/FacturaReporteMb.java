@@ -110,7 +110,7 @@ public class FacturaReporteMb  extends GeneralAbstractMb implements DialogoWeb<F
     private String subtotal0;
     private String totalDescuento;
     private String iva12;
-    private String valorTotal;
+    private String valorTotal; 
     
     
     @PostConstruct

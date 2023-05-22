@@ -505,6 +505,19 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         descripcion+=(productoSeleccionado.getCaracteristicas()!=null)?" "+productoSeleccionado.getCaracteristicas():"";
         //descripcion=descripcion.replace("\n"," ");
         
+        //Si el producto maneja inventario directamente seteo el tipo de dato por defecto
+        TipoDocumentoEnum tipoDocumentoEnum=null;
+        if(productoSeleccionado.getManejarInventarioEnum()!=null && productoSeleccionado.getManejarInventarioEnum().equals(EnumSiNo.SI))
+        {
+            tipoDocumentoEnum=TipoDocumentoEnum.INVENTARIO;
+            setTipoDocumentoEnumSeleccionado(tipoDocumentoEnum.INVENTARIO);
+        }
+        else
+        {
+            tipoDocumentoEnum=interfaz.obtenerTipoDocumentoSeleccionado();
+        }
+        
+        
         FacturaDetalle facturaDetalle=crearFacturaDetalle(
                 BigDecimal.ONE,
                 valorUnitario, 
@@ -516,7 +529,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 (lote!=null)?lote:null,
                 itemEspecifico,
                 EnumSiNo.NO,
-                interfaz.obtenerTipoDocumentoSeleccionado(),
+                tipoDocumentoEnum,
                 descuentoDefecto);
         
         verificarProductoConNotaVentaInterna(facturaDetalle);

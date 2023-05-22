@@ -1534,6 +1534,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //kardex.
                 //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
                 
+                entityManager.persist(kardexDetalle);
                 entityManager.merge(kardex);
                 return kardexDetalle;
             //}

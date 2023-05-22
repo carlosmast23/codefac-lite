@@ -251,7 +251,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     public void anularProcesoFactura(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
     {
         //TipoDocumentoEnum tipoDocumento,Long referenciaId,BigDecimal total
-        switch (facturaDetalle.getTipoDocumentoEnum()) {
+        TipoDocumentoEnum tipoDocumentoEnum=facturaDetalle.getTipoDocumentoEnum();
+        switch (tipoDocumentoEnum) {
             case ACADEMICO:
                 anularRubroEstudiante(facturaDetalle.getReferenciaId(),facturaDetalle.getTotal());
                 break;

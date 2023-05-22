@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
@@ -38,6 +39,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 @ViewScoped
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
+    List<Mantenimiento.MantenimientoEnum> estadoMantenimietoList;
     List<MantenimientoResult> mantenimientoList;
 
     @Override
@@ -97,6 +99,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         mantenimientoList=new ArrayList<MantenimientoResult>();
+        //estadoMantenimietoList=UtilidadesLista.obtenerDatoMayor(, comparador) Mantenimiento.MantenimientoEnum.values();
     }
 
     @Override
@@ -150,5 +153,14 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         this.mantenimientoList = mantenimientoList;
     }
 
+    public List<Mantenimiento.MantenimientoEnum> getEstadoMantenimietoList() {
+        return estadoMantenimietoList;
+    }
+
+    public void setEstadoMantenimietoList(List<Mantenimiento.MantenimientoEnum> estadoMantenimietoList) {
+        this.estadoMantenimietoList = estadoMantenimietoList;
+    }
+
+    
     
 }
