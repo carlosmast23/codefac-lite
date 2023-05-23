@@ -46,6 +46,24 @@ public class UtilidadesComboBox {
         
     }
     
+    public static void seleccionarItemoAgregarComboBox(JComboBox comboBox,Object datoSeleccionado)
+    {
+        //boolean contieneElemento = false;
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            if (comboBox.getItemAt(i).equals(datoSeleccionado)) {
+                //contieneElemento = true;
+                comboBox.setSelectedItem(datoSeleccionado);
+                return;
+            }
+        }
+        
+        //Si hasta este punto llego asumo que tengo que agregar el componente porque no se encontro
+        comboBox.addItem(datoSeleccionado);
+        comboBox.setSelectedItem(datoSeleccionado);
+
+  
+    }
+    
 
     public static void crearCabeceraComboBox(JComboBox comboBox, String titulo) {
         //comboBox.setRenderer(new MyComboBoxRenderer(titulo));

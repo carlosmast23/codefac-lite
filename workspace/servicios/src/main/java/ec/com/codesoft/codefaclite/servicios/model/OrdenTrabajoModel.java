@@ -266,7 +266,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             
             if(ordenTrabajoTemp.getObjetoMantenimiento()!=null)
             {
-                getCmbObjetoMantenimiento().setSelectedItem(ordenTrabajoTemp.getObjetoMantenimiento());
+                UtilidadesComboBox.seleccionarItemoAgregarComboBox(getCmbObjetoMantenimiento(), ordenTrabajoTemp.getObjetoMantenimiento());
+                //getCmbObjetoMantenimiento().setSelectedItem(ordenTrabajoTemp.getObjetoMantenimiento());
             }
                         
             mostrarDatosTabla();           
