@@ -41,7 +41,12 @@
                     </div>
                     
                     <div class="p-grid" style="text-align: left" >
-                        <div class="p-col-12"><h:outputLabel   value="OBSERVACION :  " class="etiqueta_titulo" /></div>
+                        <div class="p-col-12">
+                            <h:outputLabel 
+                                value="OBSERVACION :  " 
+                                class="etiqueta_titulo" 
+                                />
+                        </div>
                         <div class="p-col-12 p-md-6 p-lg-6">
                             <h:inputText value="#{tareaMantenimientoMb.tareaMantenimieto.observacion}" required="false"  class="componente-responsive" />
                         </div>
@@ -49,9 +54,9 @@
                     
                     <div class="p-grid" style="text-align: left" >
                         <div class="p-col-12 p-md-6 p-lg-6">
-                            <p:commandButton actionListener="#{tareaMantenimientoMb.crearNuevaTarea()}" process="@this" value="Crear Tarea"/>
-                            <p:commandButton actionListener="#{tareaMantenimientoMb.finalizarMantenimiento()}" process="@this" value="Finalizar Tarea"/>
-                            <p:commandButton actionListener="#{tareaMantenimientoMb.finalizarTareaYCrearOtra()}" process="@this" value="Finalizar y Crear Nueva Tarea"/>
+                            <p:commandButton action="#{tareaMantenimientoMb.crearNuevaTarea()}" process="@form" value="Crear Tarea"/>
+                            <p:commandButton action="#{tareaMantenimientoMb.finalizarMantenimiento()}" process="@form" value="Finalizar Tarea"/>
+                            <p:commandButton action="#{tareaMantenimientoMb.finalizarTareaYCrearOtra()}" process="@form" value="Finalizar y Crear Nueva Tarea"/>
                         </div>
                     </div>
                 </p:tab>

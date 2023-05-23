@@ -57,8 +57,11 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
             fechaFinStr=" AND m.fechaIngreso<=?2  ";
         }
         
-        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr;
+        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 AND m.estado<>?3 "+fechaIngresoStr+fechaFinStr;
         Query query = getEntityManager().createQuery(queryStr);
+        
+        
+        query.setParameter(3,Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());
         
         if(fechaInicio!=null)
         {
@@ -71,5 +74,13 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         }
         
         return query.getResultList();
+    }
+    
+    public Boolean verificarMantenimientoActivoFacade(Mantenimiento objeto) throws ServicioCodefacException, RemoteException 
+    {
+        /*objeto.getEstado()
+        /*String queryStr = " SELECT m FROM Mantenimiento m WHERE m.vehiculo.vin=?1 AND m.estado=?2 AND  ";*/
+        return true;
+        
     }
 }

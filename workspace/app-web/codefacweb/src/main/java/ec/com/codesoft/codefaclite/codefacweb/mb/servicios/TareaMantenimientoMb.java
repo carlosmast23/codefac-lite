@@ -18,7 +18,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TareaMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -27,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -48,22 +48,44 @@ public class TareaMantenimientoMb extends GeneralAbstractMb implements Serializa
     @PostConstruct
     private void init()
     {
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        Map<String, String> requestParams = externalContext.getRequestParameterMap();
-        String mantemientoIdStr = requestParams.get("mantenimientoId");
-        System.out.println("leyendo mantenimientoId: "+mantemientoIdStr);
-        
         //Por defecto crear el objeto de forma vacia
         tareaMantenimieto=new MantenimientoTareaDetalle();
         
-        if(!UtilidadesTextos.verificarNullOVacio(mantemientoIdStr))
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, String> requestParams = externalContext.getRequestParameterMap();
+        
+        //Busco primero si tenia creado antes un mantenimiento previo para solo terminar de editar
+        String tareaMantemientoIdStr = requestParams.get("tareaMantenimientoId");
+        if(!UtilidadesTextos.verificarNullOVacio(tareaMantemientoIdStr))
         {
             try {
-                tareaMantenimieto=ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().buscarPorId(Long.parseLong(mantemientoIdStr));
+                tareaMantenimieto=ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().buscarPorId(Long.parseLong(tareaMantemientoIdStr));
+                
             } catch (RemoteException ex) {
                 Logger.getLogger(TareaMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        //Si la pantalla no empieza con ninguna tarea de mantenimiento entonces empiezo a buscar el resto de datos
+        if(tareaMantenimieto.getId()==null)
+        {        
+            String mantemientoIdStr = requestParams.get("mantenimientoId");
+            System.out.println("leyendo mantenimientoId: "+mantemientoIdStr);       
+
+            if(!UtilidadesTextos.verificarNullOVacio(mantemientoIdStr))
+            {
+                try {
+                    Mantenimiento mantenimientoTmp= ServiceFactory.getFactory().getMantenimientoServiceIf().buscarPorId(Long.parseLong(mantemientoIdStr));
+                    tareaMantenimieto.setMantenimiento(mantenimientoTmp);
+                    //tareaMantenimieto=ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().buscarPorId(Long.parseLong(mantemientoIdStr));
+                } catch (RemoteException ex) {
+                    Logger.getLogger(TareaMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        //Buscar el operador por defecto que corresponde al mismo usuario
+        tareaMantenimieto.setOperador(sessionMb.getSession().getUsuario().getEmpleado());
     }
 
     @Override
@@ -198,9 +220,14 @@ public class TareaMantenimientoMb extends GeneralAbstractMb implements Serializa
     {
         try {
             ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().grabar(tareaMantenimieto,sessionMb.getSession().getEmpresa(),sessionMb.getSession().getUsuario());
-            System.out.println("Creando nueva tarea ...");
+            System.out.println("Creando nueva tarea ...");  
             MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-            UtilidadesWeb.redirigirPaginaInterna("mantenimientos_pendientes");
+            
+            UtilidadesWeb.redirigirPaginaInterna("tareas_pendientes?faces-redirect=true");
+            /*FacesContext context = FacesContext.getCurrentInstance();
+            NavigationHandler handler = context.getApplication().getNavigationHandler();
+            handler.handleNavigation(context, null, "tareas_pendientes?faces-redirect=true");*/
+            
         } catch (ServicioCodefacException ex) {
             MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
             Logger.getLogger(TareaMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -214,7 +241,7 @@ public class TareaMantenimientoMb extends GeneralAbstractMb implements Serializa
         try {
             ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().finalizarTarea(tareaMantenimieto,true);
             MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-             UtilidadesWeb.redirigirPaginaInterna("tarea_mantenimiento");
+            UtilidadesWeb.redirigirPaginaInterna("tareas_pendientes");
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(TareaMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {

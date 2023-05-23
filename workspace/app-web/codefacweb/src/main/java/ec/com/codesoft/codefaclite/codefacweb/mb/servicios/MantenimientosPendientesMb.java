@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.servicios;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -31,7 +34,7 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class MantenimientosPendientesMb extends GeneralAbstractMb implements Serializable{
 
-    List<Mantenimiento> mantenimientoPendienteList; 
+    List<Mantenimiento> mantenimientoPendienteList;  
     
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -122,6 +125,24 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
             // Manejar cualquier excepción
             e.printStackTrace();
         }
+    }
+    
+    public void eliminarMantenimiento(Mantenimiento matenimiento)
+    {
+        try {
+            System.out.println("Eliminar Mantenimiento ...");  
+            ServiceFactory.getFactory().getMantenimientoServiceIf().eliminar(matenimiento);
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            iniciar();
+        } catch (ServicioCodefacException ex) {
+            MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     /*

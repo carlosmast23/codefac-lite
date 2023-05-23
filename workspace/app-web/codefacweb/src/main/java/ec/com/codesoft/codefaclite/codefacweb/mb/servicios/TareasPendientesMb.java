@@ -129,7 +129,7 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
         
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         try {
-            externalContext.redirect("tarea_mantenimiento.xhtml?mantenimientoId="+mantenimiento.getId());
+            externalContext.redirect("tarea_mantenimiento.xhtml?tareaMantenimientoId="+mantenimiento.getId());
         } catch (IOException e) {
             // Manejar cualquier excepción
             e.printStackTrace();

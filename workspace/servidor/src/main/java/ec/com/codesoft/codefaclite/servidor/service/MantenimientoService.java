@@ -90,15 +90,19 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
     
     public Boolean verificarMantenimientoActivo(Mantenimiento objeto) throws ServicioCodefacException, RemoteException 
     {
+        //objeto.getUbicacion()
         String vin=objeto.getVehiculo().getVin();
         Map<String,Object> mapConsulta=new HashMap<String,Object>();
         mapConsulta.put("vehiculo.vin",vin);
         mapConsulta.put("estado", Mantenimiento.MantenimientoEnum.INGRESADO.getLetra());
+        mapConsulta.put("ubicacion", Mantenimiento.UbicacionEnum.TALLER.getLetra());
+        
         List resultadoList= getFacade().findByMap(mapConsulta);
         if(resultadoList.size()>0)
         {
             return true;
         }
+        
         return false;
     }
     
@@ -155,7 +159,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         return entity;
     }
     
-    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin) throws ServicioCodefacException, RemoteException
+    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Boolean eliminados) throws ServicioCodefacException, RemoteException
     {
         return (List<MantenimientoResult>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
@@ -207,6 +211,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException 
             {
+                entity.setEstadoEnum(Mantenimiento.MantenimientoEnum.ELIMINADO);
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
                 entityManager.merge(entity);
             }

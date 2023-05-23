@@ -66,10 +66,14 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
     
     public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorEmpleado(Empleado empleado) throws ServicioCodefacException, RemoteException 
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        /*MantenimientoTareaDetalle mtd;
+        mtd.getMantenimiento().getEstado();
+        */
+        /*Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("operador", empleado);
         mapParametros.put("estado",MantenimientoTareaDetalle.EstadoEnum.INICIADO.getLetra());
-        return getFacade().findByMap(mapParametros);
+        return getFacade().findByMap(mapParametros);*/
+        return getFacade().obtenerTareasPendientesPorEmpleadoFacade(empleado);
     }
     
     public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorUsuario(Usuario usuario) throws ServicioCodefacException, RemoteException 

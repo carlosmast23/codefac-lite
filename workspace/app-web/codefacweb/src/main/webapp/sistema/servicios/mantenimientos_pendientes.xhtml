@@ -55,6 +55,17 @@
                                         icon="pi pi-check"                                         
                                         styleClass="edit-button rounded-button ui-button-success" process="@this">                                                        
                         </p:commandButton>                    
+                        
+                        <p:commandButton
+                                        title="Eliminar Mantenimiento"
+                                        action="#{mantenimientosPendientesMb.eliminarMantenimiento(m)}"
+                                        onclick="return confirm('¿Estás seguro de eliminar el mantenimiento?'"
+                                        icon="pi pi-trash" 
+                                        update="@form"
+                                        style="background-color:#0097A"
+                                        process="@this">                                                        
+                        </p:commandButton>                    
+                        
                     </p:column>
                     
                 </p:dataTable>

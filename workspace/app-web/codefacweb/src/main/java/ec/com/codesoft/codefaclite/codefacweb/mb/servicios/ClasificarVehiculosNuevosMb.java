@@ -44,6 +44,7 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
         
         try {
             ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoList,sessionMb.getSession().getUsuario());
+            iniciar();
             //ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoList,sessionMb.getSession().getUsuario());
             MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
