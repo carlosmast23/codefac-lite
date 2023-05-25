@@ -627,21 +627,14 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         }
         else
         {
-            try {
-                KardexDetalle nuevoKardexDetalle=(KardexDetalle) kardexItemEspecifico.getKardexDetalle().clone(); //Copiar un nuevo kardex detalle
-                nuevoKardexDetalle.setDetallesEspecificos(new ArrayList<KardexItemEspecifico>());
-                
-                KardexDetalleTmp nuevoKardexDetalleTmp=(KardexDetalleTmp) nuevoKardexDetalle;
-                nuevoKardexDetalleTmp.seleccion=true;
-                nuevoKardexDetalleTmp.bodega=bodega;
-                
-                intercambiarItemsKardex(kardexItemEspecifico,nuevoKardexDetalleTmp);
-                
-                detallesKardex.put(nuevoKardexDetalleTmp,compraDetalleTemp);                
-                
-            } catch (CloneNotSupportedException ex) {
-                Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
-            }          
+            //KardexDetalle nuevoKardexDetalle=(KardexDetalle) kardexItemEspecifico.getKardexDetalle().clone(); //Copiar un nuevo kardex detalle
+            KardexDetalle nuevoKardexDetalle=new KardexDetalle(kardexItemEspecifico.getKardexDetalle()); //Copiar un nuevo kardex detalle
+            nuevoKardexDetalle.setDetallesEspecificos(new ArrayList<KardexItemEspecifico>());
+            KardexDetalleTmp nuevoKardexDetalleTmp=(KardexDetalleTmp) nuevoKardexDetalle;
+            nuevoKardexDetalleTmp.seleccion=true;
+            nuevoKardexDetalleTmp.bodega=bodega;
+            intercambiarItemsKardex(kardexItemEspecifico,nuevoKardexDetalleTmp);
+            detallesKardex.put(nuevoKardexDetalleTmp,compraDetalleTemp);          
             
         }
         construirTablaDetalleCompra();

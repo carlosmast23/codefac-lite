@@ -11,9 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -251,5 +251,36 @@ public abstract class UtilidadVarios {
     public interface ProcesoTiempoIf
     {
         public void proceso();
+    }
+    
+    public static void copiarObjetos(Object origen, Object destino) {
+        try {
+            Class<?> claseOrigen = origen.getClass();
+            Class<?> claseDestino = destino.getClass();
+            Field[] camposOrigen = claseOrigen.getDeclaredFields();
+            Field[] camposDestino = claseDestino.getDeclaredFields();
+
+            for (Field campoOrigen : camposOrigen) {
+                campoOrigen.setAccessible(true);
+                Field campoDestino = buscarCampoDestino(camposDestino, campoOrigen.getName());
+
+                if (campoDestino != null) {
+                    campoDestino.setAccessible(true);
+                    Object valor = campoOrigen.get(origen);
+                    campoDestino.set(destino, valor);
+                }
+            }
+        } catch (IllegalAccessException e) {
+            // Manejar la excepción si es necesario
+        }
+    }
+
+    private static Field buscarCampoDestino(Field[] camposDestino, String nombreCampo) {
+        for (Field campoDestino : camposDestino) {
+            if (campoDestino.getName().equals(nombreCampo)) {
+                return campoDestino;
+            }
+        }
+        return null;
     }
 }

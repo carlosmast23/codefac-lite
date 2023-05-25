@@ -5,13 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
-import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImpresora;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.obtenerComprobanteData;
-import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -22,7 +19,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
@@ -30,7 +26,6 @@ import ec.com.codesoft.codefaclite.servidor.service.cartera.PrestamoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaPermisoService;
 import ec.com.codesoft.codefaclite.servidor.service.pos.CajaSesionService;
-import ec.com.codesoft.codefaclite.servidor.service.pos.IngresoCajaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -46,7 +41,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle.EstadoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
@@ -65,12 +59,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.TurnoAsignado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DiaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
@@ -88,37 +79,27 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleF
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
-import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
-import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
-import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
+import javax.persistence.RollbackException;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.eclipse.persistence.exceptions.DatabaseException;
-import org.eclipse.persistence.internal.sessions.factories.SessionsFactory;
 
 /**
  *
@@ -564,6 +545,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
                 setearDatosClienteYDistribuidor(factura);
                 
+                
                 //Validaciones iniciales de la factura
                 validacionInicialFacturar(factura,carteraParametro,CrudEnum.CREAR);
                 
@@ -603,6 +585,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
                 
                 imprimirLogFactura(factura, CrudEnum.CREAR);
+                //throw new RollbackException("Forzando un rollback"); // Lanzar una excepción marcada
             }
         });
         
@@ -1122,7 +1105,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             presupuesto.setPersona(detalle.getFactura().getCliente());
             
             //Cambiar el estado al presupuesto para saber que ya fue facturadp
-            presupuesto.setEstado(Presupuesto.EstadoEnum.FACTURADO.getLetra()); 
+            presupuesto.setEstadoEnum(Presupuesto.EstadoEnum.FACTURADO); 
             
             OrdenTrabajoDetalle ordenTrabajoDetalle=presupuesto.getOrdenTrabajoDetalle();
             OrdenTrabajo ordenTrabajo=ordenTrabajoDetalle.getOrdenTrabajo();

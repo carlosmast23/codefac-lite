@@ -154,7 +154,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         initDatosTabla();
         this.getCmbFechaPresupuesto().setDate(UtilidadesFecha.getFechaHoy());
         this.setEnabled(false);
-        validacionDatosIngresados=false;
+        validacionDatosIngresados=false;        
     }
     
     
@@ -470,6 +470,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getLblTotalServicios().setText("0.00");
         this.getTxtVentaRelacionada().setText("");
         this.getChkEnviarCorreo().setSelected(false);
+        getCmbEstadoPresupuesto().setSelectedItem(Presupuesto.EstadoEnum.PRESUPUESTANDO);
         getBtnAgregarDetalle().setEnabled(true);
         initDatosTabla();
     }

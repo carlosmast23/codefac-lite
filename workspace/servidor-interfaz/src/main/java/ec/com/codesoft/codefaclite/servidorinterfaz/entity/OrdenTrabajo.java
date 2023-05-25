@@ -247,7 +247,7 @@ public class OrdenTrabajo implements Serializable
         /**
          * Estado para indicar que esa orden de trabajo ya esta facturada
          */
-        FACTURADO("T","Facturado"),
+        FACTURADO("C","Facturado"),
         /**
          * Estado para identificar las ordenes de trabajo eliminadas
          */

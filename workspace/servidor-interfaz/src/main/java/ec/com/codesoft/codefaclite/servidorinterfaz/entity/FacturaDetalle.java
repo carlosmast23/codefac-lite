@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -36,7 +37,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA_DETALLE")
-public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements Cloneable{
+public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
 
     @Id
     @Column(name = "ID")
@@ -69,6 +70,20 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     public FacturaDetalle() {
         
     }
+    
+    //TODO: Hacer algunas pruebas para ver que no genere errores
+    @Deprecated
+    public FacturaDetalle(FacturaDetalle facturaDetalle) 
+    {
+        /*this.factura=facturaDetalle.factura;
+        this.id=facturaDetalle.id;
+        this.numeroPvp=facturaDetalle.numeroPvp;
+        this.precioSinSubsidio=facturaDetalle.precioSinSubsidio;
+        this.reservado=facturaDetalle.reservado;
+        this.responsable=facturaDetalle.responsable;        */
+        UtilidadVarios.copiarObjetos(facturaDetalle,this);
+        //this.factura=facturaDetalle.factura;
+    }
 
     public Long getId() {
         return id;
@@ -97,10 +112,6 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         this.precioSinSubsidio = precioSinSubsidio;
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
-    }
 
     public String getReservado() {
         return reservado;
@@ -223,6 +234,8 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         }
         return null;
     }
+    
+    
 
     /**
      * El total bruto se refiere al subtotal incluido el descuento

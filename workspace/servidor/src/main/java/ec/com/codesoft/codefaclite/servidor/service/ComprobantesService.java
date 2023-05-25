@@ -449,7 +449,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         comprobanteElectronico.enviarSoloCorreosAdjuntos=true;
         
         //TODO; Revisar esta parte
-        ParametroCodefac parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE,empresa);
+        ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
+        ParametroCodefac parametroCodefac = parametroCodefacService.getParametroByNombre(ParametroCodefac.TIPO_ENVIO_COMPROBANTE,empresa);
         if (parametroCodefac != null && parametroCodefac.getValor().equals(ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_AUTORIZADO.getLetra())) {
            comprobanteElectronico.setEnviarCorreoComprobanteAutorizado(true);
         }

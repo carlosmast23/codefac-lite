@@ -1341,7 +1341,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             dialogoFactory.setDiponibleVenta(EnumSiNo.SI);
             
             kardexSeleccionado = (Kardex) dialogoFactory.ejecutarDialogo();
-            productoSeleccionado=kardexSeleccionado.getProducto();
+            if(kardexSeleccionado==null)
+            {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.WARNING,"Error al agregar un producto a la factura que al parecer no tiene kardex pero esta marcado con inventario en si");
+                throw new ServicioCodefacException("Error al agregar al inventario un producto que no tiene kardex");
+            }
+            else
+            {
+                productoSeleccionado=kardexSeleccionado.getProducto();
+            }
             
         }
         else if(manejaInventario.equals(EnumSiNo.NO))
@@ -3763,6 +3771,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void itemStateChanged(ItemEvent e) {
                 cargarSecuencial();
+                
+                //Este codigo es para evitar que se cargue un producto previamente mal por ejemplo las NVI que tiene iva
+                controlador.limpiarDetalleFactura();
+                
                 //Si no tiene detalles no hago ninguna validacion
                 if(factura==null || factura.getDetalles()==null || factura.getDetalles().size()==0)
                 {
@@ -3791,7 +3803,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(documentoNuevo.equals(DocumentoEnum.NOTA_VENTA_INTERNA)
                         || documentoAnterior.equals(DocumentoEnum.NOTA_VENTA_INTERNA) )
                 {
-                    controlador.limpiarDetalleFactura();
+                    
                     if(factura!=null && factura.getDetalles()!=null && factura.getDetalles().size()>0)
                     {                        
                         if(DialogoCodefac.dialogoPregunta("Si cambia el tipo de documento los detalles pueden sufrir cambios en el iva , desea continuar ?",DialogoCodefac.MENSAJE_ADVERTENCIA))

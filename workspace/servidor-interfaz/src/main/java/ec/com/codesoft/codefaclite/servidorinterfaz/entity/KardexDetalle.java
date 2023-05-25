@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -31,7 +32,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "KARDEX_DETALLE")
-public class KardexDetalle implements Serializable ,Cloneable {
+public class KardexDetalle implements Serializable {
 
     @Id
     @Column(name = "ID")
@@ -115,6 +116,12 @@ public class KardexDetalle implements Serializable ,Cloneable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardexDetalle")
     private List<KardexItemEspecifico> detallesEspecificos;
     
+    //TODO: Hacer algunas pruebas para ver que no genere errores
+    @Deprecated
+    public KardexDetalle(KardexDetalle kardexDetalle) 
+    {
+        UtilidadVarios.copiarObjetos(kardexDetalle,this);
+    }
     
 
     public KardexDetalle() {
@@ -406,12 +413,7 @@ public class KardexDetalle implements Serializable ,Cloneable {
         
     }
     
-    
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public int hashCode() {

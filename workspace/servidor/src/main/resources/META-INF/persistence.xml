@@ -6,6 +6,8 @@
       <property name="javax.persistence.jdbc.url" value="jdbc:derby:Derby2.DB"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>      
       <property name="eclipselink.allow-zero-id" value="true"/>
+      <!-- Validar que no ingrese ids nulos o incorrectos -->
+      <!--<property name="eclipselink.id-validation" value="EXCEPTION"/>-->
       <!-- Esta propiedad me permite ejecutar siempre un commit despues de cada transaccion para evitar perdida de datos -->
       <property name="javax.persistence.flushMode" value="COMMIT"/>
       <property name="eclipselink.cache.shared.default" value="false"/>

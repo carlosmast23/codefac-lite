@@ -153,7 +153,8 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     private AlertaResponse obtenerAlertaIvaSinConfigurar(Empresa empresa)
     {
         try {
-            ParametroCodefac parametroCodefac= ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.IVA_DEFECTO, empresa);
+            ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
+            ParametroCodefac parametroCodefac= parametroCodefacService.getParametroByNombre(ParametroCodefac.IVA_DEFECTO, empresa);
             if(parametroCodefac!=null)
             {
                 if(parametroCodefac.valor!=null && !parametroCodefac.valor.isEmpty())
