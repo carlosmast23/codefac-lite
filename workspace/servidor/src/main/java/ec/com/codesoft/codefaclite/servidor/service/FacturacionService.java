@@ -306,7 +306,30 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public void enviarCorreoNVI(Factura notaVentaInterna) throws RemoteException,ServicioCodefacException
     {
-        try {
+        try 
+        {
+            //TODO: Mejorar esta parte para enviar los correos
+            Boolean enviarCorreo=false;
+            ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
+            ParametroCodefac parametroCodefac=parametroCodefacService.getParametroByNombre(ParametroCodefac.ENVIAR_NVI_CORREO,notaVentaInterna.getEmpresa());
+            if(parametroCodefac!=null)
+            {
+                if(!UtilidadesTextos.verificarNullOVacio(parametroCodefac.valor))
+                {
+                    EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(parametroCodefac.valor);
+                    if(enumSiNo!=null && enumSiNo.equals(EnumSiNo.SI))
+                    {
+                        enviarCorreo=true;
+                    }
+                }
+            }
+            
+            //Si no esta configurando para enviar NVI no haga nada mas
+            if(!enviarCorreo)
+            {
+                return;
+            }
+            
             ComprobanteDataInterface dataFactura= obtenerComprobanteData(notaVentaInterna);
             ComprobanteServiceIf comprobanteService=ServiceFactory.getFactory().getComprobanteServiceIf();
             byte[] byteReporte=comprobanteService.getReporteComprobanteComprobante(dataFactura,notaVentaInterna.getUsuario(),notaVentaInterna.getClaveAcceso());
@@ -536,6 +559,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      */
     public Factura grabar(final Factura factura,Prestamo prestamo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException {
         
+        Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO, "Iniciando Metodo grabarFactura: " + factura.getPreimpreso() + " | fecha de emisión: " + factura.getFechaEmision() + " | cliente: " + factura.getRazonSocial() + " | documento: " + factura.getCodigoDocumentoEnum().getNombre() + " | iva: " + factura.getIva() + " | total: " + factura.getTotal());
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
         {
             
@@ -581,7 +605,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 //Si se grabo una nota de venta interna intento enviar al correo
                 if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
                 {
-                    enviarCorreoProforma(factura);
+                    enviarCorreoNVI(factura);
                 }
                 
                 imprimirLogFactura(factura, CrudEnum.CREAR);

@@ -260,6 +260,16 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 detalle.setCodigoPrincipal(facturaDetalle.getCodigoPrincipal());
             }
             detalle.setCantidad(facturaDetalle.getCantidad());
+            
+            if(!UtilidadesTextos.verificarNullOVacio(facturaDetalle.getPresentacionCodigo()))
+            {
+                detalle.setUnidadMedida(facturaDetalle.getPresentacionCodigo());
+            }
+            else
+            {
+                detalle.setUnidadMedida(null);
+            }
+            
             /*
             *   UTF-8 Validad caracteres no imprimibles Á y Í
             */

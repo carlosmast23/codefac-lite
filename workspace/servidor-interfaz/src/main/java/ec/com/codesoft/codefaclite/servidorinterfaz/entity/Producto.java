@@ -1058,10 +1058,16 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     
     public BigDecimal getPrecioDistribuidorConIva() {
         
-        if(precioDistribuidor==null || precioDistribuidor.compareTo(BigDecimal.ZERO)==0)
+        if(precioDistribuidor==null)
+        {
+            return BigDecimal.ZERO;
+        }
+        
+        if(precioDistribuidor.compareTo(BigDecimal.ZERO)==0)
         {
             return precioDistribuidor;
         }
+        
         
         BigDecimal tarifa= new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
         return UtilidadesImpuestos.agregarValorIva(tarifa, precioDistribuidor);

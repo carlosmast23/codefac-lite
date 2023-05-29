@@ -14,6 +14,7 @@ public class DetalleReporteData {
     private String descripcion;
     private String cantidad;
     private String precio_unitario;
+    private String presentacion;
     private String descuento;
     private String precio_total;
     private String subsidio;
@@ -88,6 +89,15 @@ public class DetalleReporteData {
     public void setPorcentajeIva(String porcentajeIva) {
         this.porcentajeIva = porcentajeIva;
     }
+
+    public String getPresentacion() {
+        return presentacion;
+    }
+
+    public void setPresentacion(String presentacion) {
+        this.presentacion = presentacion;
+    }
+    
     
     
     

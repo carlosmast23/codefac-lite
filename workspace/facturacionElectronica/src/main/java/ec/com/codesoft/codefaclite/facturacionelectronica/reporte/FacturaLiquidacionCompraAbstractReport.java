@@ -102,6 +102,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
             data.setCantidad(detalleFacturaComprobante.getCantidad()+"");
             data.setCodigo(detalleFacturaComprobante.getCodigoPrincipal());
             data.setDescripcion(detalleFacturaComprobante.getDescripcion());
+            data.setPresentacion(detalleFacturaComprobante.getUnidadMedida());
             
             if(detalleFacturaComprobante.getImpuestos()!=null && detalleFacturaComprobante.getImpuestos().size()>0)
             {

@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {
     "codigoPrincipal",
     "descripcion",
+    "unidadMedida",
     "cantidad",
     "precioUnitario",
     "precioSinSubsidio",
@@ -31,6 +32,8 @@ import javax.xml.bind.annotation.XmlType;
 public class DetalleFacturaComprobante extends DetalleComprobanteAbstract {
 
     private String descripcion;
+    
+    private String unidadMedida;
     //private BigDecimal cantidad;
     //private BigDecimal precioUnitario;
     //private BigDecimal descuento;
@@ -56,6 +59,16 @@ public class DetalleFacturaComprobante extends DetalleComprobanteAbstract {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    @XmlElement(name = "unidadMedida")
+    public String getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(String unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
+    
 
     @XmlElement(name = "precioTotalSinImpuesto")
     public BigDecimal getPrecioTotalSinImpuesto() {
