@@ -17,7 +17,24 @@
 
             <!-- Cargar una tabla para que pueda visualizar el contenido -->
             <div class="card">
-                <p:dataTable id="tblMantenimiento" var="m" value="#{tareasPendientesMb.mantenimientoTareaList}" rowIndexVar="rowIndex" >
+                <p:dataTable 
+                    id="tblMantenimiento" 
+                    var="m" 
+                    reflow="true"
+                    widgetVar="tblMantenimientoWidget"
+                    value="#{tareasPendientesMb.mantenimientoTareaList}" 
+                    rowIndexVar="rowIndex" >
+
+                    <f:facet name="header">
+                        <div class="flex align-items-center justify-content-between">
+                            <span>Listado de Vehiculos Pendientes</span>
+                            <div>
+                                <p:inputText id="globalFilter" onkeyup="PF('tblMantenimientoWidget').filter()" 
+                                             placeholder="Ingrese el VIN" />                                
+                            </div>
+                        </div>
+
+                    </f:facet>
 
                     <p:column headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />

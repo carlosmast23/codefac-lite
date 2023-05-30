@@ -14,38 +14,52 @@
                     <h2>Clasificar vehiculos pendientes</h2>
                 </div>              
             </div>
-
+            
             <!-- Cargar una tabla para que pueda visualizar el contenido -->
-            <div class="card">
+            <div class="card" style="text-align: left">
                 <p:dataTable 
                     id="tblMantenimiento" 
                     var="m" 
                     editable="true"
                     editMode="cell"
-                    value="#{clasificarVehiculosNuevosMb.mantenimientoList}" 
-                    rowIndexVar="rowIndex" >
+                    reflow="true"
+                    value="#{clasificarVehiculosNuevosMb.mantenimientoList}"                     
+                    selection="#{clasificarVehiculosNuevosMb.mantenimientoSeleccionList}"
+                    widgetVar="tblMantenimientoWidget"
+                    rowKey="#{m.id}"
+                    rowIndexVar="rowIndex"
+                    rowSelectMode="add"
+                    >
 
-                    <p:column headerText="#">
+                    <f:facet name="header">
+                        <div class="flex align-items-center justify-content-between">
+                            <span>Listado de Vehiculos Pendientes</span>
+                            <div>
+                                <p:inputText id="globalFilter" onkeyup="PF('tblMantenimientoWidget').filter()" 
+                                             placeholder="Ingrese el VIN" />                                
+                            </div>
+                        </div>
+
+                    </f:facet>
+
+                    <p:column width="50"  selectionMode="multiple" exportable="false"></p:column>
+
+                    
+                    <p:column width="50"  headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
                     
-                    <p:column headerText="Status">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{m.ubicacionEnum}"/></f:facet>
-                            <f:facet name="input">
-                                <h:selectOneMenu value="#{m.ubicacionEnum}" style="width:100%" converter="ubicacionVehiculoConverter" >
-                                    <f:selectItems value="#{clasificarVehiculosNuevosMb.ubicacionList}" var="m"
-                                                   itemLabel="#{m.nombre}" itemValue="#{m.letra}"/>
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
+                    <p:column width="70" headerText="Fecha">
+                        <h:outputText value="#{m.fechaIngreso}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
                     </p:column>
 
                     <p:column headerText="Modelo">
                         <h:outputText value="#{m.vehiculo.modelo}" />
                     </p:column>
 
-                    <p:column headerText="Color">
+                    <p:column width="100" headerText="Color">
                         <h:outputText value="#{m.vehiculo.color}" />
                     </p:column>
 
@@ -53,11 +67,6 @@
                         <h:outputText value="#{m.vehiculo.vin}" />
                     </p:column>
 
-                    <p:column headerText="Fecha Ingreso">
-                        <h:outputText value="#{m.fechaIngreso}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                        </h:outputText>
-                    </p:column>
 
 
                 </p:dataTable>

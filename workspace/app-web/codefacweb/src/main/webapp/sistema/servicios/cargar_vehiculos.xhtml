@@ -30,7 +30,12 @@
 
             <!-- Cargar una tabla para que pueda visualizar el contenido -->
             <div class="card">
-                <p:dataTable id="tblMantenimiento" var="m" value="#{cargarVehiculoMb.mantenimientoList}" rowIndexVar="rowIndex" >
+                <p:dataTable 
+                    id="tblMantenimiento" 
+                    var="m" 
+                    reflow="true"
+                    value="#{cargarVehiculoMb.mantenimientoList}" 
+                    rowIndexVar="rowIndex" >
 
                     <p:column headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />

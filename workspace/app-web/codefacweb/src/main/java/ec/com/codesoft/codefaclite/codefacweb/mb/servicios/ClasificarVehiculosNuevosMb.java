@@ -31,19 +31,37 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped 
 public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  Serializable{
     
-    private List<Mantenimiento> mantenimientoList;  
+    private List<Mantenimiento> mantenimientoList;
+    private List<Mantenimiento> mantenimientoSeleccionList;
     private List<Mantenimiento.UbicacionEnum> ubicacionList;
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private List<Mantenimiento> setearEstadoVehiculos(List<Mantenimiento> mantenimientoSeleccionados,List<Mantenimiento> mantenimientoList)
+    {
+        for (Mantenimiento mantenimiento : mantenimientoList) 
+        {
+            if(mantenimientoSeleccionados.contains(mantenimiento))
+            {
+                mantenimiento.setUbicacionEnum(Mantenimiento.UbicacionEnum.TALLER);            
+            }
+            else
+            {
+                mantenimiento.setUbicacionEnum(Mantenimiento.UbicacionEnum.DIRECTO);
+            }
+        }
+        return mantenimientoList;
+    }
  
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
         
         try {
-            ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoList,sessionMb.getSession().getUsuario());
+            List<Mantenimiento> mantenimientoProcesarList= setearEstadoVehiculos(mantenimientoSeleccionList, mantenimientoList);
+            ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoProcesarList,sessionMb.getSession().getUsuario());
             iniciar();
             //ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoList,sessionMb.getSession().getUsuario());
             MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
@@ -130,12 +148,12 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Mantenimiento> getMantenimientoList() {
-        return mantenimientoList;
+    public List<Mantenimiento> getMantenimientoList() {     
+        return mantenimientoList;          
     }
 
-    public void setMantenimientoList(List<Mantenimiento> mantenimientoList) {
-        this.mantenimientoList = mantenimientoList;
+    public void setMantenimientoList(List<Mantenimiento> mantenimientoList) {   
+        this.mantenimientoList = mantenimientoList;           
     }
 
     public List<Mantenimiento.UbicacionEnum> getUbicacionList() {
@@ -144,6 +162,14 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
 
     public void setUbicacionList(List<Mantenimiento.UbicacionEnum> ubicacionList) {
         this.ubicacionList = ubicacionList;
+    }
+
+    public List<Mantenimiento> getMantenimientoSeleccionList() {
+        return mantenimientoSeleccionList;
+    }
+
+    public void setMantenimientoSeleccionList(List<Mantenimiento> mantenimientoSeleccionList) {
+        this.mantenimientoSeleccionList = mantenimientoSeleccionList;
     }
 
     

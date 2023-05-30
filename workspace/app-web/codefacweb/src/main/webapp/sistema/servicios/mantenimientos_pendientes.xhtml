@@ -19,10 +19,27 @@
                     </div>
                 </div> 
             </div>
-            
+
             <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
             <div class="card">
-                <p:dataTable id="tblMantenimiento" var="m" value="#{mantenimientosPendientesMb.mantenimientoPendienteList}" rowIndexVar="rowIndex" >
+                <p:dataTable 
+                    id="tblMantenimiento" 
+                    var="m" 
+                    widgetVar="tblMantenimientoWidget"
+                    value="#{mantenimientosPendientesMb.mantenimientoPendienteList}" 
+                    rowIndexVar="rowIndex" 
+                    reflow="true" >
+
+                    <f:facet name="header">
+                        <div class="flex align-items-center justify-content-between">
+                            <span>Listado de Vehiculos Pendientes</span>
+                            <div>
+                                <p:inputText id="globalFilter" onkeyup="PF('tblMantenimientoWidget').filter()" 
+                                             placeholder="Ingrese el VIN" />                                
+                            </div>
+                        </div>
+
+                    </f:facet>
 
                     <p:column headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />
@@ -35,43 +52,43 @@
                     <p:column headerText="Color">
                         <h:outputText value="#{m.vehiculo.color}" />
                     </p:column>
-                    
-                    <p:column headerText="Vin" filterable="true">
+
+                    <p:column headerText="Vin" filterBy="#{m.vehiculo.vin}" filterMatchMode="contains">
                         <h:outputText value="#{m.vehiculo.vin}" />
                     </p:column>
-                    
+
                     <p:column headerText="Fecha Ingreso">
                         <h:outputText value="#{m.fechaIngreso}" />
                     </p:column>
-                    
+
                     <p:column headerText="Estado">
                         <h:outputText value="#{m.estado}" />
                     </p:column>
-                    
+
                     <p:column exportable="false">
                         <p:commandButton
-                                        title="Asignar nueva tarea"
-                                        action="#{mantenimientosPendientesMb.agregarTarea(m)}"
-                                        icon="pi pi-check"                                         
-                                        styleClass="edit-button rounded-button ui-button-success" process="@this">                                                        
+                            title="Asignar nueva tarea"
+                            action="#{mantenimientosPendientesMb.agregarTarea(m)}"
+                            icon="pi pi-check"                                         
+                            styleClass="edit-button rounded-button ui-button-success" process="@this">                                                        
                         </p:commandButton>                    
-                        
+
                         <p:commandButton
-                                        title="Eliminar Mantenimiento"
-                                        action="#{mantenimientosPendientesMb.eliminarMantenimiento(m)}"
-                                        onclick="return confirm('¿Estás seguro de eliminar el mantenimiento?'"
-                                        icon="pi pi-trash" 
-                                        update="@form"
-                                        style="background-color:#0097A"
-                                        process="@this">                                                        
+                            title="Eliminar Mantenimiento"
+                            action="#{mantenimientosPendientesMb.eliminarMantenimiento(m)}"
+                            onclick="return confirm('¿Estás seguro de eliminar el mantenimiento?'"
+                            icon="pi pi-trash" 
+                            update="@form"
+                            style="background-color:#0097A"
+                            process="@this">                                                        
                         </p:commandButton>                    
-                        
+
                     </p:column>
-                    
+
                 </p:dataTable>
             </div>
 
-            
+
         </ui:define>
     </ui:composition>
 
