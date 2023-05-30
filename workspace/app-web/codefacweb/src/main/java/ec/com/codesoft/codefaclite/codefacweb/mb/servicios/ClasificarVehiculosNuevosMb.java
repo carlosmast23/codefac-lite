@@ -28,7 +28,7 @@ import javax.faces.bean.ViewScoped;
  * @author CARLOS_CODESOFT
  */
 @ManagedBean
-@ViewScoped
+@ViewScoped 
 public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  Serializable{
     
     private List<Mantenimiento> mantenimientoList;  

@@ -12,6 +12,7 @@ package ec.com.codesoft.codefaclite.controlador.vista.factura;
 public class ComprobanteVentaData {
     private String codigo;
     private String nombre;
+    private String presentacion;
     private String cantidad;
     private String precioUnitario;
     private String total;
@@ -108,6 +109,15 @@ public class ComprobanteVentaData {
     public void setTmp(String tmp) {
         this.tmp = tmp;
     }
+
+    public String getPresentacion() {
+        return presentacion;
+    }
+
+    public void setPresentacion(String presentacion) {
+        this.presentacion = presentacion;
+    }
+    
     
     /**
      * Datos adicionales
