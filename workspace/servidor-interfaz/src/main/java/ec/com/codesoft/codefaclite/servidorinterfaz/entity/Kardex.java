@@ -311,13 +311,14 @@ public class Kardex implements Serializable,Cloneable {
         if(detallesKardex!=null)
         {
             for (KardexDetalle kardexDetalle: detallesKardex) 
-            {
+            {                
                 Integer signo=kardexDetalle.getSigno();
                 if(signo==null)
                 {
                     signo=kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero();
                 }
                 
+                //System.out.println(signo+" > "+kardexDetalle.getCantidad());
                 stock=stock.add(kardexDetalle.getCantidad().multiply(new BigDecimal(signo)));
             }
         }

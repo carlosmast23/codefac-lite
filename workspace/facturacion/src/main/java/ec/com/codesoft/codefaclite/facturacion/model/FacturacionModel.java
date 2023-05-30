@@ -2218,6 +2218,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {                                        
                     try {
                         ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura(factura);
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
                     } catch (ServicioCodefacException ex) {
                         DialogoCodefac.mensaje(ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);                        

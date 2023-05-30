@@ -1522,6 +1522,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 kardexDetalle.setFechaDocumento(fechaDocumento);
                 
                 kardex.addDetalleKardex(kardexDetalle);
+                //NOTA: Es importante persistir y hacer flush antes del metodo recalcularStock
+                entityManager.persist(kardexDetalle);
+                entityManager.flush();
                 
                 //Actualizar los valores del kardex
                 //kardex.setStock(kardex.getStock().add(kardexDetalle.getCantidad()));
@@ -1532,9 +1535,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
                 kardex.calcularPrecioTotal();
                 //kardex.
-                //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());                
                 
-                entityManager.persist(kardexDetalle);
                 entityManager.merge(kardex);
                 return kardexDetalle;
             //}
