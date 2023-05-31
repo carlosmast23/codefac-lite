@@ -391,6 +391,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         //if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO))
         //{
         titulos.add(3,"Producto");
+        titulos.add(4,"Cant Producto");
         //}
         
         return titulos;
