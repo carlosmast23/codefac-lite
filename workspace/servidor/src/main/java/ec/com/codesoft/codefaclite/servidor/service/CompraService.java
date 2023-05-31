@@ -47,8 +47,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
@@ -810,10 +812,25 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         
     }
     
+    @Deprecated //Mejorar esta parte con las presentaciones porque exist ecodigo repetido al buscar la bodega y luego generar el kardex detalle de la anulacion
     private Bodega obtenerBodegaDevolucion(CompraDetalle compraDetalle) throws RemoteException, ServicioCodefacException
     {
         KardexDetalleService kardexDetalleService=new KardexDetalleService();
-        KardexDetalle kardexDetalle=kardexDetalleService.consultarPorReferencia(compraDetalle.getCompra().getCodigoTipoDocumentoEnum(),compraDetalle.getCompra().getId(),compraDetalle.getProductoProveedor().getProducto());
+        
+        Producto producto=compraDetalle.getProductoProveedor().getProducto();
+        ProductoService productoService=new ProductoService();
+        
+        //@DEPRECATED, Este proceso de consulta del producto original se esta repitiendo 2 veces
+        //TODO: Unificar con el mismo metodo al momento de grabar
+        if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) {
+            ProductoConversionPresentacionRespuesta respuesta = productoService.convertirProductoEmpaqueSecundarioEnPrincipal(producto, compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario());
+
+            producto = respuesta.productoPresentacionPrincipal;
+            //precioUnitario = respuesta.precioUnitario;
+            //cantidad = respuesta.cantidad;
+        }
+        
+        KardexDetalle kardexDetalle=kardexDetalleService.consultarPorReferencia(compraDetalle.getCompra().getCodigoTipoDocumentoEnum(),compraDetalle.getCompra().getId(),producto);
         if(kardexDetalle!=null)
         {
             return kardexDetalle.getKardex().getBodega();
