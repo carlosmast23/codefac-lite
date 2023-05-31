@@ -510,7 +510,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     private void valoresIniciales() {
         
         filtrarReferidos=false;
-        getDateFechaInicio().setDate(fechaInicioMes(hoy()));
+        getDateFechaInicio().setDate(hoy());
         getDateFechaFin().setDate(hoy());
 
         getCmbEstado().removeAllItems();
