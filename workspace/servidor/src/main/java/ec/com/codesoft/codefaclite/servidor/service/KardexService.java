@@ -38,10 +38,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetall
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoUbicacionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.RotacionInventarioRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TransferenciaBodegaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
@@ -1495,6 +1497,16 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     {
         try {
             Producto producto=productoService.buscarPorId(referenciaProductoId);
+            
+            //TODO: Unificar con el mismo metodo al momento de grabar
+            if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) 
+            {
+                ProductoConversionPresentacionRespuesta respuesta = productoService.convertirProductoEmpaqueSecundarioEnPrincipal(producto, cantidad,precioUnitario);
+
+                producto = respuesta.productoPresentacionPrincipal;
+                precioUnitario = respuesta.precioUnitario;
+                cantidad = respuesta.cantidad;
+            }
             
             //Map<String,Object> mapParametros=new HashMap<String,Object>();
             //mapParametros.put("producto", producto);

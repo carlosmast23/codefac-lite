@@ -1216,12 +1216,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException
+    private void afectarInventario(FacturaDetalle detalle,Bodega bodega) throws RemoteException, ServicioCodefacException 
     {        
         Producto producto = productoService.buscarPorId(detalle.getReferenciaId());
         BigDecimal cantidad=detalle.getCantidad();
         BigDecimal precioUnitario=detalle.getPrecioUnitario();
         
+        //TODO: Unificar metodo con el de eliminar
         //Si el producto es un empaque busco el producto original
         if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
         {
