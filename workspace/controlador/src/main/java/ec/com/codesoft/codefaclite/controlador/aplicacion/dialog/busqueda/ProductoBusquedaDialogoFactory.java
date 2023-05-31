@@ -93,7 +93,7 @@ public class ProductoBusquedaDialogoFactory
             else
             {
                 isInventario=false;
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(sucursal.getEmpresa(),false,true);
+                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(sucursal.getEmpresa(),null,null);
                 return buscarBusquedaDialogo;
                 //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(buscarBusquedaDialogo);
                 //return buscarDialogoModel;
