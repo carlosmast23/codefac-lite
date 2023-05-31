@@ -52,6 +52,11 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
             throw new ServicioCodefacException("Debe ingresar un código de lote para grabar");
         }
         
+        if(lote.getFechaVencimiento()==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar sin una Fecha de Vencimiento");
+        }
+        
     }
 
     @Override
