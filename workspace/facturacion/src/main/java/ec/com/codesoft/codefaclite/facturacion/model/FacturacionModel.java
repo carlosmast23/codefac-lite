@@ -1008,9 +1008,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 controlador.actualizarFacturaDetalleCatalogo(facturaDetalle);
                 
+                String codigoPresentacion="";
+                PresentacionProducto presentacion = (PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
+                if(presentacion!=null)
+                {
+                    codigoPresentacion=presentacion.getNombre();
+                }
+                
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 Producto.PrecioVenta precioVenta= (Producto.PrecioVenta) getCmbPreciosVenta().getSelectedItem();
-                if(controlador.agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado,kardexSeleccionado,null,null,(precioVenta!=null)?precioVenta.getNumero():null))
+                if(controlador.agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado,kardexSeleccionado,null,null,(precioVenta!=null)?precioVenta.getNumero():null,codigoPresentacion))
                 {
                     habilitarModoIngresoDatos();
                 }
