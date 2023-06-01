@@ -322,7 +322,8 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             Lote loteTmp = (Lote) dato[4];
             
             //Si coincide estos inidices entonces verifico el lote
-            if(productoTmp.equals(producto) && bodegaTmp.equals(bodega))
+            //TODO: Toca tomar que compare con el oparador == los lotes para evitar problemas cuando sea null al comparar
+            if(productoTmp.equals(producto) && bodegaTmp.equals(bodega) && loteTmp==lote )
             {
                 return false;
             }            
