@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -215,21 +216,28 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         getBtnVerificar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               List<Producto> productosProblemas=verificarEnsamble();
-               if(productosProblemas.size()>0)
-               {
-                   String errores="\n";
-                   for (Producto productosProblema : productosProblemas) {
-                       errores+=" - "+productosProblema.getNombre()+"\n";
-                   }
-                   
-                   DialogoCodefac.mensaje("Advertencia","No existe suficiente stock de los siguientes productos:"+errores+"\n Agregue stock para continuar", DialogoCodefac.MENSAJE_INCORRECTO);
-                   
-               }
-               else
-               {
-                   DialogoCodefac.mensaje("Correcto","El stock de los componentes si esta disponble ",DialogoCodefac.MENSAJE_CORRECTO);
-               }
+                
+
+                try {
+                    List<Producto> productosProblemas = verificarEnsamble();
+                    if (productosProblemas.size() > 0)
+                    {
+                        String errores = "\n";
+                        for (Producto productosProblema : productosProblemas) {
+                            errores += " - " + productosProblema.getNombre() + "\n";
+                        }
+                        
+                        DialogoCodefac.mensaje("Advertencia", "No existe suficiente stock de los siguientes productos:" + errores + "\n Agregue stock para continuar", DialogoCodefac.MENSAJE_INCORRECTO);
+                        
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje("Correcto", "El stock de los componentes si esta disponble ", DialogoCodefac.MENSAJE_CORRECTO);
+                    }
+                } catch (ExcepcionCodefacLite ex) {
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
             }
         });
@@ -309,8 +317,15 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
      * para comprobar la disponibilidad de los componentes
      * @return 
      */
-    private List<Producto> verificarEnsamble()
+    private List<Producto> verificarEnsamble()  throws ExcepcionCodefacLite 
     {
+        
+        if (productoEnsamble == null || productoEnsamble.getDetallesEnsamble() == null || productoEnsamble.getDetallesEnsamble().size() == 0) {
+            throw new ExcepcionCodefacLite("El producto no tiene configurando DETALLES con otros productos para realizar el ENSAMBLE");
+            ///DialogoCodefac.mensaje(new CodefacMsj("El producto no tiene configurando DETALLES con otros productos para realizar el ENSAMBLE", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            //return;
+        }
+        
         List<Producto> productosProblemas=new ArrayList<Producto>();
         BigDecimal cantidad = new BigDecimal(getTxtCantidad().getText());
         String accion = getCmbAccion().getSelectedItem().toString();
