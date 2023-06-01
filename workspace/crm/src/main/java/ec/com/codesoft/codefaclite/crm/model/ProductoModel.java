@@ -56,6 +56,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -877,8 +878,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                     costoUltimo= kardex.getPrecioUltimoConIva();
                 }
                 
-                getTxtUltimoCosto().setText(costoUltimo+"");
-                getTxtUltimoCosto2().setText(costoUltimo+"");
+                getTxtUltimoCosto().setText(costoUltimo.setScale(2,BigDecimal.ROUND_HALF_UP)+"");
+                getTxtUltimoCosto2().setText(costoUltimo.setScale(2,BigDecimal.ROUND_HALF_UP)+"");
                 
                 getTxtCostoPromedio().setText(kardex.getCostoPromedio()+"");
                 getTxtStock().setText(kardex.getStock()+"");

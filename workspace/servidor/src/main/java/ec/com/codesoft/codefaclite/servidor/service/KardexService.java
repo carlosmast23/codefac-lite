@@ -819,12 +819,27 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                
+                ordenarDetallesKardex(detalles);
                 for (KardexDetalle detalle : detalles) 
                 {
+                    //System.out.println(detalle.getPrecioUnitario()+" > "+detalle.getDescripcion());
                     grabarKardexDetallSinTransaccion(detalle,detalle.getKardex().getLote(),false);                    
                 }
                 
+            }
+        });
+    }
+    
+    /**
+     * Esta funcion es importante porque por ejemplo en los productos de compra se existen 2 veces en el detalle productos y algunos tiene precio unitario cero y luego si tiene otro precio unitario
+     * entonces para garantizar que siempre al final guarde el mayor precio hago este ordenamiento
+     */
+    private void ordenarDetallesKardex(List<KardexDetalle> detalleList)
+    {
+        UtilidadesLista.ordenarLista(detalleList,new Comparator<KardexDetalle>() {
+            @Override
+            public int compare(KardexDetalle o1, KardexDetalle o2) {
+                return o1.getPrecioUnitario().compareTo(o2.getPrecioUnitario());
             }
         });
     }
