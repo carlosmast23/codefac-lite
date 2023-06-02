@@ -41,7 +41,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
     private List<MantenimientoEnum> estadoMantenimietoList;
-    private List<MantenimientoResult> mantenimientoList;
+    private List<MantenimientoResult> mantenimientoList; 
     
     private java.util.Date fechaInicial;
     private java.util.Date fechaFinal;
@@ -136,12 +136,16 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public void ejemplo()
+    {
+        System.out.println("verificar presionar boton ...");
+    }
     
     public void consultarMantenimientos()
     {
         try {
             mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,true);
-            System.out.println("Datos consultados: "+mantenimientoList.size());
+            System.out.println("Datos consultados: "+mantenimientoList.size());  
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {

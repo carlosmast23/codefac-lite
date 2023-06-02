@@ -13,7 +13,6 @@
                 <div class="p-col-12 p-md-6 p-lg-6" >
                     <h2>Reporte General Mantenimientos</h2>
                 </div> 
-
             </div>
 
             <div class="p-grid div-resposive"  >
@@ -37,11 +36,19 @@
                         </div>
                     </div>
                 </div>
-                
+
 
                 <div class="p-col-6 p-md-2 p-lg-2" >
                     <div class="p-col-fixed" >
                         <p:commandButton icon="fa fa-search" value="Consultar " process="@form" update="tblMantenimiento"  actionListener="#{reporteMantenimientoMb.consultarMantenimientos()}" styleClass="ui-priority-primary" class="componente-responsive" />                
+                    </div>
+                </div>
+                
+                <div class="p-col-6 p-md-2 p-lg-2" >
+                    <div class="p-col-fixed" >
+                        <p:commandButton value="XLSX" styleClass="mr-2 mb-2 ui-button-outlined" process="@this" actionListener="#{reporteMantenimientoMb.ejemplo()}" ajax="false">
+                            <p:dataExporter type="xls" target="tblMantenimiento" fileName="vehiculos" />
+                        </p:commandButton>
                     </div>
                 </div>
             </div>
