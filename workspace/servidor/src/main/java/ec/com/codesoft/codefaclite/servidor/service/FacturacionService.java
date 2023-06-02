@@ -909,6 +909,28 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 throw new ServicioCodefacException("El producto "+detalle.getDescripcion()+" tiene un tipo un descuento superior al permitido");
             }
             
+            
+            ///Verificar que si tiene lotes, el lote tenga el mismo producto para evitar inconsistencia
+            if(detalle.getKardexId()!=null)
+            {
+                Kardex kardex=kardexService.buscarPorId(detalle.getKardexId());
+                if(kardex!=null)
+                {
+                    if(!detalle.getCodigoPrincipal().equals(kardex.getProducto().getCodigoPersonalizado()))
+                    {
+                        throw new ServicioCodefacException("Error al grabar el producto: <<"+detalle.getDescripcion()+">> , porque el detalle tiene asignado un producto distinto: <<"+kardex.getProducto().getNombre()+">>\n\n SOLUCIÓN: QUITE Y AGREGUE de nuevo el detalle del producto: "+detalle.getDescripcion());
+                    }
+                }
+                /*if(kardex!=null && kardex.getLote()!=null)
+                {
+                    Lote lote=kardex.getLote();
+                    if(!kardex.getProducto().equals(lote.getProducto()))
+                    {
+                        throw new ServicioCodefacException("Error al grabar el producto con detalle: "+detalle.getDescripcion()+", porque el LOTE: "+kardex.getLote().getCodigo()+" tiene un producto distinto");
+                    }
+                }*/
+            }
+            
         }   
         
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))

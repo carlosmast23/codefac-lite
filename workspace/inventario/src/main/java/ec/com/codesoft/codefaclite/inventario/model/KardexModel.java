@@ -109,11 +109,13 @@ public class KardexModel extends KardexPanel {
         agregarListernerBotones();
         listenerCheckBox();
         valoresIniciales();
+        //No validar datos al presionar el botón de enter
+        super.validacionDatosIngresados=false;
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       limpiar();
     }
     
     private void setearValores()
@@ -258,6 +260,19 @@ public class KardexModel extends KardexPanel {
     @Override
     public void limpiar() {
         listaKardex = new ArrayList<KardexData>();
+        productoSeleccionado=null;
+        lote=null;
+        
+        getTblKardexDetalle().setModel(new DefaultTableModel());
+        getTxtProducto().setText("");
+        getTxtLoteNombre().setText("");
+        getTxtUltimoCosto().setText("");
+        getTxtCostoPromedio().setText("");
+        getTxtReserva().setValue(0);
+        getLblCantidad().setText("0");
+        getLblPrecioPromedio().setText("0.00");
+        getLblPrecioUltimo().setText("0.00");
+        getLblTotal().setText("0.00");
     }
 
 //    @Override
@@ -273,7 +288,7 @@ public class KardexModel extends KardexPanel {
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO, false);
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
