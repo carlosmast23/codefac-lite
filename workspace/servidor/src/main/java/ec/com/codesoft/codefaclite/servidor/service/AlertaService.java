@@ -81,7 +81,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
         //alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
         alertas.add(obtenerNotificacionProblemasConEnvioRespaldo(sucursal.getEmpresa()));
-        alertas.add(obtenerNotificacionFechaRespaldo());
+        alertas.add(obtenerNotificacionFechaRespaldo(sucursal.getEmpresa()));
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
         
         
@@ -198,11 +198,12 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     
     /**
      * Esta notificacion se encarga de verificar que no pase más de 5 días sin enviar los respaldos 
+     * TODO: Por el momento hago que escoja de la misma empresa para evitar problemas cuando se tiene muchas empresas
      * @return 
      */
-    private AlertaResponse obtenerNotificacionFechaRespaldo()
+    private AlertaResponse obtenerNotificacionFechaRespaldo(Empresa empresa)
     {
-        String fechaStr=ParametroUtilidades.obtenerValorParametroSinEmpresa(ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
+        String fechaStr=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
         if(!UtilidadesTextos.verificarNullOVacio(fechaStr))
         {
             java.util.Date fechaUltimaVerificacion = UtilidadesFecha.castStringToDate(fechaStr, ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA);

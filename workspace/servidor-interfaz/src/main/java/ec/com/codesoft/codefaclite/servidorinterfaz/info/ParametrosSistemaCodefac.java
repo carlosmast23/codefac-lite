@@ -176,7 +176,7 @@ public abstract class ParametrosSistemaCodefac {
     
     public static final BigDecimal MONTO_MAXIMO_VENTAS_CONSUMIDOR_FINAL=new BigDecimal("50");
     
-    public static final Integer TOLERACION_DIAS_SIN_RESPALDO=5;
+    public static final Integer TOLERACION_DIAS_SIN_RESPALDO=7;
     
     public static Boolean MOSTRAR_PRECIOS_CON_IVA=null;
     

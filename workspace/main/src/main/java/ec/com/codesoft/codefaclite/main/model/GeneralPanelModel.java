@@ -109,6 +109,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceI
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesReflexion.ResponseAnotacion;
@@ -441,7 +442,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         Boolean generarRespaldo=false;
         String fechaStr = ParametroUtilidades.obtenerValorParametroSinEmpresa(ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
-        if (fechaStr != null && !fechaStr.isEmpty()) {
+        if(!UtilidadesTextos.verificarNullOVacio(fechaStr))
+        {
+            //if (fechaStr != null && !fechaStr.isEmpty()) {
             java.util.Date fechaUltimaVerificacion = UtilidadesFecha.castStringToDate(fechaStr, ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA);
             int diasDiferencia = UtilidadesFecha.obtenerDistanciaConLaFechaActual(fechaUltimaVerificacion);
             
