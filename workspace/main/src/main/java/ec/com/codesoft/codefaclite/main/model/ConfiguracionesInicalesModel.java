@@ -28,6 +28,12 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
         activarPestaña();
         listenerBotones();
         this.datosGrabados=false;
+        
+        //Datos por defecto por el momento para evitar datos que luego se me hacen dificil de buscar
+        getTxtUsuarioRegistro().setText("root");
+        getTxtClaveRegistro().setText("1234");
+        getTxtRepetirClaveRegistro().setText("1234");
+        
     }
     
     private void activarPestaña()
