@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -150,12 +151,14 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO, EnumSiNo.SI)) 
             {
                 List<Producto> productoList= ServiceFactory.getFactory().getCompraServiceIf().obtenerProductosActualizarPrecios(compraInventario);
+                List<ProductoPrecioDataTable> productoDataList = ProductoPrecioDataTable.castList(productoList);
+                
                 if(productoList.size()>0)
                 {
                     Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("La compra tiene cambios en los costos, desea actualizar los precios de venta ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                     if(respuesta)
                     {
-                        Object[] parametros = {productoList};
+                        Object[] parametros = {productoDataList};
                         panelPadre.crearVentanaCodefac(VentanaEnum.UTILIDAD_PRECIO, true, parametros);
                     }
                 }

@@ -10,6 +10,8 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -137,6 +139,17 @@ public class ProductoPrecioDataTable implements Serializable{
             this.costoUltimo = costoUltimo;
         }
 
+        public static List<ProductoPrecioDataTable> castList(List<Producto> productoList)
+        {
+            List<ProductoPrecioDataTable> resultadoList=new ArrayList<ProductoPrecioDataTable>();
+            
+            for (Producto producto : productoList) 
+            {
+                resultadoList.add(new ProductoPrecioDataTable(producto));
+            }
+            
+            return resultadoList;
+        }
         
      
 }
