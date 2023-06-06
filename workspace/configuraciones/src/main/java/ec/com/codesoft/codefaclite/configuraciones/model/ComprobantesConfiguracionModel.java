@@ -112,6 +112,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
+            verificarFirmaElectronica();
+            
             //getTxtClaveFirma().setEnabled(true);
             actualizarDatosVista();
             moverTodosArchivos();
@@ -141,6 +143,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             dispose(); //TODO: En esta parte analizar porque cuando se sale del formulario no se borra de la lista de ventas abiertas del menu
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
 
@@ -561,7 +567,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
             @Override
             public void focusLost(FocusEvent e) {
-                verificarFirmaElectronica();
+                try {
+                    verificarFirmaElectronica();
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
+                }
             }
         });
 
@@ -704,7 +715,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     /**
      * TODO: Hacer la validacion utilizando el metodo creado en UtilidadesFirmaElectronica
      */
-    private void verificarFirmaElectronica() {
+    private void verificarFirmaElectronica() throws ServicioCodefacException {
         try {
             String claveFirma = new String(getTxtClaveFirma().getPassword());
             String nombreArchivo = getTxtNombreFirma().getText();
@@ -719,7 +730,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 if (!claveFirma.equals("") && !pathFirma.equals("")) {
                     if (!FirmaElectronica.FirmaVerificar(pathFirma, claveFirma)) {
                         getTxtClaveFirma().setText("");
-                        DialogoCodefac.mensaje("Error Clave", "La Clave de la firma es incorrecta, ingrese nuevamente.", DialogoCodefac.MENSAJE_INCORRECTO);
+                        //DialogoCodefac.mensaje("Error Clave", "La Clave de la firma es incorrecta, ingrese nuevamente.", DialogoCodefac.MENSAJE_INCORRECTO);
+                        throw new ServicioCodefacException("La Clave de la firma es incorrecta, ingrese nuevamente.");
 
                     }
                 }
@@ -730,8 +742,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
                 if (!validacion) {
                     getTxtClaveFirma().setText("");
-                    DialogoCodefac.mensaje("Error Clave", "La Clave de la firma es incorrecta, ingrese nuevamente.", DialogoCodefac.MENSAJE_INCORRECTO);
-
+                    //DialogoCodefac.mensaje("Error Clave", "La Clave de la firma es incorrecta, ingrese nuevamente.", DialogoCodefac.MENSAJE_INCORRECTO);
+                    throw new ServicioCodefacException("La Clave de la firma es incorrecta, ingrese nuevamente.");
                 }
 
             }
