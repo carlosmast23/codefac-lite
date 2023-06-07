@@ -183,7 +183,19 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 mantenimientoResult.vin=dato.getVehiculo().getVin();
                 mantenimientoResult.estado=(estadoEnum!=null)?estadoEnum.getNombre():"";
                 mantenimientoResult.fechaIngreso=dato.getFechaIngreso()+"";
+                mantenimientoResult.fechaSalida=(dato.getFechaSalida()!=null)?dato.getFechaSalida()+"":"";
                 mantenimientoResult.ubicacion=(dato.getUbicacionEnum()!=null)?dato.getUbicacionEnum().getNombre():"";
+                
+                String duracionDiasStr="";
+                if(dato.getFechaSalida()!=null)
+                {
+                    duracionDiasStr=UtilidadesFecha.obtenerDistanciaDias(dato.getFechaIngreso(), dato.getFechaSalida())+"";
+                }
+                else
+                {
+                    duracionDiasStr=UtilidadesFecha.obtenerDistanciaDias(dato.getFechaIngreso(), UtilidadesFecha.getFechaHoraHoy())+"";
+                }
+                mantenimientoResult.setDuracionDias(duracionDiasStr);
                 
                 //Falta implemtar el resto de los procesos
                 MantenimientoTareaDetalleService tareaService=new MantenimientoTareaDetalleService();

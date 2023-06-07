@@ -207,6 +207,12 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     @Transient
     private Path pathFotoTmp;
     
+    @Column(name = "COD_PRESENTACION_DEFECTO_VENTA")
+    private String codigoPresentacionDefectoVenta;
+    
+    @Column(name = "COD_PRESENTACION_DEFECTO_COMPRA")
+    private String codigoPresentacionDefectoCompra;
+    
         
     public Producto() {
     }
@@ -1153,6 +1159,24 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         }
         return precio;
     }
+
+    public String getCodigoPresentacionDefectoVenta() {
+        return codigoPresentacionDefectoVenta;
+    }
+
+    public void setCodigoPresentacionDefectoVenta(String codigoPresentacionDefectoVenta) {
+        this.codigoPresentacionDefectoVenta = codigoPresentacionDefectoVenta;
+    }
+
+    public String getCodigoPresentacionDefectoCompra() {
+        return codigoPresentacionDefectoCompra;
+    }
+
+    public void setCodigoPresentacionDefectoCompra(String codigoPresentacionDefectoCompra) {
+        this.codigoPresentacionDefectoCompra = codigoPresentacionDefectoCompra;
+    }
+    
+    
     
     /**
      * TODO: Ver alguna forma de evitar consultar a la base de datos especilamente desde el servidor porque genera redundacia y problemas de rendimiento bastante fuerte

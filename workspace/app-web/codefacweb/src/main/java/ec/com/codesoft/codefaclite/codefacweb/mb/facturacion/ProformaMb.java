@@ -1284,6 +1284,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         
     }
 
+    @Override
+    public void seleccionarPresentacion(String codigoPresentacion) {
+        
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA

@@ -158,6 +158,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setDisponibleVentaEnum(EnumSiNo.getEnumByBoolean(getChkVentas().isSelected()));
         producto.setDisponibleCompraEnum(EnumSiNo.getEnumByBoolean(getChkCompras().isSelected()));
         
+        
+        //Cargar los codigos de las presentaciones por defecto
+        producto.setCodigoPresentacionDefectoVenta((String) UtilidadesComboBox.obtenerDatoSeleccionadoPorCriterio(getCmbPresentacionDefectoVentas(),criterioSeleccionPresentacion));
+        producto.setCodigoPresentacionDefectoCompra((String) UtilidadesComboBox.obtenerDatoSeleccionadoPorCriterio(getCmbPresentacionDefectoCompras(),criterioSeleccionPresentacion));
+        
 
     }
     
@@ -203,6 +208,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         cargarFotoFormulario();
         
         verificarVisibleBotonEditarPresentacion();
+        
+        getCmbPresentacionDefectoCompras().setSelectedItem(null);
+        getCmbPresentacionDefectoVentas().setSelectedItem(null);
     }
 
 //    @Override
@@ -312,6 +320,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             PresentacionProductoServiceIf presentacionService = ServiceFactory.getFactory().getPresentacionProductoServiceIf();
             List<PresentacionProducto> presentacionProductosList=presentacionService.obtenerActivosPorEmpresa(session.getEmpresa());
             UtilidadesComboBox.llenarComboBox(getCmbPresentacionEmpaquetado(),presentacionProductosList);
+            UtilidadesComboBox.llenarComboBox(getCmbPresentacionDefectoVentas(),presentacionProductosList,true);
+            UtilidadesComboBox.llenarComboBox(getCmbPresentacionDefectoCompras(),presentacionProductosList,true);
+            
             UtilidadesComboBox.llenarComboBox(getCmbTipoPresentacion(), ProductoPresentacionDetalle.TipoPresentacionEnum.values());
             UtilidadesComboBox.llenarComboBox(getCmbIvaOpcionPrecioVentaPresentacion(), ProductoModelControlador.IvaOpcionEnum.values());
         } catch (ServicioCodefacException ex) {
@@ -814,6 +825,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     public InterfaceModelFind obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    UtilidadesComboBox.CriterioCompararComboEnum<PresentacionProducto> criterioSeleccionPresentacion = new UtilidadesComboBox.CriterioCompararComboEnum<PresentacionProducto>() {
+        @Override
+        public Object objectoComparador(PresentacionProducto presentacionProducto) {
+            if (presentacionProducto != null) {
+                return presentacionProducto.getNombre();
+            }
+            return null;
+        }
+    };
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
@@ -862,6 +883,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         verificarVisibleBotonEditarPresentacion();
         cargarDatoKardex(controlador.producto);
         cargarFotoFormulario();
+        
+        
+        //Cargar valores por defecto para las presentaciones
+        UtilidadesComboBox.seleccionarItemPorCriterio(getCmbPresentacionDefectoVentas(),controlador.producto.getCodigoPresentacionDefectoVenta(), criterioSeleccionPresentacion);
+        UtilidadesComboBox.seleccionarItemPorCriterio(getCmbPresentacionDefectoCompras(),controlador.producto.getCodigoPresentacionDefectoCompra(), criterioSeleccionPresentacion);
         
     }
     

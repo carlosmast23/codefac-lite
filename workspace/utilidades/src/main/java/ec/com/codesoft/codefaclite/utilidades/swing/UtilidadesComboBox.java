@@ -17,13 +17,27 @@ import javax.swing.event.EventListenerList;
  */
 public class UtilidadesComboBox {
     
+    /**
+     * Metodo que me permite obtener algun dato en especifico del objeto seleccionado de un comboBox
+     * @return 
+     */
+    public static Object obtenerDatoSeleccionadoPorCriterio(JComboBox comboBox,CriterioCompararComboEnum criterio)
+    {
+        Object datoSeleccionado=comboBox.getSelectedItem();
+        if(datoSeleccionado!=null)
+        {
+            return criterio.objectoComparador(datoSeleccionado);
+        }
+        return null;
+    }
+    
     public static void seleccionarItemPorCriterio(JComboBox comboBox,Object valor,CriterioCompararComboEnum criterio)
     {
         Boolean datoEncontrado=false;
         for (int i = 0; i < comboBox.getItemCount(); i++) 
         {
-            Object puntoEmision= comboBox.getItemAt(i);
-            Object comparador=criterio.objectoComparador(puntoEmision);
+            Object objetoGuardado= comboBox.getItemAt(i);
+            Object comparador=criterio.objectoComparador(objetoGuardado);
             if(comparador!=null)
             {
                 if(comparador.equals(valor))

@@ -55,7 +55,7 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
                 if(terminarMantenimiento)
                 {
                     tareaDetalle.getMantenimiento().setEstadoEnum(Mantenimiento.MantenimientoEnum.TERMINADO);
-                    tareaDetalle.setFechaFin(UtilidadesFecha.getFechaHoyTimeStamp());
+                    tareaDetalle.getMantenimiento().setFechaSalida(UtilidadesFecha.getFechaHoyTimeStamp());
                     entityManager.merge(tareaDetalle.getMantenimiento());
                 }
                 

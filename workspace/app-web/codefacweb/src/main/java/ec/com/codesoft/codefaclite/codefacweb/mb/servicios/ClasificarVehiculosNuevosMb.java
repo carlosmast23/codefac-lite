@@ -12,10 +12,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -42,6 +44,7 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
     
     private List<Mantenimiento> setearEstadoVehiculos(List<Mantenimiento> mantenimientoSeleccionados,List<Mantenimiento> mantenimientoList)
     {
+        List<Mantenimiento> resultadoList=new ArrayList<Mantenimiento>();
         for (Mantenimiento mantenimiento : mantenimientoList) 
         {
             if(mantenimientoSeleccionados.contains(mantenimiento))
@@ -50,10 +53,35 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
             }
             else
             {
+                mantenimiento.setUbicacion(null);
+            }
+            
+            resultadoList.add(mantenimiento);
+        }
+        return resultadoList;
+    }
+    
+    public void procesarTodosVehiculosDirecto()
+    {
+        System.out.println("procesando resto de vehiculos de forma DIRECTA ..");
+        try {
+            for (Mantenimiento mantenimiento : mantenimientoList) {
                 mantenimiento.setUbicacionEnum(Mantenimiento.UbicacionEnum.DIRECTO);
             }
+            ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoList, sessionMb.getSession().getUsuario());
+            iniciar();
+            //ServiceFactory.getFactory().getMantenimientoServiceIf().editarLote(mantenimientoList,sessionMb.getSession().getUsuario());
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ClasificarVehiculosNuevosMb.class.getName()).log(Level.SEVERE, null, ex);
+            MensajeMb.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClasificarVehiculosNuevosMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ClasificarVehiculosNuevosMb.class.getName()).log(Level.SEVERE, null, ex);
+            MensajeMb.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
         }
-        return mantenimientoList;
+        
     }
  
     @Override
@@ -67,6 +95,7 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
             MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ClasificarVehiculosNuevosMb.class.getName()).log(Level.SEVERE, null, ex);
+            MensajeMb.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
         } catch (RemoteException ex) {
             Logger.getLogger(ClasificarVehiculosNuevosMb.class.getName()).log(Level.SEVERE, null, ex);
         }

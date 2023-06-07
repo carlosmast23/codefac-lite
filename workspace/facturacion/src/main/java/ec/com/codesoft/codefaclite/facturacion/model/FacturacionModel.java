@@ -1368,11 +1368,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
         }
         
-        cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado);
+        cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado,false);
         //ParametroCodefac.        
     }
     
-    private void cargarProductoInventario(EnumSiNo manejaInventario,Kardex kardexSeleccionado,Producto productoSeleccionado) throws RemoteException, ServicioCodefacException
+    private void cargarProductoInventario(EnumSiNo manejaInventario,Kardex kardexSeleccionado,Producto productoSeleccionado,Boolean recargarPresentacion) throws RemoteException, ServicioCodefacException
     {
         /**
          * ==========================================================================
@@ -1426,16 +1426,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     fechaCaducidad=kardexSeleccionado.getLote().getFechaVencimiento();
                 }
                 
-                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecifico,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
+                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecifico,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad,recargarPresentacion);
             }
             else
             {
-                controlador.agregarProductoVista(productoSeleccionado, null,null,null,null,null);
+                controlador.agregarProductoVista(productoSeleccionado, null,null,null,null,null,recargarPresentacion);
             }
             
         } 
         else if (manejaInventario.equals(EnumSiNo.NO)) {
-            controlador.agregarProductoVista(productoSeleccionado, null,null,BigDecimal.ZERO,null,null);
+            controlador.agregarProductoVista(productoSeleccionado, null,null,BigDecimal.ZERO,null,null,recargarPresentacion);
         }
     }
     
@@ -1507,7 +1507,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                 }
                 //Volver a cargar los productos pero con la nueva presentacion
-                cargarProductoInventario(enumBusqueda, kardex, producto);
+                cargarProductoInventario(enumBusqueda, kardex, producto,true);
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
@@ -1557,6 +1557,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         for (ActionListener actionListener : listenerList) {
             comboBox.removeActionListener(actionListener);
         }
+    }
+    
+    public void seleccionarPresentacion(String codigoPresentacion)
+    {
+        UtilidadesComboBox.seleccionarItemPorCriterio(getCmbPresentacionProducto(), codigoPresentacion, new UtilidadesComboBox.CriterioCompararComboEnum<PresentacionProducto>() {
+            @Override
+            public Object objectoComparador(PresentacionProducto objeto) {
+                if(objeto!=null)
+                {
+                    return objeto.getNombre();
+                }
+                return null;
+            }
+            
+        });
     }
     
     public void cargarPresentaciones(Producto producto)

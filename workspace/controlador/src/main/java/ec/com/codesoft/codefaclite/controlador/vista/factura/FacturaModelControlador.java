@@ -428,7 +428,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return new ArrayList<BigDecimal>();
     }
     
-    
+    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad)
+    {
+        agregarProductoVista(productoSeleccionado, lote, itemEspecifico, stock, costo, fechaCaducidad, false);
+    }
     
     /**
      * TODO: Ver si en este mismo metodo se puede hacer para tener seleccionado el kardex del producto para no tener en el modelo de la vista
@@ -436,18 +439,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param lote
      * @param stock 
      */
-    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad) {
+    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad,Boolean recargarPresentacion) {
         if (productoSeleccionado == null) {
             return;
         }
         
         //Consultar el Valor Unitario segun el PVP confgurado por defecto
         BigDecimal valorUnitario=productoSeleccionado.buscarPrecioPorNombre(pvpDefecto);
-        //Si no tiene valor unitario cargar por defecto el primer valor que exista
-        //if(valorUnitario==null)
-        //{
-        //    valorUnitario=productoSeleccionado.buscarPrecioPorNombre(Producto.PrecioVenta.PV1);
-        //}
         
         //Consultar los descuentos que se deben cargar segun el precio seleccionado
         List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado, pvpDefecto);
@@ -460,6 +458,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado,1);
         interfaz.cargarPreciosPorcentaje(descuentos);
         interfaz.cargarPresentaciones(productoSeleccionado);
+        
+        //Solo ejecutar cuando no se esta recargando presentaciones desde el combo box
+        if(!recargarPresentacion)
+        {
+            interfaz.seleccionarPresentacion(productoSeleccionado.getCodigoPresentacionDefectoVenta());
+        }
         
         //TODO
         //Por el momento busco un descuento por defecto cuando tiene varios
@@ -2024,6 +2028,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public void cargarPreciosPorcentaje(List<BigDecimal> descuentos );
         
         public void cargarPresentaciones(Producto producto);
+        
+        public void seleccionarPresentacion(String codigoPresentacion);
         
         public void cargarEtiquetaStock(BigDecimal stock);
         

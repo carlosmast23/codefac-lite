@@ -36,7 +36,15 @@
                         </div>
                     </div>
                 </div>
-
+                
+                
+                <!--- ESTADO -->
+                <div class="p-col-12 p-md-6 p-lg-4" >
+                    <div><h:outputLabel for="console" value="Estado:" class="label-responsive" /></div>
+                    <p:selectOneMenu id="console" value="#{reporteMantenimientoMb.estadoSeleccionado}" converter="mantenimientoEstadoConverter" class="componente-responsive" >
+                        <f:selectItems var="estado" value="#{reporteMantenimientoMb.estadoMantenimietoList}" itemValue="#{estado.letra}"/>
+                    </p:selectOneMenu>
+                </div>
 
                 <div class="p-col-6 p-md-2 p-lg-2" >
                     <div class="p-col-fixed" >
@@ -72,6 +80,23 @@
                     <p:column headerText="Vin">
                         <h:outputText value="#{m.vin}" />
                     </p:column>
+                    
+                    <p:column headerText="Fecha Ingreso">
+                        <h:outputText value="#{m.fechaIngreso}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Fecha Salida">
+                        <h:outputText value="#{m.fechaSalida}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Duración Días">
+                        <h:outputText value="#{m.duracionDias}" />
+                    </p:column>
+
 
                     <p:column headerText="Estado">
                         <h:outputText value="#{m.estado}" />

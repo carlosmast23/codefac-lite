@@ -359,7 +359,7 @@ public class ControllerCodefacMb implements Serializable {
             context.addMessage(null, new FacesMessage("Successful", "Your message: PRUEBA"));
             context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
         }
-        return "error nombre pagina ";
+        return "===";
     }
 
     public void cerrarDialogoResultados() {

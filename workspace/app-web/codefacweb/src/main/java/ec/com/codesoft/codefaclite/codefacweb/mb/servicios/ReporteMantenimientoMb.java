@@ -42,6 +42,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
 {
     private List<MantenimientoEnum> estadoMantenimietoList;
     private List<MantenimientoResult> mantenimientoList; 
+    private MantenimientoEnum estadoSeleccionado;
     
     private java.util.Date fechaInicial;
     private java.util.Date fechaFinal;
@@ -103,7 +104,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         mantenimientoList=new ArrayList<MantenimientoResult>();
-        //estadoMantenimietoList=UtilidadesLista.obtenerDatoMayor(, comparador) Mantenimiento.MantenimientoEnum.values();
+        estadoMantenimietoList=UtilidadesLista.arrayToList(MantenimientoEnum.values());
     }
 
     @Override
@@ -183,6 +184,14 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
 
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
+    }
+
+    public MantenimientoEnum getEstadoSeleccionado() {
+        return estadoSeleccionado;
+    }
+
+    public void setEstadoSeleccionado(MantenimientoEnum estadoSeleccionado) {
+        this.estadoSeleccionado = estadoSeleccionado;
     }
     
     

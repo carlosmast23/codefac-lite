@@ -12,7 +12,14 @@
             <div class="p-grid" style="text-align: left" >
                 <div class="p-col-12 p-md-6 p-lg-6" >
                     <h2>Clasificar vehiculos pendientes</h2>
-                </div>              
+                </div>           
+                <div class="p-col-12 p-md-6 p-lg-6" >
+                    <p:commandButton 
+                        value="Enviar vehiculos DIRECTO" 
+                        actionListener="#{clasificarVehiculosNuevosMb.procesarTodosVehiculosDirecto()}"
+                        update="tblMantenimiento"
+                        />
+                </div>
             </div>
             
             <!-- Cargar una tabla para que pueda visualizar el contenido -->
