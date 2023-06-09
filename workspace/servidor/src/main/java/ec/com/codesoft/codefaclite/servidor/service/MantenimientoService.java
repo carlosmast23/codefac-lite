@@ -159,13 +159,13 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         return entity;
     }
     
-    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Boolean eliminados) throws ServicioCodefacException, RemoteException
+    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum ,Boolean eliminados) throws ServicioCodefacException, RemoteException
     {
         return (List<MantenimientoResult>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException 
             {  
-                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin));
+                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin,estadoEnum));
             }
         });
     }

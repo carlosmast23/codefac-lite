@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CategoriaProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.PresentacionPrecioData;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.StockMinimoData;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.StockUnicoData;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
@@ -29,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -125,6 +127,11 @@ public class StockReporteModel extends StockMinimoPanel{
             getCmbMostrarDetalle().addItem(EnumSiNo.NO);
             getCmbMostrarDetalle().addItem(EnumSiNo.SI);
             
+            //Cargar los datos de las presentaciones
+            getCmbMostrarPresentaciones().removeAllItems();
+            getCmbMostrarPresentaciones().addItem(EnumSiNo.NO);
+            getCmbMostrarPresentaciones().addItem(EnumSiNo.SI);
+            
             //Cargar los datos para saber si se debe incluir el iva en el reporte
             getCmbIncluirIva().removeAllItems();            
             getCmbIncluirIva().addItem(EnumSiNo.SI);
@@ -181,9 +188,11 @@ public class StockReporteModel extends StockMinimoPanel{
                 @Override
                 public void pdf() {
                     
-                    JasperReport reportDatosAdicionales= obtenerSubReporte();
+                    JasperReport reportDatosAdicionales= obtenerSubReporte("stockGarantiaDetalle.jrxml");
+                    JasperReport reportPresentacion= obtenerSubReporte("detallePresentaciones.jrxml");
                     Map<String,Object> mapParametros=new HashMap<String,Object>();
                     mapParametros.put("pl_detalle_item",reportDatosAdicionales);
+                    mapParametros.put("pl_presentacion_list",reportPresentacion);
                     TipoReporteStockEnum tipoReporteStockEnum=(TipoReporteStockEnum) getCmbTipoReporte().getSelectedItem();
                     ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_INVENTARIO,tipoReporteStockEnum.getNombreReporte(), mapParametros, listaData, panelPadre, "Reporte Stock", OrientacionReporteEnum.HORIZONTAL, FormatoHojaEnum.A4);
                     //ReporteCodefac.generarReporteInternalFramePlantilla(path,mapParametros, listaData, panelPadre, "Reporte Stock");
@@ -194,14 +203,14 @@ public class StockReporteModel extends StockMinimoPanel{
         
     }
     
-    private JasperReport obtenerSubReporte()
+    private JasperReport obtenerSubReporte(String nombreReporte)
     {
         BigDecimal b1=BigDecimal.ONE;
         b1.multiply(b1);
         InputStream inputStream = null;
         try {
             RecursosServiceIf service = ServiceFactory.getFactory().getRecursosServiceIf();
-            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_INVENTARIO, "stockGarantiaDetalle.jrxml"));
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_INVENTARIO, nombreReporte));
             JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
             return reportDatosAdicionales;
         } catch (RemoteException ex) {
@@ -429,6 +438,20 @@ public class StockReporteModel extends StockMinimoPanel{
                                 data.agregarDetalle(stockUnicoData);
                             }
                                     
+                        }
+                        
+                        //Agregar las presentaciones en el reporte
+                        if(getCmbMostrarPresentaciones().getSelectedItem().equals(EnumSiNo.SI))
+                        {
+                            List<ProductoPresentacionDetalle> resultadoList=producto.getPresentacionList();
+                            for (ProductoPresentacionDetalle resultado : resultadoList) 
+                            {
+                                PresentacionPrecioData presentacionData=new PresentacionPrecioData();
+                                presentacionData.setNombre(resultado.getPresentacionProducto().getNombre());
+                                presentacionData.setCosto(resultado.getCantidad().multiply(ultimoCosto).setScale(2, RoundingMode.HALF_UP)+"");
+                                presentacionData.setPvp(resultado.getCantidad().multiply(cantidad).setScale(2, RoundingMode.HALF_UP)+"");
+                                data.agregarPresentacion(presentacionData);
+                            }
                         }
                         
                         listaData.add(data);                        

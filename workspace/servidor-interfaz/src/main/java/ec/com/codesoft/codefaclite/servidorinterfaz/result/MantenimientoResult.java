@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.result;
 
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -216,6 +217,20 @@ public class MantenimientoResult implements Serializable,Cloneable{
     public void setOtros(String otros) {
         this.otros = otros;
     }*/
+    
+    public String getDetalleTareasStr()
+    {
+        return UtilidadesLista.castListToString(tareaLista,",",new UtilidadesLista.CastListInterface<DetalleTareaResult>() {
+            @Override
+            public String getString(DetalleTareaResult dato) {
+                if(dato!=null)
+                {
+                    return dato.titulo;
+                }
+                return "";
+            }
+        });
+    }
     
     public static class DetalleTareaResult implements Serializable
     {

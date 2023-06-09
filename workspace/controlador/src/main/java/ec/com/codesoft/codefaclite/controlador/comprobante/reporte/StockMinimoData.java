@@ -47,6 +47,7 @@ public class StockMinimoData implements ExcelDatosInterface{
     private Integer ivaPorcentaje;
     
     private List<StockUnicoData> detalles;
+    private List<PresentacionPrecioData> presentacionList;
     
     
 
@@ -241,8 +242,24 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setIvaPorcentaje(Integer ivaPorcentaje) {
         this.ivaPorcentaje = ivaPorcentaje;
     }
+
+    public List<PresentacionPrecioData> getPresentacionList() {
+        return presentacionList;
+    }
+
+    public void setPresentacionList(List<PresentacionPrecioData> presentacionList) {
+        this.presentacionList = presentacionList;
+    }
     
-    
+    public void agregarPresentacion(PresentacionPrecioData presentacionData)
+    {
+        if(this.presentacionList==null)
+        {
+            this.presentacionList=new ArrayList<PresentacionPrecioData>();
+        }
+        
+        this.presentacionList.add(presentacionData);
+    }
     
     
 

@@ -90,6 +90,8 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         cmbUbicacion = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         cmbIncluirIva = new javax.swing.JComboBox<>();
+        lblMostrarDetalle1 = new javax.swing.JLabel();
+        cmbMostrarPresentaciones = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -100,10 +102,11 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblMostrarDetalle.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblMostrarDetalle.setText("Mostrar Detalle:");
+        lblMostrarDetalle.setText("Mostrar Presentaciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblMostrarDetalle, gridBagConstraints);
@@ -128,8 +131,9 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 18;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 17;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnBuscar, gridBagConstraints);
@@ -138,7 +142,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 19;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -150,7 +154,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         lblDiasCaducidad.setText("Días Caducidad Tolerancia:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblDiasCaducidad, gridBagConstraints);
@@ -235,7 +239,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 16;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbMostrarDetalle, gridBagConstraints);
@@ -250,7 +254,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 16;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -314,7 +318,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel10.setText("Tipo Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel10, gridBagConstraints);
@@ -383,8 +387,8 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel14.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel14.setText("Incluir Iva?:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel14, gridBagConstraints);
@@ -407,7 +411,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoReporte, gridBagConstraints);
@@ -424,15 +428,15 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel17.setText("Ubicación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel17, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbUbicacion, gridBagConstraints);
@@ -447,11 +451,27 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel18, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbIncluirIva, gridBagConstraints);
+
+        lblMostrarDetalle1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblMostrarDetalle1.setText("Mostrar Detalle:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblMostrarDetalle1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbMostrarPresentaciones, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -471,6 +491,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
     private javax.swing.JComboBox<EnumSiNo> cmbIncluirIva;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarDetalle;
+    private javax.swing.JComboBox<EnumSiNo> cmbMostrarPresentaciones;
     private javax.swing.JComboBox<KardexOrdenarEnum> cmbOrdenar;
     private javax.swing.JComboBox<Bodega> cmbSegmento;
     private javax.swing.JComboBox<Bodega> cmbTipo;
@@ -499,6 +520,7 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio123123;
     private javax.swing.JLabel lblEspacio33434;
     private javax.swing.JLabel lblMostrarDetalle;
+    private javax.swing.JLabel lblMostrarDetalle1;
     private javax.swing.JTable tblDato;
     private javax.swing.JTextField txtCategoria;
     private javax.swing.JTextField txtCodigoProducto;
@@ -697,6 +719,14 @@ public abstract class StockMinimoPanel extends ControladorCodefacInterface {
 
     public void setTxtCodigoProducto(JTextField txtCodigoProducto) {
         this.txtCodigoProducto = txtCodigoProducto;
+    }
+
+    public JComboBox<EnumSiNo> getCmbMostrarPresentaciones() {
+        return cmbMostrarPresentaciones;
+    }
+
+    public void setCmbMostrarPresentaciones(JComboBox<EnumSiNo> cmbMostrarPresentaciones) {
+        this.cmbMostrarPresentaciones = cmbMostrarPresentaciones;
     }
 
     

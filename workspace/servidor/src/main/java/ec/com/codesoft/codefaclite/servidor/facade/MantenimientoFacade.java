@@ -40,9 +40,10 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         return query.getResultList();
     }
     
-    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin) throws ServicioCodefacException, RemoteException
+    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum) throws ServicioCodefacException, RemoteException
     {
         //Mantenimiento m;
+        //m.getEstado()
         //m.getFechaSalida();
         
         String fechaIngresoStr="";
@@ -57,7 +58,13 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
             fechaFinStr=" AND m.fechaIngreso<=?2  ";
         }
         
-        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 AND m.estado<>?3 "+fechaIngresoStr+fechaFinStr;
+        String estado="";
+        if(estadoEnum!=null)
+        {
+            estado=" AND m.estado=?3 ";
+        }
+        
+        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 AND m.estado<>?3 "+fechaIngresoStr+fechaFinStr+estado;
         Query query = getEntityManager().createQuery(queryStr);
         
         
@@ -71,6 +78,11 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         if(fechaFin!=null)
         {
             query.setParameter(2,fechaFin);
+        }
+        
+        if(estadoEnum!=null)
+        {
+            query.setParameter(3,estadoEnum.getLetra());
         }
         
         return query.getResultList();
