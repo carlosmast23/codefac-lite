@@ -254,6 +254,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         //Cargar las opciones en las configuraciones
         UtilidadesComboBox.llenarComboBox(getCmbEditarDescripcionFactura(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbEditarFechaEmision(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbAgregarPvpAnterior(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbEditarDescuentoFactura(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbEditarPrecioUnitFactura(),EnumSiNo.values());
@@ -650,6 +651,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarDescripcionFactura != null) ? parametroEditarDescripcionFactura.getValor() : null);
             getCmbEditarDescripcionFactura().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac parametroEditarFechaFactura = parametrosTodos.get(ParametroCodefac.EDITAR_FECHA_FACTURA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroEditarFechaFactura != null) ? parametroEditarFechaFactura.getValor() : null);
+            getCmbEditarFechaEmision().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             ParametroCodefac parametroAgregarPvpAnterior = parametrosTodos.get(ParametroCodefac.AGREGAR_PVP_ANTERIOR);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroAgregarPvpAnterior != null) ? parametroAgregarPvpAnterior.getValor() : null);
             getCmbAgregarPvpAnterior().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -911,6 +916,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbEditarDescripcionFactura().getSelectedItem();
         agregarParametro(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA);
+        
+        enumSiNo = (EnumSiNo) getCmbEditarFechaEmision().getSelectedItem();
+        agregarParametro(ParametroCodefac.EDITAR_FECHA_FACTURA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.EDITAR_FECHA_FACTURA);
         
         enumSiNo = (EnumSiNo) getCmbAgregarPvpAnterior().getSelectedItem();
         agregarParametro(ParametroCodefac.AGREGAR_PVP_ANTERIOR, (enumSiNo != null) ? enumSiNo.getLetra() : null);

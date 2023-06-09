@@ -3108,7 +3108,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setEmpresa(session.getEmpresa());
         //factura.setEstado(Factura.ESTADO_FACTURADO);
         //factura.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
-        factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
+        factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));        
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(getPuntoEmisionSeleccionado().getPuntoEmision());
         factura.setPuntoEmisionId(getPuntoEmisionSeleccionado().getId());
@@ -4315,6 +4315,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getChkPagoConCartera().setVisible(false);
         }
         
+        
+        if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.EDITAR_FECHA_FACTURA,EnumSiNo.NO))
+        {
+            getjDateFechaEmision().setEnabled(false);
+        }
         
         
     }
