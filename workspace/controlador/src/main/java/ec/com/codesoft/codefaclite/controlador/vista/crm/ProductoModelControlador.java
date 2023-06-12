@@ -181,6 +181,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
                     add(TipoProductoEnum.PRODUCTO);
                     add(TipoProductoEnum.EMSAMBLE);
                     add(TipoProductoEnum.SERVICIO);
+                    //TODO: NO borrar porque es necesario luego para poder editar que se cargue el dato
+                    add(TipoProductoEnum.EMPAQUE);
                 }        
         };
         
