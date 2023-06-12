@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
@@ -620,6 +621,13 @@ public class MigrarProductoModel extends MigrarModel {
                         detallePresentacion.setPresentacionProducto(presentacionCaja);
                         detallePresentacion.setProductoOriginal(producto);
                         detallePresentacion.setTipoEnum(ProductoPresentacionDetalle.TipoPresentacionEnum.ADICIONAL);
+                        
+                        Double pvpPresentacionCaja = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.PVP_PRESENTACION);
+                        
+                        if(pvpPresentacionCaja!=null)
+                        {
+                            detallePresentacion.setPvpTmp(new BigDecimal(pvpPresentacionCaja).setScale(5, RoundingMode.HALF_UP));
+                        }
                                
                         producto.addPresentacion(detallePresentacion);
                         
