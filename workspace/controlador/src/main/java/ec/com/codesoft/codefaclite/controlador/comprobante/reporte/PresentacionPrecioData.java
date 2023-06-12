@@ -15,11 +15,13 @@ public class PresentacionPrecioData implements Serializable{
     private String nombre;
     private String costo;
     private String pvp;
+    private String stock;
 
-    public PresentacionPrecioData(String nombre, String costo, String pvp) {
+    public PresentacionPrecioData(String nombre, String costo, String pvp,String stock) {
         this.nombre = nombre;
         this.costo = costo;
         this.pvp = pvp;
+        this.stock=stock;
     }
 
     public PresentacionPrecioData() {
@@ -50,6 +52,16 @@ public class PresentacionPrecioData implements Serializable{
     public void setPvp(String pvp) {
         this.pvp = pvp;
     }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+    
+    
     
     
     

@@ -446,11 +446,15 @@ public class StockReporteModel extends StockMinimoPanel{
                             List<ProductoPresentacionDetalle> resultadoList=producto.getPresentacionList();
                             for (ProductoPresentacionDetalle resultado : resultadoList) 
                             {
-                                PresentacionPrecioData presentacionData=new PresentacionPrecioData();
-                                presentacionData.setNombre(resultado.getPresentacionProducto().getNombre());
-                                presentacionData.setCosto(resultado.getCantidad().multiply(ultimoCosto).setScale(2, RoundingMode.HALF_UP)+"");
-                                presentacionData.setPvp(resultado.getCantidad().multiply(cantidad).setScale(2, RoundingMode.HALF_UP)+"");
-                                data.agregarPresentacion(presentacionData);
+                                if(resultado.getPresentacionProducto()!=null)
+                                {
+                                    PresentacionPrecioData presentacionData=new PresentacionPrecioData();
+                                    presentacionData.setNombre(resultado.getPresentacionProducto().getNombre());
+                                    presentacionData.setCosto(resultado.getCantidad().multiply(ultimoCosto).setScale(2, RoundingMode.HALF_UP)+"");
+                                    presentacionData.setPvp(resultado.getCantidad().multiply(valorUnitario).setScale(2, RoundingMode.HALF_UP)+"");
+                                    presentacionData.setStock(cantidad.divide(resultado.getCantidad(),2,RoundingMode.HALF_UP)+"");
+                                    data.agregarPresentacion(presentacionData);
+                                }
                             }
                         }
                         

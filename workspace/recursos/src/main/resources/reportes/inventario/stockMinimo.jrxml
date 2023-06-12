@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="2.139837529582534"/>
+	<property name="ireport.zoom" value="1.0980750000000221"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -291,7 +291,7 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
-					<paragraph leftIndent="5" rightIndent="5"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{utilidad1}]]></textFieldExpression>
 			</textField>
@@ -305,7 +305,7 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
-					<paragraph leftIndent="5" rightIndent="5"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
 			</textField>
@@ -333,7 +333,7 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
-					<paragraph leftIndent="5" rightIndent="5"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidadMinima}]]></textFieldExpression>
 			</textField>
@@ -347,7 +347,7 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
-					<paragraph leftIndent="5" rightIndent="5"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pvp1}]]></textFieldExpression>
 			</textField>
@@ -375,7 +375,7 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
-					<paragraph leftIndent="5" rightIndent="5"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
 			</textField>
@@ -422,14 +422,14 @@
 				<textFieldExpression><![CDATA[$F{marca}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="371" y="13" width="125" height="0" uuid="19aebd5c-bb04-4c4c-a2dc-86f778c4e5d8">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="415" y="13" width="125" height="0" uuid="19aebd5c-bb04-4c4c-a2dc-86f778c4e5d8">
 					<printWhenExpression><![CDATA[$F{detalles}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalles})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{pl_detalle_item}]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="275" y="13" width="96" height="0" uuid="a7a04591-97b4-49f1-ae21-ac2e41ce11ef">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="275" y="13" width="140" height="0" uuid="a7a04591-97b4-49f1-ae21-ac2e41ce11ef">
 					<printWhenExpression><![CDATA[$F{presentacionList}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{presentacionList})]]></dataSourceExpression>

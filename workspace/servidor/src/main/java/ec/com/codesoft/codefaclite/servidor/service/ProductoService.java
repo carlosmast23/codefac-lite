@@ -87,6 +87,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     {
         ProductoPresentacionDetalle presentacionDetalle = productoEmpaqueSecundario.buscarPresentacionDetalleProducto();
         
+        if(presentacionDetalle==null)
+        {
+            throw new ServicioCodefacException("No se pudo encontrar la presentación principal para el producto: "+productoEmpaqueSecundario.getNombre());
+        }
+        
         //TODO: Codigo por el momento para encontrar un error que puede dar al querer convertir un empaque en producto normal
         if (!presentacionDetalle.getProductoOriginal().getTipoProductoEnum().equals(TipoProductoEnum.PRODUCTO)) {
             String mensajeError = "Error al convertir el Producto:" + presentacionDetalle.getProductoOriginal().getNombre() + " en la presentacion original para poder guardar.\\n Error con id producto original: " + presentacionDetalle.getProductoOriginal().getIdProducto() + " id producto secundario: " + productoEmpaqueSecundario.getIdProducto();
