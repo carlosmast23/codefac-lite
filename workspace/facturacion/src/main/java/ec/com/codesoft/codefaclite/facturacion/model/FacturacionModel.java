@@ -2398,6 +2398,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             tipoReferenciaEnum = factura.getDetalles().get(0).getTipoDocumentoEnum();
         }        
         
+        getCmbDocumento().setSelectedItem(factura.getCodigoDocumentoEnum());
         controlador.setTipoDocumentoEnumSeleccionado(tipoReferenciaEnum);
         //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
         seleccionarPanelTipoDocumento(tipoReferenciaEnum);
@@ -3818,9 +3819,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     return;
                 }
                 
+                //Si no cambia de documento no hago ninguna validacion
                 if(documentoAnterior.equals(documentoNuevo))
                 {
                     return;
+                }
+            
+                //solo hago las validaciones si esta habilitado el campo de editar
+                if(!getCmbDocumento().isEnabled())
+                {
+                    return ;
                 }
                 
                 if(documentoNuevo.equals(DocumentoEnum.NOTA_VENTA_INTERNA)
