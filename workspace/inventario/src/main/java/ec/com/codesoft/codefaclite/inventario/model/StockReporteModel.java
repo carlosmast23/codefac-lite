@@ -39,10 +39,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoUbicacionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ActionEvent;
@@ -60,6 +63,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -70,6 +75,8 @@ import net.sf.jasperreports.engine.JasperReport;
  * @author Carlos
  */
 public class StockReporteModel extends StockMinimoPanel{
+    
+    private static final int COLUMNA_STOCK=8;
     
     private List<Object[]> listaStock;
     private List<StockMinimoData> listaData;
@@ -151,7 +158,29 @@ public class StockReporteModel extends StockMinimoPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            Map<Long,BigDecimal> datosModificados= StockMinimoData.obtenerKardexModificadoStock(listaData);
+            
+            if(datosModificados.size()==0)
+            {
+                throw new ExcepcionCodefacLite("No existen datos para modificar el Stock");
+            }
+            
+            Boolean continuar=DialogoCodefac.dialogoPregunta(new CodefacMsj("Está seguro de que quiere actualizar el STOCK de "+datosModificados.size()+" productos ?", CodefacMsj.TipoMensajeEnum.CORRECTO));
+            if(!continuar)
+            {
+                throw new ExcepcionCodefacLite("Proceso cancelado ...");
+            }
+            
+            ServiceFactory.getFactory().getKardexServiceIf().actualizarKardexLote(datosModificados);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));            
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
+        
     }
 
     @Override
@@ -249,6 +278,7 @@ public class StockReporteModel extends StockMinimoPanel{
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         return permisos;
     }
 
@@ -354,6 +384,7 @@ public class StockReporteModel extends StockMinimoPanel{
                         Lote lote=(Lote)objeto[4];
                         BigDecimal ultimoCosto = (BigDecimal)objeto[5];
                         BigDecimal reserva = (BigDecimal)objeto[6];
+                        Long kardexId = (Long)objeto[7];
                         
                         if(reserva==null)
                         {
@@ -397,7 +428,8 @@ public class StockReporteModel extends StockMinimoPanel{
                             codigoPersonalizado=producto.getCodigoPersonalizado();
                         }
                         //System.out.println(producto.getNombre());
-                        data.setCodigo(codigoPersonalizado);
+                        data.setKardexId(kardexId);
+                        data.setCodigo(codigoPersonalizado);                        
                         data.setCodigo2((producto.getCodigoUPC()!=null)?producto.getCodigoUPC():"");
                         data.setProducto(producto.getNombre());
                         data.setStock(cantidad.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP)+"");
@@ -496,6 +528,7 @@ public class StockReporteModel extends StockMinimoPanel{
     public void construirTabla(List<StockMinimoData> listaData)
     {
         String[] titulo={
+            "",
             "Código",
             "Lote",
             "Bodega",
@@ -515,8 +548,9 @@ public class StockReporteModel extends StockMinimoPanel{
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
         for (StockMinimoData stockMinimo : listaData) {
             
-            String[] datos=
+            Object[] datos=
             {
+                stockMinimo,
                 stockMinimo.getCodigo(),
                 stockMinimo.getLote(),
                 stockMinimo.getBodega(),
@@ -536,7 +570,39 @@ public class StockReporteModel extends StockMinimoPanel{
             modeloTabla.addRow(datos);
         }
         
-        getTblDato().setModel(modeloTabla);        
+        getTblDato().setModel(modeloTabla);       
+        
+        UtilidadesTablas.ocultarColumna(getTblDato(),0);
+        
+        modeloTabla.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {                
+                int columnaModificada = e.getColumn();
+                int filaModificada = e.getFirstRow();
+
+                if (filaModificada < 0 || columnaModificada < 0) //Si no existe ninguna fila seleccionada no ejecuta ninguna accion 
+                    return;
+                
+                Object datoModificado=modeloTabla.getValueAt(filaModificada, columnaModificada);
+                
+                if(columnaModificada==COLUMNA_STOCK)
+                {
+                    StockMinimoData objeto=(StockMinimoData) modeloTabla.getValueAt(filaModificada,0);
+                    try
+                    {
+                        BigDecimal stockNumero=new BigDecimal(datoModificado+"");
+                        objeto.setStock(stockNumero+"");
+                        objeto.setActualizarStockTmp(true);
+                    }
+                    catch(NumberFormatException  nfe)
+                    {
+                        Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.INFO,"Erro al ingresar el stock con el formato del numero");
+                    }
+                }
+                
+                
+            }
+        });
     }
 
     private void listenerCheckBox() {

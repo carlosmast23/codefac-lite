@@ -101,4 +101,6 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public void actualizarKardex(Kardex kardex) throws RemoteException,ServicioCodefacException;
     
+    public void actualizarKardexLote(Map<Long,BigDecimal> stockMap) throws RemoteException,ServicioCodefacException;
+    
 }

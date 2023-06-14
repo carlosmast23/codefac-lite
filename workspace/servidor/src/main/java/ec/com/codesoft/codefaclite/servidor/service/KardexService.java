@@ -1606,6 +1606,30 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
+    public void actualizarKardexLote(Map<Long,BigDecimal> stockMap) throws RemoteException,ServicioCodefacException
+    {
+        for (Map.Entry<Long, BigDecimal> entry : stockMap.entrySet()) 
+        {
+            Long kardexId = entry.getKey();
+            BigDecimal stockNuevo = entry.getValue();            
+            
+            
+            //Consultar el kardex que viene el movimiento
+            KardexService kardexService=new KardexService();
+            Kardex kardex= kardexService.buscarPorId(kardexId);
+            KardexDetalle kardexDetalle=crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.AJUSTE_EXACTO_INVENTARIO,kardex.getPrecioUltimo(),stockNuevo);
+            
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    grabarKardexDetallSinTransaccion(kardexDetalle,kardex.getLote(), Boolean.TRUE);
+                }
+            });
+            
+        }
+        
+    }
+    
     public void actualizarKardex(Kardex kardex) throws RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 

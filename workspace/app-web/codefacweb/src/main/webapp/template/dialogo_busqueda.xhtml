@@ -9,7 +9,7 @@
         <title>Buscador</title>
     </h:head>
 
-    <h:body > 
+    <h:body style="overflow: hidden;" > 
         <h:form>
             <p:dataTable 
                 id="tablaBusqueda" 
@@ -17,13 +17,13 @@
                 value="#{dialogoBuscarMb.datosBusquedaLazy}" 
                 rowIndexVar="indice" 
                 paginator="true"
-                style="width: 100%;height: 100%;font-size: 12px"
+                style="width: 100%;height: 50%;font-size: 12px"
                 rows="10"
                 selectionMode="single"
                 selection="#{dialogoBuscarMb.objetoSeleccionado}"
                 lazy="true"
-                scrollable="true" 
-                scrollHeight="100%"
+                scrollable="false"
+                scrollHeight="auto"
                 >
 
                 <p:ajax event="rowSelect" listener="#{dialogoBuscarMb.filaSeleccionada}" update="@this" />

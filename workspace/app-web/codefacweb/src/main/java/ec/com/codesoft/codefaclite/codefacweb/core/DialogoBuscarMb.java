@@ -49,15 +49,15 @@ import org.primefaces.model.SortOrder;
 @ViewScoped
 public class DialogoBuscarMb implements Serializable {
 
-    private static final Logger LOG = Logger.getLogger(DialogoBuscarMb.class.getName());
+    private static final Logger LOG = Logger.getLogger(DialogoBuscarMb.class.getName()); 
     
     
 
-    private List<Object> datosBusqueda;
+    private List<Object> datosBusqueda; 
     private List<String> propiedadesObjeto;
     private List<Vector<String>> datosConsulta;
     private Vector<ColumnaDialogo> columnasConsulta;
-    private LazyDataModel<Object> datosBusquedaLazy;
+    private LazyDataModel<Object> datosBusquedaLazy;    
     
     private Object objetoSeleccionado;
 

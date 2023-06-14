@@ -16,14 +16,14 @@ import java.util.Vector;
 public class ProductoImagenBusquedaDialogo extends ProductoBusquedaDialogo{
     
     public ProductoImagenBusquedaDialogo(Empresa empresa, Boolean productosVenta, Boolean productosCompra) {
-        super(empresa, productosVenta, productosCompra);
+        super(empresa, productosVenta, productosCompra); 
     }
     
     @Override
     public Vector<ColumnaDialogo> getColumnas() 
     {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Imagen", 0.3d));
+        //titulo.add(new ColumnaDialogo("Imagen", 0.3d));
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Código", 0.2d));        
         titulo.add(new ColumnaDialogo("Pvp1 ", 0.05d));
@@ -35,12 +35,12 @@ public class ProductoImagenBusquedaDialogo extends ProductoBusquedaDialogo{
     @Override
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
-        propiedades.add("imagen");
+        //propiedades.add("imagen");
         propiedades.add("nombre");
         propiedades.add("codigoPersonalizado");
         propiedades.add("valorUnitario");
         propiedades.add("valorUnitarioConIva");
-        propiedades.add("catalogoProducto.iva");
+        propiedades.add("catalogoProducto.iva"); 
         return propiedades;
     }
     

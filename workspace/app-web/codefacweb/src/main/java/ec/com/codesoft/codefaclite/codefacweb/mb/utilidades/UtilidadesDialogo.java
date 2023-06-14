@@ -29,14 +29,14 @@ public abstract class UtilidadesDialogo {
 
         //Esstablecer porpiedades que se van a enviar al dialogo en map
         Map<String, Object> options = new HashMap<String, Object>();
-        options.put("resizable", false);
+        options.put("resizable", true);
         options.put("draggable", false);
         options.put("modal", true);
         options.put("responsive", true);
-        options.put("width", "100%");
-        options.put("height", "100%");
-        options.put("contentHeight", "100%");
-        options.put("contentWidth", "100%");
+        options.put("width", "90%");
+        //options.put("height", "90%");
+        //options.put("contentHeight", "100%");
+        options.put("contentWidth", "100%"); 
         //responsive="true"
         //options.put("busquedaClase", new EmpleadoBusquedaDialogo() ); //TODO: Mando por defecto un dialogo por defecto
         String nombreDialogoBusqueda = "dialogo_busqueda";

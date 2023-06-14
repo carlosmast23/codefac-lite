@@ -443,9 +443,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     }
 
-    public void abrirDialogoBusquedaProducto() {
-        //ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa(),true,false);
-        ProductoBusquedaDialogo dialogModel= new ProductoImagenBusquedaDialogo(sessionMb.getSession().getEmpresa(), true, false);
+    public void abrirDialogoBusquedaProducto() { 
+        ProductoBusquedaDialogo dialogModel = new ProductoBusquedaDialogo(sessionMb.getSession().getEmpresa(),true,false);
+        //ProductoBusquedaDialogo dialogModel= new ProductoImagenBusquedaDialogo(sessionMb.getSession().getEmpresa(), true, false);
         //dialogModel.setBuscarFiltroMarca(false);
         //abrirDialogoBusqueda(dialogModel);
         UtilidadesDialogo.abrirDialogoBusqueda(dialogModel);
@@ -644,7 +644,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             imprimirProforma();
         }else if(tipoPaginaEnum.equals(tipoPaginaEnum.FACTURA))
         {
-            if (ParametroUtilidades.comparar(sessionMb.getSession().getEmpresa(), ParametroCodefac.IMPRESORA_TICKETS_VENTAS, EnumSiNo.SI)) {
+            if (ParametroUtilidades.comparar(sessionMb.getSession().getEmpresa(), ParametroCodefac.IMPRESORA_TICKETS_VENTAS, EnumSiNo.SI) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA)) 
+            {
                 imprimirTicket(factura);
             } else {
                 imprimirFactura(factura);

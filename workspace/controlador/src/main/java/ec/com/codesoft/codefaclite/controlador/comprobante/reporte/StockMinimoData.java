@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
+import com.sun.java.swing.plaf.motif.resources.motif;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
@@ -12,7 +13,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -22,6 +25,7 @@ public class StockMinimoData implements ExcelDatosInterface{
     
     public static String NOMBRE_CABECERA_EXCEL[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad"};
     
+    private Long kardexId;
     private String codigo;
     private String codigo2;
     private String lote;
@@ -45,6 +49,9 @@ public class StockMinimoData implements ExcelDatosInterface{
     private String nombreProveedor;
     private String marca;
     private Integer ivaPorcentaje;
+    
+    //Variable temporal que solo me sirve para saber si fue modificado un stock
+    private Boolean actualizarStockTmp=false;
     
     private List<StockUnicoData> detalles;
     private List<PresentacionPrecioData> presentacionList;
@@ -83,7 +90,7 @@ public class StockMinimoData implements ExcelDatosInterface{
         return stock;
     }
 
-    public void setStock(String stock) {
+    public void setStock(String stock) {        
         this.stock = stock;
     }
 
@@ -134,6 +141,23 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setLote(String lote) {
         this.lote = lote;
     }
+
+    public Long getKardexId() {
+        return kardexId;
+    }
+
+    public void setKardexId(Long kardexId) {
+        this.kardexId = kardexId;
+    }
+
+    public Boolean getActualizarStockTmp() {
+        return actualizarStockTmp;
+    }
+
+    public void setActualizarStockTmp(Boolean actualizarStockTmp) {
+        this.actualizarStockTmp = actualizarStockTmp;
+    }
+    
     
       
 
@@ -289,6 +313,18 @@ public class StockMinimoData implements ExcelDatosInterface{
     }
     
     
-    
+    public static Map<Long,BigDecimal> obtenerKardexModificadoStock(List<StockMinimoData> lista)
+    {
+        Map<Long,BigDecimal> mapStock=new HashMap<Long, BigDecimal>();
+        
+        for (StockMinimoData stockMinimoData : lista) 
+        {
+            if(stockMinimoData.actualizarStockTmp)
+            {
+                mapStock.put(stockMinimoData.getKardexId(),new BigDecimal(stockMinimoData.stock));
+            }
+        }
+        return mapStock;
+    }
     
 }
