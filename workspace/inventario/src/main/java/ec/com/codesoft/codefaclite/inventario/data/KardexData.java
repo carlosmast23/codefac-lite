@@ -8,10 +8,13 @@ package ec.com.codesoft.codefaclite.inventario.data;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -214,8 +217,17 @@ public class KardexData implements ExcelDatosInterface,Cloneable{
     
     private String formatearDosDecimales(String valorStr)
     {
-        if(valorStr!=null && !valorStr.trim().isEmpty())
+        //UtilidadesTextos.verificarNullOVacio(fecha)
+        //if(valorStr!=null && !valorStr.trim().isEmpty() && valorStr.equals("nuññ"))
+        
+        if("null".equals(valorStr))
         {
+            Logger.getLogger(KardexData.class.getName()).log(Level.WARNING,"Problema con valor NULL con el movimiento: "+documento+" y secuencial: "+preimpreso);
+        }
+        
+        if(!UtilidadesTextos.verificarNullOVacio(valorStr, Boolean.TRUE))
+        {
+            //System.out.println("formatear dato: "+valorStr);
             BigDecimal valor=new BigDecimal(valorStr).setScale(2,RoundingMode.HALF_UP);
             return valor.toString();
         }

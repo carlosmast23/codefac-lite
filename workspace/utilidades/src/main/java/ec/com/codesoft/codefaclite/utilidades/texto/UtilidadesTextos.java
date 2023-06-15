@@ -275,6 +275,23 @@ public abstract class UtilidadesTextos {
         return false;
     }
     
+    public static Boolean verificarNullOVacio(String texto,Boolean verificarTextoNull)
+    {
+        if(!verificarNullOVacio(texto))
+        {
+            if(texto.toLowerCase().equals("null"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     /**
      * Metodo que me permite separar la primero parte numerica y la segunda parte de texto
      * @param textoAlfanumerico
