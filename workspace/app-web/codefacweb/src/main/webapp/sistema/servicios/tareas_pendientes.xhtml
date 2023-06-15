@@ -39,6 +39,10 @@
                     <p:column headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
+                    
+                    <p:column headerText="Vin" filterBy="#{m.mantenimiento.vehiculo.vin}" filterMatchMode="contains"  >
+                        <h:outputText value="#{m.mantenimiento.vehiculo.vin}" />
+                    </p:column>
 
                     <p:column headerText="Tarea">
                         <h:outputText value="#{m.tarea.nombre}" />
@@ -50,10 +54,6 @@
 
                     <p:column headerText="Color">
                         <h:outputText value="#{m.mantenimiento.vehiculo.color}" />
-                    </p:column>
-
-                    <p:column headerText="Vin" filterBy="#{m.mantenimiento.vehiculo.vin}" filterMatchMode="contains"  >
-                        <h:outputText value="#{m.mantenimiento.vehiculo.vin}" />
                     </p:column>
 
                     <p:column headerText="Fecha Ingreso">

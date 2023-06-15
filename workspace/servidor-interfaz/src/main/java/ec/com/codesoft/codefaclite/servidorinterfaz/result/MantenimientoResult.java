@@ -220,7 +220,7 @@ public class MantenimientoResult implements Serializable,Cloneable{
     
     public String getDetalleTareasStr()
     {
-        return UtilidadesLista.castListToString(tareaLista,",",new UtilidadesLista.CastListInterface<DetalleTareaResult>() {
+        /*return UtilidadesLista.castListToString(tareaLista,",",new UtilidadesLista.CastListInterface<DetalleTareaResult>() {
             @Override
             public String getString(DetalleTareaResult dato) {
                 if(dato!=null)
@@ -229,7 +229,8 @@ public class MantenimientoResult implements Serializable,Cloneable{
                 }
                 return "";
             }
-        });
+        });*/
+        return "";
     }
     
     public static class DetalleTareaResult implements Serializable

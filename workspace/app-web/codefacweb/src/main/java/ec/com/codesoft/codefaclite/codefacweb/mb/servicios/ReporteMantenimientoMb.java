@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento.MantenimientoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
@@ -41,10 +42,13 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
     private List<MantenimientoEnum> estadoMantenimietoList;
-    private List<MantenimientoResult> mantenimientoList; 
-    private MantenimientoEnum estadoSeleccionado;
+    private List<MantenimientoResult> mantenimientoList;
+    private List<MarcaProducto> marcaList; 
     
-    private java.util.Date fechaInicial;
+    private MantenimientoEnum estadoSeleccionado;
+    private MarcaProducto marcaSeleccionada;
+    
+    private java.util.Date fechaInicial; 
     private java.util.Date fechaFinal;
 
     @Override
@@ -145,8 +149,10 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void consultarMantenimientos()
     {
         try {
-            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,true);
+            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,null,true);
             mantenimientoList.add(0,null);
+            
+            marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(sessionMb.getSession().getEmpresa());
             System.out.println("Datos consultados: "+mantenimientoList.size());  
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -194,9 +200,23 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void setEstadoSeleccionado(MantenimientoEnum estadoSeleccionado) {
         this.estadoSeleccionado = estadoSeleccionado;
     }
-    
-    
 
+    public List<MarcaProducto> getMarcaList() {
+        return marcaList;
+    }
+
+    public void setMarcaList(List<MarcaProducto> marcaList) {
+        this.marcaList = marcaList;
+    }
+
+    public MarcaProducto getMarcaSeleccionada() {
+        return marcaSeleccionada;
+    }
+
+    public void setMarcaSeleccionada(MarcaProducto marcaSeleccionada) {
+        this.marcaSeleccionada = marcaSeleccionada;
+    }
+    
     
     
 }

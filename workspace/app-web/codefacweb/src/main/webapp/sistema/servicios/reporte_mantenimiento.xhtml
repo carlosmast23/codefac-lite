@@ -39,10 +39,18 @@
                 
                 
                 <!--- ESTADO -->
-                <div class="p-col-12 p-md-6 p-lg-4" >
+                <div class="p-col-12 p-md-6 p-lg-2" >
                     <div><h:outputLabel for="console" value="Estado:" class="label-responsive" /></div>
                     <p:selectOneMenu id="console" value="#{reporteMantenimientoMb.estadoSeleccionado}" converter="mantenimientoEstadoConverter" class="componente-responsive" >
                         <f:selectItems var="estado" value="#{reporteMantenimientoMb.estadoMantenimietoList}" itemValue="#{estado.letra}"/>
+                    </p:selectOneMenu>
+                </div>
+                
+                <!--- MANTENIMIENTO -->
+                <div class="p-col-12 p-md-6 p-lg-2" >
+                    <div><h:outputLabel for="console25" value="Marca:" class="label-responsive" /></div>
+                    <p:selectOneMenu id="console25" value="#{reporteMantenimientoMb.marcaSeleccionada}" converter="marcaConverter" class="componente-responsive" >
+                        <f:selectItems var="estado" value="#{reporteMantenimientoMb.marcaList}" itemValue="#{estado.id.toString()}"/>
                     </p:selectOneMenu>
                 </div>
 
@@ -68,6 +76,10 @@
                     <p:column headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
+                    
+                    <p:column headerText="Vin">
+                        <h:outputText value="#{m.vin}" />
+                    </p:column>
 
                     <p:column headerText="Modelo">
                         <h:outputText value="#{m.modelo}" />
@@ -77,10 +89,6 @@
                         <h:outputText value="#{m.color}" />
                     </p:column>
 
-                    <p:column headerText="Vin">
-                        <h:outputText value="#{m.vin}" />
-                    </p:column>
-                    
                     <p:column headerText="Fecha Ingreso">
                         <h:outputText value="#{m.fechaIngreso}" >
                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />

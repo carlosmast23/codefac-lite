@@ -56,12 +56,10 @@
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
                     
-                    <p:column width="70" headerText="Fecha">
-                        <h:outputText value="#{m.fechaIngreso}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
+                    <p:column headerText="Vin" filterBy="#{m.vehiculo.vin}" filterMatchMode="contains"  >
+                        <h:outputText value="#{m.vehiculo.vin}" />
                     </p:column>
-
+    
                     <p:column headerText="Modelo">
                         <h:outputText value="#{m.vehiculo.modelo}" />
                     </p:column>
@@ -69,9 +67,11 @@
                     <p:column width="100" headerText="Color">
                         <h:outputText value="#{m.vehiculo.color}" />
                     </p:column>
-
-                    <p:column headerText="Vin" filterBy="#{m.vehiculo.vin}" filterMatchMode="contains"  >
-                        <h:outputText value="#{m.vehiculo.vin}" />
+                    
+                    <p:column width="70" headerText="Fecha">
+                        <h:outputText value="#{m.fechaIngreso}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
                     </p:column>
 
 

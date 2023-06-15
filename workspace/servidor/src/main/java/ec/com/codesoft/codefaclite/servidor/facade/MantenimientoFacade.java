@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -40,7 +41,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         return query.getResultList();
     }
     
-    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum) throws ServicioCodefacException, RemoteException
+    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca) throws ServicioCodefacException, RemoteException
     {
         //Mantenimiento m;
         //m.getEstado()
@@ -64,7 +65,13 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
             estado=" AND m.estado=?3 ";
         }
         
-        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 AND m.estado<>?3 "+fechaIngresoStr+fechaFinStr+estado;
+        String marcaStr="";
+        if(marca!=null)
+        {
+            marcaStr=" AND m.marca=?4 ";
+        }
+        
+        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado;
         Query query = getEntityManager().createQuery(queryStr);
         
         
@@ -83,6 +90,11 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         if(estadoEnum!=null)
         {
             query.setParameter(3,estadoEnum.getLetra());
+        }
+        
+        if(marca!=null)
+        {
+            query.setParameter(4,marca);
         }
         
         return query.getResultList();

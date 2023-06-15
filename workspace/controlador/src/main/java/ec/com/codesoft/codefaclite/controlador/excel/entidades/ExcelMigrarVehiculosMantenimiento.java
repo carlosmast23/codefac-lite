@@ -25,14 +25,16 @@ public class ExcelMigrarVehiculosMantenimiento extends ExcelMigrar{
     }
     
     public enum Enum implements CampoMigrarInterface
-    {
+    {       
         NUMERO("NUMERO",0,Double.class,false),
-        MODELO("MODELO",1,String.class,false),
-        COLOR("COLOR",2,String.class,false),
-        VIN("VIN",3,String.class,true),
-        ESTADO_VEHICULO("ESTADO_VEHICULO",4,String.class,false),
-        FECHA_INGRESO("F.INGRESO",5,Date.class,false),
-        ESTADO("ESTADO",6,String.class,false),;
+        MARCA("MARCA",1,String.class,false),
+        MODELO("MODELO",2,String.class,false),
+        COLOR("COLOR",3,String.class,false),
+        VIN("VIN",4,String.class,true),
+        ESTADO_VEHICULO("ESTADO_VEHICULO",5,String.class,false),
+        CLIENTE("CLIENTE",6,String.class,false),
+        FECHA_INGRESO("F.INGRESO",7,Date.class,false),
+        ESTADO("ESTADO",8,String.class,false),;
 
         private Enum(String nombre,Integer posicion,Class tipoDato,Boolean requerido) {
             this.nombre = nombre;

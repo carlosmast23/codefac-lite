@@ -16,8 +16,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -174,20 +176,42 @@ public class CargarVehiculoMb extends GeneralAbstractMb implements ReporteInvent
                 @Override
                 public void procesar(ExcelMigrar.FilaResultado fila) throws ExcelMigrar.ExcepcionExcel, ExcelMigrar.ExcepcionExcelRegistroDuplicado {
                     
-                    String modelo=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.MODELO);
-                    String color=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.COLOR);
-                    String vin=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.VIN);
-                    String fechaIngresoStr=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.FECHA_INGRESO);
-                    
-                    ObjetoMantenimiento objMantenimiento=new ObjetoMantenimiento();
-                    objMantenimiento.setModelo(modelo);
-                    objMantenimiento.setColor(color);
-                    objMantenimiento.setVin(vin);
-                    
-                    Mantenimiento mantenimiento=new Mantenimiento();
-                    mantenimiento.setVehiculo(objMantenimiento);
-                    
-                    mantenimientoList.add(mantenimiento);
+                    try {
+                        String marcaNombre=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.MARCA);
+                        String modelo=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.MODELO);
+                        String color=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.COLOR);
+                        String vin=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.VIN);
+                        String fechaIngresoStr=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.FECHA_INGRESO);
+                        
+                        ObjetoMantenimiento objMantenimiento=new ObjetoMantenimiento();
+                        objMantenimiento.setModelo(modelo);
+                        objMantenimiento.setColor(color);
+                        objMantenimiento.setVin(vin);
+                        
+                        //Ver si existe la marca para setear el valor
+                        MarcaProducto marcaProducto=ServiceFactory.getFactory().getMarcaProductoServiceIf().buscarPorNombre(sessionMb.getSession().getEmpresa(),marcaNombre);
+                        if(marcaProducto==null)
+                        {
+                            marcaProducto=new MarcaProducto();
+                            marcaProducto.setDescripcion(marcaNombre);
+                            marcaProducto.setEmpresa(sessionMb.getSession().getEmpresa());
+                            marcaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                            marcaProducto.setNombre(marcaNombre);
+                            //Grabar el marca producto cuando no existe creado
+                            marcaProducto=ServiceFactory.getFactory().getMarcaProductoServiceIf().grabar(marcaProducto);
+                        }
+                        //Grabar la marca que esta grabando del documento de excel
+                        objMantenimiento.setMarca(marcaProducto);
+                        
+                        Mantenimiento mantenimiento=new Mantenimiento();
+                        mantenimiento.setVehiculo(objMantenimiento);
+                        
+                        mantenimientoList.add(mantenimiento);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(CargarVehiculoMb.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(CargarVehiculoMb.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                     
                 }
