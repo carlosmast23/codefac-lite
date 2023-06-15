@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -69,6 +70,7 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("codigoProveedor", codigoProveedor);
         mapParametros.put("producto.empresa", empresa);
+        mapParametros.put("producto.estado", GeneralEnumEstado.ACTIVO.getLetra());
         //mapParametros.put("proveedor", proveedor);
         List<ProductoProveedor> resultadoList = getFacade().findByMap(mapParametros);
 

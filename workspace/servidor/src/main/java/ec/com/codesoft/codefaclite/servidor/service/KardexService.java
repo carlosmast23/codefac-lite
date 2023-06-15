@@ -121,9 +121,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Lote lote) throws java.rmi.RemoteException
     {
+        //Kardex k=new Kardex();
+        //k.getProducto().setEstadoEnum(GeneralEnumEstado.ACTIVO);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bodega", bodega);
         map.put("producto", producto);
+        map.put("producto.estado", GeneralEnumEstado.ACTIVO.getEstado());
         map.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         map.put("lote", lote);
         
