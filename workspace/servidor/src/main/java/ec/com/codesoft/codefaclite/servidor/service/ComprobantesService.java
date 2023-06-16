@@ -165,6 +165,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     public boolean verificarCredencialesFirma(String claveFirma,Empresa empresa) throws RemoteException
     {        
+        //Si no tiene nada ingresado no valida
+        if(UtilidadesTextos.verificarNullOVacio(claveFirma))
+        {
+            return false;
+        }
+        
         ParametroCodefacService servicioParametros = new ParametroCodefacService();
         Map<String, ParametroCodefac> parametrosMap = servicioParametros.getParametrosMap(empresa);
 

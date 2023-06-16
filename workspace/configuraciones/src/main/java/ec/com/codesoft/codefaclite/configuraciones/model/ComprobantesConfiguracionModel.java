@@ -112,7 +112,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            verificarFirmaElectronica();
+            ///verificarFirmaElectronica();
             
             //getTxtClaveFirma().setEnabled(true);
             actualizarDatosVista();
@@ -143,11 +143,11 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             dispose(); //TODO: En esta parte analizar porque cuando se sale del formulario no se borra de la lista de ventas abiertas del menu
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
+        } /*catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite(ex.getMessage());
-        }
+        }*/
     }
 
     @Override

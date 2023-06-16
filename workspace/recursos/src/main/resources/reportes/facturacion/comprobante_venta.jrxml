@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="405" pageHeight="595" columnWidth="365" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="2.5892034107949504"/>
+	<property name="ireport.zoom" value="4.586931783631316"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="128"/>
+	<property name="ireport.y" value="256"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -107,8 +107,8 @@
 				</textElement>
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="70" y="27" width="205" height="12" uuid="12e07238-470a-46ff-add1-fb128f3e9d49"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="70" y="40" width="205" height="18" uuid="12e07238-470a-46ff-add1-fb128f3e9d49"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -128,7 +128,7 @@
 				<text><![CDATA[Preimpreso:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="70" y="40" width="205" height="12" uuid="deed9b40-fb1e-4271-8427-d09f34d11985"/>
+				<reportElement x="70" y="28" width="205" height="12" uuid="deed9b40-fb1e-4271-8427-d09f34d11985"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -155,14 +155,14 @@
 				<textFieldExpression><![CDATA[$P{codigo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="27" width="69" height="12" uuid="e2fd7476-1955-4a56-bc82-3540587282e5"/>
+				<reportElement x="1" y="40" width="69" height="12" uuid="e2fd7476-1955-4a56-bc82-3540587282e5"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="40" width="69" height="12" uuid="de4117e3-c405-4d16-b6ac-379355d0a214"/>
+				<reportElement x="1" y="28" width="69" height="12" uuid="de4117e3-c405-4d16-b6ac-379355d0a214"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
