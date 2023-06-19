@@ -11,18 +11,30 @@ import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.LoteControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.LotePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.rmi.RemoteException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -32,11 +44,62 @@ public class LoteModel extends LotePanel implements DialogInterfacePanel<Lote>,I
     
     private LoteControlador controlador;
 
+    //TODO: Optimizar esta parte para 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         controlador=new LoteControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
-    }
+        
+        
+        /*JTextField textField = (JTextField) getCmbFechaVencimiento().getComponent(0);
 
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateDatePicker(getCmbFechaVencimiento(), textField);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateDatePicker(getCmbFechaVencimiento(), textField);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateDatePicker(getCmbFechaVencimiento(), textField);
+            }
+        });*/
+        
+        //UtilidadesSwing.corregirFuncionamientoSeteoManualJxDate(getCmbFechaVencimiento());        
+        UtilidadesSwing.corregirFuncionamientoSeteoManualJxDate(getCmbFechaVencimiento(),new UtilidadesSwing.SetearFechaIf() {
+            @Override
+            public void setear(java.util.Date fecha) 
+            {
+                controlador.getLote().setFechaVencimiento(UtilidadesFecha.castDateUtilToSql(fecha));
+            }
+        });
+    }
+    
+    /*private void updateDatePicker(JXDatePicker datePicker, JTextField textField) {
+        String text = textField.getText();
+        if(!UtilidadesTextos.verificarNullOVacio(text))
+        {
+            //DateFormat dateFormat = datePicker.getFormats()[0];
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                java.util.Date date = dateFormat.parse(text);
+                //datePicker.setDate(date);
+                //datePicker.getEditor().commitEdit();
+                java.sql.Date fechaSql= UtilidadesFecha.castDateUtilToSql(date);
+                controlador.getLote().setFechaVencimiento(fechaSql);
+                System.out.println("Seteado fecha: "+date);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                // Manejar el error aquí si el formato es inválido
+                System.out.println("error verificando la fecha: >>"+text+"<<");
+            }
+        }
+    }*/
+    
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
