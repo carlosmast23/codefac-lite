@@ -547,6 +547,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
             } 
         }
+        
+        //Agregar un campo adicional en los detalles con el número de telefono del cliente
+        String telefonosClienteStr=factura.getCliente().obtenerTodosTelefonos();
+        if(!UtilidadesTextos.verificarNullOVacio(telefonosClienteStr))
+        {
+            //Mejorar esta parte
+            factura.addDatoAdicional(new FacturaAdicional("*"+ComprobanteAdicional.CampoDefectoEnum.TELEFONOS_CLIENTES.getNombre(),telefonosClienteStr,ComprobanteAdicional.Tipo.TIPO_OTRO));
+        }
     }
     
     /**

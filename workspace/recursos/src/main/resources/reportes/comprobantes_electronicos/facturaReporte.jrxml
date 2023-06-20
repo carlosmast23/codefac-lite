@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="2.8531167061101095"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="462"/>
+	<property name="ireport.y" value="589"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -86,6 +86,7 @@
 	<parameter name="campoFirma3" class="java.lang.String"/>
 	<parameter name="tipoRegimen" class="java.lang.String"/>
 	<parameter name="SUBREPORT_CABECERA" class="java.lang.Object"/>
+	<parameter name="telefonos_cliente" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -108,14 +109,14 @@
 				<reportElement x="-2" y="256" width="557" height="43" uuid="267e20e7-cdb9-4cc7-bbe5-773ecf3b0bf2"/>
 			</rectangle>
 			<textField>
-				<reportElement x="71" y="258" width="331" height="13" uuid="7a51c9a1-117a-4cd1-9e9e-2050b5f8424b"/>
+				<reportElement x="71" y="258" width="320" height="13" uuid="7a51c9a1-117a-4cd1-9e9e-2050b5f8424b"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cliente_nombres}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="479" y="257" width="69" height="15" uuid="d61cbadd-18a1-4550-8c49-921ba009ddae"/>
+				<reportElement x="455" y="258" width="83" height="13" uuid="d61cbadd-18a1-4550-8c49-921ba009ddae"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -130,7 +131,7 @@
 				<text><![CDATA[Razón Social:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="402" y="258" width="77" height="13" uuid="853671ed-6041-4aa4-badb-4c46f5b0ee08"/>
+				<reportElement x="385" y="258" width="70" height="13" uuid="853671ed-6041-4aa4-badb-4c46f5b0ee08"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
@@ -303,6 +304,21 @@
 				<connectionExpression><![CDATA[]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_CABECERA}]]></subreportExpression>
 			</subreport>
+			<staticText>
+				<reportElement x="385" y="272" width="70" height="13" uuid="eba88364-7b61-474e-976f-0109a600297b"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<text><![CDATA[Teléfonos:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="455" y="272" width="90" height="13" uuid="cee0847c-bb7c-41a6-ac63-dc130f8f268d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{telefonos_cliente}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>

@@ -107,6 +107,19 @@ public class FacturaComprobante extends ComprobanteElectronicoFacturaAndLiquidac
         return informacionFactura.getContribuyenteEspecial();
     }
 
-
+    public String obtenerTelefonoCliente()
+    {        
+        if(informacionAdicional!=null)
+        {
+            for (InformacionAdicional infoAdicional : informacionAdicional) 
+            {
+                if(infoAdicional.getNombre().equals("*telefonos_cliente"))
+                {
+                    return infoAdicional.getValor();
+                }
+            }
+        }
+        return "";
+    }
     
 }

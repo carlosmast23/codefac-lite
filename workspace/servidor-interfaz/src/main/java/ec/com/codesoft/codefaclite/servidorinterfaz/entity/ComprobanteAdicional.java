@@ -135,6 +135,7 @@ public class ComprobanteAdicional implements Serializable{
      */
     public enum CampoDefectoEnum
     {               
+        TELEFONOS_CLIENTES("telefonos_cliente"),
         CELULAR("celular"),
         CORREO("correo"),
         FECHA_VENCIMIENTO("Fecha Maxima de Pago"),
