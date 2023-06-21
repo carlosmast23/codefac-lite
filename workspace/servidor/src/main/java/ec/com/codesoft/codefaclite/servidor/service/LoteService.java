@@ -65,15 +65,19 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-                
-                setDatosAuditoria(entity,usuarioCreacion,CrudEnum.CREAR);
-                setearDatosGrabar(entity, empresa,CrudEnum.CREAR);
-                validarGrabar(entity, CrudEnum.CREAR);
-                entityManager.persist(entity);
-                
+                                
             }
         });
+        return entity;
+    }
+    
+    public Lote grabarSinTransaccion(Lote entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException {
+        entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+
+        setDatosAuditoria(entity, usuarioCreacion, CrudEnum.CREAR);
+        setearDatosGrabar(entity, empresa, CrudEnum.CREAR);
+        validarGrabar(entity, CrudEnum.CREAR);
+        entityManager.persist(entity);
         return entity;
     }
     
@@ -177,6 +181,13 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         Integer total=getFacade().reporteFechaCaducidadTotalFacade(sucursal, bodega, fechaReferencia);
         return total;
     }
+
+    @Override
+    public Lote buscarPorId(Object primaryKey) throws RemoteException {
+        return super.buscarPorId(primaryKey); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
     
 }

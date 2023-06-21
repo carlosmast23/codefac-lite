@@ -95,8 +95,8 @@ public class Kardex implements Serializable,Cloneable {
     @Column(name = "ESTADO")
     private String estado;
     
-    @JoinColumn(name = "LOTE_ID")
-    @ManyToOne
+    @JoinColumn(name = "LOTE_ID",insertable = false,updatable = false)
+    //@ManyToOne
     private Lote lote;    
     
     //Variable solo de paso para grabar los detalles que luego necesito para grabar o hacer algun tema temporal

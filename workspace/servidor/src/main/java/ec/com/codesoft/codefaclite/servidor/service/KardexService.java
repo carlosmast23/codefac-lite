@@ -129,6 +129,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         map.put("producto.estado", GeneralEnumEstado.ACTIVO.getEstado());
         map.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         map.put("lote", lote);
+        //Solo buscar lotes que tengan estado activo
+        map.put("lote.estado", GeneralEnumEstado.ACTIVO.getEstado());
         
         List<Kardex> listaKardex=getFacade().findByMap(map);
         //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
@@ -883,8 +885,11 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             {
                 if(kardex.getLote().getId()==null)
                 {
-                    entityManager.persist(kardex.getLote());
-                    //System.out.println("grabando detalles kardex etapa 0... ");
+                    LoteService loteService=new LoteService();                    
+                    loteService.grabarSinTransaccion(lote, kardex.getProducto().getEmpresa(), null);
+                    
+                    //entityManager.persist(kardex.getLote());
+                    
                     em.flush();
                 }
             }
@@ -894,7 +899,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 {
                     if(lote.getId()==null)
                     {
-                        em.persist(lote);
+                        LoteService loteService=new LoteService();                    
+                        loteService.grabarSinTransaccion(lote, kardex.getProducto().getEmpresa(), null);
+                        //em.persist(lote);
                     }
                     else
                     {
@@ -1398,6 +1405,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     public Kardex crearObjeto(Bodega bodega,Producto producto,Lote lote) throws java.rmi.RemoteException,ServicioCodefacException
     {
         Kardex kardex=new Kardex();
+                
         kardex.setLote(lote);
         kardex.setBodega(bodega);
         kardex.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
