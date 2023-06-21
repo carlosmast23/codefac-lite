@@ -692,7 +692,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         ServiceFactor.getFactory().getLoteSeviceIf().editarSinTransaccion(lote);*/
         //Cuando hago una modificacion de este tema guardo la fecha de edicion
         //TODO: Ver si mejor la fecha de debe recalcular al momento de hacer la edicion global
-        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
+        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoyTimeStamp());
         //CALCULAR EL PRECIO CON EL STOCK FINAL
         kardex.calcularPrecioTotal();
         
@@ -869,8 +869,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //Si no existe completo los datos para crear el kardex
             kardex = detalle.getKardex();
             //kardex.setBodega(bodega);
-            kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-            kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
+            kardex.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
+            kardex.setFechaModificacion(UtilidadesFecha.getFechaHoyTimeStamp());
             kardex.setCostoPromedio((kardex.getCostoPromedio()!=null)?kardex.getCostoPromedio():BigDecimal.ZERO);
             kardex.setPrecioTotal(BigDecimal.ZERO);
             kardex.setPrecioUltimo(detalle.getPrecioUnitario());
@@ -944,7 +944,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
         //Cuando hago una modificacion de este tema guardo la fecha de edicion
         //TODO: Ver si mejor la fecha de debe recalcular al momento de hacer la edicion global
-        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
+        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoyTimeStamp());
 
         //Agregar la fecha de creacion del sistema
         detalle.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
@@ -1400,8 +1400,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         Kardex kardex=new Kardex();
         kardex.setLote(lote);
         kardex.setBodega(bodega);
-        kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
+        kardex.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
+        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoyTimeStamp());
         kardex.setCostoPromedio(BigDecimal.ZERO);
         kardex.setPrecioTotal(BigDecimal.ZERO);
         kardex.setPrecioUltimo(BigDecimal.ZERO);

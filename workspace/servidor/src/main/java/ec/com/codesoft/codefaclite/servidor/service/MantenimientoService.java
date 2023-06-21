@@ -180,6 +180,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 
                 MantenimientoResult mantenimientoResult=new MantenimientoResult();
                 mantenimientoResult.modelo=dato.getVehiculo().getModelo();
+                mantenimientoResult.marca=dato.getVehiculo().getMarcaNombre();
                 mantenimientoResult.color=dato.getVehiculo().getColor();
                 mantenimientoResult.vin=dato.getVehiculo().getVin();
                 mantenimientoResult.estado=(estadoEnum!=null)?estadoEnum.getNombre():"";

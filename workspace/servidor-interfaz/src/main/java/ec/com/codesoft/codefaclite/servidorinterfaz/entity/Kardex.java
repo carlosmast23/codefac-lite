@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,10 +49,10 @@ public class Kardex implements Serializable,Cloneable {
     private Long id;
     
     @Column(name = "FECHA_CREACION")
-    private Date fechaCreacion;
+    private Timestamp fechaCreacion;
     
     @Column(name = "FECHA_MODIFICACION")
-    private Date fechaModificacion;
+    private Timestamp fechaModificacion;
     
     @Column(name = "PRECIO_PROMEDIO")
     private BigDecimal costoPromedio;
@@ -114,19 +115,19 @@ public class Kardex implements Serializable,Cloneable {
         this.id = id;
     }
 
-    public Date getFechaCreacion() {
+    public Timestamp getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(Timestamp fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public Date getFechaModificacion() {
+    public Timestamp getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(Date fechaModificacion) {
+    public void setFechaModificacion(Timestamp fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 

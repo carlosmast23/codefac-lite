@@ -204,6 +204,15 @@ public class ObjetoMantenimiento extends EntityAbstract<GeneralEnumEstado>{
     ////////////////////////////////////////////////
     ///         METODOS PERSONALIZADOS
     ////////////////////////////////////////////////
+    
+    public String getMarcaNombre()
+    {
+        if(marca!=null)
+        {
+            return marca.getNombre();
+        }
+        return "";
+    }
 
     public TipoObjetoMantenimientoEnum getTipoEnum() {
         return TipoObjetoMantenimientoEnum.getEnumByLetra(tipo);

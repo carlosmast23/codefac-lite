@@ -100,6 +100,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 
         }
         
+        if(presentacionDetalle.getCantidad().compareTo(BigDecimal.ZERO)<=0)
+        {
+            throw new ServicioCodefacException("Error con la PRESENTACION del producto "+presentacionDetalle.getProductoOriginal().getNombre()+" porque tiene una presentacion con una CANTIDAD NO VALIDA");
+        }
+        
         BigDecimal cantidadEquivalencia = presentacionDetalle.getCantidad();
         cantidad = cantidad.multiply(cantidadEquivalencia);
         precioUnitario = (precioUnitario.divide(cantidadEquivalencia, 6, BigDecimal.ROUND_HALF_UP));
@@ -532,6 +537,10 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 detalle= entityManager.merge(detalle);
                 //Elimino el dato que ya no voy a ocupar
                 entityManager.remove(detalle);
+                
+                //Elimino la referencia del producto en el mpaque para luego evitar complicaciones cuando tenga esas relaciones en otras pantallas
+                detalle.getProductoEmpaquetado().setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                entityManager.merge(detalle.getProductoEmpaquetado());
             }
         }
         

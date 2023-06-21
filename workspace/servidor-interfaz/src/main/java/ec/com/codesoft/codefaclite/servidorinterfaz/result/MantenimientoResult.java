@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 public class MantenimientoResult implements Serializable,Cloneable{
     
     public String modelo;
+    public String marca;
     public String color;
     public String vin;
     public String estado;
@@ -165,6 +166,14 @@ public class MantenimientoResult implements Serializable,Cloneable{
 
     public void setDuracionDias(String duracionDias) {
         this.duracionDias = duracionDias;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
     }
     
     
