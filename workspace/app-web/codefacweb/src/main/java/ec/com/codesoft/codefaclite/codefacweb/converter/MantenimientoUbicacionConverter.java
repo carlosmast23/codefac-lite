@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import java.rmi.RemoteException;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -14,25 +15,14 @@ import javax.faces.convert.FacesConverter;
  *
  * @author CARLOS_CODESOFT
  */
-@FacesConverter("marcaConverter")
-public class MarcaConverter extends AbstractConverter implements Converter{
+@FacesConverter("mantenimientoUbicacionConverter")
+public class MantenimientoUbicacionConverter extends AbstractConverter implements Converter{
 
     @Override
     public Object buscarObjetoPorId(String id) throws RemoteException 
     {
-        if(id!=null)
-        {
-            try
-            {
-                return ServiceFactory.getFactory().getMarcaProductoServiceIf().buscarPorId(Long.parseLong(id));
-            }
-            catch(java.lang.NumberFormatException e)
-            {
-                
-            }
-            
-        }
-        return null;
+        
+        return Mantenimiento.UbicacionEnum.getEnum(id);
     }
     
     

@@ -17,7 +17,7 @@
 
             <div class="p-grid div-resposive"  >
                 <!--- FECHA INICIAL -->
-                <div class="p-col-12 p-md-6 p-lg-4" >
+                <div class="p-col-12 p-md-6 p-lg-2" >
                     <p:outputLabel for="fechaInicial" value="Fecha Inicial:" class="label-responsive"/>                    
                     <div class="p-grid div-resposive" >
                         <div class="p-col-fixed" >
@@ -27,7 +27,7 @@
                 </div>
 
                 <!--- FECHA FINAL -->
-                <div class="p-col-12 p-md-6 p-lg-4" >
+                <div class="p-col-12 p-md-6 p-lg-2" >
                     <p:outputLabel for="fechaFinal" value="Fecha Final:" class="label-responsive" />
 
                     <div class="p-grid div-resposive" >
@@ -42,6 +42,7 @@
                 <div class="p-col-12 p-md-6 p-lg-2" >
                     <div><h:outputLabel for="console" value="Estado:" class="label-responsive" /></div>
                     <p:selectOneMenu id="console" value="#{reporteMantenimientoMb.estadoSeleccionado}" converter="mantenimientoEstadoConverter" class="componente-responsive" >
+                        <f:selectItem itemLabel="Todos" noSelectionOption="true" />
                         <f:selectItems var="estado" value="#{reporteMantenimientoMb.estadoMantenimietoList}" itemValue="#{estado.letra}"/>
                     </p:selectOneMenu>
                 </div>
@@ -50,9 +51,20 @@
                 <div class="p-col-12 p-md-6 p-lg-2" >
                     <div><h:outputLabel for="console25" value="Marca:" class="label-responsive" /></div>
                     <p:selectOneMenu id="console25" value="#{reporteMantenimientoMb.marcaSeleccionada}" converter="marcaConverter" class="componente-responsive" >
+                        <f:selectItem itemLabel="Todos" noSelectionOption="true" />
                         <f:selectItems var="estado" value="#{reporteMantenimientoMb.marcaList}" itemValue="#{estado.id.toString()}"/>
                     </p:selectOneMenu>
                 </div>
+                
+                <!--- UBICACIÓN -->
+                <div class="p-col-12 p-md-6 p-lg-2" >
+                    <div><h:outputLabel for="console25" value="Ubicación:" class="label-responsive" /></div>
+                    <p:selectOneMenu id="console254" value="#{reporteMantenimientoMb.ubicacionSeleccionada}" converter="mantenimientoUbicacionConverter" class="componente-responsive" >
+                        <f:selectItem itemLabel="Todos" noSelectionOption="true" />
+                        <f:selectItems var="estado" value="#{reporteMantenimientoMb.ubicacionList}" itemValue="#{estado.letra}"/>
+                    </p:selectOneMenu>
+                </div>
+
 
                 <div class="p-col-6 p-md-2 p-lg-2" >
                     <div class="p-col-fixed" >
@@ -82,7 +94,7 @@
                     </p:column>
                     
                     <p:column headerText="Marca">
-                        <h:outputText value="#{m.modelo}" />
+                        <h:outputText value="#{m.marca}" />
                     </p:column>
 
                     <p:column headerText="Modelo">
@@ -112,6 +124,10 @@
 
                     <p:column headerText="Estado">
                         <h:outputText value="#{m.estado}" />
+                    </p:column>
+
+                    <p:column headerText="Ubicación">
+                        <h:outputText value="#{m.ubicacion}" />
                     </p:column>
                     
                     <p:column headerText="Tareas">

@@ -39,7 +39,11 @@ public abstract class AbstractConverter {
     }
 
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return value.toString();
+        if(value!=null)
+        {
+            return value.toString();
+        }
+        return null;
     }
     
 }

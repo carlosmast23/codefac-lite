@@ -41,7 +41,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         return query.getResultList();
     }
     
-    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca) throws ServicioCodefacException, RemoteException
+    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum) throws ServicioCodefacException, RemoteException
     {
         //Mantenimiento m;
         //m.getEstado()
@@ -64,6 +64,11 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         {
             estado=" AND m.estado=?3 ";
         }
+        else
+        {
+            //Si quiere ver todos los estados por defecto, no muestro los que estan eliminados
+            estado=" AND m.estado<>"+Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra();
+        }
         
         String marcaStr="";
         if(marca!=null)
@@ -71,11 +76,18 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
             marcaStr=" AND m.marca=?4 ";
         }
         
-        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado;
+        String ubicacionEnumStr="";
+        if(ubicacionEnum!=null)
+        {
+            ubicacionEnumStr=" AND m.ubicacion=?5";
+        }
+        
+        
+        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado+marcaStr+ubicacionEnumStr;
         Query query = getEntityManager().createQuery(queryStr);
         
         
-        query.setParameter(3,Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());
+        //query.setParameter(3,Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());
         
         if(fechaInicio!=null)
         {
@@ -95,6 +107,11 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         if(marca!=null)
         {
             query.setParameter(4,marca);
+        }
+        
+        if(ubicacionEnum!=null)
+        {
+            query.setParameter(5, ubicacionEnum.getLetra());
         }
         
         return query.getResultList();

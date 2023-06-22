@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporte
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento.MantenimientoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -42,18 +43,21 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
     private List<MantenimientoEnum> estadoMantenimietoList;
-    private List<MantenimientoResult> mantenimientoList;
+    private List<MantenimientoResult> mantenimientoList; 
     private List<MarcaProducto> marcaList; 
+    private List<Mantenimiento.UbicacionEnum> ubicacionList;
     
     private MantenimientoEnum estadoSeleccionado;
     private MarcaProducto marcaSeleccionada;
+    private Mantenimiento.UbicacionEnum ubicacionSeleccionada;
     
     private java.util.Date fechaInicial; 
     private java.util.Date fechaFinal;
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Mantenimiento m;
+        //m.getUbicacionEnum()
     }
 
     @Override
@@ -107,8 +111,14 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        mantenimientoList=new ArrayList<MantenimientoResult>();
-        estadoMantenimietoList=UtilidadesLista.arrayToList(MantenimientoEnum.values());
+        try {
+            mantenimientoList=new ArrayList<MantenimientoResult>();
+            estadoMantenimietoList=UtilidadesLista.arrayToList(MantenimientoEnum.values());
+            marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(sessionMb.getSession().getEmpresa());
+            ubicacionList=UtilidadesLista.arrayToList(Mantenimiento.UbicacionEnum.values());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -149,11 +159,10 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void consultarMantenimientos()
     {
         try {
-            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,null,true);
+            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true);
             mantenimientoList.add(0,null);
-            
-            marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(sessionMb.getSession().getEmpresa());
-            System.out.println("Datos consultados: "+mantenimientoList.size());  
+                        
+            System.out.println("Datos consultados DE MANTENIMIENTOS: "+mantenimientoList.size());  
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -216,6 +225,23 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void setMarcaSeleccionada(MarcaProducto marcaSeleccionada) {
         this.marcaSeleccionada = marcaSeleccionada;
     }
+
+    public List<Mantenimiento.UbicacionEnum> getUbicacionList() {
+        return ubicacionList;
+    }
+
+    public void setUbicacionList(List<Mantenimiento.UbicacionEnum> ubicacionList) {
+        this.ubicacionList = ubicacionList;
+    }
+
+    public Mantenimiento.UbicacionEnum getUbicacionSeleccionada() {
+        return ubicacionSeleccionada;
+    }
+
+    public void setUbicacionSeleccionada(Mantenimiento.UbicacionEnum ubicacionSeleccionada) {
+        this.ubicacionSeleccionada = ubicacionSeleccionada;
+    }
+    
     
     
     
