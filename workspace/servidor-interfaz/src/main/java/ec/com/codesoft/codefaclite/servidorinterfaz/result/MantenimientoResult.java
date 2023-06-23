@@ -28,6 +28,15 @@ public class MantenimientoResult implements Serializable,Cloneable{
     public String fechaSalida;
     public String ubicacion;
     
+    //Listado de los detalles adicionales
+    public String enderezada;
+    public String pintura;
+    public String pulida;
+    public String faltante;
+    public String electromecanico;
+    public String comentario;
+            
+    
     private String tareaTitulo;
     private String tareaDescripcion;
     private String duracionDias;
@@ -174,6 +183,54 @@ public class MantenimientoResult implements Serializable,Cloneable{
 
     public void setMarca(String marca) {
         this.marca = marca;
+    }
+
+    public String getEnderezada() {
+        return enderezada;
+    }
+
+    public void setEnderezada(String enderezada) {
+        this.enderezada = enderezada;
+    }
+
+    public String getPintura() {
+        return pintura;
+    }
+
+    public void setPintura(String pintura) {
+        this.pintura = pintura;
+    }
+
+    public String getPulida() {
+        return pulida;
+    }
+
+    public void setPulida(String pulida) {
+        this.pulida = pulida;
+    }
+
+    public String getFaltante() {
+        return faltante;
+    }
+
+    public void setFaltante(String faltante) {
+        this.faltante = faltante;
+    }
+
+    public String getElectromecanico() {
+        return electromecanico;
+    }
+
+    public void setElectromecanico(String electromecanico) {
+        this.electromecanico = electromecanico;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
     
     

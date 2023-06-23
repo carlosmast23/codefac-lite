@@ -204,9 +204,33 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 List<MantenimientoTareaDetalle> detalleList= tareaService.buscarPorMantenimiento(dato);
                 for (MantenimientoTareaDetalle mantenimientoTareaDetalle : detalleList) 
                 {
-                    MantenimientoResult.DetalleTareaResult detalleResult= new MantenimientoResult.DetalleTareaResult(mantenimientoTareaDetalle.getTarea().getNombre(),mantenimientoTareaDetalle.getObservacion());
-                    
+                    MantenimientoResult.DetalleTareaResult detalleResult= new MantenimientoResult.DetalleTareaResult(mantenimientoTareaDetalle.getTarea().getNombre(),mantenimientoTareaDetalle.getObservacion());                    
                     mantenimientoResult.agregarTarea(detalleResult);
+                    
+                    if(mantenimientoTareaDetalle.getTarea().getNombre().equals("ENDEREZADA"))
+                    {
+                        mantenimientoResult.enderezada="X";
+                    }
+                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("PINTURA"))
+                    {
+                         mantenimientoResult.pintura="X";
+                    }
+                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("PULIDA VIDRIOS"))
+                    {
+                         mantenimientoResult.pulida="X";
+                    }
+                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("FALTANTE"))
+                    {
+                         mantenimientoResult.faltante="X";
+                    }
+                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("ELECTROMECÁNICO"))
+                    {
+                         mantenimientoResult.electromecanico="X";
+                    }
+                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("OTROS PROBLEMAS"))
+                    {
+                         mantenimientoResult.comentario="X";
+                    }
                 }
                 resultadoList.add(mantenimientoResult);
             } catch (RemoteException ex) {

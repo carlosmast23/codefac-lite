@@ -4260,9 +4260,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             BigDecimal.ZERO);
 
                     setFacturaDetalleSeleccionado(facturaDetalle);
-                    controlador.setearValoresProducto(facturaDetalle);                    
-                    controlador.agregarDetallesFactura(facturaDetalle, null, documentoSeleccionado, kardexSeleccionado, EnumSiNo.NO, BigDecimal.ONE,null);
                     controlador.verificarProductoConNotaVentaInterna(facturaDetalle);
+                    controlador.setearValoresProducto(facturaDetalle);                                        
+                    controlador.agregarDetallesFactura(facturaDetalle, null, documentoSeleccionado, kardexSeleccionado, EnumSiNo.NO, BigDecimal.ONE,null);
+                    
                     editarCeldaFacturaDetalle();
                 } else {
                     controlador.agregarProductoVista(producto, lote, null, (kardexSeleccionado != null) ? kardexSeleccionado.getStock() : BigDecimal.ZERO, ultimoCosto, fechaCaducidad);
