@@ -18,13 +18,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadCodigoBarras;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -65,7 +69,9 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         getCmbTipoCodigoBarras().removeAllItems();
         getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.CODE128);
         getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.CODE39);        
-        getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.EAN);        
+        getCmbTipoCodigoBarras().addItem(UtilidadCodigoBarras.CodigoBarrasEnum.EAN);     
+        
+        UtilidadesComboBox.llenarComboBox(getCmbFormatoHoja(),UtilidadesLista.arrayToList(FormatoHojaImpresionEnum.values()),true);
     }
 
     @Override
@@ -99,7 +105,8 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         }
         else if (formatoImpresion.equals("POS"))
         {
-            nombreJasper="codigosBarrasMini.jrxml";
+            //nombreJasper="codigosBarrasMini.jrxml";
+            nombreJasper="codigosBarrasZebraTest.jrxml";
             //nombreJasper="codigosBarrasZebra10x15.jrxml";
         }
         else if(formatoImpresion.equals("ZEBRA"))
@@ -111,6 +118,8 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         
         path=aplicarConfiguraciones(path);
         Map<String,Object> parametros = new HashMap<String,Object>();
+        parametros.put("pie_pagina1", getTxtPiePagina().getText());
+        
         
         ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, getData(), panelPadre,"Códigos de Barras");
         
@@ -123,10 +132,18 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         String altoTxt=getTxtAlto().getText();
         String anchoTxt=getTxtAncho().getText();
         
+        FormatoHojaImpresionEnum formatoHojaEnum=(FormatoHojaImpresionEnum) getCmbFormatoHoja().getSelectedItem();
+        if(formatoHojaEnum!=null)
+        {
+            altoTxt=formatoHojaEnum.getAltoPx()+"";
+            anchoTxt=formatoHojaEnum.getAnchoPx()+"";
+        }
+        
         if(!UtilidadesTextos.verificarNullOVacio(altoTxt))
         {
             Integer alto=Integer.parseInt(altoTxt);
-            manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_ALTO_DOCUMENTO, (alto+40)+"");
+            //manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_ALTO_DOCUMENTO, (alto+40)+"");
+            manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_ALTO_DOCUMENTO, alto+"");
             Element elementDetail=manager.buscarEtiquetaPorNombre("detail");
             Element elementBand=manager.buscarEtiquetaPorNombre(elementDetail,"band");
             manager.setearValor(elementBand,"height",altoTxt);
@@ -134,13 +151,31 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
             //buscar la etiqueta para el alto del código de barras
             Element elementImage=manager.buscarEtiquetaPorNombre(elementBand, "image");
             Element reportElement=manager.buscarEtiquetaPorNombre(elementImage, "reportElement");            
-            manager.setearValor(reportElement, "height", (alto-35)+"");
+            manager.setearValor(reportElement, "height", (alto-55)+"");
+            
+            //Cambiar el alto del texto del PIE de PAGINA
+            Element etiquetaPiePaginaElement = manager.buscarPorValorAtributo("uuid","9e299110-b148-4a5c-9e40-0dd9ae85f151");
+            manager.setearValor(etiquetaPiePaginaElement, "y", (alto-20)+"");
+            
             
             if(!UtilidadesTextos.verificarNullOVacio(anchoTxt))
             {
+                //Aumentar el ancho de la etiqueta de imagen
                 Integer ancho=Integer.parseInt(anchoTxt);
-                manager.setearValor(reportElement, "width", (ancho-20)+"");
+                String anchoConMargen=(ancho-10)+"";
+                //manager.setearValor(reportElement, "width", (ancho-20)+"");
+                manager.setearValor(reportElement, "width",anchoConMargen);
+                
+                //Cambiar el Tamaño del NOMBRE
+                //Element etiquetaNombreElement = manager.buscarComponente("cf908f5d-646c-428a-83ac-d99299a6c01b");
+                Element etiquetaNombreElement = manager.buscarPorValorAtributo("uuid","cf908f5d-646c-428a-83ac-d99299a6c01b");
+                manager.setearValor(etiquetaNombreElement, "width", anchoConMargen);
+                
+                manager.setearValor(etiquetaPiePaginaElement, "width", anchoConMargen);
+                
             }
+            
+            
         }
         
         
@@ -367,6 +402,56 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         
         jpopMenu.add(jmenuItemEliminar);        
         getTblDatos().setComponentPopupMenu(jpopMenu);
+    }
+    
+    public enum FormatoHojaImpresionEnum
+    {
+        HOJA50X30("HOJA 5cm X 3cm",new BigDecimal("5"),new BigDecimal("3"));
+        
+        private static final BigDecimal CONSTANTE_CONVERSION=new BigDecimal("2.54");
+        private static final BigDecimal CONSTANTE_PPT=new BigDecimal("80");
+        
+        private String nombre;
+        private BigDecimal anchoCm;
+        private BigDecimal altoCm;
+
+        private FormatoHojaImpresionEnum(String nombre, BigDecimal anchoCm, BigDecimal altoCm) {
+            this.nombre = nombre;
+            this.anchoCm = anchoCm;
+            this.altoCm = altoCm;
+        }
+        
+        //Metodos Personalizados
+        public BigDecimal getAltoPx()
+        {
+            return altoCm.multiply(CONSTANTE_PPT).divide(CONSTANTE_CONVERSION,0,BigDecimal.ROUND_HALF_UP);
+        }
+        
+        public BigDecimal getAnchoPx()
+        {
+            return anchoCm.multiply(CONSTANTE_PPT).divide(CONSTANTE_CONVERSION,0,BigDecimal.ROUND_HALF_UP);
+        }
+        
+        
+        ///Metodos GET AND SET //////////////        
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public BigDecimal getAnchoCm() {
+            return anchoCm;
+        }
+
+        public BigDecimal getAltoCm() {
+            return altoCm;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }        
+        
     }
     
 }

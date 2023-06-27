@@ -67,7 +67,8 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         else
         {
             //Si quiere ver todos los estados por defecto, no muestro los que estan eliminados
-            estado=" AND m.estado<>"+Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra();
+            //estado=" AND m.estado<>"+Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra();
+            estado=" AND m.estado<>?3";
         }
         
         String marcaStr="";
@@ -102,6 +103,10 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         if(estadoEnum!=null)
         {
             query.setParameter(3,estadoEnum.getLetra());
+        }
+        else
+        {
+            query.setParameter(3,Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());
         }
         
         if(marca!=null)

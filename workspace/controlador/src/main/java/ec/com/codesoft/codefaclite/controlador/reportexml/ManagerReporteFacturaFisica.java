@@ -194,6 +194,40 @@ public class ManagerReporteFacturaFisica {
     
     }
     
+    /**
+     * Metodo que me permite buscar una etiqueta [ELEMENT] por algun valor de un atributo
+     * @param element
+     * @param attributeName
+     * @param attributeValue
+     * @return 
+     */
+    public Element buscarPorValorAtributo(String attributeName, String attributeValue) {
+        //Busco el primera etiqueta padre para empezar la busqueda
+        Element element=document.getRootElement();
+        //realizo la busqueda recursiva
+        return getElementByAttributeValue(element, attributeName, attributeValue);
+    }
+    
+    
+    private  Element getElementByAttributeValue(Element element, String attributeName, String attributeValue) {
+        if (element.getAttribute(attributeName) != null
+                && element.getAttributeValue(attributeName).equals(attributeValue)) {
+            // Se encontró el elemento con el valor de atributo deseado
+            return element;
+        }
+
+        List<Element> childElements = element.getChildren();
+        for (Element childElement : childElements) {
+            Element foundElement = getElementByAttributeValue(childElement, attributeName, attributeValue);
+            if (foundElement != null) {
+                // Se encontró el elemento con el valor de atributo deseado en el subárbol
+                return foundElement;
+            }
+        }
+
+        return null;
+    }
+    
     public Element buscarComponente(String uuid)
     {        
         for (Object object : rootNode.getChildren()) 
