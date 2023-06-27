@@ -65,14 +65,17 @@
                         <h:outputText value="#{m.estado}" />
                     </p:column>
 
-                    <p:column exportable="false">
+                    <p:column width="50" exportable="false">
                         <p:commandButton
                             title="Asignar nueva tarea"
                             action="#{mantenimientosPendientesMb.agregarTarea(m)}"
                             icon="pi pi-check"                                         
                             styleClass="edit-button rounded-button ui-button-success" process="@this">                                                        
-                        </p:commandButton>                    
+                        </p:commandButton>                                          
 
+                    </p:column>
+                    
+                    <p:column width="50" >
                         <p:commandButton
                             title="Eliminar Mantenimiento"
                             action="#{mantenimientosPendientesMb.eliminarMantenimiento(m)}"
@@ -82,7 +85,6 @@
                             style="background-color:#0097A"
                             process="@this">                                                        
                         </p:commandButton>                    
-
                     </p:column>
 
                 </p:dataTable>
