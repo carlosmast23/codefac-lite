@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TareaMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
@@ -105,12 +106,44 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
         
     }
     
+    public boolean verificarTareaDuplicada(Mantenimiento mantenimiento,TareaMantenimiento tareaMantenimiento)
+    {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",MantenimientoTareaDetalle.EstadoEnum.INICIADO.getLetra());
+        mapParametros.put("mantenimiento",mantenimiento);
+        mapParametros.put("tarea",tareaMantenimiento);
+        
+        List<MantenimientoTareaDetalle> mantenimientoList=getFacade().findByMap(mapParametros);
+        if(mantenimientoList.size()>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
+         
+    }
+    
+    private void validarDatosIngresoTarea(MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException 
+    {
+        //Validar que no se puedan ingresar 2 tareas duplicadas
+        if(verificarTareaDuplicada(tareaDetalle.getMantenimiento(),tareaDetalle.getTarea()))
+        {
+            throw new ServicioCodefacException("No se puede crear una tarea repetida de "+tareaDetalle.getTarea().getNombre());
+        }
+    }
+    
     @Override
     public MantenimientoTareaDetalle grabar(MantenimientoTareaDetalle tareaDetalle,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                validarDatosIngresoTarea(tareaDetalle);
+                
                 tareaDetalle.setEstadoEnum(MantenimientoTareaDetalle.EstadoEnum.INICIADO);
                 tareaDetalle.setFechaInicio(UtilidadesFecha.getFechaHoyTimeStamp());
                 

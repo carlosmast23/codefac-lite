@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -130,10 +131,11 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         map.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         map.put("lote", lote);
         //Solo buscar lotes que tengan estado activo
-        map.put("lote.estado", GeneralEnumEstado.ACTIVO.getEstado());
+        //map.put("lote.estado", GeneralEnumEstado.ACTIVO.getEstado());
         
         List<Kardex> listaKardex=getFacade().findByMap(map);
         //List<Kardex> listaKardex=obtenerPorMap(mapParametros);
+        eliminarKardexQueTengaLotesEliminados(listaKardex);
         
         if(listaKardex!=null && listaKardex.size()>0)
         {
@@ -143,6 +145,27 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
         
         return null;
+    }
+    
+    //TODO: Solucion temporal para no consultar kardex con lotes eliminados
+    // Pero para solucionar toca hacer la consultar directamente en jpa
+    @Deprecated
+    private void eliminarKardexQueTengaLotesEliminados(List<Kardex> listaKardex)
+    {
+        Iterator<Kardex> iterator = listaKardex.iterator();
+        while (iterator.hasNext()) 
+        {
+           Kardex dato=iterator.next();
+           if(dato.getLote()!=null)
+           {
+               if(!GeneralEnumEstado.ACTIVO.equals(dato.getLote().getEstadoEnum()))
+               {
+                   iterator.remove();
+               }
+           }
+            
+        }
+        
     }
 
 

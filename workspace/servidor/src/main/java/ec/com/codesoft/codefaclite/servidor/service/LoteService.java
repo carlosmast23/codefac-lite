@@ -65,7 +65,7 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                                
+                grabarSinTransaccion(entity, empresa, usuarioCreacion);
             }
         });
         return entity;
