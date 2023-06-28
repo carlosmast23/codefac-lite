@@ -19,7 +19,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -114,8 +116,15 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         try {
             mantenimientoList=new ArrayList<MantenimientoResult>();
             estadoMantenimietoList=UtilidadesLista.arrayToList(MantenimientoEnum.values());
+            estadoMantenimietoList.remove(MantenimientoEnum.FACTURADO);
             marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(sessionMb.getSession().getEmpresa());
             ubicacionList=UtilidadesLista.arrayToList(Mantenimiento.UbicacionEnum.values());
+            fechaInicial=UtilidadesFecha.getFechaHoy();
+            fechaFinal=UtilidadesFecha.sumarDiasFecha(UtilidadesFecha.getFechaHoy(),1); 
+            
+            System.out.println("Fecha Inicial: "+fechaInicial);
+            System.out.println("Fecha Final: "+fechaFinal);
+            
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
         }
