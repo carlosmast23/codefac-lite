@@ -198,6 +198,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
+    {
+        return grabarProforma(proforma,true);
+    }
+    
+    public Factura grabarProforma(Factura proforma,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException
     {            
             //validacionInicialFacturar(proforma,null,CrudEnum.CREAR);
         
@@ -231,7 +236,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         //JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
                         //UtilidadesImpresora.PrintReportToPrinter(jasperReporte);
                         
-                        enviarCorreoProforma(proforma);
+                        if(enviarCorreo)
+                        {
+                            enviarCorreoProforma(proforma);
+                        }
                }
             });
             

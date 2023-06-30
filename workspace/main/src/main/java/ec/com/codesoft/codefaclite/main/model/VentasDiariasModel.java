@@ -487,7 +487,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 factura.setEmpresa(this.session.getEmpresa());
                 factura.setUsuario(session.getUsuario());
                 factura.setCodigoOrigenTransaccionEnum(Factura.OrigenTransaccionEnum.WIDGETS_VENTA_DIARIA);
-                factura=ServiceFactory.getFactory().getFacturacionServiceIf().grabarProforma(factura);
+                factura=ServiceFactory.getFactory().getFacturacionServiceIf().grabarProforma(factura,false);
             }
             else
             {
