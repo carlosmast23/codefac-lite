@@ -282,11 +282,15 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                     mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
                     mapParametros.put("generarCodigoBarras",EnumSiNo.SI.getLetra());*/
                     
-                    Producto productoBuscar=ServiceFactory.getFactory().getProductoServiceIf().buscarGenerarCodigoBarras(EnumSiNo.SI,session.getEmpresa());
-                    if (productoBuscar!=null) {
-                        agregarProductoMap(productoBuscar);
-                    }
+                    List<Producto> productoBuscarList=ServiceFactory.getFactory().getProductoServiceIf().buscarGenerarCodigoBarras(EnumSiNo.SI,session.getEmpresa());
                     
+                    for (Producto productoBuscar : productoBuscarList) 
+                    {
+                        if (productoBuscar != null) {
+                            agregarProductoMap(productoBuscar);
+                        }
+                    }
+                                        
                     generarTabla(); //Dibujar los datos en la tabla
                     
                 } catch (RemoteException ex) {

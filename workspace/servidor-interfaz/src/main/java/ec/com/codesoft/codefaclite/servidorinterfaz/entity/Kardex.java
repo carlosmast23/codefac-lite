@@ -95,7 +95,7 @@ public class Kardex implements Serializable,Cloneable {
     @Column(name = "ESTADO")
     private String estado;
     
-    @JoinColumn(name = "LOTE_ID",insertable = false,updatable = false)
+    @JoinColumn(name = "LOTE_ID")
     //@ManyToOne
     private Lote lote;    
     

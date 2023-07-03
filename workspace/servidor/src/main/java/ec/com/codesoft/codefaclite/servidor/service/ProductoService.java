@@ -962,7 +962,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return resultados;
     }
     
-    public Producto buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException,RemoteException
+    public List<Producto> buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException,RemoteException
     {
         //Producto p;
         //p.getEmpresa();
@@ -973,11 +973,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
 
         List<Producto> resultado=getFacade().findByMap(mapParametros);
-        if(resultado.size()>0)
+        /*if(resultado.size()>0)
         {
             return resultado.get(0);
-        }
-        return null;
+        }*/
+        return resultado;
     }
     
     public void actualizarPreciosPresentaciones(Producto producto) throws RemoteException, ServicioCodefacException

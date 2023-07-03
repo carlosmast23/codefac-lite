@@ -1347,15 +1347,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX);
             dialogoFactory.setDiponibleVenta(EnumSiNo.SI);
             
-            kardexSeleccionado = (Kardex) dialogoFactory.ejecutarDialogo();
-            if(kardexSeleccionado==null)
+            Kardex kardexSeleccionado = (Kardex) dialogoFactory.ejecutarDialogo();
+            /*if(kardexSeleccionado==null)
             {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.WARNING,"Error al agregar un producto a la factura que al parecer no tiene kardex pero esta marcado con inventario en si");
                 throw new ServicioCodefacException("Error al agregar al inventario un producto que no tiene kardex");
             }
-            else
+            else*/
+            if(kardexSeleccionado!=null)
             {
                 productoSeleccionado=kardexSeleccionado.getProducto();
+                cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado,false);
             }
             
         }
@@ -1365,10 +1367,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busqueda);
             buscarDialogoModel.setVisible(true);
             productoSeleccionado=(Producto) buscarDialogoModel.getResultado();
-            
+            cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado,false);
         }
         
-        cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado,false);
+        
         //ParametroCodefac.        
     }
     
