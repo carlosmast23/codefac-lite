@@ -467,6 +467,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         //TODO
         //Por el momento busco un descuento por defecto cuando tiene varios
+
         BigDecimal descuentoDefecto=BigDecimal.ZERO;
         for (BigDecimal descuento : descuentos) {
             if(descuento.compareTo(BigDecimal.ZERO)>0)

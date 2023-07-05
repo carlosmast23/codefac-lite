@@ -81,6 +81,26 @@ public class ProductoFacade extends AbstractFacade<Producto>
         return null;
     }
     
+    public ProductoPresentacionDetalle buscarProductoPorPresentacionCodigoFacade(String presentacionCodigo,Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        //ProductoPresentacionDetalle ppd;
+        //ppd.getPresentacionProducto().getNombre();
+        //ppd.getPresentacionProducto()
+        String queryString = "SELECT DISTINCT pd FROM ProductoPresentacionDetalle pd WHERE pd.presentacionProducto.nombre=?1 AND (pd.productoOriginal=?2 )" ;
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, presentacionCodigo);
+        query.setParameter(2, producto);
+        
+        List<ProductoPresentacionDetalle> productoList=query.getResultList();
+        
+        if(productoList.size()>0)
+        {
+            return productoList.get(0);
+        }
+        
+        return null;
+    }
+    
     public Producto buscarProductoEmpaquePrincipal(Producto producto) throws RemoteException,ServicioCodefacException
     {
         String queryString = "SELECT DISTINCT pd FROM ProductoPresentacionDetalle pd WHERE pd.productoEmpaquetado=?1 " ;

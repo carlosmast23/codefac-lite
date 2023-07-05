@@ -131,6 +131,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
@@ -1347,15 +1348,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX);
             dialogoFactory.setDiponibleVenta(EnumSiNo.SI);
             
-            Kardex kardexSeleccionado = (Kardex) dialogoFactory.ejecutarDialogo();
+            Kardex kardexSeleccionadoTmp = (Kardex) dialogoFactory.ejecutarDialogo();
             /*if(kardexSeleccionado==null)
             {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.WARNING,"Error al agregar un producto a la factura que al parecer no tiene kardex pero esta marcado con inventario en si");
                 throw new ServicioCodefacException("Error al agregar al inventario un producto que no tiene kardex");
             }
             else*/
-            if(kardexSeleccionado!=null)
+            if(kardexSeleccionadoTmp!=null)
             {
+                this.kardexSeleccionado=kardexSeleccionadoTmp;
                 productoSeleccionado=kardexSeleccionado.getProducto();
                 cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado,false);
             }
@@ -1523,6 +1525,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         public void actionPerformed(ActionEvent e) {
             PresentacionProducto presentacion = (PresentacionProducto) getCmbPresentacionProducto().getSelectedItem();
             cargarNuevaPresentacionVista(productoSeleccionado, kardexSeleccionado, presentacion);
+            
+            System.out.println("listenerCmbPresentacion ...");
 
             /*if (presentacion != null) {
                 //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
@@ -2902,7 +2906,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //editarCeldaFacturaDetalle();
         }
         else //Proceso normal para editar
-        {            
+        {   
             getTxtCantidad().setText(cantidadTxt);
             verificarIngresoCantidadConPresentacion(cantidadTxt);
             btnListenerEditar();
@@ -4219,6 +4223,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void ingresarProductoDesdeCodigoDirecto(String codigoDetalle)
     {
         Producto producto = FacturaModelControlador.listenerBuscarProducto(codigoDetalle, controlador.getTipoDocumentoEnumSeleccionado(), session.getEmpresa());
+        
+        
         //Todo: Mejorar esta parte
         //BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
         //Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
@@ -4235,6 +4241,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 fechaCaducidad = lote.getFechaVencimiento();
             }
         }
+        
+        //Verificar si tiene una PRESENTACION por DEFECTO para cambiarle de producto
+        if(!UtilidadesTextos.verificarNullOVacio(producto.getCodigoPresentacionDefectoVenta()))
+        {
+            try {
+                ProductoPresentacionDetalle detallePresentacion=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacionCodigo(producto.getCodigoPresentacionDefectoVenta(),producto);
+                if(detallePresentacion!=null)
+                {
+                    producto=detallePresentacion.getProductoEmpaquetado();
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         if (producto == null) {
             if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
@@ -4243,7 +4265,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         } else {
             try {
                 //Verificar si tengo que agregar a la vista o directamente lo agrego al detalle de las facturas
-                if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS, EnumSiNo.SI)) {
+                if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS, EnumSiNo.SI)) 
+                {
                     DocumentoEnum documentoSeleccionado = (DocumentoEnum) getCmbDocumento().getSelectedItem();
                     TipoDocumentoEnum tipoDocumento = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
 
@@ -4267,7 +4290,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     controlador.agregarDetallesFactura(facturaDetalle, null, documentoSeleccionado, kardexSeleccionado, EnumSiNo.NO, BigDecimal.ONE,null);
                     
                     editarCeldaFacturaDetalle();
-                } else {
+                } 
+                else 
+                {
                     controlador.agregarProductoVista(producto, lote, null, (kardexSeleccionado != null) ? kardexSeleccionado.getStock() : BigDecimal.ZERO, ultimoCosto, fechaCaducidad);
                 }
             } catch (ServicioCodefacException ex) {

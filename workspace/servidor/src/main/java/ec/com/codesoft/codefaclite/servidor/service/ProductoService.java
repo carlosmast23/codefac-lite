@@ -83,6 +83,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
+    public ProductoPresentacionDetalle buscarProductoPorPresentacionCodigo(String presentacionCodigo,Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        Producto productoPrincipal= buscarProductoEmpaquePrincipal(producto);
+        return getFacade().buscarProductoPorPresentacionCodigoFacade(presentacionCodigo, producto);
+        
+    }
+    
     public ProductoConversionPresentacionRespuesta convertirProductoEmpaqueSecundarioEnPrincipal(Producto productoEmpaqueSecundario,BigDecimal cantidad,BigDecimal precioUnitario) throws RemoteException,ServicioCodefacException
     {
         ProductoPresentacionDetalle presentacionDetalle = productoEmpaqueSecundario.buscarPresentacionDetalleProducto();
