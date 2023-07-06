@@ -8,7 +8,7 @@ create table KARDEX(
     FECHA_CREACION TIMESTAMP, 
     FECHA_MODIFICACION TIMESTAMP,
     PRECIO_PROMEDIO decimal(13,2),
-    PRECIO_ULTIMO decimal(13,2),
+    PRECIO_ULTIMO decimal(13,5),
     PRECIO_TOTAL decimal(13,2),
     STOCK decimal(13,5),
     RESERVA decimal(13,5),

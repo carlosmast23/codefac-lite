@@ -669,6 +669,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 {
                     kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
                 }
+                
+                //Hacer un redondeo por el momento a 4 digitos para saber que hicieron la compra
+                if(kardex.getPrecioUltimo()!=null)
+                {
+                    kardex.setPrecioUltimo(kardex.getPrecioUltimo().setScale(4, RoundingMode.HALF_UP));
+                }
 
 
                 //Calcular el precio promedio con respecto al nuevo valor

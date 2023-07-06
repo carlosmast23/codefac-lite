@@ -446,7 +446,12 @@ public class StockReporteModel extends StockMinimoPanel{
                             data.setCantidadMinima("0");
                         }
                         data.setCosto(costoPromedio.toString());
-                        data.setUltimoCosto(ultimoCosto+"");
+                        
+                        if(ultimoCosto!=null)
+                        {
+                            data.setUltimoCosto(ultimoCosto.setScale(2, RoundingMode.HALF_UP)+"");
+                            
+                        }
                         data.setBodega(bodega.getNombre());
                         data.setLote((lote!=null)?lote.getCodigo():"");
                         //data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));

@@ -322,10 +322,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             Integer ivaPorcentaje=detalleXml.getImpuestos().get(0).getTarifa().intValue();
             compraDetalle.setIvaPorcentaje(ivaPorcentaje);            
             
-            if(detalleXml.getCodigoPrincipal().equals("5062651/h52"))
+            /*if(detalleXml.getCodigoPrincipal().equals("5062651/h52"))
             {
                 System.out.println("revisar ...");
-            }
+            }*/
             
             //Consulta el valor del ICE
             compraDetalle.setIcePorcentaje(detalleXml.obtenerIcePorcentaje());
