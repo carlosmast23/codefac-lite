@@ -950,6 +950,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         agregarParametro(ParametroCodefac.MOSTRAR_AHORRO_VENTA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.MOSTRAR_AHORRO_VENTA);
         
+        enumSiNo = (EnumSiNo) getCmbMostrarCostosFacturar().getSelectedItem();
+        agregarParametro(ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.MOSTRAR_COSTOS_FACTURAR);
+        
         enumSiNo = (EnumSiNo) getCmbActivarNotaVenta().getSelectedItem();
         agregarParametro(ParametroCodefac.ACTIVAR_NOTA_VENTA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.ACTIVAR_NOTA_VENTA);
