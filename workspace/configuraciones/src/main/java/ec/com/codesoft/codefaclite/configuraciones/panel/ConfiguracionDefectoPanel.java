@@ -85,6 +85,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbCreditoDefectoFacturas = new javax.swing.JComboBox<>();
         jLabel85 = new javax.swing.JLabel();
         txtDiasCreditoAlerta = new javax.swing.JSpinner();
+        jLabel116 = new javax.swing.JLabel();
+        cmbGenerarVentaSinCredito = new javax.swing.JComboBox<>();
         jPanel11 = new javax.swing.JPanel();
         jLabel59 = new javax.swing.JLabel();
         cmbReporteDefectoPedido = new javax.swing.JComboBox<>();
@@ -509,7 +511,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel3.add(cmbActivarModuloCartera, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -519,7 +521,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel36.setText("Días Crédito Alerta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel36, gridBagConstraints);
@@ -533,19 +535,36 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel3.add(cmbCreditoDefectoFacturas, gridBagConstraints);
 
         jLabel85.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel85.setText("Crédito Por Defecto Facturas:");
+        jLabel85.setText("Generar cartera ventas sin crédito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel85, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(txtDiasCreditoAlerta, gridBagConstraints);
+
+        jLabel116.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel116.setText("Crédito Por Defecto Facturas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel116, gridBagConstraints);
+
+        cmbGenerarVentaSinCredito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(cmbGenerarVentaSinCredito, gridBagConstraints);
 
         jTabbedPane1.addTab("Cartera", jPanel3);
 
@@ -2504,6 +2523,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbFiltroRapidoBusqueda;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
+    private javax.swing.JComboBox<EnumSiNo> cmbGenerarVentaSinCredito;
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
     private javax.swing.JComboBox<String> cmbImpresoraComanda;
     private javax.swing.JComboBox<String> cmbImpresoraComanda2;
@@ -2555,6 +2575,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel113;
     private javax.swing.JLabel jLabel114;
     private javax.swing.JLabel jLabel115;
+    private javax.swing.JLabel jLabel116;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -3640,6 +3661,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbEditarFechaEmision(JComboBox<EnumSiNo> cmbEditarFechaEmision) {
         this.cmbEditarFechaEmision = cmbEditarFechaEmision;
+    }
+
+    public JComboBox<EnumSiNo> getCmbGenerarVentaSinCredito() {
+        return cmbGenerarVentaSinCredito;
+    }
+
+    public void setCmbGenerarVentaSinCredito(JComboBox<EnumSiNo> cmbGenerarVentaSinCredito) {
+        this.cmbGenerarVentaSinCredito = cmbGenerarVentaSinCredito;
     }
     
     

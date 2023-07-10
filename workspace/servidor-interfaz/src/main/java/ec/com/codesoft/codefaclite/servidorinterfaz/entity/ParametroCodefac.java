@@ -86,6 +86,8 @@ public class ParametroCodefac implements Serializable {
     public static final String FORMATO_ORDEN_TRABAJO="formato_orden_trabajo";
     public static final String ACTIVAR_CARTERA="cartera_activa";
     
+    public static final String GENERAR_CARTERA_VENTA_SIN_CREDITO="generar_cartera_venta_sin_credito";
+    
     public static final String NUMERO_PRECIO_PRESUPUESTO="numero_precio_presupuesto";
     /**
      * Parametro para activar los comporbante de venta para imprimir en las facturas electronicas
