@@ -3846,11 +3846,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         if(DialogoCodefac.dialogoPregunta("Si cambia el tipo de documento los detalles pueden sufrir cambios en el iva , desea continuar ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                         {   
                             cambiarDocumentoVenta(documentoNuevo, documentoAnterior, factura);
-                            //eliminarTodosLosDetalles();
+                            
+                            //Artificio para cuadrar con los descuentos cuando se maneja con varios tipos de documentos
+                            BigDecimal descuentosImpuestos=factura.getDescuentoImpuestos();
+                            BigDecimal descuentosSinImpuestos=factura.getDescuentoSinImpuestos();
+                            
                             cargarFacturaDesdeProforma(factura,documentoNuevo);
                             //Este artificio lo hago por que el metodo anterior solo sirve para agregar cuando vienen desde una proforma grabada previamente
                             factura.setProforma(null);
-                            //controlador.cargarTotales();
+                            
+                            corregirCambioDocumentoIva(descuentosImpuestos,descuentosSinImpuestos, documentoNuevo);
                         }
                         else
                         {
@@ -3915,6 +3920,33 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         });
+    }
+    
+    private void corregirCambioDocumentoIva(BigDecimal descuentosImpuestos,BigDecimal descuentosSinImpuestos,DocumentoEnum documentoNuevo)
+    {
+        descuentosImpuestos=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),descuentosImpuestos);
+                
+        BigDecimal descuentosTotales=descuentosImpuestos.add(descuentosSinImpuestos);
+        
+        //Si los documentos tienen previamente descuento hago un artificio para poder cuadrar los descuentos
+        if (descuentosTotales.compareTo(BigDecimal.ZERO) > 0) 
+        {
+            factura.aplicarDescuento(BigDecimal.ZERO, false, EnumSiNo.NO);
+
+            //Aplicar los cambios de los descuentos
+            cargarDatosDetalles();
+            controlador.cargarTotales();
+
+            if (documentoNuevo.equals(DocumentoEnum.NOTA_VENTA_INTERNA)) {
+                factura.aplicarDescuento(descuentosTotales, false, EnumSiNo.NO);
+            } else if (documentoNuevo.equals(DocumentoEnum.FACTURA)) {
+                factura.aplicarDescuento(descuentosTotales, false, EnumSiNo.SI);
+            }
+
+            //Aplicar los cambios de los descuentos
+            cargarDatosDetalles();
+            controlador.cargarTotales();
+        }
     }
     
     private void cambiarDocumentoVenta(DocumentoEnum documentoNuevo, DocumentoEnum documentoAnterior,Factura factura)

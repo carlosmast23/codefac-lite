@@ -198,6 +198,11 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         return subtotalSinImpuestos.subtract(descuentoSinImpuestos);
     }
     
+    public BigDecimal calcularDescuentosTotales()
+    {
+        return descuentoImpuestos.add(descuentoSinImpuestos);
+    }
+    
     public void aplicarDescuento(BigDecimal descuentoLeido,Boolean porcentajeDescuentoGlobal,EnumSiNo ivaDescuentoEnumSiNo)
     {
         //String descuentoStr = getTxtDescuentoGlobal().getText();
