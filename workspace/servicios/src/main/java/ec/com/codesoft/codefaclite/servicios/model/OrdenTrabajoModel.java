@@ -802,6 +802,12 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     private void cargarObjectosMantenimiento(Persona cliente)
     {
+        //Solo cargar objetos de mantenimiento cuando esta en modo nuevo
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            return ;
+        }
+        
         getCmbObjetoMantenimiento().removeAllItems();
         if(cliente!=null)
         {
