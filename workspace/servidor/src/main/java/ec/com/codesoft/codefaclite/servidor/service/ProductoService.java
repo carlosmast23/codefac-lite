@@ -431,14 +431,19 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
     }
     
-    private void grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList)
+    private void grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException
     {
         //grabar los detalles de  la presentacion
         if(productoPresentacionList!=null)
         {                                    
             for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) 
             {
+                
                 //Validacion para verificar que si tenga la referencia al nuevo producto de forma correcta
+                if(presentacionDetalle.getPresentacionProducto()==null)
+                {
+                    throw new ServicioCodefacException("No se puede crear presentaciones sin seleccionar las unidades");
+                }
                 
                 if(presentacionDetalle.getId()==null || presentacionDetalle.getId()<0)
                 {                    
