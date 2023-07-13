@@ -134,6 +134,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 dataDetalle.setTotalCompra(presupuestoDetalle.calcularTotalCompra());
                 dataDetalle.setTipo(presupuestoDetalle.getProducto().getTipoProductoEnum().getNombre());                
                 //dataDetalle.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre():"");
+                dataDetalle.setCodigoProducto(presupuestoDetalle.getProducto().getCodigoPersonalizado());
                 
                 detalleReporteData.add(dataDetalle);
             }
@@ -216,10 +217,12 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Presupuesto.EstadoEnum estadoEnum=(getCmbEstado().isEnabled())?(Presupuesto.EstadoEnum) getCmbEstado().getSelectedItem():null;
+                    String placa=getTxtPlaca().getText();
                     List<Presupuesto> presupuestos = ServiceFactory.getFactory().getPresupuestoServiceIf().consultarPresupuestos(
                             getCmbFechaInicial().getDate(),
                             getCmbFechaFinal().getDate(),
                             cliente,
+                            placa,
                             estadoEnum);
 
                     construirDataReporte(presupuestos);
@@ -254,6 +257,8 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
             presupuestoData.setCompras(totales.valoresProveedores);
             presupuestoData.setProduccionInterna(totales.produccionInterna);
             presupuestoData.setUtilidad(totales.utilidad);
+            presupuestoData.setPlaca((presupuesto.obtenerObjectoMantenimiento()!=null)?presupuesto.obtenerObjectoMantenimiento().getCodigo():"");
+            //presupuestoData.setCodigoPresupuesto(pre);
             
             ObjetoMantenimiento objetoMantenimiento=presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
             presupuestoData.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre():"");

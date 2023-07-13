@@ -24,7 +24,8 @@ public class PresupuestoReporteDetalleData extends PresupuestoReporteData{
     private BigDecimal descuentoCompra;
     private BigDecimal cantidadCompra;
     private BigDecimal totalCompra;
-    
+    private String codigoProducto;
+    private String placa;
     
 
     public PresupuestoReporteDetalleData(PresupuestoReporteData presupuestoReporteData) {
@@ -41,6 +42,7 @@ public class PresupuestoReporteDetalleData extends PresupuestoReporteData{
         setUtilidad(presupuestoReporteData.getUtilidad());
         setTipo(presupuestoReporteData.getTipo());
         setObjetoMantenimiento(presupuestoReporteData.getObjetoMantenimiento());
+        setPlaca(presupuestoReporteData.getPlaca());
     }
     
     
@@ -95,6 +97,23 @@ public class PresupuestoReporteDetalleData extends PresupuestoReporteData{
     public void setTotalCompra(BigDecimal totalCompra) {
         this.totalCompra = totalCompra;
     }
+
+    public String getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    public void setCodigoProducto(String codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+    
     
     
 

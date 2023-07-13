@@ -266,9 +266,9 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         return presupuestoFacade.listarOrdenTrabajo(ordenTrabajo);
     }
     
-    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal,Persona cliente,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException,java.rmi.RemoteException
+    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal,Persona cliente,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        return getFacade().consultarPresupuestos(fechaInicial, fechaFinal, cliente, estadoEnum);
+        return getFacade().consultarPresupuestos(fechaInicial, fechaFinal, cliente,codigoObjetoMantenimiento,estadoEnum);
     }
     
     public List<Presupuesto> consultarPorOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,RemoteException

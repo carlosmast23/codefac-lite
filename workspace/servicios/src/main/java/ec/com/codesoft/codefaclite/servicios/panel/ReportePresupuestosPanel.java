@@ -57,6 +57,8 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         btnLimpiarFechaFinal = new javax.swing.JButton();
         chkTodosEstados = new javax.swing.JCheckBox();
         chkReporteDetallesCompras = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        txtPlaca = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -74,10 +76,10 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         jPanel1.add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Cliente:");
+        jLabel2.setText("Placa:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -99,7 +101,7 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -201,10 +203,25 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         chkReporteDetallesCompras.setText("Reporte Detalle Compras");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(chkReporteDetallesCompras, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText("Cliente:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtPlaca, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -227,12 +244,14 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JTable tblDatos;
     private javax.swing.JTextField txtCliente;
+    private javax.swing.JTextField txtPlaca;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnBuscarCliente() {
@@ -283,8 +302,13 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         return chkReporteDetallesCompras;
     }
 
-    
-    
+    public JTextField getTxtPlaca() {
+        return txtPlaca;
+    }
+
+    public void setTxtPlaca(JTextField txtPlaca) {
+        this.txtPlaca = txtPlaca;
+    }
 
     
 }

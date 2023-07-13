@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleAct
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
@@ -44,8 +45,11 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         return query.getResultList();
     }
 
-    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal, Persona cliente, Presupuesto.EstadoEnum estadoEnum) {
+    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal, Persona cliente,String codigoObjetoMantenimiento, Presupuesto.EstadoEnum estadoEnum) 
+    {
         //Presupuesto presupuesto;
+        //presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento().getCodigo();
+        
         //presupuesto.getEstado();        
         String queryString = " Select DISTINCT p From Presupuesto p where 1=1 ";
 
@@ -64,6 +68,11 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         if (estadoEnum != null) {
             queryString += " AND p.estado=?4";
         }
+        
+        if(!UtilidadesTextos.verificarNullOVacio(codigoObjetoMantenimiento))
+        {
+            queryString+=" AND p.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento.codigo=?5 "; 
+        }
 
         Query query = getEntityManager().createQuery(queryString);
 
@@ -81,6 +90,11 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
 
         if (estadoEnum != null) {
             query.setParameter(4, estadoEnum.getLetra());
+        }
+        
+        if(!UtilidadesTextos.verificarNullOVacio(codigoObjetoMantenimiento))
+        {
+            query.setParameter(5,codigoObjetoMantenimiento);
         }
         return query.getResultList();
     }
