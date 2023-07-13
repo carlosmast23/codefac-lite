@@ -75,6 +75,7 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         btnActualizarPorcentaje = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         cmbIncluidoIva = new javax.swing.JComboBox<>();
+        chkEditarValoresDirectos = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -314,6 +315,15 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbIncluidoIva, gridBagConstraints);
 
+        chkEditarValoresDirectos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkEditarValoresDirectos.setText("Editar Valores Directos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(chkEditarValoresDirectos, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -324,6 +334,7 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
     private javax.swing.JButton btnActualizarPorcentaje;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnProductoBuscar;
+    private javax.swing.JCheckBox chkEditarValoresDirectos;
     private javax.swing.JCheckBox chkPendientesActualizar;
     private javax.swing.JComboBox<CostoCalculoEnum> cmbCalcularCosto;
     private javax.swing.JComboBox<EnumSiNo> cmbIncluidoIva;
@@ -510,6 +521,15 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         this.tblPreciosOriginal = tblPreciosOriginal;
     }
 
+    public JCheckBox getChkEditarValoresDirectos() {
+        return chkEditarValoresDirectos;
+    }
+
+    public void setChkEditarValoresDirectos(JCheckBox chkEditarValoresDirectos) {
+        this.chkEditarValoresDirectos = chkEditarValoresDirectos;
+    }
+
+    
     
     
     

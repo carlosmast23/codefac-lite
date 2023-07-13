@@ -289,8 +289,11 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
                 Producto producto=valueTmp.producto;
                 String codigo=producto.getCodigoPersonalizado();
                 String nombreProducto=producto.getNombre();
-                               
-                valueTmp.recalcularValoresDesdePorcentajes(valueTmp.costoCalculo);
+                            
+                if(!getChkEditarValoresDirectos().isSelected())
+                {
+                    valueTmp.recalcularValoresDesdePorcentajes(valueTmp.costoCalculo);
+                }
                 
                 BigDecimal costoUltimoConIva= UtilidadesImpuestos.agregarValorIva(new BigDecimal(producto.getCatalogoProducto().getIva().getTarifa()),valueTmp.costoCalculo);
                 BigDecimal costoPromedioConIva= UtilidadesImpuestos.agregarValorIva(new BigDecimal(producto.getCatalogoProducto().getIva().getTarifa()),valueTmp.costoPromedio);
