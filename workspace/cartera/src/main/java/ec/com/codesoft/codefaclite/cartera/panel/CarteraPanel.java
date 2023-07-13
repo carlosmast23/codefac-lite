@@ -118,7 +118,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jLabel17 = new javax.swing.JLabel();
         jToolBar3 = new javax.swing.JToolBar();
         btnAgregarDocumentoCruzar = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnEliminarDocumentoCruzar = new javax.swing.JButton();
         cmbFechaCruzar = new com.toedter.calendar.JDateChooser();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -488,11 +488,11 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         btnAgregarDocumentoCruzar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar3.add(btnAgregarDocumentoCruzar);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon2.png"))); // NOI18N
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar3.add(jButton4);
+        btnEliminarDocumentoCruzar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon2.png"))); // NOI18N
+        btnEliminarDocumentoCruzar.setFocusable(false);
+        btnEliminarDocumentoCruzar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEliminarDocumentoCruzar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(btnEliminarDocumentoCruzar);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
@@ -661,6 +661,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnCruzar;
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnEliminarDetalle;
+    private javax.swing.JButton btnEliminarDocumentoCruzar;
     private javax.swing.JComboBox<DocumentoDetalleEnum > cmbDetalleDocumento;
     private javax.swing.JComboBox<DocumentoEnum > cmbDocumentoCartera;
     private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
@@ -668,7 +669,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private com.toedter.calendar.JDateChooser cmbFechaEmision;
     private javax.swing.JComboBox<TipoCarteraEnum > cmbTipoCartera;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -956,6 +956,13 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         this.txtReferenciaDetalle = txtReferenciaDetalle;
     }
 
-    
+    public JButton getBtnEliminarDocumentoCruzar() {
+        return btnEliminarDocumentoCruzar;
+    }
+
+    public void setBtnEliminarDocumentoCruzar(JButton btnEliminarDocumentoCruzar) {
+        this.btnEliminarDocumentoCruzar = btnEliminarDocumentoCruzar;
+    }
+
     
 }

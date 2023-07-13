@@ -749,6 +749,13 @@ public class CarteraModel extends CarteraPanel{
             }
         });
         
+        getBtnEliminarDocumentoCruzar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerBtnEliminarDocumentoCruce();
+            }
+        });
+        
         
         getBtnAgregarDetalle().addActionListener(new ActionListener() {
             @Override
@@ -784,6 +791,18 @@ public class CarteraModel extends CarteraPanel{
                 }
             }
         });
+    }
+    
+    private void listenerBtnEliminarDocumentoCruce() 
+    {
+        int filaSeleccionada=getTblDocumentosCruzar().getSelectedRow();
+        
+        if(filaSeleccionada>=0)
+        {
+            Cartera carteraTmp=(Cartera) getTblDocumentosCruzar().getModel().getValueAt(filaSeleccionada,0);
+            carteraDocumentosCruzar.remove(carteraTmp);
+            actualizarTablaDocumentosCruzar();
+        }        
     }
         
     
