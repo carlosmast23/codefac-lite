@@ -45,6 +45,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraSer
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -600,6 +601,17 @@ public class CarteraModel extends CarteraPanel{
             CarteraDetalle carteraDetalle = entry.getKey();
             BigDecimal valor = entry.getValue();
             
+            //Si el valor del abono es superior al saldo de documento entonces solo obtengo el valor que necesito cruzar
+            if(valor.compareTo(saldoDocumento)>0)
+            {
+                //BigDecimal valorOriginal=UtilidadBigDecimal.copiar(valor);
+                mapDetalles.put(carteraDetalle, valor.subtract(saldoDocumento));
+                //Utilizo el valor de cruce que necesito
+                valor=UtilidadBigDecimal.copiar(saldoDocumento);
+                
+                
+            }
+            
             CarteraCruce carteraCruce=new CarteraCruce();
             carteraCruce.setCarteraAfectada(documentoCruzar);
             carteraCruce.setCarteraDetalle(carteraDetalle);
@@ -686,12 +698,19 @@ public class CarteraModel extends CarteraPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Map<CarteraDetalle,BigDecimal>  detallesCruzar=obtenerMapDetallesSeleccionadosCruce(); //Obtiene los detalles con los valores a cruzar
-                Cartera cartera=UtilidadesTablas.obtenerDatoSeleccionado(getTblDocumentosCruzar(),0); //Dato seleccionado de la tabla
-                //Solo actualizar las tablas si el proces de cruce termina correctamente
-                if (cruzarDocumentos(detallesCruzar, cartera)) {
-                    actualizarTablaDocumentosCruzar();
-                    actualizarTablaCruces();
-                }              
+                //Cartera cartera=UtilidadesTablas.obtenerDatoSeleccionado(getTblDocumentosCruzar(),0); //Dato seleccionado de la tabla
+                List<Cartera> carteraList=UtilidadesTablas.obtenerDatosSeleccionados(getTblDocumentosCruzar(),0);
+                
+                for (Cartera cartera : carteraList) 
+                {
+                    //Solo actualizar las tablas si el proces de cruce termina correctamente
+                    if (cruzarDocumentos(detallesCruzar, cartera)) 
+                    {
+                        actualizarTablaDocumentosCruzar();
+                        actualizarTablaCruces();
+                    }
+                }
+                              
             }
         });
         

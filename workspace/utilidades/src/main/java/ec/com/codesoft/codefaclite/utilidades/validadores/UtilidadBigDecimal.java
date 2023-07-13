@@ -55,4 +55,9 @@ public class UtilidadBigDecimal {
         return valor.setScale(numeroDecimales, RoundingMode.HALF_UP);
     }
     
+    public static BigDecimal copiar(BigDecimal datoOriginal)
+    {
+        return datoOriginal.add(BigDecimal.ZERO);
+    }
+    
 }

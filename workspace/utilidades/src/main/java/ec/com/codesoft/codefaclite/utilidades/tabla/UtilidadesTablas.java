@@ -61,6 +61,23 @@ public abstract class UtilidadesTablas {
         }
         return null;
     }
+    
+    public static <T> List<T> obtenerDatosSeleccionados(JTable tabla,int columna)
+    {
+        List<T> resultadosList=new ArrayList<T>();
+        
+        int[] filas=tabla.getSelectedRows();
+        
+        for (int fila : filas) 
+        {
+            resultadosList.add((T) tabla.getValueAt(fila,columna));
+        }
+        
+        return resultadosList;
+        
+    }
+    
+    
       
     
     public static void ocultarColumna(JTable jtable,int columna)
