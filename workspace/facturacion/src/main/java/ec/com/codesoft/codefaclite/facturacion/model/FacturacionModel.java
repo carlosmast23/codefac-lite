@@ -5063,6 +5063,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(facturaTmp!=null)
         {
             cargarFacturaDesdeProforma(facturaTmp,null);
+            //Borro la referencia a la antigua factura para que no se cambie de estado
+            factura.setProforma(null);
             //Metodo que me permite quitar datos adicionales que no deberian aparecer porque se va a duplicar la informacion
             factura.eliminarDatosAdicionalesSistema();
         } 
