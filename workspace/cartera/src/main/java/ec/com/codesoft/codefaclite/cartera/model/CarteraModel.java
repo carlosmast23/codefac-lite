@@ -579,7 +579,10 @@ public class CarteraModel extends CarteraPanel{
             return false;
         }
         
-        BigDecimal saldoDocumento=documentoCruzar.getTotal().subtract(buscarValorCruceDocumento(documentoCruzar));
+        //BigDecimal documentoTotalCruzar=documentoCruzar.getTotal();
+        BigDecimal documentoTotalCruzar=documentoCruzar.getSaldo();
+        BigDecimal valorCruceDocumento=buscarValorCruceDocumento(documentoCruzar);
+        BigDecimal saldoDocumento=documentoTotalCruzar.subtract(valorCruceDocumento);
         if(saldoDocumento.compareTo(BigDecimal.ZERO)==0)
         {
             DialogoCodefac.mensaje("Advertencia","El documento ya no tiene saldo pendiente para cruzar",DialogoCodefac.MENSAJE_ADVERTENCIA);
