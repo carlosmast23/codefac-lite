@@ -51,7 +51,6 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
     }
     
     
-
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

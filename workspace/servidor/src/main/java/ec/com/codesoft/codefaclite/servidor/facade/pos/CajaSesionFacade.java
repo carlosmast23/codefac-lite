@@ -33,25 +33,27 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
     {
         try
         {
-            String stringQuery = "Select cs from CajaSession cs where cs.caja = ?1 and cs.estadoCierreCaja = ?2 order by cs.fechaHoraCierre desc";
+            String stringQuery = "Select cs from CajaSession cs where cs.caja = ?1 and cs.estadoCierreCaja = ?2 order by cs.id desc";
 
             Query query = getEntityManager().createQuery(stringQuery);
             query.setParameter(1, caja);
             query.setParameter(2, CajaSessionEnum.FINALIZADO.getEstado());
+            query.setMaxResults(1);
 
-            List<CajaSession> resultadoLista= query.getResultList();
+            return (CajaSession) query.getSingleResult();
+            /*List<CajaSession> resultadoLista= query.getResultList();
             
             if(resultadoLista.size()>0)
             {
                 return resultadoLista.get(0);
-            }
+            }*/
         } 
         catch (NoResultException e) 
         {
            return null;
         }
         
-        return null;
+        //return null;
     }
     
     public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin,CajaEnum estado)
