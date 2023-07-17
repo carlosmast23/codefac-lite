@@ -414,6 +414,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                     facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                     catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                     facturaDetalle.setCatalogoProducto(catalogoProducto);
+                    facturaDetalle.setCodigoPrincipal(productoSeleccionado.getCodigoPersonalizado());
                     break;
             }
             if(catalogoProducto==null)

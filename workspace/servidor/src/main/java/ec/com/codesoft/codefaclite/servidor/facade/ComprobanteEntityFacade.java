@@ -58,6 +58,20 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         
     }
     
+    public void actualizarClaveAccesoComprobanteFacade(String claveAcceso,Long entityId)
+    {
+        //Factura factura;
+        //factura.getId();
+        String queryStr="UPDATE ComprobanteEntity f SET f.claveAcceso = ?1 WHERE f.id = ?2 ";
+        Query query = getEntityManager().createQuery(queryStr);
+        
+        query.setParameter(1, claveAcceso);
+        query.setParameter(2, entityId);
+        
+        query.executeUpdate();
+        
+    }
+    
     /**
      * TODO: Unificar logica con el metodo de arriba
      * @param empresa

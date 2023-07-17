@@ -1478,11 +1478,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                                        
                     //Si se genera la etapa firmar entonces seteo la clave de acceso
                     if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
-                        comprobanteOriginal.setClaveAcceso(clave.clave);
-
+                        
                         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                             @Override
                             public void transaccion() {
+                                //TODO: Tener presente este codigo porque aveces generaba como que se estuviera haciendo dos update con la clave de acceso
+                                comprobanteOriginal.setClaveAcceso(null);
+                                comprobanteOriginal.setClaveAcceso(clave.clave);
                                 entityManager.merge(comprobanteOriginal);
                             }
                         });

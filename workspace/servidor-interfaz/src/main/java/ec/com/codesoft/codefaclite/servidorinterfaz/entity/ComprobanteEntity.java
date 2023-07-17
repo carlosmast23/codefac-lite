@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
@@ -36,6 +39,11 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
 
     public abstract void addDatoAdicionalAbstract(T comprobanteAdicional);
     //public abstract void(ComprobanteEntity comprobante);
+    
+    @Id
+    @Column(name = Factura.NOMBRE_PK)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     @Column(name = "CLAVE_ACCESO")
     protected String claveAcceso;
@@ -134,6 +142,16 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
 
     public ComprobanteEntity() {
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    
 
     public String getClaveAcceso() {
         return claveAcceso;

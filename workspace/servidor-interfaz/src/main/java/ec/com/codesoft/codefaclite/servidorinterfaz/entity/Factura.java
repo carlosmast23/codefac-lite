@@ -59,10 +59,10 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     //public static final String ESTADO_FACTURADO="F";
     //public static final String ESTADO_ANULADO="A";
     //public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
-    @Id
+    /*@Id
     @Column(name = Factura.NOMBRE_PK)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;*/
 
     //@Column(name = "TIPO_IDENTIFICACION_ID")
     //private Long tipoClienteId;
@@ -147,17 +147,17 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     }
 
-    public Long getId() {
+    /*public Long getId() {
         return id;
-    }
+    }*/
 
     public ImpuestoDetalle getIvaSriId() {
         return ivaSriId;
     }
 
-    public void setId(Long id) {
+    /*public void setId(Long id) {
         this.id = id;
-    }
+    }*/
 
     public void setIvaSriId(ImpuestoDetalle ivaSriId) {
         this.ivaSriId = ivaSriId;
