@@ -261,7 +261,16 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
             //presupuestoData.setCodigoPresupuesto(pre);
             
             ObjetoMantenimiento objetoMantenimiento=presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
-            presupuestoData.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre():"");
+            
+            String kilometraje="";
+            if(objetoMantenimiento!=null)
+            {
+                if(objetoMantenimiento.getKilometraje()!=null)
+                {
+                    kilometraje="["+objetoMantenimiento.getKilometraje()+"km]";
+                }
+            }
+            presupuestoData.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre()+kilometraje:"");
             
             
             presupuestoData.setPresupuesto(presupuesto);

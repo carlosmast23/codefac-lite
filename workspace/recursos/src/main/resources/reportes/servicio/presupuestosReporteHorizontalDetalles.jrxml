@@ -219,7 +219,7 @@
 					<text><![CDATA[Descripción]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="0" width="39" height="15" uuid="7bbeb8c9-d8bd-4b1a-bd61-f1f9bfb20a64"/>
+					<reportElement x="0" y="0" width="35" height="15" uuid="7bbeb8c9-d8bd-4b1a-bd61-f1f9bfb20a64"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -229,10 +229,10 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Código]]></text>
+					<text><![CDATA[Cod]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="39" y="0" width="80" height="15" uuid="c7c229fd-07c5-4715-b81f-9978808d3e39"/>
+					<reportElement x="35" y="0" width="90" height="15" uuid="c7c229fd-07c5-4715-b81f-9978808d3e39"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -297,7 +297,7 @@
 					<text><![CDATA[Utilidad]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="0" y="15" width="39" height="15" uuid="8969b7aa-2eef-4a08-98c3-cfd131a4b0ce"/>
+					<reportElement x="0" y="15" width="35" height="15" uuid="8969b7aa-2eef-4a08-98c3-cfd131a4b0ce"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -311,7 +311,7 @@
 					<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="39" y="15" width="80" height="15" uuid="1de02cd1-e954-4036-9113-108b1cc5cced"/>
+					<reportElement x="35" y="15" width="90" height="15" uuid="1de02cd1-e954-4036-9113-108b1cc5cced"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -477,7 +477,7 @@
 					<text><![CDATA[Código]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="119" y="0" width="56" height="15" uuid="817fad09-25b0-4551-acc7-93959487058a"/>
+					<reportElement x="125" y="0" width="50" height="15" uuid="817fad09-25b0-4551-acc7-93959487058a"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -490,7 +490,7 @@
 					<text><![CDATA[Placa]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="119" y="15" width="56" height="15" uuid="0c0cbdda-bcdb-4d2f-af12-738c2884ac6c"/>
+					<reportElement x="125" y="15" width="50" height="15" uuid="0c0cbdda-bcdb-4d2f-af12-738c2884ac6c"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>

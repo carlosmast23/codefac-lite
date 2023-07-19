@@ -181,6 +181,20 @@ public class CerrarCajaModel extends CajaSessionModel
         parametros.put("valor_ciere_practico", cajaSession.getValorCierreReal()+"");
         parametros.put("observacion", cajaSession.getObservacionCierreCaja());
         
+        parametros.put("1ctv", cajaSession.getMoneda1ctv()+"");
+        parametros.put("5ctv", cajaSession.getMoneda5ctv()+"");
+        parametros.put("10ctv", cajaSession.getMoneda10ctv()+"");
+        parametros.put("25ctv", cajaSession.getMoneda25ctv()+"");
+        parametros.put("50ctv", cajaSession.getMoneda50ctv()+"");
+        parametros.put("100ctv", cajaSession.getMoneda1dolar()+"");
+        
+        parametros.put("1usd", cajaSession.getBillete1()+"");
+        parametros.put("5usd", cajaSession.getBillete5()+"");
+        parametros.put("10usd", cajaSession.getBillete10()+"");
+        parametros.put("20usd", cajaSession.getBillete20()+"");
+        parametros.put("50usd", cajaSession.getBillete50()+"");
+        parametros.put("100usd", cajaSession.getBillete100()+"");
+        
         
         //Cargar los datos de los detalles
         List<VentaReporteData> detalleData=new ArrayList<VentaReporteData>();

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.pos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToIntegerConverter;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
@@ -81,6 +82,30 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
         jTextValorCierreReal = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtObservacionesCierreCaja = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        txtBillete50 = new javax.swing.JTextField();
+        txtBillete20 = new javax.swing.JTextField();
+        txtBillete10 = new javax.swing.JTextField();
+        txtBillete5 = new javax.swing.JTextField();
+        txtBillete1 = new javax.swing.JTextField();
+        txtBillete100 = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        txtMoneda1ctv = new javax.swing.JTextField();
+        txtMoneda5ctv = new javax.swing.JTextField();
+        txtMoneda10ctv = new javax.swing.JTextField();
+        txtMoneda25ctv = new javax.swing.JTextField();
+        txtMoneda50ctv = new javax.swing.JTextField();
+        txtMoneda1Dolar = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -251,50 +276,251 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Valor Teorico:");
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel6.setText("Billete 1$:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel6, gridBagConstraints);
 
         jTextValorCierreTeorico.setInheritsPopupMenu(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 60;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(25, 5, 5, 5);
         jPanel2.add(jTextValorCierreTeorico, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.weightx = 0.1;
         jPanel2.add(lblEspacio882, gridBagConstraints);
 
-        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel13.setText("Valor Real:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(25, 5, 5, 5);
         jPanel2.add(jLabel13, gridBagConstraints);
 
         jTextValorCierreReal.setInheritsPopupMenu(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 60;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(25, 5, 5, 5);
         jPanel2.add(jTextValorCierreReal, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel12.setText("Observaciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel12, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtObservacionesCierreCaja, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel14.setText("Billete 10$:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel14, gridBagConstraints);
+
+        jLabel15.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel15.setText("Valor Teorico:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(25, 5, 5, 5);
+        jPanel2.add(jLabel15, gridBagConstraints);
+
+        jLabel16.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel16.setText("Billete 20$:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel16, gridBagConstraints);
+
+        jLabel17.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel17.setText("Billete 100$:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel17, gridBagConstraints);
+
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel18.setText("Billete 5$:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel18, gridBagConstraints);
+
+        jLabel19.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel19.setText("Billete 50$:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel19, gridBagConstraints);
+
+        txtBillete50.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtBillete50, gridBagConstraints);
+
+        txtBillete20.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtBillete20, gridBagConstraints);
+
+        txtBillete10.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtBillete10, gridBagConstraints);
+
+        txtBillete5.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtBillete5, gridBagConstraints);
+
+        txtBillete1.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtBillete1, gridBagConstraints);
+
+        txtBillete100.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtBillete100, gridBagConstraints);
+
+        jLabel20.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel20.setText("Moneda 1ctv:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel20, gridBagConstraints);
+
+        jLabel21.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel21.setText("Moneda 5ctv:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel21, gridBagConstraints);
+
+        jLabel22.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel22.setText("Moneda 10ctv:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel22, gridBagConstraints);
+
+        jLabel23.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel23.setText("Moneda 25ctv:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel23, gridBagConstraints);
+
+        jLabel24.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel24.setText("Moneda 50ctv:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel24, gridBagConstraints);
+
+        jLabel25.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel25.setText("Moneda 1 dolar:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel25, gridBagConstraints);
+
+        txtMoneda1ctv.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtMoneda1ctv, gridBagConstraints);
+
+        txtMoneda5ctv.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtMoneda5ctv, gridBagConstraints);
+
+        txtMoneda10ctv.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtMoneda10ctv, gridBagConstraints);
+
+        txtMoneda25ctv.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtMoneda25ctv, gridBagConstraints);
+
+        txtMoneda50ctv.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtMoneda50ctv, gridBagConstraints);
+
+        txtMoneda1Dolar.setInheritsPopupMenu(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtMoneda1Dolar, gridBagConstraints);
 
         pnlCierreCajaOpciones.addTab("Efectivo", jPanel2);
 
@@ -478,7 +704,19 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -503,6 +741,128 @@ public abstract class CajaSessionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio882;
     private javax.swing.JPanel pnlCierreCaja;
     private javax.swing.JTabbedPane pnlCierreCajaOpciones;
+    private javax.swing.JTextField txtBillete1;
+    private javax.swing.JTextField txtBillete10;
+    private javax.swing.JTextField txtBillete100;
+    private javax.swing.JTextField txtBillete20;
+    private javax.swing.JTextField txtBillete5;
+    private javax.swing.JTextField txtBillete50;
+    private javax.swing.JTextField txtMoneda10ctv;
+    private javax.swing.JTextField txtMoneda1Dolar;
+    private javax.swing.JTextField txtMoneda1ctv;
+    private javax.swing.JTextField txtMoneda25ctv;
+    private javax.swing.JTextField txtMoneda50ctv;
+    private javax.swing.JTextField txtMoneda5ctv;
     private javax.swing.JTextField txtObservacionesCierreCaja;
     // End of variables declaration//GEN-END:variables
+
+    @TextFieldBinding(value = "controlador.CajaSession.billete1",converter =StringToIntegerConverter.class )
+    public JTextField getTxtBillete1() {
+        return txtBillete1;
+    }
+
+    public void setTxtBillete1(JTextField txtBillete1) {
+        this.txtBillete1 = txtBillete1;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.billete10",converter =StringToIntegerConverter.class)
+    public JTextField getTxtBillete10() {
+        return txtBillete10;
+    }
+
+    public void setTxtBillete10(JTextField txtBillete10) {
+        this.txtBillete10 = txtBillete10;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.billete100",converter =StringToIntegerConverter.class)
+    public JTextField getTxtBillete100() {
+        return txtBillete100;
+    }
+
+    public void setTxtBillete100(JTextField txtBillete100) {
+        this.txtBillete100 = txtBillete100;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.billete20",converter =StringToIntegerConverter.class)
+    public JTextField getTxtBillete20() {
+        return txtBillete20;
+    }
+
+    public void setTxtBillete20(JTextField txtBillete20) {
+        this.txtBillete20 = txtBillete20;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.billete5",converter =StringToIntegerConverter.class)
+    public JTextField getTxtBillete5() {
+        return txtBillete5;
+    }
+
+    public void setTxtBillete5(JTextField txtBillete5) {
+        this.txtBillete5 = txtBillete5;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.billete50",converter =StringToIntegerConverter.class)
+    public JTextField getTxtBillete50() {
+        return txtBillete50;
+    }
+
+    public void setTxtBillete50(JTextField txtBillete50) {
+        this.txtBillete50 = txtBillete50;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.moneda10ctv",converter =StringToIntegerConverter.class)
+    public JTextField getTxtMoneda10ctv() {
+        return txtMoneda10ctv;
+    }
+
+    public void setTxtMoneda10ctv(JTextField txtMoneda10ctv) {
+        this.txtMoneda10ctv = txtMoneda10ctv;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.moneda1dolar",converter =StringToIntegerConverter.class)
+    public JTextField getTxtMoneda1Dolar() {
+        return txtMoneda1Dolar;
+    }
+
+    public void setTxtMoneda1Dolar(JTextField txtMoneda1Dolar) {
+        this.txtMoneda1Dolar = txtMoneda1Dolar;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.moneda1ctv",converter =StringToIntegerConverter.class)
+    public JTextField getTxtMoneda1ctv() {
+        return txtMoneda1ctv;
+    }
+
+    public void setTxtMoneda1ctv(JTextField txtMoneda1ctv) {
+        this.txtMoneda1ctv = txtMoneda1ctv;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.moneda25ctv",converter =StringToIntegerConverter.class)
+    public JTextField getTxtMoneda25ctv() {
+        return txtMoneda25ctv;
+    }
+
+    public void setTxtMoneda25ctv(JTextField txtMoneda25ctv) {
+        this.txtMoneda25ctv = txtMoneda25ctv;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.moneda50ctv",converter =StringToIntegerConverter.class)
+    public JTextField getTxtMoneda50ctv() {
+        return txtMoneda50ctv;
+    }
+
+    public void setTxtMoneda50ctv(JTextField txtMoneda50ctv) {
+        this.txtMoneda50ctv = txtMoneda50ctv;
+    }
+
+    @TextFieldBinding(value = "controlador.CajaSession.moneda5ctv",converter =StringToIntegerConverter.class)
+    public JTextField getTxtMoneda5ctv() {
+        return txtMoneda5ctv;
+    }
+
+    public void setTxtMoneda5ctv(JTextField txtMoneda5ctv) {
+        this.txtMoneda5ctv = txtMoneda5ctv;
+    }
+
+    
 }

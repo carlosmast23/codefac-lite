@@ -60,6 +60,7 @@ public class CajaSession implements Serializable
     private Timestamp fechaHoraApertura;
     @Column(name = "FECHA_HORA_CIERRE")
     private Timestamp fechaHoraCierre;
+    
     @Column(name = "VALOR_APERTURA")
     private BigDecimal valorApertura;
     @Column(name = "VALOR_CIERRE")
@@ -70,6 +71,35 @@ public class CajaSession implements Serializable
     private String estadoCierreCaja;
     @Column(name = "OBSERVACION_CIERRE")
     private String observacionCierreCaja;
+    
+    //Datos adicionales para grabar las monedas
+    @Column(name = "MONEDA_1CTV")
+    private Integer moneda1ctv;
+    @Column(name = "MONEDA_5CTV")
+    private Integer moneda5ctv;    
+    @Column(name = "MONEDA_10CTV")
+    private Integer moneda10ctv;
+    @Column(name = "MONEDA_25CTV")
+    private Integer moneda25ctv;
+    @Column(name = "MONEDA_50CTV")
+    private Integer moneda50ctv;
+    @Column(name = "MONEDA_1USD")
+    private Integer moneda1dolar;
+    
+    @Column(name = "BILLETE_1USD")
+    private Integer billete1;
+    @Column(name = "BILLETE_5USD")
+    private Integer billete5;
+    @Column(name = "BILLETE_10USD")
+    private Integer billete10;
+    @Column(name = "BILLETE_20USD")
+    private Integer billete20;
+    @Column(name = "BILLETE_50USD")
+    private Integer billete50;
+    @Column(name = "BILLETE_100USD")
+    private Integer billete100;
+    
+    
     
     /*
     * Foreign Key
@@ -182,6 +212,107 @@ public class CajaSession implements Serializable
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public Integer getMoneda1ctv() {
+        return moneda1ctv;
+    }
+
+    public void setMoneda1ctv(Integer moneda1ctv) {
+        this.moneda1ctv = moneda1ctv;
+    }
+
+    public Integer getMoneda5ctv() {
+        return moneda5ctv;
+    }
+
+    public void setMoneda5ctv(Integer moneda5ctv) {
+        this.moneda5ctv = moneda5ctv;
+    }
+
+    public Integer getMoneda10ctv() {
+        return moneda10ctv;
+    }
+
+    public void setMoneda10ctv(Integer moneda10ctv) {
+        this.moneda10ctv = moneda10ctv;
+    }
+    
+    
+    public Integer getMoneda25ctv() {
+        return moneda25ctv;
+    }
+
+    public void setMoneda25ctv(Integer moneda25ctv) {
+        this.moneda25ctv = moneda25ctv;
+    }
+
+    public Integer getMoneda50ctv() {
+        return moneda50ctv;
+    }
+
+    public void setMoneda50ctv(Integer moneda50ctv) {
+        this.moneda50ctv = moneda50ctv;
+    }
+
+    public Integer getMoneda1dolar() {
+        return moneda1dolar;
+    }
+
+    public void setMoneda1dolar(Integer moneda1dolar) {
+        this.moneda1dolar = moneda1dolar;
+    }
+
+    public Integer getBillete1() {
+        return billete1;
+    }
+
+    public void setBillete1(Integer billete1) {
+        this.billete1 = billete1;
+    }
+
+    public Integer getBillete5() {
+        return billete5;
+    }
+
+    public void setBillete5(Integer billete5) {
+        this.billete5 = billete5;
+    }
+
+    public Integer getBillete10() {
+        return billete10;
+    }
+
+    public void setBillete10(Integer billete10) {
+        this.billete10 = billete10;
+    }
+
+    public Integer getBillete20() {
+        return billete20;
+    }
+
+    public void setBillete20(Integer billete20) {
+        this.billete20 = billete20;
+    }
+
+    public Integer getBillete50() {
+        return billete50;
+    }
+
+    public void setBillete50(Integer billete50) {
+        this.billete50 = billete50;
+    }
+
+    public Integer getBillete100() {
+        return billete100;
+    }
+
+    public void setBillete100(Integer billete100) {
+        this.billete100 = billete100;
+    }
+
+    
+    
+    
     
     public CajaEnum getEstadoEnum(){
         return CajaEnum.getEnum(estado);

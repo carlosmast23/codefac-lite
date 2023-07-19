@@ -23,7 +23,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
@@ -31,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
@@ -47,7 +54,86 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
     public void iniciar() throws ExcepcionCodefacLite, RemoteException 
     {
         controlador = new CajaSesionModelControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+        agregarListenerBoton();
         
+    }
+    
+    private void agregarListenerBoton()
+    {
+        getTxtBillete1().addActionListener(listenerUnidadMonetaria);
+        getTxtBillete5().addActionListener(listenerUnidadMonetaria);
+        getTxtBillete10().addActionListener(listenerUnidadMonetaria);
+        getTxtBillete20().addActionListener(listenerUnidadMonetaria);
+        getTxtBillete50().addActionListener(listenerUnidadMonetaria);
+        getTxtBillete100().addActionListener(listenerUnidadMonetaria);
+        getTxtMoneda1ctv().addActionListener(listenerUnidadMonetaria);
+        getTxtMoneda5ctv().addActionListener(listenerUnidadMonetaria);
+        getTxtMoneda25ctv().addActionListener(listenerUnidadMonetaria);
+        getTxtMoneda50ctv().addActionListener(listenerUnidadMonetaria);
+        getTxtMoneda1Dolar().addActionListener(listenerUnidadMonetaria);     
+        
+        getTxtBillete1().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtBillete5().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtBillete10().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtBillete20().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtBillete50().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtBillete100().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtMoneda1ctv().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtMoneda5ctv().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtMoneda25ctv().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtMoneda50ctv().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtMoneda1Dolar().addFocusListener(focusListenerUnidadMonetaria);
+        
+    }
+    
+    private FocusListener focusListenerUnidadMonetaria=new FocusListener() {
+        @Override
+        public void focusGained(FocusEvent e) {}
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            calcularValoresConDetalles();
+        }
+    };
+    
+    private ActionListener listenerUnidadMonetaria=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            calcularValoresConDetalles();
+        }
+    };
+    
+   
+    private void calcularValoresConDetalles()
+    {
+        BigDecimal billete1=UtilidadBigDecimal.obtenerValorJTextField(getTxtBillete1());
+        BigDecimal billete5= UtilidadBigDecimal.obtenerValorJTextField(getTxtBillete5()).multiply(new BigDecimal("5"));
+        BigDecimal billete10= UtilidadBigDecimal.obtenerValorJTextField(getTxtBillete10()).multiply(new BigDecimal("10"));
+        BigDecimal billete20= UtilidadBigDecimal.obtenerValorJTextField(getTxtBillete20()).multiply(new BigDecimal("20"));
+        BigDecimal billete50= UtilidadBigDecimal.obtenerValorJTextField(getTxtBillete50()).multiply(new BigDecimal("50"));
+        BigDecimal billete100= UtilidadBigDecimal.obtenerValorJTextField(getTxtBillete100()).multiply(new BigDecimal("100"));;
+        
+        BigDecimal moneda1= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda1ctv()).multiply(new BigDecimal("1")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+        BigDecimal moneda5= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda5ctv()).multiply(new BigDecimal("5")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+        BigDecimal moneda10= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda10ctv()).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+        BigDecimal moneda25= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda25ctv()).multiply(new BigDecimal("25")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+        BigDecimal moneda50= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda50ctv()).multiply(new BigDecimal("50")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+        BigDecimal moneda100= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda1Dolar()).multiply(new BigDecimal("100")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);        
+        
+        BigDecimal total=billete1
+                .add(billete5)
+                .add(billete10)
+                .add(billete20)
+                .add(billete50)
+                .add(billete100)
+                .add(moneda1)
+                .add(moneda5)
+                .add(moneda10)
+                .add(moneda25)
+                .add(moneda50)
+                .add(moneda100);
+        
+        getjTextValorCierreReal().setText(total+"");
     }
     
     
@@ -83,7 +169,20 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getTxtBillete1().setText("0");
+        getTxtBillete10().setText("0");
+        getTxtBillete100().setText("0");
+        getTxtBillete20().setText("0");
+        getTxtBillete5().setText("0");
+        getTxtBillete50().setText("0");
+        
+        getTxtMoneda10ctv().setText("0");
+        getTxtMoneda1Dolar().setText("0");
+        getTxtMoneda1ctv().setText("0");
+        getTxtMoneda25ctv().setText("0");
+        getTxtMoneda50ctv().setText("0");
+        getTxtMoneda5ctv().setText("0");
+        
     }
 
     @Override

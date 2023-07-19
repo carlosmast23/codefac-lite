@@ -15,7 +15,11 @@ public class StringToIntegerConverter extends ConverterSwingMvvc<Integer,String>
 
     @Override
     public String castPropertyToComponente(Integer value) {
-        return value.toString();
+        if(value!=null)
+        {
+            return value.toString();
+        }
+        return "";
     }
 
     @Override

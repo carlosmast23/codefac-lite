@@ -6,8 +6,8 @@
 package ec.com.codesoft.codefaclite.utilidades.validadores;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
+import javax.swing.JTextField;
 
 /**
  *
@@ -43,6 +43,19 @@ public class UtilidadBigDecimal {
     public static BigDecimal redondearCuatroDecimales(BigDecimal valor)
     {
         return redondear(valor,4);
+    }
+    
+    public static BigDecimal obtenerValorJTextField(JTextField textField)
+    {
+        try
+        {
+            return new BigDecimal(textField.getText());
+        }
+        catch(Exception e)
+        {
+            
+        }
+        return BigDecimal.ZERO;
     }
     
     public static BigDecimal redondear(BigDecimal valor, Integer numeroDecimales)
