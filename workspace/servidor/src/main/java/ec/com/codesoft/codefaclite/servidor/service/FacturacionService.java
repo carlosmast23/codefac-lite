@@ -1165,7 +1165,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         {
             if(parametroCodefac.getValor().equals(EnumSiNo.NO.getLetra()))
             {
-                if(!carteraParametro.habilitarCredito)
+                if(carteraParametro==null || !carteraParametro.habilitarCredito)
                 {
                     generarCartera=Boolean.FALSE;
                 }
