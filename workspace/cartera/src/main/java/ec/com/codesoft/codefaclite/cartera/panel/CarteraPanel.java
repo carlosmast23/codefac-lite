@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
@@ -112,7 +113,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         };
         jScrollPane3 = new javax.swing.JScrollPane();
         tblDocumentosCruzar = new javax.swing.JTable();
-        jLabel12 = new javax.swing.JLabel();
         btnCruzar = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -120,6 +120,8 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         btnAgregarDocumentoCruzar = new javax.swing.JButton();
         btnEliminarDocumentoCruzar = new javax.swing.JButton();
         cmbFechaCruzar = new com.toedter.calendar.JDateChooser();
+        jLabel19 = new javax.swing.JLabel();
+        chkSeleccionarTodoDetalleSinCruzar = new javax.swing.JCheckBox();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblCruceDetalles = new javax.swing.JTable();
@@ -414,7 +416,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -425,21 +427,12 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel5.add(jScrollPane3, gridBagConstraints);
-
-        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Fecha Cruzar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel5.add(jLabel12, gridBagConstraints);
 
         btnCruzar.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         btnCruzar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flechaDer.png"))); // NOI18N
@@ -449,7 +442,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         btnCruzar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 0.01;
@@ -462,7 +455,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jLabel14.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         jPanel5.add(jLabel14, gridBagConstraints);
@@ -473,7 +466,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jLabel17.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         jPanel5.add(jLabel17, gridBagConstraints);
@@ -496,17 +489,36 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jToolBar3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(cmbFechaCruzar, gridBagConstraints);
+
+        jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel19.setText("Fecha Cruzar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel19, gridBagConstraints);
+
+        chkSeleccionarTodoDetalleSinCruzar.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        chkSeleccionarTodoDetalleSinCruzar.setSelected(true);
+        chkSeleccionarTodoDetalleSinCruzar.setText("Seleccionar Todo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel5.add(chkSeleccionarTodoDetalleSinCruzar, gridBagConstraints);
 
         tabDetalles.addTab("Cruce Documentos", jPanel5);
 
@@ -662,6 +674,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JButton btnEliminarDocumentoCruzar;
+    private javax.swing.JCheckBox chkSeleccionarTodoDetalleSinCruzar;
     private javax.swing.JComboBox<DocumentoDetalleEnum > cmbDetalleDocumento;
     private javax.swing.JComboBox<DocumentoEnum > cmbDocumentoCartera;
     private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
@@ -673,13 +686,13 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -964,5 +977,12 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         this.btnEliminarDocumentoCruzar = btnEliminarDocumentoCruzar;
     }
 
+    public JCheckBox getChkSeleccionarTodoDetalleSinCruzar() {
+        return chkSeleccionarTodoDetalleSinCruzar;
+    }
+
+    public void setChkSeleccionarTodoDetalleSinCruzar(JCheckBox chkSeleccionarTodoDetalleSinCruzar) {
+        this.chkSeleccionarTodoDetalleSinCruzar = chkSeleccionarTodoDetalleSinCruzar;
+    }
     
 }

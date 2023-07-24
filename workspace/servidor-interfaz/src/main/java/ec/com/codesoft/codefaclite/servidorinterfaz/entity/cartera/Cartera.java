@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -470,6 +471,7 @@ public class Cartera implements Serializable{
     }
     
     public String getPreimpreso() {
+        //UtilidadVarios.construirPreimpresoStr(puntoEstablecimiento, puntoEmision, secuencial);
         return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEmision, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 9, "0");
     }
     

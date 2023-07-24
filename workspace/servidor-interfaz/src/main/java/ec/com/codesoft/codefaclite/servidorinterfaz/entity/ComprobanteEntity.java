@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -471,9 +472,9 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     }
 
     public String getPreimpreso() {
-        
+        return UtilidadVarios.construirPreimpresoStr(puntoEmision,puntoEstablecimiento.intValue(), secuencial);
         //TODO: Este artificio utilizo porque genera para imprimir presupuestos desde la interfaz web
-        if (puntoEmision == null) {
+        /*if (puntoEmision == null) {
             puntoEmision = 0;
         }
         
@@ -487,7 +488,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
             secuencial=0;
         }
 
-        return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 9, "0");
+        return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 9, "0");*/
     }
 
     public DocumentoEnum getCodigoDocumentoEnum() {

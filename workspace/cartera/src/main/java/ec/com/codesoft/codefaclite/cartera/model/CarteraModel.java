@@ -112,6 +112,7 @@ public class CarteraModel extends CarteraPanel{
         listenerBotones();
         listenerTablas();
         listenerTabs();
+        listenerCheckBox();
         nuevo();
     }
 
@@ -1240,6 +1241,19 @@ public class CarteraModel extends CarteraPanel{
 
         }
         
+    }
+
+    private void listenerCheckBox() {
+        getChkSeleccionarTodoDetalleSinCruzar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean seleccion=getChkSeleccionarTodoDetalleSinCruzar().isSelected();                
+                for (int i=0;i<getTblDetallesCruzar().getRowCount();i++) 
+                {
+                    getTblDetallesCruzar().setValueAt(seleccion,i,1);
+                }
+            }
+        });
     }
     
     

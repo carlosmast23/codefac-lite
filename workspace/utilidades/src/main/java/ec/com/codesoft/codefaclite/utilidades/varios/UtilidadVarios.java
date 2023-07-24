@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -44,6 +46,25 @@ public abstract class UtilidadVarios {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    public static String construirPreimpresoStr(Integer puntoEmision,Integer puntoEstablecimiento,Integer secuencial)
+    {
+        if (puntoEmision == null) {
+            puntoEmision = 0;
+        }
+        
+        if(puntoEstablecimiento==null)
+        {
+            puntoEstablecimiento=0;
+        }
+        
+        if(secuencial==null)
+        {
+            secuencial=0;
+        }
+
+        return UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEmision.toString(), 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 9, "0");
     }
     
     public static  String obtenerMac()
