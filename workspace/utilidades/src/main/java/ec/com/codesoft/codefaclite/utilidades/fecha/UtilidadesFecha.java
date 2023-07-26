@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.utilidades.fecha;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -255,6 +256,25 @@ public class UtilidadesFecha {
         return sumarDiasFecha(date,-1* dias);
     }
     
+    public static java.util.Date sumarTimeAFecha(java.util.Date date, Time time) {
+        // Obtiene los valores de horas, minutos y segundos del objeto Time
+        int hour = time.getHours();
+        int minute = time.getMinutes();
+        int second = time.getSeconds();
+
+        // Crea un objeto Calendar para manipular la fecha y hora
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        // Suma los valores de horas, minutos y segundos al objeto Calendar
+        calendar.add(Calendar.HOUR_OF_DAY, hour);
+        calendar.add(Calendar.MINUTE, minute);
+        calendar.add(Calendar.SECOND, second);
+
+        // Devuelve el nuevo objeto Date con la suma realizada
+        return calendar.getTime();
+    }
+    
     /**
      * @author: Carlos Sánchez 
      * @param date
@@ -468,6 +488,68 @@ public class UtilidadesFecha {
             return true;
         }
         return false;
+    }
+    
+    public static java.util.Date combinarFechayHora(java.util.Date date, Time time) 
+    {
+        // Crea un objeto Calendar para manipular la fecha
+        Calendar dateCalendar = Calendar.getInstance();
+        
+        // Establece el calendario de la fecha al objeto "date"
+        dateCalendar.setTime(date);
+        
+        // Obtiene la hora, minutos, segundos y milisegundos de "time"
+        /*long timeInMillis = time.getTime();
+        int hour = (int) (timeInMillis / 3600000); // 3600000 ms en una hora
+        int minute = (int) ((timeInMillis % 3600000) / 60000); // 60000 ms en un minuto
+        int second = (int) ((timeInMillis % 60000) / 1000); // 1000 ms en un segundo
+        int millisecond = (int) (timeInMillis % 1000);*/
+        int hour = time.getHours();
+        int minute = time.getMinutes();
+        int second = time.getSeconds();
+        
+        
+        // Establece la hora, minutos, segundos y milisegundos en "date"
+        dateCalendar.set(Calendar.HOUR_OF_DAY, hour);
+        dateCalendar.set(Calendar.MINUTE, minute);
+        dateCalendar.set(Calendar.SECOND, second);
+        dateCalendar.set(Calendar.MILLISECOND, 0);
+        
+        // Devuelve el nuevo objeto Date con la fecha y hora combinadas
+        return dateCalendar.getTime();
+    }
+
+    /**
+     * Esta funcion calcula la distancia entre 2 fechas y cuando la fecha 1 es superior a la fecha 2 asume que tiene que ser del siguiente día
+     * @param time1
+     * @param time2
+     * @return 
+     */
+    public static Time obtenerDistanciaHoras(Time time1, Time time2) 
+    {
+         long timeInMillis1 = time1.getTime();
+        long timeInMillis2 = time2.getTime();
+        
+        // Si time1 es mayor que time2, asumimos que time2 pertenece al día siguiente
+        if (timeInMillis1 > timeInMillis2) {
+            // Agregamos 24 horas (en milisegundos) a time2 para completar el día siguiente
+            timeInMillis2 += 24 * 60 * 60 * 1000; // 24 horas * 60 minutos * 60 segundos * 1000 milisegundos
+        }
+        
+        // Calcula la diferencia en milisegundos entre los dos tiempos
+        long differenceInMillis = Math.abs(timeInMillis1 - timeInMillis2);
+        
+        // Convierte la diferencia en horas y minutos
+        int hours = (int) (differenceInMillis / (1000 * 60 * 60));
+        int minutes = (int) ((differenceInMillis / (1000 * 60)) % 60);
+        
+        // Crea un nuevo objeto Time con la cantidad de horas y minutos calculados
+        return new Time(hours, minutes, 0);
+    }
+    
+     public static boolean comparaFechaEntreRango(java.util.Date fecha, java.util.Date fechaInicio, java.util.Date fechFin) {
+        // Compara si la fecha a verificar está entre la fecha de inicio y la fecha de fin
+        return fecha.compareTo(fechaInicio) >= 0 && fecha.compareTo(fechFin) <= 0;
     }
     
     public static int obtenerAnioActual()

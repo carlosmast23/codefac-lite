@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.pos.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.IntegerToStringConverter;
 import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.SpinnerBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import java.util.Calendar;
@@ -51,6 +53,8 @@ public abstract class TurnoPanel extends ControladorCodefacInterface {
         SpinnerDateModel sm2 = new SpinnerDateModel(dateHoraFinal, null, null, Calendar.HOUR_OF_DAY);
         jSpinnerHoraFinal = new javax.swing.JSpinner(sm2);
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jSpinnerCantidadDias = new javax.swing.JSpinner();
 
         jLabel1.setText("jLabel1");
 
@@ -78,10 +82,10 @@ public abstract class TurnoPanel extends ControladorCodefacInterface {
         getContentPane().add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Hora Final:");
+        jLabel4.setText("Cantidad Días:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
@@ -125,11 +129,27 @@ public abstract class TurnoPanel extends ControladorCodefacInterface {
         jLabel5.setText("          ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(jLabel5, gridBagConstraints);
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel6.setText("Hora Final:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel6, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jSpinnerCantidadDias, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -171,9 +191,22 @@ public abstract class TurnoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinnerCantidadDias;
     private javax.swing.JSpinner jSpinnerHoraFinal;
     private javax.swing.JSpinner jSpinnerHoraInicial;
     private javax.swing.JTextField jTextNombre;
     // End of variables declaration//GEN-END:variables
+
+    @SpinnerBinding(value = "controlador.turno.cantidadDias" )
+    public JSpinner getjSpinnerCantidadDias() {
+        return jSpinnerCantidadDias;
+    }
+
+    public void setjSpinnerCantidadDias(JSpinner jSpinnerCantidadDias) {
+        this.jSpinnerCantidadDias = jSpinnerCantidadDias;
+    }
+
+    
 }

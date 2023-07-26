@@ -46,6 +46,9 @@ public class Turno implements Serializable
     @Column(name = "HORA_FINAL")
     private Time horaFinal;
     
+    @Column(name = "CANTIDAD_DIAS")
+    private Integer cantidadDias;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "turno", fetch = FetchType.EAGER)
     private List<TurnoAsignado> turnoAsignadoList;
 
@@ -91,6 +94,15 @@ public class Turno implements Serializable
     public void setTurnoAsignadoList(List<TurnoAsignado> turnoAsignadoList) {
         this.turnoAsignadoList = turnoAsignadoList;
     }
+
+    public Integer getCantidadDias() {
+        return cantidadDias;
+    }
+
+    public void setCantidadDias(Integer cantidadDias) {
+        this.cantidadDias = cantidadDias;
+    }
+    
 
     @Override
     public int hashCode() {

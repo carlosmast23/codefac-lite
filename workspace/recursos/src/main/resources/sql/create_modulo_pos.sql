@@ -137,6 +137,8 @@ create table TURNO(
     NOMBRE varchar(256),
     HORA_INICIAL time,
     HORA_FINAL time,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.5.4)*/
+    CANTIDAD_DIAS INT,
 
     primary key(ID)
 );

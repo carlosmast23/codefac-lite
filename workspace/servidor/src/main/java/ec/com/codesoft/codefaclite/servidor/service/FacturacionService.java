@@ -1719,29 +1719,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //CajaPermisoService cajaPermisoService=new CajaPermisoService();
         //cajaPermisoService.buscarUsuariosPorSucursalYLigadosACaja(session, caja)
         
-        for(CajaPermiso cajaPermiso : cajaPermisoList) 
-        {
-            Caja caja=cajaPermiso.getCaja();
-            if(caja.getPuntoEmision().getPuntoEmision().equals(factura.getPuntoEmision()) || ( caja.getPuntoEmision2()!=null && caja.getPuntoEmision2().getPuntoEmision().equals(factura.getPuntoEmision())))
-            {
-                for(TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList())
-                {
-                    if(turnoAsignado.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
-                    {
-                        if(UtilidadesHora.comprobarHoraEnRangoDeTiempo(turnoAsignado.getTurno().getHoraInicial(), turnoAsignado.getTurno().getHoraFinal(), UtilidadesHora.horaActual()))
-                        {
-                           cajaPermisoParaUsuario = cajaPermiso;
-                           break;
-                        }
-                    }                    
-                }
-            }
-        }
-        
-        if(cajaPermisoParaUsuario == null)
-        {
-            throw new ServicioCodefacException("No tiene permisos asignados en el punto de emisión para este horario.\n Solución: Asigne al usuario un horario");
-        }
         
         //TODO: Este artificio solo es temporal por que esta referencia no se esta actualizando de forma automatica y toca cerrar y abrir el sistema para que se actualice
         List<CajaSession> cajasSessionUsuarioList=cajaSesionService.obtenerCajaSessionPorUsuarioYSucursal(usuario,factura.getSucursalEmpresa());
@@ -1755,6 +1732,34 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         if(cajaSession == null)
         {
             throw new ServicioCodefacException("No se encontro ninguna session para el punto de emisión");
+        }
+        else
+        {
+            //Verificar que cuando exista una cajaSession si este dentro del horario y periodo de tiempo para poder seguir vendiendo
+            for(CajaPermiso cajaPermiso : cajaPermisoList) 
+            {
+                Caja caja=cajaPermiso.getCaja();
+                if(caja.getPuntoEmision().getPuntoEmision().equals(factura.getPuntoEmision()) || ( caja.getPuntoEmision2()!=null && caja.getPuntoEmision2().getPuntoEmision().equals(factura.getPuntoEmision())))
+                {
+                    for(TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList())
+                    {
+                        if(turnoAsignado.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                        {
+                            if(UtilidadesHora.comprobarHoraEnRangoDeTiempo(cajaSession.getFechaHoraApertura(),turnoAsignado.getTurno().getHoraInicial(), turnoAsignado.getTurno().getHoraFinal(),turnoAsignado.getTurno().getCantidadDias()))
+                            {
+                               cajaPermisoParaUsuario = cajaPermiso;
+                               break;
+                            }
+                        }                    
+                    }
+                }
+            }
+            
+                            
+            if (cajaPermisoParaUsuario == null) {
+                throw new ServicioCodefacException("No tiene permisos asignados en el punto de emisión para este horario.\n Solución: Asigne al usuario un horario");
+            }
+        
         }
         
         //Grabar el valor de la venta para contavilizar cuando se termine la session de la caja

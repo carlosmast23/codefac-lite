@@ -66,7 +66,7 @@ public class TurnoModel extends TurnoPanel implements ControladorVistaIf, TurnoM
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getjSpinnerCantidadDias().setValue(0);
     }
 
     @Override
