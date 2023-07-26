@@ -176,7 +176,12 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
             destinatarioData.setNumAutDocSustento(destinatario.getAutorizacionNumero());
             destinatarioData.setRazonSocialDestinatario(UtilidadValidador.normalizarTexto(destinatario.getRazonSocial()));
             destinatarioData.setRuta(destinatario.getRuta());
-            destinatarioData.setNumDocSustento(destinatario.getPreimpreso());
+            
+            if(UtilidadesTextos.verificarNullOVacio(destinatario.getCodDucumentoSustento()))
+            {
+                destinatarioData.setNumDocSustento(destinatario.getPreimpreso());
+            }
+            
             detalleDestinatarios.add(destinatarioData);
             
             ///////// Obtener los detalles de los productos de cada destinatario ///////////////////////////

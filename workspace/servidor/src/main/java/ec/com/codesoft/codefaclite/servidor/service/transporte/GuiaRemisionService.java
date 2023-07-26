@@ -87,14 +87,17 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                     throw new ServicioCodefacException("No se puede emitir guias de remisión con cantidades iguales o menores que cero\nProducto con problema: "+detallesProducto.getDescripcion());
                 }
                 
-                FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
-                FacturaDetalle facturaDetalle= facturaDetalleFacade.find(detallesProducto.getReferenciaId());
                 
-                //Verificar que los saldos no sean superiores a los diponibles en las facturas
-                BigDecimal saldo=consultarSaldoDetalleFactura(facturaDetalle);
-                if(new BigDecimal(detallesProducto.getCantidad()+"").compareTo(saldo)>0)
-                {
-                    throw new ServicioCodefacException("La cantidad del producto "+detallesProducto.getDescripcion()+" es superior al saldo de "+saldo+" pendiente en la factura");
+                if(detallesProducto.getReferenciaId()!=null)
+                {                
+                    FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
+                    FacturaDetalle facturaDetalle= facturaDetalleFacade.find(detallesProducto.getReferenciaId());                
+                    //Verificar que los saldos no sean superiores a los diponibles en las facturas
+                    BigDecimal saldo=consultarSaldoDetalleFactura(facturaDetalle);
+                    if(new BigDecimal(detallesProducto.getCantidad()+"").compareTo(saldo)>0)
+                    {
+                        throw new ServicioCodefacException("La cantidad del producto "+detallesProducto.getDescripcion()+" es superior al saldo de "+saldo+" pendiente en la factura");
+                    }
                 }
                 
             }
@@ -107,9 +110,12 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         {
             for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) 
             {
-                if(!destinatario.getFacturaReferencia().getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+                if(destinatario.getFacturaReferencia()!=null)
                 {
-                    throw new ServicioCodefacException("No se puede grabar una Guía de Remisión con detalles de otros documentos diferentes de Facturas");
+                    if(!destinatario.getFacturaReferencia().getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+                    {
+                        throw new ServicioCodefacException("No se puede grabar una Guía de Remisión con detalles de otros documentos diferentes de Facturas");
+                    }
                 }
             }
         }
@@ -118,19 +124,24 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
          * Validar que todos los detalles de las facturas estan activas por cualquier motivo antes de procesar
          */
         for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
-            FacturacionService facturaService=new FacturacionService();
-            //Actualizo la referencia de la factura para evitar tener alguna modificación
-            Factura factura=facturaService.buscarPorId(destinatario.getFacturaReferencia().getId());
-            if(factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) || factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI))
-            {
-                throw  new ServicioCodefacException("No se puede procesar por que la factura: "+factura.getPreimpreso()+" fue eliminada");
-                
-            }
             
-            //Eliminar tambien las NC que afecten a facturas que les anules por completo
-            if(factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL))
-            {
-                throw  new ServicioCodefacException("No se puede procesar por que la factura: "+factura.getPreimpreso()+" esta afectada por una Nota Crédito");
+            //Cuando no tiene referencia no hago el resto de validaciones por el momento
+            if(destinatario.getFacturaReferencia()!=null)
+            {            
+                FacturacionService facturaService=new FacturacionService();
+                //Actualizo la referencia de la factura para evitar tener alguna modificación
+                Factura factura=facturaService.buscarPorId(destinatario.getFacturaReferencia().getId());
+                if(factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) || factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI))
+                {
+                    throw  new ServicioCodefacException("No se puede procesar por que la factura: "+factura.getPreimpreso()+" fue eliminada");
+
+                }
+
+                //Eliminar tambien las NC que afecten a facturas que les anules por completo
+                if(factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL))
+                {
+                    throw  new ServicioCodefacException("No se puede procesar por que la factura: "+factura.getPreimpreso()+" esta afectada por una Nota Crédito");
+                }
             }
         }
     }
@@ -165,18 +176,21 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                    
                     for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
                         for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
-                            Long facturaId=detallesProducto.getReferenciaId();
-                            FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
-                            FacturaDetalle facturaDetalle= facturaDetalleFacade.find(facturaId);;
-                            
-                            //TODO: Por el momento dejo pendiente de validar cuando un mismo producto puede ir en partes en varias guias de remision
-                            Factura facturaEditar=facturaDetalle.getFactura();
-                            //if(facturaEditar.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
-                            //{
-                            System.out.println("Factura enviada en guia de remision editar: "+facturaEditar.getPreimpreso());
-                            facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
-                            entityManager.merge(facturaEditar);
-                            //}
+                            //Solo hacer cambios de estado cuando existe una referencia a una factura
+                            if(detallesProducto.getReferenciaId()!=null)
+                            {
+                                Long facturaId=detallesProducto.getReferenciaId();
+                                FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
+                                FacturaDetalle facturaDetalle= facturaDetalleFacade.find(facturaId);;
+
+                                //TODO: Por el momento dejo pendiente de validar cuando un mismo producto puede ir en partes en varias guias de remision
+                                Factura facturaEditar=facturaDetalle.getFactura();
+                                //if(facturaEditar.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
+                                //{
+                                System.out.println("Factura enviada en guia de remision editar: "+facturaEditar.getPreimpreso());
+                                facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
+                                entityManager.merge(facturaEditar);
+                            }
                         }
                         
                     }

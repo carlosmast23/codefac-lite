@@ -8,21 +8,20 @@ package ec.com.codesoft.codefaclite.transporte.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRemisionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 //import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 //import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
-import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.obtenerComprobanteData;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -52,7 +51,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
@@ -68,6 +66,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -81,6 +80,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +90,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -111,6 +110,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     private Persona destinatario;
     private PersonaEstablecimiento destinatarioEstablecimiento;
     private Factura facturaSeleccionada;
+    private Producto productoSeleccionado;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -227,29 +227,31 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
             for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
                 
-                FacturaDetalle facturaDetalle= consultarFacturaDetalle(detallesProducto.getReferenciaId());
-                ConsolidadoCargaData data=mapResulados.get(facturaDetalle.getReferenciaId());
-                if(data==null)
+                if(detallesProducto.getReferenciaId()!=null)
                 {
-                    data=new ConsolidadoCargaData(detallesProducto);                    
-                    mapResulados.put(facturaDetalle.getReferenciaId(),data);
-                }
-                else
-                {
-                    data.agregarCantidad(detallesProducto.getCantidad());
-                }
-                
-                
-                //Agregar el valor total del detalle                
-                BigDecimal totalDetalle=facturaDetalle.calcularTotalFinal();
-                data.setTotal(data.getTotal().add(totalDetalle));
-                
-                if(data.getCodigoInterno().equals("12210"))
-                {
-                    System.out.println("Dato principal ,valor= "+totalDetalle+" -> "+facturaDetalle.getFactura().getPreimpreso());
-                    System.out.println("Destinatario Detalle"+destinatario.getCodDucumentoSustento());
-                }
-                
+                    FacturaDetalle facturaDetalle= consultarFacturaDetalle(detallesProducto.getReferenciaId());
+                    ConsolidadoCargaData data=mapResulados.get(facturaDetalle.getReferenciaId());
+                    if(data==null)
+                    {
+                        data=new ConsolidadoCargaData(detallesProducto);                    
+                        mapResulados.put(facturaDetalle.getReferenciaId(),data);
+                    }
+                    else
+                    {
+                        data.agregarCantidad(detallesProducto.getCantidad());
+                    }
+
+
+                    //Agregar el valor total del detalle                
+                    BigDecimal totalDetalle=facturaDetalle.calcularTotalFinal();
+                    data.setTotal(data.getTotal().add(totalDetalle));
+
+                    if(data.getCodigoInterno().equals("12210"))
+                    {
+                        System.out.println("Dato principal ,valor= "+totalDetalle+" -> "+facturaDetalle.getFactura().getPreimpreso());
+                        System.out.println("Destinatario Detalle"+destinatario.getCodDucumentoSustento());
+                    }
+                }                
             }
         }
         
@@ -823,7 +825,112 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
                 
             }
         });
+        
+        getBtnAgregarProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerBtnAgregarProducto();
+            }
+        });
+        
+        getBtnAgregarDetalleGuia().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerAgregarDetalleGuia();
+            }
+        });
+        
     }
+    
+    private void listenerAgregarDetalleGuia()
+    {
+        DestinatarioGuiaRemision destinatario = new DestinatarioGuiaRemision();
+        
+        String autorizacionTxt=getTxtAutorizacion().getText();
+        if(UtilidadesTextos.verificarNullOVacio(autorizacionTxt))
+        {
+            //por defecto dejo un numero de autorizacion solo para poder pasar la validacion
+            autorizacionTxt="0000000000";
+        }
+        
+        destinatario.setAutorizacionNumero(autorizacionTxt);
+                
+        destinatario.setCodDucumentoSustento("001-001-000000001"); //TODO: Por defecto queda seteado de esta forma para el tema de los preimpresos
+        destinatario.setDestinatorio(this.destinatario);
+        destinatario.setDireccionDestino(getTxtDireccionDestino().getText());
+        Date fechaFactura=getCmbFechaFactura().getDate();
+        if(fechaFactura!=null)
+        {
+            destinatario.setFechaEmision(UtilidadesFecha.castDateUtilToSql(fechaFactura));
+        }
+        destinatario.setGuiaRemision(guiaRemision);
+        
+        String motivoTrasladoTxt=getTxtMotivoTraslado().getText();
+        if(UtilidadesTextos.verificarNullOVacio(motivoTrasladoTxt))
+        {
+            motivoTrasladoTxt="s/m";
+        }
+        
+        destinatario.setMotivoTranslado(motivoTrasladoTxt);
+        destinatario.setPreimpreso(getTxtPreimpreso().getText());
+        destinatario.setRazonSocial(this.destinatario.getRazonSocial());
+        destinatario.setRuta(getTxtRuta().getText());
+        destinatario.setFacturaReferencia(null);
+        destinatario.setIdentificacion(this.destinatario.getIdentificacion());
+        
+        String codEstablecimientoTxt="";
+        if(UtilidadesTextos.verificarNullOVacio(codEstablecimientoTxt))
+        {
+            codEstablecimientoTxt="001";
+        }
+        
+        destinatario.setCodigoEstablecimiento(codEstablecimientoTxt);
+        
+        DetalleProductoGuiaRemision detalle = new DetalleProductoGuiaRemision();
+        detalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+        detalle.setCodigoAdicional("");
+        detalle.setCodigoInterno(getTxtCodigoDetalle().getText()); //Todo: Ver si en este campo para futuras versiones se graba mejor el codigo de los productos , sevicios , etc
+        detalle.setDescripcion(getTxtDescripcionDetalle().getText());
+        detalle.setReferenciaId(null); //TODO: Por el momento mando null para saber que fue agregado manualmente
+        destinatario.addProducto(detalle);
+        
+        guiaRemision.addDestinario(destinatario);
+        //Actualizar los datos en la vista
+        imprimirTabla();
+        limpiarDetalleProductoGuia();
+        
+    }
+    
+    private void limpiarDetalleProductoGuia()
+    {
+        getTxtCodigoDetalle().setText("");
+        getTxtCantidad().setText("");
+        getTxtDescripcionDetalle().setText("");
+        productoSeleccionado=null;
+        
+    }
+    
+    private void listenerBtnAgregarProducto()
+    {
+        agregarProductoSinInventario(EnumSiNo.SI);
+    }
+    
+    private void agregarProductoSinInventario(EnumSiNo manejaInventario) {
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario, session.getEmpresa(), true, false);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        productoSeleccionado = (Producto) buscarDialogoModel.getResultado();        
+        agregarProductoVista(productoSeleccionado);
+    }
+    
+    private void agregarProductoVista(Producto productoSeleccionado)
+    {
+        getTxtCodigoDetalle().setText(productoSeleccionado.getCodigoPersonalizado());
+        getTxtCantidad().setText("1");
+        getTxtDescripcionDetalle().setText(productoSeleccionado.getNombre());
+    }
+    
+    
     
     private void agregarDetalleGuiaRemision()
     {
@@ -867,7 +974,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         String[] titulos={"","Motivo","Ruta","Factura","FechaFact","Destinatario","Código Producto","Descripción","Cantidad"};
         
         DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulos,
-        new Class[]{DetalleProductoGuiaRemision.class,
+        new Class[]{
+        DetalleProductoGuiaRemision.class,
         String.class,
         String.class,
         String.class,
@@ -916,8 +1024,10 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         
         
         getTblGuiaRemision().setModel(modeloTabla);
-        cargarFacturasLista();
         UtilidadesTablas.ocultarColumna(getTblGuiaRemision(),0);
+         UtilidadesTablas.cambiarTamanioColumnas(getTblGuiaRemision(),new Integer[]{0});
+        cargarFacturasLista();
+        
         
     }
     
@@ -927,7 +1037,10 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         if(guiaRemision!=null && guiaRemision.getDestinatarios()!=null)
         {
             for (DestinatarioGuiaRemision destinatarios : guiaRemision.getDestinatarios()) {
-                lista.addElement(destinatarios.getFacturaReferencia().getSecuencial()+"");
+                if(destinatarios.getFacturaReferencia()!=null)
+                {
+                    lista.addElement(destinatarios.getFacturaReferencia().getSecuencial()+"");
+                }
                 
             }            
         }
@@ -1130,6 +1243,16 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     public List<ComprobanteAdicional> getDatosAdicionales() {
         return (List<ComprobanteAdicional>)(Object) guiaRemision.getDatosAdicionales();
     }
+
+    public Producto getProductoSeleccionado() {
+        return productoSeleccionado;
+    }
+
+    public void setProductoSeleccionado(Producto productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
+    }
+    
+    
 
     private void listenerFechas() {
         getCmbFechaInicio().addActionListener(new ActionListener() {

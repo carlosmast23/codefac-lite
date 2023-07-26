@@ -111,7 +111,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jToolBar3 = new javax.swing.JToolBar();
-        btnAgregarDetalle = new javax.swing.JButton();
+        btnAgregarDetalleGuia = new javax.swing.JButton();
         btnActualizarDetalle = new javax.swing.JButton();
         btnEliminarDetalle = new javax.swing.JButton();
         cmbDestinatarios = new javax.swing.JComboBox<>();
@@ -122,6 +122,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jLabel10 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        btnAgregarProducto = new javax.swing.JButton();
         pnlDetalles = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblGuiaRemision = new javax.swing.JTable();
@@ -591,7 +592,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Código:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
         jPanel4.add(jLabel4, gridBagConstraints);
@@ -599,11 +600,11 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar3.setFloatable(false);
         jToolBar3.setRollover(true);
 
-        btnAgregarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
-        btnAgregarDetalle.setFocusable(false);
-        btnAgregarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAgregarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar3.add(btnAgregarDetalle);
+        btnAgregarDetalleGuia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
+        btnAgregarDetalleGuia.setFocusable(false);
+        btnAgregarDetalleGuia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarDetalleGuia.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(btnAgregarDetalleGuia);
 
         btnActualizarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
         btnActualizarDetalle.setFocusable(false);
@@ -618,7 +619,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar3.add(btnEliminarDetalle);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -631,27 +632,27 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel4.add(cmbDestinatarios, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel4.add(lblEspacio4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel4.add(txtCodigoDetalle, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel4.add(txtCantidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
@@ -661,7 +662,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText("Cantidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
         jPanel4.add(jLabel10, gridBagConstraints);
@@ -669,7 +670,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel14.setText("Descripción:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
         jPanel4.add(jLabel14, gridBagConstraints);
@@ -681,6 +682,20 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
         jPanel4.add(jLabel17, gridBagConstraints);
+
+        btnAgregarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnAgregarProducto.setFocusable(false);
+        btnAgregarProducto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarProducto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarProductoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        jPanel4.add(btnAgregarProducto, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -757,6 +772,10 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAgregarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarProductoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnBuscarFactura;
@@ -764,7 +783,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnAgregarDestinarioGuiaRemision;
     private javax.swing.JButton btnAgregarDestinatario;
-    private javax.swing.JButton btnAgregarDetalle;
+    private javax.swing.JButton btnAgregarDetalleGuia;
+    private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscarDestinatario;
     private javax.swing.JButton btnBuscarTransportista;
     private javax.swing.JButton btnCargarFacturaIgualSecuencial;
@@ -1033,6 +1053,22 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         this.lstFacturas = lstFacturas;
     }
 
+    public JButton getBtnAgregarProducto() {
+        return btnAgregarProducto;
+    }
+
+    public void setBtnAgregarProducto(JButton btnAgregarProducto) {
+        this.btnAgregarProducto = btnAgregarProducto;
+    }
+
+    public JButton getBtnAgregarDetalleGuia() {
+        return btnAgregarDetalleGuia;
+    }
+
+    public void setBtnAgregarDetalleGuia(JButton btnAgregarDetalleGuia) {
+        this.btnAgregarDetalleGuia = btnAgregarDetalleGuia;
+    }
+    
     
 
 }

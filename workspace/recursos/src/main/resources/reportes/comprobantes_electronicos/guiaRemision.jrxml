@@ -516,7 +516,7 @@
 				</textElement>
 				<text><![CDATA[Destino:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="132" y="0" width="100" height="15" uuid="9cd9b796-caf4-45d5-aaf6-8c10d5cdf237"/>
 				<textElement>
 					<font size="9"/>
