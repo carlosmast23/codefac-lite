@@ -80,6 +80,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Column(name = "ICE_PORCENTAJE")
     private BigDecimal icePorcentaje;
     
+    @Column(name ="IRBPNR")
+    private BigDecimal irbpnr;
+    
     @JoinColumn(name = "LOTE_ID")
     private Lote lote;
     
@@ -101,6 +104,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public DetalleFacturaNotaCeditoAbstract() {
         this.valorIce = BigDecimal.ZERO;
         this.icePorcentaje = BigDecimal.ZERO;
+        this.irbpnr=BigDecimal.ZERO;
     }
 
     /**
@@ -286,6 +290,14 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
 
     public void setKardexItemEspecifico(KardexItemEspecifico kardexItemEspecifico) {
         this.kardexItemEspecifico = kardexItemEspecifico;
+    }
+
+    public BigDecimal getIrbpnr() {
+        return irbpnr;
+    }
+
+    public void setIrbpnr(BigDecimal irbpnr) {
+        this.irbpnr = irbpnr;
     }
     
     

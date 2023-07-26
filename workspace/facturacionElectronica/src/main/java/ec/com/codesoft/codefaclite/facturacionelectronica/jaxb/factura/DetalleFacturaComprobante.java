@@ -136,6 +136,21 @@ public class DetalleFacturaComprobante extends DetalleComprobanteAbstract {
         }
         return resultado;
     }
+    
+    @Deprecated //TODO: Mejorar esta parte
+    public BigDecimal obtenerIRBPNRPorcentaje()
+    {       
+        BigDecimal resultado=BigDecimal.ZERO;
+        for (ImpuestoComprobante impuesto : impuestos) 
+        {
+            //TODO: Parametrizar de mejor manera pero por el momento asumo que el codigo 5 es para el IRBPNR
+            if(impuesto.getCodigo().equals("5"))
+            {
+                resultado=impuesto.getValor();
+            }
+        }
+        return resultado;
+    }
 
     /**
      * Metodos Adicionales

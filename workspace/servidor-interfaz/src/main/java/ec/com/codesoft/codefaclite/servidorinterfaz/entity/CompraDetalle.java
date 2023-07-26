@@ -330,8 +330,8 @@ public class CompraDetalle extends DetalleFacturaNotaCeditoAbstract implements S
     public void setCostoUnitario(BigDecimal costoUnitario) {
         this.costoUnitario = costoUnitario;
     }
-    
-    
+
+
     
     /**
      * Metodos adicionales

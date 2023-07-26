@@ -76,6 +76,8 @@ create table COMPRA
     SUCURSAL_ID BIGINT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.1.7)*/
     AHORRO decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.5.5)*/
+    IRBPNR decimal(13,2),
     primary key (ID)
     /*CONSTRAINT id_cliente_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
 
@@ -127,6 +129,8 @@ create table COMPRA_DETALLE
     PRECIO_SIN_AHORRO decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.3.0)*/
     PRESENTACION_CODIGO varchar(15),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.5.5)*/
+    IRBPNR decimal(13,2),
     primary key (ID)
 );
 

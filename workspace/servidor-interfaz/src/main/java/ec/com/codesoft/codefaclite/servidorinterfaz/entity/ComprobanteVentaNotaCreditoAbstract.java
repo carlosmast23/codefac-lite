@@ -72,6 +72,9 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     @Column(name = "VALOR_ICE")
     private BigDecimal ice;
     
+    @Column(name = "IRBPNR")
+    private BigDecimal irbpnr;
+    
     @Column(name = "TIPO_IDENTIFICACION_CODIGO_SRI")
     private String tipoIdentificacionCodigoSri;
     
@@ -179,6 +182,14 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
         this.tipoIdentificacionCodigoSri = tipoIdentificacionCodigoSri;
     }
+
+    public BigDecimal getIrbpnr() {
+        return irbpnr;
+    }
+
+    public void setIrbpnr(BigDecimal irbpnr) {
+        this.irbpnr = irbpnr;
+    }
     
     
     
@@ -186,7 +197,7 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
 
     /**
      * ==========================================================================
-     * METODOS MERSONALIZADOS
+     * METODOS PERSONALIZADOS
      * ==========================================================================
      */
     
@@ -264,6 +275,7 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
 
             //Sumar el valor del Ice
             resultado.ice = resultado.ice.add(detalle.getValorIce());
+            resultado.irbpnr=resultado.irbpnr.add(detalle.getIrbpnr());
             
             BigDecimal precio=(precioNormal?detalle.getPrecioUnitario():detalle.getPrecioSinAhorro());
             //Sumar los subtotales
@@ -278,6 +290,7 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                 
                 //Artificio para no perder la referencia
                 resultado.ivaDecimal = new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
+                ///resultado.impuestoIva = resultado.subTotalConImpuestos.add(resultado.ice).subtract(resultado.descuentoConImpuestos).multiply(resultado.ivaDecimal);
                 resultado.impuestoIva = resultado.subTotalConImpuestos.add(resultado.ice).subtract(resultado.descuentoConImpuestos).multiply(resultado.ivaDecimal);
             }
 
@@ -288,7 +301,8 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         resultado.total = resultado.subTotalSinImpuestos.subtract(resultado.descuentoSinImpuestos)
                 .add(resultado.subTotalConImpuestos.subtract(resultado.descuentoConImpuestos))
                 .add(resultado.impuestoIva)
-                .add(resultado.ice);
+                .add(resultado.ice)
+                .add(resultado.irbpnr);
     
         return resultado;
     }
@@ -305,6 +319,8 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
             this.subtotalImpuestos = BigDecimal.ZERO;
             this.iva = BigDecimal.ZERO;
             this.ice = BigDecimal.ZERO;
+            this.irbpnr=BigDecimal.ZERO;
+            
             return;
         }
 
@@ -320,9 +336,11 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         BigDecimal impuestoIva = resultado.impuestoIva; //        
         BigDecimal ivaDecimal = resultado.ivaDecimal; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
         BigDecimal ice = resultado.ice;
+        BigDecimal irbpnr=resultado.irbpnr;
         
         //TODO: Me parece que ese codigo se debe setear directo
         this.ice = ice;
+        this.irbpnr=irbpnr;
         
         //Antes de hacer calculos verifico si el sistema tiene grabados esos datos para no hacer calculos inecesarios
         if(detalles.get(0).getPrecioSinAhorro()!=null)
@@ -387,7 +405,9 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
          * redondeados a 2 decimales
          * ==================================================================================
          */
-        BigDecimal totalConImpuestos = this.total.subtract(this.subtotalSinImpuestos).add(this.descuentoSinImpuestos);
+        //TODO: Analizar si tiene que ver que se agregue el tema de los impuestos con el IRBPNR
+        BigDecimal totalConImpuestos = this.total.subtract(this.subtotalSinImpuestos).add(this.descuentoSinImpuestos).add(this.irbpnr);
+        //BigDecimal totalConImpuestos = this.total.subtract(this.subtotalSinImpuestos).add(this.descuentoSinImpuestos);
 
         /**
          * ==================================================================================
@@ -396,6 +416,7 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
          * ==================================================================================
          */
         this.ice = this.ice.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.irbpnr=this.irbpnr.setScale(2,BigDecimal.ROUND_HALF_UP);
 
         /**
          * ==================================================================================
@@ -421,6 +442,7 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
          * DESCUENTOS
          * ==================================================================================
          */
+        //this.subtotalImpuestos = subtotalMenosImpuestosConIce.subtract(this.ice).add(this.descuentoImpuestos);
         this.subtotalImpuestos = subtotalMenosImpuestosConIce.subtract(this.ice).add(this.descuentoImpuestos);
 
         /**
@@ -489,6 +511,7 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         BigDecimal impuestoIva = BigDecimal.ZERO; //        
         BigDecimal ivaDecimal = BigDecimal.ZERO; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
         BigDecimal ice = BigDecimal.ZERO;
+        BigDecimal irbpnr=BigDecimal.ZERO;
 
         public ResultadoTotales() 
         {

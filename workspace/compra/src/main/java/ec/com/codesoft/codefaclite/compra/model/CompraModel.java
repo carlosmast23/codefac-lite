@@ -1542,6 +1542,7 @@ public class CompraModel extends CompraPanel{
         getLblSubtotalSinImpuestos().setText(compra.getSubtotalSinImpuestos()+"");
         getLblIva().setText(compra.getIva()+"");
         getTxtIce().setText(compra.getIce()+"");
+        getTxtIrbpnr().setText(compra.getIrbpnr()+"");
         getLblTotal().setText(compra.getTotal()+"");
         
         getLblTotalIvaRet().setText(compra.calcularTotalRentencionIva()+"");

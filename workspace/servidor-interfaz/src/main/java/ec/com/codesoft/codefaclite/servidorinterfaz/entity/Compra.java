@@ -159,6 +159,8 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     @Deprecated
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
+    
+    
 
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra",fetch = FetchType.EAGER)
@@ -635,6 +637,7 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
         this.subtotalSinImpuestos=BigDecimal.ZERO;
         this.iva=BigDecimal.ZERO;
         setIce((this.getIce()!=null)?this.getIce():BigDecimal.ZERO);
+        setIrbpnr((this.getIrbpnr()!=null)?this.getIrbpnr():BigDecimal.ZERO);
         //this.ice=(this.ice!=null)?this.ice:BigDecimal.ZERO;
         
         if(detalles!=null)
@@ -670,13 +673,13 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
             iva=iva.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
             
             
-            total=getSubtotalImpuestos().add(subtotalSinImpuestos).add(iva); //calcular el total de los valores
+            total=getSubtotalImpuestos().add(subtotalSinImpuestos).add(iva).add(getIrbpnr()); //calcular el total de los valores
             
             //redondeo despues de redondear el iva para tener un valor coherente con la sumatoria de los valores redondeados
             total=total.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
         }
     }
-    
+
     
     public void addDetalle(CompraDetalle detalle)
     {

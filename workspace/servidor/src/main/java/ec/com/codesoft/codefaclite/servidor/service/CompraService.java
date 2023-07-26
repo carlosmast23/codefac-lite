@@ -347,8 +347,12 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             BigDecimal descuento= detalleXml.getDescuento();
             compraDetalle.setDescuento(descuento);
             
+            //Agregar el valor del IRBPNR
+            compraDetalle.setIrbpnr(detalleXml.obtenerIRBPNRPorcentaje());
+            
             //Agregar el CODIGO DEL PROVEEDOR ORIGINAL DE LA COMPRA
             compraDetalle.setCodigoProveedor(codigoPrincipal);
+            
             //Calculor los totales previos
             compraDetalle.calcularSubtotalSinIva();
             

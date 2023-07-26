@@ -93,7 +93,8 @@ create table FACTURA
     NOMBRE_TIPO_DOCUMENTO varchar(128),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.1.7)*/
     AHORRO decimal(13,2),
-    
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.5.5)*/
+    IRBPNR decimal(13,2),
     primary key (ID)
     /*CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
 
@@ -142,6 +143,8 @@ create table FACTURA_DETALLE
     NUMERO_PVP INT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.3.0)*/
     PRESENTACION_CODIGO varchar(50),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.5.5)*/
+    IRBPNR decimal(13,2),
     primary key (ID)
 );
 
