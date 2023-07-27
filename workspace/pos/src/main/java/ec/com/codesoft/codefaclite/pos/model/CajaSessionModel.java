@@ -68,6 +68,7 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         getTxtBillete100().addActionListener(listenerUnidadMonetaria);
         getTxtMoneda1ctv().addActionListener(listenerUnidadMonetaria);
         getTxtMoneda5ctv().addActionListener(listenerUnidadMonetaria);
+        getTxtMoneda10ctv().addActionListener(listenerUnidadMonetaria);
         getTxtMoneda25ctv().addActionListener(listenerUnidadMonetaria);
         getTxtMoneda50ctv().addActionListener(listenerUnidadMonetaria);
         getTxtMoneda1Dolar().addActionListener(listenerUnidadMonetaria);     
@@ -80,6 +81,7 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         getTxtBillete100().addFocusListener(focusListenerUnidadMonetaria);
         getTxtMoneda1ctv().addFocusListener(focusListenerUnidadMonetaria);
         getTxtMoneda5ctv().addFocusListener(focusListenerUnidadMonetaria);
+        getTxtMoneda10ctv().addFocusListener(focusListenerUnidadMonetaria);
         getTxtMoneda25ctv().addFocusListener(focusListenerUnidadMonetaria);
         getTxtMoneda50ctv().addFocusListener(focusListenerUnidadMonetaria);
         getTxtMoneda1Dolar().addFocusListener(focusListenerUnidadMonetaria);
@@ -115,7 +117,7 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         
         BigDecimal moneda1= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda1ctv()).multiply(new BigDecimal("1")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
         BigDecimal moneda5= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda5ctv()).multiply(new BigDecimal("5")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
-        BigDecimal moneda10= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda10ctv()).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+        BigDecimal moneda10= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda10ctv()).multiply(new BigDecimal("10")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
         BigDecimal moneda25= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda25ctv()).multiply(new BigDecimal("25")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
         BigDecimal moneda50= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda50ctv()).multiply(new BigDecimal("50")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
         BigDecimal moneda100= UtilidadBigDecimal.obtenerValorJTextField(getTxtMoneda1Dolar()).multiply(new BigDecimal("100")).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);        

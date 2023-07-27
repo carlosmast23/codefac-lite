@@ -82,6 +82,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
@@ -112,10 +113,10 @@ import java.util.Arrays;
 @ViewScoped 
 public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterface, Serializable {
 
-    private static final String ID_COMPONENTE_MONITOR="monitor";  
+    private static final String ID_COMPONENTE_MONITOR="monitor";   
     
         
-    private Factura factura;    
+    private Factura factura;     
 
     /**
      * Esta referencia me permite saber cual factura esta seleccionada para editar 
@@ -124,7 +125,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     private List<Producto.PrecioVenta> precioVentaList;
     private List<DocumentoEnum> documentos;     
-    private List<PuntoEmision> puntosEmision;    
+    private List<PuntoEmision> puntosEmision; 
+    private List<CategoriaProducto> categoriaList;
+    private List<Producto> productoPorCategoriaList;
+    
     private EnumSiNo[] enumSiNoList;
     //private List<SriFormaPago> sriFormaPagosList;
 
@@ -507,7 +511,29 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         factura.addFormaPago(formaPago);
         
     }
-
+    
+    //TODO: Unificar esta parte con el metodo CARGARDATOSDETALLEVISTA
+    public void agregarProductoPorDefecto()
+    {
+        Producto productoDefecto=productoPorCategoriaList.get(0);
+        productoSeleccionado=productoDefecto;
+        
+        facturaDetalle = new FacturaDetalle();
+        facturaDetalle.setCantidad(BigDecimal.ONE);
+        facturaDetalle.setDescripcion(productoDefecto.getNombre());
+        facturaDetalle.setPrecioUnitario(productoDefecto.getValorUnitario());
+        facturaDetalle.setDescuento(BigDecimal.ZERO);
+        facturaDetalle.setIvaPorcentaje(productoDefecto.getCatalogoProducto().getIva().getTarifa());
+        if (productoSeleccionado.getCatalogoProducto().getIce() != null) {
+            facturaDetalle.setIcePorcentaje(productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje());
+        }
+        facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);
+        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+        facturaDetalle.setCatalogoProducto(productoDefecto.getCatalogoProducto());
+        
+        precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();        
+        agregarProducto();
+    }
 
 
     public void agregarProducto() {
@@ -1444,6 +1470,12 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             }
             //puntosEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sessionMb.getSession().getSucursal());
             this.puntosEmision=puntosEmision;
+            
+            //Cargar los datos de las categoria
+            categoriaList=ServiceFactory.getFactory().getCategoriaProductoServiceIf().obtenerTodosPorEmpresa(sessionMb.getSession().getEmpresa()).subList(0, 50);
+            
+            productoPorCategoriaList=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(sessionMb.getSession().getEmpresa()).subList(0,10);
+            
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -1473,6 +1505,23 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("modificarPrecioVenta ...");
         precioVentaOriginalSeleccionada=facturaDetalle.getPrecioUnitario();
         //System.out.println("valor: "+facturaDetalle.getPrecioUnitario());
+    }
+    
+    public void ejemplo()
+    {
+        System.out.println("Ejemplo de productos ..."); 
+    }
+    
+    public void cargarListaProductosPorCategoria(CategoriaProducto categoriaProducto)
+    {
+        try {
+            productoPorCategoriaList=ServiceFactory.getFactory().getProductoServiceIf().buscarPorCategoria(categoriaProducto);
+            System.out.println("productoPorCategoriaList ...");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -1593,10 +1642,24 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void setPrecioVentaOriginalSeleccionada(BigDecimal precioVentaOriginalSeleccionada) {
         this.precioVentaOriginalSeleccionada = precioVentaOriginalSeleccionada;
     }
-    
-    
-    
 
+    public List<CategoriaProducto> getCategoriaList() {
+        return categoriaList; 
+    }
+
+    public void setCategoriaList(List<CategoriaProducto> categoriaList) {
+        this.categoriaList = categoriaList;
+    }
+
+    public List<Producto> getProductoPorCategoriaList() {
+        return productoPorCategoriaList;
+    }
+
+    public void setProductoPorCategoriaList(List<Producto> productoPorCategoriaList) {
+        this.productoPorCategoriaList = productoPorCategoriaList;
+    }
+    
+    
     public FacturaModelControlador getControlador() {
         return controlador;
     }

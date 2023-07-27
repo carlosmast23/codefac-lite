@@ -33,7 +33,7 @@ public class AbrirCajaModel extends CajaSessionModel
         getjTextValorCierreTeorico().setEnabled(false);
         
         //Buscar el valor de cierre anterior para dejar ingresando 
-        agregarListenerComboBox();                
+        //agregarListenerComboBox();                
         
     }
     
