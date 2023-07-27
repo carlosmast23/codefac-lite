@@ -108,8 +108,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
 
     /**
-     * ======================================================== METODOS
-     * PERSONALIZADOS ========================================================
+     * ======================================================== METODOS PERSONALIZADOS ========================================================
      */
     public void calcularValorIce(BigDecimal porcentajeIce) {
         if (porcentajeIce.compareTo(BigDecimal.ZERO) > 0) {

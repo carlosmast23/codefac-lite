@@ -52,7 +52,18 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         valoresIniciales();
         listenerBotones();
+        listenerComboBox();
        
+    }
+    
+    private void listenerComboBox()
+    {
+        getCmbBodegaOrigen().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarCostoTransferencia();
+            }
+        });
     }
 
     @Override
@@ -218,11 +229,34 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
                 {
                     productoSeleccionado=(Producto) buscarDialogo.getResultado();
                     getTxtProducto().setText(productoSeleccionado.toString());
-                    
+                    buscarCostoTransferencia();
                 }
                 
             }
         });
+    }
+    
+    private void buscarCostoTransferencia()
+    {
+        if(this.productoSeleccionado!=null)
+        {
+            //Buscar si existe una bodega que por defecto este seleccionada
+            Bodega bodegaSeleccionada=(Bodega) getCmbBodegaOrigen().getSelectedItem();
+            if(bodegaSeleccionada!=null)
+            {
+                try {
+                    //buscar el kardex detalle para sacar el costo para poder hacer una transferencia
+                    Kardex kardex=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaSeleccionada, productoSeleccionado,null);
+                    if(kardex!=null)
+                    {
+                        getTxtPrecio().setText(kardex.getPrecioUltimo()+"");
+                    }
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(TransferenciaBodegasModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
     
     private void setearVariables()

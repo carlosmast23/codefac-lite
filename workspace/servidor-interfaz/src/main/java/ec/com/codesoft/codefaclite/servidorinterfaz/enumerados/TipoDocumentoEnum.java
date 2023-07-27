@@ -147,7 +147,7 @@ public enum TipoDocumentoEnum implements ParametroUtilidades.ComparadorInterface
             "TMD",
             "Transferencia mercaderia destino",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO,
-            false),
+            true),
     
     STOCK_INICIAL(ModuloCodefacEnum.INVENTARIO,
             "STI",
