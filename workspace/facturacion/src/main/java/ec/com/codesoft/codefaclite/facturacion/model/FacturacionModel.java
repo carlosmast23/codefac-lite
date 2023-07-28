@@ -857,33 +857,44 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void cargarDetalleProducto()
     {
-        TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
-
-        switch (tipoDocumentoEnum) {
-            case ACADEMICO:
-                agregarRubroAcademico();
-                break;
-            case PRESUPUESTOS:
-                agregarPresupuesto();
-                break;
-            case ORDEN_TRABAJO:
-                agregarOrdenTrabajo();
-                break;
-            case INVENTARIO:
-            try {
-                agregarProductoInventario(EnumSiNo.SI);
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
-                DialogoCodefac.mensaje(ex.getMessage(), DialogoCodefac.MENSAJE_ADVERTENCIA);
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            break;
-            case LIBRE:
-                agregarProductoSinInventario(EnumSiNo.NO);
-                break;
-
+        
+        DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        
+        if(documentoEnum.equals(DocumentoEnum.FACTURA_REEMBOLSO))
+        {
+            //Caso espcial donde se genera una Factura de Reembolso y se tiene que mostrar otro dialogo
+           
         }
+        else
+        {
+            TipoDocumentoEnum tipoDocumentoEnum = controlador.getTipoDocumentoEnumSeleccionado();
+
+            switch (tipoDocumentoEnum) {
+                case ACADEMICO:
+                    agregarRubroAcademico();
+                    break;
+                case PRESUPUESTOS:
+                    agregarPresupuesto();
+                    break;
+                case ORDEN_TRABAJO:
+                    agregarOrdenTrabajo();
+                    break;
+                case INVENTARIO:
+            try {
+                    agregarProductoInventario(EnumSiNo.SI);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    DialogoCodefac.mensaje(ex.getMessage(), DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                break;
+                case LIBRE:
+                    agregarProductoSinInventario(EnumSiNo.NO);
+                    break;
+
+            }
+        }        
     }
     
     //TODO: Unificar esta parte en el controlador para luego poder usar en la interfaz web    

@@ -261,6 +261,26 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                Kardex kardex = crearObjeto(bodega, producto,null);
                entityManager.persist(kardex);
            }
+           else
+            {
+                //Caso contrario cuando tiene datos primero analizo que tengo uno sin lote, porque eso necesito para el correcto funcionamiento
+                Boolean kardexSinLote=false;
+                for (Kardex kardex : kardexList) 
+                {
+                    if(kardex==null)
+                    {
+                        kardexSinLote=true;
+                    }                    
+                }
+                
+                //Todo si no existe un lote entonces creo uno que no tenga lote
+                if(!kardexSinLote)
+                {
+                    Kardex kardex = crearObjeto(bodega, producto,null);
+                    entityManager.persist(kardex);
+                }
+            }
+           
        }
    }
     
