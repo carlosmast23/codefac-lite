@@ -204,7 +204,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
       
     public Producto grabar(Producto p,Boolean generarCodigo) throws RemoteException, ServicioCodefacException
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() 
+        {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 grabarSinTransaccion(p,generarCodigo,true);
@@ -214,7 +215,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //TODO: Metodo temporal porque cuando se ejecuta sin esta parte causa conflicto al utilizar el producto en el resto de pantallas
         //Al utilizar por segunda vez el mismo objeto por algun motivo genera un error y luego de eso ya funciona correctamente
         try {
-            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() 
+            {
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
 
@@ -223,7 +225,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 
                 }
             });
-        } catch (Exception e) {
+        } catch (Exception e) 
+        {
             e.printStackTrace();
         }
         
@@ -458,6 +461,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         {
                             //Saco una copia del producto original para crear el producto empaqueteado con sus propias caracteristicas
                             productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
+                            productoEmpaquetado.setValorUnitario(null);
+                            productoEmpaquetado.setPrecioDistribuidor(null);
+                            productoEmpaquetado.setPrecioTarjeta(null);
+                            productoEmpaquetado.setPvp4(null);
+                            productoEmpaquetado.setPvp5(null);
+                            productoEmpaquetado.setPvp6(null);
+                            
                             productoEmpaquetado.setIdProducto(null);
                             //Eliminar los detalles por que puede dar referencia un objecto que ya estaba previamente grabado
                             productoEmpaquetado.setDetallesEnsamble(null);
@@ -775,7 +785,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //Buscar componentes ensambles eliminados
                 List<ProductoEnsamble> productoEnsambleEliminar=productoEnsamblesEliminados(producto);
                 
-                actualizarPreciosPresentacionesSinTransaccion(producto);
+                //TODO: Por eel momento solo cuando graba que se calculen solo los precios, al momento de editar ya le toca hacer los calculos de forma manual
+                //actualizarPreciosPresentacionesSinTransaccion(producto);
                 
                 //TODO: Por el momento ELIMINO directamente de la base de datos pero se deberia manejar por ESTADOS
                 for (ProductoEnsamble productoEnsamble : productoEnsambleEliminar) 
