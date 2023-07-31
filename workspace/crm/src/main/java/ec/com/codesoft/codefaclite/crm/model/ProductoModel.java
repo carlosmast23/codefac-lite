@@ -107,7 +107,6 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 

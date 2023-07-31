@@ -130,6 +130,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.TareaMantenimiento</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.ReembolsoDetalle</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.RembolsoImpuestoDetalle</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

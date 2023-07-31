@@ -137,6 +137,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaAdicional> datosAdicionales;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
+    private List<ReembolsoDetalle> reembolsoList;
 
     //@OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     //private List<NotaCredito> notasCredito;
@@ -644,6 +647,27 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
             }
         }
     }
+
+    public List<ReembolsoDetalle> getReembolsoList() {
+        return reembolsoList;
+    }
+
+    public void setReembolsoList(List<ReembolsoDetalle> reembolsoList) {
+        this.reembolsoList = reembolsoList;
+    }
+    
+    public void agregarReembolsoDetalle(ReembolsoDetalle rembolsoDetalle)
+    {
+        if(rembolsoDetalle==null)
+        {
+            reembolsoList=new ArrayList<ReembolsoDetalle>();
+        }
+        
+        rembolsoDetalle.setFactura(this);
+        reembolsoList.add(rembolsoDetalle);       
+       
+    }
+    
 
     @Override
     public List<DetalleFacturaNotaCeditoAbstract> getDetallesComprobante() {

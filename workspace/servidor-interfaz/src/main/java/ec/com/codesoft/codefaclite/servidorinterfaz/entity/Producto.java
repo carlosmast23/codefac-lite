@@ -65,6 +65,8 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     public static final String NOMBRE_TABLA="PRODUCTO";
     public static final String NOMBRE_CAMPO_ID="ID_PRODUCTO";
     
+    public static final String NOMBRE_PRODUCTO_REEMBOLSO="REEMBOLSO";
+    
 
     private static final long serialVersionUID = 1L;
     @Id

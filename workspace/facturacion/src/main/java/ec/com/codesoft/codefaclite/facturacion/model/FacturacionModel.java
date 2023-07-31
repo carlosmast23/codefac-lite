@@ -132,6 +132,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ReembolsoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
@@ -863,7 +864,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(documentoEnum.equals(DocumentoEnum.FACTURA_REEMBOLSO))
         {
             //Caso espcial donde se genera una Factura de Reembolso y se tiene que mostrar otro dialogo
-           
+            agregarDetalleRembolso();
         }
         else
         {
@@ -895,6 +896,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             }
         }        
+    }
+    
+    private void agregarDetalleRembolso()
+    {
+        ObserverUpdateInterface observer=new ObserverUpdateInterface<ReembolsoDetalle>() {
+            @Override
+            public void updateInterface(ReembolsoDetalle entity) {                
+                if(entity!=null)
+                {
+                    factura.agregarReembolsoDetalle(entity);
+                    controlador.agregarProductoReembolsoVista(entity);
+                    
+                }
+                
+            }
+        };
+        
+        panelPadre.crearDialogoCodefac(observer, VentanaEnum.DETALLE_REMBOLSO, false, new Object[]{},this);
     }
     
     //TODO: Unificar esta parte en el controlador para luego poder usar en la interfaz web    

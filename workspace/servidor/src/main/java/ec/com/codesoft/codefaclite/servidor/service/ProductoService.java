@@ -1106,7 +1106,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public Producto crearProductoPorDefectoSinTransaccion(Empresa empresa,Integer ivaDefecto) throws RemoteException, ServicioCodefacException
     {
-        Producto producto=new Producto();
+        /*Producto producto=new Producto();
         producto.setCodigoPersonalizado("001");
         producto.setNombre("libre");
         producto.setValorUnitario(new BigDecimal("1"));
@@ -1116,8 +1116,49 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         producto.setEmpresa(empresa);
         CatalogoProducto catalogoProducto=crearCatalogoProductoDefectoSinTransaccion(empresa,producto.getNombre(),ivaDefecto);
         producto.setCatalogoProducto(catalogoProducto);
+        return producto;        */
+        return crearProductoPorDefectoSinTransaccion(empresa, "libre", ivaDefecto);
+    }
+    
+    public Producto crearProductoPorDefectoSinTransaccion(Empresa empresa,String nombre,Integer ivaDefecto) throws RemoteException, ServicioCodefacException
+    {
+        String codigoAlAzar= UtilidadesCodigos.generarCodigoConTiempo();
+        
+        Producto producto=new Producto();
+        producto.setCodigoPersonalizado(codigoAlAzar);
+        producto.setNombre(nombre);
+        producto.setValorUnitario(new BigDecimal("1"));
+        producto.setManejarInventarioEnum(EnumSiNo.NO);
+        producto.setGenerarCodigoBarrasEnum(EnumSiNo.NO);
+        producto.setTipoProductoEnum(TipoProductoEnum.PRODUCTO);
+        producto.setEmpresa(empresa);
+        CatalogoProducto catalogoProducto=crearCatalogoProductoDefectoSinTransaccion(empresa,producto.getNombre(),ivaDefecto);
+        producto.setCatalogoProducto(catalogoProducto);
         return producto;        
     }
+    
+    public Producto crearOBuscarProductoReembolso(Empresa empresa) throws RemoteException, ServicioCodefacException
+    {
+        //Producto p;
+        //p.getEmpresa():
+        //p.getNombre()
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("empresa",empresa);
+        mapParametros.put("nombre",Producto.NOMBRE_PRODUCTO_REEMBOLSO);
+        
+       List<Producto> productoList=getFacade().findByMap(mapParametros);
+       if(productoList.size()==0)
+       {
+           Producto producto=grabar(crearProductoPorDefectoSinTransaccion(empresa, Producto.NOMBRE_PRODUCTO_REEMBOLSO,0), Boolean.FALSE);
+           return producto;
+       }
+       else
+       {
+           return productoList.get(0);
+       }
+        
+    }
+
     
     private CatalogoProducto crearCatalogoProductoDefectoSinTransaccion(Empresa empresa,String nombre,Integer ivaDefecto) throws RemoteException, ServicioCodefacException
     {

@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
@@ -52,7 +53,7 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         txtAutorizacion = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblImpuestoDetalle = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
         txtProveedorDescripcion = new javax.swing.JTextField();
         pnlDetalleImpuestos = new javax.swing.JPanel();
@@ -64,6 +65,7 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         txtBase = new javax.swing.JTextField();
         btnAgregarItem = new javax.swing.JButton();
         btnEliminarItem = new javax.swing.JButton();
+        lbl8912938123 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -181,12 +183,12 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel10, gridBagConstraints);
 
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblImpuestoDetalle);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -275,11 +277,18 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         pnlDetalleImpuestos.add(btnEliminarItem, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel1.add(pnlDetalleImpuestos, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.3;
+        jPanel1.add(lbl8912938123, gridBagConstraints);
 
         getContentPane().add(jPanel1);
 
@@ -311,9 +320,10 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JLabel lbl8912938123;
     private javax.swing.JPanel pnlDetalleImpuestos;
+    private javax.swing.JTable tblImpuestoDetalle;
     private javax.swing.JTextField txtAutorizacion;
     private javax.swing.JTextField txtBase;
     private javax.swing.JTextField txtDescripcionReembolso;
@@ -427,6 +437,14 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         this.txtSecuencialCompra = txtSecuencialCompra;
     }
 
+    public JTable getTblImpuestoDetalle() {
+        return tblImpuestoDetalle;
+    }
+
+    public void setTblImpuestoDetalle(JTable tblImpuestoDetalle) {
+        this.tblImpuestoDetalle = tblImpuestoDetalle;
+    }
+    
     
 
 }

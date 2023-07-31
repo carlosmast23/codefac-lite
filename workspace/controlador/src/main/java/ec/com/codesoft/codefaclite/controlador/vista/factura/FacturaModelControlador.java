@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ReembolsoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -430,7 +431,22 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad)
     {
+        
         agregarProductoVista(productoSeleccionado, lote, itemEspecifico, stock, costo, fechaCaducidad, false);
+        
+    }    
+    
+    public void agregarProductoReembolsoVista(ReembolsoDetalle rembolsoDetalle)
+    {
+        try {
+            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().crearOBuscarProductoReembolso(rembolsoDetalle.getFactura().getEmpresa());
+            producto.setNombre(rembolsoDetalle.getDescripcion());
+            agregarProductoVista(producto, null, null, null,null,null);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
