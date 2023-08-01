@@ -92,6 +92,16 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
                 
             }
         });
+        
+        getBtnEliminarItem().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                rembolsoDetalle.getDetalleList().clear();
+                actualizarVista();
+                
+            }
+        });
     }
     
     private void actualizarVista()
