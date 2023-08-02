@@ -658,7 +658,7 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     public void agregarReembolsoDetalle(ReembolsoDetalle rembolsoDetalle)
     {
-        if(rembolsoDetalle==null)
+        if(reembolsoList==null)
         {
             reembolsoList=new ArrayList<ReembolsoDetalle>();
         }

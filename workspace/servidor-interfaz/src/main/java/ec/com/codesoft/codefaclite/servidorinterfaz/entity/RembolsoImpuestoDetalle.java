@@ -38,6 +38,9 @@ public class RembolsoImpuestoDetalle implements Serializable{
     
     @Column(name = "BASE_IMPONIBLE")
     private BigDecimal baseImponible;
+    
+    @JoinColumn(name = "REEMBOLSO_DETALLE")
+    private ReembolsoDetalle rembolsoDetalle;
 
     public RembolsoImpuestoDetalle() 
     {
@@ -75,6 +78,14 @@ public class RembolsoImpuestoDetalle implements Serializable{
 
     public void setBaseImponible(BigDecimal baseImponible) {
         this.baseImponible = baseImponible;
+    }
+    
+    public ReembolsoDetalle getRembolsoDetalle() {
+        return rembolsoDetalle;
+    }
+
+    public void setRembolsoDetalle(ReembolsoDetalle rembolsoDetalle) {
+        this.rembolsoDetalle = rembolsoDetalle;
     }
     
     

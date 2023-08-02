@@ -439,8 +439,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public void agregarProductoReembolsoVista(ReembolsoDetalle rembolsoDetalle)
     {
         try {
-            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().crearOBuscarProductoReembolso(rembolsoDetalle.getFactura().getEmpresa());
-            producto.setNombre(rembolsoDetalle.getDescripcion());
+            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().crearOBuscarProductoReembolso(session.getEmpresa());
+            producto.setNombre(rembolsoDetalle.generarTextoRembolso());
             agregarProductoVista(producto, null, null, null,null,null);
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);

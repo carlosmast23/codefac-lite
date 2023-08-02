@@ -46,6 +46,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ReembolsoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RembolsoImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Ruta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -1064,9 +1066,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         List<FacturaDetalle> facturaDetalleList=factura.getDetalles();
         List<FormaPago> facturaFormasPagoList=factura.getFormaPagos();
         List<FacturaAdicional> facturaAdicionalList=factura.getDatosAdicionales();
+        List<ReembolsoDetalle> rembolsoList=factura.getReembolsoList();
+        
         factura.setFormaPagos(null);
         factura.setDetalles(null);
         factura.setDatosAdicionales(null);
+        factura.setReembolsoList(null);
         //factura.setMesa(null);
         entityManager.persist(factura);
         entityManager.flush();
@@ -1082,6 +1087,24 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             facturaAdicional.setFactura(factura);
             entityManager.persist(facturaAdicional);
             entityManager.flush();
+        }
+        
+        //Grabar los valores para el tema de lso reembolsos
+        for (ReembolsoDetalle reembolsoDetalle : rembolsoList) 
+        {
+            List<RembolsoImpuestoDetalle> impuestoDetalleList=reembolsoDetalle.getDetalleList();
+            reembolsoDetalle.setDetalleList(null);
+            reembolsoDetalle.setFactura(factura);
+            entityManager.persist(reembolsoDetalle);
+            entityManager.flush();
+            
+            for (RembolsoImpuestoDetalle impuestoDetalle : impuestoDetalleList) 
+            {
+                impuestoDetalle.setRembolsoDetalle(reembolsoDetalle);
+                entityManager.persist(impuestoDetalle);
+                entityManager.flush();
+            }
+            
         }
 
         /**
@@ -1130,6 +1153,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         factura.setDetalles(facturaDetalleList);
         factura.setFormaPagos(facturaFormasPagoList);
         factura.setDatosAdicionales(facturaAdicionalList);
+        factura.setReembolsoList(rembolsoList);
             
     }
     

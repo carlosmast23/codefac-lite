@@ -1149,7 +1149,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
        List<Producto> productoList=getFacade().findByMap(mapParametros);
        if(productoList.size()==0)
        {
-           Producto producto=grabar(crearProductoPorDefectoSinTransaccion(empresa, Producto.NOMBRE_PRODUCTO_REEMBOLSO,0), Boolean.FALSE);
+           Producto producto=crearProductoPorDefectoSinTransaccion(empresa, Producto.NOMBRE_PRODUCTO_REEMBOLSO,0);
+           
+           if(producto.getIdProducto()==null)
+           {
+                producto=grabar(producto, Boolean.FALSE);
+           }
+           
            return producto;
        }
        else
