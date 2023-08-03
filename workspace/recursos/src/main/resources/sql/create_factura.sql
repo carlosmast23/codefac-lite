@@ -165,9 +165,9 @@ create table FACTURA_ADICIONAL
     FACTURA_ID BIGINT,
     CAMPO varchar(150),
     VALOR varchar(150),
+    primary key (ID)
     TIPO varchar(1),
     NUMERO integer ,
-    primary key (ID)
 );
 
 /*@AGREGAR_TABLA(VERSION_SISTEMA=1.3.0.5.6)*/
@@ -190,7 +190,7 @@ create table REEMBOLSO_IMPUESTO_DETALLE
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     IMPUESTO_ID BIGINT,
-    REEMBOLSO_DETALLE BIGINT,
+    REEMBOLSO_DETALLE_ID BIGINT,
     PORCENTAJE_IVA INT,
     BASE_IMPONIBLE decimal(13,2),
     primary key (ID)

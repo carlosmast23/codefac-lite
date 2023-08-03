@@ -39,7 +39,7 @@ public class RembolsoImpuestoDetalle implements Serializable{
     @Column(name = "BASE_IMPONIBLE")
     private BigDecimal baseImponible;
     
-    @JoinColumn(name = "REEMBOLSO_DETALLE")
+    @JoinColumn(name = "REEMBOLSO_DETALLE_ID")
     private ReembolsoDetalle rembolsoDetalle;
 
     public RembolsoImpuestoDetalle() 

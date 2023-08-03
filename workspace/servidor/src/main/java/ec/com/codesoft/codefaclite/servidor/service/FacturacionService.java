@@ -1090,21 +1090,24 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
         
         //Grabar los valores para el tema de lso reembolsos
-        for (ReembolsoDetalle reembolsoDetalle : rembolsoList) 
+        if(rembolsoList!=null)
         {
-            List<RembolsoImpuestoDetalle> impuestoDetalleList=reembolsoDetalle.getDetalleList();
-            reembolsoDetalle.setDetalleList(null);
-            reembolsoDetalle.setFactura(factura);
-            entityManager.persist(reembolsoDetalle);
-            entityManager.flush();
-            
-            for (RembolsoImpuestoDetalle impuestoDetalle : impuestoDetalleList) 
+            for (ReembolsoDetalle reembolsoDetalle : rembolsoList) 
             {
-                impuestoDetalle.setRembolsoDetalle(reembolsoDetalle);
-                entityManager.persist(impuestoDetalle);
+                List<RembolsoImpuestoDetalle> impuestoDetalleList=reembolsoDetalle.getDetalleList();
+                reembolsoDetalle.setDetalleList(null);
+                reembolsoDetalle.setFactura(factura);
+                entityManager.persist(reembolsoDetalle);
                 entityManager.flush();
+
+                for (RembolsoImpuestoDetalle impuestoDetalle : impuestoDetalleList) 
+                {
+                    impuestoDetalle.setRembolsoDetalle(reembolsoDetalle);
+                    entityManager.persist(impuestoDetalle);
+                    entityManager.flush();
+                }
+
             }
-            
         }
 
         /**

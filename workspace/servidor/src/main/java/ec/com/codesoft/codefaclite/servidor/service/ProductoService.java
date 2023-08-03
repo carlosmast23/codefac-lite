@@ -434,11 +434,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
     }
     
-    private void grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException
+    private List<ProductoPresentacionDetalle> grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException
     {
+        List<ProductoPresentacionDetalle> productoPresentacionNuevoList=new ArrayList<ProductoPresentacionDetalle>();
         //grabar los detalles de  la presentacion
         if(productoPresentacionList!=null)
-        {                                    
+        {
+            
             for (ProductoPresentacionDetalle presentacionDetalle : productoPresentacionList) 
             {
                 
@@ -461,7 +463,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         {
                             //Saco una copia del producto original para crear el producto empaqueteado con sus propias caracteristicas
                             productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
-                            productoEmpaquetado.setValorUnitario(null);
+                            //productoEmpaquetado.setValorUnitario(null);
                             productoEmpaquetado.setPrecioDistribuidor(null);
                             productoEmpaquetado.setPrecioTarjeta(null);
                             productoEmpaquetado.setPvp4(null);
@@ -528,22 +530,24 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                     }
                                         
                     entityManager.persist(presentacionDetalle);
-                    //entityManager.flush();
+                    entityManager.flush();
                     
                 }
+                productoPresentacionNuevoList.add(presentacionDetalle);
             }
             
             //finalmente luego que ya tengo creando los nuevos productos le enlazo el detalle por que estaba dando problemas recursivos al enlazar en el mismo proceso repetitivo
-            for (ProductoPresentacionDetalle productoPresentacionDetalle : productoPresentacionList) {
-                productoPresentacionDetalle.getProductoEmpaquetado().setPresentacionList(productoPresentacionList);                
+            for (ProductoPresentacionDetalle productoPresentacionDetalle : productoPresentacionNuevoList) {
+                productoPresentacionDetalle.getProductoEmpaquetado().setPresentacionList(productoPresentacionNuevoList);                
             }
             
-            producto.setPresentacionList(productoPresentacionList);
+            producto.setPresentacionList(productoPresentacionNuevoList);
             //Actualizar los cambios en el producto
             entityManager.merge(producto);
             
         }
-
+        
+        return productoPresentacionNuevoList;
     }
     
     private void eliminarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException, RemoteException

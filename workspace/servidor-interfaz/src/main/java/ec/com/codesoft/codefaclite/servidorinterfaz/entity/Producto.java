@@ -200,7 +200,8 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
     private List<ProductoProveedor> productoProveedorList;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoOriginal",fetch = FetchType.EAGER)
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "productoOriginal",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "productoOriginal",fetch = FetchType.EAGER)
     private List<ProductoPresentacionDetalle> presentacionList;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
