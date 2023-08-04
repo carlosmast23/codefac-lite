@@ -28,11 +28,13 @@ import javax.xml.bind.annotation.XmlType;
  * @author Carlos
  */
 @XmlRootElement(name = ComprobanteElectronico.FACTURA)
-@XmlType(propOrder = {"informacionTributaria","informacionFactura","detalles","informacionAdicional"})
+@XmlType(propOrder = {"informacionTributaria","informacionFactura","detalles","reembolsos","informacionAdicional"})
 public class FacturaComprobante extends ComprobanteElectronicoFacturaAndLiquidacionAbstract{
 
     private InformacionFactura informacionFactura;
     //private List<DetalleFacturaComprobante> detalles;
+    
+    private List<ReembolsoDetalleComprobante> reembolsos;
     
     @Override
     public String getTipoDocumento() {
@@ -58,6 +60,18 @@ public class FacturaComprobante extends ComprobanteElectronicoFacturaAndLiquidac
     public void setInformacionFactura(InformacionFactura informacionFactura) {
         this.informacionFactura = informacionFactura;
     }
+
+    @XmlElementWrapper(name = "reembolsos")
+    @XmlElement(name = "reembolsoDetalle")
+    public List<ReembolsoDetalleComprobante> getReembolsos() {
+        return reembolsos;
+    }
+
+    public void setReembolsos(List<ReembolsoDetalleComprobante> reembolsos) {
+        this.reembolsos = reembolsos;
+    }
+    
+    
     
     
 

@@ -335,6 +335,10 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
          * Informacion adicional
          */
         comprobante.setCorreos(getCorreos());
+        
+        /**
+         * 
+         */
 
         return comprobante;
     }

@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -24,7 +26,8 @@ import javax.xml.bind.annotation.XmlType;
     "ptoEmiDocReembolso",
     "secuencialDocReembolso",    
     "fechaEmisionDocReembolso",
-    "numeroautorizacionDocReemb"
+    "numeroautorizacionDocReemb",
+    "detalleImpuestoList"
 })
 public class ReembolsoDetalleComprobante implements Serializable{
     
@@ -38,9 +41,23 @@ public class ReembolsoDetalleComprobante implements Serializable{
     private String secuencialDocReembolso;
     private String fechaEmisionDocReembolso;
     private String numeroautorizacionDocReemb;
+    
+    private List<DetalleImpuestoReembolsoComprobante> detalleImpuestoList;
 
     public ReembolsoDetalleComprobante() {
     }
+
+    @XmlElementWrapper(name = "detalleImpuestos")
+    @XmlElement(name = "detalleImpuesto")
+    public List<DetalleImpuestoReembolsoComprobante> getDetalleImpuestoList() {
+        return detalleImpuestoList;
+    }
+
+    public void setDetalleImpuestoList(List<DetalleImpuestoReembolsoComprobante> detalleImpuestoList) {
+        this.detalleImpuestoList = detalleImpuestoList;
+    }
+    
+    
 
     @XmlElement(name = "tipoIdentificacionProveedorReembolso")
     public String getTipoIdentificacionProveedorReembolso() {
