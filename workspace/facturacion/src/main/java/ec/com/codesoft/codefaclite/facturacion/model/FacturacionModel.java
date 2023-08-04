@@ -914,6 +914,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         };
         
         panelPadre.crearDialogoCodefac(observer, VentanaEnum.DETALLE_REMBOLSO, false, new Object[]{},this);
+        
     }
     
     //TODO: Unificar esta parte en el controlador para luego poder usar en la interfaz web    

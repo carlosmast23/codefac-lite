@@ -233,6 +233,7 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
     @Override
     public ReembolsoDetalle getResult() throws ExcepcionCodefacLite 
     {
+        setearDatos();
         System.out.println(" retorando objeto del rembolso");
         return rembolsoDetalle;
     }

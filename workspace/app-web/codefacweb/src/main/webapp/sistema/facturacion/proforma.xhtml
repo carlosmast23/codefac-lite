@@ -131,7 +131,7 @@
                 <p:tab title="Restaurante" rendered="#{proformaMb.visualizarComanda}">
                     <div class="p-grid" style="text-align: left" >
                         <div class="p-col-6 p-md-2 p-lg-2" >
-                            <h:outputLabel style="font-weight: bold">Seleccione la mesa:  </h:outputLabel>
+                            <h:outputLabel style="font-weight: bold">Seleccione la mesa:  </h:outputLabel>                            
                         </div>
                         <div class="p-col-6 p-md-4 p-lg-4" >
                             <p:selectOneMenu id="console1" value="#{proformaMb.factura.mesa}"  style="width:125px" converter="mesaConverter">
@@ -141,30 +141,25 @@
                     </div>   
 
 
-                    <p:tabView>
-                        <p:tab id="categoriaId" title="Categoria">
+                    <p:tabView id="tabComandaId" activeIndex="#{proformaMb.indiceTabComanda}" >
+                        <p:tab id="categoriaId" title="Categoria" >
                             <p:carousel value="#{proformaMb.categoriaList}" var="categoria" vertical="true" numVisible="3" responsive="true" >
                                 <f:facet name="header">
                                     <h2>#{categoria.nombre}</h2>
                                 </f:facet>
-                                
-                                <div class="product-item">
-                                    <div class="product-item-content">                                        
+
+                                <div class="product-item">                                   
+
+                                    <div class="product-item-content"> 
                                         <div>
-                                            <h4 class="mb-1">#{categoria.nombre}</h4>
-                                            <h6 class="mt-0 mb-3">
-                                                <h:outputText value="#{categoria.descripcion}">                                                   
-                                                </h:outputText>
-                                            </h6>                                            
+                                            <h3 class="mb-1">#{categoria.nombre}</h3>                                            
                                             <div class="mt-5">
-                                                <p:commandButton process="@this" update=":formulario:acordionCabecera:j_idt86:tabProductoId" immediate="true" actionListener="#{proformaMb.cargarListaProductosPorCategoria(categoria)}" icon="pi pi-search" styleClass="rounded-button mr-2" />
-                                                <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
-                                                <p:commandButton type="button" icon="pi pi-cog" styleClass="ui-button-help rounded-button" />
+                                                <p:commandButton process="@this" immediate="true" update=":formulario:acordionCabecera:tabComandaId:tabProductoId, :formulario:acordionCabecera:tabComandaId " actionListener="#{proformaMb.cargarListaProductosPorCategoria(categoria)}" icon="pi pi-search" styleClass="rounded-button mr-4" style="font-size: 30px;" />                                                
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </p:carousel>
                         </p:tab>
 
@@ -177,12 +172,11 @@
                                 <div class="product-item">
                                     <div class="product-item-content">                                        
                                         <div>
-                                            <h4 class="mb-1">#{producto.codigoPersonalizado}</h4>
-                                            <p>#{producto.nombre}</p>
-                                            <h4 class="mb-1">#{producto.valorUnitario}</h4>
-                                            <div class="mt-5">
-                                                <p:commandButton process="@this" update=":formulario:tblProductoDetalles" actionListener="#{proformaMb.agregarProductoPorDefecto()}" icon="pi pi-plus" styleClass="rounded-button mr-2" />
-                                                <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />                                                
+                                            <h4 class="mb-1">#{producto.codigoPersonalizado} [#{producto.valorUnitario}$]</h4>
+                                            <p>#{producto.nombre}</p>                                            
+                                            <div class="mt-5">                                                
+                                                <p:keyboard id="keypad" value="#{producto.registroSanitario}" keypadOnly="true" style="font-size: 20px" />
+                                                <p:commandButton process="@this, keypad" update=":formulario:tblProductoDetalles" actionListener="#{proformaMb.agregarProductoPorDefecto(producto)}" icon="pi pi-plus" styleClass="rounded-button mr-2" style="font-size: 20px;" />
                                             </div>
                                         </div>
                                     </div>
@@ -192,7 +186,7 @@
                         </p:tab>
 
                         <p:tab title="Detalles">
-                            
+
                         </p:tab>
 
                     </p:tabView>
@@ -422,7 +416,6 @@
                 <p:dataTable 
                     id="tblProductoDetalles" 
                     var="detalle" 
-                    reflow="true"
                     value="#{proformaMb.factura.detalles}" 
                     editable="true"  
                     style="margin-bottom:20px">
@@ -441,28 +434,28 @@
                     </p:column>
 
 
-                    <p:column headerText="Valor Unit">
+                    <p:column headerText="Valor Unit" priority="4">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.precioUnitario}" /></f:facet>
                             <f:facet name="input"><p:inputText id="modelInput3" value="#{detalle.precioUnitario}" style="width:100%"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
-                    <p:column headerText="Cantidad">
+                    <p:column headerText="Cantidad" priority="2" >
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.cantidad}" /></f:facet>
                             <f:facet name="input"><p:inputText id="modelInput6" value="#{detalle.cantidad}" style="width:100%"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
-                    <p:column headerText="Descuento">
+                    <p:column headerText="Descuento" priority="5">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.descuento}" /></f:facet>
                             <f:facet name="input"><p:inputText  id="modelInput19" value="#{detalle.descuento}" style="width:100%"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
-                    <p:column headerText="Total">
+                    <p:column headerText="Total" priority="3">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{detalle.total}" /></f:facet>
                             <f:facet name="input"><p:inputText disabled="true" id="modelInput5" value="#{detalle.total}" style="width:100%"/></f:facet>
@@ -470,7 +463,7 @@
                     </p:column>
 
 
-                    <p:column style="width:35px">
+                    <p:column style="width:35px" priority="6">
                         <p:rowEditor />
                     </p:column>
 

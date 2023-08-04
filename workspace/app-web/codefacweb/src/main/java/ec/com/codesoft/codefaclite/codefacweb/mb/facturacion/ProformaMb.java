@@ -100,6 +100,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteService
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.RoundingMode;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Timestamp;
@@ -187,6 +188,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     Variable temporal que me permite saber cual fue el precio original seleccionado para poder realizar otras validaciones
     */
     private BigDecimal precioVentaOriginalSeleccionada;
+   
+    /**
+     * Variable que me va a permitir saber cual de los tab debe estar seleccionado por defecto empiezo en CERO es decir en Categoria
+     */
+    private Integer indiceTabComanda=0;
 
     @PostConstruct
     public void init() {
@@ -513,13 +519,21 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
     
     //TODO: Unificar esta parte con el metodo CARGARDATOSDETALLEVISTA
-    public void agregarProductoPorDefecto()
+    public void agregarProductoPorDefecto(Producto producto)
     {
-        Producto productoDefecto=productoPorCategoriaList.get(0);
+        System.out.println("producto cargado: "+producto.getNombre());
+        Producto productoDefecto=producto;
         productoSeleccionado=productoDefecto;
         
+        Integer cantidad=1;
+        if(!UtilidadesTextos.verificarNullOVacio(productoDefecto.getRegistroSanitario()))
+        {
+            cantidad=Integer.parseInt(productoDefecto.getRegistroSanitario()); 
+        }
+        
         facturaDetalle = new FacturaDetalle();
-        facturaDetalle.setCantidad(BigDecimal.ONE);
+        facturaDetalle.setCantidad(new BigDecimal(cantidad+""));
+        facturaDetalle.setCodigoPrincipal(productoDefecto.getCodigoPersonalizado());
         facturaDetalle.setDescripcion(productoDefecto.getNombre());
         facturaDetalle.setPrecioUnitario(productoDefecto.getValorUnitario());
         facturaDetalle.setDescuento(BigDecimal.ZERO);
@@ -541,6 +555,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         try {
 
             controlador.agregarDetallesFactura(facturaDetalle,precioVentaOriginalSeleccionada,documentoSeleccionado,null,null,null,null);
+            factura.calcularTotalesDesdeDetalles();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
             MensajeMb.mostrarMensajeDialogo("Error ",ex.getMessage(), FacesMessage.SEVERITY_ERROR);
@@ -1472,14 +1487,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             this.puntosEmision=puntosEmision;
             
             //Cargar los datos de las categoria
-            categoriaList=ServiceFactory.getFactory().getCategoriaProductoServiceIf().obtenerTodosPorEmpresa(sessionMb.getSession().getEmpresa()).subList(0, 50);
+            categoriaList=ServiceFactory.getFactory().getCategoriaProductoServiceIf().obtenerTodosPorEmpresa(sessionMb.getSession().getEmpresa());
             
-            productoPorCategoriaList=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(sessionMb.getSession().getEmpresa()).subList(0,10);
+            productoPorCategoriaList=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(sessionMb.getSession().getEmpresa()).subList(0,10); 
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
-            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);  
         }
 
     }
@@ -1512,10 +1527,17 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("Ejemplo de productos ..."); 
     }
     
-    public void cargarListaProductosPorCategoria(CategoriaProducto categoriaProducto)
+    public void seleccionarTab()
+    {
+        indiceTabComanda=1;
+        System.out.println("seleccionado tab ...");  
+    }
+    
+    public void cargarListaProductosPorCategoria(CategoriaProducto categoriaProducto) 
     {
         try {
             productoPorCategoriaList=ServiceFactory.getFactory().getProductoServiceIf().buscarPorCategoria(categoriaProducto);
+            indiceTabComanda=1;
             System.out.println("productoPorCategoriaList ...");
         } catch (RemoteException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -1667,6 +1689,15 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void setControlador(FacturaModelControlador controlador) {
         this.controlador = controlador;
     }
+
+    public Integer getIndiceTabComanda() {
+        return indiceTabComanda;
+    }
+
+    public void setIndiceTabComanda(Integer indiceTabComanda) {
+        this.indiceTabComanda = indiceTabComanda;
+    }
+    
     
     
     
