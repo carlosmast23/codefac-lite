@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -46,7 +47,20 @@ public class ReembolsoDetalleComprobante implements Serializable{
 
     public ReembolsoDetalleComprobante() {
     }
-
+    
+    ////////////////// METODOS PERSONALIZADOS //////////////////////////////////
+    public void agregarDetalleImpuesto(DetalleImpuestoReembolsoComprobante detalleImpuesto)
+    {
+        if(this.detalleImpuestoList==null)
+        {
+            this.detalleImpuestoList=new ArrayList<DetalleImpuestoReembolsoComprobante>();
+        }
+        
+        this.detalleImpuestoList.add(detalleImpuesto);
+    }
+    
+    /////////////////// GET AND SET/////////////////////////////////////////////
+    
     @XmlElementWrapper(name = "detalleImpuestos")
     @XmlElement(name = "detalleImpuesto")
     public List<DetalleImpuestoReembolsoComprobante> getDetalleImpuestoList() {

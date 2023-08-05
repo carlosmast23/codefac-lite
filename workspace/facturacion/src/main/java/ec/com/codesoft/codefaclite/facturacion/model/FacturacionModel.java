@@ -859,9 +859,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void cargarDetalleProducto()
     {
         
-        DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        //DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         
-        if(documentoEnum.equals(DocumentoEnum.FACTURA_REEMBOLSO))
+        
+        if(getChkFacturaReembolso().isSelected())
         {
             //Caso espcial donde se genera una Factura de Reembolso y se tiene que mostrar otro dialogo
             agregarDetalleRembolso();
@@ -906,8 +907,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(entity!=null)
                 {
                     factura.agregarReembolsoDetalle(entity);
-                    controlador.agregarProductoReembolsoVista(entity);
-                    
+                    controlador.agregarProductoReembolsoVista(entity);                    
                 }
                 
             }

@@ -11,48 +11,33 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronicoFacturaAndLiquidacionAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.InformacionComprobanteAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleImpuestoReembolsoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FormaPagoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.InformacionFactura;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.ReembolsoDetalleComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra.InformacionLiquidacionCompra;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra.LiquidacionCompraComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
-import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ReembolsoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RembolsoImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.formato.ComprobantesUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -337,10 +322,56 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         comprobante.setCorreos(getCorreos());
         
         /**
-         * 
+         * Agregar los datos cuando es una FACTURA DE REEMBOLSO
          */
+        agregarDatosReembolso(comprobante);
+        
 
         return comprobante;
+    }
+    
+    private void agregarDatosReembolso(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteData)
+    {
+        FacturaComprobante facturaComprobante=(FacturaComprobante) comprobanteData;
+        if(factura.getReembolsoList()!=null)
+        {
+            for (ReembolsoDetalle reembolsoDetalle : factura.getReembolsoList()) 
+            {
+                ReembolsoDetalleComprobante rembolsoDetalleData=new ReembolsoDetalleComprobante();
+                rembolsoDetalleData.setTipoIdentificacionProveedorReembolso("04");
+                rembolsoDetalleData.setIdentificacionProveedorReembolso(reembolsoDetalle.getProveedor().getIdentificacion());
+                rembolsoDetalleData.setCodPaisPagoProveedorReembolso("000");
+                rembolsoDetalleData.setTipoProveedorReembolso("01");
+                rembolsoDetalleData.setCodDocReembolso("01");
+                rembolsoDetalleData.setEstabDocReembolso(ComprobantesUtilidades.formatoEstablecimiento(reembolsoDetalle.getPuntoEstablecimiento()+""));
+                rembolsoDetalleData.setPtoEmiDocReembolso(ComprobantesUtilidades.formatoEstablecimiento(reembolsoDetalle.getPuntoEmision()+""));
+                String secuencialFormat=UtilidadesTextos.llenarCarateresIzquierda(reembolsoDetalle.getSecuencial()+"",9,"0");
+                rembolsoDetalleData.setSecuencialDocReembolso(secuencialFormat);
+                
+                String fechaEmisionStr=ComprobantesElectronicosUtil.dateToString(new java.sql.Date(reembolsoDetalle.getFechaEmision().getTime()));
+                
+                rembolsoDetalleData.setFechaEmisionDocReembolso(fechaEmisionStr);
+                rembolsoDetalleData.setNumeroautorizacionDocReemb(reembolsoDetalle.getNumeroAutorizacion());
+                
+                
+                /// Agregar los detalle de los impuesto de los REEMBOLSOS                
+                for (RembolsoImpuestoDetalle impuestoDetalle : reembolsoDetalle.getDetalleList()) 
+                {
+                    DetalleImpuestoReembolsoComprobante impuestoDetalleData=new DetalleImpuestoReembolsoComprobante();
+                    impuestoDetalleData.setCodigo("2");
+                    impuestoDetalleData.setCodigoPorcentaje("0");
+                    impuestoDetalleData.setTarifa("0");
+                    BigDecimal baseImponibleReembolso=impuestoDetalle.getBaseImponible().setScale(2, RoundingMode.HALF_UP);
+                    impuestoDetalleData.setBaseImponibleReembolso(baseImponibleReembolso+"");
+                    impuestoDetalleData.setImpuestoReembolso(baseImponibleReembolso+"");
+                    rembolsoDetalleData.agregarDetalleImpuesto(impuestoDetalleData);
+                } 
+                
+                //Agregar el reembolso al detalle de la factura del comprobante
+                facturaComprobante.agregarDetalleRembolso(rembolsoDetalleData);
+            }
+            
+        }
     }
 
     

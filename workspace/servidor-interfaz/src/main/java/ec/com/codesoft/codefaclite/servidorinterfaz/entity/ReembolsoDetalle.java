@@ -13,10 +13,12 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -59,7 +61,7 @@ public class ReembolsoDetalle implements Serializable{
     @Column(name = "DESCRIPCION") 
     private String descripcion;
     
-    
+    @OneToMany(mappedBy = "rembolsoDetalle", fetch = FetchType.EAGER)
     private List<RembolsoImpuestoDetalle> detalleList;
 
     public ReembolsoDetalle() 

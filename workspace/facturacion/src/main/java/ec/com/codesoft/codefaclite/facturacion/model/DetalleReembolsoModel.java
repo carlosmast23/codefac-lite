@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimient
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ReembolsoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RembolsoImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -234,8 +235,40 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
     public ReembolsoDetalle getResult() throws ExcepcionCodefacLite 
     {
         setearDatos();
+        validarDatos();
         System.out.println(" retorando objeto del rembolso");
         return rembolsoDetalle;
+    }
+    
+    private void validarDatos() throws ExcepcionCodefacLite 
+    {
+        if(rembolsoDetalle.getProveedor()==null)
+        {
+            throw new ExcepcionCodefacLite("No se puede grabar sin ingresar un proveedor");
+        }
+        
+        if(UtilidadesTextos.verificarNullOVacio(rembolsoDetalle.getNumeroAutorizacion()))
+        {
+            throw new ExcepcionCodefacLite("No se puede grabar sin ingresar un número de autorización");
+        }
+        
+        if(rembolsoDetalle.getNumeroAutorizacion().length()<9)
+        {
+            throw new ExcepcionCodefacLite("El número de autorización es muy corto");
+        }
+        
+        if(rembolsoDetalle.getFechaEmision()==null)
+        {
+            throw new ExcepcionCodefacLite("No se puede grabar sin ingresar una fecha");
+        }
+        
+        if(rembolsoDetalle.getDetalleList()==null || rembolsoDetalle.getDetalleList().size()==0)
+        {
+            throw new ExcepcionCodefacLite("No se puede grabar sin ingresar detalles de los impuestos");
+        }
+        
+        
+        
     }
     
     

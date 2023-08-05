@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Informaci
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.DetalleNotaCreditoComprobante;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -41,6 +42,19 @@ public class FacturaComprobante extends ComprobanteElectronicoFacturaAndLiquidac
         return ComprobanteEnum.FACTURA.getCodigo();
     }
     
+    ////////////////////// METODOS PERSONALIZADOS ////////////////////
+    
+    public void agregarDetalleRembolso(ReembolsoDetalleComprobante rembolsoDetalle)
+    {
+        if(reembolsos==null)
+        {
+            this.reembolsos=new ArrayList<ReembolsoDetalleComprobante>();            
+        }
+        
+        this.reembolsos.add(rembolsoDetalle);
+    }
+    
+    ////////////////////// GET AND SET ///////////////////////////////
 
     /*@XmlElementWrapper(name = "detalles")
     @XmlElement(name = "detalle")

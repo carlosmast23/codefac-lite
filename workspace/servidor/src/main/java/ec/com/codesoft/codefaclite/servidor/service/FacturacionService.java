@@ -93,6 +93,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -1090,8 +1091,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
         
         //Grabar los valores para el tema de lso reembolsos
+        //List<ReembolsoDetalle> rembolsoListPersistencia=null;
         if(rembolsoList!=null)
         {
+            //rembolsoListPersistencia=new ArrayList<ReembolsoDetalle>();
             for (ReembolsoDetalle reembolsoDetalle : rembolsoList) 
             {
                 List<RembolsoImpuestoDetalle> impuestoDetalleList=reembolsoDetalle.getDetalleList();
@@ -1107,6 +1110,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     entityManager.flush();
                 }
 
+                reembolsoDetalle.setDetalleList(impuestoDetalleList);
+                //Agregar la nueva referencia a la lista
+                //rembolsoListPersistencia.add(reembolsoDetalle);
             }
         }
 

@@ -196,6 +196,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         cmbPuntoEmision = new javax.swing.JComboBox<>();
         lblSecuencial = new javax.swing.JLabel();
         lblEspacio23 = new javax.swing.JLabel();
+        chkFacturaReembolso = new javax.swing.JCheckBox();
         panelTabDatos = new javax.swing.JTabbedPane();
         panelProductos = new javax.swing.JPanel();
         panelDatosEmpresa1 = new javax.swing.JPanel();
@@ -1063,6 +1064,21 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         panelDatosFactura.add(lblEspacio23, gridBagConstraints);
 
+        chkFacturaReembolso.setFont(new java.awt.Font("Arial", 3, 11)); // NOI18N
+        chkFacturaReembolso.setText("Reembolso");
+        chkFacturaReembolso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkFacturaReembolsoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+        panelDatosFactura.add(chkFacturaReembolso, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1739,6 +1755,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbDescuentoActionPerformed
 
+    private void chkFacturaReembolsoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFacturaReembolsoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkFacturaReembolsoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDatosAdicionales;
@@ -1769,6 +1789,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox checkPorcentaje;
     private javax.swing.JCheckBox chkActivarFechaVencimiento;
     private javax.swing.JCheckBox chkActivarFinanciamiento;
+    private javax.swing.JCheckBox chkFacturaReembolso;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JCheckBox chkHabilitarCredito;
     private javax.swing.JCheckBox chkOTDetalleUnico;
@@ -2521,6 +2542,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setLblTituloAhorro(JLabel lblTituloAhorro) {
         this.lblTituloAhorro = lblTituloAhorro;
+    }
+
+    public JCheckBox getChkFacturaReembolso() {
+        return chkFacturaReembolso;
+    }
+
+    public void setChkFacturaReembolso(JCheckBox chkFacturaReembolso) {
+        this.chkFacturaReembolso = chkFacturaReembolso;
     }
 
     
