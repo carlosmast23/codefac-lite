@@ -292,6 +292,11 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
 
     public BigDecimal getIrbpnr() {
+        //TODO: Codigo para hacer compatible con versiones anteriores que no tenian el irbpnr
+        if(irbpnr==null)
+        {
+            this.irbpnr=BigDecimal.ZERO;
+        }        
         return irbpnr;
     }
 
