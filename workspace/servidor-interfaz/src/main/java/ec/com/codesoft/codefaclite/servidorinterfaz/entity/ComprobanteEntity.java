@@ -472,7 +472,17 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     }
 
     public String getPreimpreso() {
-        return UtilidadVarios.construirPreimpresoStr(puntoEmision,puntoEstablecimiento.intValue(), secuencial);
+        
+        //System.out.println("p:"+puntoEmision+" e:"+puntoEstablecimiento+" s:"+secuencial);
+        
+        Integer puntoEstablecimientoTmp=0;
+        if(puntoEstablecimiento!=null)
+        {
+            puntoEstablecimientoTmp=puntoEstablecimiento.intValue();
+            Logger.getLogger(ComprobanteEntity.class.getName()).log(Level.WARNING,"La Factura con id: "+id+" no tiene punto de establecimiento asignado, REVISAR");
+        }
+        
+        return UtilidadVarios.construirPreimpresoStr(puntoEmision,puntoEstablecimientoTmp, secuencial);
         //TODO: Este artificio utilizo porque genera para imprimir presupuestos desde la interfaz web
         /*if (puntoEmision == null) {
             puntoEmision = 0;
