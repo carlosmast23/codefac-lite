@@ -1067,7 +1067,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     public void setTxtUtilidad(JTextField txtUtilidad) {
         this.txtUtilidad = txtUtilidad;
     }
-    
+
     
 
     

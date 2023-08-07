@@ -996,10 +996,15 @@ public class CompraModel extends CompraPanel{
         getBtnAgregarItem().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /**
-                 * Seteo el valor que se ingresa en el costo para actualizar el valor del producto para ese proveedor
-                 */
-                agregarDetalleCompraConDatosVista(null);
+                try {
+                    /**
+                     * Seteo el valor que se ingresa en el costo para actualizar el valor del producto para ese proveedor
+                     */
+                    agregarDetalleCompraConDatosVista(null);
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                }
 
             }
         });
@@ -1084,14 +1089,19 @@ public class CompraModel extends CompraPanel{
             public void actionPerformed(ActionEvent e) {
                 if(bandera)
                 {
-                    bandera = false;
-                    int filaDP = getTblDetalleProductos().getSelectedRow();
-                    filaDP = getTblDetalleProductos().getSelectedRow();
-                    CompraDetalle compraDetalle = compra.getDetalles().get(filaDP);
-                    agregarDetalleCompraConDatosVista(compraDetalle);
-                    calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
-                    calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
-                    bloquearDesbloquearBotones(true);
+                    try {
+                        bandera = false;
+                        int filaDP = getTblDetalleProductos().getSelectedRow();
+                        filaDP = getTblDetalleProductos().getSelectedRow();
+                        CompraDetalle compraDetalle = compra.getDetalles().get(filaDP);
+                        agregarDetalleCompraConDatosVista(compraDetalle);
+                        calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
+                        calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                        bloquearDesbloquearBotones(true);
+                    } catch (ExcepcionCodefacLite ex) {
+                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    }
                 }
             }
         });
@@ -1250,7 +1260,7 @@ public class CompraModel extends CompraPanel{
         }
     }
     
-    private void agregarDetalleCompraConDatosVista(CompraDetalle compraDetalle)
+    private void agregarDetalleCompraConDatosVista(CompraDetalle compraDetalle) throws ExcepcionCodefacLite
     {
 
         BigDecimal costo = null;
@@ -1261,9 +1271,34 @@ public class CompraModel extends CompraPanel{
             costo=new BigDecimal(costoStr);
         }
         
-        BigDecimal cantidad = new BigDecimal(getTxtCantidadItem().getText());
-        BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText());
-        BigDecimal descuento=new BigDecimal(getTxtDescuentoItem().getText());
+        BigDecimal cantidad =  null;        
+        try
+        {
+            cantidad =  new BigDecimal(getTxtCantidadItem().getText());
+        }catch(java.lang.NumberFormatException nfe)
+        {
+            throw new ExcepcionCodefacLite("Error al ingresar un formato de número invalido para la CANTIDAD");
+        }
+                
+        BigDecimal precioUnitario = null;
+        try
+        {
+            precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText());
+        }catch(java.lang.NumberFormatException nfe)
+        {
+            throw new ExcepcionCodefacLite("Error al ingresar un formato de número invalido para el PRECIO UNITARIO");
+        }
+        
+        
+        BigDecimal descuento=null;
+        try
+        {
+            descuento = new BigDecimal(getTxtDescuentoItem().getText());
+        }catch(java.lang.NumberFormatException nfe)
+        {
+            throw new ExcepcionCodefacLite("Error al ingresar un formato de número invalido para el DESCUENTO");
+        }
+        
         //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
         Integer porcentajeIva=(Integer) getCmbIvaDetalle().getSelectedItem();
         
@@ -1965,7 +2000,12 @@ public class CompraModel extends CompraPanel{
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) 
                 {
-                    agregarDetalleCompraConDatosVista(null);
+                    try {
+                        agregarDetalleCompraConDatosVista(null);
+                    } catch (ExcepcionCodefacLite ex) {
+                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    }
                 }
             }
 
