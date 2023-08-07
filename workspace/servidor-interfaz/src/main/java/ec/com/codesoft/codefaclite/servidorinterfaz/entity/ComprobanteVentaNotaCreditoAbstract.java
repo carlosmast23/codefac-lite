@@ -184,6 +184,12 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     }
 
     public BigDecimal getIrbpnr() {
+        //TODO: Por el momento dejo este codigo para que sea retrocompatible con versiones anteriores que no tenian este dato
+        if(irbpnr==null)
+        {
+            this.irbpnr=BigDecimal.ZERO;
+        }
+        
         return irbpnr;
     }
 
