@@ -267,9 +267,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 Boolean kardexSinLote=false;
                 for (Kardex kardex : kardexList) 
                 {
-                    if(kardex==null)
+                    if(kardex.getLote()==null)
                     {
                         kardexSinLote=true;
+                        break;
                     }                    
                 }
                 

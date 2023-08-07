@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
@@ -34,6 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import static java.awt.image.ImageObserver.SOMEBITS;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -82,6 +84,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnReenviarCorreo = new javax.swing.JButton();
         btnAutorizarDocumento = new javax.swing.JButton();
         btnCambiarEstado = new javax.swing.JButton();
+        btnCorregirSecuencial = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -113,6 +116,10 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnCambiarEstado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/editar2.gif"))); // NOI18N
         btnCambiarEstado.setToolTipText("Cambiar estado comprobante");
         add(btnCambiarEstado);
+
+        btnCorregirSecuencial.setFont(new java.awt.Font("Arial", 2, 11)); // NOI18N
+        btnCorregirSecuencial.setText("fix secuencial");
+        add(btnCorregirSecuencial);
 
         jLabel2.setText("  ");
         add(jLabel2);
@@ -149,6 +156,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     private javax.swing.JButton btnAbrirXml;
     private javax.swing.JButton btnAutorizarDocumento;
     private javax.swing.JButton btnCambiarEstado;
+    private javax.swing.JButton btnCorregirSecuencial;
     private javax.swing.JButton btnObtenerClaveAcceso;
     private javax.swing.JButton btnReProcesarComprobante;
     private javax.swing.JButton btnReenviarCorreo;
@@ -341,6 +349,39 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                 }
             }
         });
+          
+        btnCorregirSecuencial.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                //Validacion que ingrese la clave de soporte para poder continuar
+                String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+                if (!UtilidadesSistema.verificarClaveSoporte(claveIngresada)) {
+                    DialogoCodefac.mensaje(new CodefacMsj("Clave de acceso incorrecta",CodefacMsj.TipoMensajeEnum.ERROR));
+                    return;
+                }
+                
+                try {
+                    String secuencialIngresado = JOptionPane.showInputDialog("Ingrese el nuevo secuencial para modificar al comprobante:");
+                    comprobante.getComprobante().setSecuencial(Integer.parseInt(secuencialIngresado));               
+                    
+                    if(DialogoCodefac.dialogoPregunta(new CodefacMsj("Está seguro que quiere cambiar al nuevo secuencial "+secuencialIngresado+" ?",CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
+                    {
+                        ServiceFactory.getFactory().getComprobanteServiceIf().editar(comprobante.getComprobante());
+                        DialogoCodefac.mensaje(new CodefacMsj("Secuencial modificado correctamente",CodefacMsj.TipoMensajeEnum.CORRECTO));
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch(Exception ex1)
+                {
+                    ex1.printStackTrace();
+                    DialogoCodefac.mensaje(new CodefacMsj(ex1.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
+                }
+            }
+        });
+                
     }
     
     private void setearDatosRecepcion(DialogMostrarClaveAcceso dialogo)
