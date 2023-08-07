@@ -905,9 +905,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void updateInterface(ReembolsoDetalle entity) {                
                 if(entity!=null)
-                {
-                    factura.agregarReembolsoDetalle(entity);
+                {   
+                    factura.agregarReembolsoDetalle(entity);                    
                     controlador.agregarProductoReembolsoVista(entity);                    
+                    //Cuando ingreso productos de facturas de reembolso no tienen kardex y tengo que dejar en NULL
+                    kardexSeleccionado=null;
                 }
                 
             }
@@ -1343,7 +1345,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
             buscarDialogoModel.setVisible(true);
             productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
-            getCmbIva().setSelectedItem(EnumSiNo.NO);    
+            getCmbIva().setSelectedItem(EnumSiNo.NO); 
+            kardexSeleccionado=null;
             controlador.agregarProductoVista(productoSeleccionado,null,null,null,null,null);
     }
     
