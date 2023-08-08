@@ -547,6 +547,23 @@ public class UtilidadesFecha {
         return new Time(hours, minutes, 0);
     }
     
+    public static Time extractTimeFromDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        int seconds = calendar.get(Calendar.SECOND);
+
+        long millisecondsInTime = hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000;
+        return new Time(millisecondsInTime);
+    }
+
+    public static Time obtenerTiempoActual() {
+        long currentTimeMillis = System.currentTimeMillis();
+        return new Time(currentTimeMillis);
+    }
+    
      public static boolean comparaFechaEntreRango(java.util.Date fecha, java.util.Date fechaInicio, java.util.Date fechFin) {
         // Compara si la fecha a verificar está entre la fecha de inicio y la fecha de fin
         return fecha.compareTo(fechaInicio) >= 0 && fecha.compareTo(fechFin) <= 0;

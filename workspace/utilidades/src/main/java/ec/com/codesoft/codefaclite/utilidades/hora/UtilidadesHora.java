@@ -82,7 +82,33 @@ public class UtilidadesHora
         //TODO: Si la cantidad de dias es negativa entonces asumo que siempre debe coger como referencia el dia de apertura el mismo día
         if(cantidadDias<0)
         {
-            fechaAperturaCaja=UtilidadesFecha.getFechaHoraHoy();
+            //Para hacer esta comparacion cuando la fechas se pasan de dia debo saber que dia empezar a configurar dependiendo la hora que me encuentro
+            
+            //En el caso normal que siempre la hora anterior sea anterior a la hora normal tomo la hora del día actual
+            if(horaInicial.before(horaFinal))
+            {
+                fechaAperturaCaja=UtilidadesFecha.getFechaHoraHoy();
+            }
+            else
+            {
+                //Este time representa 24 horas para saber que se acabo el dia
+                //long millisecondsIn24Hours = 24 * 60 * 60 * 1000;
+                //Time time24Hours = new Time(millisecondsIn24Hours);                
+                Time horaActual=UtilidadesFecha.obtenerTiempoActual();                
+                
+                if(compararTimes(horaActual, horaInicial)<=0)
+                {
+                    Date fechaAyer= UtilidadesFecha.restarDiasFecha(UtilidadesFecha.getFechaHoy(), 1);
+                    fechaAperturaCaja=fechaAyer;
+                }
+                else
+                {
+                    fechaAperturaCaja=UtilidadesFecha.getFechaHoraHoy();
+                }
+            
+            }
+            
+            
         }
         else
         {
@@ -150,6 +176,24 @@ public class UtilidadesHora
     public static java.sql.Date transformarTimeSqlToDateSql(Time hora)
     {
         return new java.sql.Date(hora.getTime());
+    }
+    
+    public static int compararTimes(Time time1, Time time2) {
+        int hours1 = time1.getHours();
+        int minutes1 = time1.getMinutes();
+        int seconds1 = time1.getSeconds();
+
+        int hours2 = time2.getHours();
+        int minutes2 = time2.getMinutes();
+        int seconds2 = time2.getSeconds();
+
+        if (hours1 != hours2) {
+            return Integer.compare(hours1, hours2);
+        } else if (minutes1 != minutes2) {
+            return Integer.compare(minutes1, minutes2);
+        } else {
+            return Integer.compare(seconds1, seconds2);
+        }
     }
     
 }
