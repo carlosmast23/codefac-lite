@@ -358,9 +358,21 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                 for (RembolsoImpuestoDetalle impuestoDetalle : reembolsoDetalle.getDetalleList()) 
                 {
                     DetalleImpuestoReembolsoComprobante impuestoDetalleData=new DetalleImpuestoReembolsoComprobante();
-                    impuestoDetalleData.setCodigo("2");
-                    impuestoDetalleData.setCodigoPorcentaje("0");
-                    impuestoDetalleData.setTarifa("0");
+                    impuestoDetalleData.setCodigo("2"); //Por defecto por el momento solo hago que permita enviar productos con IVA
+                    
+                    //TODO: Por el momento solo queda configurado para poder hacer reembolso del IVA, solo hago esto por la premura del tiempo
+                    //SOLUCION: Guardar este dato desde impuestoDetalle para no tener que estar haciendo validaciones extra
+                    if(impuestoDetalle.getPorcentajeIva()==0)
+                    {
+                        impuestoDetalleData.setCodigoPorcentaje("0");
+                        impuestoDetalleData.setTarifa("0");
+                        
+                    }else if(impuestoDetalle.getPorcentajeIva()==12)
+                    {
+                        impuestoDetalleData.setCodigoPorcentaje("2");
+                        impuestoDetalleData.setTarifa("12");
+                    }
+                    
                     BigDecimal baseImponibleReembolso=impuestoDetalle.getBaseImponible().setScale(2, RoundingMode.HALF_UP);
                     impuestoDetalleData.setBaseImponibleReembolso(baseImponibleReembolso+"");
                     impuestoDetalleData.setImpuestoReembolso(baseImponibleReembolso+"");

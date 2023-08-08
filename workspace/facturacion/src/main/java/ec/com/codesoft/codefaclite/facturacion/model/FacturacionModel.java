@@ -1074,13 +1074,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         int fila = getTblDetalleFactura().getSelectedRow();
         if(fila>=0)
         {
-            eliminarDetalleModelo(fila);
-            controlador.cargarTotales();
-            modoEdicionDetalle=false;
-            getBtnEditarDetalle().setEnabled(false);
-            getBtnAgregarDetalleFactura().setEnabled(true);
-            getBtnAgregarProducto().setEnabled(true);
-            getBtnCrearProducto().setEnabled(true);
+            if(getChkFacturaReembolso().isSelected())
+            {                
+                DialogoCodefac.mensaje(new CodefacMsj("Función no disponible para facturas de Reembolso, se recomienda VOLVER A REALIZAR LA FACTURA nuevamente", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            }
+            else
+            {
+                eliminarDetalleModelo(fila);
+                controlador.cargarTotales();
+                modoEdicionDetalle=false;
+                getBtnEditarDetalle().setEnabled(false);
+                getBtnAgregarDetalleFactura().setEnabled(true);
+                getBtnAgregarProducto().setEnabled(true);
+                getBtnCrearProducto().setEnabled(true);
+            }
         }
     }
     

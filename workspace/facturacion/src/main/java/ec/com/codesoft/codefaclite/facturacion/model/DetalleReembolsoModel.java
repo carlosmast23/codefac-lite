@@ -15,11 +15,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.facturacion.panel.DetalleReembolsoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ReembolsoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RembolsoImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,6 +54,7 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
     public void iniciar() throws ExcepcionCodefacLite, RemoteException 
     {
         listenerBotones();
+        cargarDatosIniciales();
     }
     
     public void cargarDatosDefecto()
@@ -83,9 +86,11 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
         getBtnAgregarItem().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+                ImpuestoDetalle impuestoDetalle=(ImpuestoDetalle) getCmbPorcentaje().getSelectedItem();                
                 RembolsoImpuestoDetalle detalle=new RembolsoImpuestoDetalle();
                 detalle.setImpuesto(impuestoIva);
-                detalle.setPorcentajeIva(12); //Dejo ingresado por defecto
+                detalle.setPorcentajeIva(impuestoDetalle.getTarifa()); //Dejo ingresado por defecto
                 detalle.setBaseImponible(new BigDecimal(getTxtBase().getText()));
                 
                 rembolsoDetalle.agregarImpuestoRembolso(detalle);
@@ -107,6 +112,9 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
     
     private void actualizarVista()
     {
+        String titulo[]={"Impuesto","Porcentaje","Base"};
+        DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
+        
         if(rembolsoDetalle!=null)
         {
             Persona proveedor=rembolsoDetalle.getProveedor();
@@ -120,17 +128,15 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
             if(rembolsoDetalle.getDetalleList()!=null)
             {
                 for (RembolsoImpuestoDetalle impuestoDetalle : rembolsoDetalle.getDetalleList()) 
-                {
-                    String titulo[]={"Impuesto","Porcentaje","Base"};
-                    DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
+                {                   
                     
                     Vector filaDatos=new Vector();
                     filaDatos.add("IVA");
-                    filaDatos.add("12%");
+                    filaDatos.add(impuestoDetalle.getPorcentajeIva()+"%");
                     filaDatos.add(impuestoDetalle.getBaseImponible());
                     
                     modeloTabla.addRow(filaDatos);
-                    getTblImpuestoDetalle().setModel(modeloTabla);
+                    
                 }
             }
             else
@@ -138,6 +144,7 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
                 getTblImpuestoDetalle().setModel(new DefaultTableModel());
             }
         }
+        getTblImpuestoDetalle().setModel(modeloTabla);
     }
 
     @Override
@@ -252,7 +259,7 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
             throw new ExcepcionCodefacLite("No se puede grabar sin ingresar un número de autorización");
         }
         
-        if(rembolsoDetalle.getNumeroAutorizacion().length()<9)
+        if(rembolsoDetalle.getNumeroAutorizacion().length()<=9)
         {
             throw new ExcepcionCodefacLite("El número de autorización es muy corto");
         }
@@ -268,6 +275,16 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
         }
         
         
+        
+    }
+
+    private void cargarDatosIniciales() {
+        try {
+            List<ImpuestoDetalle> impuestoDetalleList = ServiceFactory.getFactory().getImpuestoDetalleServiceIf().obtenerIvaVigente();
+            UtilidadesComboBox.llenarComboBox(getCmbPorcentaje(), impuestoDetalleList);
+        } catch (RemoteException ex) {
+            Logger.getLogger(DetalleReembolsoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     

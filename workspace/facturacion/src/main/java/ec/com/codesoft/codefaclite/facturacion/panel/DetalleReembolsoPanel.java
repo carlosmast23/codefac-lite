@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -60,8 +61,6 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         jLabel4 = new javax.swing.JLabel();
         cmbPorcentaje = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        cmbImpuesto = new javax.swing.JComboBox<>();
         txtBase = new javax.swing.JTextField();
         btnAgregarItem = new javax.swing.JButton();
         btnEliminarItem = new javax.swing.JButton();
@@ -71,6 +70,7 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setMinimumSize(new java.awt.Dimension(554, 671));
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -222,7 +222,6 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlDetalleImpuestos.add(jLabel4, gridBagConstraints);
 
-        cmbPorcentaje.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "12%" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -238,23 +237,6 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlDetalleImpuestos.add(jLabel6, gridBagConstraints);
-
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Impuesto:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlDetalleImpuestos.add(jLabel7, gridBagConstraints);
-
-        cmbImpuesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IVA" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlDetalleImpuestos.add(cmbImpuesto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
@@ -305,8 +287,7 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
     private javax.swing.JButton btnBuscarProveedor;
     private javax.swing.JButton btnEliminarItem;
     private com.toedter.calendar.JDateChooser cmbFechaCompra;
-    private javax.swing.JComboBox<String> cmbImpuesto;
-    private javax.swing.JComboBox<String> cmbPorcentaje;
+    private javax.swing.JComboBox<ImpuestoDetalle> cmbPorcentaje;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel23;
@@ -315,7 +296,6 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -365,22 +345,15 @@ public abstract class DetalleReembolsoPanel  extends ControladorCodefacInterface
         this.cmbFechaCompra = cmbFechaCompra;
     }
 
-    public JComboBox<String> getCmbImpuesto() {
-        return cmbImpuesto;
-    }
-
-    public void setCmbImpuesto(JComboBox<String> cmbImpuesto) {
-        this.cmbImpuesto = cmbImpuesto;
-    }
-
-    public JComboBox<String> getCmbPorcentaje() {
+    public JComboBox<ImpuestoDetalle> getCmbPorcentaje() {
         return cmbPorcentaje;
     }
 
-    public void setCmbPorcentaje(JComboBox<String> cmbPorcentaje) {
+    public void setCmbPorcentaje(JComboBox<ImpuestoDetalle> cmbPorcentaje) {
         this.cmbPorcentaje = cmbPorcentaje;
     }
 
+    
     public JTextField getTxtAutorizacion() {
         return txtAutorizacion;
     }
