@@ -947,10 +947,20 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         } 
         else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
-            Factura factura=(Factura) comprobanteEntity;
-            ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
-            comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
-            return comprobanteData;
+            if(comprobanteEntity instanceof Factura)
+            {
+                Factura factura=(Factura) comprobanteEntity;
+                ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+                comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
+                return comprobanteData;
+            }
+            else if(comprobanteEntity instanceof Compra)
+            {
+                Compra compra=(Compra) comprobanteEntity;
+                ComprobanteDataCompra comprobanteData=new ComprobanteDataCompra(compra);
+                return comprobanteData;
+            }
+            
         }   
         else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
         {
