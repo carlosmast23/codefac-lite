@@ -7,13 +7,12 @@ package ec.com.codesoft.codefaclite.cartera.model;
 
 import ec.com.codesoft.codefaclite.cartera.panel.MovimientoCarteraPanel;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CruceCarteraData;
-import ec.com.codesoft.codefaclite.cartera.reportdata.CuentasPorCobrarData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
@@ -27,10 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
-import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -44,9 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComponent;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -231,7 +224,7 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
     
     private void construirTablaMovimientoCartera()
     {
-        String[] titulo={"identificación","Codigo","Nombres","Documento","Preimpreso","Debe","Haber"};
+        String[] titulo={"identificación","Codigo","Nombres","Documento","Preimpreso","Valor","Abono"};
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
         
         for (Cartera cartera : carteraResultado) {
@@ -246,9 +239,9 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
             }
             
             //Saldos y valores cancelado
-            String[] filaSaldo={"","","","","Debe","0",cartera.getTotal().subtract(cartera.getSaldo()).toString()};
+            String[] filaSaldo={"","","","","Valor","0",cartera.getTotal().subtract(cartera.getSaldo()).toString()};
             modeloTabla.addRow(filaSaldo);
-            String[] filaHaber={"","","","","Haber","0",cartera.getSaldo().toString()};
+            String[] filaHaber={"","","","","Abono","0",cartera.getSaldo().toString()};
             modeloTabla.addRow(filaHaber);
             
             //Espacio en blanco para manejar un formato bonito

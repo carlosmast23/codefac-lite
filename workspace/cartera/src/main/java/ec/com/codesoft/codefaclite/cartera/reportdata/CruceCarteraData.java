@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.cartera.reportdata;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 public class CruceCarteraData {
     private String carteraId;
     private String identificacion;
+    private String descripcion;
     private String razonSocial;
     private String nombreLegal;
     private String documento;
@@ -112,6 +114,15 @@ public class CruceCarteraData {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
     
     
     
@@ -152,12 +163,13 @@ public class CruceCarteraData {
                 //TODO:Optmizar codigo repetido
                 data.setIdentificacion(cartera.getPersona().getIdentificacion());
                 //String nombreLegal2=(cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial()!=null)?cartera.getPersona().getEstablecimientosActivos().get(0).getNombreComercial():"";
+                data.setDescripcion(cruce.getCarteraDetalle().getDescripcion());
                 data.setNombreLegal(nombreComercial);
                 data.setRazonSocial(cartera.getPersona().getRazonSocial());
                 data.setDocumento(cruce.getCarteraDetalle().getCartera().getCarteraDocumentoEnum().getNombre());
                 data.setFechaEmision(cruce.getCarteraDetalle().getCartera().getFechaEmision()+"");
                 data.setDebe("0");
-                data.setHaber(cruce.getValor()+"");
+                data.setHaber(cruce.getValor().setScale(3, RoundingMode.HALF_UP)+"");
                 data.setCodigo(cruce.getCarteraDetalle().getCartera().getCodigo());
                 //data.setPreimpreso(cruce.getCarteraDetalle().getCartera().getPreimpreso());
                 data.setPreimpreso(cruce.getCarteraDetalle().getCartera().getPreimpreso()); //TODO: PUEDE SER QUE SI TENGA PREIMPRESO POR EJEMPLOE RETENCIONES 

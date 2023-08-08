@@ -43,6 +43,8 @@
 	<parameter name="valorivaNC" class="java.lang.String"/>
 	<parameter name="totalNC" class="java.lang.String"/>
 	<parameter name="afectaNotaCredito" class="java.lang.Boolean"/>
+	<parameter name="pl_instagram" class="java.lang.String"/>
+	<parameter name="pl_img_instagram" class="java.lang.Object"/>
 	<field name="numeroFactura" class="java.lang.String"/>
 	<field name="fechaFactura" class="java.lang.String"/>
 	<field name="identificacionCliente" class="java.lang.String"/>
@@ -809,8 +811,17 @@
 			</staticText>
 			<subreport>
 				<reportElement x="0" y="152" width="802" height="54" uuid="22e9a120-a3b6-4839-b07b-ceaa9f3ba399"/>
+				<subreportParameter name="pl_img_instagram">
+					<subreportParameterExpression><![CDATA[$P{pl_img_instagram}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="pl_img_whatsapp">
 					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_img_logo_pie">
 					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
@@ -824,11 +835,8 @@
 				<subreportParameter name="pl_celular">
 					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_telefonos">
-					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pl_facebook">
-					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				<subreportParameter name="pl_instagram">
+					<subreportParameterExpression><![CDATA[$P{pl_instagram}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_adicional">
 					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>
