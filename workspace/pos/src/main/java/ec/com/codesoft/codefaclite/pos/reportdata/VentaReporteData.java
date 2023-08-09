@@ -23,14 +23,16 @@ public class VentaReporteData implements ExcelDatosInterface{
     private String total;    
     private String estado;
     private String formaPago;
+    private String hora;
 
-    public VentaReporteData(String secuencial, String identificacion, String cliente, String total,String estado,String formaPago) {
+    public VentaReporteData(String secuencial, String identificacion, String cliente, String total,String estado,String formaPago,String hora) {
         this.secuencial = secuencial;
         this.identificacion = identificacion;
         this.cliente = cliente;
         this.total = total;
         this.estado=estado;
         this.formaPago=formaPago;
+        this.hora=hora;
     }
     
     
@@ -82,6 +84,15 @@ public class VentaReporteData implements ExcelDatosInterface{
     public void setFormaPago(String formaPago) {
         this.formaPago = formaPago;
     }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+    
     
     @Override
     public List<TipoDato> getDatos() {

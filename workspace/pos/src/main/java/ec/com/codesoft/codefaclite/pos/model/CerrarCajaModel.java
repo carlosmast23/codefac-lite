@@ -31,6 +31,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -41,6 +42,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
+import org.apache.commons.net.ntp.TimeStamp;
 
 /**
  *
@@ -201,19 +203,24 @@ public class CerrarCajaModel extends CajaSessionModel
         
         List<IngresoCaja> ingresoCajaList=cajaSession.getIngresosCaja();
         
+         SimpleDateFormat dateFormatHora = new SimpleDateFormat("HH:mm");
+        
         if(ingresoCajaList!=null)
         {
             for (IngresoCaja ingresoCaja : ingresoCajaList) 
             {
+                Timestamp fechaIngreso=ingresoCaja.getFactura().getFechaCreacion();
+                
                 for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
                 {
-                    VentaReporteData reporteData = new VentaReporteData(
+                    VentaReporteData reporteData = new VentaReporteData(                            
                             ingresoCaja.getFactura().getSecuencial() + "",
                             ingresoCaja.getFactura().getIdentificacion(),
                             ingresoCaja.getFactura().getRazonSocial(),
                             formaPago.getTotal() + "",
                             ingresoCaja.getFactura().getEstadoEnum().getNombre(),
-                            formaPago.getSriFormaPago().getAlias()
+                            formaPago.getSriFormaPago().getAlias(),
+                            dateFormatHora.format(fechaIngreso)
                     );
 
                     detalleData.add(reporteData);

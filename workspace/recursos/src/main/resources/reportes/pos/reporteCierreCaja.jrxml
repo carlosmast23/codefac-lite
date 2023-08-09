@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="1.9453068450750222"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="331"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -51,6 +51,7 @@
 	<field name="total" class="java.lang.String"/>
 	<field name="estado" class="java.lang.String"/>
 	<field name="formaPago" class="java.lang.String"/>
+	<field name="hora" class="java.lang.String"/>
 	<variable name="SUBTOTAL_GROUP" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
 		<variableExpression><![CDATA[new BigDecimal($F{total})]]></variableExpression>
 	</variable>
@@ -88,7 +89,7 @@
 					<text><![CDATA[Identificación]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="124" y="29" width="308" height="13" uuid="9c40268c-ce82-46e5-b9c6-708d5e680cee"/>
+					<reportElement x="166" y="29" width="266" height="13" uuid="9c40268c-ce82-46e5-b9c6-708d5e680cee"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -140,6 +141,19 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{formaPago}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="124" y="29" width="42" height="13" uuid="32adb14f-11c8-45e7-af0f-ee94ba5ddf45"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Hora]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -707,6 +721,21 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{50usd}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="275" y="80" width="124" height="20" uuid="b696797a-1713-4f7d-9434-d84d314328f0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="9" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[Diferencia:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="399" y="80" width="121" height="20" uuid="f1aae4b6-f400-4007-977d-9944b8d8c283"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_teorico}).subtract(new BigDecimal($P{valor_ciere_practico}))+""]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -745,7 +774,7 @@
 				<textFieldExpression><![CDATA[$F{identificacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="124" y="0" width="308" height="13" uuid="5aa67a24-2a65-461e-9b94-237db168c0a7"/>
+				<reportElement x="166" y="0" width="266" height="13" uuid="5aa67a24-2a65-461e-9b94-237db168c0a7"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>
@@ -788,6 +817,21 @@
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="124" y="0" width="42" height="13" uuid="dc6b3a56-7b3d-404b-b0f4-847372474865"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
