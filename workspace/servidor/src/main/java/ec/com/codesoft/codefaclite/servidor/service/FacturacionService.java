@@ -348,8 +348,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
             String secuencialStr=notaVentaInterna.getSecuencial()+"";
             Map<String, String> mapParametro = new HashMap<String, String>();
-            mapParametro.put("nombre_documento","Nota Venta Interna");
-            mapParametro.put("numeroProforma",secuencialStr);
+            mapParametro.put("nombre_documento","El comprobante");
+            mapParametro.put("secuencial",secuencialStr);
             mapParametro.put("nombreCliente", notaVentaInterna.getRazonSocial());
             mapParametro.put("empresa", notaVentaInterna.getEmpresa().obtenerNombreEmpresa());
             //mapParametro

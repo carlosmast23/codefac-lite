@@ -80,7 +80,7 @@ public abstract class MensajeCodefacSistema {
     
     public static abstract class VentasMensaje
     {
-        public static final CodefacMsj NVI_ENVIADA_CORREO = new CodefacMsj("?nombre_documento ?secuencial fue generada correctamente", "Estimado ?nombreCliente, ?empresa le informa que el documento esta generado correctamente y puede descargar como archivo adjunto. Saludos", MENSAJE_CORRECTO);
+        public static final CodefacMsj NVI_ENVIADA_CORREO = new CodefacMsj("?nombre_documento ?secuencial fue generado correctamente", "Estimado ?nombreCliente, ?empresa le informa que el documento esta generado correctamente y puede descargar como archivo adjunto. Saludos", MENSAJE_CORRECTO);
     }
     
     public static abstract class IngresoInformacion
