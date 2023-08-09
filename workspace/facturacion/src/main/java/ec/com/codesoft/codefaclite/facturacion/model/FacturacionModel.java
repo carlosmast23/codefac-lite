@@ -4361,7 +4361,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     controlador.verificarProductoConNotaVentaInterna(facturaDetalle);
                     controlador.setearValoresProducto(facturaDetalle);                                        
                     controlador.agregarDetallesFactura(facturaDetalle, null, documentoSeleccionado, kardexSeleccionado, EnumSiNo.NO, BigDecimal.ONE,null);
-                    
+                    cargarEtiquetaStock(kardexSeleccionado.getStock());
                     editarCeldaFacturaDetalle();
                 } 
                 else 
