@@ -133,20 +133,19 @@ public class RespaldosModelUtilidades {
             else
             {
                 correoCodefac.enviarCorreo(empresa,mensajeCorreo,tituloCorreo,correosList,mapArchivosAdjuntos);
-
-
-                //Si los datos son correctos grabo cuando fue la última modificación de la fecha
-                ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
+            }
+            
+            //Si el envio de los respaldos en cualquier de los 2 casos es correcto entonces dejo grabando que se fue sin novedad
+            ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
                     empresa,
                     ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA,
-                    UtilidadesFecha.formatDate(UtilidadesFecha.hoy(),ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA));
-                
-                ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
-                        empresa,
-                        ParametroCodefac.ParametrosRespaldoDB.PROBLEMA_ULTIMO_ENVIO_RESPALDO,
-                        EnumSiNo.NO.getLetra());
-                
-            }
+                    UtilidadesFecha.formatDate(UtilidadesFecha.hoy(), ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA));
+
+            ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
+                    empresa,
+                    ParametroCodefac.ParametrosRespaldoDB.PROBLEMA_ULTIMO_ENVIO_RESPALDO,
+                    EnumSiNo.NO.getLetra());
+            
         } catch (CorreoCodefac.ExcepcionCorreoCodefac ex) {
             Logger.getLogger(RespaldosModelUtilidades.class.getName()).log(Level.SEVERE, null, ex);
             
