@@ -402,6 +402,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 validarDatosCompra(compra,CrudEnum.EDITAR);
+                
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
                     for (CompraDetalle compraDetalle : compra.getDetalles()) 
                     {
@@ -683,17 +684,23 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             mapParametros.put("proveedor", compra.getProveedor());
             
             //compra.get
+            List<Compra> resultadoCompra = getFacade().findByMap(mapParametros);
 
+            ServicioCodefacException expecion=new ServicioCodefacException("No se puede grabar compras repetidas del mismo proveedor");
             if(crudEnum.equals(CrudEnum.CREAR))
             {
-                List<Compra> resultadoCompra= getFacade().findByMap(mapParametros);
-
-                if(resultadoCompra.size()>0)
-                {
-                    throw new ServicioCodefacException("No se puede ingresar compras repetidas del mismo proveedor");
+                if (resultadoCompra.size() > 0) {
+                    throw expecion;
+                }
+            }
+            else if (crudEnum.equals(CrudEnum.EDITAR))
+            {
+                if (resultadoCompra.size() > 1) {
+                    throw expecion;
                 }
             }
             
+
             //Setear datos por DEFECTO
             if(compra.getInventarioIngresoEnum()==null)
             {
