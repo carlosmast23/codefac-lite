@@ -71,6 +71,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.awt.event.ActionEvent;
@@ -333,6 +334,18 @@ public class CompraModel extends CompraPanel{
                 throw new ExcepcionCodefacLite("Error de validación");
             }
             setearValores();
+            
+            //Verificar que el producto aun no este ingresado en el inventario o si no le debe pedir clave de autorizacion
+            if(EnumSiNo.SI.equals(compra.getInventarioIngresoEnum()))
+            {
+                String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+                if(!UtilidadesSistema.verificarClaveSoporte(claveIngresada))
+                {                    
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);
+                    throw new ExcepcionCodefacLite(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA.mensaje);
+                }
+            }
+            
             ServiceFactory.getFactory().getCompraServiceIf().editarCompra(compra);
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             
