@@ -114,6 +114,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         grupoTipoCompra = new javax.swing.ButtonGroup();
         btnCargarXml = new javax.swing.JButton();
         jDialog1 = new javax.swing.JDialog();
+        btnAuditoria = new javax.swing.JButton();
         pblContenedora = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtProveedor = new javax.swing.JTextField();
@@ -234,6 +235,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
         btnCargarXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/xml2.png"))); // NOI18N
         btnCargarXml.setToolTipText("Cargar compra desde Xml");
+
+        btnAuditoria.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        btnAuditoria.setText("Auditoria");
 
         setClosable(true);
         setIconifiable(true);
@@ -1243,6 +1247,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarProveedor;
     private javax.swing.JButton btnAgregarReembolso;
     private javax.swing.JButton btnAplicarDescuentoGlobal;
+    private javax.swing.JButton btnAuditoria;
     private javax.swing.JButton btnBuscarFacturaReembolso;
     private javax.swing.JButton btnBuscarLote;
     private javax.swing.JButton btnBuscarProductoProveedor;
@@ -1687,6 +1692,17 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setBtnCargarXml(JButton btnCargarXml) {
         this.btnCargarXml = btnCargarXml;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros",visible = true)
+    public JButton getBtnAuditoria() {
+        return btnAuditoria;
+    }
+
+    public void setBtnAuditoria(JButton btnAuditoria) {
+        this.btnAuditoria = btnAuditoria;
+    }
+    
+    
 
     public JButton getBtnBuscarFacturaReembolso() {
         return btnBuscarFacturaReembolso;

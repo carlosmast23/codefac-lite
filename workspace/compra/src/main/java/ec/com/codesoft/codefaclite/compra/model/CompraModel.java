@@ -20,6 +20,9 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBu
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
+import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_GRABAR;
+import ec.com.codesoft.codefaclite.controlador.model.AuditoriaInformacionModel;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
@@ -135,8 +138,6 @@ public class CompraModel extends CompraPanel{
         super.validacionDatosIngresados=false;
     }
     
-    
-    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         inicarComponentesGraficos();
@@ -245,7 +246,8 @@ public class CompraModel extends CompraPanel{
             setearValores();
             CarteraParametro carteraParametro=new CarteraParametro(
                     Boolean.TRUE, 
-                    (Integer)getTxtDiasCredito().getValue());
+                    (Integer)getTxtDiasCredito().getValue());            
+            
             servicio.grabarCompra(compra,carteraParametro);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
@@ -277,6 +279,7 @@ public class CompraModel extends CompraPanel{
         compra.setEstado(GeneralEnumEstado.ACTIVO.getEstado()); //TODO: cambiar el estado de las ordenes de compra; El estado deberia ponerse por defecto en el servicio
         compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         compra.setFechaFactura(new Date(getCmbFechaCompra().getDate().getTime()));
+        compra.setUsuario(session.getUsuario());
         
         compra.setIdentificacion(compra.getProveedor().getIdentificacion());
         compra.setRazonSocial(compra.getProveedor().getRazonSocial());
@@ -1180,6 +1183,19 @@ public class CompraModel extends CompraPanel{
         
         getBtnBuscarLote().addActionListener(listenerBuscarLote);
         getBtnCrearLote().addActionListener(listenerCrearLote);
+        
+        getBtnAuditoria().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if(estadoFormulario.equals(ESTADO_EDITAR))
+                {
+                    AuditoriaInformacionModel auditoriaModel=new AuditoriaInformacionModel(compra.getFechaCreacion()+"",compra.getFechaUltimaEdicion()+"",compra.getUsuario()+"",compra.getUsuarioUltimaEdicion()+"");
+                    auditoriaModel.setVisible(true);
+                    
+                }
+            }
+        });
                 
     }
     

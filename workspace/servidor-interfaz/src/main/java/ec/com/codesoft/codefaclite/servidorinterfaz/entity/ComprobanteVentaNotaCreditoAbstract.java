@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +82,12 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne
     private Persona cliente;
+    
+    @Column(name = "FECHA_ULTIMA_EDICION")
+    protected Timestamp fechaUltimaEdicion;
+    
+    @JoinColumn(name = "USUARIO_ULTIMA_EDICION_ID")
+    protected Usuario usuarioUltimaEdicion;
     
     /**
      * Se refiere a la sucucursal del cliente
@@ -196,6 +203,23 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     public void setIrbpnr(BigDecimal irbpnr) {
         this.irbpnr = irbpnr;
     }
+
+    public Timestamp getFechaUltimaEdicion() {
+        return fechaUltimaEdicion;
+    }
+
+    public void setFechaUltimaEdicion(Timestamp fechaUltimaEdicion) {
+        this.fechaUltimaEdicion = fechaUltimaEdicion;
+    }
+
+    public Usuario getUsuarioUltimaEdicion() {
+        return usuarioUltimaEdicion;
+    }
+
+    public void setUsuarioUltimaEdicion(Usuario usuarioUltimaEdicion) {
+        this.usuarioUltimaEdicion = usuarioUltimaEdicion;
+    }
+    
     
     
     

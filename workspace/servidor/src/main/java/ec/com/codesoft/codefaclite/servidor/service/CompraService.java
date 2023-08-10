@@ -401,6 +401,12 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                //Setear los datos del usuario y la ultima fecha de modificacion
+                compra.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
+                compra.setUsuarioUltimaEdicion(compra.getUsuario());
+                
+                
                 validarDatosCompra(compra,CrudEnum.EDITAR);
                 
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
@@ -496,9 +502,11 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         llenarDatosPorDefecto(compra);
         validarDatosCompra(compra,CrudEnum.CREAR);
         
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() 
+        {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion() throws ServicioCodefacException, RemoteException 
+            {
                 //TODO: por el momento dejo para pruebas
                 entityManager.flush();
                 compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo NO para poder ingresar al inventario

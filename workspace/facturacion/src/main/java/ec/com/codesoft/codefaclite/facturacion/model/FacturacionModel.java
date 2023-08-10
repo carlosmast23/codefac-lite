@@ -900,14 +900,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     private void agregarDetalleRembolso()
-    {
+    {   
         ObserverUpdateInterface observer=new ObserverUpdateInterface<ReembolsoDetalle>() {
             @Override
             public void updateInterface(ReembolsoDetalle entity) {                
                 if(entity!=null)
                 {   
                     factura.agregarReembolsoDetalle(entity);                    
-                    controlador.agregarProductoReembolsoVista(entity);                    
+                    
+                    Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea agregar manualmente los detalles de la factura ?",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    if(!respuesta)
+                    {
+                        controlador.agregarProductoReembolsoVista(entity);                    
+                    }
                     //Cuando ingreso productos de facturas de reembolso no tienen kardex y tengo que dejar en NULL
                     kardexSeleccionado=null;
                 }

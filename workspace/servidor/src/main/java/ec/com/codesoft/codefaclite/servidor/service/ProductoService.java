@@ -819,8 +819,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 
 
                 //Crear los KARDEX CUANDO NO EXISTA
-                if (producto.getManejarInventarioEnum().equals(EnumSiNo.SI)) {
-                    ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(producto);
+                if(TipoProductoEnum.PRODUCTO.equals(producto.getTipoProductoEnum()) || TipoProductoEnum.EMSAMBLE.equals(producto.getTipoProductoEnum()))
+                {
+                    if (producto.getManejarInventarioEnum().equals(EnumSiNo.SI)) {
+                        ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(producto);
+                    }
                 }
 
             }
@@ -1153,7 +1156,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
        List<Producto> productoList=getFacade().findByMap(mapParametros);
        if(productoList.size()==0)
        {
-           Producto producto=crearProductoPorDefectoSinTransaccion(empresa, Producto.NOMBRE_PRODUCTO_REEMBOLSO,0);
+           Producto producto=crearProductoPorDefectoSinTransaccion(empresa, Producto.NOMBRE_PRODUCTO_REEMBOLSO,12);
            
            if(producto.getIdProducto()==null)
            {

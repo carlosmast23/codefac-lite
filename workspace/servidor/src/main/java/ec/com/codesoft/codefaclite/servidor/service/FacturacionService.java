@@ -476,6 +476,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                //Grabar los datos de la edicion y el usuario
+                proforma.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
+                proforma.setUsuarioUltimaEdicion(proforma.getUsuario());
+                
                 setearDatosClienteYDistribuidor(proforma);
                 entityManager.merge(proforma);                
                 eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma), proforma.getDetalles());                
