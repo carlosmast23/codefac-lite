@@ -266,7 +266,7 @@ public abstract class UtilidadVarios {
         //Obtiene el nombre del metodo del contesto actual
         String nombreMetodo = new Object(){}.getClass().getEnclosingMethod().getName();
         
-        Logger.getLogger(UtilidadVarios.class.getName()).log(Level.INFO,"Tiempo del proceso: "+nombreMetodo+" |"+tiempo+" segundos");
+        //Logger.getLogger(UtilidadVarios.class.getName()).log(Level.INFO,"Tiempo del proceso: "+nombreMetodo+" |"+tiempo+" segundos");
     }
     
     public interface ProcesoTiempoIf

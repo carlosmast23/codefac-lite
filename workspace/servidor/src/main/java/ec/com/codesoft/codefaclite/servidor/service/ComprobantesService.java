@@ -1488,13 +1488,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                                        
                     //Si se genera la etapa firmar entonces seteo la clave de acceso
                     if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
+                        //TODO: Tener presente este codigo porque aveces generaba como que se estuviera haciendo dos update con la clave de acceso
+                        comprobanteOriginal.setClaveAcceso(null);
+                        comprobanteOriginal.setClaveAcceso(clave.clave);
                         
                         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                             @Override
-                            public void transaccion() {
-                                //TODO: Tener presente este codigo porque aveces generaba como que se estuviera haciendo dos update con la clave de acceso
-                                comprobanteOriginal.setClaveAcceso(null);
-                                comprobanteOriginal.setClaveAcceso(clave.clave);
+                            public void transaccion() {                                
                                 entityManager.merge(comprobanteOriginal);
                             }
                         });
@@ -1574,38 +1574,40 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     private void setearDatosAutorizacionComprobanteConTransaccion(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,Autorizacion documentoAutorizado) throws ServicioCodefacException
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                
-                if(documentoAutorizado.getEstado().equals("AUTORIZADO"))
-                {   
-                    if(!verificarExisteXmlAutorizado(comprobanteOriginal))
-                    {
-                        String mensajeError="ERROR AL CAMBIAR DE ESTADO A AUTORIZAR EL COMPROBANTE: "+comprobanteOriginal.getClaveAcceso()+", NO EXISTE EL XML EN EL DISCO";
-                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE,mensajeError);
-                        throw new ServicioCodefacException(mensajeError);
-                    }
-                    
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.WARNING,"Autorizando Comprobante: "+comprobanteOriginal.getCodigoDocumentoEnum().getNombre()," | con secuencial: "+comprobanteOriginal.getSecuencial()+" | con autorización: "+documentoAutorizado.getNumeroAutorizacion());
-                    comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
-                    XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
-                    java.util.Date fechaAutorizacion = new java.util.Date(fechaXml.toGregorianCalendar().getTime().getTime());
-                    Timestamp fechaHoraAutorizacion= UtilidadesFecha.castDateToTimeStamp(fechaAutorizacion);
-                    comprobanteOriginal.setFechaAutorizacionSri(fechaHoraAutorizacion);
-
-                    ComprobanteEntity.TipoAmbienteEnum enumAmbiente = ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(documentoAutorizado.getAmbiente());
-                    if (enumAmbiente != null) {
-                        comprobanteOriginal.setTipoAmbiente(enumAmbiente.getLetra());
-                    }
-                    
-                    entityManager.merge(comprobanteOriginal);
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"El comprobante "+comprobanteOriginal.getPreimpreso()+" fue autorizado desde el metodo setearDatosAutorizacionComprobanteConTransaccion() en la clase ComprobantesService");
-                }
-
+        //Codigo que no necesita procesar en una transaccion para evitar poner lento al sistema al grabar nuevos datos
+        if (documentoAutorizado.getEstado().equals("AUTORIZADO")) 
+        {
+            if (!verificarExisteXmlAutorizado(comprobanteOriginal)) {
+                String mensajeError = "ERROR AL CAMBIAR DE ESTADO A AUTORIZAR EL COMPROBANTE: " + comprobanteOriginal.getClaveAcceso() + ", NO EXISTE EL XML EN EL DISCO";
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, mensajeError);
+                throw new ServicioCodefacException(mensajeError);
             }
-        });        
-                
+
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.WARNING, "Autorizando Comprobante: " + comprobanteOriginal.getCodigoDocumentoEnum().getNombre(), " | con secuencial: " + comprobanteOriginal.getSecuencial() + " | con autorización: " + documentoAutorizado.getNumeroAutorizacion());
+            
+            comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.AUTORIZADO);
+            XMLGregorianCalendar fechaXml = documentoAutorizado.getFechaAutorizacion();
+            java.util.Date fechaAutorizacion = new java.util.Date(fechaXml.toGregorianCalendar().getTime().getTime());
+            Timestamp fechaHoraAutorizacion = UtilidadesFecha.castDateToTimeStamp(fechaAutorizacion);
+            comprobanteOriginal.setFechaAutorizacionSri(fechaHoraAutorizacion);
+
+            ComprobanteEntity.TipoAmbienteEnum enumAmbiente = ComprobanteEntity.TipoAmbienteEnum.buscarPorNombreSri(documentoAutorizado.getAmbiente());
+            if (enumAmbiente != null) {
+                comprobanteOriginal.setTipoAmbiente(enumAmbiente.getLetra());
+            }
+
+            //entityManager.merge(comprobanteOriginal);
+            //Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO, "El comprobante " + comprobanteOriginal.getPreimpreso() + " fue autorizado desde el metodo setearDatosAutorizacionComprobanteConTransaccion() en la clase ComprobantesService");
+            
+           ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    entityManager.merge(comprobanteOriginal);
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO, "El comprobante " + comprobanteOriginal.getPreimpreso() + " fue autorizado desde el metodo setearDatosAutorizacionComprobanteConTransaccion() en la clase ComprobantesService");
+                }
+            });  
+            
+        }
     }
     
     /**

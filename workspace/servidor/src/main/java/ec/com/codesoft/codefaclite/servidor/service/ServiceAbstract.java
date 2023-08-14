@@ -44,7 +44,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject implements Serializable
 {
     private static final Integer TIEMPO_ESPERA_TRANSACCION=1000;
-    private static final Integer INTENTOS_ESPERA_TRANSACCION=5;
+    private static final Integer INTENTOS_ESPERA_TRANSACCION=15;
 
     //private static final Logger LOG = Logger.getLogger(ServiceAbstract.class.getName());
     
@@ -300,21 +300,22 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
        }
        
        
+       //Si ya espere un tiempo prudente y sigue la anterior transaccion, entonces lanzo un mensaje de error para que intente nuevamente
        if (transaccion.isActive()) 
        {
            //TODO: Solución de prueba temporal
-           transaccion.commit();//Si por algun motivo queda una transaccion activa , lo que primero que intento es grabar la transacción
+           //transaccion.commit();//Si por algun motivo queda una transaccion activa , lo que primero que intento es grabar la transacción
            
-           if(transaccion.isActive())
-           {           
+           //if(transaccion.isActive())
+           //{           
                 throw new ServicioCodefacException("Previamente existe una transacción activa , por favor intente nuevamente");
-           }
+           //}
        }
        
        
         
         try {        
-            
+            //si no hay problema de transacciones anteriones inicio la NUEVA TRANSACCION
             transaccion.begin();
             resultadoTransaccion=interfaz.transaccionGenerica();
             transaccion.commit();
