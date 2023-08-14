@@ -169,9 +169,9 @@ create table FACTURA_ADICIONAL
     FACTURA_ID BIGINT,
     CAMPO varchar(150),
     VALOR varchar(150),
-    primary key (ID)
     TIPO varchar(1),
     NUMERO integer ,
+    primary key (ID)
 );
 
 /*@AGREGAR_TABLA(VERSION_SISTEMA=1.3.0.5.6)*/

@@ -187,6 +187,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             String pathFile = comprobanteElectronicoService.getPathComprobanteConClaveAcceso(ComprobanteElectronicoService.CARPETA_AUTORIZADOS, claveAcceso);
             File archivo = new File(pathFile);
             ComprobanteElectronico comprobante = ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(archivo);
+            if(comprobante==null)
+            {
+                throw new ServicioCodefacException("No se pudo encontrar el comprobante en el SRI.\n Posibles Causas:\n 1.- La clave de acceso es incorrecta.\n 2.- El comprobante aun no esta disponible en el Sri, vuelva a intentar en unas horas.");
+            }
             //return obtenerCompraDesdeXml(comprobante, empresa);
             return comprobante;
         }

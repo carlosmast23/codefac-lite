@@ -791,8 +791,10 @@ public class CompraModel extends CompraPanel{
                 abrirDialogoCompraXml(compra);
             } catch (RemoteException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                 DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             }
             
         }
@@ -819,10 +821,13 @@ public class CompraModel extends CompraPanel{
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             } catch (IOException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             }
             
         }
@@ -1462,7 +1467,12 @@ public class CompraModel extends CompraPanel{
 
                 if (resultados != null && resultados.size() > 0) {
                     productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
-                    getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto() + "");
+                    
+                    if(productoProveedor.getCosto()!=null && productoProveedor.getCosto().compareTo(BigDecimal.ZERO)>0)
+                    {
+                        getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto() + "");
+                    }
+                    
                     //EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
                 } else {//Cuando no existe crea un nuevo producto proveedor
                     productoProveedor = new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
