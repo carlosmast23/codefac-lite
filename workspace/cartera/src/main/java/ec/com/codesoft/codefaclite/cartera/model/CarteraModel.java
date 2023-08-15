@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.Banco;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.CarteraCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
@@ -426,16 +427,26 @@ public class CarteraModel extends CarteraPanel{
 
     private void valoresIniciales() {
         
-        getBtnAgregarDetalle().setToolTipText("Agregar Detalle");
-        getBtnEditarDetalle().setToolTipText("Editar Detalle");
-        getBtnEliminarDetalle().setToolTipText("Eliminar Detalle");
-        
-        getCmbTipoCartera().removeAllItems();
-        for (Cartera.TipoCarteraEnum carteraEnum : Cartera.TipoCarteraEnum.values()) {
-            getCmbTipoCartera().addItem(carteraEnum);
+        try {
+            getBtnAgregarDetalle().setToolTipText("Agregar Detalle");
+            getBtnEditarDetalle().setToolTipText("Editar Detalle");
+            getBtnEliminarDetalle().setToolTipText("Eliminar Detalle");
+            
+            getCmbTipoCartera().removeAllItems();
+            for (Cartera.TipoCarteraEnum carteraEnum : Cartera.TipoCarteraEnum.values()) {
+                getCmbTipoCartera().addItem(carteraEnum);
+            }
+            
+            getCmbFechaCruzar().setDate(UtilidadesFecha.getFechaHoy());
+            
+            //cargar los datos de los bancos
+            List<Banco> bancoList= ServiceFactory.getFactory().getBancoServiceIf().obtenerActivosPorEmpresa(null);
+            UtilidadesComboBox.llenarComboBox(getCmbBanco(), bancoList);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        getCmbFechaCruzar().setDate(UtilidadesFecha.getFechaHoy());
     }
 
     private void listenerCombos() {
