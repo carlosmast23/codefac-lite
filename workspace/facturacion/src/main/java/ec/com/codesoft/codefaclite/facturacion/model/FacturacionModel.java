@@ -133,6 +133,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ReembolsoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RembolsoImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
@@ -906,13 +907,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void updateInterface(ReembolsoDetalle entity) {                
                 if(entity!=null)
                 {   
-                    factura.agregarReembolsoDetalle(entity);                    
+                    factura.agregarReembolsoDetalle(entity);    
+                    actualizarVistaReembolso();
                     
-                    Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea agregar manualmente los detalles de la factura ?",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                    if(!respuesta)
-                    {
-                        controlador.agregarProductoReembolsoVista(entity);                    
-                    }
+                    //Boolean respuesta=DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea agregar manualmente los detalles de la factura ?",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    //if(!respuesta)
+                    //{
+                    //    controlador.agregarProductoReembolsoVista(entity);                    
+                    //}
                     //Cuando ingreso productos de facturas de reembolso no tienen kardex y tengo que dejar en NULL
                     kardexSeleccionado=null;
                 }
@@ -921,6 +923,36 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         };
         
         panelPadre.crearDialogoCodefac(observer, VentanaEnum.DETALLE_REMBOLSO, false, new Object[]{},this);
+        
+    }
+    private void actualizarVistaReembolso()
+    {
+        String[] titulos=new String[]{"Identifación","Secuencial","Imp","Valor"};        
+        
+        DefaultTableModel tableModel=new DefaultTableModel(titulos,0);
+        
+        if(factura.getReembolsoList()!=null)
+        {
+            for (ReembolsoDetalle reembolsoDetalle : factura.getReembolsoList()) 
+            {
+                if(reembolsoDetalle.getDetalleList()!=null)
+                {
+                    for (RembolsoImpuestoDetalle rembolsoImpuesto : reembolsoDetalle.getDetalleList()) 
+                    {
+                        Object[] fila = new Object[]{
+                            reembolsoDetalle.getProveedor().getIdentificacion(),
+                            reembolsoDetalle.getSecuencial(),
+                            rembolsoImpuesto.getPorcentajeIva(),
+                            rembolsoImpuesto.getBaseImponible()
+                        };
+                        tableModel.addRow(fila);
+                    }
+                }
+                
+            }
+        }
+        
+        getTblReembolso().setModel(tableModel);
         
     }
     
@@ -2497,6 +2529,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         cargarValoresAdicionales();
         cargarFormasPagoTabla();
         cargarTablaDatosAdicionales();
+        actualizarVistaReembolso();
         
         getPnlDatosAdicionales().habiliarBotonAutorizar();
         
@@ -2617,6 +2650,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
         getTxtDiasCredito().setValue(0);
         getTxtDescuentoGlobal().setText("0");
+        actualizarVistaReembolso();
         
         
         

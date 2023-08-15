@@ -259,6 +259,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel2 = new javax.swing.JLabel();
         txtDiasCredito = new javax.swing.JSpinner();
         chkHabilitarCredito = new javax.swing.JCheckBox();
+        pnlReembolso = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblReembolso = new javax.swing.JTable();
         pnlVuelto = new javax.swing.JPanel();
         txtValorRecibido = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
@@ -1549,6 +1552,18 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         jTabCartera.addTab("Cartera", jPanel4);
 
+        pnlReembolso.setLayout(new java.awt.GridBagLayout());
+
+        jScrollPane6.setViewportView(tblReembolso);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        pnlReembolso.add(jScrollPane6, gridBagConstraints);
+
+        jTabCartera.addTab("Reembolso", pnlReembolso);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1868,6 +1883,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTabbedPane jTabCartera;
     private javax.swing.JTextArea jTextArea1;
@@ -1915,10 +1931,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel pnlCosto;
     private javax.swing.JPanel pnlDetalles;
     private javax.swing.JPanel pnlPrincipal;
+    private javax.swing.JPanel pnlReembolso;
     private javax.swing.JPanel pnlVuelto;
     private javax.swing.JTable tblDatosAdicionales;
     private javax.swing.JTable tblDetalleFactura;
     private javax.swing.JTable tblFormasPago;
+    private javax.swing.JTable tblReembolso;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtCodigoDetalle;
@@ -2552,6 +2570,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.chkFacturaReembolso = chkFacturaReembolso;
     }
 
+    public JTable getTblReembolso() {
+        return tblReembolso;
+    }
+
+    public void setTblReembolso(JTable tblReembolso) {
+        this.tblReembolso = tblReembolso;
+    }
+
+    
     
 
     
