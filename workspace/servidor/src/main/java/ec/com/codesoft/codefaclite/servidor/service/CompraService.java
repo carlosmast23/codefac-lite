@@ -293,6 +293,12 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             CompraDetalle compraDetalle=new CompraDetalle();
             //Buscar si existe el producto cargado con el Código principal
             String codigoPrincipal=detalleXml.getCodigoPrincipal();
+            
+            if(codigoPrincipal.equals("1TTEC001303"))
+            {
+                System.out.println("Revisar ese mensaje ...");
+            }
+            
             ProductoProveedor productoProveedor=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarActivoPorCodigoProveedor(codigoPrincipal,compra.getEmpresa());
             //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoPrincipal,compra.getEmpresa());
             

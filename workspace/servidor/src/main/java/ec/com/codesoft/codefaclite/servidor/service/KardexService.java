@@ -1185,6 +1185,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             }
         }
         
+        //validacion que el kardex tenga asignado un producto y ese producto no este eliminado
+        if(detalle.getKardex().getProducto().getEstadoEnum().equals(GeneralEnumEstado.ELIMINADO))
+        {
+            throw new ServicioCodefacException("No se puede grabar el Kardex que tiene vinculado al producto eliminado : "+detalle.getKardex().getProducto().getNombre()+"\n Solución: Edite la compra, borre y agregue de nuevo con un producto activo");
+        }
+        
         
     }
     

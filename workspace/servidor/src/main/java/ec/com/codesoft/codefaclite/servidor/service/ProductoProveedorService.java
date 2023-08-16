@@ -12,8 +12,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -80,6 +82,30 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
             ProductoService productoService=new ProductoService();
             
             producto=productoService.buscarProductoDefectoCompras(resultadoList.get(0).getProducto());            
+            
+            //Validar si el producto es un ensamble tengo que verificar si el producto original existe y esta activo
+            if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+            {
+                ProductoPresentacionDetalle productoOriginalPresentacion=producto.buscarPresentacionDetalleProducto();
+                if(productoOriginalPresentacion==null)
+                {
+                    return null;
+                }
+                else
+                {
+                    if(productoOriginalPresentacion.getProductoOriginal()==null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        if(productoOriginalPresentacion.getProductoOriginal().getEstadoEnum().equals(GeneralEnumEstado.ELIMINADO))
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
             
             ProductoProveedor productoProveedor=resultadoList.get(0);
             productoProveedor.setProducto(producto);

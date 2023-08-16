@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoPresentacionDetalleServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -35,10 +36,13 @@ public class ProductoPresentacionDetalleService extends ServiceAbstract<Producto
     
     public ProductoPresentacionDetalle buscarPorProductoEmpaquetado(Producto productoEmpaquetado) throws ServicioCodefacException, RemoteException 
     {
-        //ProductoPresentacionDetalle d;
+        ProductoPresentacionDetalle d;
+        //d.getpro
+        //d.getProductoOriginal().getEstado();
         //d.getProductoEmpaquetado();
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("productoEmpaquetado", productoEmpaquetado);
+        mapParametros.put("productoOriginal.estado", GeneralEnumEstado.ACTIVO.getLetra());
         List<ProductoPresentacionDetalle> detalles = getFacade().findByMap(mapParametros);
         if(detalles.size()>0)
         {

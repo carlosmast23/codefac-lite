@@ -1062,6 +1062,11 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     
     public BigDecimal getTarifaIva()
     {
+        if(catalogoProducto==null || catalogoProducto.getIva()==null)
+        {
+            System.out.println("catalogo sin tener asignado un iva");
+        }
+        
         return new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
     }
     
