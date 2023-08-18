@@ -48,6 +48,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -63,6 +64,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -89,6 +92,7 @@ public class StockReporteModel extends StockMinimoPanel{
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         listenerBotones();
         listenerCheckBox();
+        listenerJPopupMenu();
         valoresIniciales();
         ocultarComponentes();
         setTitle("Reporte Stock");
@@ -97,6 +101,52 @@ public class StockReporteModel extends StockMinimoPanel{
     public void ocultarComponentes()
     {
     
+    }
+    
+    private void listenerJPopupMenu()
+    {
+        JPopupMenu jpopMenuItem=new JPopupMenu();
+        JMenuItem itemMenu= new JMenuItem("Eliminar Kardex");
+        new CodefacMsj("", CodefacMsj.TipoMensajeEnum.ADVERTENCIA);
+        itemMenu.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                int filaSeleccionada=getTblDato().getSelectedRow();
+                if(filaSeleccionada>0)
+                {
+                    //Preguntar si desea eliminar el kardex que ingrese la clave de soporte
+                    String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+                    if (!UtilidadesSistema.verificarClaveSoporte(claveIngresada)) 
+                    {
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);
+                        return;
+                    }
+                    
+                    //Eliminar los KARDEX POR EL ID de la tabla seleccionada
+                    try {                        
+                        StockMinimoData stockMinimoData=(StockMinimoData) getTblDato().getValueAt(filaSeleccionada,0);
+                        ServiceFactory.getFactory().getKardexServiceIf().eliminarPorId(stockMinimoData.getKardexId());
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+                        
+                        generarConsulta();
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    }
+                    
+                    
+                }
+                
+            }
+        });
+        
+        jpopMenuItem.add(itemMenu);
+        getTblDato().setComponentPopupMenu(jpopMenuItem);
+        
     }
     
     //TODO: Unificar el funcionamiento con la pantalla de Stock minimo por que son bastante similares
@@ -328,187 +378,166 @@ public class StockReporteModel extends StockMinimoPanel{
     private ActionListener listenerBuscarReporte=new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                    Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();             
-                    
-                    if(getChkTodasBodega().isSelected())
-                    {
-                        bodegaSeleccionada=null;
-                    }
-                    
-                    TipoProducto tipoSeleccionada=(TipoProducto) getCmbTipo().getSelectedItem();
-                    if(getChkTodosTipo().isSelected())
-                    {
-                        tipoSeleccionada=null;
-                    }
-                    
-                    SegmentoProducto segmentoProducto=(SegmentoProducto) getCmbSegmento().getSelectedItem();
-                    if(getChkTodosSegmento().isSelected())
-                    {
-                        segmentoProducto=null;
-                    }
-                    
-                    String nombreProducto=getTxtNombreProducto().getText();
-                    if(UtilidadesTextos.verificarNullOVacio(nombreProducto))
-                    {
-                        //Si no tiene nada ingresado envio un null
-                        nombreProducto=null;
-                    }
-                    else
-                    {
-                        //Si quiere poner parte de un nombre pongo los porcentajes para que pueda buscar en cualquier lugar
-                        nombreProducto="%"+nombreProducto+"%";
-                    }
-                    
-                    String codigoProducto=getTxtCodigoProducto().getText();
-                    
-                    if(UtilidadesTextos.verificarNullOVacio(codigoProducto))
-                    {
-                        codigoProducto=null;
-                    }
-                            
-                    
-                    KardexOrdenarEnum ordenarEnum=(KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();
-                    TipoStockEnum tipoStockEnum=(TipoStockEnum) getCmbTipoStock().getSelectedItem();
-                    TipoUbicacionEnum tipoUbicacionEnum=(TipoUbicacionEnum) getCmbUbicacion().getSelectedItem();
-                    listaStock=ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada,nombreProducto,codigoProducto,categoriaProducto,tipoSeleccionada,segmentoProducto,session.getEmpresa(),ordenarEnum,tipoStockEnum,tipoUbicacionEnum);
-                    
-                    listaData=new ArrayList<StockMinimoData>();
-                    
-                     for (Object[] objeto : listaStock) 
-                     {
-                        Producto producto = (Producto) objeto[0];
-                        BigDecimal cantidad = (BigDecimal) objeto[1];
-                        BigDecimal costoPromedio=(BigDecimal)objeto[2];
-                        Bodega bodega=(Bodega)objeto[3];
-                        Lote lote=(Lote)objeto[4];
-                        BigDecimal ultimoCosto = (BigDecimal)objeto[5];
-                        BigDecimal reserva = (BigDecimal)objeto[6];
-                        Long kardexId = (Long)objeto[7];
-                        
-                        if(reserva==null)
-                        {
-                            reserva=BigDecimal.ZERO;
-                        }
-                        
-                        //Aumentar el valor del iva en los precios, costos y utilidades
-                        EnumSiNo incluyeIvaEnum=(EnumSiNo) getCmbIncluirIva().getSelectedItem();
-                        
-                        BigDecimal valorUnitario=producto.getValorUnitario();
-                        if(incluyeIvaEnum!=null && incluyeIvaEnum.equals(EnumSiNo.SI))
-                        {
-                            //Obtener el valor unitario pero con iva
-                            valorUnitario=producto.getValorUnitarioConIva();
-                            
-                            //Verificar si el costo le tengo que poner con iva
-                            costoPromedio=UtilidadesImpuestos.agregarValorIva(producto.getTarifaIva(), costoPromedio);
-                            costoPromedio.setScale(2, RoundingMode.HALF_UP);
-                            
-                            //Agregar el iva al último costo
-                            ultimoCosto=UtilidadesImpuestos.agregarValorIva(producto.getTarifaIva(), ultimoCosto);
-                            ultimoCosto=ultimoCosto.setScale(2, RoundingMode.HALF_UP);
-                            
-                        }
-                        
-                        //Kardex kardexTemp = (Kardex) objeto[2];
-                        
-                        /*if(producto==null)
+            generarConsulta();
+        }
+    };
+    
+    private void generarConsulta()
+    {
+        try {
+            Bodega bodegaSeleccionada = (Bodega) getCmbBodega().getSelectedItem();
+
+            if (getChkTodasBodega().isSelected()) {
+                bodegaSeleccionada = null;
+            }
+
+            TipoProducto tipoSeleccionada = (TipoProducto) getCmbTipo().getSelectedItem();
+            if (getChkTodosTipo().isSelected()) {
+                tipoSeleccionada = null;
+            }
+
+            SegmentoProducto segmentoProducto = (SegmentoProducto) getCmbSegmento().getSelectedItem();
+            if (getChkTodosSegmento().isSelected()) {
+                segmentoProducto = null;
+            }
+
+            String nombreProducto = getTxtNombreProducto().getText();
+            if (UtilidadesTextos.verificarNullOVacio(nombreProducto)) {
+                //Si no tiene nada ingresado envio un null
+                nombreProducto = null;
+            } else {
+                //Si quiere poner parte de un nombre pongo los porcentajes para que pueda buscar en cualquier lugar
+                nombreProducto = "%" + nombreProducto + "%";
+            }
+
+            String codigoProducto = getTxtCodigoProducto().getText();
+
+            if (UtilidadesTextos.verificarNullOVacio(codigoProducto)) {
+                codigoProducto = null;
+            }
+
+            KardexOrdenarEnum ordenarEnum = (KardexOrdenarEnum) getCmbOrdenar().getSelectedItem();
+            TipoStockEnum tipoStockEnum = (TipoStockEnum) getCmbTipoStock().getSelectedItem();
+            TipoUbicacionEnum tipoUbicacionEnum = (TipoUbicacionEnum) getCmbUbicacion().getSelectedItem();
+            listaStock = ServiceFactory.getFactory().getKardexServiceIf().consultarStock(bodegaSeleccionada, nombreProducto, codigoProducto, categoriaProducto, tipoSeleccionada, segmentoProducto, session.getEmpresa(), ordenarEnum, tipoStockEnum, tipoUbicacionEnum);
+
+            listaData = new ArrayList<StockMinimoData>();
+
+            for (Object[] objeto : listaStock) {
+                Producto producto = (Producto) objeto[0];
+                BigDecimal cantidad = (BigDecimal) objeto[1];
+                BigDecimal costoPromedio = (BigDecimal) objeto[2];
+                Bodega bodega = (Bodega) objeto[3];
+                Lote lote = (Lote) objeto[4];
+                BigDecimal ultimoCosto = (BigDecimal) objeto[5];
+                BigDecimal reserva = (BigDecimal) objeto[6];
+                Long kardexId = (Long) objeto[7];
+
+                if (reserva == null) {
+                    reserva = BigDecimal.ZERO;
+                }
+
+                //Aumentar el valor del iva en los precios, costos y utilidades
+                EnumSiNo incluyeIvaEnum = (EnumSiNo) getCmbIncluirIva().getSelectedItem();
+
+                BigDecimal valorUnitario = producto.getValorUnitario();
+                if (incluyeIvaEnum != null && incluyeIvaEnum.equals(EnumSiNo.SI)) {
+                    //Obtener el valor unitario pero con iva
+                    valorUnitario = producto.getValorUnitarioConIva();
+
+                    //Verificar si el costo le tengo que poner con iva
+                    costoPromedio = UtilidadesImpuestos.agregarValorIva(producto.getTarifaIva(), costoPromedio);
+                    costoPromedio.setScale(2, RoundingMode.HALF_UP);
+
+                    //Agregar el iva al último costo
+                    ultimoCosto = UtilidadesImpuestos.agregarValorIva(producto.getTarifaIva(), ultimoCosto);
+                    ultimoCosto = ultimoCosto.setScale(2, RoundingMode.HALF_UP);
+
+                }
+
+                //Kardex kardexTemp = (Kardex) objeto[2];
+                /*if(producto==null)
                         {
                             System.err.println("Error con un producto nulo en kardeId="+kardexTemp.getId());
                             continue;
                         }*/
-                        
-                        StockMinimoData data=new StockMinimoData();
-                        
-                        
-                        
-                        String codigoPersonalizado="Sin Código";
-                        if(producto.getCodigoPersonalizado()!=null)
-                        {
-                            codigoPersonalizado=producto.getCodigoPersonalizado();
-                        }
-                        //System.out.println(producto.getNombre());
-                        data.setKardexId(kardexId);
-                        data.setCodigo(codigoPersonalizado);                        
-                        data.setCodigo2((producto.getCodigoUPC()!=null)?producto.getCodigoUPC():"");
-                        data.setProducto(producto.getNombre());
-                        data.setStock(cantidad.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP)+"");
-                        data.setReserva(reserva.setScale(obtenerCantidadDecimales(),RoundingMode.HALF_UP));
-                        
-                        data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto()!=null)?producto.getCatalogoProducto().getCategoriaProducto().getNombre():"");
-                        data.setUbicacion(producto.getUbicacion());
-                        if(producto.getCantidadMinima()!=null)
-                        {
-                            data.setCantidadMinima(producto.getCantidadMinima().toString());
-                        }
-                        else
-                        {
-                            data.setCantidadMinima("0");
-                        }
-                        data.setCosto(costoPromedio.toString());
-                        
-                        if(ultimoCosto!=null)
-                        {
-                            data.setUltimoCosto(ultimoCosto.setScale(2, RoundingMode.HALF_UP)+"");
-                            
-                        }
-                        data.setBodega(bodega.getNombre());
-                        data.setLote((lote!=null)?lote.getCodigo():"");
-                        //data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
-                        //data.setUtilidad1(producto.getValorUnitario().subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
-                        data.setPvp1(valorUnitario.setScale(2, RoundingMode.HALF_UP));
-                        data.setUtilidad1(valorUnitario.subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
-                        
-                        data.setAplicacion(producto.getAplicacionProducto());
-                        data.setTipo(producto.getTipoProducto());
-                        data.setSegmento(producto.getSegmentoProducto());
-                        data.setMarca((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
-                        data.setIvaPorcentaje(producto.getCatalogoProducto().getIva().getTarifa());
-                        
-                        //Agregar los detalles adicional cuando el producto tiene garantia
-                        if(producto.getGarantiaEnum().equals(EnumSiNo.SI) && getCmbMostrarDetalle().getSelectedItem().equals(EnumSiNo.SI))
-                        {
-                            
-                            List<KardexItemEspecifico> kardeItemEspecificoList=ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerItemsEspecificosPorProducto(producto);
-                            for (KardexItemEspecifico kardexItemEspecifico : kardeItemEspecificoList) {
-                                StockUnicoData stockUnicoData=new StockUnicoData(kardexItemEspecifico.getCodigoEspecifico());                                
-                                data.agregarDetalle(stockUnicoData);
-                            }
-                                    
-                        }
-                        
-                        //Agregar las presentaciones en el reporte
-                        if(getCmbMostrarPresentaciones().getSelectedItem().equals(EnumSiNo.SI))
-                        {
-                            List<ProductoPresentacionDetalle> resultadoList=producto.getPresentacionList();
-                            for (ProductoPresentacionDetalle resultado : resultadoList) 
-                            {
-                                if(resultado.getPresentacionProducto()!=null)
-                                {
-                                    PresentacionPrecioData presentacionData=new PresentacionPrecioData();
-                                    presentacionData.setNombre(resultado.getPresentacionProducto().getNombre());
-                                    presentacionData.setCosto(resultado.getCantidad().multiply(ultimoCosto).setScale(2, RoundingMode.HALF_UP)+"");
-                                    presentacionData.setPvp(resultado.getCantidad().multiply(valorUnitario).setScale(2, RoundingMode.HALF_UP)+"");
-                                    presentacionData.setStock(cantidad.divide(resultado.getCantidad(),2,RoundingMode.HALF_UP)+"");
-                                    data.agregarPresentacion(presentacionData);
-                                }
-                            }
-                        }
-                        
-                        listaData.add(data);                        
-                    }
-                     
-                     construirTabla(listaData);
-                    
+                StockMinimoData data = new StockMinimoData();
 
-                    
-                } catch (RemoteException ex) {
-                    Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                String codigoPersonalizado = "Sin Código";
+                if (producto.getCodigoPersonalizado() != null) {
+                    codigoPersonalizado = producto.getCodigoPersonalizado();
+                }
+                //System.out.println(producto.getNombre());
+                data.setKardexId(kardexId);
+                data.setCodigo(codigoPersonalizado);
+                data.setCodigo2((producto.getCodigoUPC() != null) ? producto.getCodigoUPC() : "");
+                data.setProducto(producto.getNombre());
+                data.setStock(cantidad.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP) + "");
+                data.setReserva(reserva.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP));
+
+                data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto() != null) ? producto.getCatalogoProducto().getCategoriaProducto().getNombre() : "");
+                data.setUbicacion(producto.getUbicacion());
+                if (producto.getCantidadMinima() != null) {
+                    data.setCantidadMinima(producto.getCantidadMinima().toString());
+                } else {
+                    data.setCantidadMinima("0");
+                }
+                data.setCosto(costoPromedio.toString());
+
+                if (ultimoCosto != null) {
+                    data.setUltimoCosto(ultimoCosto.setScale(2, RoundingMode.HALF_UP) + "");
+
+                }
+                data.setBodega(bodega.getNombre());
+                data.setLote((lote != null) ? lote.getCodigo() : "");
+                //data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
+                //data.setUtilidad1(producto.getValorUnitario().subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
+                data.setPvp1(valorUnitario.setScale(2, RoundingMode.HALF_UP));
+                data.setUtilidad1(valorUnitario.subtract(costoPromedio).setScale(2, RoundingMode.HALF_UP));
+
+                data.setAplicacion(producto.getAplicacionProducto());
+                data.setTipo(producto.getTipoProducto());
+                data.setSegmento(producto.getSegmentoProducto());
+                data.setMarca((producto.getMarcaProducto() != null) ? producto.getMarcaProducto().getNombre() : "");
+                data.setIvaPorcentaje(producto.getCatalogoProducto().getIva().getTarifa());
+
+                //Agregar los detalles adicional cuando el producto tiene garantia
+                if (producto.getGarantiaEnum().equals(EnumSiNo.SI) && getCmbMostrarDetalle().getSelectedItem().equals(EnumSiNo.SI)) {
+
+                    List<KardexItemEspecifico> kardeItemEspecificoList = ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerItemsEspecificosPorProducto(producto);
+                    for (KardexItemEspecifico kardexItemEspecifico : kardeItemEspecificoList) {
+                        StockUnicoData stockUnicoData = new StockUnicoData(kardexItemEspecifico.getCodigoEspecifico());
+                        data.agregarDetalle(stockUnicoData);
+                    }
+
+                }
+
+                //Agregar las presentaciones en el reporte
+                if (getCmbMostrarPresentaciones().getSelectedItem().equals(EnumSiNo.SI)) {
+                    List<ProductoPresentacionDetalle> resultadoList = producto.getPresentacionList();
+                    for (ProductoPresentacionDetalle resultado : resultadoList) {
+                        if (resultado.getPresentacionProducto() != null) {
+                            PresentacionPrecioData presentacionData = new PresentacionPrecioData();
+                            presentacionData.setNombre(resultado.getPresentacionProducto().getNombre());
+                            presentacionData.setCosto(resultado.getCantidad().multiply(ultimoCosto).setScale(2, RoundingMode.HALF_UP) + "");
+                            presentacionData.setPvp(resultado.getCantidad().multiply(valorUnitario).setScale(2, RoundingMode.HALF_UP) + "");
+                            presentacionData.setStock(cantidad.divide(resultado.getCantidad(), 2, RoundingMode.HALF_UP) + "");
+                            data.agregarPresentacion(presentacionData);
+                        }
+                    }
+                }
+
+                listaData.add(data);
             }
+
+            construirTabla(listaData);
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    };
+    }
     
     private Integer obtenerCantidadDecimales()
     {

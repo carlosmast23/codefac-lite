@@ -1698,6 +1698,23 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
+    public void eliminarPorId(Long kardexId) throws RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException 
+            {
+                Kardex kardex= buscarPorId(kardexId);
+                kardex.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                
+                entityManager.merge(kardex);
+                
+            }
+        });
+        
+    }
+    
+    
     public void actualizarKardex(Kardex kardex) throws RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 

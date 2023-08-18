@@ -673,7 +673,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         timerControlEscritura = new Timer(500, e -> {
             String text = getTxtBuscar().getText();
             if (text!=null) {
-                Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.INFO, "Ejecutando busqueda dialogo ...");
+                //Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.INFO, "Ejecutando busqueda dialogo ...");
                 ejecutarConsulta();
                 //Cuando realiza la consulta lo detengo para evitar seguir consultado de nuevo hasta que vuelvan a presionar una tecla
                 timerControlEscritura.stop();

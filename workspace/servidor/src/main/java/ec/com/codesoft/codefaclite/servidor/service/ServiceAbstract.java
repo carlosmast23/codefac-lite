@@ -335,7 +335,24 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             //ex.printStackTrace();
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
-        }catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
+        }catch (javax.persistence.RollbackException e) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE,"GENERANDO RollbackException ...");
+            e.printStackTrace();
+            
+            //Si la transaccion falla primero intentar hacer una RollBack
+            if(transaccion.isActive())
+            {
+                transaccion.rollback();
+            }
+            
+            //para evitar un error complicado del tema de RollBack mejor tratar de hacer restaurar los datos con la base con el metodo clear()
+            entityManager.flush();            
+            entityManager.clear();
+            throw new ServicioCodefacException(e.getMessage());
+                        
+        }
+        catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE,"GENERANDO PersistenceException ...");
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
             //ex.printStackTrace();
             //verifica que la transaccion esta activa para hacer un rollback
@@ -369,7 +386,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, e);
             //e.printStackTrace();
             throw new ServicioCodefacException("Problema con variable nula \n\n"+e.getMessage());
-        }catch(Exception e) //Hacer un RollBack si se produce cualquier error
+        }    
+        catch(Exception e) //Hacer un RollBack si se produce cualquier error
         {
             if (transaccion.isActive()) {
                 transaccion.rollback();

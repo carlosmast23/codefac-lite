@@ -63,6 +63,22 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     
     public void editarConValidacion(Persona p,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException
     {
+        /*try
+        {
+            entityManager.merge(p);        
+            EntityTransaction transaccion = entityManager.getTransaction();
+            transaccion.commit();
+            transaccion.begin();
+        }catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+            if (e.getMessage().contains("No transaction is currently active")) 
+            {
+                System.out.println("no existe una transaccion activa ...");
+            }
+            e.printStackTrace();
+        }*/
+        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
