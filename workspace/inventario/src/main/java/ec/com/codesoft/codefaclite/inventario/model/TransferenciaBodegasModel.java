@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -221,13 +222,16 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,true);
+                ProductoBusquedaDialogoFactory busquedaFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(), ProductoBusquedaDialogoFactory.ResultadoEnum.PRODUCTO);
+                InterfaceModelFind buscarBusquedaDialogo = busquedaFactory.construirDialogo();
+                //ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),true,true);
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 
                 if(buscarDialogo.getResultado()!=null)
                 {
-                    productoSeleccionado=(Producto) buscarDialogo.getResultado();
+                    Kardex kardex= (Kardex) buscarDialogo.getResultado();                    
+                    productoSeleccionado=kardex.getProducto();
                     getTxtProducto().setText(productoSeleccionado.toString());
                     buscarCostoTransferencia();
                 }
