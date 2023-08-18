@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -93,6 +94,16 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {                
                 entityManager.merge(ordenTrabajo);
+                
+                //si se hizo una modificacion del CLIENTE, se cambia igual a los presupuestos para tener igual los datos en los demas lugares
+                PresupuestoService presupuestoService=new PresupuestoService();
+                List<Presupuesto> presupuestoList=presupuestoService.consultarPorOrdenTrabajo(ordenTrabajo);
+                for (Presupuesto presupuesto : presupuestoList) 
+                {
+                    presupuesto.setPersona(ordenTrabajo.getCliente());
+                    entityManager.merge(presupuesto);
+                }
+                
                 //ordenTrabajoFacade.edit(ordenTrabajo);
             }
         });
