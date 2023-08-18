@@ -257,6 +257,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
             presupuestoData.setCompras(totales.valoresProveedores);
             presupuestoData.setProduccionInterna(totales.produccionInterna);
             presupuestoData.setUtilidad(totales.utilidad);
+            presupuestoData.setNota(presupuesto.getOrdenTrabajoDetalle().getNotas());
             presupuestoData.setPlaca((presupuesto.obtenerObjectoMantenimiento()!=null)?presupuesto.obtenerObjectoMantenimiento().getCodigo():"");
             //presupuestoData.setCodigoPresupuesto(pre);
             

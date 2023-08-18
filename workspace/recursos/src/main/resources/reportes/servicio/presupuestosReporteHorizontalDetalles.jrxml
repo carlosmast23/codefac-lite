@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.7684607682500113"/>
+	<property name="ireport.zoom" value="1.768460768250012"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="39"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -46,6 +46,7 @@
 	<field name="objetoMantenimiento" class="java.lang.String"/>
 	<field name="codigoProducto" class="java.lang.String"/>
 	<field name="placa" class="java.lang.String"/>
+	<field name="nota" class="java.lang.String"/>
 	<variable name="venta_acum" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{total}]]></variableExpression>
 	</variable>
@@ -63,7 +64,7 @@
 		<groupHeader>
 			<band height="54">
 				<staticText>
-					<reportElement mode="Opaque" x="193" y="30" width="609" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="82cb2472-12a9-409d-badf-f03fac4320e4"/>
+					<reportElement mode="Opaque" x="240" y="30" width="562" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="82cb2472-12a9-409d-badf-f03fac4320e4"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -76,20 +77,7 @@
 					<text><![CDATA[DETALLES DEL PRESUPUESTO]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="305" y="42" width="141" height="12" uuid="2de64bd2-195e-4901-8cf8-1d05f30906f8"/>
-					<box>
-						<topPen lineWidth="0.5"/>
-						<leftPen lineWidth="0.5"/>
-						<bottomPen lineWidth="0.5"/>
-						<rightPen lineWidth="0.5"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Proveedor]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="446" y="42" width="214" height="12" uuid="660d44f9-865a-48eb-a6c9-293ca0c818b6"/>
+					<reportElement x="352" y="42" width="308" height="12" uuid="660d44f9-865a-48eb-a6c9-293ca0c818b6"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -451,7 +439,7 @@
 					<textFieldExpression><![CDATA[$F{utilidad}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="193" y="42" width="45" height="12" uuid="9a380aca-e2d6-4f3e-9e5a-1d45d4eaa4a5"/>
+					<reportElement x="240" y="42" width="45" height="12" uuid="9a380aca-e2d6-4f3e-9e5a-1d45d4eaa4a5"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -464,7 +452,7 @@
 					<text><![CDATA[Tipo]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="238" y="42" width="67" height="12" uuid="6172009e-428c-4bb3-b352-f746b79660c6"/>
+					<reportElement x="285" y="42" width="67" height="12" uuid="6172009e-428c-4bb3-b352-f746b79660c6"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -503,6 +491,33 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
 				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="35" y="30" width="205" height="12" forecolor="#000000" backcolor="#F3F3F3" uuid="7db4734b-e5c0-43a0-b5b9-53e54c792ac1"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isItalic="true"/>
+						<paragraph leftIndent="2" rightIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nota}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="30" width="35" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="bd1a596d-08ac-475b-b3b7-c9cf3d73c194"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Nota:]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -548,21 +563,7 @@
 	<detail>
 		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="305" y="0" width="141" height="12" uuid="565d8422-9dac-49cc-adca-afa743932670"/>
-				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="7"/>
-					<paragraph leftIndent="2" rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{proveedor}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="446" y="0" width="214" height="12" uuid="cdb41238-13f1-4460-84a7-e6d9798d65bc"/>
+				<reportElement x="352" y="0" width="308" height="12" uuid="cdb41238-13f1-4460-84a7-e6d9798d65bc"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -632,7 +633,7 @@
 				<textFieldExpression><![CDATA[$F{totalCompra}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="193" y="0" width="45" height="12" uuid="fb08b5c7-15ec-4b7a-be75-8bff1f16a65d"/>
+				<reportElement x="240" y="0" width="45" height="12" uuid="fb08b5c7-15ec-4b7a-be75-8bff1f16a65d"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -646,7 +647,7 @@
 				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="238" y="0" width="67" height="12" uuid="b3a0924d-70fe-410c-bb7e-6cf633c7f4d4"/>
+				<reportElement x="285" y="0" width="67" height="12" uuid="b3a0924d-70fe-410c-bb7e-6cf633c7f4d4"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>

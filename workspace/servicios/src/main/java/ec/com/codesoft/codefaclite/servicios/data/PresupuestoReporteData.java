@@ -37,6 +37,7 @@ public class PresupuestoReporteData implements ExcelDatosInterface {
     private String objetoMantenimiento;
     private String placa;
     private String codigoPresupuesto;
+    private String nota;
 
     public PresupuestoReporteData() 
     {
@@ -170,6 +171,15 @@ public class PresupuestoReporteData implements ExcelDatosInterface {
     public void setCodigoPresupuesto(String codigoPresupuesto) {
         this.codigoPresupuesto = codigoPresupuesto;
     }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
+    
     
     
     
