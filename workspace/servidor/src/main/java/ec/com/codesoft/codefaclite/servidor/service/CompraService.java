@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import static com.sun.tools.xjc.reader.Ring.add;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
@@ -25,6 +26,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra.RetencionEnumCompras;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraFacturaReembolso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteVentaNotaCreditoAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DetalleFacturaNotaCeditoAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -197,6 +200,13 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         return null;
     }
     
+    public Factura obtenerFacturaDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException
+    {
+        Factura factura=generFacturaDesdeXml((FacturaComprobante) comprobanteElectronico, empresa);
+        return factura;
+        
+    }
+    
     public Compra obtenerCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException
     {        
         //InputStream inputStream=null;
@@ -232,41 +242,27 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         return null;
     }
     
+    public Factura generFacturaDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException
+    {
+        Factura facturaNueva=(Factura) generarComprobanteDesdeXml(comprobanteElectronico, empresa,new Factura());        
+        //Cargar los DETALLES DE LA COMPRA
+        List<FacturaDetalle> detalleList=cargarProductoFacturaDetalleDesdeXml(comprobanteElectronico, facturaNueva);
+        facturaNueva.setDetalles(detalleList);
+        facturaNueva.calcularTotalesDesdeDetalles();
+        facturaNueva.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+        return facturaNueva;
+    }
+    
     
     //TODO: Ver si se puede abstraer para tener un metodo generico que se encargue de llenar los datos principales y luego se pueda llenar el resto
     private Compra generarCompraDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException
     {
-        Compra compraNueva=new Compra();
+        Compra compraNueva=(Compra) generarComprobanteDesdeXml(comprobanteElectronico, empresa,new Compra());
         
-        compraNueva.setEmpresa(empresa);
-        
-        //obtener los datos del PROVEEDOR
-        Persona proveedor=cargarProveedorCompraDesdeXml(comprobanteElectronico,empresa);
-        compraNueva.setProveedor(proveedor);
-        
-        compraNueva.setCodigoDocumentoEnum(DocumentoEnum.obtenerPorComprobanteEnum(comprobanteElectronico.getInformacionTributaria().getCodigoDocumentoEnum()));
-        
-        //obtener los datos de la CLAVE DE ACCESO
-        String claveAcceso=comprobanteElectronico.getInformacionTributaria().getClaveAcceso();
-        compraNueva.setAutorizacion(claveAcceso);        
-        compraNueva.setClaveAcceso(claveAcceso);
-        
-        //obtener el ESTABLECIMIENTO
-        BigDecimal establecimientoNumero=new BigDecimal(comprobanteElectronico.getInformacionTributaria().getEstablecimiento());
-        compraNueva.setPuntoEstablecimiento(establecimientoNumero);
-        
-        //obtener el PUNTO_EMISION
-        Integer puntoEmision=Integer.parseInt(comprobanteElectronico.getInformacionTributaria().getPuntoEmision());
-        compraNueva.setPuntoEmision(puntoEmision);
-        
-        //obtener el SECUENCIAL
-        Integer secuencial=Integer.parseInt(comprobanteElectronico.getInformacionTributaria().getSecuencial());
-        compraNueva.setSecuencial(secuencial);
-        
-        //obtener la FECHA DE EMISION
-        java.util.Date fechaEmision=ComprobantesElectronicosUtil.stringToDate(comprobanteElectronico.getFechaEmision());
-        compraNueva.setFechaEmision(fechaEmision);
-        compraNueva.setFechaFactura(UtilidadesFecha.castDateUtilToSql(fechaEmision));
+        //Datos adicionales que se deben completar para la COMPRA
+        compraNueva.setProveedor(compraNueva.getCliente());
+        compraNueva.setAutorizacion(compraNueva.getClaveAcceso());       
+        compraNueva.setFechaFactura(compraNueva.getFechaEmision());
         
         //Datos por DEFECTO
         compraNueva.setObservacion("Compra Electrónica");
@@ -276,99 +272,195 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         RetencionEnumCompras estadoRetencion=Compra.RetencionEnumCompras.SIN_CONTABILIDAD;
         compraNueva.setEstadoRetencionEnum(estadoRetencion);
         
+        
         //Cargar los DETALLES DE LA COMPRA
         List<CompraDetalle> detallesCompra=cargarProductoCompraDetalleDesdeXml(comprobanteElectronico, compraNueva);
         compraNueva.setDetalles(detallesCompra);
         compraNueva.calcularTotalesDesdeDetalles();
         
-        
         return compraNueva;
+        
     }
     
-    private List<CompraDetalle> cargarProductoCompraDetalleDesdeXml(FacturaComprobante comprobanteElectronico,Compra compra) throws ServicioCodefacException, RemoteException
+    private ComprobanteVentaNotaCreditoAbstract generarComprobanteDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa,ComprobanteVentaNotaCreditoAbstract comprobanteNuevo) throws RemoteException, ServicioCodefacException
+    {
+        //ComprobanteVentaNotaCreditoAbstract comprobanteNuevo=new ComprobanteVentaNotaCreditoAbstract();
+        
+        comprobanteNuevo.setEmpresa(empresa);
+        
+        //obtener los datos del PROVEEDOR
+        Persona proveedor=cargarProveedorCompraDesdeXml(comprobanteElectronico,empresa);
+        comprobanteNuevo.setCliente(proveedor);
+        comprobanteNuevo.setSucursal(proveedor.getEstablecimientoActivoPorDefecto());
+        //compraNueva.setProveedor(proveedor);
+        
+        comprobanteNuevo.setCodigoDocumentoEnum(DocumentoEnum.obtenerPorComprobanteEnum(comprobanteElectronico.getInformacionTributaria().getCodigoDocumentoEnum()));
+        
+        //obtener los datos de la CLAVE DE ACCESO
+        String claveAcceso=comprobanteElectronico.getInformacionTributaria().getClaveAcceso();
+        //compraNueva.setAutorizacion(claveAcceso);        
+        comprobanteNuevo.setClaveAcceso(claveAcceso);
+        
+        //obtener el ESTABLECIMIENTO
+        BigDecimal establecimientoNumero=new BigDecimal(comprobanteElectronico.getInformacionTributaria().getEstablecimiento());
+        comprobanteNuevo.setPuntoEstablecimiento(establecimientoNumero);
+        
+        //obtener el PUNTO_EMISION
+        Integer puntoEmision=Integer.parseInt(comprobanteElectronico.getInformacionTributaria().getPuntoEmision());
+        comprobanteNuevo.setPuntoEmision(puntoEmision);
+        
+        //obtener el SECUENCIAL
+        Integer secuencial=Integer.parseInt(comprobanteElectronico.getInformacionTributaria().getSecuencial());
+        comprobanteNuevo.setSecuencial(secuencial);
+        
+        //obtener la FECHA DE EMISION
+        java.util.Date fechaEmision=ComprobantesElectronicosUtil.stringToDate(comprobanteElectronico.getFechaEmision());
+        comprobanteNuevo.setFechaEmision(fechaEmision);
+        //compraNueva.setFechaFactura(UtilidadesFecha.castDateUtilToSql(fechaEmision));        
+        
+        return comprobanteNuevo;
+    }
+    
+    private List<CompraDetalle> cargarProductoCompraDetalleDesdeXml(FacturaComprobante comprobanteElectronico,ComprobanteVentaNotaCreditoAbstract compra) throws ServicioCodefacException, RemoteException
     {
         List<CompraDetalle> detalles=new ArrayList<CompraDetalle>();        
+        
+        List<DetalleFacturaNotaCeditoAbstract> resultadoList=cargarProductoComprobanteDetalleDesdeXml(comprobanteElectronico, compra,CompraDetalle.class);
+        for (DetalleFacturaNotaCeditoAbstract detalleFacturaNotaCeditoAbstract : resultadoList) 
+        {
+            detalles.add((CompraDetalle) detalleFacturaNotaCeditoAbstract);
+        }
+        return detalles;
+    }
+    
+    private List<FacturaDetalle> cargarProductoFacturaDetalleDesdeXml(FacturaComprobante comprobanteElectronico,ComprobanteVentaNotaCreditoAbstract compra) throws ServicioCodefacException, RemoteException
+    {
+        List<FacturaDetalle> detalles=new ArrayList<FacturaDetalle>();        
+        
+        List<DetalleFacturaNotaCeditoAbstract> resultadoList=cargarProductoComprobanteDetalleDesdeXml(comprobanteElectronico, compra,FacturaDetalle.class);
+        for (DetalleFacturaNotaCeditoAbstract detalleFacturaNotaCeditoAbstract : resultadoList) 
+        {
+            FacturaDetalle facturaDetalle=(FacturaDetalle) detalleFacturaNotaCeditoAbstract;
+            facturaDetalle.setFactura((Factura) compra);
+            detalles.add(facturaDetalle);
+        }
+        return detalles;
+    }
+    
+    
+    
+    private List<DetalleFacturaNotaCeditoAbstract> cargarProductoComprobanteDetalleDesdeXml(FacturaComprobante comprobanteElectronico,ComprobanteVentaNotaCreditoAbstract compra,Class claseObjeto) throws ServicioCodefacException, RemoteException
+    {
+        List<DetalleFacturaNotaCeditoAbstract> detalles=new ArrayList<DetalleFacturaNotaCeditoAbstract>();        
         for (DetalleFacturaComprobante detalleXml : comprobanteElectronico.getDetalles()) 
         {       
-            CompraDetalle compraDetalle=new CompraDetalle();
-            //Buscar si existe el producto cargado con el Código principal
-            String codigoPrincipal=detalleXml.getCodigoPrincipal();
-            
-            if(codigoPrincipal.equals("1TTEC001303"))
-            {
-                System.out.println("Revisar ese mensaje ...");
-            }
-            
-            ProductoProveedor productoProveedor=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarActivoPorCodigoProveedor(codigoPrincipal,compra.getEmpresa());
-            //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoPrincipal,compra.getEmpresa());
-            
-            if(productoProveedor!=null)
-            {
-                //List<ProductoProveedor> productoProveedorList=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(producto, compra.getProveedor());
-                //if(productoProveedorList.size()>0)
-                //{
-                compraDetalle.setProductoProveedor(productoProveedor);
-                //}                
-            }
-            else
-            {
-                //Crear temporalmente los datos para mandar los impuestos que deben crear en el nuevo producto}
-                ProductoProveedor productoProveedorTmp=new ProductoProveedor();
-                Producto productoTmp=new Producto();
+            try {
+                DetalleFacturaNotaCeditoAbstract compraDetalle=(DetalleFacturaNotaCeditoAbstract) claseObjeto.newInstance();
+                //Buscar si existe el producto cargado con el Código principal
+                String codigoPrincipal=detalleXml.getCodigoPrincipal();
                 
-                CatalogoProducto catalogoProductoTmp=new CatalogoProducto();
-                ImpuestoDetalle impuestoDetalleIvaTmp=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorCodigo(Integer.parseInt(detalleXml.getImpuestos().get(0).getCodigoPorcentaje()));
-                                
                 
-                productoProveedorTmp.setProducto(productoTmp);
-                productoTmp.setCatalogoProducto(catalogoProductoTmp);
-                catalogoProductoTmp.setIva(impuestoDetalleIvaTmp);                
-                compraDetalle.setProductoProveedor(productoProveedorTmp);
+                //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoPrincipal,compra.getEmpresa());
                 
-                //TODO: Si no existe el producto falta programar esta parte
-            }
-            
-            //Consultar la tarifa de los impuestos
-            Integer ivaPorcentaje=detalleXml.getImpuestos().get(0).getTarifa().intValue();
-            compraDetalle.setIvaPorcentaje(ivaPorcentaje);            
-            
-            /*if(detalleXml.getCodigoPrincipal().equals("5062651/h52"))
-            {
-                System.out.println("revisar ...");
-            }*/
-            
-            //Consulta el valor del ICE
-            compraDetalle.setIcePorcentaje(detalleXml.obtenerIcePorcentaje());
-            compraDetalle.setValorIce(detalleXml.obtenerIce());
-            
-            //Agregar la CANTIDAD del detalle
-            BigDecimal cantidad = detalleXml.getCantidad();
-            compraDetalle.setCantidad(cantidad);
+                if(claseObjeto.equals(CompraDetalle.class) )
+                {
+                    CompraDetalle compraDetalleTmp=(CompraDetalle) compraDetalle;
+                    ProductoProveedor productoProveedor=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarActivoPorCodigoProveedor(codigoPrincipal,compra.getEmpresa());
+                    if(productoProveedor!=null)
+                    {
+                        //List<ProductoProveedor> productoProveedorList=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(producto, compra.getProveedor());
+                        //if(productoProveedorList.size()>0)
+                        //{
+                        compraDetalleTmp.setProductoProveedor(productoProveedor);
+                        //}
+                    }
+                    else
+                    {
+                        //Crear temporalmente los datos para mandar los impuestos que deben crear en el nuevo producto}
+                        ProductoProveedor productoProveedorTmp=new ProductoProveedor();
+                        Producto productoTmp=new Producto();
+                        
+                        CatalogoProducto catalogoProductoTmp=new CatalogoProducto();
+                        ImpuestoDetalle impuestoDetalleIvaTmp=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorCodigo(Integer.parseInt(detalleXml.getImpuestos().get(0).getCodigoPorcentaje()));
+                        
+                        
+                        productoProveedorTmp.setProducto(productoTmp);
+                        productoTmp.setCatalogoProducto(catalogoProductoTmp);
+                        catalogoProductoTmp.setIva(impuestoDetalleIvaTmp);
+                        compraDetalleTmp.setProductoProveedor(productoProveedorTmp);
+                        
+                        //TODO: Si no existe el producto falta programar esta parte
+                    }
+                    
+                    //Agregar el CODIGO DEL PROVEEDOR ORIGINAL DE LA COMPRA
+                    compraDetalleTmp.setCodigoProveedor(codigoPrincipal);
+                } else if(claseObjeto.equals(FacturaDetalle.class) )
+                {
+                    FacturaDetalle facturaDetalleTmp=(FacturaDetalle) compraDetalle;                    
+                    facturaDetalleTmp.setTipoDocumentoEnum(TipoDocumentoEnum.INVENTARIO);
+                    
+                    compraDetalle.setCodigoPrincipal(codigoPrincipal);
+                    
+                    Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoPrincipal, compra.getEmpresa());
+                    facturaDetalleTmp.setReferenciaId(producto.getIdProducto());                    
+                    facturaDetalleTmp.setCatalogoProducto(producto.getCatalogoProducto());                                        
+                    
+                }
 
-            //Agregar la DESCRIPCION del detalle
-            String descripcion = detalleXml.getDescripcion();
-            compraDetalle.setDescripcion(descripcion);      
-            
-            //Agregar el PRECIO UNITARIO
-            BigDecimal precioUnitario=detalleXml.getPrecioUnitario();
-            compraDetalle.setPrecioUnitario(precioUnitario);            
-            
-            //Agregar el DESCUENTO
-            BigDecimal descuento= detalleXml.getDescuento();
-            compraDetalle.setDescuento(descuento);
-            
-            //Agregar el valor del IRBPNR
-            compraDetalle.setIrbpnr(detalleXml.obtenerIRBPNRPorcentaje());
-            
-            //Agregar el CODIGO DEL PROVEEDOR ORIGINAL DE LA COMPRA
-            compraDetalle.setCodigoProveedor(codigoPrincipal);
-            
-            //Calculor los totales previos
-            compraDetalle.calcularSubtotalSinIva();
-            
-            //detalleXml.getImpuestos();
-            
-            detalles.add(compraDetalle);
+                
+                //Consultar la tarifa de los impuestos
+                Integer ivaPorcentaje=detalleXml.getImpuestos().get(0).getTarifa().intValue();
+                compraDetalle.setIvaPorcentaje(ivaPorcentaje);
+                
+                /*if(detalleXml.getCodigoPrincipal().equals("5062651/h52"))
+                {
+                System.out.println("revisar ...");
+                }*/
+                
+                //Consulta el valor del ICE
+                compraDetalle.setIcePorcentaje(detalleXml.obtenerIcePorcentaje());
+                compraDetalle.setValorIce(detalleXml.obtenerIce());
+                
+                //Agregar la CANTIDAD del detalle
+                BigDecimal cantidad = detalleXml.getCantidad();
+                compraDetalle.setCantidad(cantidad);
+                
+                //Agregar la DESCRIPCION del detalle
+                String descripcion = detalleXml.getDescripcion();
+                compraDetalle.setDescripcion(descripcion);
+                
+                //Agregar el PRECIO UNITARIO
+                BigDecimal precioUnitario=detalleXml.getPrecioUnitario();
+                compraDetalle.setPrecioUnitario(precioUnitario);
+                
+                //Agregar el DESCUENTO
+                BigDecimal descuento= detalleXml.getDescuento();
+                compraDetalle.setDescuento(descuento);
+                
+                //Agregar el valor del IRBPNR
+                compraDetalle.setIrbpnr(detalleXml.obtenerIRBPNRPorcentaje());
+                
+                //TODO: Ver si se puede unificar estos metodos para no hacer 2 veces el calculo
+                if(claseObjeto.equals(CompraDetalle.class) )
+                {
+                    CompraDetalle compraDetalleTmp=(CompraDetalle) compraDetalle;
+                    //Calculor los totales previos
+                    compraDetalleTmp.calcularSubtotalSinIva();
+                }
+                else if(claseObjeto.equals(FacturaDetalle.class) )
+                {
+                    FacturaDetalle facturaDetalleTmp=(FacturaDetalle) compraDetalle;
+                    facturaDetalleTmp.calcularTotalDetalle();
+                }
+                
+                //detalleXml.getImpuestos();
+                
+                detalles.add(compraDetalle);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
         }
         return detalles;

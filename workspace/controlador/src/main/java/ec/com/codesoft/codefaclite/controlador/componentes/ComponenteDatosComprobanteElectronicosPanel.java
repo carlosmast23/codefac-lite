@@ -85,6 +85,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnAutorizarDocumento = new javax.swing.JButton();
         btnCambiarEstado = new javax.swing.JButton();
         btnCorregirSecuencial = new javax.swing.JButton();
+        btnCargarXml = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -121,6 +122,10 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnCorregirSecuencial.setText("fix secuencial");
         add(btnCorregirSecuencial);
 
+        btnCargarXml.setFont(new java.awt.Font("Arial", 2, 11)); // NOI18N
+        btnCargarXml.setText("cargar XML");
+        add(btnCargarXml);
+
         jLabel2.setText("  ");
         add(jLabel2);
 
@@ -156,6 +161,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     private javax.swing.JButton btnAbrirXml;
     private javax.swing.JButton btnAutorizarDocumento;
     private javax.swing.JButton btnCambiarEstado;
+    private javax.swing.JButton btnCargarXml;
     private javax.swing.JButton btnCorregirSecuencial;
     private javax.swing.JButton btnObtenerClaveAcceso;
     private javax.swing.JButton btnReProcesarComprobante;
@@ -168,7 +174,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     // End of variables declaration//GEN-END:variables
 
     private void listenerBotones() {
-       
+                       
         btnReProcesarComprobante.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -520,6 +526,24 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         });
         
     }
+
+    public JButton getBtnAbrirXml() {
+        return btnAbrirXml;
+    }
+
+    public void setBtnAbrirXml(JButton btnAbrirXml) {
+        this.btnAbrirXml = btnAbrirXml;
+    }
+
+    public JButton getBtnCargarXml() {
+        return btnCargarXml;
+    }
+
+    public void setBtnCargarXml(JButton btnCargarXml) {
+        this.btnCargarXml = btnCargarXml;
+    }
+    
+    
  
     
 }

@@ -432,7 +432,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         //Runtime garbage = Runtime.getRuntime();
         //garbage.gc();
         
-        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.INFO, "Liberando memoria GC...");
+        //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.INFO, "Liberando memoria GC...");
     }
     
     /**
@@ -516,7 +516,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 try {
                     //opcion de salir
                     
-                    //Grabar datos para saber la concurrencia de los datos
+                    //Grabar datos de los secuenciales para saber si luego tienen inconsistencia con la información
                     ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
                     
                     DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {

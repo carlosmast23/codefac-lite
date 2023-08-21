@@ -123,8 +123,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
@@ -157,12 +160,15 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import static java.awt.image.ImageObserver.WIDTH;
+import java.io.File;
 import java.math.RoundingMode;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import org.jdesktop.swingx.JXTaskPane;
@@ -384,8 +390,62 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.ELIMINAR_REGISTRO)
     }
     
+    //TODO: Unificar con metodo similar al momento de hacer al carga enla compra
+    private void listenerBtnCargarCompraXml()
+    {
+        String[] filtros={"xml", "XML"};
+        JFileChooser jFileChooser=UtilidadesSwing.getJFileChooserPreBuild("Elegir  Xml", "Xml", filtros);
+        int seleccion=jFileChooser.showDialog(null,"Abrir");
+        //Si devuelve una respuesta ejecuto el metodo para grabar
+        if(seleccion==JFileChooser.APPROVE_OPTION)
+        {
+            try {
+                File archivoSeleccionado=jFileChooser.getSelectedFile();
+                //SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
+                //        new FileInputStream(archivoSeleccionado));
+                
+                ComprobanteElectronico comprobanteElectronico=ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(archivoSeleccionado);
+                
+                Factura facturaTmp=ServiceFactory.getFactory().getCompraServiceIf().obtenerFacturaDesdeXml(comprobanteElectronico, session.getEmpresa());
+                facturaTmp.setSecuencial(null);
+                facturaTmp.setPuntoEmision(null);
+                facturaTmp.setClaveAcceso(null);
+                
+                if(facturaTmp!=null)
+                {
+                    cargarDatosPantallaFactura(facturaTmp);
+                }
+                
+                //Object[] parametros={compra};
+                //panelPadre.crearDialogoCodefac(observerCompraXml, VentanaEnum.COMPRA_XML, true, parametros, formularioActual);
+               // abrirDialogoCompraXml(compra);
+                        
+                //cargarDatosCompra(compra);
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void cargarXmlFactura()
+    {
+        listenerBtnCargarCompraXml();
+    }
+            
 
     private void addListenerButtons() { 
+        
+        
+        getPnlDatosAdicionales().getBtnCargarXml().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarXmlFactura();
+            }
+        });
         
         getBtnCargarComanda().addActionListener(new ActionListener() {
             @Override
@@ -2545,15 +2605,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         buscarDialogoModel.setVisible(true);
         Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
         
-        if (facturaTmp != null) {
-            limpiar();
-            this.factura = facturaTmp;
-            cargarDatosBuscar();
-            validacionesParaEditar();
-           
+        if (facturaTmp != null) 
+        {
+            cargarDatosPantallaFactura(facturaTmp);           
         } else {
             throw new ExcepcionCodefacLite("cancelar ejecucion");
         }
+    }
+    
+    private void cargarDatosPantallaFactura(Factura facturaTmp)
+    {
+        limpiar();
+        this.factura = facturaTmp;
+        cargarDatosBuscar();
+        validacionesParaEditar();
     }
     
     private FacturaAdicional buscarCampoAdicionalPorNombre(String nombre)

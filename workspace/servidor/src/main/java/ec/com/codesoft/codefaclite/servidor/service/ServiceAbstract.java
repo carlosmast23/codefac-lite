@@ -318,7 +318,11 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             //si no hay problema de transacciones anteriones inicio la NUEVA TRANSACCION
             transaccion.begin();
             resultadoTransaccion=interfaz.transaccionGenerica();
+            //Agrego un flush para enviar los datos directamente a la base de datos, y evitar datos por tener en memoria
+            entityManager.flush();
             transaccion.commit();
+            
+
             //transaccion.setRollbackOnly();
             //entityManager.clear(); //Supuestamente esto no es neceario y solo se estaba usando supuestamente para errores de cache
         }catch (RemoteException ex) { //Hacer un RoolBack cuando no exista comunicacion con el servidor

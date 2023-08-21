@@ -1146,7 +1146,8 @@ public class CompraModel extends CompraPanel{
         
         getBtnCargarXml().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) 
+            {
                 listenerBtnCargarCompraXml();
             }
         });

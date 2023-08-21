@@ -9,7 +9,7 @@
       <!-- Validar que no ingrese ids nulos o incorrectos -->
       <!--<property name="eclipselink.id-validation" value="EXCEPTION"/>-->
       <!-- Esta propiedad me permite ejecutar siempre un commit despues de cada transaccion para evitar perdida de datos -->
-      <property name="javax.persistence.flushMode" value="COMMIT"/>
+      <property name="javax.persistence.flushMode" value="AUTO"/>
       <property name="eclipselink.cache.shared.default" value="false"/>
       <!-- Estas dos lines sirven para activar los logs del eclipseLink -->
       <!-- <property name="eclipselink.logging.level.sql" value="FINE"/>-->
