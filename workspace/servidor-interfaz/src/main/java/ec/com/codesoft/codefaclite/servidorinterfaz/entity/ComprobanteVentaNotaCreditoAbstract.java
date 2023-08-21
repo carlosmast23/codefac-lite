@@ -161,6 +161,10 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     public Persona getCliente() {
         return cliente;
     }
+    
+    public Persona getClienteOriginal() {
+        return cliente;
+    }
 
     public void setCliente(Persona cliente) {
         this.cliente = cliente;

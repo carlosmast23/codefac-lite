@@ -260,9 +260,12 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         Compra compraNueva=(Compra) generarComprobanteDesdeXml(comprobanteElectronico, empresa,new Compra());
         
         //Datos adicionales que se deben completar para la COMPRA
-        compraNueva.setProveedor(compraNueva.getCliente());
-        compraNueva.setAutorizacion(compraNueva.getClaveAcceso());       
-        compraNueva.setFechaFactura(compraNueva.getFechaEmision());
+        Persona proveedor=compraNueva.getClienteOriginal();
+        compraNueva.setProveedor(proveedor);
+        compraNueva.setAutorizacion(compraNueva.getClaveAcceso());   
+        
+        java.util.Date fechaEmision=compraNueva.getFechaEmisionOriginal();        
+        compraNueva.setFechaFactura(UtilidadesFecha.castDateUtilToSql(fechaEmision));
         
         //Datos por DEFECTO
         compraNueva.setObservacion("Compra Electrónica");
@@ -385,6 +388,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                         
                         
                         productoProveedorTmp.setProducto(productoTmp);
+                        //productoProveedorTmp.setProveedor(compra.getCliente());
                         productoTmp.setCatalogoProducto(catalogoProductoTmp);
                         catalogoProductoTmp.setIva(impuestoDetalleIvaTmp);
                         compraDetalleTmp.setProductoProveedor(productoProveedorTmp);

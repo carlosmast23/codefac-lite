@@ -220,6 +220,10 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public Date getFechaEmision() {
         return fechaEmision;
     }
+    
+    public Date getFechaEmisionOriginal() {
+        return fechaEmision;
+    }
 
     public void setFechaEmision(Date fechaEmision) {
         this.fechaEmision = fechaEmision;
