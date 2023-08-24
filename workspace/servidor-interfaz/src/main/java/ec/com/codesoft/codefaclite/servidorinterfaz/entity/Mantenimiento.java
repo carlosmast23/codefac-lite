@@ -51,6 +51,9 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     @Column(name = "UBICACION")
     private String ubicacion;
     
+    @Column(name = "TALLER_NOMBRE")
+    private String tallerNombre;
+    
     @JoinColumn(name = "OBJETO_MANTENIMIENTO_ID")
     private ObjetoMantenimiento vehiculo;
 
@@ -109,6 +112,16 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
     }
+
+    public String getTallerNombre() {
+        return tallerNombre;
+    }
+
+    public void setTallerNombre(String tallerNombre) {
+        this.tallerNombre = tallerNombre;
+    }
+    
+    
     
     public UbicacionEnum getUbicacionEnum() {
         return UbicacionEnum.getEnum(ubicacion);
@@ -208,7 +221,36 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
         }
         
         
+    }
+    
+    public enum TallerEnum
+    {
+        COLISIONES("c","Taller Colisiones"),
+        EXPRESS("e","Taller Express"),
+        EXTERNO("x","Taller Externos"),
+        MECANICO("m","Taller Mécanico"),
+        RETORNO("r","Taller Retorno");
         
+        private String letra;
+        private String nombre;
+
+        private TallerEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
         
     }
     

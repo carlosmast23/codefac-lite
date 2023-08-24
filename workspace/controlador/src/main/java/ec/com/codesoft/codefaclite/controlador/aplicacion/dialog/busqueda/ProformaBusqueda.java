@@ -65,9 +65,10 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Secuencial", 0.2d));
+        titulo.add(new ColumnaDialogo("Secuencial", 0.05d));
         titulo.add(new ColumnaDialogo("cliente", 0.3d));
         titulo.add(new ColumnaDialogo("documento", 0.15d));
+        titulo.add(new ColumnaDialogo("vendedor", 0.2d));
         titulo.add(new ColumnaDialogo("estado", 0.15d));
         titulo.add(new ColumnaDialogo("fecha", 0.15d));
         titulo.add(new ColumnaDialogo("total", 0.1d));
@@ -146,6 +147,16 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         dato.add(t.getCliente().getRazonSocial());
         DocumentoEnum documentoEnum = DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
         dato.add(documentoEnum.getNombre()); //TODO: Veri si para cosnultar por documento sea una propiedad intrinsica de la factura        
+        
+        //Agregar el nombre del vendedor
+        String nombreVendedor="";
+        if(t.getVendedor()!=null)
+        {
+            nombreVendedor=t.getVendedor().getNombresCompletos();
+        }        
+        dato.add(nombreVendedor);
+        
+        
         dato.add((t.getEstadoEnum() != null) ? t.getEstadoEnum().getNombre() : "Sin estado");
 
         if(t.getFechaEmision()!=null)

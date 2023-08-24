@@ -304,12 +304,12 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
        if (transaccion.isActive()) 
        {
            //TODO: Solución de prueba temporal
-           //transaccion.commit();//Si por algun motivo queda una transaccion activa , lo que primero que intento es grabar la transacción
+           transaccion.commit();//Si por algun motivo queda una transaccion activa , lo que primero que intento es grabar la transacción
            
-           //if(transaccion.isActive())
-           //{           
+           if(transaccion.isActive())
+           {           
                 throw new ServicioCodefacException("Previamente existe una transacción activa , por favor intente nuevamente");
-           //}
+           }
        }
        
        

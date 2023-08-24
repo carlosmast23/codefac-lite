@@ -21,7 +21,7 @@
                         />
                 </div>
             </div>
-            
+
             <!-- Cargar una tabla para que pueda visualizar el contenido -->
             <div class="card" style="text-align: left">
                 <p:dataTable 
@@ -51,19 +51,41 @@
 
                     <p:column width="50"  selectionMode="multiple" exportable="false"></p:column>
 
-                    
+
                     <p:column width="50"  headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
-                    
+
+                    <p:column width="20"  headerText="">
+                        <p:commandButton icon="pi pi-pencil"  
+                                         oncomplete="PF('manageProductDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">                            
+                            
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:column width="100"  headerText="Taller">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{m.tallerNombre}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{m.tallerNombre}" style="width:100%">
+                                    <f:selectItems value="#{clasificarVehiculosNuevosMb.tallerList}" var="taller"
+                                                   itemLabel="#{taller.nombre}" itemValue="#{taller.nombre}"/>
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
                     <p:column headerText="Vin" filterBy="#{m.vehiculo.vin}" filterMatchMode="contains"  >
                         <h:outputText value="#{m.vehiculo.vin}" />
                     </p:column>
-                    
+
                     <p:column headerText="Marca" filterBy="#{m.vehiculo.marca}" filterMatchMode="contains"  >
                         <h:outputText value="#{m.vehiculo.marca}" />
                     </p:column>
-    
+
                     <p:column headerText="Modelo" filterBy="#{m.vehiculo.modelo}" filterMatchMode="contains" >
                         <h:outputText value="#{m.vehiculo.modelo}" />
                     </p:column>
@@ -71,7 +93,7 @@
                     <p:column width="100" headerText="Color">
                         <h:outputText value="#{m.vehiculo.color}" />
                     </p:column>
-                    
+
                     <p:column width="70" headerText="Fecha">
                         <h:outputText value="#{m.fechaIngreso}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
@@ -82,6 +104,36 @@
 
                 </p:dataTable>
             </div>
+
+            <p:dialog header="Subtarea" showEffect="fade" modal="true" widgetVar="manageProductDialog"
+                      responsive="true">
+                <p:outputPanel id="manage-product-content" >
+                    <h5 style="margin-top:0px">Seleccione las subtareas:</h5>
+                    <p:selectManyCheckbox id="basicAjax" value="#{clasificarVehiculosNuevosMb.textoEjemploArray}" widgetVar="blub"  >
+                        <f:selectItem itemLabel="pintura" itemValue="pintura"/>
+                        <f:selectItem itemLabel="enderezada" itemValue="enderezada"/>
+                        <f:selectItem itemLabel="pulida vidrios" itemValue="pulida vidrios"/>
+                        <f:selectItem itemLabel="detailing" itemValue="detailing"/>
+                        <!--<f:selectItem itemLabel="faltante" itemValue="faltante"/>
+                        <f:selectItem itemLabel="parte defectuosa" itemValue="parte defectuosa"/>
+                        <f:selectItem itemLabel="garante" itemValue="garante"/>
+                        <f:selectItem itemLabel="fallo mecánico" itemValue="fallo mecánico"/>
+                        <f:selectItem itemLabel="fallo eléctrico" itemValue="fallo eléctrico"/>
+                        <f:selectItem itemLabel="mal ensamblaje" itemValue="mal ensamblaje"/>
+                        <f:selectItem itemLabel="accesorio mal instalado" itemValue="accesorio mal instalado"/>
+                        <f:selectItem itemLabel="otros" itemValue="otros"/>-->
+                    </p:selectManyCheckbox>
+                </p:outputPanel>
+
+                <f:facet name="footer">           
+                    
+                    <p:commandButton value="Grabar" icon="pi pi-check" onclick="PF('manageProductDialog').hide()" />
+                    
+                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                     class="ui-button-secondary" type="button" />
+                </f:facet>
+            </p:dialog>
+
         </ui:define>
     </ui:composition>
 

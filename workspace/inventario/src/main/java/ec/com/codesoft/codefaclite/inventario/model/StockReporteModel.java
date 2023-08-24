@@ -114,7 +114,7 @@ public class StockReporteModel extends StockMinimoPanel{
             public void actionPerformed(ActionEvent e) 
             {
                 int filaSeleccionada=getTblDato().getSelectedRow();
-                if(filaSeleccionada>0)
+                if(filaSeleccionada>=0)
                 {
                     //Preguntar si desea eliminar el kardex que ingrese la clave de soporte
                     String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);

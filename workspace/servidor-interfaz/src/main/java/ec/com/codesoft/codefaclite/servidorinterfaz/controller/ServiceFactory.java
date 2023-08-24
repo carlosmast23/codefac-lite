@@ -105,6 +105,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuari
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TallerServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TareaMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
@@ -263,6 +264,7 @@ public abstract class ServiceFactory {
     public TareaMantenimientoServiceIf getTareaMantenimientoServiceIf(){return (TareaMantenimientoServiceIf) getRecursosRMI(TareaMantenimientoServiceIf.class);};
     public MantenimientoServiceIf getMantenimientoServiceIf(){return (MantenimientoServiceIf) getRecursosRMI(MantenimientoServiceIf.class);};
     public MantenimientoTareaDetalleServiceIf getMantenimientoTareaDetalleServiceIf(){return (MantenimientoTareaDetalleServiceIf) getRecursosRMI(MantenimientoTareaDetalleServiceIf.class);};
+    public TallerServiceIf getTallerServiceIf(){return (TallerServiceIf) getRecursosRMI(TallerServiceIf.class);};
     
     
     /**

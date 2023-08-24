@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoStockEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoUbicacionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.orden.KardexOrdenarEnum;
@@ -210,7 +211,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //Bodega b;
         //b.getStockMinimoAdvertencia()
         //String queryString = " SELECT COUNT(k) FROM Kardex k WHERE (k.producto.estado<>?4 ) AND k.stock<k.producto.cantidadMinima AND k.bodega.stockMinimoAdvertencia=?5  ";               
-        String queryString = "SELECT  COUNT(*) FROM ( SELECT P.ID_PRODUCTO FROM KARDEX k INNER JOIN PRODUCTO P ON k.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID=k.BODEGA_ID WHERE B.STOCK_MINIMO_ADVERTENCIA='s' AND P.ESTADO !='e' AND P.MANEJAR_INVENTARIO='s' GROUP BY P.ID_PRODUCTO,P.CANTIDAD_MINIMA HAVING SUM((k.STOCK+ABS(k.STOCK))/2)<=P.CANTIDAD_MINIMA ) e ";               
+        String queryString = "SELECT  COUNT(*) FROM ( SELECT P.ID_PRODUCTO FROM KARDEX k INNER JOIN PRODUCTO P ON k.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID=k.BODEGA_ID WHERE B.STOCK_MINIMO_ADVERTENCIA='s' AND P.ESTADO !='e' AND P.MANEJAR_INVENTARIO='s' AND P.TIPO_PRODUCTO_COD='p' AND K.ESTADO='A' GROUP BY P.ID_PRODUCTO,P.CANTIDAD_MINIMA HAVING SUM((k.STOCK+ABS(k.STOCK))/2)<=P.CANTIDAD_MINIMA ) e";               
         Query query = getEntityManager().createNativeQuery(queryString);
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(5,EnumSiNo.SI.getLetra());
@@ -250,7 +251,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             whereCategoria=" and k.producto.catalogoProducto.categoriaProducto=?2 ";
         }
         
-        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 AND k.producto.manejarInventario=?99 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+whereNombre+whereCodigo+" "
+        String whereTipoProducto=" AND k.producto.tipoProductoCodigo=?12 ";
+        
+        String queryString = "SELECT k.producto,max(k.stock) FROM Kardex k WHERE 1=1 AND k.producto.manejarInventario=?99 AND k.producto IS NOT NULL AND (k.producto.estado<>?4 )  "+whereBodega+whereCategoria+whereNombre+whereCodigo+whereTipoProducto+" "
                 + " group by k.producto having max(k.stock)<=k.producto.cantidadMinima  ";
         
         String orderBy="";
@@ -304,6 +307,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(12, TipoProductoEnum.PRODUCTO.getLetra());
         //query.setParameter(1,producto);
         return query.getResultList();
 
@@ -516,9 +520,11 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         
         //Kardex k;
+        //k.getProducto().getTipoProductoCodigo();
         ///k.getId();
+        String whereTipoProducto=" AND k.producto.tipoProductoCodigo=?12 ";
         
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id FROM Kardex k WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+orderBy;
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id FROM Kardex k WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+whereTipoProducto+orderBy;
         Query query = getEntityManager().createQuery(queryString);
         
         
@@ -560,6 +566,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         
         query.setParameter(11, EnumSiNo.SI.getLetra());
+        query.setParameter(12, TipoProductoEnum.PRODUCTO.getLetra());
         
         //query.setParameter(3,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());

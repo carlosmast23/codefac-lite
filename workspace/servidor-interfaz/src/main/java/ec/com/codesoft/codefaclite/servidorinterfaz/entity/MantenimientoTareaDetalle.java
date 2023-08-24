@@ -42,6 +42,8 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
     @JoinColumn(name = "MANTENIMIENTO_ID")
     private Mantenimiento mantenimiento;
     
+    //private Tarea
+    
     @JoinColumn(name = "TAREA_MANTENIMIENTO_ID")
     private TareaMantenimiento tarea;
 

@@ -752,6 +752,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         ///////////////////////////////////////////////////////////////////////
         //Quitar espacios en blanco
         p.setNombre(p.getNombre().trim());
+        p.setCodigoPersonalizado(p.getCodigoPersonalizado().trim());
         
         //Corregir datos cuando no tengan seteados para poner por defecto
         if(p.getDisponibleVentaEnum()==null)

@@ -35,7 +35,11 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
     
     private List<Mantenimiento> mantenimientoList;
     private List<Mantenimiento> mantenimientoSeleccionList;
-    private List<Mantenimiento.UbicacionEnum> ubicacionList;
+    private List<Mantenimiento.UbicacionEnum> ubicacionList;    
+    
+    private List<Mantenimiento.TallerEnum > tallerList;
+    
+    private String[] textoEjemploArray;
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -141,6 +145,7 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
                 mantenimiento.setUbicacionEnum(Mantenimiento.UbicacionEnum.DIRECTO);
             }
             ubicacionList=UtilidadesLista.arrayToList(Mantenimiento.UbicacionEnum.values());
+            tallerList=UtilidadesLista.arrayToList(Mantenimiento.TallerEnum.values());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -158,7 +163,7 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
     }
 
     @Override
-    public String getURLAyuda() {
+    public String getURLAyuda() {  
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -201,6 +206,24 @@ public class ClasificarVehiculosNuevosMb extends GeneralAbstractMb implements  S
         this.mantenimientoSeleccionList = mantenimientoSeleccionList;
     }
 
+    public List<Mantenimiento.TallerEnum> getTallerList() {
+        return tallerList; 
+    }
+
+    public void setTallerList(List<Mantenimiento.TallerEnum> tallerList) {
+        this.tallerList = tallerList;
+    }
+
+    public String[] getTextoEjemploArray() {
+        return textoEjemploArray; 
+    }
+
+    public void setTextoEjemploArray(String[] textoEjemploArray) {
+        this.textoEjemploArray = textoEjemploArray;   
+    }
+
+    
+    
     
     
     
