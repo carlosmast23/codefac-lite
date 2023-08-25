@@ -128,7 +128,7 @@ public class CompraModel extends CompraPanel{
     private ProductoProveedor productoProveedor;
     private DefaultTableModel modeloTablaDetallesCompra;
     private DefaultTableModel modeloTablaCompraReembolso;
-    private Boolean bandera;
+    private Boolean banderaEdicion;
     //private int filaDP;
     private Boolean banderaIngresoDetallesCompra;
     private Compra.RetencionEnumCompras estadoRetencion;
@@ -159,7 +159,7 @@ public class CompraModel extends CompraPanel{
         }
         getCmbFechaCompra().setDate(new java.util.Date());
         desbloquearIngresoDetalleProducto();
-        this.bandera = false;
+        this.banderaEdicion = false;
         this.banderaIngresoDetallesCompra = false;
         bloquearDesbloquearBotones(true);
         setearVariblesIniciales();
@@ -1062,7 +1062,7 @@ public class CompraModel extends CompraPanel{
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 int filaDP = getTblDetalleProductos().getSelectedRow();
-                bandera = true;
+                banderaEdicion = true;
                 if(filaDP>=0)
                 {
                     
@@ -1108,16 +1108,16 @@ public class CompraModel extends CompraPanel{
         getBtnEditarItem().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(bandera)
+                if(banderaEdicion)
                 {
                     try {
-                        bandera = false;
+                        banderaEdicion = false;
                         int filaDP = getTblDetalleProductos().getSelectedRow();
                         filaDP = getTblDetalleProductos().getSelectedRow();
                         CompraDetalle compraDetalle = compra.getDetalles().get(filaDP);
                         agregarDetalleCompraConDatosVista(compraDetalle);
-                        calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
-                        calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                        //calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
+                        //calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
                         bloquearDesbloquearBotones(true);
                     } catch (ExcepcionCodefacLite ex) {
                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1130,12 +1130,12 @@ public class CompraModel extends CompraPanel{
         getBtnEliminarItem().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(bandera)
+                if(banderaEdicion)
                 {
                     int filaDP = getTblDetalleProductos().getSelectedRow();
                     if(filaDP>=0)
                     {
-                        bandera = false;
+                        banderaEdicion = false;
                         modeloTablaDetallesCompra.removeRow(filaDP);
                         compra.getDetalles().remove(filaDP);                   
                         actualizarDatosMostrarVentana();
@@ -1491,7 +1491,13 @@ public class CompraModel extends CompraPanel{
 
                 getTxtProductoItem().setText(productoSeleccionado.getCodigoPersonalizado());
                 getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
-                seleccionarComboTipoIva(productoSeleccionado.getCatalogoProducto().getIva().getTarifa());
+                
+                //Solo cambiar o cargar el iva cuando no este en modo de edicion, caso contrario se queda el mimos
+                //Este artificio lo dejo de esta manera porque estaba dando problemas con las presentaciones
+                if(!banderaEdicion)
+                {
+                    seleccionarComboTipoIva(productoSeleccionado.getCatalogoProducto().getIva().getTarifa());
+                }
             } catch (RemoteException ex) {
                 Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
@@ -1507,7 +1513,8 @@ public class CompraModel extends CompraPanel{
     
     private void actualizarTotales()
     {
-        compra.calcularTotales(session.obtenerIvaActualDecimal());
+        //compra.calcularTotales(session.obtenerIvaActualDecimal());
+        compra.calcularTotalesDesdeDetalles();
     }
     
        
