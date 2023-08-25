@@ -65,8 +65,8 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
     
     @Column(name = "NUMERO_PVP")
     private Integer numeroPvp;
-
-
+    
+    
     public FacturaDetalle() {
         
     }
@@ -235,6 +235,11 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
         return null;
     }
     
+    
+    public BigDecimal obtenerPrecioUnitarioConIva()
+    {
+        return super.getPrecioUnitario().add(super.getIva());
+    }
     
 
     /**

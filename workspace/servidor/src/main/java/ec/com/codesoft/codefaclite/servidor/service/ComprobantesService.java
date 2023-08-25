@@ -1436,7 +1436,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-                //Agregar el listener
+        //Agregar el listener
         comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
             /**
              * Variable que me permite verificar la primera si existe conexion para no hacer comprobaciones

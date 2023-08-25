@@ -184,8 +184,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public static final String NOMBRE_REPORTE_FACTURA_INTERNA="Comprobante de Venta Interna";
     
     public static final int INDICE_OBJECTO_TABLA_FACTURA=0;
-    public static final int INDICE_CANTIDAD_TABLA_FACTURA=5;
-    public static final int INDICE_ELIMINAR_TABLA_FACTURA=10;
+    public static final int INDICE_CANTIDAD_TABLA_FACTURA=6;
+    public static final int INDICE_ELIMINAR_TABLA_FACTURA=11;
     //private Persona persona;
     protected Factura factura;
     private Estudiante estudiante;
@@ -2919,7 +2919,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         "Codigo",
         "UNI",
         "PVP",
-        "ValorUni",
+        "Val Uni",
+        "Val+iva",
         "Cantidad",
         "Descripcion",
         "IVA",
@@ -2938,6 +2939,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         DefaultTableModel modeloTablaDetallesProductos=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{
             Object.class,
+            String.class,
             String.class,
             String.class,
             String.class,
@@ -2999,7 +3001,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     precioUnitarioTxt=detalle.getPrecioUnitario().toString();
                 }
                 
-                fila.add(precioUnitarioTxt);               
+                fila.add(precioUnitarioTxt);   
+                
+                ///Cargar el precio Unitario pero con iva
+                fila.add(detalle.obtenerPrecioUnitarioConIva().setScale(2, RoundingMode.HALF_UP)+"");
                 
 
                 fila.add(detalle.getCantidad().toString());
@@ -3017,7 +3022,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
         
-        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,130,30,30,100,80,580,80,80,100,100}); //Definir los tamanios definidos para la tabla principal
+        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,130,30,30,80,50,80,580,80,80,100,100}); //Definir los tamanios definidos para la tabla principal
         
         ButtonColumn botonEliminar=new ButtonColumn(getTblDetalleFactura(),new AbstractAction() { //Agregado boton de eliminar a la tabla
             @Override
