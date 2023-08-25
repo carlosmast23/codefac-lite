@@ -73,7 +73,7 @@ public class ProductoBusquedaDialogoFactory
                     }
                 }
                 
-                ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, true);
+                ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, false);
                 if(diponibleVenta!=null)
                 {
                     productoInventarioBusquedaDialogo.setDisponibleVenta(diponibleVenta);

@@ -80,10 +80,11 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         titulo.add(new ColumnaDialogo("Codigo", 0.2d));
         titulo.add(new ColumnaDialogo("Codigo Aux", 0.2d));
         titulo.add(new ColumnaDialogo("Nombre", 0.5d));
+        titulo.add(new ColumnaDialogo("Lote", 0.2d));
         //titulo.add(new ColumnaDialogo("Lote", 0.3d));
         titulo.add(new ColumnaDialogo("Marca", 0.3d));
         titulo.add(new ColumnaDialogo("Aplicación", 0.3d));
-        titulo.add(new ColumnaDialogo("Ubicación", 0.2d));
+        titulo.add(new ColumnaDialogo("Ubicación", 0.2d));        
         titulo.add(new ColumnaDialogo("Costo", 0.10d));
         titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
         titulo.add(new ColumnaDialogo("IVA", 0.05d));        
@@ -226,6 +227,13 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         vector.add(producto.getCodigoPersonalizado());
         vector.add(producto.getCodigoUPC());
         vector.add(producto.getNombre());
+        
+        if (kardex.getLote() != null) {
+            vector.add((kardex.getLote().getCodigo()));
+        } else {
+            vector.add("");
+        }
+        
         //vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
         vector.add((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
         vector.add((producto.getAplicacionProducto()!=null)?producto.getAplicacionProducto():"");
