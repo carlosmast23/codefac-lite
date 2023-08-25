@@ -17,6 +17,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.pos.reportdata.VentaReporteData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
@@ -213,12 +215,20 @@ public class CerrarCajaModel extends CajaSessionModel
                 
                 for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
                 {
+                    String estadoNombre=ingresoCaja.getFactura().getEstadoEnum().getNombre();
+                    //En el caso que la nota de credito este anulada en el reporte si aparece pero con estado anulado
+                    
+                    if(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
+                    {
+                        estadoNombre=ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre();
+                    }
+                    
                     VentaReporteData reporteData = new VentaReporteData(                            
                             ingresoCaja.getFactura().getSecuencial() + "",
                             ingresoCaja.getFactura().getIdentificacion(),
                             ingresoCaja.getFactura().getRazonSocial(),
                             formaPago.getTotal() + "",
-                            ingresoCaja.getFactura().getEstadoEnum().getNombre(),
+                            estadoNombre,
                             formaPago.getSriFormaPago().getAlias(),
                             dateFormatHora.format(fechaIngreso)
                     );

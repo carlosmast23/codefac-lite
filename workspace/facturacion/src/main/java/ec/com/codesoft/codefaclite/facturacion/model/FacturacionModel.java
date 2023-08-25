@@ -157,6 +157,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
@@ -878,7 +879,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             modoEdicionDetalle = true;
             //setear valores para cargar de nuevo en los campos de la factura
             FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
-            getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
+            
+            //Cargar los precios con iva en el caso que se tenga configurado
+            Integer ivaPorcentaje=facturaDetalle.getIvaPorcentaje();
+            if (ivaPorcentaje>0 && ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI))
+            {
+                setComboIva(EnumSiNo.SI);
+                BigDecimal valorConIva = UtilidadIva.calcularValorConIvaIncluido(
+                        session.obtenerIvaActualDecimal(),
+                        BigDecimal.ZERO,
+                        facturaDetalle.getPrecioUnitario());
+                getTxtValorUnitario().setText(valorConIva + "");
+                
+            }
+            else
+            {
+                getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
+                setComboIva(EnumSiNo.NO);
+            }
+            
+            
             getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
             getTxtDescripcion().setText(facturaDetalle.getDescripcion());
             getTxtDescripcion().setCaretPosition(0);
@@ -890,7 +910,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getBtnAgregarDetalleFactura().setEnabled(false);
             getBtnAgregarProducto().setEnabled(false);
             getBtnCrearProducto().setEnabled(false);
-            getCmbIva().setSelectedItem(EnumSiNo.NO);
+            //getCmbIva().setSelectedItem(EnumSiNo.NO);
             
             //Cargar los datos de producto cuando sea el caso
             Producto producto=facturaDetalle.consultarProductoEnlazado();
@@ -2997,7 +3017,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
         
-        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,100,30,30,100,80,600,80,80,100,100}); //Definir los tamanios definidos para la tabla principal
+        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,130,30,30,100,80,580,80,80,100,100}); //Definir los tamanios definidos para la tabla principal
         
         ButtonColumn botonEliminar=new ButtonColumn(getTblDetalleFactura(),new AbstractAction() { //Agregado boton de eliminar a la tabla
             @Override

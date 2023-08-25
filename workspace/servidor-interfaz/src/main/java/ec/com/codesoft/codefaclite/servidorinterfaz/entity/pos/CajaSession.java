@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -448,15 +449,20 @@ public class CajaSession implements Serializable
             {
                 if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )
                 {
-                    for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
+                    //Verificar si fue anulado con NOTA DE CREDITO para igual no tomar en cuenta por el momento
+                    if(!Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
                     {
-                        //Solo agregar las formas de pago en efectivo
-                        if(formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.ALIAS_FORMA_PAGO_EFECTIVO))
+                        for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
                         {
-                            //System.out.println("Efectivo :"+ingre);
-                            totalVentas = totalVentas.add(formaPago.getTotal());
-                        }                        
+                            //Solo agregar las formas de pago en efectivo
+                            if(formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.ALIAS_FORMA_PAGO_EFECTIVO))
+                            {
+                                //System.out.println("Efectivo :"+ingre);
+                                totalVentas = totalVentas.add(formaPago.getTotal());
+                            }                        
+                        }
                     }
+                    
                 }
             }
         }
