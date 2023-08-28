@@ -147,6 +147,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpr
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
@@ -1503,7 +1504,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);            
             //buscarDialogoModel.setVisible(true);
             //Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
-            ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX);
+            ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX,true);
             dialogoFactory.setDiponibleVenta(EnumSiNo.SI);
             
             Kardex kardexSeleccionadoTmp = (Kardex) dialogoFactory.ejecutarDialogo();
@@ -1515,8 +1516,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             else*/
             if(kardexSeleccionadoTmp!=null)
             {
-                this.kardexSeleccionado=kardexSeleccionadoTmp;
-                productoSeleccionado=kardexSeleccionado.getProducto();
+                productoSeleccionado=kardexSeleccionadoTmp.getProducto();
+                
+                //TODO: Artificio por el momento para cargar como null un kardex cuando se tiene seleccionado una presentacion
+                if(kardexSeleccionadoTmp.getProducto().getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+                {
+                    this.kardexSeleccionado=null;
+                }
+                else
+                {
+                    this.kardexSeleccionado=kardexSeleccionadoTmp;
+                }             
+                
+                
                 cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado,false);
             }
             
@@ -4444,27 +4456,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         }
         
-        //Verificar si tiene una PRESENTACION por DEFECTO para cambiarle de producto
-        if(!UtilidadesTextos.verificarNullOVacio(producto.getCodigoPresentacionDefectoVenta()))
-        {
-            try {
-                ProductoPresentacionDetalle detallePresentacion=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacionCodigo(producto.getCodigoPresentacionDefectoVenta(),producto);
-                if(detallePresentacion!=null)
-                {
-                    producto=detallePresentacion.getProductoEmpaquetado();
-                }
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
 
         if (producto == null) {
             if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
                 btnListenerCrearProducto();
             }
         } else {
+            
+            //Verificar si tiene una PRESENTACION por DEFECTO para cambiarle de producto
+            if (!UtilidadesTextos.verificarNullOVacio(producto.getCodigoPresentacionDefectoVenta())) {
+                try {
+                    ProductoPresentacionDetalle detallePresentacion = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacionCodigo(producto.getCodigoPresentacionDefectoVenta(), producto);
+                    if (detallePresentacion != null) {
+                        producto = detallePresentacion.getProductoEmpaquetado();
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            
             try {
                 //Verificar si tengo que agregar a la vista o directamente lo agrego al detalle de las facturas
                 if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS, EnumSiNo.SI)) 

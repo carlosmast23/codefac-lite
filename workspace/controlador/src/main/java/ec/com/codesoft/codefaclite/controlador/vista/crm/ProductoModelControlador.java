@@ -470,9 +470,15 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         {
             producto=((Kardex)entidad).getProducto();
         }
-        else
+        else if( entidad instanceof  Producto)
         {
             producto=(Producto) entidad;
+        }
+        else if(entidad instanceof Object[])
+        {
+            Object[] resultados=(Object[]) entidad;
+            Kardex kardexTmp=(Kardex)resultados[0];            
+            producto=kardexTmp.getProducto();
         }
         
         System.out.println("cargando pantlla producto controlador ...");

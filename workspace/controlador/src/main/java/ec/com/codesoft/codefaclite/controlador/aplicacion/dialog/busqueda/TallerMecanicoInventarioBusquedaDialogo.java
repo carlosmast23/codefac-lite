@@ -35,7 +35,7 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
     
     
     public TallerMecanicoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega) {
-        super(isManejoInvetario, empresa, bodega, true);
+        super(isManejoInvetario, empresa, bodega, true,false);
     }
     
         @Override
@@ -57,8 +57,10 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
     }
     
         @Override
-    public void agregarObjeto(Kardex kardex, Vector vector) {
-        Producto producto=kardex.getProducto();
+    public void agregarObjeto(Object[] resultado, Vector vector) {
+        Kardex kardex=(Kardex) resultado[0];
+        //Producto producto=kardex.getProducto();
+        Producto producto=obtenerProductoDisponible(resultado);
         vector.add(producto.getCodigoPersonalizado());
         vector.add(producto.getNombre());
         //vector.add(producto.getAplicacionProducto());

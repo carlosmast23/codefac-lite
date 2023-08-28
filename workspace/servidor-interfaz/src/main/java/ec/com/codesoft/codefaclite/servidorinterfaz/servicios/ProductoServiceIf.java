@@ -80,4 +80,7 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public Producto crearProductoPorDefectoSinTransaccion(Empresa empresa,String nombre,Integer ivaDefecto) throws RemoteException, ServicioCodefacException;
     
     public Producto crearOBuscarProductoReembolso(Empresa empresa) throws RemoteException, ServicioCodefacException;
+    
+    public Producto buscarProductoActivoPorCodigo(String codigo,Boolean consultarPresentacion,Empresa empresa) throws ServicioCodefacException, RemoteException;
+    
 }

@@ -479,7 +479,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //Solo ejecutar cuando no se esta recargando presentaciones desde el combo box
         if(!recargarPresentacion)
         {
-            interfaz.seleccionarPresentacion(productoSeleccionado.getCodigoPresentacionDefectoVenta());
+            //Si el producto cargado es un empaque cargo directamente la misma presentacion en la vista
+            if(productoSeleccionado.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+            {
+                interfaz.seleccionarPresentacion(productoSeleccionado.obtenerNombrePresentacion());
+            }
+            else
+            {
+                interfaz.seleccionarPresentacion(productoSeleccionado.getCodigoPresentacionDefectoVenta());
+            }
         }
         
         //TODO
@@ -1618,7 +1626,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                         //Map<String,Object> mapParametros=new HashMap<String,Object>();
                         //mapParametros.put("codigoPersonalizado", getTxtCodigoDetalle().getText()); //TODO: VER COMO MANEJAR TODOS LOS TIPOS DE CODIGO, VER UNA OPCION DE PARAMETRIZAR POR QUE CODIGO SE QUIERE TRABAJAR
                         //List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(getTxtCodigoDetalle().getText(),session.getEmpresa());
-                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoDetalle, empresa);
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoDetalle,true,empresa);
                         return producto;
 
                 }

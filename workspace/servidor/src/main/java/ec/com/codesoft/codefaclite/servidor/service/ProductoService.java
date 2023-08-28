@@ -955,6 +955,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
+    public Producto buscarProductoActivoPorCodigo(String codigo,Boolean consultarPresentacion,Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        return getFacade().buscarProductoActivoPorCodigoFacade(codigo,empresa,consultarPresentacion);
+    }
+    
     public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
         //Producto p;
@@ -978,7 +983,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         {
             return productos.get(0);
         }*/
-        return getFacade().buscarProductoActivoPorCodigoFacade(codigo, empresa);
+        return getFacade().buscarProductoActivoPorCodigoFacade(codigo, empresa,false);
         
     }
                 

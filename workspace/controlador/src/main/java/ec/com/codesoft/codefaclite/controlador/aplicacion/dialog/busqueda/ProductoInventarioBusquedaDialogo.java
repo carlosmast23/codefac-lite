@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -46,7 +47,7 @@ import javax.swing.JPanel;
  *
  * @author Carlos
  */
-public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kardex> , InterfacesPropertisFindWeb,FiltroDialogoIf,DialogPanelAuxIf<Kardex>  ,DialogoConfigAuxIf<Kardex>
+public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Object[]> , InterfacesPropertisFindWeb,FiltroDialogoIf,DialogPanelAuxIf<Object[]>  ,DialogoConfigAuxIf<Object[]>
 {
     
     public static final int PARAMETRO_FILTRO_STOCK=-93;
@@ -61,12 +62,15 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     
     private EnumSiNo disponibleVenta;
     
-    public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega,Boolean mostrarStockNegativo) 
+    private Boolean mostrarPresentaciones;
+    
+    public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega,Boolean mostrarStockNegativo,Boolean mostrarPresentaciones) 
     {
         //this.isManejoInvetario = isManejoInvetario;
         this.empresa = empresa;
         this.bodega = bodega;
         this.mostrarStockNegativo=mostrarStockNegativo;
+        this.mostrarPresentaciones=mostrarPresentaciones;
         
         if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
         {
@@ -74,16 +78,18 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         }
     }
 
+
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Codigo", 0.2d));
         titulo.add(new ColumnaDialogo("Codigo Aux", 0.2d));
         titulo.add(new ColumnaDialogo("Nombre", 0.5d));
+        titulo.add(new ColumnaDialogo("UNI", 0.1d));        
         titulo.add(new ColumnaDialogo("Lote", 0.2d));
         //titulo.add(new ColumnaDialogo("Lote", 0.3d));
-        titulo.add(new ColumnaDialogo("Marca", 0.3d));
-        titulo.add(new ColumnaDialogo("Aplicación", 0.3d));
+        titulo.add(new ColumnaDialogo("Marca", 0.25d));
+        titulo.add(new ColumnaDialogo("Aplicación", 0.25d));
         titulo.add(new ColumnaDialogo("Ubicación", 0.2d));        
         titulo.add(new ColumnaDialogo("Costo", 0.10d));
         titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
@@ -160,7 +166,21 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
             filtroDisponibleVenta=" AND u.disponibleVenta=?7 ";
         }
         
-        String queryString = "SELECT k FROM Kardex k JOIN k.producto u  WHERE 1=1 AND k.estado<>'E' "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+" AND k.producto.tipoProductoCodigo<>?6  "+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        String whereMostrarPresentacion="";
+        if(!mostrarPresentaciones)
+        {
+            whereMostrarPresentacion=" AND ( pp.tipo='O' OR pp.id IS NULL ) ";
+        }
+        
+        //ProductoPresentacionDetalle ppd;
+        //ppd.getTipoEnum().ORIGINAL
+        //ppd.getProductoEmpaquetado().getCodigoPersonalizado();
+        //ppd.getProductoEmpaquetado();
+        //ppd.getPresentacionProducto()
+        //Producto p;
+        //List<ProductoPresentacionDetalle> ppdList=p.getPresentacionList();
+        
+        String queryString = "SELECT k,pp.productoEmpaquetado FROM Kardex k JOIN k.producto u LEFT JOIN u.presentacionList pp  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+whereMostrarPresentacion+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
         
         queryString+=" and (  LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
         
@@ -218,15 +238,30 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
         return "";
     }
     
+    public Producto obtenerProductoDisponible(Object[] resultado)
+    {
+        Kardex kardex=(Kardex) resultado[0];
+        Producto producto=(Producto) resultado[1];
+        
+        if(producto==null)
+        {
+            producto=kardex.getProducto();
+        }
+        return producto;
+    }
     
     @Override
-    public void agregarObjeto(Kardex kardex, Vector vector) {
+    public void agregarObjeto(Object[] resultado, Vector vector) {
+        Kardex kardex=(Kardex) resultado[0];
+        Producto producto=obtenerProductoDisponible(resultado);
+        //Producto kardex=(Kardex) resultado[1];
         //KardexServiceIf servicio = ServiceFactory.getFactory().getKardexServiceIf();
         //Kardex kardex = servicio.buscarKardexPorProductoyBodega(this.bodega, producto);
-        Producto producto=kardex.getProducto();
+        //Producto producto=kardex.getProducto();
         vector.add(producto.getCodigoPersonalizado());
         vector.add(producto.getCodigoUPC());
         vector.add(producto.getNombre());
+        vector.add(producto.obtenerNombrePresentacion());
         
         if (kardex.getLote() != null) {
             vector.add((kardex.getLote().getCodigo()));
@@ -291,12 +326,14 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     }
 
     @Override
-    public JPanel getPanelAuxiliar(Kardex dato) {
+    public JPanel getPanelAuxiliar(Object[] resultado) {
+        
         
         TallerMecanicoDialogoInfo panelAux=new TallerMecanicoDialogoInfo();
         
-        if(dato!=null)
+        if(resultado!=null)
         {        
+            Kardex dato=(Kardex) resultado[0];
             panelAux.getLblNombreProducto().setText(dato.getProducto().getNombre());
             SegmentoProducto segmento=dato.getProducto().getSegmentoProducto();
             if(segmento!=null)
@@ -322,20 +359,22 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Kar
     
 
     @Override
-    public List<Kardex> preProcessResult(List<Kardex> datos) 
+    public List<Object[]> preProcessResult(List<Object[]> datos) 
     {
-        List<Kardex> listTemp=new ArrayList<Kardex>(datos);
-        List<Kardex> resultadoList=new ArrayList<Kardex>(datos);
+        List<Object[]> listTemp=new ArrayList<Object[]>(datos);
+        List<Object[]> resultadoList=new ArrayList<Object[]>(datos);
         
         
-        for( Kardex kardex : datos )
+        for( Object[] resultados : datos )
         {
+            Kardex kardex=(Kardex) resultados[0];
             //Verifico si tiene lote para eliminar el otro dato que no tenga lote
             if(kardex.getLote()!=null)
             {
                 //Recorro la lista que tiene todos los datos para eliminar los que no necesito
-                for (Kardex kardexTmp : listTemp) 
+                for (Object[] resultadoTmp : listTemp) 
                 {
+                    Kardex kardexTmp=(Kardex) resultadoTmp[0];
                     //No tomo en cuenta el mismo dato del kardex
                     if(!kardex.equals(kardexTmp))
                     {

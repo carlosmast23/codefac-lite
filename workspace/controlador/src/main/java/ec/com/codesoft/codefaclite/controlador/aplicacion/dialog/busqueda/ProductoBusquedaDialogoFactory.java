@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -35,6 +36,7 @@ public class ProductoBusquedaDialogoFactory
     private ResultadoEnum resultadoEnum;
     private Boolean isInventario=false;
     private EnumSiNo diponibleVenta;
+    private Boolean mostrarPresentaciones=false;
 
     public ProductoBusquedaDialogoFactory(Sucursal sucursal,ResultadoEnum resultadoEnum) {
         this.sucursal = sucursal;
@@ -48,6 +50,13 @@ public class ProductoBusquedaDialogoFactory
         this.resultadoEnum = resultadoEnum;
     }
     
+    public ProductoBusquedaDialogoFactory(Sucursal sucursal, Boolean inventarioDefecto, ResultadoEnum resultadoEnum,Boolean mostrarPresentaciones) {
+        this.sucursal = sucursal;
+        this.inventarioDefecto = inventarioDefecto;
+        this.resultadoEnum = resultadoEnum;
+        this.mostrarPresentaciones=mostrarPresentaciones;
+    }
+
     
     public InterfaceModelFind construirDialogo()
     {
@@ -73,7 +82,7 @@ public class ProductoBusquedaDialogoFactory
                     }
                 }
                 
-                ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, false);
+                ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, false,mostrarPresentaciones);
                 if(diponibleVenta!=null)
                 {
                     productoInventarioBusquedaDialogo.setDisponibleVenta(diponibleVenta);
@@ -143,6 +152,40 @@ public class ProductoBusquedaDialogoFactory
             }
             return resultado;
         }
+        else if(resultado instanceof Object[])
+        {
+            //si el resultado viene de una instancia de datos
+            Object[] resultados=(Object[]) resultado;
+            Kardex kardexTmp=(Kardex) resultados[0];
+            Producto productoPresentacion=(Producto) resultados[1];
+            
+            if (resultadoEnum.equals(ResultadoEnum.KARDEX)) 
+            {
+                if(productoPresentacion!=null)
+                {
+                    //TODO: Por el momento le mando seteado el producto de la presentacion
+                    //Advertencia: Pero toca ver que no cause conflicto
+                    kardexTmp.setProducto(productoPresentacion);
+                }
+                return kardexTmp;
+            }
+            else if (resultadoEnum.equals(ResultadoEnum.PRODUCTO))
+            {
+                
+                if(productoPresentacion!=null)
+                {
+                    return productoPresentacion;
+                }
+                else
+                {
+                    Kardex kardex=(Kardex) resultados[0];
+                    return kardex.getProducto();
+                }
+            }
+            
+        }
+        
+        
         return null;
     }
 

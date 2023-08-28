@@ -589,6 +589,16 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
        return null;
     }
     
+    public String obtenerNombrePresentacion()
+    {
+        PresentacionProducto presentacionProducto=buscarPresentacionProducto();
+        if(presentacionProducto!=null)
+        {
+            return presentacionProducto.getNombre();
+        }
+        return "";
+    }
+    
     public void agregarPresentacionOriginal(PresentacionProducto presentacionProducto)
     {
         ProductoPresentacionDetalle detalle=new ProductoPresentacionDetalle();

@@ -25,7 +25,7 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
 {
 
     public FarmaciaProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega) {
-        super(isManejoInvetario, empresa, bodega,false);
+        super(isManejoInvetario, empresa, bodega,false,false);
     }
 
     @Override
@@ -49,8 +49,10 @@ public class FarmaciaProductoInventarioBusquedaDialogo extends ProductoInventari
     }
 
     @Override
-    public void agregarObjeto(Kardex kardex, Vector vector) {
-        Producto producto=kardex.getProducto();
+    public void agregarObjeto(Object[] resultado, Vector vector) {
+        Kardex kardex=(Kardex) resultado[0];
+        //Producto producto=kardex.getProducto();
+        Producto producto=obtenerProductoDisponible(resultado);
         vector.add(producto.getCodigoPersonalizado());
         vector.add(producto.getNombre());
         vector.add(producto.getNombreGenerico());

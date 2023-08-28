@@ -154,7 +154,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         return query.getResultList();
     }
     
-    public Producto buscarProductoActivoPorCodigoFacade(String codigo,Empresa empresa) throws ServicioCodefacException, RemoteException
+    public Producto buscarProductoActivoPorCodigoFacade(String codigo,Empresa empresa,Boolean consultarPresentaciones) throws ServicioCodefacException, RemoteException
     {
         String whereEmpresa="";
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
@@ -163,7 +163,13 @@ public class ProductoFacade extends AbstractFacade<Producto>
             //mapParametros.put("empresa",empresa);        
         }
         
-        String queryString = "SELECT p FROM Producto p WHERE p.codigoPersonalizado=?1 AND p.estado=?2 AND p.tipoProductoCodigo<>?4  "+whereEmpresa ;
+        String wherePresentaciones="";
+        if(!consultarPresentaciones)
+        {
+            wherePresentaciones=" AND p.tipoProductoCodigo<>?4";
+        }
+        
+        String queryString = "SELECT p FROM Producto p WHERE p.codigoPersonalizado=?1 AND p.estado=?2 "+wherePresentaciones+whereEmpresa ;
         
         Query query = getEntityManager().createQuery(queryString);
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
@@ -173,16 +179,17 @@ public class ProductoFacade extends AbstractFacade<Producto>
         
         query.setParameter(1, codigo);
         query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
-        query.setParameter(4, TipoProductoEnum.EMPAQUE.getLetra());
+        
+        if(!consultarPresentaciones)
+        {
+            query.setParameter(4, TipoProductoEnum.EMPAQUE.getLetra());
+        }
         
         //Map<String,Object> mapParametros=new HashMap<String,Object>();        
         //mapParametros.put("codigoPersonalizado",codigo);
         //mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
         
         //Cuando este configurado como datos compartidos no tomo en cuenta de donde esta cogiendo la empresa
-                
-        
-        
         
         List<Producto> productos=query.getResultList();
         if(productos.size()>0)

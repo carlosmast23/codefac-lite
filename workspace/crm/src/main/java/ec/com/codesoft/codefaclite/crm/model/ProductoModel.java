@@ -840,8 +840,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         if (entidad instanceof Kardex) {
             controlador.producto = ((Kardex) entidad).getProducto();
-        } else {
-            controlador.producto = (Producto) entidad;
+        } else if( entidad instanceof  Producto)
+        {
+            controlador.producto=(Producto) entidad;
+        }
+        else if(entidad instanceof Object[])
+        {
+            Object[] resultados=(Object[]) entidad;
+            Kardex kardexTmp=(Kardex)resultados[0];            
+            controlador.producto=kardexTmp.getProducto();
         }
         
         getTxtCodigoEAN().setText(controlador.producto.getCodigoEAN());
