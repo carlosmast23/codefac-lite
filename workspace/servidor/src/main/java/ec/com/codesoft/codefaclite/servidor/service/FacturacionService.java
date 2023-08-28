@@ -367,6 +367,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
+        //Solo enviar al correo si tiene un cliente asignado
+        if(proforma.getCliente()==null)
+        {
+            return ;
+        }
+        
         //TODO: Agregar para poner un validacion previa para evitar construir un reporte cuando no tenga correos a donde enviar
         List<String> destinatarios = Arrays.asList(proforma.obtenerCorreosStr());
 
@@ -737,6 +743,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             }
            
 
+        }
+        
+        //Validaciones exclusivas cuando el tipo de documento es PROFORMA
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+        {
+            if(factura.getCliente()==null)
+            {
+                throw new ServicioCodefacException("No se puede grabar una proforma sin cliente");
+            }
         }
        
                
