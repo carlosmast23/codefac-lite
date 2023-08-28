@@ -508,11 +508,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
                 //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
                 costo= UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costo);
-                interfaz.setearCostoDetalleTxt(costo+"");
+                interfaz.setearCostoDetalleTxt(costo.setScale(2, RoundingMode.HALF_UP)+"");
             }
             else
             {
-                interfaz.setearCostoDetalleTxt(costo+"");
+                interfaz.setearCostoDetalleTxt(costo.setScale(2, RoundingMode.HALF_UP)+"");
             }
         }
         
