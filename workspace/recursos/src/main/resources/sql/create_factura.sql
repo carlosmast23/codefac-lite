@@ -18,7 +18,7 @@ create table FACTURA
     SUCURSAL_ID BIGINT,
     CLIENTE_ID BIGINT,
     TIPO_IDENTIFICACION_ID varchar(1),
-    SECUENCIAL varchar(100),
+    SECUENCIAL varchar(100) NOT NULL,
     PUNTO_ESTABLECIMIENTO decimal,
     PUNTO_EMISION decimal,
     FECHA_EMISION date,

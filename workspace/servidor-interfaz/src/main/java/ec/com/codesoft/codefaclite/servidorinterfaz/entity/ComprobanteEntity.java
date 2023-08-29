@@ -49,7 +49,7 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     @Column(name = "CLAVE_ACCESO")
     protected String claveAcceso;
 
-    @Column(name = "SECUENCIAL")
+    @Column(name = "SECUENCIAL",nullable = false)
     protected Integer secuencial;
 
     @Column(name = "PUNTO_ESTABLECIMIENTO")

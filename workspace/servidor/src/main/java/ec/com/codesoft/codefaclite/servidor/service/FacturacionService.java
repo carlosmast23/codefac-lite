@@ -185,6 +185,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         asignarVendedorProforma(proforma);
 
         proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa(),proforma.getCodigoDocumentoEnum()).intValue());
+        //proforma.setSecuencial(null); //Solo para probar la validacion de JPA
         proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
 
         //proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
@@ -233,6 +234,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         * Informar por CORREO que la proforma fue enviada
                         * correctamente
                         */
+                        proforma.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());                        
                         proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
                         grabarProformaYComandaSinTransaccion(proforma);
                         
