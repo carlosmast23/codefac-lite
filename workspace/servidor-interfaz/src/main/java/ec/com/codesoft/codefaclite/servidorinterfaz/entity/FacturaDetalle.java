@@ -236,10 +236,7 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
     }
     
     
-    public BigDecimal obtenerPrecioUnitarioConIva()
-    {
-        return super.getPrecioUnitario().add(super.getIva());
-    }
+    
     
 
     /**

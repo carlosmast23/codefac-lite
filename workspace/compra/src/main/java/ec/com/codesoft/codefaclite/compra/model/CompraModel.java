@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.compra.model;
 
-import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusquedaDialogo;
 import ec.com.codesoft.codefaclite.compra.panel.CompraPanel;
 import java.awt.Color;
@@ -17,16 +16,13 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
-import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_GRABAR;
 import ec.com.codesoft.codefaclite.controlador.model.AuditoriaInformacionModel;
-import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComponentBindingAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
@@ -83,17 +79,14 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1533,12 +1526,13 @@ public class CompraModel extends CompraPanel{
             "Unidad",
             "Descripción",
             "lote",
-            "ValorRetIVA",
-            "ValorRetRent",
             "Desc",
             "Val Unit",
+            "Val+IVA",
             "Ice",
-            "Utilidad",
+            "Utilidad",            
+            "RetIVA",
+            "RetRent",
             "Total"
         };
         
@@ -1563,17 +1557,18 @@ public class CompraModel extends CompraPanel{
             
             fila.add(detalle);
             fila.add(producto.getCodigoPersonalizado());
-            fila.add(detalle.getCantidad()+"");
+            fila.add(detalle.getCantidad().setScale(3, RoundingMode.HALF_UP)+"");
             fila.add(presentacionProductoNombre);
             fila.add(detalle.getDescripcion()+"");
             fila.add(loteCodigo);
-            fila.add((detalle.getValorSriRetencionIVA()!=null)?detalle.getValorSriRetencionIVA().setScale(3, RoundingMode.HALF_UP)+"":"");
-            fila.add((detalle.getValorSriRetencionRenta()!=null)?detalle.getValorSriRetencionRenta().setScale(3,RoundingMode.HALF_UP)+"":"");
             fila.add(detalle.getDescuento()+"");
             fila.add(detalle.getPrecioUnitario().setScale(4, RoundingMode.HALF_UP)+"");
+            fila.add(detalle.obtenerPrecioUnitarioConIva().setScale(2, RoundingMode.HALF_UP));
             fila.add(detalle.getValorIce());
             fila.add(detalle.calcularUtilidadRedondeada()+"");
-            fila.add(detalle.getSubtotal().setScale(4, RoundingMode.HALF_UP)+"");
+            fila.add((detalle.getValorSriRetencionIVA()!=null)?detalle.getValorSriRetencionIVA().setScale(3, RoundingMode.HALF_UP)+"":"");
+            fila.add((detalle.getValorSriRetencionRenta()!=null)?detalle.getValorSriRetencionRenta().setScale(3,RoundingMode.HALF_UP)+"":"");            
+            fila.add(detalle.getSubtotal().setScale(2, RoundingMode.HALF_UP)+"");
             this.modeloTablaDetallesCompra.addRow(fila);
             
             System.out.println(producto.getCodigoPersonalizado()+";"+detalle.getCantidad()+";"+detalle.getPrecioUnitario()+";"+detalle.getDescuento());
@@ -1581,7 +1576,20 @@ public class CompraModel extends CompraPanel{
                 
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
         UtilidadesTablas.ocultarColumna(getTblDetalleProductos(),0);
-        UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleProductos(),new Integer[]{0,150,50,50,250,100,50,50,50,30,50,50});
+        
+        EnumSiNo emitirRetencion=(EnumSiNo) getCmbEmitirRetencion().getSelectedItem();
+        ArrayList<Integer> miArrayList = new ArrayList<>(Arrays.asList(0,120,50,50,250,80,50,50,50,50,0));
+        if(emitirRetencion.getBool())
+        {
+            miArrayList.addAll(Arrays.asList(50,50,70));
+        }
+        else
+        {
+            miArrayList.addAll(Arrays.asList(0,0,70));
+        }
+            
+        UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleProductos(),miArrayList.toArray(new Integer[0]));
+        //UtilidadesTablas.cambiarTamanioColumnas(getTblDetalleProductos(),new Integer[]{0,120,50,50,250,80,50,50,50,50,0,0,70});
         
     }
     
