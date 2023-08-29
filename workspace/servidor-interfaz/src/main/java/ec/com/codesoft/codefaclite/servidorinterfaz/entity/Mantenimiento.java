@@ -54,6 +54,9 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     @Column(name = "TALLER_NOMBRE")
     private String tallerNombre;
     
+    @Column(name = "PRIORIDAD")
+    private Integer prioridad;
+    
     @JoinColumn(name = "OBJETO_MANTENIMIENTO_ID")
     private ObjetoMantenimiento vehiculo;
 

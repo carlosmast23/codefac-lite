@@ -15,10 +15,19 @@
                 </div> 
                 <div class="p-col-12 p-md-6 p-lg-6" >
                     <div>
-
+                        <p:commandButton value="Agregar Mantenimiento" icon="ui-icon-plus" />
                     </div>
                 </div> 
             </div>
+
+            <p:toolbarGroup>
+                <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                 oncomplete="PF('manageProductDialog').show()"
+                                 update=":formulario:dialogs:manage-product-content"
+                                 styleClass="ui-button-success" style="margin-right: .5rem">
+                    <p:resetInput target=":dialogs:manage-product-content" />
+                </p:commandButton>
+            </p:toolbarGroup>
 
             <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
             <div class="card">
@@ -44,7 +53,7 @@
                     <p:column headerText="#">
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
-                    
+
                     <p:column headerText="Vin" filterBy="#{m.vehiculo.vin}" filterMatchMode="contains">
                         <h:outputText value="#{m.vehiculo.vin}" />
                     </p:column>
@@ -71,7 +80,7 @@
                         </p:commandButton>                                          
 
                     </p:column>
-                    
+
                     <p:column width="50" >
                         <p:commandButton
                             title="Eliminar Mantenimiento"
@@ -87,9 +96,30 @@
                 </p:dataTable>
             </div>
 
+            <h:form id="dialogs">
+                <p:dialog header="Product Details" showEffect="fade" modal="true" widgetVar="manageProductDialog"
+                          responsive="true">
+                    <p:outputPanel id="manage-product-content" class="ui-fluid">
+                        <p:outputPanel>
+
+                            <div class="field">
+                                <p:outputLabel >Prioridad</p:outputLabel>
+                                <p:rating value="#{mantenimientosPendientesMb.mantenimiento.}"/>                                
+                            </div>
+                            
+                            <div class="field">
+                                <p:outputLabel >Taller</p:outputLabel>                                
+                            </div>
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
 
         </ui:define>
+
     </ui:composition>
+
 
 </html>
 

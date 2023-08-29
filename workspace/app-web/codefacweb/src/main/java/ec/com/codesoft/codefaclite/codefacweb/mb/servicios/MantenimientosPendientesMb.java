@@ -35,6 +35,8 @@ import javax.faces.context.FacesContext;
 public class MantenimientosPendientesMb extends GeneralAbstractMb implements Serializable{
 
     List<Mantenimiento> mantenimientoPendienteList;  
+    private Mantenimiento mantenimiento;
+    
     
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -57,7 +59,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     }
 
     @Override
-    public void eliminar() throws ExcepcionCodefacLite, UnsupportedOperationException {
+    public void eliminar() throws ExcepcionCodefacLite, UnsupportedOperationException { 
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -81,7 +83,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         try {
             mantenimientoPendienteList=ServiceFactory.getFactory().getMantenimientoServiceIf().obtenerPendientes(sessionMb.getSession().getEmpresa());
         } catch (ServicioCodefacException ex) {
-            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex); 
         }
     }
 
@@ -157,6 +159,15 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         this.mantenimientoPendienteList = mantenimientoPendienteList;
     }
 
+    public Mantenimiento getMantenimiento() {
+        return mantenimiento;
+    }
+
+    public void setMantenimiento(Mantenimiento mantenimiento) {
+        this.mantenimiento = mantenimiento;
+    }
+
+    
     
     
 }

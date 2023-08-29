@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -174,6 +175,11 @@ public class CerrarCajaModel extends CajaSessionModel
             fechaCierreStr=format.format(cajaSession.getFechaHoraCierre());
         }
         
+        BigDecimal totalVentas =cajaSession.calcularValorCierreTeorico();
+        if(cajaSession.getValorCierre()!=null)
+        {
+            totalVentas=cajaSession.getValorCierre();
+        }
         //Cargar los datos de los parametros
         
         parametros.put("caja", cajaSession.getCaja().getNombre());
@@ -181,7 +187,7 @@ public class CerrarCajaModel extends CajaSessionModel
         parametros.put("fecha_apertura", fechaAperturaStr);
         parametros.put("fecha_cierre", fechaCierreStr);
         parametros.put("valor_apertura", cajaSession.getValorApertura()+"");
-        parametros.put("valor_cierre_teorico", cajaSession.getValorCierre()+"");
+        parametros.put("valor_cierre_teorico", totalVentas+"");
         parametros.put("valor_ciere_practico", cajaSession.getValorCierreReal()+"");
         parametros.put("observacion", cajaSession.getObservacionCierreCaja());
         
