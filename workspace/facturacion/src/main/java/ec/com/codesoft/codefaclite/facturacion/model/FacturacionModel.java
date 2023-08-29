@@ -801,27 +801,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnBuscarVendedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EmpleadoBusquedaDialogo busquedaDialog = new EmpleadoBusquedaDialogo();
-                busquedaDialog.setTipoEnum(Departamento.TipoEnum.Ventas);
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
-                buscarDialogoModel.setVisible(true);
-                Empleado empleadoTmp = (Empleado) buscarDialogoModel.getResultado();
-                if (empleadoTmp != null) {
-                    //vendedor=empleadoTmp;
-                    factura.setVendedor(empleadoTmp);
-                    getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
-                    //factura.setVendedor(null);
-                    
-                    /*factura.addDatoAdicional(new FacturaAdicional(
-                            ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
-                            factura.getVendedor().getNombresCompletos(), 
-                            ComprobanteAdicional.Tipo.TIPO_OTRO) {
-                    });*/                                  
-                                        
-                    //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
-                    cargarTablaDatosAdicionales();
-                }
-
+                eventoAgregarBtnVendedor();
             }
         });
         
@@ -858,6 +838,29 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getBtnAplicarDescuentoGlobal().addActionListener(listenerDescuentoGlobal);
 
+    }
+    
+    private void eventoAgregarBtnVendedor()
+    {
+        EmpleadoBusquedaDialogo busquedaDialog = new EmpleadoBusquedaDialogo();
+        busquedaDialog.setTipoEnum(Departamento.TipoEnum.Ventas);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
+        buscarDialogoModel.setVisible(true);
+        Empleado empleadoTmp = (Empleado) buscarDialogoModel.getResultado();
+        if (empleadoTmp != null) {
+            //vendedor=empleadoTmp;
+            factura.setVendedor(empleadoTmp);
+            getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
+            //factura.setVendedor(null);
+
+            /*factura.addDatoAdicional(new FacturaAdicional(
+                            ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
+                            factura.getVendedor().getNombresCompletos(), 
+                            ComprobanteAdicional.Tipo.TIPO_OTRO) {
+                    });*/
+            //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
+            cargarTablaDatosAdicionales();
+        }
     }
     
     private String obtenerCodigoPresentacionSeleccionado()
@@ -4876,6 +4879,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 cargarDetalleProducto();
             }
         }, keyStroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
+        
+        //Agregando evento de teclado para agregar de forma rapida un vendedor
+        KeyStroke keyStrokeVendedor=javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK);
+        getPnlPrincipal().registerKeyboardAction(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eventoAgregarBtnVendedor();
+            }
+        }, keyStrokeVendedor, JComponent.WHEN_IN_FOCUSED_WINDOW);
         
         //Agregar evento para cargar un producto de forma automatica cuando se presiona un boton
         crearListenerKeyStrokeProductosRapidos(KeyEvent.VK_F1, ParametroCodefac.Inventario.F1_PRODUCTO);
