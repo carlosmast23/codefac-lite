@@ -895,6 +895,12 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         UtilidadesComboBox.seleccionarItemPorCriterio(getCmbPresentacionDefectoVentas(),controlador.producto.getCodigoPresentacionDefectoVenta(), criterioSeleccionPresentacion);
         UtilidadesComboBox.seleccionarItemPorCriterio(getCmbPresentacionDefectoCompras(),controlador.producto.getCodigoPresentacionDefectoCompra(), criterioSeleccionPresentacion);
         
+        //Bloquear el combo de tipo de producto si esta creado originalmente como empaque
+        if(controlador.producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+        {
+            getCmbTipoProducto().setEnabled(false);
+        }
+        
     }
     
     private void cargarDatoKardex(Producto producto)
