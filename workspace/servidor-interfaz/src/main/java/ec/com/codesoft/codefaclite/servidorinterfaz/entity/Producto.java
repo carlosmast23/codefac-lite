@@ -216,6 +216,9 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     @Column(name = "COD_PRESENTACION_DEFECTO_COMPRA")
     private String codigoPresentacionDefectoCompra;
     
+    @Column(name = "PSICOTROPICO")
+    private String psicotropico;
+    
         
     public Producto() {
     }
@@ -981,6 +984,24 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         else
             tipoProductoCodigo=null;
     } 
+
+    public String getPsicotropico() {
+        return psicotropico;
+    }
+
+    public void setPsicotropico(String psicotropico) {
+        this.psicotropico = psicotropico;
+    }
+    
+    public EnumSiNo getPsicotropicoEnum() {
+        return EnumSiNo.getEnumByLetra(psicotropico);
+    }
+
+    public void setPsicotropicoEnum(EnumSiNo psicotropicoEnum) {
+        this.psicotropico = psicotropicoEnum.getLetra();
+    }
+    
+    
 
     @Override
     public String toString() {

@@ -157,6 +157,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setDisponibleVentaEnum(EnumSiNo.getEnumByBoolean(getChkVentas().isSelected()));
         producto.setDisponibleCompraEnum(EnumSiNo.getEnumByBoolean(getChkCompras().isSelected()));
         
+        producto.setPsicotropicoEnum(EnumSiNo.getEnumByBoolean(getChkPsicotropicos().isSelected()));
+        
         
         //Cargar los codigos de las presentaciones por defecto
         producto.setCodigoPresentacionDefectoVenta((String) UtilidadesComboBox.obtenerDatoSeleccionadoPorCriterio(getCmbPresentacionDefectoVentas(),criterioSeleccionPresentacion));
@@ -291,6 +293,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getChkVentas().setSelected(true);
         getChkCompras().setSelected(true);
+        getChkPsicotropicos().setSelected(false);
         
         /*getBtnTemporal().addActionListener(new ActionListener() {
             @Override
@@ -810,6 +813,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //getTxtStockInicial().setText("0");
         getChkVentas().setSelected(true);
         getChkCompras().setSelected(true);
+        getChkPsicotropicos().setSelected(false);
         
     }
     
@@ -883,6 +887,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getChkCompras().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getDisponibleCompra(),EnumSiNo.SI).getBool());
         getChkVentas().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getDisponibleVenta(),EnumSiNo.SI).getBool());
+        getChkPsicotropicos().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getPsicotropico(),EnumSiNo.NO).getBool());
         
         actualizarTablaEnsamble();
         actualizarTablaEmpaques();

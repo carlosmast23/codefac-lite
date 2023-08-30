@@ -44,6 +44,9 @@ public class KardexData implements ExcelDatosInterface,Cloneable{
     
     private String usuario;
     
+    private String productoNombre;
+    private String productoId;
+    
 
     public KardexData() {
     }
@@ -183,6 +186,23 @@ public class KardexData implements ExcelDatosInterface,Cloneable{
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
+
+    public String getProductoNombre() {
+        return productoNombre;
+    }
+
+    public void setProductoNombre(String productoNombre) {
+        this.productoNombre = productoNombre;
+    }
+
+    public String getProductoId() {
+        return productoId;
+    }
+
+    public void setProductoId(String productoId) {
+        this.productoId = productoId;
+    }
+    
     
     
     //////////////////////////////////////////////////////////////////

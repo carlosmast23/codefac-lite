@@ -122,6 +122,18 @@ public class DetalleFacturaComprobante extends DetalleComprobanteAbstract {
         return resultado;
     }
     
+    @Deprecated
+    public BigDecimal obtenerIvaValor() {
+        BigDecimal resultado = BigDecimal.ZERO;
+        for (ImpuestoComprobante impuesto : impuestos) {
+            //TODO: Parametrizar de mejor manera pero por el momento asumo que el codigo 3 es para el ICE
+            if (!impuesto.getCodigo().equals("3")) {
+                resultado = impuesto.getValor();
+            }
+        }
+        return resultado;
+    }
+    
     @Deprecated //TODO: Mejorar esta parte
     public BigDecimal obtenerIce()
     {       

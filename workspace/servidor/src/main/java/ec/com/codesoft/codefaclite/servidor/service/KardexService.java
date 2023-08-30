@@ -1279,9 +1279,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     }
     
-    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Lote lote,Integer cantidadMovimientos) throws java.rmi.RemoteException
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Lote lote,Integer cantidadMovimientos,Boolean psicotropico) throws java.rmi.RemoteException
     {
-        List<KardexDetalle> datosConsulta=getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega,lote,cantidadMovimientos);
+        List<KardexDetalle> datosConsulta=getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega,lote,cantidadMovimientos,psicotropico);
         //Invertir la lista porque los resultados estan invertidos
         //Collections.reverse(datosConsulta);
         

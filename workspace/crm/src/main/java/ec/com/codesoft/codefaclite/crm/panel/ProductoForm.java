@@ -216,6 +216,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         cmbCasaComercial = new javax.swing.JComboBox<>();
         jLabel47 = new javax.swing.JLabel();
         txtRegistroSanitario = new javax.swing.JTextField();
+        chkPsicotropicos = new javax.swing.JCheckBox();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatosEnsamble = new javax.swing.JTable();
@@ -1271,7 +1272,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel9.add(txtNombreGenerico, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel9.add(lblEspacio12983, gridBagConstraints);
@@ -1308,6 +1309,21 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(txtRegistroSanitario, gridBagConstraints);
+
+        chkPsicotropicos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkPsicotropicos.setText("Psicotrópicos");
+        chkPsicotropicos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPsicotropicosActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(chkPsicotropicos, gridBagConstraints);
 
         tabMenu.addTab("Farmacia", jPanel9);
 
@@ -1708,6 +1724,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEliminarEmpaqueActionPerformed
 
+    private void chkPsicotropicosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPsicotropicosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkPsicotropicosActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEmpaque;
     private javax.swing.JButton btnAgregarEnsamble;
@@ -1726,6 +1746,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkCompras;
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
+    private javax.swing.JCheckBox chkPsicotropicos;
     private javax.swing.JCheckBox chkTransportarGuiaRemision;
     private javax.swing.JCheckBox chkVentas;
     private javax.swing.JComboBox<CasaComercial> cmbCasaComercial;
@@ -2638,8 +2659,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public void setCmbPresentacionDefectoVentas(JComboBox<PresentacionProducto> cmbPresentacionDefectoVentas) {
         this.cmbPresentacionDefectoVentas = cmbPresentacionDefectoVentas;
     }
-    
-    
+
+    public JCheckBox getChkPsicotropicos() {
+        return chkPsicotropicos;
+    }
+
+    public void setChkPsicotropicos(JCheckBox chkPsicotropicos) {
+        this.chkPsicotropicos = chkPsicotropicos;
+    }
     
    
 }

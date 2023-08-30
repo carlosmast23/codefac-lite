@@ -416,6 +416,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 //Integer ivaPorcentaje=detalleXml.getImpuestos().get(0).getTarifa().intValue();
                 Integer ivaPorcentaje=detalleXml.obtenerIvaPorcentaje().intValue();
                 compraDetalle.setIvaPorcentaje(ivaPorcentaje);
+                compraDetalle.setIva(detalleXml.obtenerIvaValor());
                 
                 /*if(detalleXml.getCodigoPrincipal().equals("5062651/h52"))
                 {

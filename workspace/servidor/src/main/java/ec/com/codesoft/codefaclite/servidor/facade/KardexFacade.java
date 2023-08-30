@@ -140,10 +140,10 @@ public class KardexFacade extends AbstractFacade<Kardex> {
 
     }
 
-    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega,Lote lote, Integer cantidadMovimientos) {
+    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega,Lote lote, Integer cantidadMovimientos,Boolean psicotropico) {
         try {
             //KardexDetalle kd;
-            //kd.getKardex().getLote();
+            //kd.getKardex().getProducto().getPsicotropico();
             //kd.getFechaCreacion();
             
             String whereLote="";
@@ -155,10 +155,22 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             {
                 whereLote=" and kd.kardex.lote is null ";
             }
+            
+            String whereProducto="";
+            if(producto!=null)
+            {
+                whereProducto=" and kd.kardex.producto=?4 ";
+            }
+            
+            String wherePsicotropico="";
+            if(psicotropico!=null && psicotropico)
+            {
+                wherePsicotropico=" and  kd.kardex.producto.psicotropico=?6 ";
+            }
 
 
             //kd.getFechaIngreso();
-            String queryString = "SELECT kd FROM KardexDetalle kd WHERE kd.kardex.bodega=?3 and kd.kardex.producto=?4 "+whereLote;
+            String queryString = "SELECT kd FROM KardexDetalle kd WHERE kd.kardex.bodega=?3 "+whereProducto+whereLote+wherePsicotropico;
 
             if (fechaInicial != null) {
                 queryString += " and kd.fechaIngreso>=?1 ";
@@ -169,7 +181,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             }
             
             //ordenar kardex por fechas de los movimientos
-            queryString+=" order by kd.fechaIngreso ";
+            queryString+=" order by kd.kardex.producto, kd.fechaIngreso ";
 
             //Agregar orden y un limite de la consulta
             //queryString+=" order by kd.id desc ";
@@ -180,8 +192,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             //    query.setMaxResults(cantidadMovimientos);
             //}
             query.setParameter(3, bodega);
-            query.setParameter(4, producto);
-
+            
             if (fechaInicial != null) {
                 query.setParameter(1, fechaInicial);
             }
@@ -193,6 +204,16 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             if(lote!=null)
             {
                 query.setParameter(5,lote);
+            }
+            
+            if (producto != null) 
+            {
+                query.setParameter(4, producto);
+            }
+            
+            if(psicotropico!=null && psicotropico)
+            {
+                query.setParameter(6,EnumSiNo.SI.getLetra());
             }
 
             return query.getResultList();

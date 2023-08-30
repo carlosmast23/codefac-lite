@@ -213,7 +213,7 @@ public class KardexModel extends KardexPanel {
             public void pdf() {
                 Map<String, Object> parameters = new HashMap<String, Object>();
                 List<KardexData> listaConDecimales=redondearListaKardex(listaKardex);
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listaConDecimales, panelPadre, "Kardex " + productoSeleccionado.getNombre(), OrientacionReporteEnum.HORIZONTAL);
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listaConDecimales, panelPadre, "Kardex", OrientacionReporteEnum.HORIZONTAL);
             }
         });
     }
@@ -363,16 +363,11 @@ public class KardexModel extends KardexPanel {
     private void consultar()
     {
         try {
-            //Date fechaInicio=new Date(getCmbFechaInicial().getDate().getTime());
-            //Date fechaFin=new Date(getCmbFechaFinal().getDate().getTime());
+
             Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
 
             KardexServiceIf kardexService = ServiceFactory.getFactory().getKardexServiceIf();
 
-            /*Map<String, Object> parametrosMap = new HashMap<String, Object>();
-                    parametrosMap.put("bodega", bodega);
-                    parametrosMap.put("producto", productoSeleccionado);*/
-            //List<Kardex> resultados = kardexService.obtenerPorMap(parametrosMap);
             Date fechaInicial = null;
             Date fechaFinal = null;
 
@@ -389,8 +384,10 @@ public class KardexModel extends KardexPanel {
                 cantidadMovimientos = (Integer) getTxtMovimientos().getValue();
             }
 
-            detalleKardex = kardexService.obtenerConsultaPorFecha(fechaInicial, fechaFinal, productoSeleccionado, bodega, lote, cantidadMovimientos);
-            if (detalleKardex != null && detalleKardex.size() > 0) {
+            detalleKardex = kardexService.obtenerConsultaPorFecha(fechaInicial, fechaFinal, productoSeleccionado, bodega, lote, cantidadMovimientos,getChkPsicotropicos().isSelected());
+            
+            if (detalleKardex != null && detalleKardex.size() > 0) 
+            {
                 kardex = detalleKardex.get(detalleKardex.size() - 1).getKardex();
                 cargarTablaKardex();
                 UtilidadesTablas.ubicarFinalTabla(getTblKardexDetalle());
@@ -398,7 +395,9 @@ public class KardexModel extends KardexPanel {
                 getTxtCostoPromedio().setText(kardex.getCostoPromedio() + "");
                 getTxtUltimoCosto().setText(kardex.getPrecioUltimo() + "");
                 getTxtReserva().setValue(kardex.getReserva().toBigInteger());
-            } else {
+            } 
+            else 
+            {
                 //Cuando no encuentra nada seteo un kardex vacio
                 //kardexService.getKardexModificados(productoSeleccionado, cantidadMovimientos, bodega, ProductoEnsamble.EnsambleAccionEnum.AGREGAR)
                 kardex = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodega, productoSeleccionado);
@@ -441,6 +440,10 @@ public class KardexModel extends KardexPanel {
             kardexData.setFechaDocumento((kardexDetalle.getFechaDocumento()!=null)?kardexDetalle.getFechaDocumento().toString():"");
             
             kardexData.setDescripcion(kardexDetalle.getDescripcion());
+            
+            kardexData.setProductoNombre(kardexDetalle.getKardex().getProducto().getNombre()+"");
+            
+            kardexData.setProductoId(kardexDetalle.getKardex().getProducto().getIdProducto()+"");
 
             //Restar o sumar la cantidad segun omo afecte el detalle en los kardex
             if (!kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.NO_AFECTA_INVETARIO)) {

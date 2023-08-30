@@ -74,6 +74,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         btnBuscarLote = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         txtReserva = new javax.swing.JSpinner();
+        chkPsicotropicos = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -164,7 +165,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -176,7 +177,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel11.setText("Total:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel11, gridBagConstraints);
@@ -185,7 +186,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         lblTotal.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblTotal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -228,7 +229,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         getContentPane().add(jToolBar1, gridBagConstraints);
 
@@ -351,14 +352,34 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtReserva, gridBagConstraints);
 
+        chkPsicotropicos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkPsicotropicos.setText("Psicotrópicos");
+        chkPsicotropicos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPsicotropicosActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(chkPsicotropicos, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void chkPsicotropicosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPsicotropicosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkPsicotropicosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarLote;
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnProductoBuscar;
+    private javax.swing.JCheckBox chkPsicotropicos;
     private javax.swing.JCheckBox chkTodosMovimientos;
     private javax.swing.JComboBox<Bodega> cmbBodega;
     private com.toedter.calendar.JDateChooser cmbFechaFinal;
@@ -537,9 +558,14 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     public void setTxtReserva(JSpinner txtReserva) {
         this.txtReserva = txtReserva;
     }
-    
-    
-    
-    
 
+    public JCheckBox getChkPsicotropicos() {
+        return chkPsicotropicos;
+    }
+
+    public void setChkPsicotropicos(JCheckBox chkPsicotropicos) {
+        this.chkPsicotropicos = chkPsicotropicos;
+    }
+    
+    
 }
