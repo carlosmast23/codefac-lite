@@ -414,7 +414,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
     public BigDecimal obtenerPrecioUnitarioConIva()
     {
-        return getPrecioUnitario().add(getIva());
+        return getPrecioUnitario().multiply(cantidad).add(getIva());
     }
     
     public void calcularValorIce() {
