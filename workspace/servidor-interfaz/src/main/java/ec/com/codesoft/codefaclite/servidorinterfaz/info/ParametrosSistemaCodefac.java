@@ -27,8 +27,8 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.3.0.6.7";
-    /**
+    public static final String VERSION="1.3.0.6.8";
+    /*
      * El modo de conf9.6.7guracion del sistema
      */
     public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;

@@ -3053,7 +3053,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 int columnaModificada=e.getColumn();
                 int filaModificada=e.getFirstRow();
                 
-                if(filaModificada<0 || columnaModificada<0 || columnaModificada==6) //Si no existe ninguna fila seleccionada no ejecuta ninguna accion o si es lacolumna  6 que es el boton de eliminar
+                if(filaModificada<0 || columnaModificada<0 || columnaModificada==INDICE_ELIMINAR_TABLA_FACTURA) //Si no existe ninguna fila seleccionada no ejecuta ninguna accion o si es lacolumna  6 que es el boton de eliminar
                     return;
                 
                 Object dato=modeloTablaDetallesProductos.getValueAt(filaModificada, columnaModificada);                

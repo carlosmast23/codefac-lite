@@ -137,7 +137,13 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         crearFiltrosVista();
         initListener();
         //crearConsulta("");
-        ejecutarConsulta();
+        UtilidadVarios.medirTiempoProceso(new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                ejecutarConsulta();
+            }
+        });
+        
         this.dimensionVentana=dimensionVentana;
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();        

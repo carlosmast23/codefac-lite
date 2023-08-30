@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -35,7 +37,25 @@ import javax.faces.context.FacesContext;
 public class MantenimientosPendientesMb extends GeneralAbstractMb implements Serializable{
 
     List<Mantenimiento> mantenimientoPendienteList;  
+    private List<Taller> tallerList;
     private Mantenimiento mantenimiento;
+    
+    @PostConstruct
+    public void init()
+    {
+        try {
+            this.mantenimiento=new Mantenimiento();
+            
+            //Cargar los talleres disponibles
+            tallerList=ServiceFactory.getFactory().getTallerServiceIf().obtenerActivos();
+            System.out.println("Talleres encontrados: "+tallerList.size());
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     
     @Override
@@ -166,6 +186,16 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     public void setMantenimiento(Mantenimiento mantenimiento) {
         this.mantenimiento = mantenimiento;
     }
+
+    public List<Taller> getTallerList() {
+        return tallerList;
+    }
+
+    public void setTallerList(List<Taller> tallerList) {
+        this.tallerList = tallerList;
+    }
+    
+    
 
     
     

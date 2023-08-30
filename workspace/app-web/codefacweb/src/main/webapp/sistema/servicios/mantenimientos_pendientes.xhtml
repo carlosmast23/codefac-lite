@@ -25,7 +25,7 @@
                                  oncomplete="PF('manageProductDialog').show()"
                                  update=":formulario:dialogs:manage-product-content"
                                  styleClass="ui-button-success" style="margin-right: .5rem">
-                    <p:resetInput target=":dialogs:manage-product-content" />
+                    <p:resetInput target=":formulario:dialogs:manage-product-content" />
                 </p:commandButton>
             </p:toolbarGroup>
 
@@ -104,11 +104,21 @@
 
                             <div class="field">
                                 <p:outputLabel >Prioridad</p:outputLabel>
-                                <p:rating value="#{mantenimientosPendientesMb.mantenimiento.}"/>                                
+                                <p:rating value="#{mantenimientosPendientesMb.mantenimiento.prioridad}"/>                                
                             </div>
                             
                             <div class="field">
-                                <p:outputLabel >Taller</p:outputLabel>                                
+                                <p:outputLabel >Taller</p:outputLabel>   
+                                <p:selectOneMenu   value="#{mantenimientosPendientesMb.tallerList}" converter="tallerConverter" >
+                                    <f:selectItems value="#{mantenimientosPendientesMb.mantenimiento.taller}" var="taller" itemValue="#{taller.id.toString()}" />
+                                </p:selectOneMenu>
+                            </div>
+                            
+                            <div class="field">
+                                <p:outputLabel >SubTareas</p:outputLabel>   
+                                <p:selectOneMenu   value="#{mantenimientosPendientesMb.tallerList}" converter="tallerConverter" >
+                                    <f:selectItems value="#{mantenimientosPendientesMb.mantenimiento.taller}" var="taller" itemValue="#{taller.id.toString()}" />
+                                </p:selectOneMenu>
                             </div>
 
                         </p:outputPanel>

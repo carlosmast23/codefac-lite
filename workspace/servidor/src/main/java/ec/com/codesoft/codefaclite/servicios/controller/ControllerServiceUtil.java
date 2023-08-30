@@ -72,6 +72,7 @@ import ec.com.codesoft.codefaclite.servidor.service.SriRetencionRentaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriRetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.SucursalService;
+import ec.com.codesoft.codefaclite.servidor.service.TallerService;
 import ec.com.codesoft.codefaclite.servidor.service.TareaMantenimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoDocumentoService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoEstablecimientoService;
@@ -116,6 +117,7 @@ import ec.com.codesoft.codefaclite.servidor.service.transporte.GuiaRemisionServi
 import ec.com.codesoft.codefaclite.servidor.service.transporte.TransportistaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.HerramientasCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AlertaServiceIf;
@@ -210,6 +212,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuari
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TallerServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TareaMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
@@ -356,6 +359,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(TareaMantenimientoService.class,TareaMantenimientoServiceIf.class);
             mapRecursos.put(MantenimientoService.class,MantenimientoServiceIf.class);
             mapRecursos.put(MantenimientoTareaDetalleService.class,MantenimientoTareaDetalleServiceIf.class);
+            mapRecursos.put(TallerService.class,TallerServiceIf.class);
             
             
             

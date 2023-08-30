@@ -57,8 +57,12 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     @Column(name = "PRIORIDAD")
     private Integer prioridad;
     
+    
     @JoinColumn(name = "OBJETO_MANTENIMIENTO_ID")
     private ObjetoMantenimiento vehiculo;
+    
+    @JoinColumn(name = "TALLER_ID")
+    private Taller taller;
 
     public Long getId() {
         return id;
@@ -122,6 +126,22 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
 
     public void setTallerNombre(String tallerNombre) {
         this.tallerNombre = tallerNombre;
+    }
+
+    public Integer getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(Integer prioridad) {
+        this.prioridad = prioridad;
+    }
+
+    public Taller getTaller() {
+        return taller;
+    }
+
+    public void setTaller(Taller taller) {
+        this.taller = taller;
     }
     
     
