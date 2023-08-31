@@ -354,20 +354,38 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbPresentacionProducto().removeAllItems();
     }
     
-    public void cargarFacturaDesdeProforma(Factura proforma,DocumentoEnum documentoEnum) 
+    @Deprecated
+    /**
+     * TODO: Este metodo esta de organizar mejor porque estoy usando para cargar proformas, ya aveces solo le uso para copiar o duplicar una factura
+     * @param proforma
+     * @param documentoEnum
+     * @param grabarReferenciaProforma 
+     */
+    public void cargarFacturaDesdeProforma(Factura proforma,DocumentoEnum documentoEnum,Boolean grabarReferenciaProforma) 
     {
         //Metodo para actualizar las referencias editadas , ene este caso el cliente cuando cambios los datos
         //Todo: Ver como se puede optimizar
-        try {
-            factura = (Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        if(grabarReferenciaProforma)
+        {
+            try {
+                factura = (Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+        }
+        else
+        {
+            //Cuando no es una proforma solo le cargo la misma referencia
+            factura=proforma;
         }
 
         factura.setId(null); //Con este artificio no tengo que copiar a un nuevo objeto y al grabar me reconoce como un nuevo dato
         //TODO: Este artificio sirve para poder establecer la fecha actual del sistema y no la fecha del pedido
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
-        factura.setProforma(proforma);
+        if(grabarReferenciaProforma)
+        {
+            factura.setProforma(proforma);
+        }
         factura.setSecuencial(null);
         factura.setClaveAcceso(null);
         
@@ -467,7 +485,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             proforma = (Factura) resultadoLista.get(0);
                             List<Factura> facturasList = (List<Factura>) (List<?>) resultadoLista;
                             proforma.agregarDetalleDesdeVariasFacturas(facturasList);
-                            cargarFacturaDesdeProforma(proforma,null);
+                            cargarFacturaDesdeProforma(proforma,null,true);
                         }
                     }
                     
@@ -537,7 +555,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(buscarDialogoModel.getResultado()!=null)
                 {
                     Factura proforma = (Factura) buscarDialogoModel.getResultado();
-                    cargarFacturaDesdeProforma(proforma,null);
+                    cargarFacturaDesdeProforma(proforma,null,true);
                 }
             }
         });
@@ -4036,7 +4054,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             BigDecimal descuentosImpuestos=factura.getDescuentoImpuestos();
                             BigDecimal descuentosSinImpuestos=factura.getDescuentoSinImpuestos();
                             
-                            cargarFacturaDesdeProforma(factura,documentoNuevo);
+                            cargarFacturaDesdeProforma(factura,documentoNuevo,false);
                             //Este artificio lo hago por que el metodo anterior solo sirve para agregar cuando vienen desde una proforma grabada previamente
                             factura.setProforma(null);
                             
@@ -5257,7 +5275,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         if(facturaTmp!=null)
         {
-            cargarFacturaDesdeProforma(facturaTmp,null);
+            cargarFacturaDesdeProforma(facturaTmp,null,false);
             //Borro la referencia a la antigua factura para que no se cambie de estado
             factura.setProforma(null);
             //Metodo que me permite quitar datos adicionales que no deberian aparecer porque se va a duplicar la informacion

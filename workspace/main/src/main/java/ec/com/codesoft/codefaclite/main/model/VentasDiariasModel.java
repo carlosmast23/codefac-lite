@@ -302,7 +302,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                             facturacionModel.iniciar();
                             DocumentoEnum documentEnum= (DocumentoEnum)getCmbDocumento().getSelectedItem();
                             //factura.setCodigoDocumentoEnum(documentEnum);
-                            facturacionModel.cargarFacturaDesdeProforma(factura,documentEnum);
+                            facturacionModel.cargarFacturaDesdeProforma(factura,documentEnum,true);
                             //facturacionModel.setFactura(factura);
                             //facturacionModel.cargarSecuencial();
                             
