@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
@@ -101,7 +102,8 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         
-        Kardex kardex;
+        //Kardex kardex;
+        //kardex.getProducto()
         //kardex.getLote().getFechaVencimiento();
         String whereManejaInventario="";
         
@@ -166,11 +168,12 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
             filtroDisponibleVenta=" AND u.disponibleVenta=?7 ";
         }
         
-        String whereMostrarPresentacion="";
-        if(!mostrarPresentaciones)
-        {
-            whereMostrarPresentacion=" AND ( pp.tipo='O' OR pp.id IS NULL ) ";
-        }
+        //String whereMostrarPresentacion="";
+        //String innerJoin="";
+        //if(!mostrarPresentaciones)
+        //{
+        //    whereMostrarPresentacion=" AND ( pp.tipo='O' OR pp.id IS NULL ) ";
+        //}
         
         //ProductoPresentacionDetalle ppd;
         //ppd.getTipoEnum().ORIGINAL
@@ -180,7 +183,8 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
         //Producto p;
         //List<ProductoPresentacionDetalle> ppdList=p.getPresentacionList();
         
-        String queryString = "SELECT k,pp.productoEmpaquetado FROM Kardex k JOIN k.producto u LEFT JOIN u.presentacionList pp  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+whereMostrarPresentacion+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        //String queryString = "SELECT k,pp.productoEmpaquetado FROM Kardex k JOIN k.producto u LEFT JOIN u.presentacionList pp  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+whereMostrarPresentacion+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        String queryString = "SELECT k,k.producto FROM Kardex k JOIN k.producto u  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
         
         queryString+=" and (  LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
         
@@ -390,9 +394,35 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
                     }
                 }
             }
+            
         }
         
-        return resultadoList;
+        //Ahora agrego presentaciones en el caso que tengan 
+        
+        if (mostrarPresentaciones) {
+            List<Object[]> resultadoFinalList=new ArrayList<Object[]>();
+            for( Object[] resultados : resultadoList )
+            {
+                //Agregar primero el primer resultado
+                resultadoFinalList.add(resultados);
+                Kardex kardex=(Kardex) resultados[0];
+                //Cuando un producto tiene varias Presentaciones agrego el resto de presentaciones
+                List<ProductoPresentacionDetalle> presentacionesList = kardex.getProducto().getPresentacionList();
+                //List<ProductoPresentacionDetalle> presentacionesList=ServiceFactory.getFactory().getProductoPresentacionDetalleServiceIf().buscarPorProducto(kardex.getProducto());
+                for (ProductoPresentacionDetalle productoPresentacionDetalle : presentacionesList) {
+                    if (productoPresentacionDetalle.getTipoEnum().equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ADICIONAL)) {
+                        Object[] datoNuevo = {kardex, productoPresentacionDetalle.getProductoEmpaquetado()};
+                        resultadoFinalList.add(datoNuevo);
+                    }
+                }
+            }  
+            return resultadoFinalList;
+        }
+        else
+        {
+            return resultadoList;
+        }
+                
     }
     
 }
