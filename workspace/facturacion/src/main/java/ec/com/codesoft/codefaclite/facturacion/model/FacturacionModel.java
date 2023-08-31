@@ -3487,11 +3487,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void nuevo() throws ExcepcionCodefacLite {
         
         //Antes de limpiar generar un log cuando tenga datos previamente ingresados y no van a guardar
-        if(factura.getDetalles()!=null && factura.getDetalles().size()>0)
-        {
-            String cliente=(factura.getCliente()!=null)?factura.getCliente().getNombreSimple():"";
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.WARNING,"FACTURA CANCELADA (NO ) al cliente: "+cliente+", por un valor de :"+factura.getTotal()+", por el usuario: "+session.getUsuario());
+        if (factura.getId()==null) {
+            if (factura.getDetalles() != null && factura.getDetalles().size() > 0) {
+                String cliente = (factura.getCliente() != null) ? factura.getCliente().getNombreSimple() : "";
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.WARNING, "FACTURA CANCELADA (NO grabada ) al cliente: " + cliente + ", por un valor de :" + factura.getTotal() + ", por el usuario: " + session.getUsuario());
+            }
         }
+        
         
         getjDateFechaEmision().setDate(new java.util.Date());
         //TODO: Mejorar esta parte
@@ -4066,7 +4068,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             
                             cargarFacturaDesdeProforma(factura,documentoNuevo,false);
                             //Este artificio lo hago por que el metodo anterior solo sirve para agregar cuando vienen desde una proforma grabada previamente
-                            factura.setProforma(null);
+                            //factura.setProforma(null);
                             
                             corregirCambioDocumentoIva(descuentosImpuestos,descuentosSinImpuestos, documentoNuevo);
                         }

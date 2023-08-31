@@ -6,7 +6,12 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.rmi.RemoteException;
+import java.util.List;
+import javax.persistence.Query;
 
 /**
  *
@@ -16,6 +21,19 @@ public class TallerFacade extends AbstractFacade<Taller> {
 
     public TallerFacade() {
         super(Taller.class);
+    }
+    
+    public List<TallerTarea> obtenerTareasPorTallerFacade(Taller taller)
+    {
+        //TallerTarea t;
+        //t.getTaller();
+        //t.getTareaMantenimiento();
+        
+        String queryString = "SELECT u FROM TallerTarea u WHERE u.taller=?1";
+        
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, taller);
+        return query.getResultList();
     }
     
 }

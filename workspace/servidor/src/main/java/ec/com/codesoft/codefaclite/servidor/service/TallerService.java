@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.TallerFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TallerServiceIf;
@@ -84,6 +85,11 @@ public class TallerService extends ServiceAbstract<Taller,TallerFacade> implemen
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
         return getFacade().findByMap(mapParametros);
         
+    }
+    
+    public List<TallerTarea> obtenerTareasPorTaller(Taller taller) throws ServicioCodefacException, RemoteException
+    {        
+        return getFacade().obtenerTareasPorTallerFacade(taller);
     }
     
 }

@@ -46,5 +46,12 @@ public class Taller extends EntityAbstract<GeneralEnumEstado> {
     public void setTallerTareaList(List<TallerTarea> tallerTareaList) {
         this.tallerTareaList = tallerTareaList;
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+    
     
 }

@@ -21,6 +21,9 @@ public class TallerTarea extends EntityAbstract<GeneralEnumEstado>
 {
     @JoinColumn(name = "TALLER_ID")
     private Taller taller;
+    
+    @JoinColumn(name = "TAREA_MANTENIMIENTO_ID")
+    private TareaMantenimiento tareaMantenimiento;
 
     public TallerTarea() {
     }
@@ -32,5 +35,21 @@ public class TallerTarea extends EntityAbstract<GeneralEnumEstado>
     public void setTaller(Taller taller) {
         this.taller = taller;
     }
+
+    public TareaMantenimiento getTareaMantenimiento() {
+        return tareaMantenimiento;
+    }
+
+    public void setTareaMantenimiento(TareaMantenimiento tareaMantenimiento) {
+        this.tareaMantenimiento = tareaMantenimiento;
+    }
+
+    @Override
+    public String toString() {
+        return tareaMantenimiento.getNombre();
+    }
+    
+    
+    
     
 }

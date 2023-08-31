@@ -8,25 +8,70 @@
 
     <ui:composition  template="/template/codefac_template.xhtml">
         <ui:define name="contenido" >
-            <f:event listener="#{controllerCodefacMb.agregarVista(mantenimientosPendientesMb)}" type="preRenderComponent" /> 
+            <f:event listener="#{controllerCodefacMb.agregarVista(mantenimientosPendientesMb)}" type="preRenderComponent" />
+
             <div class="p-grid" style="text-align: left" >
-                <div class="p-col-12 p-md-6 p-lg-6" >
+                <div class="p-col-12 p-md-6 p-lg-3" >
+                    Vehiculo: <p:outputLabel id="txtVehiculo" value="#{mantenimientosPendientesMb.mantenimiento.vehiculo.modelo}" /> 
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">                            
+                    <p:commandButton process="@this" value="Buscar" icon="pi pi-search" action="#{mantenimientosPendientesMb.abrirDialogoBuscarVehiculo}" >
+                        <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarVehiculo}" update="txtVehiculo"  />
+                    </p:commandButton>
+                </div> 
+                
+                <div class="p-col-12 p-md-6 p-lg-3" >
+                    Prioridad: 
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">                            
+                    <p:rating value="#{mantenimientosPendientesMb.mantenimiento.prioridad}"/>                                
+                </div> 
+
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    Taller:
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">                            
+                    <p:selectOneMenu   value="#{mantenimientosPendientesMb.mantenimiento.taller}" converter="tallerConverter" >
+                        <f:selectItems value="#{mantenimientosPendientesMb.tallerList}" var="taller" itemValue="#{taller.id.toString()}" />
+                        <p:ajax event="itemSelect" listener="#{mantenimientosPendientesMb.seleccionarSubtareDesdeTaller()}" update=":formulario:multiple" />
+                    </p:selectOneMenu>
+                </div>
+                
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    SubTareas:
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">                            
+                    <p:selectCheckboxMenu id="multiple"
+                                          filter="true" filterMatchMode="startsWith"
+                                          label="Cities" multiple="true" emptyLabel="Por favor seleccione..." updateLabel="true"
+                                          style="min-width: 15rem" panelStyle="width: 30rem" scrollHeight="250"
+                                          value="#{mantenimientosPendientesMb.subtareaSeleccionadaList}">
+
+                        <f:selectItems value="#{mantenimientosPendientesMb.subtareaList}"/>
+                    </p:selectCheckboxMenu>
+                </div>
+            </div>
+
+            <div class="p-grid" style="text-align: left" >
+                <div class="p-col-12 p-md-12 p-lg-12" >
                     <div><h:outputLabel id="cmbBodega"  value="Esta pantalla contiene los vehiculos ingresados pero que aun no tienen asignadas tareas "/></div>
                 </div> 
-                <div class="p-col-12 p-md-6 p-lg-6" >
-                    <div class="field">
-                        <p:outputLabel >Taller</p:outputLabel>   
-                        <p:selectOneMenu   value="#{mantenimientosPendientesMb.tallerList}" converter="tallerConverter" >
-                            <f:selectItems value="#{mantenimientosPendientesMb.mantenimiento.taller}" var="taller" itemValue="#{taller.id.toString()}" />
-                        </p:selectOneMenu>
-                    </div>
-                </div> 
+
+                <div style="text-align: center" >
+
+                    <div class="p-col-12 p-md-6 p-lg-6" >
+                        <p:outputPanel id="manage-product-content" class="ui-fluid">
+                            <p:outputPanel>
+
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </div> 
+                </div>
             </div>
 
             <p:toolbarGroup>
                 <p:commandButton value="Nuevo" icon="pi pi-plus" 
                                  oncomplete="PF('manageProductDialog').show()"
-                                 update=":formulario:dialogs:manage-product-content"
                                  styleClass="ui-button-success" style="margin-right: .5rem">
                     <p:resetInput target=":formulario:dialogs:manage-product-content" />
                 </p:commandButton>
@@ -102,25 +147,7 @@
             <h:form id="dialogs">
                 <p:dialog header="Product Details" showEffect="fade" modal="true" widgetVar="manageProductDialog"
                           responsive="true">
-                    <p:outputPanel id="manage-product-content" class="ui-fluid">
-                        <p:outputPanel>
 
-                            <div class="field">
-                                <p:outputLabel >Prioridad</p:outputLabel>
-                                <p:rating value="#{mantenimientosPendientesMb.mantenimiento.prioridad}"/>                                
-                            </div>
-
-
-
-                            <div class="field">
-                                <p:outputLabel >SubTareas</p:outputLabel>   
-                                <p:selectOneMenu   value="#{mantenimientosPendientesMb.tallerList}" converter="tallerConverter" >
-                                    <f:selectItems value="#{mantenimientosPendientesMb.mantenimiento.taller}" var="taller" itemValue="#{taller.id.toString()}" />
-                                </p:selectOneMenu>
-                            </div>
-
-                        </p:outputPanel>
-                    </p:outputPanel>
                 </p:dialog>
             </h:form>
 

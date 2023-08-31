@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
@@ -17,4 +18,5 @@ import java.util.List;
  */
 public interface TallerServiceIf extends ServiceAbstractIf<Taller>{
     public List<Taller> obtenerActivos() throws ServicioCodefacException, RemoteException;
+    public List<TallerTarea> obtenerTareasPorTaller(Taller taller) throws ServicioCodefacException, RemoteException;
 }

@@ -124,7 +124,9 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {                
-                objeto.setEstadoEnum(Mantenimiento.MantenimientoEnum.INGRESADO);
+                //objeto.setEstadoEnum(Mantenimiento.MantenimientoEnum.INGRESADO);
+                objeto.getVehiculo().setEmpresa(empresa);
+                objeto.setEstado("A");
                 setDatosAuditoria(objeto,usuarioCreacion,CrudEnum.CREAR);
                 objeto.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
                 //setearDatosGrabar(mesa, empresa,CrudEnum.CREAR);
