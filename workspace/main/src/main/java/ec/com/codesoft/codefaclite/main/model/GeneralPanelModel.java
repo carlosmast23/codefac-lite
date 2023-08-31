@@ -507,12 +507,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Evento que se ejecuta cuando cierran el sistema
      */
     private void eventoCerrarSistema()
-    {
+    {        
         String[] opciones = {"Salir", "Cambiar usuario", "Cancelar"};
         int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Por favor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
         switch (opcionSeleccionada) {
             case 0: 
             {
+                if(!DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.SALIR_SISTEMA))
+                {
+                    break;
+                }
+                
                 try {
                     //opcion de salir
                     
@@ -545,10 +550,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             terminarAutorizarComprobantesPendientes();
             UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web    
             dispose();
+            LOG.log(Level.INFO, "SALIENDO DEL SISTEMA, usuario actual:"+sessionCodefac.getUsuario().getNick());                        
             System.exit(0);
             break;
             
             case 1: //opcion cambiar de usuario
+                
+                if(!DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.CAMBIAR_USUARIO))
+                {
+                    break;
+                }
+                
+                LOG.log(Level.INFO, "Cerrando Session para CAMBIAR DE USUARIO, usuario actual:" + sessionCodefac.getUsuario().getNick());
                 cerrarSession();
                 break;
 
@@ -882,7 +895,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     //Solo si la respuesta es grabar ejecuta el metodo
                     if(respuesta)
                     {
-                        frameInterface.nuevo();                        
+                        frameInterface.nuevo();     
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.WARNING," LIMPIANDO VENTANA CON DATOS: Ventana:"+frameInterface.getTitle()+", usuario: "+sessionCodefac.getUsuario() );
                     }
                     else
                     {
@@ -1467,6 +1481,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         {
             if (!frameInterface.salirSinGrabar()) {
                 boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Existen datos ingresados , está seguro que desea cargar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                
+                if(respuesta)
+                {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.WARNING," CARGANDO OTROS DATOS EN VENTANA CON DATOS: Ventana:"+frameInterface.getTitle()+", usuario: "+sessionCodefac.getUsuario() );
+                }
+                
                 return respuesta;
             }
         }
@@ -2427,7 +2447,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             {
                                 if(panelCerrando.estadoFormulario.equals(GeneralPanelInterface.ESTADO_GRABAR)) //Agregada validacion solo en el estado de grabar para que se ejecute cuando este desde la pantalla de 
                                 {
-                                    respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                                    respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);                                    
                                 }
                             }
                             
@@ -2435,7 +2455,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             if(respuesta)
                             {                                
                                 ControladorCodefacInterface panel = (ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
-                                
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.WARNING," CERRANDO VENTANA CON DATOS: Ventana:"+panel.getTitle()+", usuario: "+sessionCodefac.getUsuario() );                                
                                 panel.formularioCerrando = true;
                                 //cargarAyuda();
                                 mostrarPanelSecundario(false);
@@ -3873,6 +3893,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         if(!respuesta)
                         {
                             return;
+                        }
+                        else
+                        {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.WARNING," SALIENDO DEL SISTEMA, PERO LA VENTANA TIENE DATOS: Ventana:"+pantalla.getTitle()+", usuario: "+sessionCodefac.getUsuario() );
                         }
                     }
                     pantalla.dispose();

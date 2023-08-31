@@ -36,7 +36,7 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class MantenimientosPendientesMb extends GeneralAbstractMb implements Serializable{
 
-    List<Mantenimiento> mantenimientoPendienteList;  
+    List<Mantenimiento> mantenimientoPendienteList;   
     private List<Taller> tallerList;
     private Mantenimiento mantenimiento;
     

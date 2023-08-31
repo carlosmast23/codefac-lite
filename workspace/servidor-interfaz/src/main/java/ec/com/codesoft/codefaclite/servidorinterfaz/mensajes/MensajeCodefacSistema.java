@@ -49,6 +49,10 @@ public abstract class MensajeCodefacSistema {
         public static final CodefacMsj ACTUALIZAR_SISTEMA = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Esta opción solo debe ser utilizada con supervisión o autorización de una persona de soporte por que puede causar daños en sus datos. \n Esta seguro que desea ACTUALIZAR EL SISTEMA ?" ,MENSAJE_INCORRECTO);
         public static final CodefacMsj CAMBIAR_MODO_SISTEMA = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Esta opción solo debe ser utilizada con supervisión o autorización de una persona de soporte por que puede causar daños en sus datos. \n Esta seguro que desea CAMBIAR DE MODO EN EL SISTEMA ?" ,MENSAJE_INCORRECTO);
         public static final CodefacMsj PROCESAR_MODO_FORZADO = new CodefacMsj(CodefacMsj.TITULO_ERROR,"Desea realizar el proceso de manera forzada ?" ,MENSAJE_ADVERTENCIA);
+        
+        public static final CodefacMsj SALIR_SISTEMA = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"ADVERTENCIA: Recuerde haber GRABADO todos los cambios antes de continuar.\n Está seguro que desea salir del sistema? ",MENSAJE_ADVERTENCIA);
+        public static final CodefacMsj CAMBIAR_USUARIO = new CodefacMsj(CodefacMsj.TITULO_ADVERTENCIA,"ADVERTENCIA: Recuerde haber GRABADO todos los cambios antes de continuar.\n Está seguro que desea salir al LOGIN? ",MENSAJE_ADVERTENCIA);
+        
     }
     
     public static abstract class ErroresComunes

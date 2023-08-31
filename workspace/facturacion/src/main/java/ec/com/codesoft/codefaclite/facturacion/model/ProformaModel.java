@@ -345,7 +345,7 @@ public class ProformaModel extends FacturacionModel{
         if(facturaTmp!=null)
         {
             this.factura = facturaTmp;
-            cargarFacturaDesdeProforma(factura, DocumentoEnum.PROFORMA);
+            cargarFacturaDesdeProforma(factura, DocumentoEnum.PROFORMA,true);
         }
     }
    

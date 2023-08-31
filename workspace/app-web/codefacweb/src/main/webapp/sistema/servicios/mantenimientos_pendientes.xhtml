@@ -14,8 +14,11 @@
                     <div><h:outputLabel id="cmbBodega"  value="Esta pantalla contiene los vehiculos ingresados pero que aun no tienen asignadas tareas "/></div>
                 </div> 
                 <div class="p-col-12 p-md-6 p-lg-6" >
-                    <div>
-                        <p:commandButton value="Agregar Mantenimiento" icon="ui-icon-plus" />
+                    <div class="field">
+                        <p:outputLabel >Taller</p:outputLabel>   
+                        <p:selectOneMenu   value="#{mantenimientosPendientesMb.tallerList}" converter="tallerConverter" >
+                            <f:selectItems value="#{mantenimientosPendientesMb.mantenimiento.taller}" var="taller" itemValue="#{taller.id.toString()}" />
+                        </p:selectOneMenu>
                     </div>
                 </div> 
             </div>
@@ -106,14 +109,9 @@
                                 <p:outputLabel >Prioridad</p:outputLabel>
                                 <p:rating value="#{mantenimientosPendientesMb.mantenimiento.prioridad}"/>                                
                             </div>
-                            
-                            <div class="field">
-                                <p:outputLabel >Taller</p:outputLabel>   
-                                <p:selectOneMenu   value="#{mantenimientosPendientesMb.tallerList}" converter="tallerConverter" >
-                                    <f:selectItems value="#{mantenimientosPendientesMb.mantenimiento.taller}" var="taller" itemValue="#{taller.id.toString()}" />
-                                </p:selectOneMenu>
-                            </div>
-                            
+
+
+
                             <div class="field">
                                 <p:outputLabel >SubTareas</p:outputLabel>   
                                 <p:selectOneMenu   value="#{mantenimientosPendientesMb.tallerList}" converter="tallerConverter" >

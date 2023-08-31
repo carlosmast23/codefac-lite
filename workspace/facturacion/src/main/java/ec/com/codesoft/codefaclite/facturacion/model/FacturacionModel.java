@@ -2467,6 +2467,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {  
                return ;
             }
+            
+            String cliente=(factura.getCliente()!=null)?factura.getCliente().getNombreSimple():"";
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.WARNING,"FACTURA PREVISUALIZAR al cliente: "+cliente+", por un valor de :"+factura.getTotal()+", por el usuario: "+session.getUsuario());
         }
         
         //if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {        
@@ -3482,6 +3485,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
+        
+        //Antes de limpiar generar un log cuando tenga datos previamente ingresados y no van a guardar
+        if(factura.getDetalles()!=null && factura.getDetalles().size()>0)
+        {
+            String cliente=(factura.getCliente()!=null)?factura.getCliente().getNombreSimple():"";
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.WARNING,"FACTURA CANCELADA (NO ) al cliente: "+cliente+", por un valor de :"+factura.getTotal()+", por el usuario: "+session.getUsuario());
+        }
         
         getjDateFechaEmision().setDate(new java.util.Date());
         //TODO: Mejorar esta parte
