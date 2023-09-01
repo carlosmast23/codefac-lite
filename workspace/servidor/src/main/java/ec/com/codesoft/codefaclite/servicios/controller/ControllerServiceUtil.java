@@ -73,6 +73,7 @@ import ec.com.codesoft.codefaclite.servidor.service.SriRetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.SucursalService;
 import ec.com.codesoft.codefaclite.servidor.service.TallerService;
+import ec.com.codesoft.codefaclite.servidor.service.TallerTareaService;
 import ec.com.codesoft.codefaclite.servidor.service.TareaMantenimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoDocumentoService;
 import ec.com.codesoft.codefaclite.servidor.service.TipoEstablecimientoService;
@@ -213,6 +214,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaDetalleService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RutaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TallerServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TallerTareaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TareaMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
@@ -360,6 +362,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(MantenimientoService.class,MantenimientoServiceIf.class);
             mapRecursos.put(MantenimientoTareaDetalleService.class,MantenimientoTareaDetalleServiceIf.class);
             mapRecursos.put(TallerService.class,TallerServiceIf.class);
+            mapRecursos.put(TallerTareaService.class,TallerTareaServiceIf.class);
             
             
             

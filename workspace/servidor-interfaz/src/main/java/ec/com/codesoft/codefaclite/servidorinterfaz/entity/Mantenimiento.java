@@ -6,16 +6,21 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -63,6 +68,9 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     
     @JoinColumn(name = "TALLER_ID")
     private Taller taller;
+    
+    @OneToMany(mappedBy = "mantenimiento", fetch = FetchType.EAGER)
+    private List<MantenimientoTareaDetalle> tareaList;
 
     public Long getId() {
         return id;
@@ -143,8 +151,29 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     public void setTaller(Taller taller) {
         this.taller = taller;
     }
+
+    public List<MantenimientoTareaDetalle> getTareaList() {
+        return tareaList;
+    }
+
+    public void setTareaList(List<MantenimientoTareaDetalle> tareaList) {
+        this.tareaList = tareaList;
+    }
     
     
+    public String obtenerSubTareasTxt()
+    {
+        if(tareaList!=null)
+        {
+           return  UtilidadesLista.castListToString(tareaList,",",new UtilidadesLista.CastListInterface<MantenimientoTareaDetalle>() {
+                @Override
+                public String getString(MantenimientoTareaDetalle dato) {
+                    return dato.getTallerTarea().getTareaMantenimiento().getNombre();
+                }
+            });
+        }
+        return "";
+    }
     
     public UbicacionEnum getUbicacionEnum() {
         return UbicacionEnum.getEnum(ubicacion);
@@ -157,7 +186,15 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
         }        
     }
     
-    
+    public void agregarTarea(MantenimientoTareaDetalle tallerTarea)
+    {
+        if(tareaList==null)
+        {
+            tareaList=new ArrayList<MantenimientoTareaDetalle>();
+        }
+        
+        tareaList.add(tallerTarea);
+    }
     
     
     @Override
@@ -199,6 +236,10 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
 
     @Override
     public MantenimientoEnum getEstadoEnum() {
+        return MantenimientoEnum.getEnum(estado);
+    }
+    
+    public MantenimientoEnum getEstadoEnumTemp() {
         return MantenimientoEnum.getEnum(estado);
     }
 

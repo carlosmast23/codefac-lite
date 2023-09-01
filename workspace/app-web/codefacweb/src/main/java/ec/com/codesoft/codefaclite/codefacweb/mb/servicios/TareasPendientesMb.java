@@ -1,12 +1,13 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.servicios;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -14,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.RowEditEvent;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,13 +30,13 @@ import javax.faces.context.FacesContext;
 
 /**
  *
- * @author CARLOS_CODESOFT
+ * @author CARLOS_CODESOFT 
  */
 @ManagedBean
 @ViewScoped
 public class TareasPendientesMb extends GeneralAbstractMb implements Serializable 
 {
-    private List<MantenimientoTareaDetalle> mantenimientoTareaList;
+    private List<MantenimientoTareaDetalle> mantenimientoTareaList;       
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -77,11 +80,23 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        cargarDatosIniciales();
+    }
+    
+    public void cargarDatosIniciales()
+    {
         try {
             mantenimientoTareaList=ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().obtenerTareasPendientesPorEmpleado(sessionMb.getSession().getUsuario().getEmpleado());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void iniciarTarea()
+    {
+        
     }
 
     @Override
@@ -115,7 +130,7 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
     }
 
     public List<MantenimientoTareaDetalle> getMantenimientoTareaList() {
-        return mantenimientoTareaList;
+        return mantenimientoTareaList; 
     }
 
     public void setMantenimientoTareaList(List<MantenimientoTareaDetalle> mantenimientoTareaList) {
@@ -135,5 +150,37 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
             e.printStackTrace();
         }
     }
+    
+    public void iniciarTarea(MantenimientoTareaDetalle tarea)
+    {
+        System.out.println(" iniciarTarea ...");
+        try {
+            ServiceFactory.getFactory().getMantenimientoServiceIf().iniciarTarea(tarea,sessionMb.getSession().getUsuario().getEmpleado());
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            cargarDatosIniciales();
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+        } catch (RemoteException ex) {
+            Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void finalizarTarea(MantenimientoTareaDetalle tarea)
+    {
+        System.out.println(" finalizarTarea ..."); 
+        try {
+            ServiceFactory.getFactory().getMantenimientoServiceIf().finalizarTarea(tarea,sessionMb.getSession().getUsuario().getEmpleado());
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            cargarDatosIniciales();
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+        } catch (RemoteException ex) {
+            Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }   
     
 }

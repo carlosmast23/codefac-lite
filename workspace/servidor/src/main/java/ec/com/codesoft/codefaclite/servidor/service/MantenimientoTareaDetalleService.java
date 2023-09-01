@@ -129,10 +129,10 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
     private void validarDatosIngresoTarea(MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException 
     {
         //Validar que no se puedan ingresar 2 tareas duplicadas
-        if(verificarTareaDuplicada(tareaDetalle.getMantenimiento(),tareaDetalle.getTarea()))
+        /*if(verificarTareaDuplicada(tareaDetalle.getMantenimiento(),tareaDetalle.getTarea()))
         {
             throw new ServicioCodefacException("No se puede crear una tarea repetida de "+tareaDetalle.getTarea().getNombre());
-        }
+        }*/
     }
     
     @Override

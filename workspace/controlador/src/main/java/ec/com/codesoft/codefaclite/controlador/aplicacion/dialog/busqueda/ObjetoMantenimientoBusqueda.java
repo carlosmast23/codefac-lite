@@ -71,7 +71,7 @@ public class ObjetoMantenimientoBusqueda implements InterfaceModelFind<ObjetoMan
     @Override
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
-        propiedades.add("VIN");
+        propiedades.add("vin"); 
         propiedades.add("codigo");
         propiedades.add("nombre");
         propiedades.add("descripcion");

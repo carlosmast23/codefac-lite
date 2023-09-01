@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea;
@@ -22,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSiste
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -46,21 +48,16 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     List<Mantenimiento> mantenimientoPendienteList;     
     private List<Taller> tallerList; 
     private List<TallerTarea> subtareaList; 
-    private List<TallerTarea> subtareaSeleccionadaList;
+    private List<String> subtareaSeleccionadaList; 
     private Mantenimiento mantenimiento;
+    private Boolean modoEditar;
     
     @PostConstruct
     public void init()
     {
         try {
-            this.mantenimiento=new Mantenimiento();
-            
-            //Cargar los talleres disponibles
-            tallerList=ServiceFactory.getFactory().getTallerServiceIf().obtenerActivos();
-            //subtareaList=ServiceFactory.getFactory().getTallerServiceIf().obtenerTareasPorTaller(mant)
-            System.out.println("Talleres encontrados: "+tallerList.size());
-            
-        } catch (ServicioCodefacException ex) {
+            iniciar();
+        } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,6 +108,17 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         try {
+            this.modoEditar=false;
+            this.mantenimiento=new Mantenimiento();
+            this.subtareaSeleccionadaList=new ArrayList<String>(); 
+            //Cargar los talleres disponibles
+            tallerList=ServiceFactory.getFactory().getTallerServiceIf().obtenerActivos();
+            mantenimiento.setTaller(tallerList.get(0)); 
+            seleccionarSubtareDesdeTaller();
+            //subtareaList=ServiceFactory.getFactory().getTallerServiceIf().obtenerTareasPorTaller(mant)
+            System.out.println("Talleres encontrados: "+tallerList.size()); 
+
+            
             mantenimientoPendienteList=ServiceFactory.getFactory().getMantenimientoServiceIf().obtenerPendientes(sessionMb.getSession().getEmpresa());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex); 
@@ -159,6 +167,23 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         }
     }
     
+    public void cargarDatosEditarMantenimiento(Mantenimiento mantenimiento)
+    {
+        System.out.println("DATO: "+mantenimiento);
+        System.out.println("CARGANDO DATOS EDITAR ..."); 
+        this.modoEditar=true; 
+        this.mantenimiento=mantenimiento;
+        
+        //Cargar los detalles de ls subtotales
+        subtareaSeleccionadaList=new ArrayList<String>();
+        if(this.mantenimiento.getTareaList()!=null)
+        {
+            for (MantenimientoTareaDetalle mantenimientoTareaDetalle : this.mantenimiento.getTareaList()) {
+                subtareaSeleccionadaList.add(mantenimientoTareaDetalle.getId()+"");
+            }
+        }
+    }
+    
     public void eliminarMantenimiento(Mantenimiento matenimiento)
     {
         try {
@@ -173,6 +198,93 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public void grabarMantenimiento()
+    {
+        try {
+            System.out.println("Ejecutando metodo grabarMantenimiento... ");   
+            validarDatos();
+            setearDatos();
+            if(modoEditar) 
+            {
+                ServiceFactory.getFactory().getMantenimientoServiceIf().editar(mantenimiento);
+                modoEditar=false;
+            }
+            else
+            {
+                ServiceFactory.getFactory().getMantenimientoServiceIf().grabar(mantenimiento, sessionMb.getSession().getEmpresa(), sessionMb.getSession().getUsuario());
+            }
+            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            iniciar();
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
+    public void validarDatos() throws ServicioCodefacException
+    { 
+        try {
+            if(mantenimiento.getVehiculo()==null)
+            {
+                throw new ServicioCodefacException("No se puede grabar sin Seleccionar un VEHICULO");
+            }
+            
+            if(mantenimiento.getTaller()==null)
+            {
+                throw new ServicioCodefacException("No se puede grabar sin Seleccionar un TALLER");
+            }
+            
+            if(mantenimiento.getPrioridad()==null)
+            {
+                throw new ServicioCodefacException("No se puede grabar sin Seleccionar una PRIORIDAD");
+            }
+            
+            if(subtareaSeleccionadaList==null || subtareaSeleccionadaList.size()==0)
+            {
+                throw new ServicioCodefacException("No se puede grabar sin Seleccionar una SUBTAREAS");
+            }
+            
+            //TODO: Por el momento solo valida en la vista que no exista duplicado el mismo con un mantenimiento INGRESADO
+            List<Mantenimiento> resultadoList= ServiceFactory.getFactory().getMantenimientoServiceIf().obtenerPendientesPorVin(sessionMb.getSession().getEmpresa(),mantenimiento.getVehiculo().getVin());
+            if(resultadoList.size()>0)
+            {
+                throw new ServicioCodefacException("No se puede ingresar vehiculos con MANTENIMIENTOS ACTIVOS");
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public void setearDatos()
+    {
+        mantenimiento.setEstadoEnum(Mantenimiento.MantenimientoEnum.INGRESADO);
+        //Setear los detalles de las tareas pendientes
+        
+        //List<MantenimientoTareaDetalle> detallesList=new ArrayList<MantenimientoTareaDetalle>();
+        
+        for (String tallerTareaStr : subtareaSeleccionadaList) 
+        {
+            try {
+                TallerTarea tallerTarea=ServiceFactory.getFactory().getTallerTareaServiceIf().buscarPorId(Long.parseLong(tallerTareaStr));
+                MantenimientoTareaDetalle mantenimientoTareaDetalle=new MantenimientoTareaDetalle();
+                mantenimientoTareaDetalle.setEstadoEnum(MantenimientoTareaDetalle.EstadoEnum.GENERADO);
+                mantenimientoTareaDetalle.setMantenimiento(mantenimiento);
+                mantenimientoTareaDetalle.setTallerTarea(tallerTarea);
+                mantenimiento.agregarTarea(mantenimientoTareaDetalle);
+            }
+            //mantenimiento.set
+            catch (RemoteException ex) {
+                Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
     }
@@ -195,7 +307,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
-            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex); 
         } 
     }
     
@@ -249,13 +361,15 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         this.subtareaList = subtareaList;
     }
 
-    public List<TallerTarea> getSubtareaSeleccionadaList() {
+    public List<String> getSubtareaSeleccionadaList() {
         return subtareaSeleccionadaList;
     }
 
-    public void setSubtareaSeleccionadaList(List<TallerTarea> subtareaSeleccionadaList) {
+    public void setSubtareaSeleccionadaList(List<String> subtareaSeleccionadaList) {
         this.subtareaSeleccionadaList = subtareaSeleccionadaList;
     }
+
+    
     
     
     

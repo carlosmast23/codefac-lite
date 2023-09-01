@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.MantenimientoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
@@ -43,9 +45,36 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
     {
         for (Mantenimiento mantenimiento : mantenimientoList) 
         {
-            grabar(mantenimiento, empresa, usuarioCreacion);
+            ObjetoMantenimiento objetoMantenimiento = mantenimiento.getVehiculo();
+            objetoMantenimiento.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+            
+            //Verificar que no existan datos repetidos
+            
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    entityManager.persist(objetoMantenimiento);
+                }
+            });
+            //grabar(mantenimiento, empresa, usuarioCreacion);
         }
         
+    }
+    
+    public List<Mantenimiento> obtenerPendientesPorVin(Empresa empresa,String vin) throws ServicioCodefacException, RemoteException 
+    {
+        //Mantenimiento m;
+        //m.getVehiculo().getVin()
+        return (List<Mantenimiento>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+            @Override
+            public Object consulta() throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", Mantenimiento.MantenimientoEnum.INGRESADO.getLetra());
+                mapParametros.put("vehiculo.vin", vin);
+                //mapParametros.put("ubicacion", Mantenimiento.UbicacionEnum.TALLER.getLetra());
+                return getFacade().findByMap(mapParametros);
+            }
+        });
     }
     
     public List<Mantenimiento> obtenerPendientes(Empresa empresa) throws ServicioCodefacException, RemoteException 
@@ -55,7 +84,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             public Object consulta() throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new HashMap<String,Object>();
                 mapParametros.put("estado", Mantenimiento.MantenimientoEnum.INGRESADO.getLetra());
-                mapParametros.put("ubicacion", Mantenimiento.UbicacionEnum.TALLER.getLetra());
+                //mapParametros.put("ubicacion", Mantenimiento.UbicacionEnum.TALLER.getLetra());
                 return getFacade().findByMap(mapParametros);
             }
         });
@@ -126,13 +155,32 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             public void transaccion() throws ServicioCodefacException, RemoteException {                
                 //objeto.setEstadoEnum(Mantenimiento.MantenimientoEnum.INGRESADO);
                 objeto.getVehiculo().setEmpresa(empresa);
-                objeto.setEstado("A");
+                //objeto.setEstado("A");
                 setDatosAuditoria(objeto,usuarioCreacion,CrudEnum.CREAR);
                 objeto.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
                 //setearDatosGrabar(mesa, empresa,CrudEnum.CREAR);
                 validarGrabar(objeto, CrudEnum.CREAR);
+                
+                List<MantenimientoTareaDetalle> detalleList=objeto.getTareaList();
+                objeto.setTareaList(null);
+                
                 entityManager.persist(objeto.getVehiculo());
                 entityManager.persist(objeto);
+                entityManager.flush();
+                
+                //Grabar primero los detalles
+                if(detalleList!=null)
+                {
+                    for (MantenimientoTareaDetalle mantenimientoTareaDetalle : detalleList) 
+                    {
+                        mantenimientoTareaDetalle.setMantenimiento(objeto);
+                        entityManager.persist(objeto);
+
+                    }                
+                }
+                
+                objeto.setTareaList(detalleList);
+                entityManager.merge(objeto);
                 
             }
         });
@@ -160,6 +208,61 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             }
         });
         return entity;
+    }
+    
+    public void iniciarTarea(MantenimientoTareaDetalle tarea,Empleado empleado) throws ServicioCodefacException, RemoteException
+    {
+        tarea.setOperador(empleado);
+        tarea.setFechaInicio(UtilidadesFecha.getFechaHoyTimeStamp());
+        tarea.setEstadoEnum(MantenimientoTareaDetalle.EstadoEnum.INICIADO);
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(tarea);
+            }
+        });
+        
+    }
+    
+    public void finalizarTarea(MantenimientoTareaDetalle tarea, Empleado empleado) throws ServicioCodefacException, RemoteException 
+    {
+        //Solo puede finalizar el mismo empleado que inicio la tarea
+        if(!tarea.getOperador().equals(empleado))
+        {
+            throw new ServicioCodefacException("Solo puede finalizar la tarea el usuario: "+tarea.getOperador());
+        }
+        
+        tarea.setFechaFin(UtilidadesFecha.getFechaHoyTimeStamp());
+        tarea.setEstadoEnum(MantenimientoTareaDetalle.EstadoEnum.FINALIZADO);
+        
+        //Verificar si todas las tareas estan FINALIZADAS entonces cambio tambien el mantenimiento
+        List<MantenimientoTareaDetalle> tareaList=tarea.getMantenimiento().getTareaList();
+        Boolean finalizarMantenimiento=true;
+        for (MantenimientoTareaDetalle mantenimientoTareaDetalle : tareaList) {
+            if(!tarea.equals(mantenimientoTareaDetalle))
+            {
+                if(!MantenimientoTareaDetalle.EstadoEnum.FINALIZADO.getNombre().equals(mantenimientoTareaDetalle.getEstadoNombre()))
+                {
+                    finalizarMantenimiento=false;
+                    break;
+                }
+            }
+        }
+        
+        if(finalizarMantenimiento)
+        {
+            tarea.getMantenimiento().setEstadoEnum(Mantenimiento.MantenimientoEnum.TERMINADO);
+            tarea.getMantenimiento().setFechaSalida(UtilidadesFecha.getFechaHoyTimeStamp());
+        }
+
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.merge(tarea.getMantenimiento());
+                entityManager.merge(tarea);                
+            }
+        });
     }
     
     public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados) throws ServicioCodefacException, RemoteException
@@ -206,10 +309,10 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 List<MantenimientoTareaDetalle> detalleList= tareaService.buscarPorMantenimiento(dato);
                 for (MantenimientoTareaDetalle mantenimientoTareaDetalle : detalleList) 
                 {
-                    MantenimientoResult.DetalleTareaResult detalleResult= new MantenimientoResult.DetalleTareaResult(mantenimientoTareaDetalle.getTarea().getNombre(),mantenimientoTareaDetalle.getObservacion());                    
-                    mantenimientoResult.agregarTarea(detalleResult);
+                    //MantenimientoResult.DetalleTareaResult detalleResult= new MantenimientoResult.DetalleTareaResult(mantenimientoTareaDetalle.getTarea().getNombre(),mantenimientoTareaDetalle.getObservacion());                    
+                    //mantenimientoResult.agregarTarea(detalleResult);
                     
-                    if(mantenimientoTareaDetalle.getTarea().getNombre().equals("ENDEREZADA"))
+                    /*if(mantenimientoTareaDetalle.getTarea().getNombre().equals("ENDEREZADA"))
                     {
                         mantenimientoResult.enderezada="X";
                     }
@@ -232,7 +335,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                     else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("OTROS PROBLEMAS"))
                     {
                          mantenimientoResult.comentario="X";
-                    }
+                    }*/
                 }
                 resultadoList.add(mantenimientoResult);
             } catch (RemoteException ex) {

@@ -8,7 +8,8 @@
 
     <ui:composition  template="/template/codefac_template.xhtml">
         <ui:define name="contenido" >
-            <f:event listener="#{controllerCodefacMb.agregarVista(tareasPendientesMb)}" type="preRenderComponent" /> 
+            <f:event listener="#{controllerCodefacMb.agregarVista(tareasPendientesMb)}" type="preRenderComponent" />             
+            
             <div class="p-grid" style="text-align: left" >
                 <div class="p-col-12 p-md-6 p-lg-6" >
                     <h3>Tareas Pendientes Asignadas al Operario</h3>
@@ -17,13 +18,19 @@
 
             <!-- Cargar una tabla para que pueda visualizar el contenido -->
             <div class="card">
+                <p:remoteCommand name="updateDataTable" update=":formulario:tblMantenimiento"/>
                 <p:dataTable 
                     id="tblMantenimiento" 
                     var="m" 
+                    editable="true"
+                    editMode="cell"
                     reflow="true"
                     widgetVar="tblMantenimientoWidget"
                     value="#{tareasPendientesMb.mantenimientoTareaList}" 
                     rowIndexVar="rowIndex" >
+
+                    <p:ajax event="rowEdit"  />
+                    <p:ajax event="rowEditCancel" />
 
                     <f:facet name="header">
                         <div class="flex align-items-center justify-content-between">
@@ -36,37 +43,76 @@
 
                     </f:facet>
 
-                    <p:column headerText="#">
+                    <p:column headerText="#" width="10">
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
                     
-                    <p:column headerText="Vin" filterBy="#{m.mantenimiento.vehiculo.vin}" filterMatchMode="contains"  >
+                    <p:column headerText="Vin" filterBy="#{m.mantenimiento.vehiculo.vin}" filterMatchMode="contains" width="130"  >
                         <h:outputText value="#{m.mantenimiento.vehiculo.vin}" />
                     </p:column>
 
-                    <p:column headerText="Tarea">
-                        <h:outputText value="#{m.tarea.nombre}" />
+                    <p:column headerText="Tarea" width="100" filterBy="#{m.tallerTarea.tareaMantenimiento.nombre}" filterMatchMode="contains">
+                        <b><h:outputText value="#{m.tallerTarea.tareaMantenimiento.nombre}" /></b>
+                    </p:column>
+                    
+                     <p:column headerText="Estado" width="80" filterBy="#{m.estadoNombre}" filterMatchMode="contains">
+                         <b><h:outputText value="#{m.estadoNombre}" /></b>
+                    </p:column>
+
+                    <p:column headerText="Taller" width="100">
+                        <h:outputText value="#{m.tallerTarea.taller.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Prioridad" width="100">
+                        <p:rating id="txtPrioridadTabla" value="#{m.mantenimiento.prioridad}" cancel="false" />  
                     </p:column>
 
                     <p:column headerText="Modelo">
                         <h:outputText value="#{m.mantenimiento.vehiculo.modelo}" />
                     </p:column>
 
-                    <p:column headerText="Color">
+                    <p:column headerText="Color" width="100">
                         <h:outputText value="#{m.mantenimiento.vehiculo.color}" />
                     </p:column>
 
-                    <p:column headerText="Fecha Ingreso">
-                        <h:outputText value="#{m.mantenimiento.fechaIngreso}" />
+                    <p:column headerText="Fecha Ingreso" width="100">
+                        <h:outputText value="#{m.mantenimiento.fechaIngreso}" >
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Observación">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{m.observacion}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText id="modelInput" value="#{m.observacion}" style="width:100%"/>
+                            </f:facet>
+                        </p:cellEditor>
                     </p:column>
 
-                    <p:column exportable="false">
+                    <p:column exportable="false" width="70">                        
                         <p:commandButton
+                            disabled="#{m.estado eq 'F' or m.estado eq 'I'}"
                             title="Asignar nueva tarea"
-                            action="#{tareasPendientesMb.abrirPantallaModificarTarea(m)}"
-                            icon="pi pi-check"                                         
-                            styleClass="edit-button rounded-button ui-button-success" process="@this">                                                        
-                        </p:commandButton>                    
+                            process="@this"
+                            actionListener ="#{tareasPendientesMb.iniciarTarea(m)}"   
+                            onclick="return confirm('¿Estás seguro que desea INICIAR la tarea?')"
+                            icon="fa fa-play"
+                            oncomplete="updateDataTable()"
+                            styleClass="edit-button rounded-button ui-button-success">                                                        
+                        </p:commandButton>    
+                        <p:commandButton
+                            disabled="#{m.estado eq 'G' or m.estado eq 'F'}"
+                            title="Asignar nueva tarea"
+                            process="@this"
+                            actionListener="#{tareasPendientesMb.finalizarTarea(m)}"         
+                            onclick="return confirm('¿Estás seguro que desea TERMINAR la tarea?')"
+                            icon="fa fa-stop"
+                            oncomplete="updateDataTable()"
+                            styleClass="edit-button rounded-button ui-button-success">                                                        
+                        </p:commandButton> 
                     </p:column>
 
                 </p:dataTable>

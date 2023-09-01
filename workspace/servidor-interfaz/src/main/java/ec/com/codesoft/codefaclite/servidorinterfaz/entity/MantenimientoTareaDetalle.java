@@ -44,8 +44,8 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
     
     //private Tarea
     
-    @JoinColumn(name = "TAREA_MANTENIMIENTO_ID")
-    private TareaMantenimiento tarea;
+    @JoinColumn(name = "TALLER_TAREA_ID")
+    private TallerTarea tallerTarea;
 
     public MantenimientoTareaDetalle() {
     }
@@ -78,13 +78,15 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
         this.mantenimiento = mantenimiento;
     }
 
-    public TareaMantenimiento getTarea() {
-        return tarea;
+    public TallerTarea getTallerTarea() {
+        return tallerTarea;
     }
 
-    public void setTarea(TareaMantenimiento tarea) {
-        this.tarea = tarea;
+    public void setTallerTarea(TallerTarea tallerTarea) {
+        this.tallerTarea = tallerTarea;
     }
+
+
 
     public Mantenimiento getMantenimiento() {
         return mantenimiento;
@@ -102,7 +104,14 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
         this.observacion = observacion;
     }
     
-    
+    public String getEstadoNombre()
+    {
+        if(estado!=null)
+        {
+            return EstadoEnum.getEnum(estado).nombre;
+        }
+        return "";
+    }
     
     
     

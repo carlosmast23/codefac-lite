@@ -489,7 +489,9 @@ public class ControladorReporteFactura {
                 dataFacturaCopia.setIvaDoceFactura(detalle.getIva()+"");
                 //dataFacturaCopia.setTotalFactura(detalle.getPrecioUnitario()+"");
                 dataFacturaCopia.setTotalFactura(detalle.calcularTotalFinal()+"");
-                if(!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR))
+                
+                //if(!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR))
+                if(!Factura.EstadoNotaCreditoEnum.SIN_ANULAR.equals(factura.getEstadoNotaCreditoEnum()))
                 {
                     dataFacturaCopia.setTotalFinal(BigDecimal.ZERO+"");
                 }

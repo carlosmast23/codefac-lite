@@ -27,15 +27,16 @@ public class MantenimientoTareaDetalleFacade extends AbstractFacade<Mantenimient
     
     public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorEmpleadoFacade(Empleado empleado) throws ServicioCodefacException, RemoteException 
     {
-        MantenimientoTareaDetalle mtd;
+        //MantenimientoTareaDetalle mtd;
+        //mtd.getMantenimiento().getFechaIngreso();
         
-        String queryStr=" SELECT mtd FROM MantenimientoTareaDetalle mtd WHERE mtd.operador=?1 AND mtd.estado=?2 AND mtd.mantenimiento.estado<>?3 AND mtd.mantenimiento.estado<>?4 AND mtd.mantenimiento.ubicacion=?5 ";
+        String queryStr=" SELECT mtd FROM MantenimientoTareaDetalle mtd WHERE mtd.mantenimiento.estado<>?3 AND mtd.mantenimiento.estado<>?4 ORDER BY  mtd.mantenimiento.prioridad DESC, mtd.mantenimiento.fechaIngreso";
         Query query = getEntityManager().createQuery(queryStr);
-        query.setParameter(1, empleado);
-        query.setParameter(2, MantenimientoTareaDetalle.EstadoEnum.INICIADO.getLetra());
+        //query.setParameter(1, empleado);
+        //query.setParameter(2, MantenimientoTareaDetalle.EstadoEnum.INICIADO.getLetra());
         query.setParameter(3, Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());
         query.setParameter(4, Mantenimiento.MantenimientoEnum.TERMINADO.getLetra());
-        query.setParameter(5, Mantenimiento.UbicacionEnum.TALLER.getLetra());
+        //query.setParameter(5, Mantenimiento.UbicacionEnum.TALLER.getLetra());
         return query.getResultList();
     }
     
