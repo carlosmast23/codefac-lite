@@ -804,6 +804,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 getTxtPrecioCompra().setText(kardex.getCostoPromedio()+"");
             }
             
+            cargarVistaEmpleado(empleado);
             cargarDatosDetallePantalla(producto);
             //kardexSeleccionado = kardex;
             //productoSeleccionado = kardexSeleccionado.getProducto();
