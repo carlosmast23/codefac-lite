@@ -331,14 +331,19 @@ public class CompraModel extends CompraPanel{
             }
             setearValores();
             
-            //Verificar que el producto aun no este ingresado en el inventario o si no le debe pedir clave de autorizacion
-            if(EnumSiNo.SI.equals(compra.getInventarioIngresoEnum()))
+            //Hacer una verificacion basica con los totales solo para verificar que no fueron modificados los totales significa en teria que los detalles son iguales
+            Compra compraOriginal=ServiceFactory.getFactory().getCompraServiceIf().buscarPorId(compra.getId());
+            if(!compraOriginal.getTotal().equals(compra.getTotal()))
             {
-                String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
-                if(!UtilidadesSistema.verificarClaveSoporte(claveIngresada))
-                {                    
-                    DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);
-                    throw new ExcepcionCodefacLite(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA.mensaje);
+                //Verificar que el producto aun no este ingresado en el inventario o si no le debe pedir clave de autorizacion
+                if(EnumSiNo.SI.equals(compra.getInventarioIngresoEnum()))
+                {
+                    String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+                    if(!UtilidadesSistema.verificarClaveSoporte(claveIngresada))
+                    {                    
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA);
+                        throw new ExcepcionCodefacLite(MensajeCodefacSistema.IngresoInformacion.MENSAJE_CLAVE_INCORRECTA.mensaje);
+                    }
                 }
             }
             
