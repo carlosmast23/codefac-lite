@@ -789,7 +789,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 }*/
                 BigDecimal precio=producto.obtenerPrecioPresupuesto(session.getEmpresa());
                 //getTxtPrecioCompra().setText(producto.getValorUnitario()+"");
-                getTxtPrecioCompra().setText(precio+"");
+                getTxtPrecioCompra().setText(precio+""); 
             }
             else
             {
