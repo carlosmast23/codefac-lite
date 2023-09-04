@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +36,7 @@ import java.util.logging.Logger;
  * TODO: Ver como unificar el dialogo con la factura y otras que usan similares
  * @author PC
  */
-public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind<PersonaEstablecimiento> ,InterfacesPropertisFindWeb
+public class ClienteEstablecimientoBusquedaDialogo implements InterfaceModelFind<PersonaEstablecimiento> ,InterfacesPropertisFindWeb,Serializable
 {
     private Empresa empresa;
     private Boolean moduloAcademicoActivo;

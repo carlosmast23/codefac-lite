@@ -15,13 +15,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  *
  * @author DellWin10
  */
-public class ObjetoMantenimientoBusqueda implements InterfaceModelFind<ObjetoMantenimiento>,InterfacesPropertisFindWeb{
+public class ObjetoMantenimientoBusqueda implements InterfaceModelFind<ObjetoMantenimiento>,InterfacesPropertisFindWeb,Serializable{
     
     private Empresa empresa;
     
@@ -44,14 +45,15 @@ public class ObjetoMantenimientoBusqueda implements InterfaceModelFind<ObjetoMan
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //ObjetoMantenimiento objeto;
+        //objeto.getEstado()
         //objeto.getVin()
         //String queryString=" SELECT u FROM ObjetoMantenimiento u where u.estado=?1 AND u.empresa=?2 AND ( LOWER(u.nombre) like ?3 OR LOWER(u.codigo) like ?3 OR LOWER(u.vin) like ?3 ) ";
-        String queryString=" SELECT u FROM ObjetoMantenimiento u WHERE 1=1 AND ( LOWER(u.nombre) like ?3 OR LOWER(u.codigo) like ?3 OR LOWER(u.vin) like ?3 ) ";
+        String queryString=" SELECT u FROM ObjetoMantenimiento u WHERE 1=1 AND u.estado=?1 AND ( LOWER(u.nombre) like ?3 OR LOWER(u.codigo) like ?3 OR LOWER(u.vin) like ?3 ) ";
         
 
         
         QueryDialog queryDialog = new QueryDialog(queryString);
-        //queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         //queryDialog.agregarParametro(2, empresa);
         queryDialog.agregarParametro(3, filter);
         

@@ -762,7 +762,17 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);
             buscarDialogoModel.setVisible(true);
-            kardex = (Kardex) buscarDialogoModel.getResultado();
+            Object resultadoTemporal=buscarDialogoModel.getResultado();
+            if(resultadoTemporal instanceof Object[])
+            {
+                Object resultado[]=(Object[]) resultadoTemporal;
+                kardex=(Kardex) resultado[0];
+            }
+            else
+            {
+                kardex = (Kardex) resultadoTemporal;
+            }
+            
             producto=kardex.getProducto();
             bodega=kardex.getBodega();
             if(getChkInventarioProveedor().isSelected())
