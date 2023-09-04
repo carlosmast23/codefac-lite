@@ -1253,29 +1253,36 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void updateInterface(Producto entity) {
                 if (entity != null) {
                     
-                    productoSeleccionado = entity;                    
-                    
-                    FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
-                            BigDecimal.ONE,
-                            productoSeleccionado.getValorUnitario(),
-                            productoSeleccionado.getPrecioSinSubsidio(),
-                            productoSeleccionado.getNombre(),
-                            productoSeleccionado.getCodigoPersonalizado(),
-                            productoSeleccionado.getCatalogoProducto(),
-                            entity.getIdProducto(),
-                            null,
-                            null,
-                            EnumSiNo.NO,
-                            TipoDocumentoEnum.LIBRE,
-                            BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
-                    
-                    controlador.verificarProductoConNotaVentaInterna(facturaDetalle);
-                    
-                    controlador.setearValoresProducto(facturaDetalle);
-                    setFacturaDetalleSeleccionado(facturaDetalle);
-                    //Establecer puntero en la cantidad para agregar
-                    getTxtCantidad().requestFocus();
-                    getTxtCantidad().selectAll();
+                    try {
+                        productoSeleccionado = entity;                        
+                        //Seleccionar el kardex en el caso que exista uno despues de crear
+                        Kardex kardexTmp=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(entity);
+                        kardexSeleccionado=kardexTmp;
+                        
+                        FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
+                                BigDecimal.ONE,
+                                productoSeleccionado.getValorUnitario(),
+                                productoSeleccionado.getPrecioSinSubsidio(),
+                                productoSeleccionado.getNombre(),
+                                productoSeleccionado.getCodigoPersonalizado(),
+                                productoSeleccionado.getCatalogoProducto(),
+                                entity.getIdProducto(),
+                                null,
+                                null,
+                                EnumSiNo.NO,
+                                TipoDocumentoEnum.LIBRE,
+                                BigDecimal.ZERO); //TODO: El metodo libre esta de revisar porque no se desde que pantalla estan usando si es con inventario o con no
+                        
+                        controlador.verificarProductoConNotaVentaInterna(facturaDetalle);
+                        
+                        controlador.setearValoresProducto(facturaDetalle);
+                        setFacturaDetalleSeleccionado(facturaDetalle);
+                        //Establecer puntero en la cantidad para agregar
+                        getTxtCantidad().requestFocus();
+                        getTxtCantidad().selectAll();
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         };
