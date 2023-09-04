@@ -470,6 +470,14 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.getLblTotalServicios().setText("0.00");
         this.getTxtVentaRelacionada().setText("");
         this.getChkEnviarCorreo().setSelected(false);
+        
+        //Hacer invible los campos de la venta que por el momento no estoy usando
+        getLblDescuentoVenta().setVisible(false);
+        getLblPrecioVenta().setVisible(false);
+        getTxtPrecioVenta().setVisible(false);
+        getTxtDescuentoPrecioVenta().setVisible(false);
+        
+        
         getCmbEstadoPresupuesto().setSelectedItem(Presupuesto.EstadoEnum.PRESUPUESTANDO);
         getBtnAgregarDetalle().setEnabled(true);
         initDatosTabla();

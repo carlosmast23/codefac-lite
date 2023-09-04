@@ -97,10 +97,10 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        lblPrecioVenta = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblDescuentoVenta = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         btnAgregarDetalle = new javax.swing.JButton();
         btnEditarDetalle = new javax.swing.JButton();
@@ -547,14 +547,14 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel9, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText("Precio Venta:");
+        lblPrecioVenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblPrecioVenta.setText("Precio Venta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel10, gridBagConstraints);
+        jPanel1.add(lblPrecioVenta, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Cantidad:");
@@ -574,14 +574,14 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel13, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText("Desc. Venta:");
+        lblDescuentoVenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblDescuentoVenta.setText("Desc. Venta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel8, gridBagConstraints);
+        jPanel1.add(lblDescuentoVenta, gridBagConstraints);
 
         jToolBar1.setRollover(true);
 
@@ -983,7 +983,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoPresupuesto;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -1011,7 +1010,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1026,6 +1024,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JLabel lblDescuentoCompra;
+    private javax.swing.JLabel lblDescuentoVenta;
     private javax.swing.JLabel lblEspacio1234;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio34;
@@ -1034,6 +1033,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel lblIndicarFechaValidez;
     private javax.swing.JLabel lblIva;
     private javax.swing.JLabel lblObjetoMantenimiento;
+    private javax.swing.JLabel lblPrecioVenta;
     private javax.swing.JLabel lblSubtotalCompra;
     private javax.swing.JLabel lblTotalCompra;
     private javax.swing.JLabel lblTotalProductos;
@@ -1471,6 +1471,24 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setChkEnviarCorreo(JCheckBox chkEnviarCorreo) {
         this.chkEnviarCorreo = chkEnviarCorreo;
     }
+
+    public JLabel getLblDescuentoVenta() {
+        return lblDescuentoVenta;
+    }
+
+    public void setLblDescuentoVenta(JLabel lblDescuentoVenta) {
+        this.lblDescuentoVenta = lblDescuentoVenta;
+    }
+
+    public JLabel getLblPrecioVenta() {
+        return lblPrecioVenta;
+    }
+
+    public void setLblPrecioVenta(JLabel lblPrecioVenta) {
+        this.lblPrecioVenta = lblPrecioVenta;
+    }
+    
+    
 
     
 }
