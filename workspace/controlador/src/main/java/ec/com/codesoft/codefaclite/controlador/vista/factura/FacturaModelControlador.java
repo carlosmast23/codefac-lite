@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -407,7 +408,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
             factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.VEHICULO.getNombre(), objetoVehiculoTxt, ComprobanteAdicional.Tipo.TIPO_OTRO));
             factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.KILOMETRAJE.getNombre(), kilometrajeTxt, ComprobanteAdicional.Tipo.TIPO_OTRO));
-            factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.ORDEN_TRABAJO.getNombre(), presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo().getId() + "", ComprobanteAdicional.Tipo.TIPO_OTRO));
+            
+            OrdenTrabajo ordenTrabajo=presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo();
+            String fechaSrt=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(ordenTrabajo.getFechaIngreso());
+            String ordenTrabajoTxt=ordenTrabajo.getId() + " ["+fechaSrt+"]";
+            factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.ORDEN_TRABAJO.getNombre(),ordenTrabajoTxt + "", ComprobanteAdicional.Tipo.TIPO_OTRO));
 
             //Factura facturaTmp= interfaz.obtenerFactura();
             //System.out.println(facturaTmp.getDatosAdicionales().size());

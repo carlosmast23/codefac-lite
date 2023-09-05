@@ -4214,6 +4214,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 case ORDEN_TRABAJO:
                     activarTabDatos(3);
                     break;
+                    
                 case INVENTARIO: case LIBRE:
                     activarTabDatos(0);
                     
