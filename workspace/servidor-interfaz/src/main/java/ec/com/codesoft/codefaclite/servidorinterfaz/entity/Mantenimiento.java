@@ -12,6 +12,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -168,7 +170,17 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
            return  UtilidadesLista.castListToString(tareaList,",",new UtilidadesLista.CastListInterface<MantenimientoTareaDetalle>() {
                 @Override
                 public String getString(MantenimientoTareaDetalle dato) {
-                    return dato.getTallerTarea().getTareaMantenimiento().getNombre();
+                    TallerTarea tallerTarea=dato.getTallerTarea();
+                    if(tallerTarea!=null)
+                    {
+                        TareaMantenimiento tareaMantenimiento=tallerTarea.getTareaMantenimiento();                    
+                        return tareaMantenimiento.getNombre();
+                    }
+                    else
+                    {
+                        Logger.getLogger(Mantenimiento.class.getName()).log(Level.SEVERE,"Revisar MantenimientoTareaDetalle id= "+dato.getId()+", Taller"+dato.getMantenimiento().getTallerNombre());
+                    }
+                    return "";
                 }
             });
         }

@@ -1166,11 +1166,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 case LIBRE:
                     //NO DEBE AFECTAR A NADA;
                     break;
-                case PRESUPUESTOS:
-                    afectarPresupuesto(detalle);
-                    break;
+                //case PRESUPUESTOS:
+                //    afectarPresupuesto(detalle);
+                //    break;
 
             }
+            
+            //Verifica si la factura esta relacionada con el presupuesto
+            afectarPresupuesto(factura);
             
             //Hacer persistir los detalles porque sucedio un caso que por algun motivo no se grabaron
             entityManager.flush();
@@ -1233,13 +1236,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
     }
     
-    private void afectarPresupuesto(FacturaDetalle detalle) throws RemoteException
+    private void afectarPresupuesto(Factura factura) throws RemoteException
     {
+            //Si no tengo referencia del presupuesto no se hace ninguna accion
+            if(factura.getPresupuestoId()==null)
+            {
+                return;
+            }
         
             PresupuestoService servicio = new PresupuestoService();
-            Presupuesto presupuesto = servicio.buscarPorId(detalle.getReferenciaId());
+            Presupuesto presupuesto = servicio.buscarPorId(factura.getPresupuestoId());
             
-            presupuesto.setPersona(detalle.getFactura().getCliente());
+            presupuesto.setPersona(factura.getCliente());
             
             //Cambiar el estado al presupuesto para saber que ya fue facturadp
             presupuesto.setEstadoEnum(Presupuesto.EstadoEnum.FACTURADO); 
@@ -1249,7 +1257,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
             //Cambiar el estado a la orden de trabajo del detalle para saber que ya no puede usar
             ordenTrabajoDetalle.setEstado(OrdenTrabajoDetalle.EstadoEnum.TERMINADO.getLetra());//Cambio el estado a terminado
-            ordenTrabajo.setCliente(detalle.getFactura().getCliente());
+            ordenTrabajo.setCliente(factura.getCliente());
             //ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FACTURADO);
             
             //Actualiza el estado de la orde de trabajo principal
@@ -1257,7 +1265,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             ordenTrabajoService.actualizarEstadoSinTransaccion(ordenTrabajo);
             
             //Agregado una referencia de la venta al presupuesto para luego consultar de una manera más rapida
-            presupuesto.setFactura(detalle.getFactura());
+            presupuesto.setFactura(factura);
             
             //Actualizar los datos de la OT y PRESUPUESTOS
             entityManager.merge(presupuesto);

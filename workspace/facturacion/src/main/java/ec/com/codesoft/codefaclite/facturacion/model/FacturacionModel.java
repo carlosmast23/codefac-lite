@@ -1896,6 +1896,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void grabar() throws ExcepcionCodefacLite {
 
+        //Factura f;
+        //f.get
         try {
             validacionesGrabar();
             

@@ -128,6 +128,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     @Column(name = "NOMBRE_TIPO_DOCUMENTO")
     private String nombreTipoDocumento;
+    
+    @Column(name = "PRESUPUESTO_ID")
+    private Long presupuestoId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -140,6 +143,8 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     @OneToMany(mappedBy = "factura", fetch = FetchType.EAGER)
     private List<ReembolsoDetalle> reembolsoList;
+    
+    
 
     //@OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     //private List<NotaCredito> notasCredito;
@@ -568,6 +573,16 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setDiasCredito(Integer diasCredito) {
         this.diasCredito = diasCredito;
     }
+
+    public Long getPresupuestoId() {
+        return presupuestoId;
+    }
+
+    public void setPresupuestoId(Long presupuestoId) {
+        this.presupuestoId = presupuestoId;
+    }
+    
+    
 
     /**
      * Metodo que devuelve los datos adicionales de la factura en tipo de dato

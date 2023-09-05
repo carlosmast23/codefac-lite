@@ -468,7 +468,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             case TIQUETES_MAQUINAS_REGISTRADORAS:            
             case PASAJES_EMPRESA_AVIACION:    
             case DOCUMENTOS_INSTITUCIONES_FINANCIERAS:
-            case COMPROBANTE_CUOTAS_APORTES:            
+            case COMPROBANTE_CUOTAS_APORTES:       
+            case LIQUIDACION_COMPRA:
             
                 //if(crudEnum.equals(CrudEnum.CREAR))
                 //{

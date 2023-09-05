@@ -377,6 +377,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Despues de terminar de agregar todo dejo seleccionado el documento de presupuesto
             this.setTipoDocumentoEnumSeleccionado(TipoDocumentoEnum.PRESUPUESTOS);
             
+            //Agrego la referencia del presupuesto a la factura para que luego no dependa del detalle
+            factura.setPresupuestoId(presupuestoTmp.getId());
+            
             
             return facturaDetalle;            
         }
