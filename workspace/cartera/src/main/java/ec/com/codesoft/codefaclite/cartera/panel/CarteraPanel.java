@@ -62,6 +62,8 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         cmbDocumentoCategoriaCartera = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         cmbDocumentoCartera = new javax.swing.JComboBox<>();
+        jLabel20 = new javax.swing.JLabel();
+        txtDiasCredito = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtAutorizacion = new javax.swing.JTextField();
@@ -157,9 +159,9 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Fecha Emisión:");
+        jLabel2.setText("Días Crédito");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
+        gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel2, gridBagConstraints);
@@ -222,6 +224,20 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(cmbDocumentoCartera, gridBagConstraints);
+
+        jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel20.setText("Fecha Emisión:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 13;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel20, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtDiasCredito, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -718,6 +734,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -755,6 +772,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtAutorizacion;
     private javax.swing.JTextField txtCodigoAuxiliar;
     private javax.swing.JTextField txtDescripcionDetalle;
+    private javax.swing.JTextField txtDiasCredito;
     private javax.swing.JTextField txtIdentificacion;
     private javax.swing.JTextField txtPreimpreso;
     private javax.swing.JTextField txtReferenciaDetalle;
@@ -1016,5 +1034,15 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     public void setCmbBanco(JComboBox<Banco> cmbBanco) {
         this.cmbBanco = cmbBanco;
     }
+
+    public JTextField getTxtDiasCredito() {
+        return txtDiasCredito;
+    }
+
+    public void setTxtDiasCredito(JTextField txtDiasCredito) {
+        this.txtDiasCredito = txtDiasCredito;
+    }
+    
+    
     
 }

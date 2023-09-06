@@ -47,6 +47,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -287,6 +288,7 @@ public class CarteraModel extends CarteraPanel{
         getTxtPreimpreso().setText("");
         getTxtAutorizacion().setText("");
         getTxtReferenciaDetalle().setText("");
+        getTxtDiasCredito().setText("0");
     }
 
     //@Override
@@ -342,6 +344,7 @@ public class CarteraModel extends CarteraPanel{
         getTxtCodigoAuxiliar().setText(cartera.getCodigoAuxiliar());
         getTxtReferenciaManual().setText(cartera.getReferenciaManual());
         getTxtPreimpreso().setText(cartera.getPreimpreso());
+        getTxtDiasCredito().setText(cartera.getDíasCredito()+"");
         
         cargarDatosReferencia(cartera);
         
@@ -1225,6 +1228,9 @@ public class CarteraModel extends CarteraPanel{
             }
         }
         
+        
+        Integer diasCredito= UtilidadesNumeros.castStringToInteger(getTxtDiasCredito().getText());
+        cartera.setDíasCredito(diasCredito);
     }
 
     private void validar() throws ExcepcionCodefacLite {
@@ -1236,7 +1242,7 @@ public class CarteraModel extends CarteraPanel{
         
         if(!cartera.getCarteraDocumentoEnum().getCategoria().getGenerarManualmente())
         {
-            if(!DialogoCodefac.dialogoPregunta("Advertencia","Este tipo de documento no es recomedable crear por el usuario , desea continuar de todos modos? ",DialogoCodefac.MENSAJE_INCORRECTO))
+            if(!DialogoCodefac.dialogoPregunta("Advertencia","Este tipo de documento no es recomedable crear o editar por el usuario , desea continuar de todos modos? ",DialogoCodefac.MENSAJE_INCORRECTO))
             {
                 throw new ExcepcionCodefacLite("Advertencia tipo de documento no es permitido");
             }

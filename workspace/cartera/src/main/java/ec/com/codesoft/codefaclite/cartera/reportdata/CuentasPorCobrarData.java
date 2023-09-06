@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
 import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,9 +191,9 @@ public class CuentasPorCobrarData implements ExcelDatosInterface,AgrupadoReporte
             data.setNombreComercial((nombreComercial!=null)?nombreComercial:"");
             data.setPreimpreso(cartera.getPreimpreso());
             data.setRazonSocial(cartera.getPersona().getRazonSocial());
-            data.setSaldo(cartera.getSaldo().toString());
-            data.setCobrado(cartera.calcularValorCobrado().toString());
-            data.setTotal(cartera.getTotal().toString());
+            data.setSaldo(cartera.getSaldo().setScale(2, RoundingMode.HALF_UP).toString());
+            data.setCobrado(cartera.calcularValorCobrado().setScale(2, RoundingMode.HALF_UP).toString());
+            data.setTotal(cartera.getTotal().setScale(2, RoundingMode.HALF_UP).toString());
             data.setDiasCredito((cartera.getDíasCredito()!=null)?cartera.getDíasCredito().toString():"");
             Integer diasFaltaPorVenderCredito=cartera.calcularDiasFaltaPorVenderCredito();
             data.setDiasFaltantesVencerCartera((diasFaltaPorVenderCredito!=null)?diasFaltaPorVenderCredito.toString():"");

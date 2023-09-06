@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="4.169937985119266"/>
 	<property name="ireport.x" value="1770"/>
-	<property name="ireport.y" value="837"/>
+	<property name="ireport.y" value="453"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -309,7 +309,7 @@
 						<font size="7"/>
 						<paragraph leftIndent="2" rightIndent="2"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{totalGrupo}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{totalGrupo}.setScale(2, RoundingMode.HALF_UP);]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="752" y="37" width="50" height="12" uuid="a6944328-99e5-41fc-9989-c7d314113f68"/>
@@ -323,7 +323,7 @@
 						<font size="7"/>
 						<paragraph leftIndent="2" rightIndent="2"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{saldoGrupo}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{saldoGrupo}.setScale(2, RoundingMode.HALF_UP);]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="752" y="25" width="50" height="12" uuid="edb15b4b-ba72-4afd-a0a8-458fd55e32e0"/>
@@ -337,7 +337,7 @@
 						<font size="7"/>
 						<paragraph leftIndent="2" rightIndent="2"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{cobradoGrupo}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{cobradoGrupo}.setScale(2, RoundingMode.HALF_UP);]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
