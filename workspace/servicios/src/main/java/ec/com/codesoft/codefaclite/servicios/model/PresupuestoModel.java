@@ -447,7 +447,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             getLblIndicarFechaValidez().setText(""+this.presupuesto.getFechaValidez());
             //ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
-            calcularTotales();
+            calcularTotales(false);
         }
         else{
              throw new ExcepcionCodefacLite("Cancelando Busqueda");
@@ -721,7 +721,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             @Override
             public void actionPerformed(ActionEvent e) {
                 agregarDetallesPresupuesto(null,false);
-                calcularTotales();
+                calcularTotales(true);
             }
         });
         
@@ -1300,7 +1300,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         
     }
     
-    public void calcularTotales()
+    public void calcularTotales(Boolean recalcularVenta)
     {
         List<PresupuestoDetalle> detalles = this.presupuesto.getPresupuestoDetalles();
         BigDecimal subtotalCompra = new BigDecimal(BigInteger.ZERO);
@@ -1316,9 +1316,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             Producto producto=detalle.getProducto();
             TipoProductoEnum tipoProducto=producto.getTipoProductoEnum();
             
-            subtotalVenta = subtotalVenta.add(detalle.getPrecioCompra().multiply(detalle.getCantidad()));
-            //subtotalVenta = subtotalVenta.add(detalle.getPrecioCompra());
-            descuentoVenta = descuentoVenta.add(detalle.getDescuentoCompra());
+            if(recalcularVenta)
+            {
+                subtotalVenta = subtotalVenta.add(detalle.getPrecioCompra().multiply(detalle.getCantidad()));
+                //subtotalVenta = subtotalVenta.add(detalle.getPrecioCompra());
+                descuentoVenta = descuentoVenta.add(detalle.getDescuentoCompra());
+            }
             
             if(tipoProducto.equals(TipoProductoEnum.PRODUCTO))
             {
@@ -1328,6 +1331,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
             
             //totalVenta = subtotalVenta.subtract(descuentoVenta);
+        }
+        
+        if(!recalcularVenta)
+        {
+            subtotalVenta=this.presupuesto.getTotalVenta();
+            descuentoVenta=this.presupuesto.getDescuentoVenta();
         }
         
         totalVenta=subtotalVenta.subtract(descuentoVenta);
@@ -1720,7 +1729,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     agregarDetallesPresupuesto(detalleSeleccionado, false);
                     limpiarDetalles();
                     mostrarDatosTabla();
-                    calcularTotales();
+                    calcularTotales(true);
                     getBtnAgregarDetalle().setEnabled(true);
                     detalleSeleccionado=null;
                 } else {
@@ -1763,7 +1772,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     limpiarDetalles();
                     //ordenarDetallesEnFuncionDeOrdenCompra();
                     mostrarDatosTabla();
-                    calcularTotales();
+                    calcularTotales(true);
             }
             else{
                 getBtnAgregarDetalle().setEnabled(true);

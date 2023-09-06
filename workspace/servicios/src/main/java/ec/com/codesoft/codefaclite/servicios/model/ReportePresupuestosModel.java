@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,6 +122,8 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
     {
         List<PresupuestoReporteDetalleData> detalleReporteData=new  ArrayList<PresupuestoReporteDetalleData>();
         for (PresupuestoReporteData data : presupuestosData) {
+            
+            Boolean primerRegistro=true;
             for (PresupuestoDetalle presupuestoDetalle : data.getPresupuesto().getPresupuestoDetalles()) {
                 
                 //ObjetoMantenimiento objetoMantenimiento=presupuestoDetalle.getPresupuesto().getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento();
@@ -135,6 +138,18 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 dataDetalle.setTipo(presupuestoDetalle.getProducto().getTipoProductoEnum().getNombre());                
                 //dataDetalle.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre():"");
                 dataDetalle.setCodigoProducto(presupuestoDetalle.getProducto().getCodigoPersonalizado());
+                
+                //Dejo en cero el total de la venta para luego no generar inconsistencias con la sumatoria total
+                if(primerRegistro)
+                {
+                    primerRegistro=false;
+                }
+                else
+                {
+                    dataDetalle.setTotal(BigDecimal.ZERO);
+                    dataDetalle.setCompras(BigDecimal.ZERO);
+                    dataDetalle.setProduccionInterna(BigDecimal.ZERO);
+                }
                 
                 detalleReporteData.add(dataDetalle);
             }

@@ -796,7 +796,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{compra_acum}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{compra_acum}.setScale(2, RoundingMode.HALF_UP);]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="707" y="46" width="88" height="20" uuid="39853039-bec4-4ee4-a540-f9ad7f0138ad"/>
@@ -810,7 +810,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{interno_acum}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{interno_acum}.setScale(2, RoundingMode.HALF_UP);]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="707" y="66" width="88" height="20" uuid="99c73cf4-ee67-4605-a792-0722d3bcdfcb"/>
@@ -824,7 +824,7 @@
 					<font isBold="true"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{utilidad_acum}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{utilidad_acum}.setScale(2, RoundingMode.HALF_UP);]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
