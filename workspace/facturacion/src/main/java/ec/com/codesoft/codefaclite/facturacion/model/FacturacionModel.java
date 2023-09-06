@@ -4027,7 +4027,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 cargarSecuencial();
                 
                 //Este codigo es para evitar que se cargue un producto previamente mal por ejemplo las NVI que tiene iva
-                controlador.limpiarDetalleFactura();
+                controlador.limpiarDetalleFactura();//cambiar las opciones de desceunto automaticamente en el caso que seleccione nota de venta interna o factura
+                
+                if(getCmbDocumento().getSelectedItem().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+                {
+                    getCmbIvaDescuento().setSelectedItem(EnumSiNo.NO);
+                    getCmbIvaDescuento().setEnabled(false);
+                }
+                else
+                {
+                    getCmbIvaDescuento().setSelectedItem(EnumSiNo.SI);
+                    getCmbIvaDescuento().setEnabled(true);
+                }
                 
                 //Si no tiene detalles no hago ninguna validacion
                 if(factura==null || factura.getDetalles()==null || factura.getDetalles().size()==0)
@@ -4093,7 +4104,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             })).start();
                         }
                     }
-                }
+                }                
+                
             }                
             
         });
