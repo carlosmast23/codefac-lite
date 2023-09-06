@@ -327,7 +327,8 @@ public class ControladorReporteFactura {
                                 valorComision.toString(),
                                 factura.getClaveAcceso(),
                                 factura.getPuntoEmision().toString(),
-                                factura.getUsuario().getNick()
+                                factura.getUsuario().getNick(),
+                                factura.getVentaCreditoBool()
                         );
                         
                         reporteData.setCampoAdicional((factura.getCliente().getCampoAdicional()!=null)?factura.getCliente().getCampoAdicional():"");
@@ -396,7 +397,8 @@ public class ControladorReporteFactura {
                                 "0",//TODO: Revisar porque en esta parte me late que no necesito calcular el iva
                                 nota.getClaveAcceso(),
                                 nota.getPuntoEmision().toString(),
-                                nota.getUsuario().getNick()
+                                nota.getUsuario().getNick(),
+                                null
                         );
                         
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren

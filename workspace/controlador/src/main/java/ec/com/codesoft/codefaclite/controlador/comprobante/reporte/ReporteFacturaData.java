@@ -92,12 +92,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     
     protected String tipoDocumento;
     
+    protected String credito;
+    
     public ReporteFacturaData() {
     }
     
     
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura,String fechaAutorizacion, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso,String puntoEmision,String usuario) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura,String fechaAutorizacion, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura,String tipoDocumento,String documento, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura,String valorAfecta,String referencia,String totalFinal,String referido,String referidoIdentificacion,String referidoPorcentaje,String valorComision,String claveAcceso,String puntoEmision,String usuario,Boolean credito) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
         this.fechaAutorizacion=fechaAutorizacion;
@@ -122,6 +124,11 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         this.claveAcceso=claveAcceso;
         this.puntoEmision=puntoEmision;
         this.usuario=usuario;
+        this.credito="";
+        if(Boolean.TRUE.equals(credito))
+        {
+            this.credito="X";
+        }
     }
 
         
@@ -445,6 +452,15 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         this.tipoDocumento = tipoDocumento;
     }
 
+    public String getCredito() {
+        return credito;
+    }
+
+    public void setCredito(String credito) {
+        this.credito = credito;
+    }
+
+    
     
     
     
