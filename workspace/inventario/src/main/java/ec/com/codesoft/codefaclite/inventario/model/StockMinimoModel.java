@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -234,8 +235,17 @@ public class StockMinimoModel extends StockMinimoPanel{
                 if(productoProveedorList.size()>0)
                 {
                     ProductoProveedor productoProveedor=productoProveedorList.get(0);
-                    data.setRucProveedor(productoProveedor.getProveedor().getIdentificacion());
-                    data.setNombreProveedor(productoProveedor.getProveedor().getRazonSocial());
+                    Persona proveedor= productoProveedor.getProveedor();
+                    
+                    if(proveedor!=null)
+                    {
+                        data.setRucProveedor(productoProveedor.getProveedor().getIdentificacion());
+                        data.setNombreProveedor(productoProveedor.getProveedor().getRazonSocial());
+                    }
+                    else
+                    {
+                        Logger.getLogger(StockMinimoModel.class.getName()).log(Level.WARNING,"Producto Proveedor con id: "+productoProveedor.getId()+" no tiene configurado un proveedor");
+                    }
                 }else
                 {
                     data.setRucProveedor("");

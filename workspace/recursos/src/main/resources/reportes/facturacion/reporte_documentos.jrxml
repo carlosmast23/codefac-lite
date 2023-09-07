@@ -561,7 +561,7 @@
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
+					<font size="7" isBold="false"/>
 					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{credito}]]></textFieldExpression>
