@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.main.other;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.GestorTareasProgramadas;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.RespaldoProgramadoTarea;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -53,6 +55,7 @@ public class TareasProgramadasCodefac {
                     //Iniciar el respaldo programado de aplicaciones a la hora exacta con 0 minutos
                     gestorTareas.agregarTareaProgramadaPorDia(new RespaldoProgramadoTarea(),horaInicio,0);
                     Logger.getLogger(TareasProgramadasCodefac.class.getName()).log(Level.INFO,"Agregada RESPALDOS PROGRAMADOS DIARIOS al gestor de TAREAS PROGRAMADAS a las "+horaInicio);
+                    DialogoCodefac.mensaje(new CodefacMsj("Sistema Configurado con respaldos automaticos a las : "+horaInicio, CodefacMsj.TipoMensajeEnum.CORRECTO));
                 }
             }
             

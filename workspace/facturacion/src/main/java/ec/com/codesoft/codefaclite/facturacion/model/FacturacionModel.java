@@ -386,6 +386,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             factura.setProforma(proforma);
         }
+        factura.setPuntoEmision(null);
         factura.setSecuencial(null);
         factura.setClaveAcceso(null);
         
@@ -556,6 +557,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     Factura proforma = (Factura) buscarDialogoModel.getResultado();
                     cargarFacturaDesdeProforma(proforma,null,true);
+                    getCmbPuntoEmision().setSelectedIndex(0);
                 }
             }
         });

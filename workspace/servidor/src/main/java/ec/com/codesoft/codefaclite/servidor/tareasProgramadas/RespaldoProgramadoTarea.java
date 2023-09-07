@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.servidor.tareasProgramadas;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.RespaldosModelUtilidades;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -52,8 +54,10 @@ public class RespaldoProgramadoTarea implements Runnable
             {
                 try {
                     RespaldosModelUtilidades.generarRespaldoUbicacion(true,empresaSeleccionada,null,false);
+                    DialogoCodefac.mensaje(new CodefacMsj("Respaldo Automatico generado CORRECTAMENTE",CodefacMsj.TipoMensajeEnum.CORRECTO));
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(RespaldoProgramadoTarea.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
                 }
             }
         } catch (RemoteException ex) {
