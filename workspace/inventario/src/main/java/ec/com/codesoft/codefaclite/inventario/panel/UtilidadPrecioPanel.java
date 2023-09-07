@@ -315,11 +315,12 @@ public abstract class UtilidadPrecioPanel extends ControladorCodefacInterface  {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbIncluidoIva, gridBagConstraints);
 
-        chkEditarValoresDirectos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkEditarValoresDirectos.setFont(new java.awt.Font("Arial", 3, 12)); // NOI18N
+        chkEditarValoresDirectos.setSelected(true);
         chkEditarValoresDirectos.setText("Editar Valores Directos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(chkEditarValoresDirectos, gridBagConstraints);

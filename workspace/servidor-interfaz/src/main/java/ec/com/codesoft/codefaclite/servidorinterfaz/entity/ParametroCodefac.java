@@ -341,6 +341,8 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String MOSTRAR_PRECIO_CON_IVA="mostrar_precio_con_iva";
     
+    public static final String RECALCULA_PRECIO_PORCENTAJE="recalcular_precio_porcentaje";
+    
     public static final String PVP1_MARGEN_UTILIDAD = "pvp1_margen_utilidad";
     public static final String PVP2_MARGEN_UTILIDAD = "pvp2_margen_utilidad";
     public static final String PVP3_MARGEN_UTILIDAD = "pvp3_margen_utilidad";

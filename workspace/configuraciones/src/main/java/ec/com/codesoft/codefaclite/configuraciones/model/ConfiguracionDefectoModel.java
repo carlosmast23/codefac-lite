@@ -235,6 +235,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbCalculaDescuentoCostos(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbCalcularUtilidadUltimoCosto(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbMostrarPreciosConIva(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbRecalcularPrecioPorcentaje(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbVentanasMultiples(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbPermitirEditarCodigo(),EnumSiNo.values());
@@ -720,6 +721,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarPreciosConIva != null) ? parametroMostrarPreciosConIva.getValor() : null);
             getCmbMostrarPreciosConIva().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
             
+            ParametroCodefac recalcularPrecioPorcentaje = parametrosTodos.get(ParametroCodefac.RECALCULA_PRECIO_PORCENTAJE);
+            enumSiNo = EnumSiNo.getEnumByLetra((recalcularPrecioPorcentaje != null) ? recalcularPrecioPorcentaje.getValor() : null);
+            getCmbRecalcularPrecioPorcentaje().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
+            
             ParametroCodefac parametroVentasMultiples = parametrosTodos.get(ParametroCodefac.VENTANAS_MULTIPLES);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroVentasMultiples != null) ? parametroVentasMultiples.getValor() : null);
             getCmbVentanasMultiples().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -993,6 +998,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbMostrarPreciosConIva() .getSelectedItem();
         agregarParametro(ParametroCodefac.MOSTRAR_PRECIO_CON_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.MOSTRAR_PRECIO_CON_IVA);
+
+        enumSiNo = (EnumSiNo) getCmbRecalcularPrecioPorcentaje().getSelectedItem();
+        agregarParametro(ParametroCodefac.RECALCULA_PRECIO_PORCENTAJE, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.RECALCULA_PRECIO_PORCENTAJE);
         
         enumSiNo = (EnumSiNo) getCmbVentanasMultiples().getSelectedItem();
         agregarParametro(ParametroCodefac.VENTANAS_MULTIPLES, (enumSiNo != null) ? enumSiNo.getLetra() : null);

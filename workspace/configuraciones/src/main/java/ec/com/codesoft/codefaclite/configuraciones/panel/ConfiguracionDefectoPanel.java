@@ -299,6 +299,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel111 = new javax.swing.JLabel();
         txtProductoF12 = new javax.swing.JTextField();
         btnBuscarProductoF12 = new javax.swing.JButton();
+        jLabel117 = new javax.swing.JLabel();
+        cmbRecalcularPrecioPorcentaje = new javax.swing.JComboBox<>();
         jPanel9 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         cmbDatosCompartidosEmpresas = new javax.swing.JComboBox<>();
@@ -1686,10 +1688,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel8.add(lblEspacioBlanco12, gridBagConstraints);
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel21.setText("Mostrar precios con iva:");
+        jLabel21.setText("Recalcular precios por porcentajes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jLabel21, gridBagConstraints);
@@ -2266,6 +2268,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(btnBuscarProductoF12, gridBagConstraints);
 
+        jLabel117.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel117.setText("Mostrar precios con iva:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jLabel117, gridBagConstraints);
+
+        cmbRecalcularPrecioPorcentaje.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(cmbRecalcularPrecioPorcentaje, gridBagConstraints);
+
         jTabbedPane1.addTab("Inventario", jPanel8);
 
         jPanel9.setLayout(new java.awt.GridBagLayout());
@@ -2545,6 +2564,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbPermitirEditarCodigo;
     private javax.swing.JComboBox<Producto.PrecioVenta> cmbPrecioVentaDefecto;
     private javax.swing.JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces;
+    private javax.swing.JComboBox<EnumSiNo> cmbRecalcularPrecioPorcentaje;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoPedido;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoVenta;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
@@ -2576,6 +2596,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel114;
     private javax.swing.JLabel jLabel115;
     private javax.swing.JLabel jLabel116;
+    private javax.swing.JLabel jLabel117;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -3670,6 +3691,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbGenerarVentaSinCredito(JComboBox<EnumSiNo> cmbGenerarVentaSinCredito) {
         this.cmbGenerarVentaSinCredito = cmbGenerarVentaSinCredito;
     }
+
+    public JComboBox<EnumSiNo> getCmbRecalcularPrecioPorcentaje() {
+        return cmbRecalcularPrecioPorcentaje;
+    }
+
+    public void setCmbRecalcularPrecioPorcentaje(JComboBox<EnumSiNo> cmbRecalcularPrecioPorcentaje) {
+        this.cmbRecalcularPrecioPorcentaje = cmbRecalcularPrecioPorcentaje;
+    }
+    
     
     
     

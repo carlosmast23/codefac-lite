@@ -21,9 +21,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
@@ -54,9 +57,18 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException 
     {
+        verificarConfiguracionInicial();
         this.controlador = new UtilidadPrecioModelControlador(DialogoCodefac.intefaceMensaje, session,this, UtilidadPrecioModelControlador.TipoVista.ESCRITORIO);
         listenerTablas();
         crearModeloTabla();
+    }
+    
+    private void verificarConfiguracionInicial()
+    {
+        if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.RECALCULA_PRECIO_PORCENTAJE,EnumSiNo.SI))
+        {
+            getChkEditarValoresDirectos().setSelected(false);
+        }
     }
     
     private void listenerCargarPreciosOriginal(ProductoPrecioDataTable productoData)
@@ -287,6 +299,8 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
             @Override
             public Object[] addData(ProductoPrecioDataTable valueTmp) {
                 Producto producto=valueTmp.producto;
+                System.out.println(producto.getValorUnitario());
+                System.out.println(valueTmp.pvp1);
                 String codigo=producto.getCodigoPersonalizado();
                 String nombreProducto=producto.getNombre();
                             
@@ -401,6 +415,10 @@ public class UtilidadPrecioModel extends UtilidadPrecioPanel implements DialogIn
         if(parametros.length>0)
         {
             List<ProductoPrecioDataTable> productoListTmp=(List<ProductoPrecioDataTable>) parametros[0];
+            if(productoListTmp.size()>0)
+            {
+                this.controlador.setProductoFiltro(productoListTmp.get(0).producto);
+            }               
             this.controlador.castListDataTable(productoListTmp);
             actualizarBindingCompontValues();
         }
