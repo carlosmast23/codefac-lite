@@ -1332,7 +1332,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             controlador.cargarFormaPago();
             setearValoresCliente();
-            controlador.cargarDatosAdicionales(factura);
+            
+            Boolean borrarDatosAdicionales=false;
+            if(estudiante==null)
+            {
+                borrarDatosAdicionales=true;
+            }
+            controlador.cargarDatosAdicionales(factura,borrarDatosAdicionales);
             volverCargarDatosAdicionalesPorTipoDocumento(factura);
             cargarTablaDatosAdicionales();
             getTxtCodigoDetalle().requestFocus();
