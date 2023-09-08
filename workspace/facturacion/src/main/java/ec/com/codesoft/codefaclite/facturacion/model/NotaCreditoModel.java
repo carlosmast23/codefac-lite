@@ -601,7 +601,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                     notaCredito.setCliente(proveedorTmp);
                     notaCredito.setSucursal(personaEstablecimiento);
                     //agregarCorreo(proveedorTmp.getCorreoElectronico());
-                    controlador.cargarDatosAdicionales(notaCredito);
+                    controlador.cargarDatosAdicionales(notaCredito,true);
                     controlador.setearDatosProveedor(proveedorTmp,notaCredito);                    
                     getTxtProveedor().setText(proveedorTmp.getIdentificacion()+" - "+proveedorTmp.getRazonSocial());
                     mostrarDatosNotaCredito();

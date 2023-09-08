@@ -1098,7 +1098,22 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
             System.out.println("catalogo sin tener asignado un iva");
         }
         
-        return new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        if(catalogoProducto.getIva()==null)
+        {
+            Logger.getLogger(Producto.class.getName()).log(Level.WARNING,"Producto con id:"+idProducto+" , nombre="+nombre+", con catalogo id="+catalogoProducto.getId()+" Tiene IVA NULL");
+        }
+        
+        if(catalogoProducto.getIva().getTarifa()==null)
+        {
+            Logger.getLogger(Producto.class.getName()).log(Level.WARNING,"Producto con id:"+idProducto+" , nombre="+nombre+", con catalogo id="+catalogoProducto.getId()+" Tiene TARIFA NULL");
+            return catalogoProducto.getIva().getPorcentaje();
+        }
+
+
+        //System.out.println(catalogoProducto.getIva());
+        //System.out.println(catalogoProducto.getIva().getTarifa());
+        //return new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
+        return new BigDecimal(catalogoProducto.getIva().getTarifa()+"");
     }
     
     public BigDecimal getPrecioDistribuidorConIva() {

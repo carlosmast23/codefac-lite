@@ -167,6 +167,7 @@ public class CuentasPorCobrarData implements ExcelDatosInterface,AgrupadoReporte
         tiposDatos.add(new TipoDato(this.identificacion, Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.razonSocial,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreComercial,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.diasCredito,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.total,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.saldo,Excel.TipoDataEnum.NUMERO));
         return tiposDatos; 

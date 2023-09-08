@@ -110,6 +110,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                             "Identificación",
                             "Razón Social",
                             "Nombre Comercial",
+                            "Días Crédito",
                             "Total",
                             "Saldo",
                         };
