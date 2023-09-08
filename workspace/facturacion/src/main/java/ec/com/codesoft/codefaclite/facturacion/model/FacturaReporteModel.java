@@ -157,6 +157,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         controladorReporte.setAgregarCostos(getChkAgregarCostos().isSelected());
         
         controladorReporte.setProductoFiltro(productoFiltro);
+        controladorReporte.setTodasVentas(getChkTodosVenta().isSelected());
         
 
         //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto

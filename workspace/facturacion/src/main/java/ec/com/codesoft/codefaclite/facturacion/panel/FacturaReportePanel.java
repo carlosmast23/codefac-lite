@@ -106,6 +106,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         jLabel3 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         lblSubtotalUtilidad = new javax.swing.JLabel();
+        chkTodosVenta = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -713,6 +714,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(pnlUtilidades, gridBagConstraints);
 
+        chkTodosVenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkTodosVenta.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(chkTodosVenta, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -753,6 +762,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkTodos;
     private javax.swing.JCheckBox chkTodosProducto;
     private javax.swing.JCheckBox chkTodosReferidos;
+    private javax.swing.JCheckBox chkTodosVenta;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbPuntoEmision;
@@ -1068,6 +1078,15 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         this.txtUtilidad = txtUtilidad;
     }
 
+    public JCheckBox getChkTodosVenta() {
+        return chkTodosVenta;
+    }
+
+    public void setChkTodosVenta(JCheckBox chkTodosVenta) {
+        this.chkTodosVenta = chkTodosVenta;
+    }
+
+    
     
 
     

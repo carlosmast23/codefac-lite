@@ -49,7 +49,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public Query listaQuery(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,TipoConsultaEnum tipoConsultaEnum,Boolean quitarVentasAnuladasNCTotal) {
+    public Query listaQuery(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,TipoConsultaEnum tipoConsultaEnum,Boolean quitarVentasAnuladasNCTotal) {
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="", usuarioId="",enviadoGuiaRemisionStr="",vendedorStr="",afectaNotaCreditoTotalStr="";
         
         if(vendedor!=null)
@@ -85,15 +85,25 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             fecha = " AND (u.fechaEmision >= ?2 AND u.fechaEmision<= ?3)";
         }
         
+        
+        
         if (estadoEnum!= null) {
-            //Si la peticion es por todos sri entonces tengo que setear 2 valores
-            if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
+            
+            if(documentoEnum2!=null)
             {
                 estadoFactura = " AND ( u.estado=?10 or u.estado=?11 ) ";
             }
             else
-            {                
-                estadoFactura = " AND u.estado=?4";
+            {
+                //Si la peticion es por todos sri entonces tengo que setear 2 valores
+                if(ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum))
+                {
+                    estadoFactura = " AND ( u.estado=?10 or u.estado=?11 ) ";
+                }
+                else
+                {                
+                    estadoFactura = " AND u.estado=?4";
+                }
             }
         }
         
@@ -142,8 +152,14 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         {
             orderByStr= " ORDER BY" + ordenarAgrupado + " u.secuencial+0 asc";
         }
+        
+        String documentoEnum2Str="";
+        if(documentoEnum2!=null)
+        {
+            documentoEnum2Str=" OR u.codigoDocumento=?26 ";
+        }
 
-        String queryString = selectStr+"FROM Factura u WHERE u.empresa=?7 and u.codigoDocumento=?6 and  " + cliente + usuarioId + fecha + estadoFactura + filtrarReferidos + filtroPuntoEmision + filtrarSucursal + enviadoGuiaRemisionStr + vendedorStr+afectaNotaCreditoTotalStr+orderByStr;
+        String queryString = selectStr+"FROM Factura u WHERE u.empresa=?7 and ( u.codigoDocumento=?6 "+documentoEnum2Str+"  ) and  " + cliente + usuarioId + fecha + estadoFactura + filtrarReferidos + filtroPuntoEmision + filtrarSucursal + enviadoGuiaRemisionStr + vendedorStr+afectaNotaCreditoTotalStr+orderByStr;
                 
         
         Query query = getEntityManager().createQuery(queryString);
@@ -158,11 +174,19 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             query.setParameter(3, ff);
         }
         if (estadoEnum != null) {
-            if (ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum)) {
+            
+            if(documentoEnum2!=null)
+            {
                 query.setParameter(10, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                query.setParameter(11, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
-            } else {
-                query.setParameter(4, estadoEnum.getEstado());
+                query.setParameter(11, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
+            }
+            else
+            {   if (ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI.equals(estadoEnum)) {
+                    query.setParameter(10, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                    query.setParameter(11, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
+                } else {
+                    query.setParameter(4, estadoEnum.getEstado());
+                }
             }
         }
 
@@ -199,14 +223,20 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         {            
             query.setParameter(17,Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
         }
+        
+        if(documentoEnum2!=null)
+        {
+            query.setParameter(26, DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
+        }
 
         return query;
 
     }
+
     
-    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) {
+    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) {
         try {
-            Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.DATOS,quitarVentasAnuladasNCTotal);
+            Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,documentoEnum2, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.DATOS,quitarVentasAnuladasNCTotal);
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
@@ -215,13 +245,13 @@ public class FacturaFacade extends AbstractFacade<Factura> {
     
     public Long listaConTamanio(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) 
     {
-        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.TAMANIO,false);
+        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,null, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.TAMANIO,false);
         return (Long) query.getSingleResult();
     }
     
     public BigDecimal listaConTotalValor(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) 
     {
-        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.VALOR_TOTAL,false);
+        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,null, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.VALOR_TOTAL,false);
         return (BigDecimal) query.getSingleResult();
     }
    

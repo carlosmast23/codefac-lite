@@ -94,6 +94,8 @@ public class ControladorReporteFactura {
     private Boolean agregarCostos;
     private Producto productoFiltro;
     
+    private Boolean todasVentas;
+    
 
     public ControladorReporteFactura(Empresa empresa) {
         this.empresa=empresa;
@@ -151,12 +153,20 @@ public class ControladorReporteFactura {
              * ===============================================================
              */
             //datafact;
+            
+            DocumentoEnum documentoEnum2=null;
+            if(todasVentas)
+            {
+                documentoConsultaEnum=DocumentoEnum.FACTURA;
+                documentoEnum2=DocumentoEnum.NOTA_VENTA_INTERNA;
+            }
+            
             if(usuario != null)
             {
-                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal, usuario);
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,documentoEnum2,sucursal, usuario);
             }
             else{
-                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,sucursal,null);
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,documentoEnum2,sucursal,null);
             }   
             /**
              * ===============================================================
@@ -1145,6 +1155,14 @@ public class ControladorReporteFactura {
 
     public void setProductoFiltro(Producto productoFiltro) {
         this.productoFiltro = productoFiltro;
+    }
+
+    public Boolean getTodasVentas() {
+        return todasVentas;
+    }
+
+    public void setTodasVentas(Boolean todasVentas) {
+        this.todasVentas = todasVentas;
     }
 
     
