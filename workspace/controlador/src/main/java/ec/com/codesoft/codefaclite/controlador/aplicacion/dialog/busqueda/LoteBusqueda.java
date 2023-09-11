@@ -37,8 +37,9 @@ public class LoteBusqueda implements InterfaceModelFind<Lote>{
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
-        titulo.add(new ColumnaDialogo("Código", 0.2d));
+        titulo.add(new ColumnaDialogo("Código LOTE", 0.2d));
         titulo.add(new ColumnaDialogo("Producto", 0.2d));
+        titulo.add(new ColumnaDialogo("COD Producto", 0.2d));
         titulo.add(new ColumnaDialogo("Fecha Elaboración", 0.3d));
         titulo.add(new ColumnaDialogo("Fecha Caducidad", 0.3d));
         //titulo.add(new ColumnaDialogo("Stock", 0.3d));
@@ -49,8 +50,10 @@ public class LoteBusqueda implements InterfaceModelFind<Lote>{
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Lote l;
         //l.getProducto().getNombre();
+        //Producto producto;
+        //producto.getCodigoPersonalizado();
         
-        String queryString=" SELECT u FROM Lote u where u.estado=?1 and u.empresa=?2 and ( u.codigo like ?3 OR LOWER(u.producto.nombre) LIKE ?3  ) ";
+        String queryString=" SELECT u FROM Lote u where u.estado=?1 and u.empresa=?2 and ( u.codigo like ?3 OR LOWER(u.producto.nombre) LIKE ?3  OR u.producto.codigoPersonalizado like ?3 ) ";
         
         if(productoFiltro!=null)
         {
@@ -74,11 +77,14 @@ public class LoteBusqueda implements InterfaceModelFind<Lote>{
     public void agregarObjeto(Lote t, Vector dato) {
         dato.add(t.getCodigo());
         String productoNombre="";
+        String codigoProducto="";
         if(t.getProducto()!=null)
         {
             productoNombre=t.getProducto().getNombre();
+            codigoProducto=t.getProducto().getCodigoPersonalizado();
         }
         dato.add(productoNombre);
+        dato.add(codigoProducto);
         dato.add(t.getFechaElaboracion());
         dato.add(t.getFechaVencimiento());
         //dato.add(t.getStock());
