@@ -57,6 +57,27 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
             throw new ServicioCodefacException("No se puede grabar sin una Fecha de Vencimiento");
         }
         
+        //Verificar que el lote no se encuentre repetido para grabar
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("codigo", lote.getCodigo());
+        mapParametros.put("estado", lote.getEstadoEnum().ACTIVO.getLetra());
+        List<Lote> resultadoList=getFacade().findByMap(mapParametros);
+        
+        if(resultadoList.size()>0)
+        {
+            if(crudEnum.equals(crudEnum.CREAR))
+            {
+                throw new ServicioCodefacException("No se pueden grabar Lotes repetidos");
+            }
+            else if(crudEnum.equals(crudEnum.EDITAR))
+            {
+                if(resultadoList.size()>1)
+                {
+                    throw new ServicioCodefacException("No se pueden grabar Lotes repetidos");
+                }
+            }
+        }
+        
     }
 
     @Override
