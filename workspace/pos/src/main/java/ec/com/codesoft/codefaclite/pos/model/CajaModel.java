@@ -36,11 +36,22 @@ import java.util.logging.Logger;
 public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaModelControlador.SwingIf{
      
     private CajaModelControlador controlador=null;
+    private List<Sucursal> sucursalList;
     //private PuntoEmision puntoEmision;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         controlador=new CajaModelControlador(DialogoCodefac.intefaceMensaje, session, this,ModelControladorAbstract.TipoVista.ESCRITORIO);
+        
+        //Cargar datos iniciales al combo
+        try {
+            sucursalList = ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getjComboSucursal(), sucursalList);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         this.controlador.iniciar();
         listenerCombos();
     }

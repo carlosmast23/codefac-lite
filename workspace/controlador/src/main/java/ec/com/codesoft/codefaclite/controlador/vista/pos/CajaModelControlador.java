@@ -44,8 +44,7 @@ import java.util.logging.Logger;
 public class CajaModelControlador extends ModelControladorAbstract<CajaModelControlador.CommonIf, CajaModelControlador.SwingIf, CajaModelControlador.WebIf> implements VistaCodefacIf
 {
     private Caja caja;
-    private List<CajaEnum> estadosList;
-    private List<Sucursal> sucursalList;
+    private List<CajaEnum> estadosList;    
     /**
      * Controlador Generico
      * @param mensajeVista
@@ -67,13 +66,8 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         
         caja.setNombre("");
         caja.setDescripcion("");
-        caja.setEstadoEnum(CajaEnum.ACTIVO);
+        caja.setEstadoEnum(CajaEnum.ACTIVO);       
         
-        try {
-            sucursalList = ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(session.getEmpresa());
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(CajaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
         estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
     }
 
@@ -207,13 +201,7 @@ public class CajaModelControlador extends ModelControladorAbstract<CajaModelCont
         this.estadosList = estadosList;
     }
 
-    public List<Sucursal> getSucursalList() {
-        return sucursalList;
-    }
 
-    public void setSucursalList(List<Sucursal> sucursalList) {
-        this.sucursalList = sucursalList;
-    } 
     
     ////////////////////////////////////////////////////////////////////////////
     // Funciones

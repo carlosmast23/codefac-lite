@@ -261,7 +261,7 @@ public abstract class CajaPanel extends ControladorCodefacInterface {
     
     
     
-    @ComboBoxBinding(source = "controlador.SucursalList", valueSelect = "controlador.Caja.Sucursal" )
+    //@ComboBoxBinding(source = "controlador.SucursalList", valueSelect = "controlador.Caja.Sucursal" )
     public JComboBox<Sucursal> getjComboSucursal() {
         return jComboSucursal;
     }
