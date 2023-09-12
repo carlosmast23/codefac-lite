@@ -356,7 +356,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         }
         
-        grabarEmpaques(p, productoPresentacionList);
+        grabarEmpaques(p, productoPresentacionList,CrudEnum.CREAR);
         
         
         /*if(presentacion!=null)
@@ -434,8 +434,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
     }
     
-    private List<ProductoPresentacionDetalle> grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException
+    private List<ProductoPresentacionDetalle> grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList,CrudEnum crudEnum) throws ServicioCodefacException
     {
+        
         List<ProductoPresentacionDetalle> productoPresentacionNuevoList=new ArrayList<ProductoPresentacionDetalle>();
         //grabar los detalles de  la presentacion
         if(productoPresentacionList!=null)
@@ -464,11 +465,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             //Saco una copia del producto original para crear el producto empaqueteado con sus propias caracteristicas
                             productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
                             //productoEmpaquetado.setValorUnitario(null);
-                            productoEmpaquetado.setPrecioDistribuidor(null);
-                            productoEmpaquetado.setPrecioTarjeta(null);
-                            productoEmpaquetado.setPvp4(null);
-                            productoEmpaquetado.setPvp5(null);
-                            productoEmpaquetado.setPvp6(null);
+                            if(CrudEnum.EDITAR.equals(crudEnum))
+                            {
+                                productoEmpaquetado.setPrecioDistribuidor(null);
+                                productoEmpaquetado.setPrecioTarjeta(null);
+                                productoEmpaquetado.setPvp4(null);
+                                productoEmpaquetado.setPvp5(null);
+                                productoEmpaquetado.setPvp6(null);
+                            }
                             
                             productoEmpaquetado.setIdProducto(null);
                             //Eliminar los detalles por que puede dar referencia un objecto que ya estaba previamente grabado
@@ -808,7 +812,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 
                 List<ProductoPresentacionDetalle> productoPresentacionList = producto.getPresentacionList();
                 producto.setPresentacionList(null);
-                grabarEmpaques(producto, productoPresentacionList);
+                grabarEmpaques(producto, productoPresentacionList,CrudEnum.EDITAR);
                 eliminarEmpaques(producto, productoPresentacionList);
                 //producto.setPresentacion(presentacion);
                 producto.setPresentacionList(productoPresentacionList);
