@@ -398,11 +398,20 @@ public class KardexModel extends KardexPanel {
             } 
             else 
             {
-                //Cuando no encuentra nada seteo un kardex vacio
-                //kardexService.getKardexModificados(productoSeleccionado, cantidadMovimientos, bodega, ProductoEnsamble.EnsambleAccionEnum.AGREGAR)
-                kardex = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodega, productoSeleccionado);
-                if (kardex == null) {
-                    kardex = kardexService.construirKardexVacioSinPersistencia();
+                //Si no tiene detalles intento buscar si existe un kardex vacio para cargar
+                Kardex kardexTmp=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodega, productoSeleccionado, lote);
+                if(kardexTmp!=null)
+                {
+                    kardex=kardexTmp;
+                }
+                else
+                {
+                    //Cuando no encuentra nada seteo un kardex vacio
+                    //kardexService.getKardexModificados(productoSeleccionado, cantidadMovimientos, bodega, ProductoEnsamble.EnsambleAccionEnum.AGREGAR)
+                    kardex = ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodega, productoSeleccionado);
+                    if (kardex == null) {
+                        kardex = kardexService.construirKardexVacioSinPersistencia();
+                    }
                 }
                 cargarTablaKardex();
             }

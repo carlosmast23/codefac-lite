@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.MantenimientoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
@@ -41,24 +42,39 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         super(MantenimientoFacade.class);
     }
     
-    public void grabarPorLote(List<Mantenimiento> mantenimientoList,Empresa empresa,Usuario usuarioCreacion)  throws ServicioCodefacException, RemoteException 
+    public int grabarPorLote(List<Mantenimiento> mantenimientoList,Empresa empresa,Usuario usuarioCreacion)  throws ServicioCodefacException, RemoteException 
     {
+        Integer totalDatosGrabados=0;
         for (Mantenimiento mantenimiento : mantenimientoList) 
         {
             ObjetoMantenimiento objetoMantenimiento = mantenimiento.getVehiculo();
             objetoMantenimiento.setEstadoEnum(GeneralEnumEstado.ACTIVO);
             
-            //Verificar que no existan datos repetidos
+            //Verificar que no existan datos repetidos Antes de grabar
+            Map<String,Object> mapParametros=new HashMap<String,Object>();
+            mapParametros.put("vin", mantenimiento.getVehiculo().getVin());
+            mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getLetra());
+            
+            ObjetoMantenimientoService objetoMantenimientoService=new ObjetoMantenimientoService();
+            List<ObjetoMantenimiento> resultadoList= objetoMantenimientoService.obtenerPorMap(mapParametros);
+            if(resultadoList.size()>0)
+            {
+                System.out.println("DATO repetido con VIN: "+mantenimiento.getVehiculo().getVin());
+                continue;
+            }
+            
             
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion() throws ServicioCodefacException, RemoteException {
                     entityManager.persist(objetoMantenimiento);
+                    
                 }
             });
+            totalDatosGrabados++;
             //grabar(mantenimiento, empresa, usuarioCreacion);
         }
-        
+        return totalDatosGrabados;
     }
     
     public List<Mantenimiento> obtenerPendientesPorVin(Empresa empresa,String vin) throws ServicioCodefacException, RemoteException 

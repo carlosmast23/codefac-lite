@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,8 +61,8 @@ public class CargarVehiculoMb extends GeneralAbstractMb implements ReporteInvent
     @Override
     public void grabar() throws ExcepcionCodefacLite, UnsupportedOperationException {
         try {
-            ServiceFactory.getFactory().getMantenimientoServiceIf().grabarPorLote(mantenimientoList,sessionMb.getSession().getEmpresa(),sessionMb.getSession().getUsuario());
-            MensajeMb.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+            Integer totalDatosGrabados= ServiceFactory.getFactory().getMantenimientoServiceIf().grabarPorLote(mantenimientoList,sessionMb.getSession().getEmpresa(),sessionMb.getSession().getUsuario());
+            MensajeMb.mensaje(new CodefacMsj("Total de datos grabados: "+totalDatosGrabados, CodefacMsj.TipoMensajeEnum.CORRECTO));
         } catch (ServicioCodefacException ex) {
             MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
             Logger.getLogger(CargarVehiculoMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -181,7 +182,7 @@ public class CargarVehiculoMb extends GeneralAbstractMb implements ReporteInvent
                         String modelo=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.MODELO);
                         String color=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.COLOR);
                         String vin=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.VIN);
-                        String fechaIngresoStr=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.FECHA_INGRESO);
+                        //String fechaIngresoStr=fila.getValueByEnum(ExcelMigrarVehiculosMantenimiento.Enum.FECHA_INGRESO);
                         
                         ObjetoMantenimiento objMantenimiento=new ObjetoMantenimiento();
                         objMantenimiento.setModelo(modelo);

@@ -162,7 +162,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
             {
                 //Aumentar el ancho de la etiqueta de imagen
                 Integer ancho=Integer.parseInt(anchoTxt);
-                String anchoConMargen=(ancho-10)+"";
+                String anchoConMargen=(ancho-12)+"";
                 //manager.setearValor(reportElement, "width", (ancho-20)+"");
                 manager.setearValor(reportElement, "width",anchoConMargen);
                 
