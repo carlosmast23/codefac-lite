@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -63,6 +64,9 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     
     @Column(name = "PRIORIDAD")
     private Integer prioridad;
+    
+    @Column(name = "TIPO_DANIO") 
+    private Integer tipoDanio;
     
     
     @JoinColumn(name = "OBJETO_MANTENIMIENTO_ID")
@@ -160,6 +164,20 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
 
     public void setTareaList(List<MantenimientoTareaDetalle> tareaList) {
         this.tareaList = tareaList;
+    }
+
+    public Integer getTipoDanio() {
+        return tipoDanio;
+    }
+
+    public void setTipoDanio(Integer tipoDanio) {
+        this.tipoDanio = tipoDanio;
+    }
+    
+    public Integer calcularNumeroDias()
+    {
+        Integer numeroDias= UtilidadesFecha.obtenerDistanciaConLaFechaActual(fechaIngreso);
+        return numeroDias; 
     }
     
     

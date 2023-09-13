@@ -19,7 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;     
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -41,17 +41,17 @@ import org.primefaces.event.UnselectEvent;
  *
  * @author CARLOS_CODESOFT
  */
-@ManagedBean 
+@ManagedBean  
 @ViewScoped
 public class MantenimientosPendientesMb extends GeneralAbstractMb implements Serializable{
 
-    List<Mantenimiento> mantenimientoPendienteList;     
-    private List<Taller> tallerList; 
+    List<Mantenimiento> mantenimientoPendienteList;           
+    private List<Taller> tallerList;   
     private List<TallerTarea> subtareaList; 
     private List<String> subtareaSeleccionadaList; 
     private Mantenimiento mantenimiento;
-    private Boolean modoEditar;
-    
+    private Boolean modoEditar; 
+     
     @PostConstruct
     public void init()
     {
@@ -65,9 +65,9 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     }
     
     
-    @Override
+    @Override  
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates. 
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.   
     }
  
     @Override
@@ -75,7 +75,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+    @Override  
     public void editar() throws ExcepcionCodefacLite, UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -167,7 +167,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         }
     }
     
-    public void cargarDatosEditarMantenimiento(Mantenimiento mantenimiento)
+    public void cargarDatosEditarMantenimiento(Mantenimiento mantenimiento) 
     {
         System.out.println("DATO: "+mantenimiento);
         System.out.println("CARGANDO DATOS EDITAR ..."); 
@@ -370,7 +370,10 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     }
 
     
-    
+    public void ejemplo()
+    { 
+        System.out.println("METODO DE EJEMPLO ...");  
+    }
     
     
 }

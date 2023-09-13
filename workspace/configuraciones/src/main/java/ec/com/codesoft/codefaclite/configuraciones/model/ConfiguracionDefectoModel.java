@@ -159,6 +159,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         UtilidadesComboBox.llenarComboBox(getCmbFiltroRapidoBusqueda(), EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbIngresoMayusculas(), EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbVentaProductoModoDescuento(), EnumSiNo.values());
 
         //Agregar los tipos de documentos disponibles
         UtilidadesComboBox.llenarComboBox(getCmbTipoDocumento(), TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION));
@@ -446,6 +447,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroIngresoMayusculas = parametrosTodos.get(ParametroCodefac.INGRESO_MAYUSCULAS);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroIngresoMayusculas != null) ? parametroIngresoMayusculas.getValor() : null);
             getCmbIngresoMayusculas().setSelectedItem(enumSiNo);
+            
+            ParametroCodefac parametroVentaProductoModoDescuento = parametrosTodos.get(ParametroCodefac.VENTA_PRODUCTO_MODO_DESCUENTO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroVentaProductoModoDescuento != null) ? parametroVentaProductoModoDescuento.getValor() : null);
+            getCmbVentaProductoModoDescuento().setSelectedItem(enumSiNo);
             
             ParametroCodefac parametroMostrarTituloFactFisica = parametrosTodos.get(ParametroCodefac.MOSTRAR_TITULO_FACT_FISICA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarTituloFactFisica != null) ? parametroMostrarTituloFactFisica.getValor() : null);
@@ -1054,6 +1059,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbIngresoMayusculas().getSelectedItem();
         agregarParametro(ParametroCodefac.INGRESO_MAYUSCULAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.INGRESO_MAYUSCULAS);
+        
+        enumSiNo = (EnumSiNo) getCmbVentaProductoModoDescuento().getSelectedItem();
+        agregarParametro(ParametroCodefac.VENTA_PRODUCTO_MODO_DESCUENTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.VENTA_PRODUCTO_MODO_DESCUENTO);
         /*ParametroCodefac parametroCodefac=parametrosTodos.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {

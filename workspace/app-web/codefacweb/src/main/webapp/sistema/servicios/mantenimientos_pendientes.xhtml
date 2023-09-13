@@ -9,14 +9,35 @@
     <ui:composition  template="/template/codefac_template.xhtml">
         <ui:define name="contenido" >
             <f:event listener="#{controllerCodefacMb.agregarVista(mantenimientosPendientesMb)}" type="preRenderComponent" />
+            
+            <style>
+                .color-0 {
+                    background-color: #54a90a !important;
+                    background-image: none !important;
+                    color: #ffffff !important;
+                }
+                
+                .color-1 {
+                    background-color: yellow !important;
+                    background-image: none !important;
+                    color: #000000 !important;
+                }
+                
+                .color-2 {
+                    background-color: #ffcc99 !important;
+                    background-image: none !important;
+                    color: #000000 !important;
+                }
+            </style>
 
             <div class="p-grid" style="text-align: left" >
                 <div class="p-col-12 p-md-6 p-lg-3" >
-                    <b>Vehiculo:</b> <p:outputLabel id="txtVehiculo" value="#{mantenimientosPendientesMb.mantenimiento.vehiculo.modelo}" /> 
+                    <b>Vin:</b> <p:outputLabel id="txtVehiculo" value="#{mantenimientosPendientesMb.mantenimiento.vehiculo.vin}" />
+                    <div><b>Vehiculo:</b> <p:outputLabel id="txtVehiculoVin" value="#{mantenimientosPendientesMb.mantenimiento.vehiculo.modelo}" /></div>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-3">                            
                     <p:commandButton process="@this" value="Buscar" icon="pi pi-search" action="#{mantenimientosPendientesMb.abrirDialogoBuscarVehiculo}" >
-                        <p:ajax event="dialogReturn" listener="#{mantenimientosPendientesMb.seleccionarVehiculo}" update="txtVehiculo"  />
+                        <p:ajax event="dialogReturn" listener="#{mantenimientosPendientesMb.seleccionarVehiculo}" update="txtVehiculo,txtVehiculoVin"  />
                     </p:commandButton>
                 </div> 
                 
@@ -26,6 +47,13 @@
                 <div class="p-col-12 p-md-6 p-lg-3">                            
                     <p:rating id="txtPrioridad" value="#{mantenimientosPendientesMb.mantenimiento.prioridad}"/>                                
                 </div> 
+                
+                <div class="p-col-12 p-md-6 p-lg-3" >
+                    Tipo de Daño: 
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">                            
+                    <p:rating id="txtDanio" value="#{mantenimientosPendientesMb.mantenimiento.tipoDanio}" stars="3"/>                                
+                </div>
 
                 <div class="p-col-12 p-md-6 p-lg-3">
                     Taller:
@@ -65,23 +93,30 @@
             
 
             <p:outputPanel deferred="true" style="margin: 10px">
-                <p:commandButton value="Grabar Mantenimiento" icon="pi pi-plus" 
-                                 process="@this,txtPrioridad,cmbSubtarea,cmbTaller"
-                                 update=":formulario:messages,tblMantenimiento,txtVehiculo,txtPrioridad,cmbTaller,cmbSubtarea"
+                <p:commandButton value="Registro de Unidad por Defectos" icon="pi pi-plus" 
+                                 process="@this,txtPrioridad,txtDanio,cmbSubtarea,cmbTaller"
+                                 update=":formulario:messages,tblMantenimiento,txtVehiculo,txtVehiculoVin,txtPrioridad,txtDanio,cmbTaller,cmbSubtarea"
                                  actionListener="#{mantenimientosPendientesMb.grabarMantenimiento()}"
                                  styleClass="ui-button-success" style="margin-right: .5rem">
+                </p:commandButton>
+
+                <p:commandButton value="Excel" process="@this"  styleClass="mr-2 mb-2" actionListener="#{mantenimientosPendientesMb.ejemplo()}" ajax="false">
+                    <p:dataExporter type="xls" target="tblMantenimiento" fileName="mantenimientos"/>
                 </p:commandButton>
             </p:outputPanel>
 
             <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
             <div class="card">
+               
                 <p:dataTable 
                     id="tblMantenimiento" 
                     var="m" 
                     widgetVar="tblMantenimientoWidget"
                     value="#{mantenimientosPendientesMb.mantenimientoPendienteList}" 
                     rowIndexVar="rowIndex" 
-                    reflow="true" >
+                    reflow="true" 
+                    rowStyleClass="#{(m.calcularNumeroDias() eq 0) ? 'color-0' : (m.calcularNumeroDias() eq 1) ? 'color-1' : (m.calcularNumeroDias() gt 1) ? 'color-2' : null}"
+                    >
 
                     <f:facet name="header">
                         <div class="flex align-items-center justify-content-between">
@@ -90,6 +125,7 @@
                                 <p:inputText id="globalFilter" onkeyup="PF('tblMantenimientoWidget').filter()" 
                                              placeholder="Ingrese el VIN" />                                
                             </div>
+                            <div><b>Total: #{mantenimientosPendientesMb.mantenimientoPendienteList.size()}</b></div>
                         </div>
 
                     </f:facet>
@@ -108,6 +144,10 @@
                     
                     <p:column headerText="Prioridad" width="100">
                         <p:rating id="txtPrioridadTabla" value="#{m.prioridad}" cancel="false" />  
+                    </p:column>
+                    
+                    <p:column headerText="Daño" width="60">
+                        <p:rating id="txtDanioTabla" value="#{m.tipoDanio}" cancel="false" stars="3" />  
                     </p:column>
                     
 
@@ -129,6 +169,9 @@
                         </h:outputText>
                     </p:column>
 
+                    <p:column headerText="Dias" width="30">
+                        <h:outputText value="#{m.calcularNumeroDias()}" />
+                    </p:column>
 
                     <p:column width="50" exportable="false">
                         <p:commandButton

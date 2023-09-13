@@ -277,6 +277,11 @@ public class ParametroCodefac implements Serializable {
     public static final String INGRESO_MAYUSCULAS="INGRESO_MAYUSCULAS";
     
     /**
+     * Venta producto en modo de descuento
+     */
+    public static final String VENTA_PRODUCTO_MODO_DESCUENTO="VENTA_PRODUCTO_MODO_DESCUENTO";
+    
+    /**
      * Parametros para la firma de la factura
      */
     public static final String LEYENDA_FIRMA_FACTURA_1 = "leyenda_firma_factura_1";

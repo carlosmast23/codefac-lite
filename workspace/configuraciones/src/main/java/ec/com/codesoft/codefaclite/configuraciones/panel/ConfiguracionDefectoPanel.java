@@ -325,6 +325,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbActivarIvaFeriado = new javax.swing.JComboBox<>();
         jPanel14 = new javax.swing.JPanel();
         jLabel112 = new javax.swing.JLabel();
+        jPanel16 = new javax.swing.JPanel();
+        jLabel118 = new javax.swing.JLabel();
+        cmbVentaProductoModoDescuento = new javax.swing.JComboBox<>();
+        lblEspacio123 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -1660,7 +1664,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel7.add(jLabel15, gridBagConstraints);
 
-        jTabbedPane1.addTab("Comprobantes Electrónicos", jPanel7);
+        jTabbedPane1.addTab("Comprobantes Elec", jPanel7);
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
@@ -2479,6 +2483,29 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("Pos", jPanel14);
 
+        jPanel16.setLayout(new java.awt.GridBagLayout());
+
+        jLabel118.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel118.setText("Vender producto incluido descuento:");
+        jPanel16.add(jLabel118, new java.awt.GridBagConstraints());
+
+        cmbVentaProductoModoDescuento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel16.add(cmbVentaProductoModoDescuento, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel16.add(lblEspacio123, gridBagConstraints);
+
+        jTabbedPane1.addTab("Farmacia", jPanel16);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         pack();
@@ -2573,6 +2600,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
     private javax.swing.JComboBox<TipoNegocioEnum> cmbTipoNegocio;
+    private javax.swing.JComboBox<EnumSiNo> cmbVentaProductoModoDescuento;
     private javax.swing.JComboBox<EnumSiNo> cmbVentanasMultiples;
     private javax.swing.JComboBox<EnumSiNo> jComboFiltrarFacturaPorUsuario;
     private javax.swing.JEditorPane jEditorPanelVistaPrevia;
@@ -2597,6 +2625,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel115;
     private javax.swing.JLabel jLabel116;
     private javax.swing.JLabel jLabel117;
+    private javax.swing.JLabel jLabel118;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -2700,6 +2729,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2714,6 +2744,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio12;
+    private javax.swing.JLabel lblEspacio123;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio3345;
     private javax.swing.JLabel lblEspacio42;
@@ -3699,6 +3730,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbRecalcularPrecioPorcentaje(JComboBox<EnumSiNo> cmbRecalcularPrecioPorcentaje) {
         this.cmbRecalcularPrecioPorcentaje = cmbRecalcularPrecioPorcentaje;
     }
+
+    public JComboBox<EnumSiNo> getCmbVentaProductoModoDescuento() {
+        return cmbVentaProductoModoDescuento;
+    }
+
+    public void setCmbVentaProductoModoDescuento(JComboBox<EnumSiNo> cmbVentaProductoModoDescuento) {
+        this.cmbVentaProductoModoDescuento = cmbVentaProductoModoDescuento;
+    }
+    
     
     
     
