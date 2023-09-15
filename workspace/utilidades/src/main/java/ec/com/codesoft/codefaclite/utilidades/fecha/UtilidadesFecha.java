@@ -583,5 +583,14 @@ public class UtilidadesFecha {
     {
         return obtenerDia(getFechaHoy());
     }
+    
+    public static java.util.Date agregarTiempoFinalDia(Date fecha) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha);
+        calendar.add(Calendar.HOUR_OF_DAY, 23);
+        calendar.add(Calendar.MINUTE, 59);
+        calendar.add(Calendar.SECOND, 59);
+        return calendar.getTime();
+    }
 
 }

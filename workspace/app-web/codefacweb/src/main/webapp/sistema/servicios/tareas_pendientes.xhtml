@@ -60,12 +60,28 @@
                          <b><h:outputText value="#{m.estadoNombre}" /></b>
                     </p:column>
 
-                    <p:column headerText="Taller" width="100">
+                    <p:column headerText="Taller" width="100" filterBy="#{m.tallerTarea.taller.nombre}" filterMatchMode="contains" >
                         <h:outputText value="#{m.tallerTarea.taller.nombre}" />
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{tareasPendientesMb.tallerList}" />
+                            </p:selectOneMenu>
+                        </f:facet>
                     </p:column>
 
-                    <p:column headerText="Prioridad" width="100">
+                    <p:column headerText="Prioridad" width="100" filterBy="#{m.mantenimiento.prioridad}" filterMatchMode="contains">
                         <p:rating id="txtPrioridadTabla" value="#{m.mantenimiento.prioridad}" cancel="false" />  
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />                                
+                                <f:selectItem itemLabel="*" itemValue="1" />
+                                <f:selectItem itemLabel="**" itemValue="2" />
+                                <f:selectItem itemLabel="***" itemValue="3" />
+                                <f:selectItem itemLabel="****" itemValue="4" />
+                                <f:selectItem itemLabel="*****" itemValue="5" />
+                            </p:selectOneMenu>
+                        </f:facet>
                     </p:column>
 
                     <p:column headerText="Modelo">

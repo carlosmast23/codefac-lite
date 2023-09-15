@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -168,6 +169,9 @@ public class MovimientoCarteraModel extends MovimientoCarteraPanel{
         }
         
         getChkTodos().setSelected(true);
+        
+        getCmbFechaInicio().setDate(UtilidadesFecha.getFechaHoy());
+        getCmbFechaFin().setDate(UtilidadesFecha.getFechaHoy());
     }
 
     private void listerBotones() {

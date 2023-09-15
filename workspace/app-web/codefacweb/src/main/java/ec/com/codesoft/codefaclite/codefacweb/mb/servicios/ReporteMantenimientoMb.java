@@ -169,7 +169,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     {
         try {
             mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true);
-            mantenimientoList.add(0,null);
+            //mantenimientoList.add(0,null);
                         
             System.out.println("Datos consultados DE MANTENIMIENTOS: "+mantenimientoList.size());  
         } catch (ServicioCodefacException ex) {

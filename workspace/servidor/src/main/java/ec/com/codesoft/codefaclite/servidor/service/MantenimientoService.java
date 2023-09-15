@@ -292,6 +292,27 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         });
     }
     
+    public void terminarMantenimiento(Mantenimiento mantenimiento) throws ServicioCodefacException, RemoteException
+    {               
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                mantenimiento.setEstadoEnum(Mantenimiento.MantenimientoEnum.TERMINADO);
+                mantenimiento.setFechaSalida(UtilidadesFecha.getFechaHoyTimeStamp());
+                
+                //Cambiar de estado a todas las tareas
+                for (MantenimientoTareaDetalle detalle : mantenimiento.getTareaList()) {
+                    detalle.setEstadoEnum(MantenimientoTareaDetalle.EstadoEnum.FINALIZADO);
+                    detalle.setFechaFin(UtilidadesFecha.getFechaHoyTimeStamp());
+                    //if(MantenimientoTareaDetalle.EstadoEnum. detalle.getEstadoEnum().FINALIZADO)
+                    entityManager.merge(detalle);
+                }                
+                entityManager.merge(mantenimiento);
+
+            }
+        });
+    }
+    
     private List<MantenimientoResult> convertirDatos(List<Mantenimiento> datos)
     {
         List<MantenimientoResult> resultadoList=new ArrayList<MantenimientoResult>();

@@ -33,5 +33,5 @@ public interface MantenimientoServiceIf extends ServiceAbstractIf<Mantenimiento>
     public List<Mantenimiento> obtenerPendientesPorVin(Empresa empresa,String vin) throws ServicioCodefacException, RemoteException;
     public void iniciarTarea(MantenimientoTareaDetalle tarea,Empleado empleado) throws ServicioCodefacException, RemoteException;
     public void finalizarTarea(MantenimientoTareaDetalle tarea, Empleado empleado) throws ServicioCodefacException, RemoteException;
-    
+    public void terminarMantenimiento(Mantenimiento mantenimiento) throws ServicioCodefacException, RemoteException;
 }

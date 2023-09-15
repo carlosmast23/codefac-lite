@@ -56,6 +56,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         String fechaFinStr="";
         if(fechaFin!=null)
         {
+            fechaFin=UtilidadesFecha.agregarTiempoFinalDia(UtilidadesFecha.castDateUtilToSql(fechaFin));
             fechaFinStr=" AND m.fechaIngreso<=?2  ";
         }
         

@@ -117,7 +117,7 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
     
     public enum EstadoEnum implements EstadoEntidadIf
     {
-        GENERADO("G","Generado"),
+        GENERADO("G","Ingresado"),
         INICIADO("I","Iniciado"),
         FINALIZADO("F","Finalizado");
 

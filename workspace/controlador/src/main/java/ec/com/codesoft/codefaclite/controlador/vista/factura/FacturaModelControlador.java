@@ -469,11 +469,21 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return;
         }
         
+        
         //Consultar el Valor Unitario segun el PVP confgurado por defecto
         BigDecimal valorUnitario=productoSeleccionado.buscarPrecioPorNombre(pvpDefecto);
         
         //Consultar los descuentos que se deben cargar segun el precio seleccionado
         List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado, pvpDefecto);
+        
+        //Verificar si se debe calcular el ahorro como DESCUENTO o como VALOR 
+        if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.VENTA_PRODUCTO_MODO_DESCUENTO, EnumSiNo.SI)) {
+            BigDecimal porcentajeDescuento = new BigDecimal("100").subtract(valorUnitario.divide(productoSeleccionado.getValorUnitario(), 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100")));
+            descuentos.add(porcentajeDescuento);
+            //interfaz.setearDescuentoTxt(porcentajeDescuento + "");
+            //facturaDetalle.setDescuento(porcentajeDescuento);
+
+        }
                 
         //this.productoSeleccionado=productoSeleccionado;
         interfaz.setProductoSeleccionado(productoSeleccionado);
@@ -508,6 +518,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 descuentoDefecto=descuento;
             }
         }
+        
+        
         
         if(stock!=null)
         {
@@ -573,7 +585,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         verificarProductoConNotaVentaInterna(facturaDetalle);
         
         if(calcularAhorro)
-        {
+        {           
             //El precio para hacer e calculo del ahorro siempre va a hacer el primero
             facturaDetalle.setPrecioSinAhorro(productoSeleccionado.getValorUnitario());
         }

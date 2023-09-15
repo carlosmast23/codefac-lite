@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;     
 import java.io.IOException;
 import java.io.Serializable;
@@ -202,6 +203,19 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         
     }
     
+    public void terminarMantenimiento(Mantenimiento mantenimiento)
+    {
+        try {
+            ServiceFactory.getFactory().getMantenimientoServiceIf().terminarMantenimiento(mantenimiento);
+            MensajeMb.mensaje(new CodefacMsj("Mantenimiento terminando correctamente", CodefacMsj.TipoMensajeEnum.CORRECTO));
+        } catch (ServicioCodefacException ex) {
+            MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void grabarMantenimiento()
     {
         try {
@@ -353,7 +367,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         this.tallerList = tallerList;
     }
 
-    public List<TallerTarea> getSubtareaList() {
+    public List<TallerTarea> getSubtareaList() { 
         return subtareaList;
     }
 
@@ -362,7 +376,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     }
 
     public List<String> getSubtareaSeleccionadaList() {
-        return subtareaSeleccionadaList;
+        return subtareaSeleccionadaList;   
     }
 
     public void setSubtareaSeleccionadaList(List<String> subtareaSeleccionadaList) {

@@ -5,7 +5,9 @@ import ec.com.codesoft.codefaclite.codefacweb.mb.utilidades.MensajeMb;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import java.io.IOException;
@@ -36,7 +38,9 @@ import org.primefaces.event.RowEditEvent;
 @ViewScoped
 public class TareasPendientesMb extends GeneralAbstractMb implements Serializable 
 {
-    private List<MantenimientoTareaDetalle> mantenimientoTareaList;       
+    private List<MantenimientoTareaDetalle> mantenimientoTareaList;   
+    private List<Taller> tallerList;   
+    
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
@@ -80,7 +84,13 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        cargarDatosIniciales();
+        try {
+            cargarDatosIniciales();
+            
+            tallerList=ServiceFactory.getFactory().getTallerServiceIf().obtenerActivos();
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void cargarDatosIniciales()
@@ -137,6 +147,15 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
         this.mantenimientoTareaList = mantenimientoTareaList;
     }
     
+    public List<Taller> getTallerList() {
+        return tallerList;
+    }
+
+    public void setTallerList(List<Taller> tallerList) {
+        this.tallerList = tallerList;
+    }
+
+    
     public void abrirPantallaModificarTarea(MantenimientoTareaDetalle mantenimiento)
     {
         System.out.println("abriendo pantalla para modificar el mantenimiento ...");
@@ -181,6 +200,5 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
         } catch (RemoteException ex) {
             Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }   
-    
+    } 
 }

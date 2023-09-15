@@ -9,20 +9,20 @@
     <ui:composition  template="/template/codefac_template.xhtml">
         <ui:define name="contenido" >
             <f:event listener="#{controllerCodefacMb.agregarVista(mantenimientosPendientesMb)}" type="preRenderComponent" />
-            
+
             <style>
                 .color-0 {
                     background-color: #54a90a !important;
                     background-image: none !important;
                     color: #ffffff !important;
                 }
-                
+
                 .color-1 {
                     background-color: yellow !important;
                     background-image: none !important;
                     color: #000000 !important;
                 }
-                
+
                 .color-2 {
                     background-color: #ffcc99 !important;
                     background-image: none !important;
@@ -40,20 +40,14 @@
                         <p:ajax event="dialogReturn" listener="#{mantenimientosPendientesMb.seleccionarVehiculo}" update="txtVehiculo,txtVehiculoVin"  />
                     </p:commandButton>
                 </div> 
-                
+
                 <div class="p-col-12 p-md-6 p-lg-3" >
                     Prioridad: 
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-3">                            
                     <p:rating id="txtPrioridad" value="#{mantenimientosPendientesMb.mantenimiento.prioridad}"/>                                
                 </div> 
-                
-                <div class="p-col-12 p-md-6 p-lg-3" >
-                    Tipo de Daño: 
-                </div>
-                <div class="p-col-12 p-md-6 p-lg-3">                            
-                    <p:rating id="txtDanio" value="#{mantenimientosPendientesMb.mantenimiento.tipoDanio}" stars="3"/>                                
-                </div>
+
 
                 <div class="p-col-12 p-md-6 p-lg-3">
                     Taller:
@@ -64,7 +58,14 @@
                         <p:ajax event="itemSelect" listener="#{mantenimientosPendientesMb.seleccionarSubtareDesdeTaller()}" update=":formulario:cmbSubtarea" />
                     </p:selectOneMenu>
                 </div>
-                
+
+                <div class="p-col-12 p-md-6 p-lg-3" >
+                    Tipo de Daño: 
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">                            
+                    <p:rating id="txtDanio" value="#{mantenimientosPendientesMb.mantenimiento.tipoDanio}" stars="3"/>                                
+                </div>
+
                 <div class="p-col-12 p-md-6 p-lg-3">
                     SubTareas:
                 </div>
@@ -89,8 +90,8 @@
                     <div><h:outputLabel id="cmbBodega"  value="Esta pantalla contiene los vehiculos ingresados pero que aun no tienen asignadas tareas "/></div>
                 </div> 
             </div>
-            
-            
+
+
 
             <p:outputPanel deferred="true" style="margin: 10px">
                 <p:commandButton value="Registro de Unidad por Defectos" icon="pi pi-plus" 
@@ -107,7 +108,7 @@
 
             <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
             <div class="card">
-               
+
                 <p:dataTable 
                     id="tblMantenimiento" 
                     var="m" 
@@ -137,19 +138,45 @@
                     <p:column headerText="Vin" filterBy="#{m.vehiculo.vin}" filterMatchMode="contains" width="130">
                         <h:outputText value="#{m.vehiculo.vin}" />
                     </p:column>
-                    
+
                     <p:column headerText="Taller" width="100" filterBy="#{m.taller.nombre}" filterMatchMode="contains">
                         <h:outputText value="#{m.taller.nombre}" />
+
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{mantenimientosPendientesMb.tallerList}" />
+                            </p:selectOneMenu>
+                        </f:facet>
+
                     </p:column>
-                    
-                    <p:column headerText="Prioridad" width="100">
+
+                    <p:column headerText="Prioridad" width="100" filterBy="#{m.prioridad}" filterMatchMode="contains">
                         <p:rating id="txtPrioridadTabla" value="#{m.prioridad}" cancel="false" />  
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />                                
+                                <f:selectItem itemLabel="*" itemValue="1" />
+                                <f:selectItem itemLabel="**" itemValue="2" />
+                                <f:selectItem itemLabel="***" itemValue="3" />
+                                <f:selectItem itemLabel="****" itemValue="4" />
+                                <f:selectItem itemLabel="*****" itemValue="5" />
+                            </p:selectOneMenu>
+                        </f:facet>
                     </p:column>
-                    
-                    <p:column headerText="Daño" width="60">
+
+                    <p:column headerText="Daño" width="60" filterBy="#{m.tipoDanio}" filterMatchMode="contains">
                         <p:rating id="txtDanioTabla" value="#{m.tipoDanio}" cancel="false" stars="3" />  
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />                                
+                                <f:selectItem itemLabel="Baja" itemValue="1" />
+                                <f:selectItem itemLabel="Media" itemValue="2" />
+                                <f:selectItem itemLabel="Alta" itemValue="3" />
+                            </p:selectOneMenu>
+                        </f:facet>
                     </p:column>
-                    
+
 
                     <p:column headerText="Modelo">
                         <h:outputText value="#{m.vehiculo.modelo}" />
@@ -173,7 +200,7 @@
                         <h:outputText value="#{m.calcularNumeroDias()}" />
                     </p:column>
 
-                    <p:column width="50" exportable="false">
+                    <p:column width="25" exportable="false">
                         <p:commandButton
                             title="Editar mantenimiento"
                             process="@this"
@@ -185,12 +212,24 @@
 
                     </p:column>
 
-                    <p:column width="50" >
+                    <p:column width="25" >
                         <p:commandButton
                             title="Eliminar Mantenimiento"
                             action="#{mantenimientosPendientesMb.eliminarMantenimiento(m)}"
                             onclick="return confirm('¿Estás seguro de eliminar el mantenimiento?')"
                             icon="pi pi-trash" 
+                            update="@form"
+                            style="background-color:#0097A"
+                            process="@this">                                                        
+                        </p:commandButton>                    
+                    </p:column>
+                    
+                    <p:column width="25" >
+                        <p:commandButton
+                            title="Terminar Mantenimiento"
+                            action="#{mantenimientosPendientesMb.terminarMantenimiento(m)}"
+                            onclick="return confirm('¿Estás seguro que desea terminar el mantenimiento?')"
+                            icon="pi pi-check" 
                             update="@form"
                             style="background-color:#0097A"
                             process="@this">                                                        
