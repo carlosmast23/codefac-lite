@@ -89,7 +89,7 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
      */
     NOTA_VENTA("Nota de venta",
             "NVT",
-            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
             true,
             false,
