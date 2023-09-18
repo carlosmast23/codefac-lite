@@ -332,7 +332,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         pblContenedora.add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Autorizacion:");
+        jLabel6.setText("Autorización:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
