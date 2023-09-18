@@ -178,5 +178,10 @@ public class CajaModel extends CajaPanel implements ControladorVistaIf, CajaMode
     public void setControlador(CajaModelControlador controlador) {
         this.controlador = controlador;
     }
+
+    @Override
+    public Sucursal getSucursal() {
+        return (Sucursal) getjComboSucursal().getSelectedItem();
+    }
     
 }
