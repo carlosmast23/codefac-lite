@@ -43,6 +43,7 @@
 	<field name="usuario" class="java.lang.String"/>
 	<field name="productoNombre" class="java.lang.String"/>
 	<field name="productoId" class="java.lang.String"/>
+	<field name="hora" class="java.lang.String"/>
 	<group name="producto_grupo">
 		<groupExpression><![CDATA[$F{productoId}]]></groupExpression>
 		<groupHeader>
@@ -59,7 +60,7 @@
 					<text><![CDATA[#]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="20" y="24" width="45" height="30" uuid="d16d6502-9449-42b9-bc2e-3561a7109a32"/>
+					<reportElement x="20" y="24" width="40" height="30" uuid="d16d6502-9449-42b9-bc2e-3561a7109a32"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -72,7 +73,7 @@
 					<text><![CDATA[Fecha]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="133" y="24" width="75" height="30" uuid="7d1672f1-16fe-4427-95e1-86a7a7544b21"/>
+					<reportElement x="148" y="24" width="75" height="30" uuid="7d1672f1-16fe-4427-95e1-86a7a7544b21"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -85,7 +86,7 @@
 					<text><![CDATA[Documento]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="208" y="24" width="69" height="30" uuid="dc3e6b9a-58d5-440e-b672-bb1bb2c5312d"/>
+					<reportElement x="223" y="24" width="69" height="30" uuid="dc3e6b9a-58d5-440e-b672-bb1bb2c5312d"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -98,7 +99,7 @@
 					<text><![CDATA[Preimpreso]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="437" y="24" width="120" height="30" uuid="d20e424d-7674-44d2-966c-a399d6f88dd2"/>
+					<reportElement x="442" y="24" width="115" height="30" uuid="d20e424d-7674-44d2-966c-a399d6f88dd2"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -137,7 +138,7 @@
 					<text><![CDATA[Cantidad]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="277" y="24" width="160" height="30" uuid="fc9f8497-b284-4152-a57d-61252645528d"/>
+					<reportElement x="292" y="24" width="150" height="30" uuid="fc9f8497-b284-4152-a57d-61252645528d"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -254,7 +255,7 @@
 					<text><![CDATA[P.Unitario]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="65" y="24" width="68" height="30" uuid="05b4463b-17c7-4770-91db-7cf0e6b3761d"/>
+					<reportElement x="88" y="24" width="60" height="30" uuid="05b4463b-17c7-4770-91db-7cf0e6b3761d"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -281,6 +282,19 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{productoNombre}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="60" y="24" width="28" height="30" uuid="440c4475-1256-44db-97af-a934186827eb"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Hora]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -343,7 +357,7 @@
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="20" y="0" width="45" height="13" uuid="337d6509-ba43-4bcd-bef4-f648d9c508b7"/>
+				<reportElement x="20" y="0" width="40" height="13" uuid="337d6509-ba43-4bcd-bef4-f648d9c508b7"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -357,7 +371,7 @@
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="133" y="0" width="75" height="13" uuid="9b291f70-83ef-4c9f-b5cb-e7f837a7b1ae"/>
+				<reportElement x="148" y="0" width="75" height="13" uuid="9b291f70-83ef-4c9f-b5cb-e7f837a7b1ae"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -371,7 +385,7 @@
 				<textFieldExpression><![CDATA[$F{documento}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="208" y="0" width="69" height="13" uuid="e5875c9c-ecd4-45d8-bd9e-fd49d1d3bc26"/>
+				<reportElement x="223" y="0" width="69" height="13" uuid="e5875c9c-ecd4-45d8-bd9e-fd49d1d3bc26"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -385,7 +399,7 @@
 				<textFieldExpression><![CDATA[$F{preimpreso}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="437" y="0" width="120" height="13" uuid="8c0823d7-b881-4119-ad36-720401bfc45d"/>
+				<reportElement x="442" y="0" width="115" height="13" uuid="8c0823d7-b881-4119-ad36-720401bfc45d"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -413,7 +427,7 @@
 				<textFieldExpression><![CDATA[$F{ingreso_precio}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="277" y="0" width="160" height="13" uuid="be2ee38e-bac4-40af-b287-a46770681c7c"/>
+				<reportElement x="292" y="0" width="150" height="13" uuid="be2ee38e-bac4-40af-b287-a46770681c7c"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -511,7 +525,7 @@
 				<textFieldExpression><![CDATA[$F{egreso_precio}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="65" y="0" width="68" height="13" uuid="2f9706f4-eee4-45f9-8bb3-fcf797de837b"/>
+				<reportElement x="88" y="0" width="60" height="13" uuid="2f9706f4-eee4-45f9-8bb3-fcf797de837b"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -523,6 +537,20 @@
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{usuario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="0" width="28" height="13" uuid="0bbdcd87-df80-47ee-a999-b9c5d2a29a00"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

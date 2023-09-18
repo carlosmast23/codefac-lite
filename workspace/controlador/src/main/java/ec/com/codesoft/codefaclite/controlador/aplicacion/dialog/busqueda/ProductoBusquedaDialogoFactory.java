@@ -70,6 +70,12 @@ public class ProductoBusquedaDialogoFactory
                 {
                     //si no existe una bodega consulto cualquier otra bodega para poder mostrar los productos
                     List<Bodega> bodegaList= service.obtenerActivosPorSucursal(sucursal);
+                    
+                    if(bodegaList.size()==0)
+                    {
+                        throw new ServicioCodefacException("No existe creada una Bodega de Venta Configurada");
+                    }                    
+                    
                     if(bodegaList.size()>=0)
                     {
                         bodegaVenta=bodegaList.get(0);
