@@ -131,6 +131,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     @Column(name = "PRESUPUESTO_ID")
     private Long presupuestoId;
+    
+    @Column(name = "NOTA")
+    private String nota;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -477,6 +480,15 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setNombreTipoDocumento(String nombreTipoDocumento) {
         this.nombreTipoDocumento = nombreTipoDocumento;
     }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
+    
     
     
     public TipoDocumentoEnum getCodigoTipoDocumentoEnum() 
@@ -880,6 +892,21 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
             Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
         }
         return facturaNueva;
+    }
+    
+    public FacturaDetalle buscarDetallePorProducto(Producto producto)
+    {
+        if(detalles!=null)
+        {
+            for (FacturaDetalle detalle : detalles) 
+            {
+                if(detalle.getCodigoPrincipal().equals(producto.getCodigoPersonalizado()))
+                {
+                    return detalle;
+                }
+            }
+        }
+        return null;  
     }
 
     /**

@@ -137,6 +137,10 @@
                             <p:selectOneMenu id="console1" value="#{proformaMb.factura.mesa}"  style="width:125px" converter="mesaConverter">
                                 <f:selectItems var="mesa" value="#{proformaMb.controlador.mesaList}" itemValue="#{mesa.id.toString()}"    />
                             </p:selectOneMenu>
+                        </div>                        
+                        
+                        <div class="p-col-12 p-md-6 p-lg-6" >
+                            <p:inputText value="#{proformaMb.factura.nota}" placeholder="Notas" style="width: 100%" />
                         </div>
                     </div>   
 
@@ -172,11 +176,12 @@
                                 <div class="product-item">
                                     <div class="product-item-content">                                        
                                         <div>
-                                            <h4 class="mb-1">#{producto.codigoPersonalizado} [#{producto.valorUnitario}$]</h4>
+                                            <h4 class="mb-1">#{producto.codigoPersonalizado} [#{producto.valorUnitarioDefectoFormat}$]</h4>
                                             <p>#{producto.nombre}</p>                                            
-                                            <div class="mt-5">                                                
-                                                <p:keyboard id="keypad" value="#{producto.registroSanitario}" keypadOnly="true" style="font-size: 20px" />
-                                                <p:commandButton process="@this, keypad" update=":formulario:tblProductoDetalles" actionListener="#{proformaMb.agregarProductoPorDefecto(producto)}" icon="pi pi-plus" styleClass="rounded-button mr-2" style="font-size: 20px;" />
+                                            <div class="mt-5" >                                                                                                
+                                                <p:keyboard id="keypad" value="#{producto.registroSanitario}" keypadOnly="true" style="font-size: 20px;width: 100px" />
+                                                <p:commandButton process="@this, keypad" update=":formulario:tblProductoDetalles,keypad" actionListener="#{proformaMb.agregarProductoPorDefecto(producto)}" icon="pi pi-plus" styleClass="rounded-button mr-2" style="font-size: 20px;" />
+                                                <p:commandButton process="@this, keypad" update=":formulario:tblProductoDetalles,keypad" actionListener="#{proformaMb.disminuirProducto(producto)}" icon="pi pi-minus" styleClass="rounded-button mr-2" style="font-size: 20px;" />
                                             </div>
                                         </div>
                                     </div>
@@ -199,7 +204,7 @@
             <p:remoteCommand name="updateTblFormaPago" update=":formulario:tabDatosFactura:tblDetalleFormaPago"/>
 
             <p:panel id="pnlDatosFactura">
-                <p:tabView id="tabDatosFactura" style="display: block;" >
+                <p:tabView id="tabDatosFactura" style="#{proformaMb.visualizarComanda ? 'display: none;' : ''}" >
                     <p:tab title="Productos" >
                         <div class="p-grid " style="text-align: left"  >
                             <div class="p-col-12 p-md-6 p-lg-3" >

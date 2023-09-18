@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="145" pageHeight="400" columnWidth="141" leftMargin="2" rightMargin="2" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="2.353821282540893"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.y" value="243"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -44,6 +44,7 @@
 	<parameter name="leyenda_documento" class="java.lang.String"/>
 	<parameter name="mesero" class="java.lang.String"/>
 	<parameter name="mesa" class="java.lang.String"/>
+	<parameter name="nota" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -273,25 +274,7 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="208">
-			<staticText>
-				<reportElement x="13" y="106" width="128" height="32" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Este documento es informativo y no tiene validez legal, para descargar el comprobante electrónico puede acceder desde su correo electrónico registrado o desde el portal del Sri.]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="7" y="91" width="134" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Dotted"/>
-					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
-			</textField>
+		<band height="169">
 			<textField>
 				<reportElement x="98" y="2" width="42" height="10" uuid="1b7c80a0-5967-40a9-b967-71fdf687f2c4"/>
 				<box>
@@ -342,7 +325,7 @@
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="13" y="138" width="128" height="70" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
+				<reportElement x="13" y="97" width="128" height="70" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
 				<subreportParameter name="pl_telefonos">
 					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -426,22 +409,12 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{descuento}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="60" width="141" height="31" uuid="76df9525-e49a-4d8b-9529-a084c71183bc">
-					<printWhenExpression><![CDATA[new Boolean($P{leyenda_documento}!=null && !$P{leyenda_documento}.isEmpty() )]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<pen lineStyle="Dashed"/>
-					<topPen lineWidth="0.75" lineStyle="Dashed"/>
-					<leftPen lineWidth="0.75" lineStyle="Dashed"/>
-					<bottomPen lineWidth="0.75" lineStyle="Dashed"/>
-					<rightPen lineWidth="0.75" lineStyle="Dashed"/>
-				</box>
+			<textField>
+				<reportElement x="13" y="56" width="128" height="40" uuid="184f6f4e-9cea-4c58-b7c0-aed630eac2b7"/>
 				<textElement>
-					<font size="6" isBold="true"/>
-					<paragraph leftIndent="2" rightIndent="2"/>
+					<font size="7" isItalic="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{leyenda_documento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{nota}]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>

@@ -539,6 +539,16 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
 
                     entityManager.merge(compra);
                     
+                    //Modificar datos de la cartera en el caso que se haya modificado
+                    //TODO: por el momento solo tengo en cuenta el cliente
+                    CarteraService carteraService=new CarteraService();
+                    Cartera carteraCompra= carteraService.buscarCarteraPorReferencia(compra.getId(),compra.getCodigoDocumentoEnum(), GeneralEnumEstado.ACTIVO, Cartera.TipoCarteraEnum.PROVEEDORES, compra.getSucursalEmpresa());
+                    if(carteraCompra!=null)
+                    {
+                        carteraCompra.setPersona(compra.getProveedor());
+                        entityManager.merge(carteraCompra);
+                    }
+                    
                     //Eliminar detalles que fueron eliminados en la vista
                     eliminarDetallesCompra(compra);
                     

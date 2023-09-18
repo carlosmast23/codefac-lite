@@ -101,6 +101,8 @@ create table FACTURA
     USUARIO_ULTIMA_EDICION_ID BIGINT, 
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.7.3,MOSTRAR_ERROR=NO)*/
     PRESUPUESTO_ID BIGINT, 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.7.7,MOSTRAR_ERROR=NO)*/
+    NOTA varchar(256), 
     primary key (ID)
     /*CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
 
@@ -170,7 +172,7 @@ create table FACTURA_ADICIONAL
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     FACTURA_ID BIGINT,
     CAMPO varchar(150),
-    VALOR varchar(150),
+    VALOR varchar(300),
     TIPO varchar(1),
     NUMERO integer ,
     primary key (ID)

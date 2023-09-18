@@ -521,34 +521,88 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     //TODO: Unificar esta parte con el metodo CARGARDATOSDETALLEVISTA
     public void agregarProductoPorDefecto(Producto producto)
     {
-        System.out.println("producto cargado: "+producto.getNombre());
-        Producto productoDefecto=producto;
-        productoSeleccionado=productoDefecto;
-        
-        Integer cantidad=1;
-        if(!UtilidadesTextos.verificarNullOVacio(productoDefecto.getRegistroSanitario()))
-        {
-            cantidad=Integer.parseInt(productoDefecto.getRegistroSanitario()); 
-        }
-        
-        facturaDetalle = new FacturaDetalle();
-        facturaDetalle.setCantidad(new BigDecimal(cantidad+""));
-        facturaDetalle.setCodigoPrincipal(productoDefecto.getCodigoPersonalizado());
-        facturaDetalle.setDescripcion(productoDefecto.getNombre());
-        facturaDetalle.setPrecioUnitario(productoDefecto.getValorUnitario());
-        facturaDetalle.setDescuento(BigDecimal.ZERO);
-        facturaDetalle.setIvaPorcentaje(productoDefecto.getCatalogoProducto().getIva().getTarifa());
-        if (productoSeleccionado.getCatalogoProducto().getIce() != null) {
-            facturaDetalle.setIcePorcentaje(productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje());
-        }
-        facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);
-        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-        facturaDetalle.setCatalogoProducto(productoDefecto.getCatalogoProducto());
-        
-        precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();        
-        agregarProducto();
+        editarCantidadProducto(producto, 1);
+        editarOCrearProducto(producto);
     }
 
+    public void disminuirProducto(Producto producto)
+    {
+        editarCantidadProducto(producto, -1);
+        editarOCrearProducto(producto);
+    }
+    
+    public void editarOCrearProducto(Producto producto)
+    {
+        System.out.println("producto cargado: "+producto.getNombre());
+        
+        Integer cantidad = 1;
+        if (!UtilidadesTextos.verificarNullOVacio(producto.getRegistroSanitario())) {
+            cantidad = Integer.parseInt(producto.getRegistroSanitario());
+        }
+        
+        //Primero verificar si ya esta agregado el producto para solo modificar la cantidad
+        FacturaDetalle facturaDetalleTmp=factura.buscarDetallePorProducto(producto);
+        
+        //Si la factura ya existe solo toca modificar las cantidades
+        if(facturaDetalleTmp!=null) 
+        {
+            if(cantidad==0)
+            {
+                quitarDetalleFactura(facturaDetalle);  
+            }
+            else
+            {
+                facturaDetalleTmp.setCantidad(new BigDecimal(cantidad+""));
+            }
+            actualizarValoresEditados(facturaDetalleTmp);
+        }
+        else
+        {            
+            Producto productoDefecto=producto;
+            productoSeleccionado=productoDefecto;
+
+            
+            facturaDetalle = new FacturaDetalle();
+            facturaDetalle.setCantidad(new BigDecimal(cantidad+""));
+            facturaDetalle.setCodigoPrincipal(productoDefecto.getCodigoPersonalizado());
+            facturaDetalle.setDescripcion(productoDefecto.getNombre());
+            facturaDetalle.setPrecioUnitario(productoDefecto.getValorUnitario());
+            facturaDetalle.setDescuento(BigDecimal.ZERO);
+            facturaDetalle.setIvaPorcentaje(productoDefecto.getCatalogoProducto().getIva().getTarifa());
+            if (productoSeleccionado.getCatalogoProducto().getIce() != null) {
+                facturaDetalle.setIcePorcentaje(productoSeleccionado.getCatalogoProducto().getIce().getPorcentaje());
+            }
+            facturaDetalle.setTipoDocumentoEnum(TipoDocumentoEnum.LIBRE);
+            facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+            facturaDetalle.setCatalogoProducto(productoDefecto.getCatalogoProducto());
+
+            precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();        
+            agregarProducto();
+        }
+    }
+    
+    public void editarCantidadProducto(Producto producto,Integer signo)
+    {
+        if(UtilidadesTextos.verificarNullOVacio(producto.getRegistroSanitario()))
+        {
+            producto.setRegistroSanitario("0");
+        }
+        
+        Integer cantidad=Integer.parseInt(producto.getRegistroSanitario());
+        if(signo>0)
+        {
+            cantidad++;
+        }
+        else
+        {
+            if(cantidad>0)
+            {
+                cantidad--;
+            }
+        }
+        
+        producto.setRegistroSanitario(cantidad+"");
+    }
 
     public void agregarProducto() {
 
@@ -570,11 +624,17 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
      */
     public void eliminarFilaProducto(FacturaDetalle detalle) {
         System.out.println("verificar si se ejecuta el parametro");
+        
+
+    }
+    
+    //TODO: Este metodo me late que deberia estar dentro de la factura
+    public void quitarDetalleFactura(FacturaDetalle detalle)
+    {
         factura.getDetalles().remove(detalle);
         factura.calcularTotalesDesdeDetalles();
         //Actualizar las forma de pago
         controlador.cargarFormaPago();
-
     }
 
     public void cargarDatosCliente(PersonaEstablecimiento establecimiento) {
@@ -848,6 +908,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         mapParametros.put("informacionAdicionalList", obtenerDatosAdicionales());
         mapParametros.put("mesero", facturaProcesando.getUsuario().getNick());
         mapParametros.put("mesa",(facturaProcesando.getMesa()!=null)?facturaProcesando.getMesa().toString():"");
+        mapParametros.put("nota",facturaProcesando.getNota());
         
         JasperReport reportDatosAdicionales =buscarReporteDatosAdicionales(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml");
         mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
@@ -962,12 +1023,17 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
          * TODO: Lo correcto sera en vez de usar la logica de abajo unir con  controlador.agregarDetallesFactura(detalleEditado)
          * que tiene logica adicional de validaciones y otras cosas mas
          */
+        actualizarValoresEditados(detalleEditado);
+        
+        //PrimeFaces.current().ajax().update(":formulario:tblProductoDetalles");
+    }
+    
+    public void actualizarValoresEditados(FacturaDetalle detalleEditado)
+    {
         detalleEditado.calcularTotalesDetallesFactura();
         //controlador.calcularTotalesDetalles(detalleEditado);
         controlador.cargarTotales();
         controlador.cargarFormaPago();
-        
-        //PrimeFaces.current().ajax().update(":formulario:tblProductoDetalles");
     }
 
     public void verificarPagina() {
@@ -1650,7 +1716,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
 
     public Boolean getVisualizarComanda() {
-        return visualizarComanda;
+        return visualizarComanda;     
     }
 
     public void setVisualizarComanda(Boolean visualizarComanda) {
