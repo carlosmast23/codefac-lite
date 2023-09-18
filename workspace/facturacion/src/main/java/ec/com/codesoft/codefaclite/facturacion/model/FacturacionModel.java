@@ -487,6 +487,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             List<Factura> facturasList = (List<Factura>) (List<?>) resultadoLista;
                             proforma.agregarDetalleDesdeVariasFacturas(facturasList);
                             cargarFacturaDesdeProforma(proforma,null,true);
+                            getCmbPuntoEmision().setSelectedIndex(0);
                         }
                     }
                     
