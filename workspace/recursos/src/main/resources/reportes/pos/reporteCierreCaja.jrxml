@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.9453068450750222"/>
+	<property name="ireport.zoom" value="1.7684607682500204"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="331"/>
+	<property name="ireport.y" value="293"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -57,6 +57,9 @@
 	</variable>
 	<variable name="ELIMINADOS_TOT" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
 		<variableExpression><![CDATA[($F{estado}.equals("Eliminado"))?new BigDecimal($F{total}):BigDecimal.ZERO;]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_FINAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[new BigDecimal($F{total})]]></variableExpression>
 	</variable>
 	<group name="GROUP_FORMA_PAGO">
 		<groupExpression><![CDATA[$F{formaPago}]]></groupExpression>
@@ -246,7 +249,7 @@
 		</groupFooter>
 	</group>
 	<background>
-		<band splitType="Stretch"/>
+		<band height="30" splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="50" splitType="Stretch">
@@ -930,4 +933,36 @@
 			</textField>
 		</band>
 	</lastPageFooter>
+	<summary>
+		<band height="29">
+			<textField>
+				<reportElement x="499" y="9" width="56" height="20" uuid="a2e5839a-62eb-4aeb-b4cb-fcb3d60d9886"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_FINAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="375" y="9" width="124" height="20" uuid="0c263ecf-dcb8-4500-9e2a-d7138752d4a5"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[Total Formas de pago :]]></text>
+			</staticText>
+		</band>
+	</summary>
 </jasperReport>

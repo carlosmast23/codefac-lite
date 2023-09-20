@@ -163,6 +163,11 @@ public class CerrarCajaModel extends CajaSessionModel
     public static void generarReporteCaja(CajaSession cajaSession,InterfazComunicacionPanel panelPadre)
     {
         
+        if(cajaSession.getCaja()==null)
+        {
+            return;
+        }
+        
         Map<String,Object> parametros = new HashMap<String,Object>();
         
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
