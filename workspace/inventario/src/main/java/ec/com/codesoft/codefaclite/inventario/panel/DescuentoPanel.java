@@ -70,6 +70,8 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jLabel9 = new javax.swing.JLabel();
         cmbPrecios = new javax.swing.JComboBox<>();
         btnAgregarCondicionPrecio = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        txtDosPorUno = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -114,7 +116,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 200;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -135,7 +137,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.4;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -146,7 +148,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -156,7 +158,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("# Pvp:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -172,7 +174,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jScrollPane2.setViewportView(tblProductos);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -186,7 +188,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jLabel6.setText("Productos Agregados");
         jLabel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -200,7 +202,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         jPanel1.add(jLabel7, gridBagConstraints);
@@ -216,7 +218,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         jToolBar1.add(cmbTipoAgregarProducto);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -241,22 +243,22 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         jPanel1.add(jSeparator1, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel9.setText("% descuento:");
+        jLabel9.setText("2X1:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel9, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbPrecios, gridBagConstraints);
@@ -266,9 +268,25 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
         btnAgregarCondicionPrecio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAgregarCondicionPrecio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 6;
         jPanel1.add(btnAgregarCondicionPrecio, gridBagConstraints);
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("% descuento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel10, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtDosPorUno, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -285,6 +303,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     private javax.swing.JComboBox<Integer> cmbPrecios;
     private javax.swing.JComboBox<TipoBusquedaProductoEnum> cmbTipoAgregarProducto;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -302,6 +321,7 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     private javax.swing.JTable tblProductos;
     private javax.swing.JTextField txtDescripción;
     private javax.swing.JTextField txtDescuento;
+    private javax.swing.JTextField txtDosPorUno;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
@@ -412,6 +432,17 @@ public abstract class DescuentoPanel extends ControladorCodefacInterface  {
     public void setTxtDescuento(JTextField txtDescuento) {
         this.txtDescuento = txtDescuento;
     }
+
+    @TextFieldBinding(value = "controlador.condicionPrecioSeleccionado.dosPorUno",converter = StringToBigDecimalConverter.class )
+    public JTextField getTxtDosPorUno() {
+        return txtDosPorUno;
+    }
+
+    public void setTxtDosPorUno(JTextField txtDosPorUno) {
+        this.txtDosPorUno = txtDosPorUno;
+    }
+    
+    
         
     
 }

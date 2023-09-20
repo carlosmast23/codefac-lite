@@ -37,7 +37,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA_DETALLE")
-public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
+public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements Cloneable{
 
     @Id
     @Column(name = "ID")
@@ -177,6 +177,13 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract{
         }
         return true;
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
     /**
      * Esto proceso permite reinvertir los calculos cuando ya se tiene un detalle incluido el iva

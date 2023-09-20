@@ -38,6 +38,9 @@ public class DescuentoCondicionPrecio implements Serializable{
     
     @Column (name = "PORCENTAJE_DESCUENTO")
     private BigDecimal porcentajeDescuento;
+    
+    @Column (name = "DOS_POR_UNO")
+    private BigDecimal dosPorUno;
 
     public DescuentoCondicionPrecio() {
         this.id=SECUENCIAL_TMP--;
@@ -72,6 +75,15 @@ public class DescuentoCondicionPrecio implements Serializable{
     public void setPorcentajeDescuento(BigDecimal porcentajeDescuento) {
         this.porcentajeDescuento = porcentajeDescuento;
     }
+
+    public BigDecimal getDosPorUno() {
+        return dosPorUno;
+    }
+
+    public void setDosPorUno(BigDecimal dosPorUno) {
+        this.dosPorUno = dosPorUno;
+    }
+    
 
     public Long getId() {
         return id;

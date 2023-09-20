@@ -91,6 +91,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -607,6 +608,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
                 //Agrega datos adcional como por ejemplo la fecha de creacion de la factura
                 setearDatosPorDefecto(factura,carteraParametro);
+                
+                //Verificar promociones
+                verificarPromocionDosPorUno(factura);
                                
                 //Metodo que va a grabar la factura
                 grabarSinTransaccion(factura,carteraParametro);
@@ -659,6 +663,46 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         return factura;
     }
+    
+    private void verificarPromocionDosPorUno(Factura factura) throws RemoteException, ServicioCodefacException
+    {
+        DescuentoService descuentoService=new DescuentoService();
+        
+        List<FacturaDetalle> detalleList=new ArrayList<FacturaDetalle>();
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
+        {
+            Integer promoDosPorUno=descuentoService.consultarPromocionDosPorUno(facturaDetalle.getReferenciaId());
+            if(promoDosPorUno!=null && promoDosPorUno>0)
+            {
+                try {
+                    FacturaDetalle facturaDetalleCopia=(FacturaDetalle) facturaDetalle.clone();
+                    BigDecimal cantidadRegalo=facturaDetalle.getCantidad().divide(new BigDecimal(promoDosPorUno+""),0, RoundingMode.HALF_UP);
+                    if(cantidadRegalo.compareTo(BigDecimal.ZERO)>0)
+                    {
+                        facturaDetalleCopia.setCantidad(cantidadRegalo);
+                        facturaDetalleCopia.setDescuento(facturaDetalle.getPrecioUnitario().multiply(cantidadRegalo).setScale(2, RoundingMode.HALF_UP));
+                        facturaDetalleCopia.calcularTotalDetalle();
+                        //factura.addDetalle(facturaDetalle);
+                        //factura.calcularTotalesDesdeDetalles();
+                        facturaDetalleCopia.setId(null);
+                        detalleList.add(facturaDetalleCopia);
+                    }
+                    
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        }
+        
+        //Agregar todos los detalles adicionales
+        for (FacturaDetalle detalle : detalleList) {
+            factura.addDetalle(detalle);            
+        }
+        factura.calcularTotalesDesdeDetalles();
+        
+    }
+    
     private void imprimirLogFactura(Factura factura,CrudEnum crudEnum)
     {
         String accionFactura="Creando Factura # :";

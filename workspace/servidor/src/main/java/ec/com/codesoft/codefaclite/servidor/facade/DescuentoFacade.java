@@ -45,6 +45,21 @@ public class DescuentoFacade extends AbstractFacade<Descuento>{
         query.setParameter(3, UtilidadesFecha.getFechaHoraHoy());
         return query.getResultList();
     }
+    
+    public List<DescuentoProductoDetalle> consultarDescuentosPorProductoIdFacade(Long productoId)
+    {
+        ///DescuentoProductoDetalle dpd;        
+        //Producto p;
+        //p.getIdProducto();
+        //dpd.getDescuento().getEstado();
+        //dpd.getDescuento().getFechaFin();
+        String queryStr=" SELECT d FROM DescuentoProductoDetalle d WHERE d.producto.idProducto=?1 AND d.descuento.estado=?2 AND ?3>=d.descuento.fechaInicio AND ?3<=d.descuento.fechaFin ";
+        Query query=getEntityManager().createQuery(queryStr);
+        query.setParameter(1, productoId);
+        query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(3, UtilidadesFecha.getFechaHoraHoy());
+        return query.getResultList();
+    }
    
     /*public Long verificarExistenLotes(Empresa empresa)
     {

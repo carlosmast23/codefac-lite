@@ -263,8 +263,8 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
     
     public void crearModeloTablaCondicionPrecios()
     {   
-        String titulo[]=new String[]{"Objeto","#Pvp","% Desc"};
-        DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class,Object.class,Object.class});
+        String titulo[]=new String[]{"Objeto","#Pvp","% Desc","2X1"};
+        DefaultTableModel modelo=UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class,Object.class,Object.class,Object.class});
         getTblCondicionPrecios().setModel(modelo);
         UtilidadesTablas.definirTamanioColumnas(getTblCondicionPrecios(),new Integer[]{0});
     }
@@ -287,12 +287,20 @@ public class DescuentoModel extends DescuentoPanel implements DialogInterfacePan
                     porceBigDecimal=value.getPorcentajeDescuento();
                 }
                 
+                BigDecimal dosPorUno=BigDecimal.ZERO;
+                if(value.getDosPorUno()!=null)
+                {
+                    dosPorUno=value.getDosPorUno();
+                }
+                
                 
                 
                 return new Object[]{
                     value,
                     numeroPrecio,
                     porceBigDecimal,
+                    dosPorUno
+                    
                 };
             }
 

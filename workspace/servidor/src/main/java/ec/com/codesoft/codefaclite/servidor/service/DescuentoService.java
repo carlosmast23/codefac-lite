@@ -252,6 +252,25 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
         });
     }
     
+    public Integer consultarPromocionDosPorUno(Long productoId) throws ServicioCodefacException, RemoteException
+    {
+        List<DescuentoProductoDetalle> resultadoList=getFacade().consultarDescuentosPorProductoIdFacade(productoId);
+        
+        for (DescuentoProductoDetalle descuentoProductoDetalle : resultadoList) 
+        {
+            List<DescuentoCondicionPrecio> condicionList= descuentoProductoDetalle.getDescuento().getCondicionPrecioList();
+            for (DescuentoCondicionPrecio condicion : condicionList) 
+            {
+                if(condicion.getDosPorUno()!=null && condicion.getDosPorUno().compareTo(BigDecimal.ZERO)>0)
+                {
+                    return condicion.getDosPorUno().intValue();
+                }
+            }
+        }
+        
+        return null;
+    }
+    
     public List<BigDecimal> consultarDescuentosPorProducto(Producto producto,Integer numeroPrecio) throws ServicioCodefacException, RemoteException
     {
         List<DescuentoProductoDetalle> detalleDescuento= getFacade().consultarDescuentosPorProductoFacade(producto);
@@ -262,8 +281,8 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
             //OPTIMIZAR ESTA PARTE PARA HACER DIRECTO EN LA CONSULTA
             List<DescuentoCondicionPrecio> condicionList= descuentoProductoDetalle.getDescuento().getCondicionPrecioList();
             for (DescuentoCondicionPrecio condicion : condicionList) 
-            {
-                if(condicion.getNumeroPrecio().equals(numeroPrecio))
+            {                
+                if(condicion.getNumeroPrecio()!=null && condicion.getNumeroPrecio().equals(numeroPrecio))
                 {
                     descuentoList.add(condicion.getPorcentajeDescuento());
                 }
