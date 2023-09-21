@@ -71,6 +71,7 @@ public class MantenimientoResult implements Serializable,Cloneable{
                         MantenimientoResult detalleTmp= (MantenimientoResult) detalle.clone();
                         detalleTmp.setTareaTitulo(tareaResult.titulo);
                         detalleTmp.setTareaDescripcion(tareaResult.descripcion);
+                        detalleTmp.setDuracionDias(tareaResult.horas+"");
                         resultadoList.add(detalleTmp);
                     } catch (CloneNotSupportedException ex) {
                         Logger.getLogger(MantenimientoResult.class.getName()).log(Level.SEVERE, null, ex);
@@ -303,11 +304,15 @@ public class MantenimientoResult implements Serializable,Cloneable{
     {
         public String titulo;
         public String descripcion;
+        public Integer horas;
 
-        public DetalleTareaResult(String titulo, String descripcion) {
+        public DetalleTareaResult(String titulo, String descripcion,Integer horas) {
             this.titulo = titulo;
             this.descripcion = descripcion;
+            this.horas=horas;
         }
+        
+        
         
         
     }

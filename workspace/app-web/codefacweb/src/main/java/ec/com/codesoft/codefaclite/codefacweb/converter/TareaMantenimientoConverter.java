@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.codefacweb.converter;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,11 @@ public class TareaMantenimientoConverter extends AbstractConverter implements Co
 
     @Override
     public Object buscarObjetoPorId(String id) throws RemoteException {
-        return ServiceFactory.getFactory().getTareaMantenimientoServiceIf().buscarPorId(Long.parseLong(id));
+        if(!UtilidadesTextos.verificarNullOVacio(id))
+        {            
+            return ServiceFactory.getFactory().getTareaMantenimientoServiceIf().buscarPorId(Long.parseLong(id));
+        }
+        return null;
     }
     
 }

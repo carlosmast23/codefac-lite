@@ -14,143 +14,145 @@
                     <h2>Reporte general de reparaciones</h2>
                 </div> 
             </div>
-
-            <div class="p-grid div-resposive"  >
-                <!--- FECHA INICIAL -->
-                <div class="p-col-12 p-md-6 p-lg-2" >
-                    <p:outputLabel for="fechaInicial" value="Fecha Inicial:" class="label-responsive"/>                    
-                    <div class="p-grid div-resposive" >
-                        <div class="p-col-fixed" >
-                            <p:datePicker size="" id="fechaInicial" value="#{reporteMantenimientoMb.fechaInicial}" showIcon="true" />
+            
+            <p:accordionPanel widgetVar="basic" activeIndex="0" multiple="true" >
+                <p:tab title="Menu de Reporte" closable="true">
+                    <div class="p-grid div-resposive"  >
+                        <div class="p-col-12 p-md-6 p-lg-6" >
+                            <p:selectOneRadio id="cmbTipoReporte" value="#{reporteMantenimientoMb.tipoReporte}" layout="lineDirection">
+                                <f:selectItem itemLabel="Libre" itemValue="libre"/>
+                                <f:selectItem itemLabel="Liberadas" itemValue="liberadas"/>
+                                <f:selectItem itemLabel="Taller" itemValue="taller"/>
+                                <f:selectItem itemLabel="Proceso" itemValue="proceso"/>
+                            </p:selectOneRadio>  
                         </div>
-                    </div>
-                </div>
-
-                <!--- FECHA FINAL -->
-                <div class="p-col-12 p-md-6 p-lg-2" >
-                    <p:outputLabel for="fechaFinal" value="Fecha Final:" class="label-responsive" />
-
-                    <div class="p-grid div-resposive" >
-                        <div class="p-col-fixed" >
-                            <p:datePicker id="fechaFinal" value="#{reporteMantenimientoMb.fechaFinal}" showIcon="true" />
+                        
+                        <div class="p-col-12 p-md-6 p-lg-2" >
+                            <p:commandButton icon="fa fa-search" value="Consultar " process="@form,cmbTipoReporte" update=":formulario:tblMantenimiento"  actionListener="#{reporteMantenimientoMb.consultarMantenimientos()}" styleClass="ui-priority-primary" class="componente-responsive" />                
                         </div>
+
+                        <div class="p-col-6 p-md-2 p-lg-1" >
+                            <div class="p-col-fixed" >
+                                <p:commandButton value="XLSX" styleClass="mr-2 mb-2 ui-button-outlined" process="@this" actionListener="#{reporteMantenimientoMb.ejemplo()}" ajax="false">
+                                    <p:dataExporter type="xls" target=":formulario:tblMantenimiento" fileName="vehiculos" />
+                                </p:commandButton>
+                            </div>
+                        </div>
+                        
                     </div>
-                </div>
-                
-                
-                <!--- ESTADO -->
-                <div class="p-col-12 p-md-6 p-lg-2" >
-                    <div><h:outputLabel for="console" value="Estado:" class="label-responsive" /></div>
-                    <p:selectOneMenu id="console" value="#{reporteMantenimientoMb.estadoSeleccionado}" converter="mantenimientoEstadoConverter" class="componente-responsive" >
-                        <f:selectItem itemLabel="Todos" noSelectionOption="true" />
-                        <f:selectItems var="estado" value="#{reporteMantenimientoMb.estadoMantenimietoList}" itemValue="#{estado.letra}"/>
-                    </p:selectOneMenu>
-                </div>
-                
-                <!--- MANTENIMIENTO -->
-                <div class="p-col-12 p-md-6 p-lg-2" >
-                    <div><h:outputLabel for="console25" value="Marca:" class="label-responsive" /></div>
-                    <p:selectOneMenu id="console25" value="#{reporteMantenimientoMb.marcaSeleccionada}" converter="marcaConverter" class="componente-responsive" >
-                        <f:selectItem itemLabel="Todos" noSelectionOption="true" />
-                        <f:selectItems var="estado" value="#{reporteMantenimientoMb.marcaList}" itemValue="#{estado.id.toString()}"/>
-                    </p:selectOneMenu>
-                </div>
-                
-                <div class="p-col-12 p-md-6 p-lg-2" >
-                    <div><h:outputLabel for="console25" value="Ubicación:" class="label-responsive" /></div>
-                    <p:selectOneMenu id="console254" value="#{reporteMantenimientoMb.ubicacionSeleccionada}" converter="mantenimientoUbicacionConverter" class="componente-responsive" >
-                        <f:selectItem itemLabel="Todos" noSelectionOption="true" />
-                        <f:selectItems var="estado" value="#{reporteMantenimientoMb.ubicacionList}" itemValue="#{estado.letra}"/>
-                    </p:selectOneMenu>
-                </div>
+                                        
+                </p:tab>
+                <p:tab title="Filtros" closable="false">
+                    <div class="p-grid div-resposive"  >
+                        <!--- FECHA INICIAL -->
+                        <div class="p-col-12 p-md-6 p-lg-2" >
+                            <p:outputLabel for="fechaInicial" value="Fecha Inicial:" class="label-responsive"/>                    
+                            <div class="p-grid div-resposive" >
+                                <div class="p-col-fixed" >
+                                    <p:datePicker size="" id="fechaInicial" value="#{reporteMantenimientoMb.fechaInicial}" showIcon="true" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--- FECHA FINAL -->
+                        <div class="p-col-12 p-md-6 p-lg-2" >
+                            <p:outputLabel for="fechaFinal" value="Fecha Final:" class="label-responsive" />
+
+                            <div class="p-grid div-resposive" >
+                                <div class="p-col-fixed" >
+                                    <p:datePicker id="fechaFinal" value="#{reporteMantenimientoMb.fechaFinal}" showIcon="true" />
+                                </div>
+                            </div>
+                        </div>
 
 
-                <div class="p-col-6 p-md-2 p-lg-2" >
-                    <div class="p-col-fixed" >
-                        <p:commandButton icon="fa fa-search" value="Consultar " process="@form" update="tblMantenimiento"  actionListener="#{reporteMantenimientoMb.consultarMantenimientos()}" styleClass="ui-priority-primary" class="componente-responsive" />                
+                        <!--- ESTADO -->
+                        <div class="p-col-12 p-md-6 p-lg-1" >
+                            <div><h:outputLabel for="console" value="Estado:" class="label-responsive" /></div>
+                            <p:selectOneMenu id="console" value="#{reporteMantenimientoMb.estadoSeleccionado}" converter="mantenimientoEstadoConverter" class="componente-responsive" >
+                                <f:selectItem itemLabel="Todos" noSelectionOption="true" />
+                                <f:selectItems var="estado" value="#{reporteMantenimientoMb.estadoMantenimietoList}" itemValue="#{estado.letra}"/>
+                            </p:selectOneMenu>
+                        </div>
+
+                        <!--- MANTENIMIENTO -->
+                        <div class="p-col-12 p-md-6 p-lg-3" >
+                            <div><h:outputLabel for="console25" value="Marca:" class="label-responsive" /></div>
+                            <p:selectOneMenu id="console25" value="#{reporteMantenimientoMb.marcaSeleccionada}" converter="marcaConverter" class="componente-responsive" >
+                                <f:selectItem itemLabel="Todos" noSelectionOption="true" />
+                                <f:selectItems var="estado" value="#{reporteMantenimientoMb.marcaList}" itemValue="#{estado.id.toString()}"/>
+                            </p:selectOneMenu>
+                        </div>
+
+                        <div class="p-col-6 p-md-2 p-lg-3" >
+                            <div class="p-col-fixed" >
+                                <div><h:outputLabel for="console26" value="Proceso:" class="label-responsive" /></div>
+                                <p:selectOneMenu id="console26" value="#{reporteMantenimientoMb.tareaSeleccionada}" converter="tareaMantenimientoConverter" class="componente-responsive" >
+                                    <f:selectItem itemLabel="Todos" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems var="estado" value="#{reporteMantenimientoMb.tareaList}" itemValue="#{estado.id.toString()}"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+
+
                     </div>
-                </div>
-                
-                <div class="p-col-6 p-md-2 p-lg-2" >
-                    <div class="p-col-fixed" >
-                        <p:commandButton value="XLSX" styleClass="mr-2 mb-2 ui-button-outlined" process="@this" actionListener="#{reporteMantenimientoMb.ejemplo()}" ajax="false">
-                            <p:dataExporter type="xls" target="tblMantenimiento" fileName="vehiculos" />
-                        </p:commandButton>
-                    </div>
-                </div>
-            </div>
+                </p:tab>
+            </p:accordionPanel>
 
             <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
             <div class="card">
                 <p:dataTable id="tblMantenimiento" var="m" value="#{reporteMantenimientoMb.mantenimientoList}" rowIndexVar="rowIndex" >
 
-                    <p:column headerText="#">
+                    <p:column headerText="#" width="10">
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
                     
-                    <p:column headerText="Vin">
+                    <p:column headerText="Vin" width="130">
                         <h:outputText value="#{m.vin}" />
                     </p:column>
                     
-                    <p:column headerText="Marca">
+                    <p:column headerText="Tarea" width="130">
+                        <h:outputText value="#{m.tareaTitulo}" />
+                    </p:column>
+                    
+                    <p:column headerText="Horas" width="60">
+                        <h:outputText value="#{m.duracionDias}" />
+                    </p:column>
+                    
+                    <p:column headerText="Marca" width="100">
                         <h:outputText value="#{m.marca}" />
                     </p:column>
 
-                    <p:column headerText="Modelo">
+                    <p:column headerText="Modelo" >
                         <h:outputText value="#{m.modelo}" />
                     </p:column>
 
-                    <p:column headerText="Color">
+                    <p:column headerText="Color" width="80" >
                         <h:outputText value="#{m.color}" />
                     </p:column>
 
-                    <p:column headerText="Fecha Ingreso">
+                    <p:column headerText="Fecha Ingreso" width="100" >
                         <h:outputText value="#{m.fechaIngreso}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            <f:convertDateTime pattern="MM-dd HH:mm" />
                         </h:outputText>
                     </p:column>
                     
-                    <p:column headerText="Fecha Salida">
+                    <p:column headerText="Fecha Salida" width="100" >
                         <h:outputText value="#{m.fechaSalida}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            <f:convertDateTime pattern="MM-dd HH:mm" />
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Duración Días">
+                    <p:column headerText="Duración Días" width="30" >
                         <h:outputText value="#{m.duracionDias}" />
                     </p:column>
 
 
-                    <p:column headerText="Estado">
+                    <p:column headerText="Estado"  width="100">
                         <h:outputText value="#{m.estado}" />
                     </p:column>
-
-                    <p:column headerText="Ubicación">
-                        <h:outputText value="#{m.ubicacion}" />
-                    </p:column>
                     
-                    <p:column width="50" headerText="Enderezada">
-                        <h:outputText value="#{m.enderezada}" />
-                    </p:column>
-
-                    <p:column width="50" headerText="Pintura">
-                        <h:outputText value="#{m.pintura}" />
-                    </p:column>
-
-                    <p:column width="50" headerText="Pulida">
-                        <h:outputText value="#{m.pulida}" />
-                    </p:column>
-
-                    <p:column width="50" headerText="Faltante">
-                        <h:outputText value="#{m.faltante}" />
-                    </p:column>
-
-                    <p:column width="50" headerText="Electrómecanico">
-                        <h:outputText value="#{m.electromecanico}" />
-                    </p:column>
-
-
-                    <p:column width="50" headerText="Comentario">
+                    <p:column headerText="Comentario">
                         <h:outputText value="#{m.comentario}" />
                     </p:column>
 

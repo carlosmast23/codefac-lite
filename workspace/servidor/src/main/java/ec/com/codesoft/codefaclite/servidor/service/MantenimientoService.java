@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TareaMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
@@ -281,7 +282,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         });
     }
     
-    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados) throws ServicioCodefacException, RemoteException
+    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados,TareaMantenimiento tareaMantenimiento) throws ServicioCodefacException, RemoteException
     {
         return (List<MantenimientoResult>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
@@ -344,8 +345,17 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 //Falta implemtar el resto de los procesos
                 MantenimientoTareaDetalleService tareaService=new MantenimientoTareaDetalleService();
                 List<MantenimientoTareaDetalle> detalleList= tareaService.buscarPorMantenimiento(dato);
-                for (MantenimientoTareaDetalle mantenimientoTareaDetalle : detalleList) 
+                for (MantenimientoTareaDetalle detalleMantenimiento : detalleList) 
                 {
+                    if(detalleMantenimiento==null || detalleMantenimiento.getTallerTarea()==null || detalleMantenimiento.getTallerTarea().getTareaMantenimiento()==null)
+                    {
+                        Logger.getLogger(MantenimientoService.class.getName()).log(Level.WARNING,"Revisar MantenimientoTareaDetalle: Id: "+detalleMantenimiento.getId());
+                        continue;
+                    }
+                                        
+                    MantenimientoResult.DetalleTareaResult tareaDetalle=new MantenimientoResult.DetalleTareaResult(detalleMantenimiento.getTallerTarea().getTareaMantenimiento().getNombre(), "0",detalleMantenimiento.obtenerHorasTarea());
+                    
+                    mantenimientoResult.agregarTarea(tareaDetalle);
                     //MantenimientoResult.DetalleTareaResult detalleResult= new MantenimientoResult.DetalleTareaResult(mantenimientoTareaDetalle.getTarea().getNombre(),mantenimientoTareaDetalle.getObservacion());                    
                     //mantenimientoResult.agregarTarea(detalleResult);
                     

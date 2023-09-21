@@ -912,7 +912,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     
     private void listenerBtnAgregarProducto()
     {
-        agregarProductoSinInventario(EnumSiNo.SI);
+        agregarProductoSinInventario(null);
     }
     
     private void agregarProductoSinInventario(EnumSiNo manejaInventario) {

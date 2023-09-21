@@ -592,5 +592,21 @@ public class UtilidadesFecha {
         calendar.add(Calendar.SECOND, 59);
         return calendar.getTime();
     }
+    
+     public static java.util.Date obtenerPrimerDiaDelMes() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1); // Establece el día al primero del mes actual
+        return calendar.getTime(); // Convierte Calendar a Date
+    }
+     
+    public static int calcularDiferenciaEnHoras(Timestamp timestampInicial, Timestamp timestampFinal) {
+        // Calcula la diferencia en milisegundos
+        long diferenciaEnMilisegundos = timestampFinal.getTime() - timestampInicial.getTime();
+
+        // Calcula la diferencia en horas
+        int diferenciaEnHoras = (int) (diferenciaEnMilisegundos / (60 * 60 * 1000));
+
+        return diferenciaEnHoras;
+    }
 
 }

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento.MantenimientoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TareaMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
@@ -44,22 +45,30 @@ import net.sf.jasperreports.engine.JasperPrint;
 @ViewScoped
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
-    private List<MantenimientoEnum> estadoMantenimietoList;
+    private List<MantenimientoEnum> estadoMantenimietoList;  
     private List<MantenimientoResult> mantenimientoList; 
-    private List<MarcaProducto> marcaList; 
+    private List<MarcaProducto> marcaList;  
     private List<Mantenimiento.UbicacionEnum> ubicacionList;
+    private List<TareaMantenimiento> tareaList;
     
-    private MantenimientoEnum estadoSeleccionado;
+    private MantenimientoEnum estadoSeleccionado;  
     private MarcaProducto marcaSeleccionada;
     private Mantenimiento.UbicacionEnum ubicacionSeleccionada;
+    private TareaMantenimiento tareaSeleccionada;
     
     private java.util.Date fechaInicial; 
     private java.util.Date fechaFinal;
-
+    
+    private String tipoReporte;
+    
+    ///private String 
+ 
     @Override
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
         //Mantenimiento m;
         //m.getUbicacionEnum()
+        //TareaMantenimiento t;
+        
     }
 
     @Override
@@ -114,14 +123,25 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         try {
+            
+            System.out.println(">> Cargando Metodo Iniciar <<");
+            
             mantenimientoList=new ArrayList<MantenimientoResult>();
+            System.out.println("Tarea 1 ");
             estadoMantenimietoList=UtilidadesLista.arrayToList(MantenimientoEnum.values());
-            estadoMantenimietoList.remove(MantenimientoEnum.FACTURADO);
+            System.out.println("Tarea 2 ");
+            //estadoMantenimietoList.remove(MantenimientoEnum.FACTURADO);
+            
+            System.out.println("Tarea 3 ");
             marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(sessionMb.getSession().getEmpresa());
             ubicacionList=UtilidadesLista.arrayToList(Mantenimiento.UbicacionEnum.values());
             fechaInicial=UtilidadesFecha.getFechaHoy();
+            System.out.println("Tarea 4 ");
             fechaFinal=UtilidadesFecha.sumarDiasFecha(UtilidadesFecha.getFechaHoy(),1); 
+            tareaList=ServiceFactory.getFactory().getTareaMantenimientoServiceIf().obtenerTodosActivos(sessionMb.getSession().getEmpresa());
+            System.out.println("Tarea 5 ");
             
+            System.out.println("Tareas seleccionadas: "+tareaList.size());
             System.out.println("Fecha Inicial: "+fechaInicial);
             System.out.println("Fecha Final: "+fechaFinal);
             
@@ -167,9 +187,32 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     
     public void consultarMantenimientos()
     {
+        //Encontrar sola las unidades finalmente terminadas
+        if(tipoReporte.equals("liberadas"))
+        {
+            fechaFinal=UtilidadesFecha.getFechaHoy();
+            fechaInicial=UtilidadesFecha.obtenerPrimerDiaDelMes();
+            System.out.println("Fecha Inicial"+fechaInicial);
+            estadoSeleccionado=MantenimientoEnum.TERMINADO;
+        }
+        else if(tipoReporte.equals("taller") || tipoReporte.equals("proceso"))
+        {
+            estadoSeleccionado=MantenimientoEnum.INGRESADO;
+            fechaFinal=null;
+            fechaInicial=null;   
+        }
+        
         try {
-            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true);
-            //mantenimientoList.add(0,null);
+            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
+            
+            if(tipoReporte.equals("proceso"))
+            {
+                System.out.println("Datos antes: "+mantenimientoList.size());
+                mantenimientoList=MantenimientoResult.convertirDataReporte(mantenimientoList);
+                System.out.println("Datos luego: "+mantenimientoList.size());
+            }
+            
+    //mantenimientoList.add(0,null);
                         
             System.out.println("Datos consultados DE MANTENIMIENTOS: "+mantenimientoList.size());  
         } catch (ServicioCodefacException ex) {
@@ -178,6 +221,20 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /*public void agregarTareaList(List<MantenimientoResult> resultadoList)
+    {
+        List<MantenimientoResult> listaResultado=new ArrayList<MantenimientoResult>();
+        for (MantenimientoResult resultado : resultadoList) 
+        {
+            for (MantenimientoResult.DetalleTareaResult detalleTareaResult : resultado.getTareaLista()) {
+                
+                listaResultado.add(N);
+            }
+            
+        }
+        
+    }*/
 
     public List<MantenimientoResult> getMantenimientoList() {
         return mantenimientoList;
@@ -250,6 +307,32 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void setUbicacionSeleccionada(Mantenimiento.UbicacionEnum ubicacionSeleccionada) {
         this.ubicacionSeleccionada = ubicacionSeleccionada;
     }
+
+    public String getTipoReporte() {
+        return tipoReporte;
+    }
+
+    public void setTipoReporte(String tipoReporte) {
+        this.tipoReporte = tipoReporte;
+    }
+
+    public List<TareaMantenimiento> getTareaList() {
+        return tareaList;
+    }
+
+    public void setTareaList(List<TareaMantenimiento> tareaList) {
+        this.tareaList = tareaList;
+    }
+
+    public TareaMantenimiento getTareaSeleccionada() {
+        return tareaSeleccionada;
+    }
+
+    public void setTareaSeleccionada(TareaMantenimiento tareaSeleccionada) {
+        this.tareaSeleccionada = tareaSeleccionada;
+    }
+    
+    
     
     
     

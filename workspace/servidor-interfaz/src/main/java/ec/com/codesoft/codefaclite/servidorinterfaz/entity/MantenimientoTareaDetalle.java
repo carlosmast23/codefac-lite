@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -102,6 +103,21 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
 
     public void setObservacion(String observacion) {
         this.observacion = observacion;
+    }
+    
+    public Integer obtenerHorasTarea()
+    {
+        if(fechaInicio==null)
+        {
+            return 0;
+        }
+        
+        Timestamp fechaFinTmp=UtilidadesFecha.getFechaHoyTimeStamp();
+        if(fechaFin!=null)
+        {   
+            fechaFinTmp=fechaFin;
+        }
+        return UtilidadesFecha.calcularDiferenciaEnHoras(fechaInicio, fechaFinTmp);        
     }
     
     public String getEstadoNombre()
