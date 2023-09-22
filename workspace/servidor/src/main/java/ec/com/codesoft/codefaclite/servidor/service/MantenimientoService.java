@@ -330,6 +330,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 mantenimientoResult.fechaIngreso=dato.getFechaIngreso()+"";
                 mantenimientoResult.fechaSalida=(dato.getFechaSalida()!=null)?dato.getFechaSalida()+"":"";
                 mantenimientoResult.ubicacion=(dato.getUbicacionEnum()!=null)?dato.getUbicacionEnum().getNombre():"";
+                mantenimientoResult.taller=dato.getTallerNombre();
                 
                 String duracionDiasStr="";
                 if(dato.getFechaSalida()!=null)

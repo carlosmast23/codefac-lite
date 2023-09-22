@@ -35,11 +35,13 @@ public class MantenimientoResult implements Serializable,Cloneable{
     public String faltante;
     public String electromecanico;
     public String comentario;
+    public String taller;
             
     
     private String tareaTitulo;
     private String tareaDescripcion;
     private String duracionDias;
+    
     
     private List<DetalleTareaResult> tareaLista;
     
@@ -232,6 +234,14 @@ public class MantenimientoResult implements Serializable,Cloneable{
 
     public void setComentario(String comentario) {
         this.comentario = comentario;
+    }
+
+    public String getTaller() {
+        return taller;
+    }
+
+    public void setTaller(String taller) {
+        this.taller = taller;
     }
     
     

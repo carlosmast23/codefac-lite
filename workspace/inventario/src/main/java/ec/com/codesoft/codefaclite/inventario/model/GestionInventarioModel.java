@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
@@ -285,7 +286,9 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     private ActionListener listenerBuscarProducto=new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI,session.getEmpresa(),true,true);
+            //ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(EnumSiNo.SI,session.getEmpresa(),true,true);
+            ProductoBusquedaDialogoFactory busquedaFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(), ProductoBusquedaDialogoFactory.ResultadoEnum.PRODUCTO);
+            InterfaceModelFind buscarBusquedaDialogo = busquedaFactory.construirDialogo();
             BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);            
             buscarDialogo.setVisible(true);
 

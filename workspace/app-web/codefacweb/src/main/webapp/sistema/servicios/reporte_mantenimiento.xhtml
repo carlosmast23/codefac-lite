@@ -20,7 +20,7 @@
                     <div class="p-grid div-resposive"  >
                         <div class="p-col-12 p-md-6 p-lg-6" >
                             <p:selectOneRadio id="cmbTipoReporte" value="#{reporteMantenimientoMb.tipoReporte}" layout="lineDirection">
-                                <f:selectItem itemLabel="Libre" itemValue="libre"/>
+                                <f:selectItem itemLabel="Todos" itemValue="libre"/>
                                 <f:selectItem itemLabel="Liberadas" itemValue="liberadas"/>
                                 <f:selectItem itemLabel="Taller" itemValue="taller"/>
                                 <f:selectItem itemLabel="Proceso" itemValue="proceso"/>
@@ -113,6 +113,10 @@
                     
                     <p:column headerText="Tarea" width="130">
                         <h:outputText value="#{m.tareaTitulo}" />
+                    </p:column>
+                    
+                    <p:column headerText="Taller" width="130">
+                        <h:outputText value="#{m.ta}" />
                     </p:column>
                     
                     <p:column headerText="Horas" width="60">
