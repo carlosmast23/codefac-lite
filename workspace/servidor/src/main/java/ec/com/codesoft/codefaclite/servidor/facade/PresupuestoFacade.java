@@ -113,10 +113,21 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
             whereActividadesPendiente=" AND p.terminado = ?3 ";
         }
         
-        String queryString = " Select DISTINCT p FROM PresupuestoDetalleActividad p WHERE p.presupuestoDetalle.empleado=?1 AND p.presupuestoDetalle.presupuesto.estado<>?2 "+whereActividadesPendiente;
+        String whereEmpleado="";
+        if(empleado!=null)
+        {
+            whereEmpleado=" AND p.presupuestoDetalle.empleado=?1";
+        }
+        
+        String queryString = " Select DISTINCT p FROM PresupuestoDetalleActividad p WHERE p.presupuestoDetalle.presupuesto.estado<>?2 "+whereActividadesPendiente+whereEmpleado;
         
         Query query = getEntityManager().createQuery(queryString);
-        query.setParameter(1,empleado);
+        
+        if(empleado!=null)
+        {
+            query.setParameter(1,empleado);
+        }
+        
         query.setParameter(2,Presupuesto.EstadoEnum.FACTURADO.getLetra());
         
         if(actividadesPendientes!=null)

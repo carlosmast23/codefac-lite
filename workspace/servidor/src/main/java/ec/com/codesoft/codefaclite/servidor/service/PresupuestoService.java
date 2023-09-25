@@ -27,7 +27,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -63,20 +65,56 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         this.presupuestoFacade = new PresupuestoFacade();
     }
     
-    private void validacion(Presupuesto entity) throws ServicioCodefacException
+    private void validacion(Presupuesto entity) throws ServicioCodefacException, RemoteException
     {
         if (entity.getTotalVenta() == null || entity.getTotalVenta().compareTo(BigDecimal.ZERO) == 0) {
             throw new ServicioCodefacException("Error al grabar, el total del presupuesto no puede ser 0");
         }
+        
+        
+    }
+    
+    private void postValidacion(Presupuesto entity,CrudEnum estado) throws ServicioCodefacException, RemoteException
+    {        
+        //validar que si el estado se va a cambiar a facturado, primero se tiene que tener todas las actividades como terminadas
+        if(entity.getEstadoEnum().equals(Presupuesto.EstadoEnum.TERMINADO))
+        {
+            Presupuesto presupuestoOriginal=null;
+            if(estado.equals(CrudEnum.EDITAR))
+            {
+                if(entity.getId()!=null)
+                {
+                    presupuestoOriginal=buscarPorId(entity.getId());
+                }
+            }
+            
+            
+            if(presupuestoOriginal==null || !presupuestoOriginal.getEstadoEnum().equals(Presupuesto.EstadoEnum.TERMINADO))
+            {
+                List<PresupuestoDetalle> presupuestoDetalleList = entity.getPresupuestoDetalles();
+                for (PresupuestoDetalle presupuestoDetalle : presupuestoDetalleList) {
+                    List<PresupuestoDetalleActividad> actividadList = presupuestoDetalle.getActividadList();
+                    for (PresupuestoDetalleActividad actividad : actividadList) {
+                        if (EnumSiNo.NO.equals(actividad.getTerminadoEnum())) {
+                            throw new ServicioCodefacException("No se puede grabar con estado FINALIZADO si tiene actividades sin marcar como terminados");
+                        }
+                    }
+                }
+            }            
+                        
+        }
     }
     
     public void editar(Presupuesto p, Boolean enviarCorreo) throws RemoteException, ServicioCodefacException {
+        validacion(p);
+        postValidacion(p,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 entityManager.merge(p);
                 procesosRelacionados(p);
                 verificarEnviarCorreo(enviarCorreo, p);
+                
             }
         });
 
@@ -140,6 +178,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                 procesosRelacionados(entity);
                 Presupuesto presupuestoEdit=entityManager.merge(entity);                
                 verificarEnviarCorreo(enviarCorreo, presupuestoEdit);
+                postValidacion(presupuestoEdit,CrudEnum.CREAR);
                 //entity=entityManager.merge(presupuestoEdit);
                 return presupuestoEdit;
             } 
@@ -289,13 +328,15 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     }
     
     
-    public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList) throws ServicioCodefacException,RemoteException
+    public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList,Usuario usuario) throws ServicioCodefacException,RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 for (PresupuestoDetalleActividad actividad : actividadList) 
                 {
+                    actividad.setUsuario(usuario);
+                    actividad.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
                     entityManager.merge(actividad);
                 }
             }

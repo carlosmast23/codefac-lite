@@ -28,6 +28,8 @@ public class PresupuestoDetalleActividad extends EntityAbstract<GeneralEnumEstad
     @JoinColumn(name = "PRESUPUESTO_DETALLE_ID")
     private PresupuestoDetalle presupuestoDetalle;
     
+    @JoinColumn(name = "USUARIO_ID")
+    private Usuario usuario;
     
     
     /////////// GET AND SET ////////////////
@@ -66,6 +68,16 @@ public class PresupuestoDetalleActividad extends EntityAbstract<GeneralEnumEstad
     {
         this.presupuestoDetalle = presupuestoDetalle;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
+    
     
     
 }

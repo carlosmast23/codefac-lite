@@ -246,6 +246,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
       } catch (ServicioCodefacException ex) {
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+            throw new ExcepcionCodefacLite(ex.getMessage());
         }
     }
     

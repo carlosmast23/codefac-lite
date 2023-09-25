@@ -87,7 +87,7 @@ public class TareaPendienteOrdenTrabajoControlador extends ModelControladorAbstr
     public void grabar() throws ExcepcionCodefacLite, RemoteException 
     {   
         try {
-            ServiceFactory.getFactory().getPresupuestoServiceIf().actualizarActividadesPresupuestos(actividadListSeleccionada);
+            ServiceFactory.getFactory().getPresupuestoServiceIf().actualizarActividadesPresupuestos(actividadListSeleccionada,session.getUsuario());
             //ServiceFactory.getFactory().getOrdenTrabajoServiceIf().terminarDetallesOrdenesTrabajo(session.getUsuario().getEmpleado(),getDetallesModificar());
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
             limpiar();
