@@ -99,6 +99,63 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         return query.getResultList();
     }
     
+    public List<PresupuestoDetalleActividad> consultarActividades(Date fechaInicial, Date fechaFinal, Persona cliente,String codigoObjetoMantenimiento, Presupuesto.EstadoEnum estadoEnum) 
+    {
+        //PresupuestoDetalleActividad p;
+        //p.getPresupuestoDetalle().getPresupuesto();
+        //presupuestoDetalleActividad.get
+        //Presupuesto presupuesto;
+        //presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento().getCodigo();
+        
+        //presupuesto.getEstado();        
+        String queryString = " Select DISTINCT p From PresupuestoDetalleActividad p where 1=1 ";
+
+        if (fechaInicial != null) {
+            queryString += " AND p.presupuestoDetalle.presupuesto.fechaPresupuesto>=?1";
+        }
+
+        if (fechaFinal != null) {
+            queryString += " AND p.presupuestoDetalle.presupuesto.fechaPresupuesto<=?2";
+        }
+
+        if (cliente != null) {
+            queryString += " AND p.presupuestoDetalle.presupuesto.persona=?3";
+        }
+
+        if (estadoEnum != null) {
+            queryString += " AND p.presupuestoDetalle.presupuesto.estado=?4";
+        }
+        
+        if(!UtilidadesTextos.verificarNullOVacio(codigoObjetoMantenimiento))
+        {
+            queryString+=" AND p.presupuestoDetalle.presupuesto.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento.codigo=?5 "; 
+        }
+
+        Query query = getEntityManager().createQuery(queryString);
+
+        if (fechaInicial != null) {
+            query.setParameter(1, fechaInicial);
+        }
+
+        if (fechaFinal != null) {
+            query.setParameter(2, fechaFinal);
+        }
+
+        if (cliente != null) {
+            query.setParameter(3, cliente);
+        }
+
+        if (estadoEnum != null) {
+            query.setParameter(4, estadoEnum.getLetra());
+        }
+        
+        if(!UtilidadesTextos.verificarNullOVacio(codigoObjetoMantenimiento))
+        {
+            query.setParameter(5,codigoObjetoMantenimiento);
+        }
+        return query.getResultList();
+    }
+    
     public List<PresupuestoDetalleActividad> consultarActividadesPorEmpleado(Empleado empleado,Boolean actividadesPendientes)
     {
         //Presupuesto p;

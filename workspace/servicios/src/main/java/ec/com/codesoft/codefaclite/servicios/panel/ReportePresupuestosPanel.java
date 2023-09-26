@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.servicios.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -59,6 +61,8 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         chkReporteDetallesCompras = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         txtPlaca = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        cmbUsuario = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -119,10 +123,10 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         jPanel1.add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Estado:");
+        jLabel4.setText("Usuario:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
@@ -223,6 +227,22 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtPlaca, gridBagConstraints);
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel6.setText("Estado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbUsuario, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -240,11 +260,13 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
     private javax.swing.JComboBox<Presupuesto.EstadoEnum> cmbEstado;
     private org.jdesktop.swingx.JXDatePicker cmbFechaFinal;
     private org.jdesktop.swingx.JXDatePicker cmbFechaInicial;
+    private javax.swing.JComboBox<Usuario> cmbUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEspacio1;
@@ -309,6 +331,16 @@ public abstract class ReportePresupuestosPanel extends ControladorCodefacInterfa
     public void setTxtPlaca(JTextField txtPlaca) {
         this.txtPlaca = txtPlaca;
     }
+
+    public JComboBox<Usuario> getCmbUsuario() {
+        return cmbUsuario;
+    }
+
+    public void setCmbUsuario(JComboBox<Usuario> cmbUsuario) {
+        this.cmbUsuario = cmbUsuario;
+    }
+    
+    
 
     
 }

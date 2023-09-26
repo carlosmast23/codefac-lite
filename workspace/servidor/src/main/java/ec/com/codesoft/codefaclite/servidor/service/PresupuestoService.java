@@ -33,8 +33,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ActividadPresupuestoData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ActividadPresupuestoReport;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
@@ -45,11 +49,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.eclipse.jdt.internal.compiler.ast.Literal;
 
 /**
  *
@@ -346,6 +352,37 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     public Presupuesto consultarUltimaPorObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
     { 
         return getFacade().consultarUltimaOTporObjectoMantenimientoFacade(objetoMantenimiento);
+    }
+    
+    public ReportDataAbstract<ActividadPresupuestoData> consultarActividadesPresupuesto(Date fechaInicial, Date fechaFinal,Persona cliente,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException, RemoteException
+    {
+        ReportDataAbstract<ActividadPresupuestoData> reporte=new ActividadPresupuestoReport("Actividades Presupuesto");
+        
+        List<PresupuestoDetalleActividad> resultadoList=getFacade().consultarActividades(fechaInicial, fechaFinal, cliente,codigoObjetoMantenimiento,estadoEnum);        
+        for (PresupuestoDetalleActividad detalle : resultadoList) 
+        {
+            ActividadPresupuestoData data=new ActividadPresupuestoData();
+            Presupuesto presupuesto=detalle.getPresupuestoDetalle().getPresupuesto();
+            
+            String usuarioNick="";
+            if(detalle.getUsuario()!=null)
+            {
+                usuarioNick=detalle.getUsuario().getNick();
+            }
+            
+            data.setUsuario(usuarioNick);
+            data.setCodigoOrdenTrabajo(detalle.getPresupuestoDetalle().getPresupuesto().getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"");            
+            data.setTarea(detalle.getProductoActividad().getNombre());
+            data.setServicio(detalle.getPresupuestoDetalle().getProducto().getNombre());
+            
+            
+            String fechaFormato=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(presupuesto.getFechaPresupuesto());            
+            data.setFecha(fechaFormato);
+            data.setTerminado(detalle.getTerminadoEnum().getNombre());
+            
+            reporte.agregarDetalle(data);
+        }
+        return reporte;
     }
     
 }

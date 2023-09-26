@@ -26,7 +26,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -34,6 +36,7 @@ import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -164,9 +167,16 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
 
     @Override
     public void limpiar() {
-        getCmbEstado().removeAllItems();
-        for (Presupuesto.EstadoEnum estadoEnum : Presupuesto.EstadoEnum.values()) {
-            getCmbEstado().addItem(estadoEnum);
+        try {
+            getCmbEstado().removeAllItems();
+            for (Presupuesto.EstadoEnum estadoEnum : Presupuesto.EstadoEnum.values()) {
+                getCmbEstado().addItem(estadoEnum);
+            }
+            
+            List<Usuario> usuarioList= ServiceFactory.getFactory().getUsuarioServicioIf().obtenerTodos();            
+            UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarioList,true);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReportePresupuestosModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -233,15 +243,8 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 try {
                     Presupuesto.EstadoEnum estadoEnum=(getCmbEstado().isEnabled())?(Presupuesto.EstadoEnum) getCmbEstado().getSelectedItem():null;
                     String placa=getTxtPlaca().getText();
-                    List<Presupuesto> presupuestos = ServiceFactory.getFactory().getPresupuestoServiceIf().consultarPresupuestos(
-                            getCmbFechaInicial().getDate(),
-                            getCmbFechaFinal().getDate(),
-                            cliente,
-                            placa,
-                            estadoEnum);
-
-                    construirDataReporte(presupuestos);
-                    mostrarDatosTabla();
+                    Usuario usuario=(Usuario) getCmbUsuario().getSelectedItem();
+                    ejecutarConsulta(estadoEnum, getCmbFechaInicial().getDate(), getCmbFechaFinal().getDate(), cliente, placa,usuario);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ReportePresupuestosModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {
@@ -249,6 +252,19 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 }
             }
         });
+    }
+    
+    protected void ejecutarConsulta(Presupuesto.EstadoEnum estadoEnum,java.util.Date fechaInicial,java.util.Date fechaFinal,Persona cliente,String placa,Usuario usuario) throws ServicioCodefacException, RemoteException
+    {
+        List<Presupuesto> presupuestos = ServiceFactory.getFactory().getPresupuestoServiceIf().consultarPresupuestos(
+                getCmbFechaInicial().getDate(),
+                getCmbFechaFinal().getDate(),
+                cliente,
+                placa,
+                estadoEnum);
+
+        construirDataReporte(presupuestos);
+        mostrarDatosTabla();
     }
 
     private void setearValoresCliente() {
@@ -296,7 +312,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
     }
     
 
-    private String[] getTituloTablaPantalla() {
+    protected String[] getTituloTablaPantalla() {
         String[] titulo = {"Código","Orden T.", "Identificación", "Fecha", "Estado", "Razon Social", "Descripción", "Ventas","Compras","Interno","Utilidad"};
         return titulo;
     }
@@ -306,7 +322,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
         return titulo;
     }
 
-    private void mostrarDatosTabla() {
+    protected void mostrarDatosTabla() {
 
         String[] titulo = getTituloTablaPantalla();
         DefaultTableModel modeloTabla = new DefaultTableModel(titulo, 0);
