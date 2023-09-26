@@ -164,7 +164,7 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
         rembolsoDetalle.setSecuencial(Long.parseLong(getTxtSecuencialCompra().getText()));
         
         rembolsoDetalle.setFechaEmision(getCmbFechaCompra().getDate());
-        rembolsoDetalle.setNumeroAutorizacion(getTxtAutorizacion().getText());
+        rembolsoDetalle.setNumeroAutorizacion(getTxtAutorizacion().getText().trim());
         
         rembolsoDetalle.setDescripcion(getTxtDescripcionReembolso().getText());
         
@@ -262,6 +262,11 @@ public class DetalleReembolsoModel extends DetalleReembolsoPanel implements Dial
         if(rembolsoDetalle.getNumeroAutorizacion().length()<=9)
         {
             throw new ExcepcionCodefacLite("El número de autorización es muy corto");
+        }
+        
+        if(rembolsoDetalle.getNumeroAutorizacion().length()>49)
+        {
+            throw new ExcepcionCodefacLite("El número de autorización es muy largo");
         }
         
         if(rembolsoDetalle.getFechaEmision()==null)

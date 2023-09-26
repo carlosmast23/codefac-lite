@@ -215,6 +215,17 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
                 
         return cajasSession;
     }
+    
+    public List<CajaSession> obtenerTodasCajaSession(Sucursal sucursal) throws ServicioCodefacException, RemoteException 
+    {
+        Map<String, Object> map = new HashMap<>();
+        map.put("caja.sucursal", sucursal);
+        map.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
+
+        List<CajaSession> cajasSession = getFacade().findByMap(map);
+        return cajasSession;
+    }
+
 
     @Override
     public CajaSession obtenerCajaSessionPorPuntoEmisionYUsuario(Integer puntoEmision, Usuario usuario) 

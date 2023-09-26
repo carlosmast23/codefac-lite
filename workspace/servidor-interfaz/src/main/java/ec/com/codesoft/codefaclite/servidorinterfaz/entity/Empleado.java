@@ -216,6 +216,17 @@ public class Empleado implements Serializable
     }
     
     
+    public Boolean verificarSupervisor()
+    {
+        if(departamento!=null)
+        {
+            if(Departamento.TipoEnum.Supervisor.equals(departamento.getTipoEnum()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
      
 
     @Override

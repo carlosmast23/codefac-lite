@@ -384,6 +384,15 @@ public class Usuario implements Serializable{
         return false;
     }
     
+    public Boolean verficarSupervisor()
+    {
+        if(empleado!=null)
+        {
+            return empleado.verificarSupervisor();
+        }
+        return false;
+    }
+    
     /**
      * ========================================================================
      *                  METODOS ADICIONALES
