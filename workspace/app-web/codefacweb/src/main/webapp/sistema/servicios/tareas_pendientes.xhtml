@@ -109,7 +109,16 @@
                         </p:cellEditor>
                     </p:column>
 
-                    <p:column exportable="false" width="70">                        
+                    <p:column exportable="false" width="100">      
+                        <p:commandButton                            
+                            title="Asignar Conformidades"
+                            process="@this"   
+                            update="formulario:tblDetalleInforme"
+                            actionListener="#{tareasPendientesMb.abrirNovedades(m)}"
+                            oncomplete="PF('manageProductDialog').show()"
+                            icon="fa fa-file-text"                            
+                            styleClass="edit-button rounded-button ui-button-success">                                                        
+                        </p:commandButton>    
                         <p:commandButton
                             disabled="#{m.estado eq 'F' or m.estado eq 'I'}"
                             title="Asignar nueva tarea"
@@ -134,6 +143,75 @@
 
                 </p:dataTable>
             </div>
+            
+            <p:dialog header="Product Details" showEffect="fade" modal="true" widgetVar="manageProductDialog" style="width: 50%"
+                      responsive="true">
+                <p:outputPanel id="manage-product-content" class="ui-fluid">
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <h:outputLabel   value="No Conformidades :  " class="etiqueta_titulo" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:selectOneMenu id="cmbTipoNoConformidad"  value="#{tareasPendientesMb.tipoNoConformidadSeleccionada}" converter="tipoNoConformidadConverter" filter="true" filterMatchMode="startsWith" >
+                                <f:selectItems value="#{tareasPendientesMb.tipoNoConfirmidadList}" var="opcion" itemValue="#{opcion.codigo}" />
+                            </p:selectOneMenu>
+                        </div>
+                        
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <h:outputLabel   value="Parte Vehiculo :  " class="etiqueta_titulo" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:selectOneMenu id="cmbParteVehiculo"   value="#{tareasPendientesMb.parteVehiculoSeleccionada}" converter="parteVehiculoConverter" filter="true" filterMatchMode="startsWith"  >
+                                <f:selectItems value="#{tareasPendientesMb.parteVehiculoList}" var="opcion" itemValue="#{opcion.nombre}" />
+                            </p:selectOneMenu>
+                        </div>
+                        
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <p:commandButton 
+                                value="Agregar" 
+                                icon="fa fa-plus" 
+                                process="@this,cmbTipoNoConformidad,cmbParteVehiculo"
+                                update="tblDetalleInforme"
+                                actionListener="#{tareasPendientesMb.agregarNovedadTabla()}" />
+                        </div>
+                    </div>
+                    
+                    <p:dataTable
+                        style="width: 70%"
+                        id="tblDetalleInforme" 
+                        var="m" 
+                        editable="true"
+                        editMode="cell"
+                        reflow="true"
+                        widgetVar="tblDetalleInformeWidget"
+                        value="#{tareasPendientesMb.detalleSeleccionado.informeList}" 
+                    >
+
+                        <p:column headerText="Tipo">
+                            <h:outputText value="#{m.codigoTipoNoConformidad}" />
+                        </p:column>
+
+                        <p:column headerText="Parte">
+                            <h:outputText value="#{m.parteVehiculo}" />
+                        </p:column>
+                        
+                        <p:column width="25">
+                            <p:commandButton 
+                                icon="pi pi-trash" 
+                                process="@this"
+                                update="tblDetalleInforme"
+                                actionListener="#{tareasPendientesMb.eliminarNovedad(m)}"
+                                />
+                        </p:column>
+                        
+                    </p:dataTable>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                   
+                </f:facet>
+            </p:dialog>
+            
         </ui:define>
     </ui:composition>
 

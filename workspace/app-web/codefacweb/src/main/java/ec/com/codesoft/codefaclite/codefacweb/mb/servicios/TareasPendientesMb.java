@@ -6,10 +6,14 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoInformeDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ParteVehiculoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNoConformidadEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -41,9 +45,17 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
     private List<MantenimientoTareaDetalle> mantenimientoTareaList;   
     private List<Taller> tallerList;   
     
+    private List<TipoNoConformidadEnum> tipoNoConfirmidadList;
+    private List<ParteVehiculoEnum> parteVehiculoList;
+    
+    private TipoNoConformidadEnum tipoNoConformidadSeleccionada;
+    private ParteVehiculoEnum parteVehiculoSeleccionada;
+    
+    private MantenimientoTareaDetalle detalleSeleccionado;
+    
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
+    public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException { 
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -88,6 +100,8 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
             cargarDatosIniciales();
             
             tallerList=ServiceFactory.getFactory().getTallerServiceIf().obtenerActivos();
+            parteVehiculoList=UtilidadesLista.arrayToList(ParteVehiculoEnum.values());
+            tipoNoConfirmidadList=UtilidadesLista.arrayToList(TipoNoConformidadEnum.values());
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -155,6 +169,75 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
         this.tallerList = tallerList;
     }
 
+    public List<TipoNoConformidadEnum> getTipoNoConfirmidadList() {
+        return tipoNoConfirmidadList;
+    }
+
+    public void setTipoNoConfirmidadList(List<TipoNoConformidadEnum> tipoNoConfirmidadList) {
+        this.tipoNoConfirmidadList = tipoNoConfirmidadList;
+    }
+
+    public List<ParteVehiculoEnum> getParteVehiculoList() {
+        return parteVehiculoList;
+    }
+
+    public void setParteVehiculoList(List<ParteVehiculoEnum> parteVehiculoList) {
+        this.parteVehiculoList = parteVehiculoList;
+    }
+
+    public TipoNoConformidadEnum getTipoNoConformidadSeleccionada() {
+        return tipoNoConformidadSeleccionada;
+    }
+
+    public void setTipoNoConformidadSeleccionada(TipoNoConformidadEnum tipoNoConformidadSeleccionada) {
+        this.tipoNoConformidadSeleccionada = tipoNoConformidadSeleccionada;
+    }
+
+    public ParteVehiculoEnum getParteVehiculoSeleccionada() {
+        return parteVehiculoSeleccionada;
+    }
+
+    public void setParteVehiculoSeleccionada(ParteVehiculoEnum parteVehiculoSeleccionada) {
+        this.parteVehiculoSeleccionada = parteVehiculoSeleccionada;
+    }
+
+    public MantenimientoTareaDetalle getDetalleSeleccionado() {
+        return detalleSeleccionado;
+    }
+
+    public void setDetalleSeleccionado(MantenimientoTareaDetalle detalleSeleccionado) {
+        this.detalleSeleccionado = detalleSeleccionado;
+    }
+    
+    
+    public void abrirNovedades(MantenimientoTareaDetalle tarea)
+    {
+        System.out.println("Abriendo Dialogo para abrir las NOVEDADES ...");
+        detalleSeleccionado=tarea;
+    }
+    
+    public void agregarNovedadTabla()
+    {
+        System.out.println("Agregando NOVEDADES ...");
+        MantenimientoInformeDetalle detalle=new MantenimientoInformeDetalle();
+        detalle.setCodigoTipoNoConformidad(tipoNoConformidadSeleccionada.getCodigo());    
+        detalle.setParteVehiculo(parteVehiculoSeleccionada.getNombre());
+        detalle.setMantenimientoTareaDetalle(detalleSeleccionado);
+        if(!detalleSeleccionado.verificarInformeDuplicado(detalle))
+        {
+            try {                
+                ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().grabarInformeDetalle(detalle,detalleSeleccionado);
+                detalleSeleccionado.agregarInforme(detalle);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+
+    
     
     public void abrirPantallaModificarTarea(MantenimientoTareaDetalle mantenimiento)
     {
@@ -201,4 +284,17 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
             Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         }
     } 
+    
+    public void eliminarNovedad(MantenimientoInformeDetalle detalle)
+    {
+        try {
+            System.out.println(" Eliminando novedad ...");            
+            ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().eliminarInformeDetalle(detalle,detalleSeleccionado);
+            detalleSeleccionado.getInformeList().remove(detalle);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

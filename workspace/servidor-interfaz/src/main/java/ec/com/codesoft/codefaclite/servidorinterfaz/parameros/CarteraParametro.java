@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class CarteraParametro implements Serializable{
     public Boolean habilitarCredito;
     public Integer diasCredito;
+    public Boolean pagarConCaja;
 
     public CarteraParametro(Boolean habilitarCredito, Integer diasCredito) {
         this.habilitarCredito = habilitarCredito;

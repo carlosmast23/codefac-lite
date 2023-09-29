@@ -89,7 +89,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             InputStream path =  RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("mantenimientoReporte.jrxml");
             JasperPrint jasperPrint = ReporteCodefac.construirReporte(
                     path, new HashMap<String, Object>(),
-                    MantenimientoResult.convertirDataReporte(mantenimientoList), 
+                    MantenimientoResult.convertirDataReporte(mantenimientoList,false), 
                     sessionMb.getSession(), 
                     "Listado de mantemientos", 
                     OrientacionReporteEnum.HORIZONTAL, 
@@ -195,21 +195,27 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             System.out.println("Fecha Inicial"+fechaInicial);
             estadoSeleccionado=MantenimientoEnum.TERMINADO;
         }
-        else if(tipoReporte.equals("taller") || tipoReporte.equals("proceso"))
+        else if(tipoReporte.equals("taller") || tipoReporte.equals("proceso") || tipoReporte.equals("noConformidad"))
         {
             estadoSeleccionado=MantenimientoEnum.INGRESADO;
             fechaFinal=null;
-            fechaInicial=null;   
+            //UtilidadesFecha.restarDiasFecha(fechaFinal, 0)
+            fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());   
         }
-        
+                
         try {
             mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
             
             if(tipoReporte.equals("proceso"))
             {
                 System.out.println("Datos antes: "+mantenimientoList.size());
-                mantenimientoList=MantenimientoResult.convertirDataReporte(mantenimientoList);
+                mantenimientoList=MantenimientoResult.convertirDataReporte(mantenimientoList,false);
                 System.out.println("Datos luego: "+mantenimientoList.size());
+            }
+            else
+            if(tipoReporte.equals("noConformidad"))
+            {
+                mantenimientoList=MantenimientoResult.convertirDataReporte(mantenimientoList,true);
             }
             
     //mantenimientoList.add(0,null);

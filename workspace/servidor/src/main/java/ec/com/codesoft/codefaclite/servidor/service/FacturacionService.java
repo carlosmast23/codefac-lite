@@ -30,8 +30,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteVentaNotaCreditoAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -625,15 +627,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     PrestamoService prestamoService=new PrestamoService();
                     prestamoService.grabarSinTransaccion(prestamo, factura);
                 }
-                
-                //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
-                List<CajaPermiso> cajasPermisosList=cajaPermisoService.buscarPermisosCajasActivos(factura.getUsuario());
-                //List<CajaPermiso> cajasPermisosList=factura.getUsuario().buscarPermisosCajasActivosService();
-                if(cajasPermisosList != null && !cajasPermisosList.isEmpty())
-                {
-                    agregarDatosParaCajaSession(factura);
-                }
-                
+                                
+                agregarDatosParaCajaSession(factura);
                 
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();
@@ -1806,8 +1801,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws ServicioCodefacException
      * @throws RemoteException 
      */
-    private void agregarDatosParaCajaSession(Factura factura) throws ServicioCodefacException, RemoteException
+    public void agregarDatosParaCajaSession(ComprobanteVentaNotaCreditoAbstract factura) throws ServicioCodefacException, RemoteException
     {
+        //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
+        List<CajaPermiso> cajasPermisosList = cajaPermisoService.buscarPermisosCajasActivos(factura.getUsuario());
+        //List<CajaPermiso> cajasPermisosList=factura.getUsuario().buscarPermisosCajasActivosService();
+        if (cajasPermisosList != null && !cajasPermisosList.isEmpty()) {
+
+        } else {
+            return;
+        }
+        
         CajaSession cajaSession = null;
         CajaPermiso cajaPermisoParaUsuario = null;
         
@@ -1873,7 +1877,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         IngresoCaja ingresoCaja = new IngresoCaja();
         ingresoCaja.setCajaSession(cajaSession);
         ingresoCaja.setValor(factura.getTotal());
-        ingresoCaja.setFactura(factura);
+        
+        if(factura instanceof Factura)
+        {
+            ingresoCaja.setSignoIngresoEnum(SignoEnum.POSITIVO);
+            ingresoCaja.setFactura((Factura) factura);
+        }
+        else if(factura instanceof Compra)
+        {
+            ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);
+            ingresoCaja.setCompra((Compra) factura);
+        }   
         
         entityManager.persist(ingresoCaja);
             

@@ -24,6 +24,7 @@
                                 <f:selectItem itemLabel="Liberadas" itemValue="liberadas"/>
                                 <f:selectItem itemLabel="Taller" itemValue="taller"/>
                                 <f:selectItem itemLabel="Proceso" itemValue="proceso"/>
+                                <f:selectItem itemLabel="No Conformidad" itemValue="noConformidad"/>
                             </p:selectOneRadio>  
                         </div>
                         
@@ -101,7 +102,14 @@
 
             <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
             <div class="card">
-                <p:dataTable id="tblMantenimiento" var="m" value="#{reporteMantenimientoMb.mantenimientoList}" rowIndexVar="rowIndex" >
+                <p:dataTable id="tblMantenimiento" widgetVar="tblMantenimientoWidget" var="m" value="#{reporteMantenimientoMb.mantenimientoList}" rowIndexVar="rowIndex" >
+
+                    <f:facet name="header">
+                        <div class="flex align-items-center justify-content-between">                            
+                            <div><b>Total: #{reporteMantenimientoMb.mantenimientoList.size()}</b></div>
+                        </div>
+
+                    </f:facet>
 
                     <p:column headerText="#" width="10">
                         <h:outputText value="#{rowIndex + 1}" />
@@ -115,8 +123,14 @@
                         <h:outputText value="#{m.tareaTitulo}" />
                     </p:column>
                     
-                    <p:column headerText="Taller" width="130">
-                        <h:outputText value="#{m.ta}" />
+                    <p:column headerText="Taller" width="130" filterBy="#{m.taller}" filterMatchMode="contains">
+                        <h:outputText value="#{m.taller}" />
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
+                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{tareasPendientesMb.tallerList}" />
+                            </p:selectOneMenu>
+                        </f:facet>
                     </p:column>
                     
                     <p:column headerText="Horas" width="60">
@@ -159,6 +173,16 @@
                     <p:column headerText="Comentario">
                         <h:outputText value="#{m.comentario}" />
                     </p:column>
+                    
+                    <p:column headerText="No Conformidad">
+                        <h:outputText value="#{m.noConformidad}" />
+                    </p:column>
+                    
+                    <p:column headerText="Parte Vehiculo">
+                        <h:outputText value="#{m.parteVehiculo}" />
+                    </p:column>
+                    
+                    
 
 
                 </p:dataTable>

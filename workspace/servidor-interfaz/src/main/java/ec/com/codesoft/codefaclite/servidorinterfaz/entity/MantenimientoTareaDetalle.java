@@ -9,13 +9,18 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -47,6 +52,10 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
     
     @JoinColumn(name = "TALLER_TAREA_ID")
     private TallerTarea tallerTarea;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mantenimientoTareaDetalle", fetch = FetchType.EAGER)
+    private List<MantenimientoInformeDetalle> informeList;
+    
 
     public MantenimientoTareaDetalle() {
     }
@@ -105,6 +114,34 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
         this.observacion = observacion;
     }
     
+    public boolean verificarInformeDuplicado(MantenimientoInformeDetalle detalle)
+    {
+        if(informeList!=null)
+        {
+            for (MantenimientoInformeDetalle detalleTmp : informeList) 
+            {
+                if(detalleTmp.getCodigoTipoNoConformidad().equals(detalle.getCodigoTipoNoConformidad()) && detalleTmp.getParteVehiculo().equals(detalle.getParteVehiculo()))                
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    //////////// METODOS PERSONALIZADOS ///////////////////
+    public void agregarInforme(MantenimientoInformeDetalle detalle)
+    {
+        
+        if(informeList==null)
+        {
+            this.informeList=new ArrayList<MantenimientoInformeDetalle>();
+        }
+        
+        this.informeList.add(detalle);
+        
+    }
+    
     public Integer obtenerHorasTarea()
     {
         if(fechaInicio==null)
@@ -127,6 +164,14 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
             return EstadoEnum.getEnum(estado).nombre;
         }
         return "";
+    }
+
+    public List<MantenimientoInformeDetalle> getInformeList() {
+        return informeList;
+    }
+
+    public void setInformeList(List<MantenimientoInformeDetalle> informeList) {
+        this.informeList = informeList;
     }
     
     

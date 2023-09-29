@@ -109,6 +109,10 @@ create table INGRESO_CAJA(
     VALOR decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.7.3)*/
     FACTURA_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.8.0)*/
+    COMPRA_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.8.2)*/
+    SIGNO INT,
 
     primary key (ID),
     constraint id_ingreso_caja_caja_session_fk foreign key(CAJA_SESSION_ID) references CAJA_SESSION(ID),

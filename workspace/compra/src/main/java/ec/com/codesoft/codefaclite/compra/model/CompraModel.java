@@ -239,7 +239,9 @@ public class CompraModel extends CompraPanel{
             setearValores();
             CarteraParametro carteraParametro=new CarteraParametro(
                     Boolean.TRUE, 
-                    (Integer)getTxtDiasCredito().getValue());            
+                    (Integer)getTxtDiasCredito().getValue());      
+            
+            carteraParametro.pagarConCaja=getChkPagarCaja().isSelected();
             
             servicio.grabarCompra(compra,carteraParametro);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);

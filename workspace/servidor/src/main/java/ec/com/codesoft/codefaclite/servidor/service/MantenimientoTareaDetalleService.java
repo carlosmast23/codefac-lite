@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoInformeDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TareaMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -187,5 +188,31 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
     {
         validarGrabar(entity, CrudEnum.EDITAR);
         entityManager.merge(entity);
+    }
+    
+    public void grabarInformeDetalle(MantenimientoInformeDetalle detalle,MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entityManager.persist(detalle);
+                tareaDetalle.agregarInforme(detalle);
+                entityManager.merge(tareaDetalle);                
+            }
+        });
+    }
+    
+    public void eliminarInformeDetalle(MantenimientoInformeDetalle detalle,MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                MantenimientoInformeDetalle detalleTmp=entityManager.merge(detalle);
+                entityManager.remove(detalleTmp);
+                tareaDetalle.getInformeList().remove(detalleTmp);
+                entityManager.merge(tareaDetalle);
+            }
+        });
+        
     }
 }

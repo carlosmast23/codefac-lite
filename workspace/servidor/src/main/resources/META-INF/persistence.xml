@@ -134,6 +134,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.RembolsoImpuestoDetalle</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoInformeDetalle</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

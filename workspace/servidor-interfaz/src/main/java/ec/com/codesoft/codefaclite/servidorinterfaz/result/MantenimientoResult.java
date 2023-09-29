@@ -42,6 +42,9 @@ public class MantenimientoResult implements Serializable,Cloneable{
     private String tareaDescripcion;
     private String duracionDias;
     
+    private String noConformidad;
+    private String parteVehiculo;
+    
     
     private List<DetalleTareaResult> tareaLista;
     
@@ -55,8 +58,9 @@ public class MantenimientoResult implements Serializable,Cloneable{
         tareaLista.add(detalle);
     }
     
-    public static List<MantenimientoResult> convertirDataReporte(List<MantenimientoResult> datosList)
+    public static List<MantenimientoResult> convertirDataReporte(List<MantenimientoResult> datosList,Boolean noConformidades)
     {
+        System.out.println("convertirDataReporte ...");  
         List<MantenimientoResult> resultadoList=new ArrayList<MantenimientoResult>();
         
         for (MantenimientoResult detalle : datosList) 
@@ -68,13 +72,36 @@ public class MantenimientoResult implements Serializable,Cloneable{
             else
             {
                 for (DetalleTareaResult tareaResult : detalle.getTareaLista()) 
-                {
+                {                   
+                    
                     try {
-                        MantenimientoResult detalleTmp= (MantenimientoResult) detalle.clone();
-                        detalleTmp.setTareaTitulo(tareaResult.titulo);
-                        detalleTmp.setTareaDescripcion(tareaResult.descripcion);
-                        detalleTmp.setDuracionDias(tareaResult.horas+"");
-                        resultadoList.add(detalleTmp);
+                        
+                        if(noConformidades)
+                        {
+                            System.out.println("Consultando NO CONFORMIDADES ..."); 
+                            List<InformeDetalleResult> informeList= tareaResult.detalleList;
+                            if(informeList!=null)
+                            {
+                                for (InformeDetalleResult informe : informeList) 
+                                {
+                                    MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
+                                    detalleTmp.setTareaTitulo(tareaResult.titulo);
+                                    detalleTmp.setTareaDescripcion(tareaResult.descripcion);
+                                    detalleTmp.setDuracionDias(tareaResult.horas + "");
+                                    detalleTmp.setNoConformidad(informe.noConformidad);
+                                    detalleTmp.setParteVehiculo(informe.parteVehiculo);
+                                    resultadoList.add(detalleTmp);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
+                            detalleTmp.setTareaTitulo(tareaResult.titulo);
+                            detalleTmp.setTareaDescripcion(tareaResult.descripcion);
+                            detalleTmp.setDuracionDias(tareaResult.horas + "");
+                            resultadoList.add(detalleTmp);
+                        }
                     } catch (CloneNotSupportedException ex) {
                         Logger.getLogger(MantenimientoResult.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -243,6 +270,24 @@ public class MantenimientoResult implements Serializable,Cloneable{
     public void setTaller(String taller) {
         this.taller = taller;
     }
+
+    public String getNoConformidad() {
+        return noConformidad;
+    }
+
+    public void setNoConformidad(String noConformidad) {
+        this.noConformidad = noConformidad;
+    }
+
+    public String getParteVehiculo() {
+        return parteVehiculo;
+    }
+
+    public void setParteVehiculo(String parteVehiculo) {
+        this.parteVehiculo = parteVehiculo;
+    }
+    
+    
     
     
     
@@ -315,6 +360,8 @@ public class MantenimientoResult implements Serializable,Cloneable{
         public String titulo;
         public String descripcion;
         public Integer horas;
+        
+        public List<InformeDetalleResult> detalleList;
 
         public DetalleTareaResult(String titulo, String descripcion,Integer horas) {
             this.titulo = titulo;
@@ -322,7 +369,28 @@ public class MantenimientoResult implements Serializable,Cloneable{
             this.horas=horas;
         }
         
+        public void agregarInformeDetalle(InformeDetalleResult detalle)
+        {
+            if(detalleList==null)
+            {
+                this.detalleList=new ArrayList<InformeDetalleResult>();                
+            }
+            
+            detalleList.add(detalle);
+        }
         
+        
+    }
+    
+    public static class InformeDetalleResult implements Serializable
+    {
+        public String noConformidad;
+        public String parteVehiculo;
+
+        public InformeDetalleResult(String noConformidad, String parteVehiculo) {
+            this.noConformidad = noConformidad;
+            this.parteVehiculo = parteVehiculo;
+        }
         
         
     }

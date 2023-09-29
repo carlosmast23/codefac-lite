@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoInformeDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
@@ -330,7 +331,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 mantenimientoResult.fechaIngreso=dato.getFechaIngreso()+"";
                 mantenimientoResult.fechaSalida=(dato.getFechaSalida()!=null)?dato.getFechaSalida()+"":"";
                 mantenimientoResult.ubicacion=(dato.getUbicacionEnum()!=null)?dato.getUbicacionEnum().getNombre():"";
-                mantenimientoResult.taller=dato.getTallerNombre();
+                mantenimientoResult.taller=dato.getTaller().getNombre();
                 
                 String duracionDiasStr="";
                 if(dato.getFechaSalida()!=null)
@@ -356,34 +357,16 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                                         
                     MantenimientoResult.DetalleTareaResult tareaDetalle=new MantenimientoResult.DetalleTareaResult(detalleMantenimiento.getTallerTarea().getTareaMantenimiento().getNombre(), "0",detalleMantenimiento.obtenerHorasTarea());
                     
-                    mantenimientoResult.agregarTarea(tareaDetalle);
-                    //MantenimientoResult.DetalleTareaResult detalleResult= new MantenimientoResult.DetalleTareaResult(mantenimientoTareaDetalle.getTarea().getNombre(),mantenimientoTareaDetalle.getObservacion());                    
-                    //mantenimientoResult.agregarTarea(detalleResult);
+                    //Agregar las detalles del Informa
+                    List<MantenimientoInformeDetalle> informeList=detalleMantenimiento.getInformeList();
+                    for (MantenimientoInformeDetalle informe : informeList) 
+                    {
+                        MantenimientoResult.InformeDetalleResult informeResult=new MantenimientoResult.InformeDetalleResult(informe.getCodigoTipoNoConformidad(),informe.getParteVehiculo());
+                        tareaDetalle.agregarInformeDetalle(informeResult);
+                    }
                     
-                    /*if(mantenimientoTareaDetalle.getTarea().getNombre().equals("ENDEREZADA"))
-                    {
-                        mantenimientoResult.enderezada="X";
-                    }
-                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("PINTURA"))
-                    {
-                         mantenimientoResult.pintura="X";
-                    }
-                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("PULIDA VIDRIOS"))
-                    {
-                         mantenimientoResult.pulida="X";
-                    }
-                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("FALTANTE"))
-                    {
-                         mantenimientoResult.faltante="X";
-                    }
-                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("ELECTROMECÁNICO"))
-                    {
-                         mantenimientoResult.electromecanico="X";
-                    }
-                    else if(mantenimientoTareaDetalle.getTarea().getNombre().equals("OTROS PROBLEMAS"))
-                    {
-                         mantenimientoResult.comentario="X";
-                    }*/
+                    mantenimientoResult.agregarTarea(tareaDetalle);
+                    
                 }
                 resultadoList.add(mantenimientoResult);
             } catch (RemoteException ex) {

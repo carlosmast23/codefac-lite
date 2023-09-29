@@ -188,6 +188,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         txtDiasCredito = new javax.swing.JSpinner();
         jLabel27 = new javax.swing.JLabel();
         lblEspacio2324 = new javax.swing.JLabel();
+        chkPagarCaja = new javax.swing.JCheckBox();
         jToolBar2 = new javax.swing.JToolBar();
         txtEstablecimientoCompra = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
@@ -890,12 +891,21 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jPanel3.add(jLabel27, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel3.add(lblEspacio2324, gridBagConstraints);
 
-        jTabbedPane1.addTab("Cartera", jPanel3);
+        chkPagarCaja.setText("Pagar con Caja");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(chkPagarCaja, gridBagConstraints);
+
+        jTabbedPane1.addTab("Otros Datos", jPanel3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -1261,6 +1271,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnOrdenCompraBuscar;
     private javax.swing.JButton btnProveedorBuscar;
     private javax.swing.JButton btnRetencionAplicarTodo;
+    private javax.swing.JCheckBox chkPagarCaja;
     private javax.swing.JCheckBox chkPorcentajeDescuentoGlobal;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JComboBox<EnumSiNo> cmbEmitirRetencion;
@@ -1863,7 +1874,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtIrbpnr(JTextField txtIrbpnr) {
         this.txtIrbpnr = txtIrbpnr;
     }
-    
+
+    public JCheckBox getChkPagarCaja() {
+        return chkPagarCaja;
+    }
+
+    public void setChkPagarCaja(JCheckBox chkPagarCaja) {
+        this.chkPagarCaja = chkPagarCaja;
+    }
     
     
     
