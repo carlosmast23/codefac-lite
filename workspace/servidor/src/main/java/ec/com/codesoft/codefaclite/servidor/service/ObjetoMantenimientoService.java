@@ -162,6 +162,15 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
         return null;
     }
     
+    public ObjetoMantenimiento buscarPorVIN(Empresa empresa,String vin) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        List<ObjetoMantenimiento> resultadoList=getFacade().buscarPorVINFacade(empresa, vin);
+        for (ObjetoMantenimiento objetoMantenimiento : resultadoList) {
+            return objetoMantenimiento;
+        }
+        return null;
+    }
+    
     public List<ObjetoMantenimiento> buscarPorPropietario(Empresa empresa,Persona propietario) throws ServicioCodefacException,java.rmi.RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();

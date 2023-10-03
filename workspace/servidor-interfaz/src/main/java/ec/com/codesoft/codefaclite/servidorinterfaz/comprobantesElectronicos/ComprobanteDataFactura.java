@@ -332,6 +332,12 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
     
     private void agregarDatosReembolso(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteData)
     {
+        //Si es una liquidacion de compra no tiene que hacer ese proceso
+        if(comprobanteData instanceof LiquidacionCompraComprobante)
+        {
+            return;
+        }
+        
         FacturaComprobante facturaComprobante=(FacturaComprobante) comprobanteData;
         if(factura.getReembolsoList()!=null)
         {

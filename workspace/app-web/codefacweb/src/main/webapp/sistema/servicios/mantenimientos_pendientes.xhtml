@@ -31,15 +31,21 @@
             </style>
 
             <div class="p-grid" style="text-align: left" >
-                <div class="p-col-12 p-md-6 p-lg-3" >
+                
+                <div class="p-col-12 p-md-6 p-lg-6" >
+                    <p:inputText id="txtVinBuscar" value="#{mantenimientosPendientesMb.vinVehiculo}" />
+                    <p:commandButton process="@this,txtVinBuscar" actionListener="#{mantenimientosPendientesMb.buscarVehiculo()}" value="buscar Vehiculo" update="txtVehiculo,txtVehiculoVin" />                    
+                </div>
+                
+                <div class="p-col-12 p-md-6 p-lg-6" >
                     <b>Vin:</b> <p:outputLabel id="txtVehiculo" value="#{mantenimientosPendientesMb.mantenimiento.vehiculo.vin}" />
                     <div><b>Vehiculo:</b> <p:outputLabel id="txtVehiculoVin" value="#{mantenimientosPendientesMb.mantenimiento.vehiculo.modelo}" /></div>
                 </div>
-                <div class="p-col-12 p-md-6 p-lg-3">                            
+                <!--<div class="p-col-12 p-md-6 p-lg-3">                            
                     <p:commandButton process="@this" value="Buscar" icon="pi pi-search" action="#{mantenimientosPendientesMb.abrirDialogoBuscarVehiculo}" >
                         <p:ajax event="dialogReturn" listener="#{mantenimientosPendientesMb.seleccionarVehiculo}" update="txtVehiculo,txtVehiculoVin"  />
                     </p:commandButton>
-                </div> 
+                </div>-->
 
                 <div class="p-col-12 p-md-6 p-lg-3" >
                     Prioridad: 
@@ -96,7 +102,7 @@
             <p:outputPanel deferred="true" style="margin: 10px">
                 <p:commandButton value="Registro de Unidad por Defectos" icon="pi pi-plus" 
                                  process="@this,txtPrioridad,txtDanio,cmbSubtarea,cmbTaller"
-                                 update=":formulario:messages,tblMantenimiento,txtVehiculo,txtVehiculoVin,txtPrioridad,txtDanio,cmbTaller,cmbSubtarea"
+                                 update=":formulario:messages,txtVehiculo,txtVehiculoVin,txtVinBuscar,tblMantenimiento,txtPrioridad,txtDanio,cmbTaller,cmbSubtarea"
                                  actionListener="#{mantenimientosPendientesMb.grabarMantenimiento()}"
                                  styleClass="ui-button-success" style="margin-right: .5rem">
                 </p:commandButton>
@@ -206,7 +212,7 @@
                             process="@this"
                             actionListener="#{mantenimientosPendientesMb.cargarDatosEditarMantenimiento(m)}"
                             icon="pi pi-pencil"  
-                            update=":formulario:txtVehiculo,:formulario:txtPrioridad,:formulario:cmbTaller,:formulario:cmbSubtarea"
+                            update=":formulario:txtPrioridad,:formulario:cmbTaller,:formulario:cmbSubtarea"
                             styleClass="edit-button rounded-button ui-button-success">                                                        
                         </p:commandButton>                                          
 

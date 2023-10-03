@@ -26,4 +26,5 @@ public interface ObjetoMantenimientoServiceIf extends ServiceAbstractIf<ObjetoMa
     public ObjetoMantenimiento buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException;
     public void grabarSinTransaccion(ObjetoMantenimiento entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException ;
     public List<ObjetoMantenimiento> buscarPorPropietario(Empresa empresa,Persona propietario) throws ServicioCodefacException,java.rmi.RemoteException;
+    public ObjetoMantenimiento buscarPorVIN(Empresa empresa,String vin) throws ServicioCodefacException,java.rmi.RemoteException;
 }

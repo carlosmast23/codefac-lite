@@ -172,7 +172,11 @@ public class CerrarCajaModel extends CajaSessionModel
         
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //CajaSession cajaSession=getControlador().getCajaSession();
-        String fechaAperturaStr= format.format(cajaSession.getFechaHoraApertura());
+        String fechaAperturaStr= "";
+        if(cajaSession.getFechaHoraApertura()!=null)
+        {
+            fechaAperturaStr= format.format(cajaSession.getFechaHoraApertura());
+        }
         
         String fechaCierreStr="";
         if(cajaSession.getFechaHoraCierre()!=null)

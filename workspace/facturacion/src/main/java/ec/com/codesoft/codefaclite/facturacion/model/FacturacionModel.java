@@ -2440,11 +2440,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             //TODO: Para los documentos legales toca separar para electronicas y fisicas
             if(factura.getCodigoDocumentoEnum().getDocumentoLegal())
-            {
-                //Verificar que la factura no tenga notas de credito aplicando porque no podria eliminar si se da esta condicion
-                if (!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR)) {
-                    DialogoCodefac.mensaje(MensajeCodefacSistema.FacturasMensajes.ERROR_ELIMINAR_AFECTA_NOTA_CREDITO);
-                    throw new ExcepcionCodefacLite("error");
+            {                
+                //SI es una liquidacion de compra no hacer ese procedimiento
+                if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
+                {
+                    //Verificar que la factura no tenga notas de credito aplicando porque no podria eliminar si se da esta condicion
+                    if (!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR)) {
+                        DialogoCodefac.mensaje(MensajeCodefacSistema.FacturasMensajes.ERROR_ELIMINAR_AFECTA_NOTA_CREDITO);
+                        throw new ExcepcionCodefacLite("error");
+                    }
                 }
 
                 ComprobanteElectronicoComponente.eliminarComprobante(this, factura, getLblEstadoFactura());

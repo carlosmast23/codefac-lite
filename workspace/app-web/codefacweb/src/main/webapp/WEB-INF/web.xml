@@ -29,6 +29,11 @@
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+        
+        <init-param>
+            <param-name>org.apache.catalina.filters.HttpHeaderSecurityFilter.xFrameOptions</param-name>
+            <param-value>SAMEORIGIN</param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>

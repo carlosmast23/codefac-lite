@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDet
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Vehiculo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;     
@@ -46,19 +47,22 @@ import org.primefaces.event.UnselectEvent;
 @ViewScoped
 public class MantenimientosPendientesMb extends GeneralAbstractMb implements Serializable{
 
-    List<Mantenimiento> mantenimientoPendienteList;           
+    List<Mantenimiento> mantenimientoPendienteList;              
     private List<Taller> tallerList;   
     private List<TallerTarea> subtareaList; 
     private List<String> subtareaSeleccionadaList; 
+    //private List<ObjetoMantenimiento> objetoMantenimientoList; 
     private Mantenimiento mantenimiento;
-    private Boolean modoEditar; 
+    private Boolean modoEditar;   
+
+    private String vinVehiculo;
      
     @PostConstruct
     public void init()
     {
         try {
-            iniciar();
-        } catch (ExcepcionCodefacLite ex) {
+            iniciar(); 
+        } catch (ExcepcionCodefacLite ex) {  
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,7 +115,9 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         try {
             this.modoEditar=false;
             this.mantenimiento=new Mantenimiento();
+            this.vinVehiculo="";
             this.subtareaSeleccionadaList=new ArrayList<String>(); 
+            //this.objetoMantenimientoList=ServiceFactory.getFactory().getObjetoMantenimientoServiceIf().obtenerActivosPorEmpresa(sessionMb.getSession().getEmpresa());
             //Cargar los talleres disponibles
             tallerList=ServiceFactory.getFactory().getTallerServiceIf().obtenerActivos();
             mantenimiento.setTaller(tallerList.get(0)); 
@@ -219,7 +225,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     public void grabarMantenimiento()
     {
         try {
-            System.out.println("Ejecutando metodo grabarMantenimiento... ");   
+            System.out.println("METODO GRABAR MANTENIMIENTOS... ");  
             validarDatos();
             setearDatos();
             if(modoEditar) 
@@ -278,8 +284,29 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
 
     }
     
-    public void setearDatos()
+    public void buscarVehiculo()
     {
+        System.out.println("iniciando buscarVehiculo ..."); 
+        if(vinVehiculo!=null)
+        {
+            try {
+                System.out.println("buscando : "+vinVehiculo);
+                ObjetoMantenimiento objetoMantenimiento=ServiceFactory.getFactory().getObjetoMantenimientoServiceIf().buscarPorVIN(sessionMb.getSession().getEmpresa(), vinVehiculo);
+                //if(objetoMantenimiento!=null)
+                //{
+                mantenimiento.setVehiculo(objetoMantenimiento);
+                //}
+                
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void setearDatos()
+    {       
         mantenimiento.setEstadoEnum(Mantenimiento.MantenimientoEnum.INGRESADO);
         //Setear los detalles de las tareas pendientes
         
@@ -309,6 +336,14 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         msg.setSeverity(FacesMessage.SEVERITY_INFO);
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public void seleccionarVin(ObjetoMantenimiento vehiculo)
+    {
+        System.out.println("vehiculo: "+vehiculo);
+        System.out.println("Seleccionar VIN");
+        System.out.println("Imprimir vehiculo seleccionado: "+mantenimiento.getVehiculo());
+        
     }
     
     public void seleccionarSubtareDesdeTaller()
@@ -383,6 +418,16 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         this.subtareaSeleccionadaList = subtareaSeleccionadaList;
     }
 
+
+    public String getVinVehiculo() {
+        return vinVehiculo;
+    }
+
+    public void setVinVehiculo(String vinVehiculo) {
+        this.vinVehiculo = vinVehiculo;
+    }
+
+    
     
     public void ejemplo()
     { 
