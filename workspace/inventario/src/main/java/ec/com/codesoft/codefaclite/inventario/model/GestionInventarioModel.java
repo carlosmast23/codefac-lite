@@ -292,9 +292,20 @@ public class GestionInventarioModel extends GestionInventarioPanel{
             BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);            
             buscarDialogo.setVisible(true);
 
-            if (buscarDialogo.getResultado() != null) 
+            Object resultado= buscarDialogo.getResultado();
+            if (resultado != null) 
             {
-                cargarProductoVista((Producto) buscarDialogo.getResultado());
+                Producto productoTmp=null;
+                if(resultado instanceof Object[])
+                {
+                    Object[] resultadoList=(Object[]) resultado;
+                    productoTmp=(Producto)resultadoList[1];
+                }
+                else
+                {
+                    productoTmp=(Producto) resultado;
+                }
+                cargarProductoVista(productoTmp);
             }
 
         }
