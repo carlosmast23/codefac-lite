@@ -51,7 +51,7 @@
                     Prioridad: 
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-3">                            
-                    <p:rating id="txtPrioridad" value="#{mantenimientosPendientesMb.mantenimiento.prioridad}"/>                                
+                    <p:rating id="txtPrioridad" stars="2" value="#{mantenimientosPendientesMb.mantenimiento.prioridad}"/>                                
                 </div> 
 
 
@@ -157,16 +157,13 @@
 
                     </p:column>
 
-                    <p:column headerText="Prioridad" width="100" filterBy="#{m.prioridad}" filterMatchMode="contains">
-                        <p:rating id="txtPrioridadTabla" value="#{m.prioridad}" cancel="false" />  
+                    <p:column headerText="Prioridad" width="60" filterBy="#{m.prioridad}" filterMatchMode="contains">
+                        <p:rating id="txtPrioridadTabla" stars="2" value="#{m.prioridad}" cancel="false" />  
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
                                 <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />                                
                                 <f:selectItem itemLabel="*" itemValue="1" />
                                 <f:selectItem itemLabel="**" itemValue="2" />
-                                <f:selectItem itemLabel="***" itemValue="3" />
-                                <f:selectItem itemLabel="****" itemValue="4" />
-                                <f:selectItem itemLabel="*****" itemValue="5" />
                             </p:selectOneMenu>
                         </f:facet>
                     </p:column>

@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -52,8 +53,8 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public List<Kardex> buscarPorBodega(Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
     public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa) throws java.rmi.RemoteException;
     public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion) throws java.rmi.RemoteException,ServicioCodefacException;
-    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,BigDecimal cantidad) throws java.rmi.RemoteException,ServicioCodefacException;
+    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException;
+    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,BigDecimal cantidad,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException;
     public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle) throws java.rmi.RemoteException,ServicioCodefacException;
     public boolean obtenerSiNoExisteStockProducto(Bodega bodega, Producto producto, BigDecimal cantidad) throws java.rmi.RemoteException;
     
@@ -77,7 +78,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public List<TransferenciaBodegaRespuesta> consultarMovimientosTransferencia(java.util.Date fechaInicial, java.util.Date fechaFinal,Bodega bodegaDestino) throws java.rmi.RemoteException,ServicioCodefacException;
     
-    public KardexDetalle afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento,String usuarioNick) throws RemoteException,ServicioCodefacException;
+    public KardexDetalle afectarInventario(Bodega bodega,Lote lote,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento,String usuarioNick) throws RemoteException,ServicioCodefacException;
     
     public Integer consultarCantidadStockMinimo(Empresa empresa) throws java.rmi.RemoteException;
     
@@ -101,7 +102,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public void actualizarKardex(Kardex kardex) throws RemoteException,ServicioCodefacException;
     
-    public void actualizarKardexLote(Map<Long,BigDecimal> stockMap) throws RemoteException,ServicioCodefacException;
+    public void actualizarKardexLote(Map<Long,BigDecimal> stockMap,Usuario usuario) throws RemoteException,ServicioCodefacException;
     
     public void eliminarPorId(Long kardexId) throws RemoteException,ServicioCodefacException;
 }

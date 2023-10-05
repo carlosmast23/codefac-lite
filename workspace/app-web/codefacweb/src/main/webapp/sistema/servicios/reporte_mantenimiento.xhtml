@@ -35,7 +35,7 @@
                         <div class="p-col-6 p-md-2 p-lg-1" >
                             <div class="p-col-fixed" >
                                 <p:commandButton value="XLSX" styleClass="mr-2 mb-2 ui-button-outlined" process="@this" actionListener="#{reporteMantenimientoMb.ejemplo()}" ajax="false">
-                                    <p:dataExporter type="xls" target=":formulario:tblMantenimiento" fileName="vehiculos" />
+                                    <p:dataExporter type="xls" target=":formulario:tblMantenimiento" fileName="vehiculos" postProcessor="#{reporteMantenimientoMb.customXLSPostProcessor}"/>
                                 </p:commandButton>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
                         </f:facet>
                     </p:column>
                     
-                    <p:column headerText="Horas" width="60">
+                    <p:column headerText="Horas" width="60" style="text-align: right">
                         <h:outputText value="#{m.duracionDias}" />
                     </p:column>
                     
@@ -161,7 +161,7 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Duración Días" width="30" >
+                    <p:column headerText="Duración Días" width="30" style="text-align: right" >
                         <h:outputText value="#{m.duracionDias}" />
                     </p:column>
 

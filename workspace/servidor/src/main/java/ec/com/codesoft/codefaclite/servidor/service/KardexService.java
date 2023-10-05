@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -51,6 +52,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -557,7 +559,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     
-    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion) throws java.rmi.RemoteException,ServicioCodefacException
+    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -620,13 +622,15 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                         kardexOrigen, 
                         TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_ORIGEN, 
                         precioTransferencia, 
-                        cantidad);
+                        cantidad,
+                        usuario);
                 
                 KardexDetalle kardexDetalleDestino=crearKardexDetalleSinPersistencia(
                         kardexDestino, 
                         TipoDocumentoEnum.TRANSFERENCIA_MERCADERIA_DESTINO, 
                         precioTransferencia, 
-                        cantidad);
+                        cantidad,
+                        usuario);
                                 
                 entityManager.persist(kardexDetalleOrigen);
                 entityManager.persist(kardexDetalleDestino);
@@ -791,9 +795,16 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return resultadoCosto;
     }
     
-    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,BigDecimal cantidad) throws java.rmi.RemoteException,ServicioCodefacException
+    public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,BigDecimal cantidad,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException
     {
         KardexDetalle movimientoOrigen = new KardexDetalle();
+        
+        //Si no tiene precio unitario asumo que es cero
+        if(precioUnitario==null)
+        {
+            precioUnitario=BigDecimal.ZERO;
+        }
+        
         BigDecimal total=precioUnitario.multiply(new BigDecimal(cantidad.toString()));
         movimientoOrigen.setCantidad(cantidad);
         movimientoOrigen.setCodigoTipoDocumentoEnum(tipoDocumentoEnum);
@@ -807,6 +818,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         movimientoOrigen.setPrecioUnitario(precioUnitario);
         //movimientoOrigen.setPuntoEmision("");
         movimientoOrigen.setReferenciaDocumentoId(null);
+        
+        if(usuario!=null)
+        {
+            movimientoOrigen.setUsuarioNick(usuario.getNick());
+        }
+        
         return movimientoOrigen;
     }
     
@@ -1124,6 +1141,11 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         if(detalle.getKardex()==null)
         {
             throw new ServicioCodefacException("No se puede grabar sin referencia de Kardex vacio");
+        }
+        
+        if(UtilidadesTextos.verificarNullOVacio(detalle.getUsuarioNick()))
+        {
+            throw new ServicioCodefacException("No se puede grabar Kardex sin un usuario asignado");
         }
         
         if(!forzarCantidadCero)
@@ -1576,7 +1598,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * TODO: Unificar este metodo con la de factura que existe un metodo similar
      * @param detalle 
      */
-    public KardexDetalle afectarInventario(Bodega bodega,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento,String usuarioNick) throws RemoteException,ServicioCodefacException
+    public KardexDetalle afectarInventario(Bodega bodega,Lote lote,BigDecimal cantidad,BigDecimal precioUnitario,BigDecimal total,Long referenciaKardexId,Long referenciaProductoId,TipoDocumentoEnum tipoDocumento,String puntoEmision,String puntoEstablecimiento,Integer secuencial,Date fechaDocumento,String usuarioNick) throws RemoteException,ServicioCodefacException
     {
         try {
             Producto producto=productoService.buscarPorId(referenciaProductoId);
@@ -1595,7 +1617,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //mapParametros.put("producto", producto);
             KardexService kardexService=new KardexService();
             //Kardex kardexProducto=kardexService.buscarKardexPorProductoyBodega(bodega, producto);
-            Kardex kardexProducto=consultarOCrearStockSinPersistencia(producto, bodega,null);
+            Kardex kardexProducto=consultarOCrearStockSinPersistencia(producto, bodega,lote);
             //List<Kardex> kardexs= kardexService.getFacade().findByMap(mapParametros);
             //TODO: Definir especificamente cual es la bodega principal
             //if(kardexProducto!=null && kardexProducto.size()>0)
@@ -1674,7 +1696,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
-    public void actualizarKardexLote(Map<Long,BigDecimal> stockMap) throws RemoteException,ServicioCodefacException
+    public void actualizarKardexLote(Map<Long,BigDecimal> stockMap,Usuario usuario) throws RemoteException,ServicioCodefacException
     {
         for (Map.Entry<Long, BigDecimal> entry : stockMap.entrySet()) 
         {
@@ -1685,7 +1707,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //Consultar el kardex que viene el movimiento
             KardexService kardexService=new KardexService();
             Kardex kardex= kardexService.buscarPorId(kardexId);
-            KardexDetalle kardexDetalle=crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.AJUSTE_EXACTO_INVENTARIO,kardex.getPrecioUltimo(),stockNuevo);
+            KardexDetalle kardexDetalle=crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.AJUSTE_EXACTO_INVENTARIO,kardex.getPrecioUltimo(),stockNuevo,usuario);
             
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override

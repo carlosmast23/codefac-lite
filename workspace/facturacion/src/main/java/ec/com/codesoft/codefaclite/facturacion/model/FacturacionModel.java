@@ -1604,7 +1604,35 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
 
                 String detalleTexto = productoSeleccionado.getNombre();
-                detalleTexto = detalleTexto + " [ lote: " + kardexSeleccionado.getLote().getCodigo() + ", fecha caducidad: " + fechaStr + " ]";
+                detalleTexto = detalleTexto + " [ lote: " + kardexSeleccionado.getLote().getCodigo() + ", fecha caducidad: " + fechaStr;
+                
+                
+                //Agregar datos adicional cuando este activada esta opción
+                if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_INFO_ADICIONAL_LOTE_FACTURA, EnumSiNo.SI)) 
+                {
+                    Lote lote=kardexSeleccionado.getLote();
+                    String fechaElaboracionStr="";
+                    
+                    if(lote.getFechaElaboracion()!=null)
+                    {
+                        fechaElaboracionStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaVencimiento());
+                        detalleTexto=detalleTexto+", F.Elab: "+fechaElaboracionStr;
+                    }
+                    
+                    if(!UtilidadesTextos.verificarNullOVacio(productoSeleccionado.getRegistroSanitario()))
+                    {
+                        detalleTexto=detalleTexto+", Reg.San:"+productoSeleccionado.getRegistroSanitario();
+                    }
+                    
+                    if(productoSeleccionado.getCasaComercial()!=null)
+                    {
+                        detalleTexto=detalleTexto+", Casa.Comr:"+productoSeleccionado.getCasaComercial().getNombre();
+                    }
+                    
+                    
+                }
+                
+                detalleTexto=detalleTexto+" ]";
                 productoSeleccionado.setNombre(detalleTexto);
             }
         }

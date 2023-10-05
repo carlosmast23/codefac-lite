@@ -90,7 +90,9 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
                     getTxtDescripcion().getText(), 
                     new BigDecimal(getTxtCantidad().getText()),
                     precio, 
-                    new java.sql.Date(getCmbFechaIngreso().getDate().getTime()));
+                    new java.sql.Date(getCmbFechaIngreso().getDate().getTime()),
+                    session.getUsuario()
+            );
             
             DialogoCodefac.mensaje("Correcto","La transferencia de bodegas se realizo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {

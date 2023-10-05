@@ -223,7 +223,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 throw new ExcepcionCodefacLite("Proceso cancelado ...");
             }
             
-            ServiceFactory.getFactory().getKardexServiceIf().actualizarKardexLote(datosModificados);
+            ServiceFactory.getFactory().getKardexServiceIf().actualizarKardexLote(datosModificados,session.getUsuario());
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);

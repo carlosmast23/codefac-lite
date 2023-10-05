@@ -266,6 +266,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 KardexService kardexService=new KardexService();
                 kardexService.afectarInventario(
                         bodega,
+                        facturaDetalle.getLote(),
                         facturaDetalle.getCantidad(), 
                         facturaDetalle.getPrecioUnitario(),
                         facturaDetalle.getTotal(), 
@@ -321,6 +322,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 
                 KardexDetalle kardexDetalleNuevo= kardexService.afectarInventario(
                         bodega,
+                        notaDetalle.getLote(),
                         notaDetalle.getCantidad(), 
                         notaDetalle.getPrecioUnitario(),
                         notaDetalle.getTotal(), 

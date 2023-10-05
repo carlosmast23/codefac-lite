@@ -1471,13 +1471,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //TODO: Definir especificamente cual es la bodega principal
         //TODO: Analizar caso cuando se resta un producto especifico
         KardexService kardexService = new KardexService();
-        KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, precioUnitario,cantidad);;
+        KardexDetalle kardexDetalle = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, precioUnitario,cantidad,detalle.getFactura().getUsuario());
         //Agregando datos adicionales del movimiento en la factura
         kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
         kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
         kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
         kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
-        kardexDetalle.setUsuarioNick(detalle.getFactura().getUsuario().getNick());
+        //kardexDetalle.setUsuarioNick(detalle.getFactura().getUsuario().getNick());
         kardexDetalle.setFechaDocumento(UtilidadesFecha.castDateUtilToSql(detalle.getFactura().getFechaEmision()));
         
         kardexDetalle.setRazonSocial(detalle.getFactura().getRazonSocial());

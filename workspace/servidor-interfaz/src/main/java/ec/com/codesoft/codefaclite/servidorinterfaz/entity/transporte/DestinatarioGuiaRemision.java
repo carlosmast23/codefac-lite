@@ -358,7 +358,7 @@ public class DestinatarioGuiaRemision implements Serializable{
         {
             if(destinatario.getDetallesProductos()==null || destinatario.getDetallesProductos().size()==0)
             {
-                throw new ServicioCodefacException("El destinatario no tiene ningun detalle");
+                throw new ServicioCodefacException("El destinatario no tiene ningun detalle\nPosibles Causas: \n1.- Los productos de esa factura ya estan agregadas en otra guía.\n2.- El producto que se quiere agregar no esta marcado para enviar en las guías de remisión");
             }
         }
         

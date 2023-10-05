@@ -70,16 +70,13 @@
                         </f:facet>
                     </p:column>
 
-                    <p:column headerText="Prioridad" width="100" filterBy="#{m.mantenimiento.prioridad}" filterMatchMode="contains">
-                        <p:rating id="txtPrioridadTabla" value="#{m.mantenimiento.prioridad}" cancel="false" />  
+                    <p:column headerText="Prioridad" width="60" filterBy="#{m.mantenimiento.prioridad}" filterMatchMode="contains">
+                        <p:rating id="txtPrioridadTabla" stars="2" value="#{m.mantenimiento.prioridad}" cancel="false" />  
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
                                 <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />                                
                                 <f:selectItem itemLabel="*" itemValue="1" />
                                 <f:selectItem itemLabel="**" itemValue="2" />
-                                <f:selectItem itemLabel="***" itemValue="3" />
-                                <f:selectItem itemLabel="****" itemValue="4" />
-                                <f:selectItem itemLabel="*****" itemValue="5" />
                             </p:selectOneMenu>
                         </f:facet>
                     </p:column>

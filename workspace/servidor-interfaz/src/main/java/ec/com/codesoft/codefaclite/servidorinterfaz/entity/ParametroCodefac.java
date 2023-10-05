@@ -141,6 +141,8 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String AGREGAR_LOTE_FACTURA="agregar_lote_factura";
     
+    public static final String AGREGAR_INFO_ADICIONAL_LOTE_FACTURA="agregar_info_adicional_lote_factura";
+    
     /**
      * Configuracion que me permite establecer que se abran varias ventanas al mismo tiempo
      */

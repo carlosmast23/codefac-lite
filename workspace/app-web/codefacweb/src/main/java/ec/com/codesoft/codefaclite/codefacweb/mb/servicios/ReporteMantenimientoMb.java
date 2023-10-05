@@ -22,7 +22,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
-import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -36,6 +35,11 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 
 /**
  *
@@ -241,6 +245,33 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         }
         
     }*/
+    
+    public void customXLSPostProcessor(Object document) {
+        System.out.println("customXLSPostProcessor PROCESANDO ...");
+        HSSFWorkbook wb = (HSSFWorkbook) document;
+        HSSFSheet sheet = wb.getSheetAt(0);
+
+        for (int rowIndex = 1; rowIndex < sheet.getPhysicalNumberOfRows(); rowIndex++) {
+            HSSFRow row = sheet.getRow(rowIndex);
+
+            if (row != null) {
+                HSSFCell cell2 = row.getCell(4); // Columna 2
+                System.out.println(cell2.getCellTypeEnum());
+                System.out.println(cell2.getStringCellValue());
+                if (cell2 != null && cell2.getCellTypeEnum().equals(CellType.STRING)) {
+                    cell2.setCellValue(Double.parseDouble(cell2.getStringCellValue()));
+                    cell2.setCellType(CellType.NUMERIC);                    
+                }
+
+                /*
+                HSSFCell cell5 = row.getCell(10); // Columna 5
+                if (cell5 != null && cell5.getCellTypeEnum().equals(CellType.STRING)) {
+                    cell5.setCellType(CellType.NUMERIC);
+                } */
+            }
+        }
+    }
+
 
     public List<MantenimientoResult> getMantenimientoList() {
         return mantenimientoList;

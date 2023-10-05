@@ -935,6 +935,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         
         kardexService.afectarInventario(
                 bodega,
+                compraDetalle.getLote(),
                 compraDetalle.getCantidad(),
                 compraDetalle.getPrecioUnitario(),
                 compraDetalle.getTotal(),
