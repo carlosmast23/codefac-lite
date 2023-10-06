@@ -474,6 +474,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 data.setProducto(producto.getNombre());
                 data.setStock(cantidad.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP) + "");
                 data.setReserva(reserva.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP));
+                data.setDisponible(cantidad.add(reserva).setScale(obtenerCantidadDecimales(),RoundingMode.HALF_UP));
 
                 data.setCategoria((producto.getCatalogoProducto().getCategoriaProducto() != null) ? producto.getCatalogoProducto().getCategoriaProducto().getNombre() : "");
                 data.setUbicacion(producto.getUbicacion());
@@ -572,6 +573,7 @@ public class StockReporteModel extends StockMinimoPanel{
             "Ubicación",
             "Stock",
             "Reserva",
+            "Disp",
             "Pvp1",
             "Cantidad Minima",
             "Último Costo",
@@ -594,6 +596,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 stockMinimo.getUbicacion(),
                 stockMinimo.getStock(),
                 stockMinimo.getReserva()+"",
+                stockMinimo.getDisponible()+"",
                 stockMinimo.getPvp1()+"",
                 stockMinimo.getCantidadMinima(),
                 stockMinimo.getUltimoCosto()+"",

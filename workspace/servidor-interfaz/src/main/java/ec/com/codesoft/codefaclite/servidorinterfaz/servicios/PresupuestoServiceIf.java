@@ -30,7 +30,7 @@ public interface PresupuestoServiceIf  extends ServiceAbstractIf<Presupuesto> {
    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal,Persona cliente,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException,java.rmi.RemoteException;
    public List<Presupuesto> consultarPorOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,RemoteException;
    public List<PresupuestoDetalleActividad> consultarActividadPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException;
-   public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList,Usuario usuario) throws ServicioCodefacException,RemoteException;
+   public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList,Usuario usuarioSeleccionado,Usuario usuario) throws ServicioCodefacException,RemoteException;
    public List<PresupuestoDetalleActividad> consultarActividadesPendientesPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException;
    public Presupuesto consultarUltimaPorObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException;
    public Presupuesto grabar(Presupuesto entity,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException;

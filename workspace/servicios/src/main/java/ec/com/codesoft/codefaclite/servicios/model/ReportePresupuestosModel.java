@@ -141,6 +141,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 dataDetalle.setTipo(presupuestoDetalle.getProducto().getTipoProductoEnum().getNombre());                
                 //dataDetalle.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre():"");
                 dataDetalle.setCodigoProducto(presupuestoDetalle.getProducto().getCodigoPersonalizado());
+                dataDetalle.setReserva(presupuestoDetalle.getReservadoEnum().getNombre().toUpperCase());
                 
                 //Dejo en cero el total de la venta para luego no generar inconsistencias con la sumatoria total
                 if(primerRegistro)

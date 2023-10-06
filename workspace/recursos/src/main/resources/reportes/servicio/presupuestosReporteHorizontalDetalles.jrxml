@@ -47,6 +47,7 @@
 	<field name="codigoProducto" class="java.lang.String"/>
 	<field name="placa" class="java.lang.String"/>
 	<field name="nota" class="java.lang.String"/>
+	<field name="reserva" class="java.lang.String"/>
 	<variable name="venta_acum" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{total}]]></variableExpression>
 	</variable>
@@ -77,7 +78,7 @@
 					<text><![CDATA[DETALLES DEL PRESUPUESTO]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="352" y="42" width="308" height="12" uuid="660d44f9-865a-48eb-a6c9-293ca0c818b6"/>
+					<reportElement x="352" y="42" width="287" height="12" uuid="660d44f9-865a-48eb-a6c9-293ca0c818b6"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -518,6 +519,19 @@
 					</textElement>
 					<text><![CDATA[Nota:]]></text>
 				</staticText>
+				<staticText>
+					<reportElement x="639" y="42" width="21" height="12" uuid="c0ce4090-844b-4d3f-a07f-48a0ccd34378"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Rsrv]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -563,7 +577,7 @@
 	<detail>
 		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="352" y="0" width="308" height="12" uuid="cdb41238-13f1-4460-84a7-e6d9798d65bc"/>
+				<reportElement x="352" y="0" width="287" height="12" uuid="cdb41238-13f1-4460-84a7-e6d9798d65bc"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -659,6 +673,20 @@
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codigoProducto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="639" y="0" width="21" height="12" uuid="08e07dc3-ef74-4f2a-950e-37e3446a78f9"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reserva}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

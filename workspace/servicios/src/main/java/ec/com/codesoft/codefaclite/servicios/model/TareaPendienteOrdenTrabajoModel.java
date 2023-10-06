@@ -22,19 +22,26 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.servicios.panel.ObjetoMantenimientoPanel;
 import ec.com.codesoft.codefaclite.servicios.panel.TareaPendienteOrdenTrabajoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -47,8 +54,15 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        this.controlador=new TareaPendienteOrdenTrabajoControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
-        crearModeloTabla();
+        try {
+            this.controlador=new TareaPendienteOrdenTrabajoControlador(DialogoCodefac.intefaceMensaje, session, this, ModelControladorAbstract.TipoVista.ESCRITORIO);
+            //Cargar datos de los empleados
+            List<Usuario> empleadoList= ServiceFactory.getFactory().getUsuarioServicioIf().consultarUsuariosActivos(session.getEmpresa());
+            UtilidadesComboBox.llenarComboBox(getCmbEmpleado(), empleadoList,true);
+            crearModeloTabla();
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TareaPendienteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -235,6 +249,11 @@ public class TareaPendienteOrdenTrabajoModel extends TareaPendienteOrdenTrabajoP
     @Override
     public void cerrarPantalla() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Usuario getUsuarioSeleccionado() {
+        return (Usuario) getCmbEmpleado().getSelectedItem();
     }
     
     

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.0980750000000221"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.1398375295825445"/>
+	<property name="ireport.x" value="8"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
@@ -43,6 +43,8 @@
 	<field name="lote" class="java.lang.String"/>
 	<field name="marca" class="java.lang.String"/>
 	<field name="presentacionList" class="java.util.Collection"/>
+	<field name="reserva" class="java.math.BigDecimal"/>
+	<field name="disponible" class="java.math.BigDecimal"/>
 	<variable name="TOTAL_UNIDADES" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[new BigDecimal($F{stock})]]></variableExpression>
 	</variable>
@@ -107,7 +109,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="566" y="0" width="70" height="15" uuid="d8ff0833-b1a1-437b-81b2-4abd21d5df59"/>
+				<reportElement x="521" y="0" width="65" height="15" uuid="d8ff0833-b1a1-437b-81b2-4abd21d5df59"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -120,15 +122,15 @@
 				<text><![CDATA[Categoria]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="762" y="0" width="39" height="15" uuid="7da76cf2-3ce2-4cd0-bb26-b41c9e631471"/>
+				<reportElement x="769" y="0" width="33" height="15" uuid="7da76cf2-3ce2-4cd0-bb26-b41c9e631471"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Utilidad]]></text>
 			</staticText>
@@ -159,7 +161,7 @@
 				<text><![CDATA[Lote]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="275" y="0" width="221" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
+				<reportElement x="275" y="0" width="176" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -172,7 +174,7 @@
 				<text><![CDATA[Producto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="696" y="0" width="30" height="15" uuid="aba0c1ce-ae55-4912-a022-93e99d673261"/>
+				<reportElement x="706" y="0" width="30" height="15" uuid="aba0c1ce-ae55-4912-a022-93e99d673261"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -185,7 +187,7 @@
 				<text><![CDATA[Pvp1]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="726" y="0" width="36" height="15" uuid="a922b97f-56ee-4292-87ac-62d495dad0aa"/>
+				<reportElement x="736" y="0" width="33" height="15" uuid="a922b97f-56ee-4292-87ac-62d495dad0aa"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -198,7 +200,7 @@
 				<text><![CDATA[Costo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="636" y="0" width="30" height="15" forecolor="#FFFFFF" backcolor="#666666" uuid="aa1cb3b4-be8f-4a75-80ee-cfafbb904caa"/>
+				<reportElement mode="Opaque" x="586" y="0" width="30" height="15" forecolor="#FFFFFF" backcolor="#666666" uuid="aa1cb3b4-be8f-4a75-80ee-cfafbb904caa"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -211,7 +213,7 @@
 				<text><![CDATA[Stock]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="666" y="0" width="30" height="15" uuid="63a47234-4037-46a1-8948-d62d8637d5fe"/>
+				<reportElement x="676" y="0" width="30" height="15" uuid="63a47234-4037-46a1-8948-d62d8637d5fe"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -237,7 +239,7 @@
 				<text><![CDATA[Ubicación]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="496" y="0" width="70" height="15" uuid="879e6cfa-74d3-4b83-88ec-a5d4cc3d7162"/>
+				<reportElement x="451" y="0" width="70" height="15" uuid="879e6cfa-74d3-4b83-88ec-a5d4cc3d7162"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -248,6 +250,32 @@
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Marca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="616" y="0" width="30" height="15" uuid="61843ab0-0998-4159-9e09-297650b0ad00"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reserva]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="646" y="0" width="30" height="15" uuid="9b47126e-ba4a-48a7-beb7-fe4356d8a908"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Disp]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -268,7 +296,7 @@
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="566" y="0" width="70" height="13" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
+				<reportElement stretchType="RelativeToBandHeight" x="521" y="0" width="65" height="13" uuid="2e757c5f-ccf2-4523-af35-397ded2315ed"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -282,7 +310,7 @@
 				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="762" y="0" width="39" height="13" uuid="c0909c7f-cca0-46f1-b854-8117afc4c7a1"/>
+				<reportElement stretchType="RelativeToBandHeight" x="769" y="0" width="32" height="13" uuid="c0909c7f-cca0-46f1-b854-8117afc4c7a1"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -296,7 +324,7 @@
 				<textFieldExpression><![CDATA[$F{utilidad1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="636" y="0" width="30" height="13" forecolor="#000000" backcolor="#E3E3E3" uuid="086ce8d9-5df6-456d-a820-f05251accdf5"/>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="586" y="0" width="30" height="13" forecolor="#000000" backcolor="#E3E3E3" uuid="086ce8d9-5df6-456d-a820-f05251accdf5"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -324,7 +352,7 @@
 				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="666" y="0" width="30" height="13" uuid="987d00c0-794d-43d4-874c-ccc20a928534"/>
+				<reportElement stretchType="RelativeToBandHeight" x="676" y="0" width="30" height="13" uuid="987d00c0-794d-43d4-874c-ccc20a928534"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -338,7 +366,7 @@
 				<textFieldExpression><![CDATA[$F{cantidadMinima}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="696" y="0" width="30" height="13" uuid="5e533a13-5409-403b-8a86-1a61aa4f2fba"/>
+				<reportElement stretchType="RelativeToBandHeight" x="706" y="0" width="30" height="13" uuid="5e533a13-5409-403b-8a86-1a61aa4f2fba"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -352,7 +380,7 @@
 				<textFieldExpression><![CDATA[$F{pvp1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="275" y="0" width="221" height="13" uuid="86505e3e-c386-4ba6-836c-4243f9571225"/>
+				<reportElement x="275" y="0" width="176" height="13" uuid="86505e3e-c386-4ba6-836c-4243f9571225"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -366,7 +394,7 @@
 				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="726" y="0" width="36" height="13" uuid="e1bd5e98-2097-411e-abd9-8ddf8e2bd6ef"/>
+				<reportElement stretchType="RelativeToBandHeight" x="736" y="0" width="33" height="13" uuid="e1bd5e98-2097-411e-abd9-8ddf8e2bd6ef"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -408,7 +436,7 @@
 				<textFieldExpression><![CDATA[$F{ubicacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="496" y="0" width="70" height="13" uuid="84b70ff4-b581-4281-af84-6ddd6d4ed9e3"/>
+				<reportElement stretchType="RelativeToBandHeight" x="451" y="0" width="70" height="13" uuid="84b70ff4-b581-4281-af84-6ddd6d4ed9e3"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -435,6 +463,34 @@
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{presentacionList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{pl_presentacion_list}]]></subreportExpression>
 			</subreport>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="616" y="0" width="30" height="13" uuid="6a24c765-9af1-46f8-a5ba-ca88efa73df0"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reserva}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="646" y="0" width="30" height="13" uuid="5dfca9bd-fd00-42b8-9182-7b8c6c94ae1a"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{disponible}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>

@@ -40,6 +40,7 @@ public class StockMinimoData implements ExcelDatosInterface{
     private BigDecimal pvp1;
     private BigDecimal utilidad1;
     private BigDecimal reserva;
+    private BigDecimal disponible;
     
     private String aplicacion;
     private TipoProducto tipo;
@@ -274,6 +275,16 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setPresentacionList(List<PresentacionPrecioData> presentacionList) {
         this.presentacionList = presentacionList;
     }
+
+    public BigDecimal getDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(BigDecimal disponible) {
+        this.disponible = disponible;
+    }
+    
+    
     
     public void agregarPresentacion(PresentacionPrecioData presentacionData)
     {

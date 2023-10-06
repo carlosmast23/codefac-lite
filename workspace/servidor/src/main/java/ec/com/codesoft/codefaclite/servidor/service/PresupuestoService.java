@@ -334,14 +334,22 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     }
     
     
-    public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList,Usuario usuario) throws ServicioCodefacException,RemoteException
+    public void actualizarActividadesPresupuestos(List<PresupuestoDetalleActividad> actividadList,Usuario usuarioSeleccionado,Usuario usuario) throws ServicioCodefacException,RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 for (PresupuestoDetalleActividad actividad : actividadList) 
                 {
-                    actividad.setUsuario(usuario);
+                    if(usuarioSeleccionado!=null)
+                    {
+                        actividad.setUsuario(usuarioSeleccionado);
+                    }
+                    else
+                    {
+                        actividad.setUsuario(usuario);
+                    }
+                    
                     actividad.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
                     entityManager.merge(actividad);
                 }

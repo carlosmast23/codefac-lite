@@ -475,6 +475,18 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
        
     }
     
+    public List<Usuario> consultarUsuariosActivos(Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();        
+        //Usuario u;
+        //u.getEmpresa();
+        mapParametros = new HashMap<String, Object>();
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("empresa", empresa);
+        
+        return getFacade().findByMap(mapParametros);
+    }
+    
     public Usuario consultarUsuarioActivoPorEmpresa(String nick,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
     {
         Map<String, Object> mapParametros = new HashMap<String, Object>();        

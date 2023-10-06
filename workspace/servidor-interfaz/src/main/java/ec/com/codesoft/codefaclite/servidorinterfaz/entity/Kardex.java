@@ -241,6 +241,15 @@ public class Kardex implements Serializable,Cloneable {
         this.precioTotal=costoPromedio.multiply(stock);
     }
     
+    public BigDecimal calcularReserva()
+    {
+        if(reserva==null)
+        {
+            reserva=BigDecimal.ZERO;
+        }
+        return stock.add(reserva);
+    }
+    
     /**
      * @deprecated 
      * @return 

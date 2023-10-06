@@ -12,6 +12,8 @@ import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBind
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoObjetoMantenimientoEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
@@ -32,6 +34,7 @@ public abstract class TareaPendienteOrdenTrabajoPanel extends ControladorCodefac
      */
     public TareaPendienteOrdenTrabajoPanel() {
         initComponents();
+        
     }
 
     /**
@@ -50,6 +53,8 @@ public abstract class TareaPendienteOrdenTrabajoPanel extends ControladorCodefac
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatos = new javax.swing.JTable();
         cmbSeleccionarTodo = new javax.swing.JCheckBox();
+        jLabel2 = new javax.swing.JLabel();
+        cmbEmpleado = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -60,9 +65,9 @@ public abstract class TareaPendienteOrdenTrabajoPanel extends ControladorCodefac
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Estado:");
+        jLabel1.setText("Usuario:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
@@ -105,6 +110,22 @@ public abstract class TareaPendienteOrdenTrabajoPanel extends ControladorCodefac
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbSeleccionarTodo, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setText("Estado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        getContentPane().add(jLabel2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbEmpleado, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -115,9 +136,11 @@ public abstract class TareaPendienteOrdenTrabajoPanel extends ControladorCodefac
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFiltrar;
+    private javax.swing.JComboBox<Usuario> cmbEmpleado;
     private javax.swing.JCheckBox cmbSeleccionarTodo;
     private javax.swing.JComboBox<TipoObjetoMantenimientoEnum> cmbTipo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDatos;
     // End of variables declaration//GEN-END:variables
@@ -178,9 +201,14 @@ public abstract class TareaPendienteOrdenTrabajoPanel extends ControladorCodefac
         this.btnFiltrar = btnFiltrar;
     }
 
-    
-    
-    
+    public JComboBox<Usuario> getCmbEmpleado() {
+        return cmbEmpleado;
+    }
+
+    public void setCmbEmpleado(JComboBox<Usuario> cmbEmpleado) {
+        this.cmbEmpleado = cmbEmpleado;
+    }
+
     
 
 }

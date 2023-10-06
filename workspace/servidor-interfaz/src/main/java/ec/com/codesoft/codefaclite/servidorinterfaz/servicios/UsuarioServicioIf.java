@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.LoginRespuesta;
 import java.rmi.Remote;
+import java.util.List;
 
 /**
  *
@@ -23,4 +24,5 @@ public interface UsuarioServicioIf extends ServiceAbstractIf<Usuario>
     public Usuario cambiarClave(Usuario usuario,String claveAnterior,String claveNueva) throws java.rmi.RemoteException, ServicioCodefacException;
     
     public void grabarSinTransaccion(Usuario entity,Boolean validarConLicencia) throws ServicioCodefacException,java.rmi.RemoteException;
+    public List<Usuario> consultarUsuariosActivos(Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;
 }

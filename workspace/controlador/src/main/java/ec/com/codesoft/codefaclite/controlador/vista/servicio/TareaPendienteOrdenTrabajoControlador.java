@@ -87,7 +87,7 @@ public class TareaPendienteOrdenTrabajoControlador extends ModelControladorAbstr
     public void grabar() throws ExcepcionCodefacLite, RemoteException 
     {   
         try {
-            ServiceFactory.getFactory().getPresupuestoServiceIf().actualizarActividadesPresupuestos(actividadListSeleccionada,session.getUsuario());
+            ServiceFactory.getFactory().getPresupuestoServiceIf().actualizarActividadesPresupuestos(actividadListSeleccionada,getInterazEscritorio().getUsuarioSeleccionado(),session.getUsuario());
             //ServiceFactory.getFactory().getOrdenTrabajoServiceIf().terminarDetallesOrdenesTrabajo(session.getUsuario().getEmpleado(),getDetallesModificar());
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
             limpiar();
@@ -167,7 +167,8 @@ public class TareaPendienteOrdenTrabajoControlador extends ModelControladorAbstr
     {
         List<PresupuestoDetalleActividad> resultadoList=new ArrayList<PresupuestoDetalleActividad>();
         try {
-            Empleado empleado= session.getUsuario().getEmpleado();
+            //Empleado empleado= session.getUsuario().getEmpleado();
+            Empleado empleado= null;
             
             resultadoList= ServiceFactory.getFactory().getPresupuestoServiceIf().consultarActividadesPendientesPresupuesto(empleado);
             return resultadoList;
@@ -280,6 +281,7 @@ public class TareaPendienteOrdenTrabajoControlador extends ModelControladorAbstr
         public void abrirGuiaRemision(GuiaRemision guiaRemision);
         public ClienteInterfaceComprobanteLote getInterfaceCallBack();
         public void generarNotasVentaInterna(List<Factura> facturas);
+        public Usuario getUsuarioSeleccionado();
     }
 
     public interface WebIf extends CommonIf {

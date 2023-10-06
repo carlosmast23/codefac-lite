@@ -67,8 +67,8 @@ public class TallerMecanicoInventarioBusquedaDialogo extends ProductoInventarioB
         vector.add(producto.getMarcaProducto());
         //vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         vector.add(kardex.getStock().setScale(0,RoundingMode.HALF_UP));
-        vector.add("0");
-        vector.add(kardex.getStock().setScale(0,RoundingMode.HALF_UP));
+        vector.add(kardex.getReserva().setScale(0,RoundingMode.HALF_UP));
+        vector.add(kardex.calcularReserva().setScale(0,RoundingMode.HALF_UP));
             
         vector.add((producto.getValorUnitario()!=null)?UtilidadBigDecimal.redondearDosDecimales(producto.getValorUnitarioConIva()):"0");
         vector.add((producto.getPrecioDistribuidor()!=null)?UtilidadBigDecimal.redondearDosDecimales(producto.getPrecioDistribuidorConIva()):"0");
