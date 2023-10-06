@@ -50,12 +50,13 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
     List<Mantenimiento> mantenimientoPendienteList;              
     private List<Taller> tallerList;   
     private List<TallerTarea> subtareaList; 
-    private List<String> subtareaSeleccionadaList; 
+    private List<String> subtareaSeleccionadaList;   
     //private List<ObjetoMantenimiento> objetoMantenimientoList; 
     private Mantenimiento mantenimiento;
     private Boolean modoEditar;   
 
     private String vinVehiculo;
+    //private Double diasEstimados;
      
     @PostConstruct
     public void init()
@@ -222,10 +223,12 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         }
     }
     
-    public void grabarMantenimiento()
+    public void grabarMantenimiento() 
     {
         try {
             System.out.println("METODO GRABAR MANTENIMIENTOS... ");  
+            System.out.println(mantenimiento.getDiasEstimados());
+            //System.out.println(diasEstimados); 
             validarDatos();
             setearDatos();
             if(modoEditar) 
@@ -427,7 +430,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
         this.vinVehiculo = vinVehiculo;
     }
 
-    
+     
     
     public void ejemplo()
     { 

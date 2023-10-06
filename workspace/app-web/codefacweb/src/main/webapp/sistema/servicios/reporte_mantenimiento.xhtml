@@ -43,14 +43,25 @@
                     </div>
                                         
                 </p:tab>
-                <p:tab title="Filtros" closable="false">
+
+            </p:accordionPanel>
+
+            <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
+            <div class="card" >
+                
+                <p:panel >
+                    
+                    <f:facet name="header">
+                        Filtros Personalizados
+                    </f:facet>
+                    
                     <div class="p-grid div-resposive"  >
                         <!--- FECHA INICIAL -->
                         <div class="p-col-12 p-md-6 p-lg-2" >
-                            <p:outputLabel for="fechaInicial" value="Fecha Inicial:" class="label-responsive"/>                    
+                            <p:outputLabel for="fechaInicial" value="Fecha Inicial:" class="label-responsive" />                    
                             <div class="p-grid div-resposive" >
                                 <div class="p-col-fixed" >
-                                    <p:datePicker size="" id="fechaInicial" value="#{reporteMantenimientoMb.fechaInicial}" showIcon="true" />
+                                    <p:datePicker size="" id="fechaInicial" value="#{reporteMantenimientoMb.fechaInicial}" showIcon="true" style="z-index: 2;"  />
                                 </div>
                             </div>
                         </div>
@@ -97,12 +108,9 @@
 
 
                     </div>
-                </p:tab>
-            </p:accordionPanel>
-
-            <!-- Lista de los mantenimientos con estado PENDIENTE para poder asignar a los empleados -->
-            <div class="card">
-                <p:dataTable id="tblMantenimiento" widgetVar="tblMantenimientoWidget" var="m" value="#{reporteMantenimientoMb.mantenimientoList}" rowIndexVar="rowIndex" >
+                </p:panel>
+                
+                <p:dataTable id="tblMantenimiento" widgetVar="tblMantenimientoWidget" var="m" value="#{reporteMantenimientoMb.mantenimientoList}" style="z-index: 1;" rowIndexVar="rowIndex" >
 
                     <f:facet name="header">
                         <div class="flex align-items-center justify-content-between">                            

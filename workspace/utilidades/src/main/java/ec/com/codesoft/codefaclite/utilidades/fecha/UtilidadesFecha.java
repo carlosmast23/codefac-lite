@@ -379,6 +379,15 @@ public class UtilidadesFecha {
         return new Timestamp(date.getTime());
     }
     
+    public static Date castTimestampToDate(Timestamp timestamp) {
+        if (timestamp != null) {
+            return new Date(timestamp.getTime());
+        } else {
+            return null;
+        }
+    }
+
+    
     public static Date FechaHoraPorUnion(Date date, Date time){
         //Date tipo SQL
         GregorianCalendar dateCal = new GregorianCalendar();

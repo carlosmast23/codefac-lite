@@ -379,7 +379,7 @@ public class KardexModel extends KardexPanel {
 
                 getTxtCostoPromedio().setText(kardex.getCostoPromedio() + "");
                 getTxtUltimoCosto().setText(kardex.getPrecioUltimo() + "");
-                getTxtReserva().setValue(kardex.getReserva().toBigInteger());
+                getTxtReserva().setValue((kardex.getReserva()!=null)?kardex.getReserva().toBigInteger():"");
             } 
             else 
             {

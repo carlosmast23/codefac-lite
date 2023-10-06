@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.EstadoEntidadIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,9 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
     
     @Column(name = "TIPO_DANIO") 
     private Integer tipoDanio;
+    
+    @Column(name = "DIAS_ESTIMADOS") 
+    private Integer diasEstimados;
     
     
     @JoinColumn(name = "OBJETO_MANTENIMIENTO_ID")
@@ -180,6 +184,14 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
         return numeroDias; 
     }
     
+    public java.util.Date calcularFechaAproximadaSalida()
+    {
+        if(diasEstimados!=null)
+        {            
+            return UtilidadesFecha.sumarDiasFecha(UtilidadesFecha.castTimestampToDate(fechaIngreso),diasEstimados);
+        }
+        return UtilidadesFecha.castTimestampToDate(fechaIngreso);
+    }
     
     public String obtenerSubTareasTxt()
     {
@@ -225,6 +237,15 @@ public class Mantenimiento extends EntityAbstract<Mantenimiento.MantenimientoEnu
         
         tareaList.add(tallerTarea);
     }
+
+    public Integer getDiasEstimados() {
+        return diasEstimados;
+    }
+
+    public void setDiasEstimados(Integer diasEstimados) {
+        this.diasEstimados = diasEstimados;
+    }
+    
     
     
     @Override

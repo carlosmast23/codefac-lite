@@ -256,18 +256,19 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
 
             if (row != null) {
                 HSSFCell cell2 = row.getCell(4); // Columna 2
-                System.out.println(cell2.getCellTypeEnum());
-                System.out.println(cell2.getStringCellValue());
+                
                 if (cell2 != null && cell2.getCellTypeEnum().equals(CellType.STRING)) {
                     cell2.setCellValue(Double.parseDouble(cell2.getStringCellValue()));
                     cell2.setCellType(CellType.NUMERIC);                    
                 }
 
-                /*
+                
                 HSSFCell cell5 = row.getCell(10); // Columna 5
-                if (cell5 != null && cell5.getCellTypeEnum().equals(CellType.STRING)) {
-                    cell5.setCellType(CellType.NUMERIC);
-                } */
+                if (cell5 != null && cell5.getCellTypeEnum().equals(CellType.STRING)) 
+                {
+                    cell5.setCellValue(Double.parseDouble(cell5.getStringCellValue()));
+                    cell5.setCellType(CellType.NUMERIC);  
+                } 
             }
         }
     }

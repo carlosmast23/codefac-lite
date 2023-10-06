@@ -1377,6 +1377,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             kardexDetalle.setFechaCreacion(UtilidadesFecha.castDateSqlToTimeStampSql(fechaInicial));
             kardexDetalle.setFechaIngreso(UtilidadesFecha.castDateSqlToTimeStampSql(fechaInicial));
             kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.SALDO_ANTERIOR.getCodigo());
+            
+            //Crear un kardex temporal para los datos de visualizar
+            Kardex kardex=new Kardex();
+            kardex.setProducto(producto);
+            kardexDetalle.setKardex(kardex);
+            
             //kardexDetalle.set            
             datosConsulta.add(0, kardexDetalle);
         }

@@ -31,12 +31,12 @@
             </style>
 
             <div class="p-grid" style="text-align: left" >
-                
+
                 <div class="p-col-12 p-md-6 p-lg-6" >
                     <p:inputText id="txtVinBuscar" value="#{mantenimientosPendientesMb.vinVehiculo}" />
                     <p:commandButton process="@this,txtVinBuscar" actionListener="#{mantenimientosPendientesMb.buscarVehiculo()}" value="buscar Vehiculo" update="txtVehiculo,txtVehiculoVin" />                    
                 </div>
-                
+
                 <div class="p-col-12 p-md-6 p-lg-6" >
                     <b>Vin:</b> <p:outputLabel id="txtVehiculo" value="#{mantenimientosPendientesMb.mantenimiento.vehiculo.vin}" />
                     <div><b>Vehiculo:</b> <p:outputLabel id="txtVehiculoVin" value="#{mantenimientosPendientesMb.mantenimiento.vehiculo.modelo}" /></div>
@@ -89,19 +89,18 @@
                         <f:selectItems value="#{mantenimientosPendientesMb.subtareaList}" var="taller" itemValue="#{taller.id.toString()}"  />
                     </p:selectCheckboxMenu>
                 </div>
-            </div>
-
-            <div class="p-grid" style="text-align: left" >
-                <div class="p-col-12 p-md-12 p-lg-12" >
-                    <div><h:outputLabel id="cmbBodega"  value="Esta pantalla contiene los vehiculos ingresados pero que aun no tienen asignadas tareas "/></div>
+                <div class="p-col-12 p-md-6 p-lg-3" >
+                    Días Estimados: 
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">                            
+                    <p:inputNumber id="txtDiasEstimados" value="#{mantenimientosPendientesMb.mantenimiento.diasEstimados}" decimalPlaces="0" />
                 </div> 
+
             </div>
-
-
 
             <p:outputPanel deferred="true" style="margin: 10px">
                 <p:commandButton value="Registro de Unidad por Defectos" icon="pi pi-plus" 
-                                 process="@this,txtPrioridad,txtDanio,cmbSubtarea,cmbTaller"
+                                 process="@this,txtPrioridad,txtDanio,cmbSubtarea,cmbTaller,txtDiasEstimados"
                                  update=":formulario:messages,txtVehiculo,txtVehiculoVin,txtVinBuscar,tblMantenimiento,txtPrioridad,txtDanio,cmbTaller,cmbSubtarea"
                                  actionListener="#{mantenimientosPendientesMb.grabarMantenimiento()}"
                                  styleClass="ui-button-success" style="margin-right: .5rem">
@@ -198,6 +197,12 @@
                             <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
                         </h:outputText>
                     </p:column>
+                    
+                    <p:column headerText="F.Salida Aprox" width="70">
+                        <h:outputText value="#{m.calcularFechaAproximadaSalida()}" >
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </h:outputText>
+                    </p:column>
 
                     <p:column headerText="Dias" width="30">
                         <h:outputText value="#{m.calcularNumeroDias()}" />
@@ -226,7 +231,7 @@
                             process="@this">                                                        
                         </p:commandButton>                    
                     </p:column>
-                    
+
                     <p:column width="25" >
                         <p:commandButton
                             title="Terminar Mantenimiento"
