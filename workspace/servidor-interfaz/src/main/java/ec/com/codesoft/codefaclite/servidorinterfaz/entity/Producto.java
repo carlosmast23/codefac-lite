@@ -1095,7 +1095,9 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     {
         if(catalogoProducto==null || catalogoProducto.getIva()==null)
         {
-            System.out.println("catalogo sin tener asignado un iva");
+             Logger.getLogger(Producto.class.getName()).log(Level.WARNING,"Producto con id:"+idProducto+" , nombre="+nombre+", con catalogo id="+catalogoProducto.getId()+" No tiene asignado un CATALOGO");
+             //Por defecto devuelve cero
+             return BigDecimal.ZERO;
         }
         
         if(catalogoProducto.getIva()==null)

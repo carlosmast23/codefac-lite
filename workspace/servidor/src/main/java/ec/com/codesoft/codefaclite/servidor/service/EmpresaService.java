@@ -492,5 +492,20 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         }       
         
     }
+    
+    public void cerrarConexionDB()  throws RemoteException, ServicioCodefacException
+    {        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                //TODO: Solo ejecuto el metodo para forzar a que se gener un commit y un flush para evitar perdidads de datos
+            }
+        });
+        //entityManager.getEntityManagerFactory().close();
+        entityManager.close();
+        
+        Logger.getLogger(EmpresaService.class.getName()).log(Level.INFO,"Cerrando Conexión Base de Datos");
+        
+    }
         
 }

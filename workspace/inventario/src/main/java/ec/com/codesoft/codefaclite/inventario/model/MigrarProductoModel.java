@@ -250,6 +250,8 @@ public class MigrarProductoModel extends MigrarModel {
                         producto.setUbicacion((String) fila.getByEnum(ExcelMigrarProductos.Enum.UBICACION).valor);
                     }
 
+                    
+                    kardexDetalle.setUsuarioNick(session.getUsuario().getNick());
                     ServiceFactory.getFactory().getProductoServiceIf().grabarConInventario(producto,kardexDetalle);
                     LOG.log(Level.INFO,"Migrado producto "+producto.getNombre());
 

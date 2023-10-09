@@ -432,6 +432,12 @@ public class StockReporteModel extends StockMinimoPanel{
                 BigDecimal ultimoCosto = (BigDecimal) objeto[5];
                 BigDecimal reserva = (BigDecimal) objeto[6];
                 Long kardexId = (Long) objeto[7];
+                
+                if(producto.getCatalogoProducto()==null)
+                {
+                    //Si no tiene este dato por el momento no tomar en cuenta para el reporte
+                    continue;
+                }
 
                 if (reserva == null) {
                     reserva = BigDecimal.ZERO;

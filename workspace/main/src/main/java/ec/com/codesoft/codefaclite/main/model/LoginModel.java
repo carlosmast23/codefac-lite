@@ -59,7 +59,7 @@ import javax.swing.JOptionPane;
 public class LoginModel extends LoginFormDialog{
 
     private static final Logger LOG = Logger.getLogger(LoginModel.class.getName());
-    public boolean salirAplicacion=false;
+    //public boolean salirAplicacion=false;
     
     //private UsuarioServicioIf usuarioServicio;
     private Usuario usuario;
@@ -119,10 +119,7 @@ public class LoginModel extends LoginFormDialog{
         getBtnSalir().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //dispose();
-                salirAplicacion=true;
-                setVisible(false);
-                UtilidadServicioWeb.apagarServicioWeb();
+                salirSistema();
             }
         });
         
@@ -146,6 +143,23 @@ public class LoginModel extends LoginFormDialog{
                 ingresarSistema(false);
             }
         });
+    }
+    
+    public void salirSistema()
+    {
+        try {
+            //dispose();
+            //salirAplicacion=true;
+            //setVisible(false);
+            UtilidadServicioWeb.apagarServicioWeb();
+            ServiceFactory.getFactory().getEmpresaServiceIf().cerrarConexionDB();
+            dispose();
+            System.exit(0);
+        } catch (RemoteException ex) {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public Usuario getUsuarioLogin()
@@ -362,11 +376,12 @@ public class LoginModel extends LoginFormDialog{
 
             @Override
             public void windowClosing(WindowEvent e) {
-                salirAplicacion=true;
-                UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web    
+                //salirAplicacion=true;
+                /*UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web    
                 setVisible(false);
                 dispose();
-                System.exit(0);
+                System.exit(0);*/
+                salirSistema();
             }
 
             @Override

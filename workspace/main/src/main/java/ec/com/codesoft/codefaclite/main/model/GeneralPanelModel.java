@@ -548,7 +548,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             }
             terminarAutorizarComprobantesPendientes();
-            UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web    
+            cerrandoEntityManagerBaseDatos();
+            UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web                
             dispose();
             LOG.log(Level.INFO, "SALIENDO DEL SISTEMA, usuario actual:"+sessionCodefac.getUsuario().getNick());                        
             System.exit(0);
@@ -567,6 +568,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
             case 2:
                 break;
+        }
+    }
+    
+    private void cerrandoEntityManagerBaseDatos()
+    {
+        //Si el modo de aplicativo es Servidor o Cliente-Servidor termino las conexiones
+        if (!modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) 
+        {
+            try {
+                ServiceFactory.getFactory().getEmpresaServiceIf().cerrarConexionDB();
+            } catch (RemoteException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
