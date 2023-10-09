@@ -200,12 +200,21 @@ public class ServicioSri {
     {
         //TODO: Solucion temporal que aveces sale un error de conexion con el web service para intentar unas 3 veces antes de terminar
         final int INTENTO_MAXIMO=10;
+        
+        //TODO: Tener cuidado con estas 
+        File archivoXMLFirmado = new File(urlFile);
+        RecepcionComprobantesOffline port = servicio.getRecepcionComprobantesOfflinePort();
+        byte[] bytesEnviar=null;
+        try {
+            bytesEnviar= archivoToByte(archivoXMLFirmado);
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ComprobanteElectronicoException(ex.getMessage(), "Enviando Sri", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+        }
+        
         for (int i = 0; ;) {
             try {
-                //File archivoXMLFirmado = new File("C:\\CodefacRecursos\\comprobantes\\pruebas\\firmados\\0103201801172421895100110010010000000010000000011.xml");
-                File archivoXMLFirmado = new File(urlFile);
-                RecepcionComprobantesOffline port = servicio.getRecepcionComprobantesOfflinePort();
-                RespuestaSolicitud respuestaSolicitud = port.validarComprobante(archivoToByte(archivoXMLFirmado));
+                RespuestaSolicitud respuestaSolicitud = port.validarComprobante(bytesEnviar);
                 //System.out.println(respuestaSolicitud.getEstado()); //RECIBIDA DEVUELTA           
                 if (respuestaSolicitud.getComprobantes().getComprobante().size() == 0) {
                     return true;
@@ -214,8 +223,6 @@ public class ServicioSri {
                     return false;
                 }
 
-            } catch (IOException ex) {
-                Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
@@ -299,11 +306,11 @@ public class ServicioSri {
     {
        if(verificarConexionAutorizar())
        {
-           
+           AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
            for(int i=0;i<INTENTOS_AUTORIZACION;i++)
            {
                try {
-                   AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
+                   
                    RespuestaComprobante respuesta=port.autorizacionComprobante(claveAcceso);
                    autorizaciones=respuesta.getAutorizaciones().getAutorizacion();
                    if(autorizaciones.size()==0)
