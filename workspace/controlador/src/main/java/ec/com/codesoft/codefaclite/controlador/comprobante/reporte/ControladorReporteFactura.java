@@ -515,6 +515,8 @@ public class ControladorReporteFactura {
                 dataFacturaCopia.setCodigoProducto(detalle.getCodigoPrincipal());
                 dataFacturaCopia.setResponsable((detalle.getResponsable()!=null)?detalle.getResponsable().getNombresCompletos():"");
                 
+                dataFacturaCopia.setCosto(detalle.getCostoPromedio()+"");
+                
                 //TODO: Por el momento se realiza la consulta directa del producto pero esta parte tiene que estar en el servidor
                 String nombreCategoria="Sin asignar";
                 ReferenciaDetalleFacturaRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId());
