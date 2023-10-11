@@ -36,10 +36,10 @@ public class ServiceControllerServer {
         try {
             Registry registro=LocateRegistry.createRegistry(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
             //String host=InetAddress.getLocalHost().getHostAddress();
-            
+            LOG.log(Level.INFO,"CARGANDO SERVIDOR RMI: "+host+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
             for (Map.Entry<Class, Class> entry : mapRecursos.entrySet()) {
                 Class claseImplementacion=entry.getKey();
-                LOG.log(Level.INFO,"Load RMI server: "+host+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+":"+claseImplementacion.getName());
+                //LOG.log(Level.INFO,"Load RMI server: "+host+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+":"+claseImplementacion.getName());
                 UnicastRemoteObject remoteObject=(UnicastRemoteObject) claseImplementacion.newInstance();
                 
                 Class claseInterfaz=entry.getValue();

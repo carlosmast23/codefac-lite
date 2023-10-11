@@ -70,40 +70,14 @@ public class ProductoReporte extends ControladorCodefacInterface{
                 
                 
                 productoData.setNombre(producto.getNombre());
-                productoData.setTipoProducto(producto.getTipoProductoEnum().getNombre());
-                if(producto.getValorUnitario()!=null){
-                    Integer decimalesRedondear = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.NUMERO_DECIMALES_RIDE, new ParametroUtilidades.ComparadorInterface() {
-                        @Override
-                        public Object consultarParametro(String nombreParametro) {
-                            return Integer.parseInt(nombreParametro);
-                        }
-                    });
-                    
-                    if(decimalesRedondear==null)
-                    {
-                        decimalesRedondear=ParametrosSistemaCodefac.PresentacionDecimales.DECIMALES_DEFECTO_PRODUCTO;
-                    }
-                    
-                    productoData.setCategoria("");
-                    if(producto.getCatalogoProducto().getCategoriaProducto()!=null)
-                    {
-                        productoData.setCategoria(producto.getCatalogoProducto().getCategoriaProducto().getNombre());
-                    }
-                    
-                    productoData.setValorUnitario(producto.getValorUnitario().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
-                    productoData.setIva(producto.obtenerIvaValorUnitario().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
-                    productoData.setTotal(producto.getValorUnitarioConIva().setScale(decimalesRedondear, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO).toString());
-                }else{
-                    productoData.setValorUnitario("0.00");
-                    productoData.setIva("0.00");
-                    productoData.setTotal("0.00");
-                }
-                
-                productoData.setPvp2((producto.getPrecioDistribuidor()!=null)?producto.getPrecioDistribuidor()+"":"0");
-                productoData.setPvp3((producto.getPrecioTarjeta()!=null)?producto.getPrecioTarjeta()+"":"0");
-                productoData.setPvp4((producto.getPvp4()!=null)?producto.getPvp4()+"":"0");
-                productoData.setPvp5((producto.getPvp5()!=null)?producto.getPvp5()+"":"0");
-                productoData.setPvp6((producto.getPvp6()!=null)?producto.getPvp6()+"":"0");
+                productoData.setTipoProducto(producto.getTipoProductoEnum().getNombre());                
+                productoData.setCategoria(producto.obtenerNombreCategoria());
+                productoData.setValorUnitario(producto.getValorUnitarioDefectoFormat()+"");                
+                productoData.setPvp2(producto.getPrecioDistribuidorConIvaFormat()+"");
+                productoData.setPvp3(producto.getPrecioTarjetaConIva()+"");
+                productoData.setPvp4(producto.getPvp4ConIva()+"");
+                productoData.setPvp5(producto.getPvp5ConIva()+"");
+                productoData.setPvp6(producto.getPvp6()+"");
                 
                 
                 data.add(productoData);

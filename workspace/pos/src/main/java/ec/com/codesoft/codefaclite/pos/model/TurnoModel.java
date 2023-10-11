@@ -66,7 +66,7 @@ public class TurnoModel extends TurnoPanel implements ControladorVistaIf, TurnoM
 
     @Override
     public void limpiar() {
-        getjSpinnerCantidadDias().setValue(0);
+        getjSpinnerCantidadDias().setValue(-1);
     }
 
     @Override

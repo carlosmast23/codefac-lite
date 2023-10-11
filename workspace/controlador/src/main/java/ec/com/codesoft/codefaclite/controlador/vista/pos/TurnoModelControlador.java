@@ -39,6 +39,7 @@ public class TurnoModelControlador extends ModelControladorAbstract<TurnoModelCo
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         turno = new Turno();
+        turno.setCantidadDias(-1);
     }
 
     @Override

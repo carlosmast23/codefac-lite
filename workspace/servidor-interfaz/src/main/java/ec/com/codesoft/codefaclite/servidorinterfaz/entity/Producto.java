@@ -1321,7 +1321,20 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         } 
         return BigDecimal.ZERO;
     }
+    
+    public String obtenerNombreCategoria()
+    {
+        if(catalogoProducto!=null)
+        {
+            if(catalogoProducto.getCategoriaProducto()!=null) 
+            {
+                return catalogoProducto.getCategoriaProducto().getNombre();
+            }
+        }
+        return "";
+    }
 
+    
     public Path getPathFotoTmp() {
         return pathFotoTmp;
     }
