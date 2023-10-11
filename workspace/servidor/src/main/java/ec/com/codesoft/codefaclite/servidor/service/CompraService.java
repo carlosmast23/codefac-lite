@@ -674,8 +674,11 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 entityManager.merge(compra);
                 
                 FacturacionService facturaService=new FacturacionService();
+                if(carteraParametro.pagarConCaja)
+                {
+                    facturaService.agregarDatosParaCajaSession(compra);
+                }
                 
-                facturaService.agregarDatosParaCajaSession(compra);
                 grabarCartera(compra,carteraParametro); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
                 
             }

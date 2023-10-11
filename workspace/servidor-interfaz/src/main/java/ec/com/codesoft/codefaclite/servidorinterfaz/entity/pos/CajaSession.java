@@ -469,8 +469,12 @@ public class CajaSession implements Serializable
                 }
                 else if(ingresoCaja.getCompra()!=null) //En el caso de compras debe restar el valor
                 {
-                    //TODO: Por el momento no considera forma de pago, solo asumo que fue en efectivo
-                    totalVentas=totalVentas.subtract(ingresoCaja.getCompra().getTotal());
+                    if(!ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado().equals(ingresoCaja.getCompra().getEstado()))
+                    {
+                        //TODO: Por el momento no considera forma de pago, solo asumo que fue en efectivo
+                        totalVentas=totalVentas.subtract(ingresoCaja.getCompra().getTotal());
+                    }
+                    
                 }
             }
         }

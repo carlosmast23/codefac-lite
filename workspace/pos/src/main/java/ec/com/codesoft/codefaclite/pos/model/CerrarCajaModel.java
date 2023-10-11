@@ -256,18 +256,22 @@ public class CerrarCajaModel extends CajaSessionModel
                 }
                 else if(ingresoCaja.getCompra()!=null)
                 {
-                    Timestamp fechaIngreso=ingresoCaja.getCompra().getFechaCreacion();
-                    VentaReporteData compraData = new VentaReporteData(                            
-                                ingresoCaja.getCompra().getSecuencial() + "",
-                                ingresoCaja.getCompra().getIdentificacion(),
-                                ingresoCaja.getCompra().getRazonSocial(),
-                                ingresoCaja.getCompra().getTotal()+"",
-                                ingresoCaja.getCompra().getEstado(),
-                                "Efectivo",
-                                dateFormatHora.format(fechaIngreso),
-                                "-"
-                        );
-                    detalleData.add(compraData);
+                    //Tomar en cuenta para el calculo siempre y cuando no este eliminado
+                    if(!ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado().equals(ingresoCaja.getCompra().getEstado()))
+                    {
+                        Timestamp fechaIngreso=ingresoCaja.getCompra().getFechaCreacion();
+                        VentaReporteData compraData = new VentaReporteData(                            
+                                    ingresoCaja.getCompra().getSecuencial() + "",
+                                    ingresoCaja.getCompra().getIdentificacion(),
+                                    ingresoCaja.getCompra().getRazonSocial(),
+                                    ingresoCaja.getCompra().getTotal()+"",
+                                    ingresoCaja.getCompra().getEstado(),
+                                    "Efectivo",
+                                    dateFormatHora.format(fechaIngreso),
+                                    "-"
+                            );
+                        detalleData.add(compraData);
+                    }
                 }
                 
             }
