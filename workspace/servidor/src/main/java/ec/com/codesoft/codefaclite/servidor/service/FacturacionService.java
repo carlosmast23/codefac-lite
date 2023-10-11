@@ -1838,7 +1838,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             throw new ServicioCodefacException("No esta activa una CAJA para el usuario: "+usuario.getNick());
         }
         
-        cajaSession =cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(factura.getPuntoEmision(), factura.getUsuario());
+        //Si estoy haciendo un movimiento de factura busco la caja activa por punto de emision, si es compra busco cualquier session abierta
+        Integer puntoEmision=null;
+        if(factura instanceof Factura)
+        {
+            puntoEmision=((Factura) factura).getPuntoEmision();
+        }
+        
+        cajaSession =cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(puntoEmision, factura.getUsuario());
         
         if(cajaSession == null)
         {
@@ -1850,18 +1857,28 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             for(CajaPermiso cajaPermiso : cajaPermisoList) 
             {
                 Caja caja=cajaPermiso.getCaja();
+                Boolean verificarTurno=false;
+                //Verificar que sea parte de una factura con el mismo punto de emisión
                 if(caja.getPuntoEmision().getPuntoEmision().equals(factura.getPuntoEmision()) || ( caja.getPuntoEmision2()!=null && caja.getPuntoEmision2().getPuntoEmision().equals(factura.getPuntoEmision())))
                 {
-                    for(TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList())
-                    {
-                        if(turnoAsignado.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
-                        {
-                            if(UtilidadesHora.comprobarHoraEnRangoDeTiempo(cajaSession.getFechaHoraApertura(),turnoAsignado.getTurno().getHoraInicial(), turnoAsignado.getTurno().getHoraFinal(),turnoAsignado.getTurno().getCantidadDias()))
-                            {
-                               cajaPermisoParaUsuario = cajaPermiso;
-                               break;
+                    verificarTurno=true;
+                }
+                
+                //Verificar que sea parte de una compra
+                if(factura instanceof Compra)
+                {
+                    verificarTurno=true;
+                }
+                
+                if(verificarTurno)
+                {
+                    for (TurnoAsignado turnoAsignado : cajaPermiso.getTurnoAsignadoList()) {
+                        if (turnoAsignado.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO)) {
+                            if (UtilidadesHora.comprobarHoraEnRangoDeTiempo(cajaSession.getFechaHoraApertura(), turnoAsignado.getTurno().getHoraInicial(), turnoAsignado.getTurno().getHoraFinal(), turnoAsignado.getTurno().getCantidadDias())) {
+                                cajaPermisoParaUsuario = cajaPermiso;
+                                break;
                             }
-                        }                    
+                        }
                     }
                 }
             }

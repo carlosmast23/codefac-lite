@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
+import static ec.com.codesoft.codefaclite.main.init.Main.modoAplicativo;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
@@ -152,7 +153,10 @@ public class LoginModel extends LoginFormDialog{
             //salirAplicacion=true;
             //setVisible(false);
             UtilidadServicioWeb.apagarServicioWeb();
-            ServiceFactory.getFactory().getEmpresaServiceIf().cerrarConexionDB();
+            if (!modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) 
+            {
+                ServiceFactory.getFactory().getEmpresaServiceIf().cerrarConexionDB();
+            }
             dispose();
             System.exit(0);
         } catch (RemoteException ex) {

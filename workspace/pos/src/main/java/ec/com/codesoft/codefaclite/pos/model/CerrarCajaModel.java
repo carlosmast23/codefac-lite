@@ -226,29 +226,48 @@ public class CerrarCajaModel extends CajaSessionModel
         {
             for (IngresoCaja ingresoCaja : ingresoCajaList) 
             {
-                Timestamp fechaIngreso=ingresoCaja.getFactura().getFechaCreacion();
-                
-                for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
+                if(ingresoCaja.getFactura()!=null)
                 {
-                    String estadoNombre=ingresoCaja.getFactura().getEstadoEnum().getNombre();
-                    //En el caso que la nota de credito este anulada en el reporte si aparece pero con estado anulado
-                    
-                    if(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
-                    {
-                        estadoNombre=ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre();
-                    }
-                    
-                    VentaReporteData reporteData = new VentaReporteData(                            
-                            ingresoCaja.getFactura().getSecuencial() + "",
-                            ingresoCaja.getFactura().getIdentificacion(),
-                            ingresoCaja.getFactura().getRazonSocial(),
-                            formaPago.getTotal() + "",
-                            estadoNombre,
-                            formaPago.getSriFormaPago().getAlias(),
-                            dateFormatHora.format(fechaIngreso)
-                    );
+                    Timestamp fechaIngreso=ingresoCaja.getFactura().getFechaCreacion();
 
-                    detalleData.add(reporteData);
+                    for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
+                    {
+                        String estadoNombre=ingresoCaja.getFactura().getEstadoEnum().getNombre();
+                        //En el caso que la nota de credito este anulada en el reporte si aparece pero con estado anulado
+
+                        if(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
+                        {
+                            estadoNombre=ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre();
+                        }
+
+                        VentaReporteData reporteData = new VentaReporteData(                            
+                                ingresoCaja.getFactura().getSecuencial() + "",
+                                ingresoCaja.getFactura().getIdentificacion(),
+                                ingresoCaja.getFactura().getRazonSocial(),
+                                formaPago.getTotal() + "",
+                                estadoNombre,
+                                formaPago.getSriFormaPago().getAlias(),
+                                dateFormatHora.format(fechaIngreso),
+                                "+"
+                        );
+
+                        detalleData.add(reporteData);
+                    }
+                }
+                else if(ingresoCaja.getCompra()!=null)
+                {
+                    Timestamp fechaIngreso=ingresoCaja.getCompra().getFechaCreacion();
+                    VentaReporteData compraData = new VentaReporteData(                            
+                                ingresoCaja.getCompra().getSecuencial() + "",
+                                ingresoCaja.getCompra().getIdentificacion(),
+                                ingresoCaja.getCompra().getRazonSocial(),
+                                ingresoCaja.getCompra().getTotal()+"",
+                                ingresoCaja.getCompra().getEstado(),
+                                "Efectivo",
+                                dateFormatHora.format(fechaIngreso),
+                                "-"
+                        );
+                    detalleData.add(compraData);
                 }
                 
             }

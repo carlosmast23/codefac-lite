@@ -447,22 +447,30 @@ public class CajaSession implements Serializable
         {
             for (IngresoCaja ingresoCaja : ingresoCajaList) 
             {
-                if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )
+                if(ingresoCaja.getFactura()!=null)
                 {
-                    //Verificar si fue anulado con NOTA DE CREDITO para igual no tomar en cuenta por el momento
-                    if(!Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
+                    if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )
                     {
-                        for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
+                        //Verificar si fue anulado con NOTA DE CREDITO para igual no tomar en cuenta por el momento
+                        if(!Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
                         {
-                            //Solo agregar las formas de pago en efectivo
-                            if(formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.ALIAS_FORMA_PAGO_EFECTIVO))
+                            for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
                             {
-                                //System.out.println("Efectivo :"+ingre);
-                                totalVentas = totalVentas.add(formaPago.getTotal());
-                            }                        
+                                //Solo agregar las formas de pago en efectivo
+                                if(formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.ALIAS_FORMA_PAGO_EFECTIVO))
+                                {
+                                    //System.out.println("Efectivo :"+ingre);
+                                    totalVentas = totalVentas.add(formaPago.getTotal());
+                                }                        
+                            }
                         }
+
                     }
-                    
+                }
+                else if(ingresoCaja.getCompra()!=null) //En el caso de compras debe restar el valor
+                {
+                    //TODO: Por el momento no considera forma de pago, solo asumo que fue en efectivo
+                    totalVentas=totalVentas.subtract(ingresoCaja.getCompra().getTotal());
                 }
             }
         }

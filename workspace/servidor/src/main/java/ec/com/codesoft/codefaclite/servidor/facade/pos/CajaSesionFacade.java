@@ -143,9 +143,16 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
     
     public List<CajaSession> obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(Integer puntoEmision, Usuario usuario,Integer numeroPuntoEmision) 
     {
+        //CajaSession u;
+        //u.getCaja().getPuntoEmision().pun
         
+        String wherePuntoEmision="";
+        if(puntoEmision!=null)
+        {
+            wherePuntoEmision=" AND u.caja.puntoEmision?#.puntoEmision = ?3";
+        }
         
-        String consultaGeneral="SELECT u FROM CajaSession u WHERE u.usuario = ?1 AND u.estadoCierreCaja = ?2 AND u.caja.puntoEmision?#.puntoEmision = ?3  ORDER BY u.fechaHoraCierre desc";
+        String consultaGeneral="SELECT u FROM CajaSession u WHERE u.usuario = ?1 AND u.estadoCierreCaja = ?2 "+wherePuntoEmision+"  ORDER BY u.fechaHoraCierre desc";
         
         if(numeroPuntoEmision==1)
         {
@@ -159,7 +166,11 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
         Query query = getEntityManager().createQuery(consultaGeneral);
         query.setParameter(1, usuario);
         query.setParameter(2, CajaSessionEnum.ACTIVO.getEstado());
-        query.setParameter(3, puntoEmision);
+        
+        if(puntoEmision!=null)
+        {
+            query.setParameter(3, puntoEmision);
+        }
 
         List<CajaSession> resultadoLista = query.getResultList();
 
