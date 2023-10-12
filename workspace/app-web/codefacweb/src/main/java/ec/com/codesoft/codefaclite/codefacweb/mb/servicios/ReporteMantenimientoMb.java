@@ -49,7 +49,7 @@ import org.apache.poi.ss.usermodel.CellType;
 @ViewScoped
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
-    private List<MantenimientoEnum> estadoMantenimietoList;  
+    private List<MantenimientoEnum> estadoMantenimietoList;   
     private List<MantenimientoResult> mantenimientoList; 
     private List<MarcaProducto> marcaList;  
     private List<Mantenimiento.UbicacionEnum> ubicacionList;
@@ -71,7 +71,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void nuevo() throws ExcepcionCodefacLite, UnsupportedOperationException {
         //Mantenimiento m;
         //m.getUbicacionEnum()
-        //TareaMantenimiento t;
+        //TareaMantenimiento t; 
         
     }
 
@@ -189,13 +189,36 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         System.out.println("verificar presionar boton ...");
     }
     
+    public void eventoMenuReporte()
+    {
+        fechaFinal=null;
+        fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
+        if(tipoReporte.equals("liberadas"))
+        {
+            //fechaFinal=UtilidadesFecha.getFechaHoy();
+            //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
+            //System.out.println("Fecha Inicial"+fechaInicial);
+            estadoSeleccionado=MantenimientoEnum.TERMINADO;
+        }
+        else if(tipoReporte.equals("taller") || tipoReporte.equals("proceso"))
+        {
+            estadoSeleccionado=MantenimientoEnum.INGRESADO;
+            //fechaFinal=null;
+            //UtilidadesFecha.restarDiasFecha(fechaFinal, 0)
+            //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());   
+        } else if(tipoReporte.equals("noConformidad"))
+        {
+            estadoSeleccionado=null;
+        }
+    }
+    
     public void consultarMantenimientos()
     {
         //Encontrar sola las unidades finalmente terminadas
-        if(tipoReporte.equals("liberadas"))
+        /*if(tipoReporte.equals("liberadas"))
         {
             fechaFinal=UtilidadesFecha.getFechaHoy();
-            fechaInicial=UtilidadesFecha.obtenerPrimerDiaDelMes();
+            fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
             System.out.println("Fecha Inicial"+fechaInicial);
             estadoSeleccionado=MantenimientoEnum.TERMINADO;
         }
@@ -205,12 +228,13 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             fechaFinal=null;
             //UtilidadesFecha.restarDiasFecha(fechaFinal, 0)
             fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());   
-        }
+        }*/
                 
         try {
+            System.out.println("Datos Consulta | fechaIni: "+fechaInicial+" | fechaFin: "+fechaFinal+" | estado: "+estadoSeleccionado+" | marca: "+marcaSeleccionada+" | ubi: "+ubicacionSeleccionada+" | tarea: "+tareaSeleccionada);
             mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
-            
-            if(tipoReporte.equals("proceso"))
+            System.out.println("Datos consultados ANTES: "+mantenimientoList.size());  
+            if(tipoReporte.equals("proceso")) 
             {
                 System.out.println("Datos antes: "+mantenimientoList.size());
                 mantenimientoList=MantenimientoResult.convertirDataReporte(mantenimientoList,false);

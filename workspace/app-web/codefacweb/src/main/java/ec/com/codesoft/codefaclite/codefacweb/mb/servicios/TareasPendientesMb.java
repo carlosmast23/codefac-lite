@@ -226,7 +226,7 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
         if(!detalleSeleccionado.verificarInformeDuplicado(detalle))
         {
             try {                
-                ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().grabarInformeDetalle(detalle,detalleSeleccionado);
+                detalle=ServiceFactory.getFactory().getMantenimientoTareaDetalleServiceIf().grabarInformeDetalle(detalle,detalleSeleccionado);
                 detalleSeleccionado.agregarInforme(detalle);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);

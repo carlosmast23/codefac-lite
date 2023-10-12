@@ -25,6 +25,7 @@
                                 <f:selectItem itemLabel="Taller" itemValue="taller"/>
                                 <f:selectItem itemLabel="Proceso" itemValue="proceso"/>
                                 <f:selectItem itemLabel="No Conformidad" itemValue="noConformidad"/>
+                                <p:ajax event="change" listener="#{reporteMantenimientoMb.eventoMenuReporte()}" update="formulario:fechaInicial,formulario:fechaFinal,formulario:console,formulario:console25,formulario:console26" />
                             </p:selectOneRadio>  
                         </div>
                         

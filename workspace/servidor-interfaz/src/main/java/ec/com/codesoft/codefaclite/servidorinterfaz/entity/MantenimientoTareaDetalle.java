@@ -53,7 +53,7 @@ public class MantenimientoTareaDetalle extends EntityAbstract<MantenimientoTarea
     @JoinColumn(name = "TALLER_TAREA_ID")
     private TallerTarea tallerTarea;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mantenimientoTareaDetalle", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "mantenimientoTareaDetalle", fetch = FetchType.EAGER)
     private List<MantenimientoInformeDetalle> informeList;
     
 

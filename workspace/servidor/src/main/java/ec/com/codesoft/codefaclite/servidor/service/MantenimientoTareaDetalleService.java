@@ -190,16 +190,30 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
         entityManager.merge(entity);
     }
     
-    public void grabarInformeDetalle(MantenimientoInformeDetalle detalle,MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException
+    public MantenimientoInformeDetalle grabarInformeDetalle(MantenimientoInformeDetalle detalle,MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        
+        return (MantenimientoInformeDetalle) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public Object transaccion() throws ServicioCodefacException, RemoteException {
+                validarDuplicadoInformeDetalle(detalle, tareaDetalle);
                 entityManager.persist(detalle);
                 tareaDetalle.agregarInforme(detalle);
-                entityManager.merge(tareaDetalle);                
+                entityManager.merge(tareaDetalle);      
+                return entityManager.merge(detalle);
             }
         });
+    }
+    
+    private void validarDuplicadoInformeDetalle(MantenimientoInformeDetalle detalle,MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException
+    {
+        MantenimientoTareaDetalleService service=new MantenimientoTareaDetalleService();
+        MantenimientoTareaDetalle tareaDetalleTmp=service.buscarPorId(tareaDetalle.getId());
+        
+        if(tareaDetalleTmp.verificarInformeDuplicado(detalle))
+        {
+            throw new ServicioCodefacException("No se puede grabar detalles duplicados");
+        }
     }
     
     public void eliminarInformeDetalle(MantenimientoInformeDetalle detalle,MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException
