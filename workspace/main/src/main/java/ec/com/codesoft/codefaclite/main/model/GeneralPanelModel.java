@@ -2488,7 +2488,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             GeneralPanelInterface panelCerrando=(GeneralPanelInterface)e.getInternalFrame();
                             quitarVentanaAbierta(panelCerrando); //
                             //if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
-                            habilitarBotones(false);
+                            
+                            //En el caso que no tenga mas ventas abiertas dejo deshabilitando botones
+                            //TODO: Esta solucion lo hacemos de forma temporal porque en el jdk 11 los eventos de las pantallas funciona de forma diferente
+                            // y parece que la pantalla que se cierra se ejecuta al final y causa conflictos
+                            if(mapPantallaAbiertas.isEmpty())
+                            {
+                                habilitarBotones(false);
+                            }
                             
                             //Si la ventana tiene una ventana padre solo selecciono esa ventana,
                             //Si no tiene selecciono cualquier por defecto
