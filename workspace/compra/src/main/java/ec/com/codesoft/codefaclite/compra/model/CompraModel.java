@@ -1338,7 +1338,7 @@ public class CompraModel extends CompraPanel{
             throw new ExcepcionCodefacLite("Error al ingresar un formato de número invalido para el DESCUENTO");
         }
         
-        //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
+        
         Integer porcentajeIva=(Integer) getCmbIvaDetalle().getSelectedItem();
         
         //validar el ingreso en la vista
@@ -1349,7 +1349,7 @@ public class CompraModel extends CompraPanel{
         //TODO:Verificar por que existen 2 validaciones para la vista
         if(verificarCamposValidados())
         {
-            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario,descuento,getTxtDescripcionItem().getText(),porcentajeIva);
+            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario,descuento,getTxtProductoItem().getText(),getTxtDescripcionItem().getText(),porcentajeIva);
         }
         
     }
@@ -1399,7 +1399,7 @@ public class CompraModel extends CompraPanel{
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {
                     //TODO:Mejorar esta parte para no pasar los mismos datos                    
-                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje());
+                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getCodigoPrincipal(),compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje());
                     
                 }
                 
@@ -1566,8 +1566,18 @@ public class CompraModel extends CompraPanel{
                 presentacionProductoNombre=presentacionProducto.getNombre();
             }
             
+            String codigoProducto="";
+            if(!UtilidadesTextos.verificarNullOVacio(detalle.getCodigoPrincipal()))
+            {
+                codigoProducto=detalle.getCodigoPrincipal();
+            }
+            else
+            {
+                codigoProducto=producto.getCodigoPersonalizado();
+            }
+            
             fila.add(detalle);
-            fila.add(producto.getCodigoPersonalizado());
+            fila.add(codigoProducto);
             fila.add(detalle.getCantidad().setScale(3, RoundingMode.HALF_UP)+"");
             fila.add(presentacionProductoNombre);
             fila.add(detalle.getDescripcion()+"");
@@ -1740,7 +1750,7 @@ public class CompraModel extends CompraPanel{
     }
    
     //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
-    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,BigDecimal descuento,String descripcion,Integer porcentajeIva)
+    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,BigDecimal descuento,String codigo,String descripcion,Integer porcentajeIva)
     {
         Boolean agregar = true;
         
@@ -1772,8 +1782,8 @@ public class CompraModel extends CompraPanel{
             //compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
             compraDetalle.setPrecioUnitario(precioUnitario ); //TODO: Ver si es necesario escalar los valores o este proceso lo debe hacer el usuario
             compraDetalle.setCompra(compra);
+            compraDetalle.setCodigoPrincipal(codigo);
             compraDetalle.setDescripcion(descripcion);
-            //compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
             compraDetalle.setDescuento(descuento);
             compraDetalle.setLote(lote);
             /*if(productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)

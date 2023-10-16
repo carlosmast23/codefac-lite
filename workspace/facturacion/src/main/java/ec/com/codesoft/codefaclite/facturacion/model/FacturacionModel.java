@@ -1615,7 +1615,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     
                     if(lote.getFechaElaboracion()!=null)
                     {
-                        fechaElaboracionStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaVencimiento());
+                        fechaElaboracionStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaElaboracion());
                         detalleTexto=detalleTexto+", F.Elab: "+fechaElaboracionStr;
                     }
                     
