@@ -41,9 +41,14 @@ public class MantenimientoResult implements Serializable,Cloneable{
     private String tareaTitulo;
     private String tareaDescripcion;
     private String duracionDias;
+    private String duracionHoras;
     
     private String noConformidad;
     private String parteVehiculo;
+    
+    private String fechaInicioProceso;
+    private String fechaFinProceso;
+    private Integer horasProceso;
     
     
     private List<DetalleTareaResult> tareaLista;
@@ -89,7 +94,7 @@ public class MantenimientoResult implements Serializable,Cloneable{
                                     detalleTmp.setTareaDescripcion(tareaResult.descripcion);
                                     detalleTmp.setDuracionDias(tareaResult.horas + "");
                                     detalleTmp.setNoConformidad(informe.noConformidad);
-                                    detalleTmp.setParteVehiculo(informe.parteVehiculo);
+                                    detalleTmp.setParteVehiculo(informe.parteVehiculo);                                    
                                     resultadoList.add(detalleTmp);
                                 }
                             }
@@ -100,6 +105,13 @@ public class MantenimientoResult implements Serializable,Cloneable{
                             detalleTmp.setTareaTitulo(tareaResult.titulo);
                             detalleTmp.setTareaDescripcion(tareaResult.descripcion);
                             detalleTmp.setDuracionDias(tareaResult.horas + "");
+                            
+                            
+                            
+                            detalleTmp.setFechaInicioProceso(tareaResult.fechaInicio);
+                            detalleTmp.setFechaFinProceso(tareaResult.fechaFin);
+                            detalleTmp.setHorasProceso(tareaResult.horasProceso);
+                            
                             resultadoList.add(detalleTmp);
                         }
                     } catch (CloneNotSupportedException ex) {
@@ -286,6 +298,39 @@ public class MantenimientoResult implements Serializable,Cloneable{
     public void setParteVehiculo(String parteVehiculo) {
         this.parteVehiculo = parteVehiculo;
     }
+
+    public String getFechaInicioProceso() {
+        return fechaInicioProceso;
+    }
+
+    public void setFechaInicioProceso(String fechaInicioProceso) {
+        this.fechaInicioProceso = fechaInicioProceso;
+    }
+
+    public String getFechaFinProceso() {
+        return fechaFinProceso;
+    }
+
+    public void setFechaFinProceso(String fechaFinProceso) {
+        this.fechaFinProceso = fechaFinProceso;
+    }
+
+    public Integer getHorasProceso() {
+        return horasProceso;
+    }
+
+    public void setHorasProceso(Integer horasProceso) {
+        this.horasProceso = horasProceso;
+    }
+
+    public String getDuracionHoras() {
+        return duracionHoras;
+    }
+
+    public void setDuracionHoras(String duracionHoras) {
+        this.duracionHoras = duracionHoras;
+    }
+
     
     
     
@@ -361,12 +406,19 @@ public class MantenimientoResult implements Serializable,Cloneable{
         public String descripcion;
         public Integer horas;
         
+        public String fechaInicio;
+        public String fechaFin;
+        public Integer horasProceso;
+        
         public List<InformeDetalleResult> detalleList;
 
-        public DetalleTareaResult(String titulo, String descripcion,Integer horas) {
+        public DetalleTareaResult(String titulo, String descripcion,Integer horas,String fechaInicio,String fechaFin,Integer horasProceso) {
             this.titulo = titulo;
             this.descripcion = descripcion;
             this.horas=horas;
+            this.fechaInicio=fechaInicio;
+            this.fechaFin=fechaFin;
+            this.horasProceso=horasProceso;
         }
         
         public void agregarInformeDetalle(InformeDetalleResult detalle)

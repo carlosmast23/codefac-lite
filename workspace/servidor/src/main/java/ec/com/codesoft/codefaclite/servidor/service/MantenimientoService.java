@@ -20,12 +20,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *
@@ -334,15 +337,20 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                 mantenimientoResult.taller=dato.getTaller().getNombre();
                 
                 String duracionDiasStr="";
+                String duracionhorasStr="";
                 if(dato.getFechaSalida()!=null)
                 {
-                    duracionDiasStr=UtilidadesFecha.obtenerDistanciaDias(dato.getFechaIngreso(), dato.getFechaSalida())+"";
+                    duracionDiasStr=UtilidadesFecha.obtenerDistanciaDias(dato.getFechaIngreso(), dato.getFechaSalida())+"";                    
+                    duracionhorasStr=UtilidadesFecha.obtenerDistanciaHorasDate(dato.getFechaIngreso(),dato.getFechaSalida())+"";
                 }
                 else
                 {
                     duracionDiasStr=UtilidadesFecha.obtenerDistanciaDias(dato.getFechaIngreso(), UtilidadesFecha.getFechaHoraHoy())+"";
+                    duracionhorasStr=UtilidadesFecha.obtenerDistanciaHorasDate(dato.getFechaIngreso(),UtilidadesFecha.getFechaHoraHoy())+"";
                 }
-                mantenimientoResult.setDuracionDias(duracionDiasStr);
+                
+                mantenimientoResult.setDuracionDias(duracionDiasStr);                
+                mantenimientoResult.setDuracionHoras(duracionhorasStr);
                 
                 //Falta implemtar el resto de los procesos
                 MantenimientoTareaDetalleService tareaService=new MantenimientoTareaDetalleService();
@@ -354,8 +362,35 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                         Logger.getLogger(MantenimientoService.class.getName()).log(Level.WARNING,"Revisar MantenimientoTareaDetalle: Id: "+detalleMantenimiento.getId());
                         continue;
                     }
-                                        
-                    MantenimientoResult.DetalleTareaResult tareaDetalle=new MantenimientoResult.DetalleTareaResult(detalleMantenimiento.getTallerTarea().getTareaMantenimiento().getNombre(), "0",detalleMantenimiento.obtenerHorasTarea());
+                    
+                    String fechaInicio="";
+                    if(detalleMantenimiento.getFechaInicio()!=null)
+                    {
+                        fechaInicio=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA.format(detalleMantenimiento.getFechaInicio());                        
+                    }
+                    
+                    String fechaFin="";
+                    if(detalleMantenimiento.getFechaFin()!=null)
+                    {
+                        fechaFin=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA_HORA.format(detalleMantenimiento.getFechaFin());                        
+                    }
+                    
+                    //Agregar las horas que se ha demorado una tarea
+                    Timestamp tiempoFinal=detalleMantenimiento.getFechaFin();
+                    if(tiempoFinal==null)
+                    {
+                        tiempoFinal=UtilidadesFecha.getFechaHoyTimeStamp();
+                    }
+                    
+                    Timestamp tiempoInicial=detalleMantenimiento.getFechaInicio();
+                    if(tiempoInicial==null)
+                    {
+                        tiempoInicial=UtilidadesFecha.getFechaHoyTimeStamp();
+                    }
+                    
+                    Integer horasProceso=UtilidadesFecha.calcularDiferenciaEnHoras(tiempoInicial, tiempoFinal);
+                    
+                    MantenimientoResult.DetalleTareaResult tareaDetalle=new MantenimientoResult.DetalleTareaResult(detalleMantenimiento.getTallerTarea().getTareaMantenimiento().getNombre(), "0",detalleMantenimiento.obtenerHorasTarea(),fechaInicio,fechaFin,horasProceso);
                     
                     //Agregar las detalles del Informa
                     List<MantenimientoInformeDetalle> informeList=detalleMantenimiento.getInformeList();

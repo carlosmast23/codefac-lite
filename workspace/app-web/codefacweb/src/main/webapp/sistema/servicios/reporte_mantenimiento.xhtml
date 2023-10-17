@@ -24,7 +24,7 @@
                                 <f:selectItem itemLabel="Liberadas" itemValue="liberadas"/>
                                 <f:selectItem itemLabel="Taller" itemValue="taller"/>
                                 <f:selectItem itemLabel="Proceso" itemValue="proceso"/>
-                                <f:selectItem itemLabel="No Conformidad" itemValue="noConformidad"/>
+                                <f:selectItem itemLabel="Defectos" itemValue="noConformidad"/>
                                 <p:ajax event="change" listener="#{reporteMantenimientoMb.eventoMenuReporte()}" update="formulario:fechaInicial,formulario:fechaFinal,formulario:console,formulario:console25,formulario:console26" />
                             </p:selectOneRadio>  
                         </div>
@@ -137,13 +137,13 @@
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
                                 <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
-                                <f:selectItems value="#{tareasPendientesMb.tallerList}" />
+                                <f:selectItems value="#{reporteMantenimientoMb.tallerList}" />
                             </p:selectOneMenu>
                         </f:facet>
                     </p:column>
                     
                     <p:column headerText="Horas" width="60" style="text-align: right">
-                        <h:outputText value="#{m.duracionDias}" />
+                        <h:outputText value="#{m.duracionHoras}" />
                     </p:column>
                     
                     <p:column headerText="Marca" width="100">
@@ -183,7 +183,23 @@
                         <h:outputText value="#{m.comentario}" />
                     </p:column>
                     
-                    <p:column headerText="No Conformidad">
+                    <p:column headerText="Fecha Inicio Tarea" width="100" >
+                        <h:outputText value="#{m.fechaInicioProceso}" >
+                            <f:convertDateTime pattern="MM-dd HH:mm" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Fecha Fin Tarea" width="100" >
+                        <h:outputText value="#{m.fechaFinProceso}" >
+                            <f:convertDateTime pattern="MM-dd HH:mm" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Horas Proc" width="100" >
+                        <h:outputText value="#{m.horasProceso}" />
+                    </p:column>
+                    
+                    <p:column headerText="Defecto">
                         <h:outputText value="#{m.noConformidad}" />
                     </p:column>
                     

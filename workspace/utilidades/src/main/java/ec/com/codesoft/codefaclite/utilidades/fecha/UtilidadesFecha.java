@@ -103,7 +103,7 @@ public class UtilidadesFecha {
  * @param fechaMayor nada
  * @return dias
  */
-    public static int obtenerDistanciaDias(java.util.Date fechaMenor, java.util.Date fechaMayor) {
+    /*public static int obtenerDistanciaDias(java.util.Date fechaMenor, java.util.Date fechaMayor) {
         
         if(fechaMenor==null || fechaMayor==null)
         {
@@ -121,6 +121,17 @@ public class UtilidadesFecha {
                 
         //int dias = (int) ((fechaMayor.getTime() - fechaMenor.getTime()) / 86400000);
         return dias.intValue();
+    }*/
+    
+    public static int obtenerDistanciaDias(java.util.Date fechaMenor, java.util.Date fechaMayor) {
+        if (fechaMenor == null || fechaMayor == null) {
+            return 0;
+        }
+
+        long diferenciaMillis = fechaMayor.getTime() - fechaMenor.getTime();
+        long dias = diferenciaMillis / (24 * 60 * 60 * 1000);
+
+        return (int) dias;
     }
     
     public static int obtenerDistanciaConLaFechaActual(java.util.Date fecha)
@@ -616,6 +627,17 @@ public class UtilidadesFecha {
         int diferenciaEnHoras = (int) (diferenciaEnMilisegundos / (60 * 60 * 1000));
 
         return diferenciaEnHoras;
+    }
+    
+     public static int obtenerDistanciaHorasDate(java.util.Date fechaMenor,java.util.Date fechaMayor) {
+        if (fechaMenor == null || fechaMayor == null) {
+            return 0;
+        }
+
+        long diferenciaMillis = fechaMayor.getTime() - fechaMenor.getTime();
+        long horas = diferenciaMillis / 3600000; // 3600000 milisegundos en una hora
+
+        return (int) horas;
     }
 
 }

@@ -16,15 +16,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento.MantenimientoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TareaMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,7 +43,9 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CreationHelper;
 
 /**
  *
@@ -64,6 +70,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     private java.util.Date fechaFinal;
     
     private String tipoReporte;
+    private List<Taller> tallerList;   
     
     ///private String 
  
@@ -136,6 +143,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             System.out.println("Tarea 2 ");
             //estadoMantenimietoList.remove(MantenimientoEnum.FACTURADO);
             
+            tallerList=ServiceFactory.getFactory().getTallerServiceIf().obtenerActivos();
             System.out.println("Tarea 3 ");
             marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(sessionMb.getSession().getEmpresa());
             ubicacionList=UtilidadesLista.arrayToList(Mantenimiento.UbicacionEnum.values());
@@ -148,6 +156,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             System.out.println("Tareas seleccionadas: "+tareaList.size());
             System.out.println("Fecha Inicial: "+fechaInicial);
             System.out.println("Fecha Final: "+fechaFinal);
+            
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -192,12 +201,14 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void eventoMenuReporte()
     {
         fechaFinal=null;
-        fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
+        //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
+        fechaInicial=null;
         if(tipoReporte.equals("liberadas"))
         {
             //fechaFinal=UtilidadesFecha.getFechaHoy();
             //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
             //System.out.println("Fecha Inicial"+fechaInicial);
+            fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
             estadoSeleccionado=MantenimientoEnum.TERMINADO;
         }
         else if(tipoReporte.equals("taller") || tipoReporte.equals("proceso"))
@@ -208,6 +219,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());   
         } else if(tipoReporte.equals("noConformidad"))
         {
+            fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
             estadoSeleccionado=null;
         }
     }
@@ -274,12 +286,16 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         System.out.println("customXLSPostProcessor PROCESANDO ...");
         HSSFWorkbook wb = (HSSFWorkbook) document;
         HSSFSheet sheet = wb.getSheetAt(0);
+        
+        CreationHelper createHelper = wb.getCreationHelper();
+        CellStyle dateCellStyle = wb.createCellStyle();
+        dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
 
         for (int rowIndex = 1; rowIndex < sheet.getPhysicalNumberOfRows(); rowIndex++) {
             HSSFRow row = sheet.getRow(rowIndex);
 
             if (row != null) {
-                HSSFCell cell2 = row.getCell(4); // Columna 2
+                HSSFCell cell2 = row.getCell(4); 
                 
                 if (cell2 != null && cell2.getCellTypeEnum().equals(CellType.STRING)) {
                     cell2.setCellValue(Double.parseDouble(cell2.getStringCellValue()));
@@ -287,12 +303,43 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
                 }
 
                 
-                HSSFCell cell5 = row.getCell(10); // Columna 5
+                HSSFCell cell5 = row.getCell(10); 
                 if (cell5 != null && cell5.getCellTypeEnum().equals(CellType.STRING)) 
                 {
                     cell5.setCellValue(Double.parseDouble(cell5.getStringCellValue()));
                     cell5.setCellType(CellType.NUMERIC);  
                 } 
+                                
+                
+                //Aplicar formato de fecha corta excel
+                cambiarEstiloFecha(row.getCell(8), wb,dateCellStyle,1);                
+                cambiarEstiloFecha(row.getCell(9), wb,dateCellStyle,1);
+                
+                cambiarEstiloFecha(row.getCell(13), wb,dateCellStyle,2);                
+                cambiarEstiloFecha(row.getCell(14), wb,dateCellStyle,2);
+                
+                
+                
+            }
+        }
+    }
+    
+    private void cambiarEstiloFecha(HSSFCell cellFecha,HSSFWorkbook wb,CellStyle dateCellStyle,int estilo)
+    {        
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        if(estilo==2)
+        {
+            formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        }
+        
+        //cellFecha = row.getCell(13);
+        if (cellFecha != null && !UtilidadesTextos.verificarNullOVacio(cellFecha.getStringCellValue())) {
+            try {
+                String fechaStr = cellFecha.getStringCellValue();
+                cellFecha.setCellValue(formato.parse(fechaStr));
+                cellFecha.setCellStyle(dateCellStyle);
+            } catch (ParseException ex) {
+                Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -393,8 +440,15 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void setTareaSeleccionada(TareaMantenimiento tareaSeleccionada) {
         this.tareaSeleccionada = tareaSeleccionada;
     }
-    
-    
+
+    public List<Taller> getTallerList() {
+        return tallerList;
+    }
+
+    public void setTallerList(List<Taller> tallerList) {
+        this.tallerList = tallerList;
+    }
+
     
     
     
