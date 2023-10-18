@@ -1555,7 +1555,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             //Cargar los datos de las categoria
             categoriaList=ServiceFactory.getFactory().getCategoriaProductoServiceIf().obtenerTodosPorEmpresa(sessionMb.getSession().getEmpresa());
             
-            productoPorCategoriaList=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(sessionMb.getSession().getEmpresa()).subList(0,10); 
+            //productoPorCategoriaList=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodosActivos(sessionMb.getSession().getEmpresa()).subList(0,10); 
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);

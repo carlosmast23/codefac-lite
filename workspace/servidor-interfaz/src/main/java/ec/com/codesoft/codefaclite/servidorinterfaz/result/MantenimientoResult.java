@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.result;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNoConformidadEnum;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
@@ -277,6 +278,16 @@ public class MantenimientoResult implements Serializable,Cloneable{
 
     public String getTaller() {
         return taller;
+    }
+    
+    public String obtenerTallerNombre()
+    {
+        TipoNoConformidadEnum noConformidadEnum= TipoNoConformidadEnum.buscarPorCodigo(noConformidad);
+        if(noConformidadEnum!=null)
+        {
+            return noConformidadEnum.getNombre();
+        }
+        return "";
     }
 
     public void setTaller(String taller) {

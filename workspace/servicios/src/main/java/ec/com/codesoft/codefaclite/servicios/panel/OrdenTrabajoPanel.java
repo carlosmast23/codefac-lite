@@ -860,6 +860,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.btnBuscarVehiculo = btnBuscarVehiculo;
     }
 
+
     public JSpinner getSpnKilometraje() {
         return spnKilometraje;
     }
