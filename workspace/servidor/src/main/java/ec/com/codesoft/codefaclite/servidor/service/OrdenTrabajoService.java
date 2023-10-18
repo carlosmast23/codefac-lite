@@ -104,6 +104,11 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                     entityManager.merge(presupuesto);
                 }
                 
+                if(ordenTrabajo.getObjetoMantenimiento()!=null)
+                {
+                    entityManager.merge(ordenTrabajo.getObjetoMantenimiento());
+                }
+                
                 //ordenTrabajoFacade.edit(ordenTrabajo);
             }
         });
