@@ -419,7 +419,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("Hola todos");
     }
 
-    public void abrirDialogoBuscarVehiculo() {
+    public void abrirDialogoBuscarCliente() {
         System.out.println("Abriendo dialogo init");
         ClienteEstablecimientoBusquedaDialogo clienteBusquedaDialogo = new ClienteEstablecimientoBusquedaDialogo(sessionMb.getSession());
         clienteBusquedaDialogo.setPrimeraColumnaNombre(true);
