@@ -121,6 +121,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     LoteService loteService=new LoteService();
     RubroEstudianteService rubroEstudianteService=new RubroEstudianteService();
     PresupuestoService presupuestoService=new PresupuestoService();
+    OrdenTrabajoService ordenTrabajoService=new OrdenTrabajoService();
     
 
     FacturaFacade facturaFacade;
@@ -1202,6 +1203,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     
                     afectarInventario(detalle, bodegaVenta);
                     break;
+                case ORDEN_TRABAJO:
+                    afectarOrdenTrabajo(detalle);
+                    break;
+                    
                 case LIBRE:
                     //NO DEBE AFECTAR A NADA;
                     break;
@@ -1228,6 +1233,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         factura.setDatosAdicionales(facturaAdicionalList);
         factura.setReembolsoList(rembolsoList);
             
+    }
+    
+    private void afectarOrdenTrabajo(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
+    {
+        ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(TipoDocumentoEnum.ORDEN_TRABAJO, facturaDetalle.getReferenciaId());
+        OrdenTrabajo ordenTrabajo=(OrdenTrabajo) respuesta.objecto;
+        ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FACTURADO);
+        entityManager.merge(ordenTrabajo);
     }
     
     public void grabarCartera(Factura factura) throws RemoteException, ServicioCodefacException
@@ -1765,7 +1778,16 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                             respuesta.codigoPrincipal=producto.getCodigoPersonalizado();
                             break;
 
-                        case ORDEN_TRABAJO:    
+                        case ORDEN_TRABAJO:
+                            OrdenTrabajo ordenTrabajo=ordenTrabajoService.buscarPorId(referenciaId);
+                            catalogoProducto=ordenTrabajo.getCatalogoProducto();
+                            respuesta=new ReferenciaDetalleFacturaRespuesta(
+                                    catalogoProducto, 
+                                    ordenTrabajo.getId(), 
+                                    tipoDocumentoEnum, 
+                                    ordenTrabajo);
+                            break;
+                            
                         case PRESUPUESTOS:
                             Presupuesto presupuesto = presupuestoService.buscarPorId(referenciaId);
                             catalogoProducto = presupuesto.getCatalogoProducto();

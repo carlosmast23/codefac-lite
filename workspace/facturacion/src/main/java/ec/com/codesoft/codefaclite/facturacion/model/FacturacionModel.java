@@ -1388,22 +1388,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         if (ordenTrabajoTmp != null) 
         {            
+            
+            String descripción="";
+            
+            if(!UtilidadesLista.verificarListaVaciaONull(ordenTrabajoTmp.getDetalles()))
+            {
+                descripción=ordenTrabajoTmp.getDetalleString();
+            }
+            
             //ordenTrabajoTmp.get
             FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
                     BigDecimal.ONE,
                     BigDecimal.ZERO, 
                     null, //Este tipo de valores no tienen subsidio
-                    ordenTrabajoTmp.getDescripcion(), 
+                    descripción, 
                     ordenTrabajoTmp.getId().toString(), 
                     ordenTrabajoTmp.getCatalogoProducto(), 
                     ordenTrabajoTmp.getId(), 
                     null,
                     null,
                     EnumSiNo.NO,
-                    tipoDocumentoEnum.PRESUPUESTOS,
+                    tipoDocumentoEnum.ORDEN_TRABAJO,
                     BigDecimal.ZERO);
-            controlador.setearValoresProducto(facturaDetalle);
+            controlador.setearValoresProducto(facturaDetalle);            
             setFacturaDetalleSeleccionado(facturaDetalle);
+            cargarCliente(ordenTrabajoTmp.getCliente().getEstablecimientoActivoPorDefecto());
+            
         }
     }
     
@@ -3284,6 +3294,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Cargar los tipos de documentos segun el tipo de dcumento
         switch(tipoDocumentoEnum)
         {
+            case ORDEN_TRABAJO:
             case PRESUPUESTOS:            
             case ACADEMICO:
             case INVENTARIO:
