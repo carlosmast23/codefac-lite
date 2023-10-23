@@ -403,7 +403,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
 
             //Cargar datos del tipo de reporte de las ordenes de trabajo
             ParametroCodefac parametroFormtaOrdenTrabajo = parametrosTodos.get(ParametroCodefac.FORMATO_ORDEN_TRABAJO);
-            getCmbFormatoHojas().setSelectedItem((parametroFormtaOrdenTrabajo != null) ? parametroFormtaOrdenTrabajo.getValor() : null);
+            FormatoHojaEnum formatoHojaEnum=FormatoHojaEnum.buscarPorLetra(parametroFormtaOrdenTrabajo.valor);
+            getCmbFormatoHojas().setSelectedItem((formatoHojaEnum != null) ? formatoHojaEnum : null);
             
             ParametroCodefac parametroReporteDefectoVenta = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_VENTA);
             FormatoReporteEnum reporteEnum=FormatoReporteEnum.findByName((parametroReporteDefectoVenta != null) ? parametroReporteDefectoVenta.getValor() : null);

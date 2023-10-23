@@ -2206,7 +2206,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
             if(empresa.getRimpeNegociosPopularesEnum().equals(EnumSiNo.SI))
             {
-                leyendaRegimen="CONTRIBUYENTE RÉGIMEN RIMPE";
+                leyendaRegimen="CONTRIBUYENTE NEGOCIO POPULAR - RÉGIMEN RIMPE";
             }
             
         }

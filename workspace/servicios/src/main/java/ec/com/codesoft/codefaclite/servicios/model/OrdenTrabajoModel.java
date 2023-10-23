@@ -232,6 +232,10 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 case A5:
                     nombreReporte = "ordenTrabajoA5.jrxml";
                     break;
+                    
+                case TICKET:
+                    nombreReporte="ordenTrabajoTicket.jrxml";
+                    break;
             }
             
             //parametros.put("observaciones",(parametroFormatoOrden!=null)?parametroFormatoOrden.getValor():"");
