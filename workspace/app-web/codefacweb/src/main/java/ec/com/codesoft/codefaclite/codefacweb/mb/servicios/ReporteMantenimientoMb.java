@@ -70,7 +70,8 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     private java.util.Date fechaFinal;
     
     private String tipoReporte;
-    private List<Taller> tallerList;   
+    private List<Taller> tallerList;  
+    private Taller tallerSeleccionado;
     
     ///private String 
  
@@ -244,7 +245,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
                 
         try {
             System.out.println("Datos Consulta | fechaIni: "+fechaInicial+" | fechaFin: "+fechaFinal+" | estado: "+estadoSeleccionado+" | marca: "+marcaSeleccionada+" | ubi: "+ubicacionSeleccionada+" | tarea: "+tareaSeleccionada);
-            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
+            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,tallerSeleccionado,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
             System.out.println("Datos consultados ANTES: "+mantenimientoList.size());  
             if(tipoReporte.equals("proceso")) 
             {
@@ -447,6 +448,14 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
 
     public void setTallerList(List<Taller> tallerList) {
         this.tallerList = tallerList;
+    }
+
+    public Taller getTallerSeleccionado() {
+        return tallerSeleccionado;
+    }
+
+    public void setTallerSeleccionado(Taller tallerSeleccionado) {
+        this.tallerSeleccionado = tallerSeleccionado;
     }
 
     

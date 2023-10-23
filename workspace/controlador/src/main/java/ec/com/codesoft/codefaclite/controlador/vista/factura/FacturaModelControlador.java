@@ -1954,6 +1954,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             data.setIva(detalle.getIvaPorcentaje()+"");
             
             BigDecimal precioUnitario=detalle.getPrecioUnitario();
+            BigDecimal precioUnitarioCoIva=detalle.obtenerPrecioUnitarioConIva();
             BigDecimal total=detalle.getTotal();
             
             //Redondeando decimales cuando este configurado ese modo
@@ -1961,9 +1962,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             {
                 precioUnitario=precioUnitario.setScale(redondedoDecimalesPrecios,BigDecimal.ROUND_UP);
                 total=total.setScale(redondedoDecimalesPrecios,BigDecimal.ROUND_UP);
+                
+                precioUnitarioCoIva=precioUnitarioCoIva.setScale(redondedoDecimalesPrecios,BigDecimal.ROUND_UP);
             }                        
             
             data.setPrecioUnitario(precioUnitario.toString());
+            data.setPrecioUnitarioConIva(precioUnitarioCoIva.toString());
             data.setTotal(total.toString());
             
             //Datos adicionales para las proformas

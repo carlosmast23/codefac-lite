@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
@@ -41,9 +42,10 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         return query.getResultList();
     }
     
-    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum) throws ServicioCodefacException, RemoteException
+    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum) throws ServicioCodefacException, RemoteException
     {
         //Mantenimiento m;
+        //m.getTaller().getNombre();
         //m.getEstado()
         //m.getFechaSalida();
         
@@ -84,8 +86,13 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
             ubicacionEnumStr=" AND m.ubicacion=?5";
         }
         
+        String tallerStr="";
+        if(taller!=null)
+        {
+            tallerStr=" AND m.taller=?6 "; 
+        }
         
-        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado+marcaStr+ubicacionEnumStr;
+        String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado+marcaStr+ubicacionEnumStr+tallerStr;
         Query query = getEntityManager().createQuery(queryStr);
         
         
@@ -118,6 +125,11 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         if(ubicacionEnum!=null)
         {
             query.setParameter(5, ubicacionEnum.getLetra());
+        }
+        
+        if(taller!=null)
+        {
+            query.setParameter(6, taller);
         }
         
         return query.getResultList();

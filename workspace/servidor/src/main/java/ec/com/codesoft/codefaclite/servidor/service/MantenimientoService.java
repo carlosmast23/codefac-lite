@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoInformeD
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TareaMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -286,13 +287,13 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         });
     }
     
-    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados,TareaMantenimiento tareaMantenimiento) throws ServicioCodefacException, RemoteException
+    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados,TareaMantenimiento tareaMantenimiento) throws ServicioCodefacException, RemoteException
     {
         return (List<MantenimientoResult>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException 
             {  
-                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin,estadoEnum,marca,ubicacionEnum));
+                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin,taller,estadoEnum,marca,ubicacionEnum));
             }
         });
     }

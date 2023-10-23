@@ -89,15 +89,25 @@
                         </div>
 
                         <!--- MANTENIMIENTO -->
-                        <div class="p-col-12 p-md-6 p-lg-3" >
+                        <div class="p-col-12 p-md-6 p-lg-2" >
                             <div><h:outputLabel for="console25" value="Marca:" class="label-responsive" /></div>
                             <p:selectOneMenu id="console25" value="#{reporteMantenimientoMb.marcaSeleccionada}" converter="marcaConverter" class="componente-responsive" >
                                 <f:selectItem itemLabel="Todos" noSelectionOption="true" />
                                 <f:selectItems var="estado" value="#{reporteMantenimientoMb.marcaList}" itemValue="#{estado.id.toString()}"/>
                             </p:selectOneMenu>
                         </div>
-
+                        
                         <div class="p-col-6 p-md-2 p-lg-3" >
+                            <div class="p-col-fixed" >
+                                <div><h:outputLabel for="console27" value="Taller:" class="label-responsive" /></div>
+                                <p:selectOneMenu id="cmbTaller"   value="#{reporteMantenimientoMb.tallerSeleccionado}" converter="tallerConverter" >
+                                    <f:selectItem itemLabel="Todos" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{reporteMantenimientoMb.tallerList}" var="taller" itemValue="#{taller.id.toString()}" />                                    
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+
+                        <div class="p-col-6 p-md-2 p-lg-2" >
                             <div class="p-col-fixed" >
                                 <div><h:outputLabel for="console26" value="Proceso:" class="label-responsive" /></div>
                                 <p:selectOneMenu id="console26" value="#{reporteMantenimientoMb.tareaSeleccionada}" converter="tareaMantenimientoConverter" class="componente-responsive" >
@@ -132,14 +142,8 @@
                         <h:outputText value="#{m.tareaTitulo}" />
                     </p:column>
                     
-                    <p:column headerText="Taller" width="130" filterBy="#{m.taller}" filterMatchMode="contains">
+                    <p:column headerText="Taller" width="130"  >
                         <h:outputText value="#{m.taller}" />
-                        <f:facet name="filter">
-                            <p:selectOneMenu onchange="PF('tblMantenimientoWidget').filter()" styleClass="ui-custom-filter">
-                                <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
-                                <f:selectItems value="#{reporteMantenimientoMb.tallerList}" />
-                            </p:selectOneMenu>
-                        </f:facet>
                     </p:column>
                     
                     <p:column headerText="Horas" width="60" style="text-align: right">
@@ -200,7 +204,7 @@
                     </p:column>
                     
                     <p:column headerText="Defecto">
-                        <h:outputText value="#{m.obtenerTallerNombre()}" />
+                        <h:outputText value="[#{m.noConformidad}] #{m.obtenerTallerNombre()}" />
                     </p:column>
                     
                     <p:column headerText="Parte Vehiculo">

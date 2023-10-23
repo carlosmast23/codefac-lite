@@ -72,6 +72,7 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     }
     
     //TODO: Hacer algunas pruebas para ver que no genere errores
+    // Terminar de implementar toda la copia del oibjeto porque no esta funcionando
     @Deprecated
     public FacturaDetalle(FacturaDetalle facturaDetalle) 
     {
@@ -82,6 +83,24 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         this.reservado=facturaDetalle.reservado;
         this.responsable=facturaDetalle.responsable;        */
         UtilidadVarios.copiarObjetos(facturaDetalle,this);
+        //super.setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
+        
+        setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
+        setCantidad(facturaDetalle.getCantidad());
+        setPrecioUnitario(facturaDetalle.getPrecioUnitario());
+        setDescuento(facturaDetalle.getDescuento());
+        setTotal(facturaDetalle.getTotal());
+        setDescripcion(facturaDetalle.getDescripcion());
+        setTipoDocumento(facturaDetalle.getTipoDocumento());
+        setKardexId(facturaDetalle.getKardexId());
+        setReferenciaId(facturaDetalle.getReferenciaId());
+        setCantidadPresentacion(facturaDetalle.getCantidadPresentacion());
+        setCostoPromedio(facturaDetalle.getCostoPromedio());
+        setIva(facturaDetalle.getIva());
+        setReservado(facturaDetalle.getReservado());
+        setCodigoPrincipal(facturaDetalle.getCodigoPrincipal());
+        
+        
         //this.factura=facturaDetalle.factura;
     }
 

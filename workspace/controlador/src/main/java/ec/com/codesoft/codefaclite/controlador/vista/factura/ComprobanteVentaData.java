@@ -15,6 +15,7 @@ public class ComprobanteVentaData {
     private String presentacion;
     private String cantidad;
     private String precioUnitario;
+    private String precioUnitarioConIva;
     private String total;
     private String iva;
     private String unidad;
@@ -117,6 +118,15 @@ public class ComprobanteVentaData {
     public void setPresentacion(String presentacion) {
         this.presentacion = presentacion;
     }
+
+    public String getPrecioUnitarioConIva() {
+        return precioUnitarioConIva;
+    }
+
+    public void setPrecioUnitarioConIva(String precioUnitarioConIva) {
+        this.precioUnitarioConIva = precioUnitarioConIva;
+    }
+    
     
     
     /**

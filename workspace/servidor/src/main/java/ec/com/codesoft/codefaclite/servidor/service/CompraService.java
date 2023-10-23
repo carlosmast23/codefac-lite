@@ -851,10 +851,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 throw new ServicioCodefacException("Existe un problema con el producto: "+detalle.getProductoProveedor().getProducto().getNombre()+", por que esta generando valores negativos : "+subtotal);
             }
             
-            //Validar que los codigos de la compray del enlazace de producto proveedor sean iguales
-            if(!detalle.getCodigoPrincipal().equals(detalle.getProductoProveedor().getProducto().getCodigoPersonalizado()))
+            if(!UtilidadesTextos.verificarNullOVacio(detalle.getCodigoPrincipal()))
             {
-                throw new ServicioCodefacException("Error la ingresar el producto: "+detalle.getDescripcion()+" , los códigos de la compra y producto son incosistentes.\n Solución: Quitar y Agregar nuevamente el producto");
+                //Validar que los codigos de la compra del enlazace de producto proveedor sean iguales
+                if(!detalle.getCodigoPrincipal().equals(detalle.getProductoProveedor().getProducto().getCodigoPersonalizado()))
+                {
+                    throw new ServicioCodefacException("Error la ingresar el producto: "+detalle.getDescripcion()+" , los códigos de la compra y producto son incosistentes.\n Solución: Quitar y Agregar nuevamente el producto");
+                }
+                
             }
         }
         
