@@ -266,7 +266,7 @@ public class CerrarCajaModel extends CajaSessionModel
                                     ingresoCaja.getCompra().getRazonSocial(),
                                     ingresoCaja.getCompra().getTotal()+"",
                                     ingresoCaja.getCompra().getEstado(),
-                                    "Efectivo",
+                                    "U.Compras",
                                     dateFormatHora.format(fechaIngreso),
                                     "-"
                             );
