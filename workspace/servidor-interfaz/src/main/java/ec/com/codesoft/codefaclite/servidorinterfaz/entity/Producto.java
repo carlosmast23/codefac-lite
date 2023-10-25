@@ -1464,28 +1464,24 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         return (Producto)super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
     
-    /**
-     * Obtiene una presentacion cualquiera que sea disntinta de la ingresada en el producto
-     * @return 
-     */
-    /*public ProductoPresentacionDetalle obtenerProductoPresentacionPorDefecto()
+
+    @Deprecated
+    // ALERTA: No usar este metodo desde el servidor porque puede causar lentitud en los procesos
+    // solo utilizar desde los clientes
+    // Este metodo se va a utilizar para obtener el kardex aunque se llame desde un empaque
+    public Kardex obtenerKardexOriginal()
     {
-        if(presentacionList!=null)
-        {
-            for (ProductoPresentacionDetalle detallePresentacion : presentacionList) 
-            {
-                PresentacionProducto presentacionProducto= detallePresentacion.getPresentacionProducto();
-                if(presentacionProducto!=null)
-                {
-                    if(!presentacionProducto.equals(presentacion))
-                    {
-                        return detallePresentacion;
-                    }
-                }
-            }
+        try {
+            Kardex kardex=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPrincipal(this);
+            return kardex;
+        } catch (RemoteException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }*/
+    }
+    
     
     
     

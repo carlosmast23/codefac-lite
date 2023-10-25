@@ -105,4 +105,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public void actualizarKardexLote(Map<Long,BigDecimal> stockMap,Usuario usuario) throws RemoteException,ServicioCodefacException;
     
     public void eliminarPorId(Long kardexId) throws RemoteException,ServicioCodefacException;
+    
+    public Kardex buscarKardexPrincipal(Producto producto) throws java.rmi.RemoteException, ServicioCodefacException;
+    
 }

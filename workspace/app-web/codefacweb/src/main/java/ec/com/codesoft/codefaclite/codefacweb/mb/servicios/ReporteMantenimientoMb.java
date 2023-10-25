@@ -68,6 +68,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     
     private java.util.Date fechaInicial; 
     private java.util.Date fechaFinal;
+    private Boolean fechaFinalExacta;
     
     private String tipoReporte;
     private List<Taller> tallerList;  
@@ -204,12 +205,14 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         fechaFinal=null;
         //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
         fechaInicial=null;
+        fechaFinalExacta=false; 
         if(tipoReporte.equals("liberadas"))
         {
             //fechaFinal=UtilidadesFecha.getFechaHoy();
             //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
             //System.out.println("Fecha Inicial"+fechaInicial);
-            fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
+            fechaFinalExacta=true;
+            fechaFinal=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
             estadoSeleccionado=MantenimientoEnum.TERMINADO;
         }
         else if(tipoReporte.equals("taller") || tipoReporte.equals("proceso"))
@@ -245,7 +248,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
                 
         try {
             System.out.println("Datos Consulta | fechaIni: "+fechaInicial+" | fechaFin: "+fechaFinal+" | estado: "+estadoSeleccionado+" | marca: "+marcaSeleccionada+" | ubi: "+ubicacionSeleccionada+" | tarea: "+tareaSeleccionada);
-            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,tallerSeleccionado,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
+            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,fechaFinalExacta,tallerSeleccionado,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
             System.out.println("Datos consultados ANTES: "+mantenimientoList.size());  
             if(tipoReporte.equals("proceso")) 
             {
@@ -458,8 +461,13 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         this.tallerSeleccionado = tallerSeleccionado;
     }
 
-    
-    
-    
+    public Boolean getFechaFinalExacta() {
+        return fechaFinalExacta;
+    }
+
+    public void setFechaFinalExacta(Boolean fechaFinalExacta) {
+        this.fechaFinalExacta = fechaFinalExacta;
+    } 
+
     
 }

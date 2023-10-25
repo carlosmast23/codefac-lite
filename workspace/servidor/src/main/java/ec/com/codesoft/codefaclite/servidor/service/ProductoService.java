@@ -157,6 +157,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
+    /**
+     * Metodo que me permite encontrar el producto principal, cuando tiene varias presentaciones
+     * @param producto
+     * @return
+     * @throws RemoteException
+     * @throws ServicioCodefacException 
+     */
     public Producto buscarProductoEmpaquePrincipal(Producto producto) throws RemoteException,ServicioCodefacException
     {
         //Solo buscar el producto principal cuando estoy buscando desde un empaque

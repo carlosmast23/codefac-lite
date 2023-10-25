@@ -287,13 +287,13 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         });
     }
     
-    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados,TareaMantenimiento tareaMantenimiento) throws ServicioCodefacException, RemoteException
+    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Boolean fechaFinExacto,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados,TareaMantenimiento tareaMantenimiento) throws ServicioCodefacException, RemoteException
     {
         return (List<MantenimientoResult>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta() throws ServicioCodefacException, RemoteException 
             {  
-                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin,taller,estadoEnum,marca,ubicacionEnum));
+                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin,fechaFinExacto,taller,estadoEnum,marca,ubicacionEnum));
             }
         });
     }

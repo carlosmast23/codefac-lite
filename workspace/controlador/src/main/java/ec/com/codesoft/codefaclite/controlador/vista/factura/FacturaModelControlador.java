@@ -999,8 +999,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             cantidadPresentacion=presentacionDetalle.getCantidad();
         }
         
-        //verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,interfaz.obtenerProductoSeleccionado(), facturaDetalle.getCantidad().intValue());
-        //verificadorStock = serviceKardex.obtenerSiNoExisteStockProducto(bodegaVenta,producto, facturaDetalle.getCantidad());
+        //TODO: Mejorar esta parte
+        //Cuando el kardex es null se debe buscar el kardex original para hacer la comparacion
+        if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+        {
+            kardex=producto.obtenerKardexOriginal();
+        }
+        
+        //Alerta que no se puede verificar por algun motivo porque no tiene kardex
+        if(kardex==null)
+        {
+            throw new ServicioCodefacException("No se puede validar Stock bajo porque no tiene kardex para comprobar");
+        }
+                
+        System.out.println(facturaDetalle.getCantidad().multiply(cantidadPresentacion)+" > "+kardex.getStock()); 
         if(facturaDetalle.getCantidad().multiply(cantidadPresentacion).compareTo(kardex.getStock())<=0)
         {
             verificadorStock=true;

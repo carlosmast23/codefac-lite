@@ -78,43 +78,46 @@ public class MantenimientoResult implements Serializable,Cloneable{
             else
             {
                 for (DetalleTareaResult tareaResult : detalle.getTareaLista()) 
-                {                   
+                {           
                     
-                    try {
+                    try {                        
                         
-                        if(noConformidades)
-                        {
-                            System.out.println("Consultando NO CONFORMIDADES ..."); 
-                            List<InformeDetalleResult> informeList= tareaResult.detalleList;
-                            if(informeList!=null)
-                            {
-                                for (InformeDetalleResult informe : informeList) 
-                                {
-                                    MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
-                                    detalleTmp.setTareaTitulo(tareaResult.titulo);
-                                    detalleTmp.setTareaDescripcion(tareaResult.descripcion);
-                                    detalleTmp.setDuracionDias(tareaResult.horas + "");
+                        MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
+                        detalleTmp.setTareaTitulo(tareaResult.titulo);
+                        detalleTmp.setTareaDescripcion(tareaResult.descripcion);
+                        detalleTmp.setDuracionDias(tareaResult.horas + "");
+                        
+                        detalleTmp.setFechaInicioProceso(tareaResult.fechaInicio);
+                        detalleTmp.setFechaFinProceso(tareaResult.fechaFin);
+                        detalleTmp.setHorasProceso(tareaResult.horasProceso);
+                        
+                        Integer duracionDiasTarea = (int) (tareaResult.horasProceso / 24);
+                        detalleTmp.setDuracionDias(duracionDiasTarea+"");
+                        
+                        
+                        if (noConformidades) {
+                            System.out.println("Consultando NO CONFORMIDADES ...");
+                            List<InformeDetalleResult> informeList = tareaResult.detalleList;
+                            if (informeList != null) {
+                                for (InformeDetalleResult informe : informeList) {
+                                    
+
+                                    //MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
+                                    //detalleTmp.setTareaTitulo(tareaResult.titulo);
+                                    //detalleTmp.setTareaDescripcion(tareaResult.descripcion);
+                                    //detalleTmp.setDuracionDias(duracionDiasTarea + "");
                                     detalleTmp.setNoConformidad(informe.noConformidad);
-                                    detalleTmp.setParteVehiculo(informe.parteVehiculo);                                    
+                                    detalleTmp.setParteVehiculo(informe.parteVehiculo);
                                     resultadoList.add(detalleTmp);
                                 }
                             }
                         }
                         else
                         {
-                            MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
-                            detalleTmp.setTareaTitulo(tareaResult.titulo);
-                            detalleTmp.setTareaDescripcion(tareaResult.descripcion);
-                            detalleTmp.setDuracionDias(tareaResult.horas + "");
-                            
-                            
-                            
-                            detalleTmp.setFechaInicioProceso(tareaResult.fechaInicio);
-                            detalleTmp.setFechaFinProceso(tareaResult.fechaFin);
-                            detalleTmp.setHorasProceso(tareaResult.horasProceso);
-                            
                             resultadoList.add(detalleTmp);
                         }
+                        
+                        
                     } catch (CloneNotSupportedException ex) {
                         Logger.getLogger(MantenimientoResult.class.getName()).log(Level.SEVERE, null, ex);
                     }

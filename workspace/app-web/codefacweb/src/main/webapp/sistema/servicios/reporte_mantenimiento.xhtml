@@ -25,7 +25,7 @@
                                 <f:selectItem itemLabel="Taller" itemValue="taller"/>
                                 <f:selectItem itemLabel="Proceso" itemValue="proceso"/>
                                 <f:selectItem itemLabel="Defectos" itemValue="noConformidad"/>
-                                <p:ajax event="change" listener="#{reporteMantenimientoMb.eventoMenuReporte()}" update="formulario:fechaInicial,formulario:fechaFinal,formulario:console,formulario:console25,formulario:console26" />
+                                <p:ajax event="change" listener="#{reporteMantenimientoMb.eventoMenuReporte()}" update="formulario:fechaInicial,formulario:fechaFinal,formulario:console,formulario:console25,formulario:console26,formulario:chkFechaFinalExacta" />
                             </p:selectOneRadio>  
                         </div>
                         
@@ -74,6 +74,7 @@
                             <div class="p-grid div-resposive" >
                                 <div class="p-col-fixed" >
                                     <p:datePicker id="fechaFinal" value="#{reporteMantenimientoMb.fechaFinal}" showIcon="true" />
+                                    <p:selectBooleanCheckbox id="chkFechaFinalExacta" itemLabel="Exacto" value="#{reporteMantenimientoMb.fechaFinalExacta}" />
                                 </div>
                             </div>
                         </div>

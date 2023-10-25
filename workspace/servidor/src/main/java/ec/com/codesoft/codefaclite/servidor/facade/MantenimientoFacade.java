@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidor.service.MantenimientoService;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
@@ -20,7 +21,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -42,7 +46,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         return query.getResultList();
     }
     
-    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum) throws ServicioCodefacException, RemoteException
+    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Boolean fechaFinExacto,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum) throws ServicioCodefacException, RemoteException
     {
         //Mantenimiento m;
         //m.getTaller().getNombre();
@@ -59,7 +63,15 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         if(fechaFin!=null)
         {
             fechaFin=UtilidadesFecha.agregarTiempoFinalDia(UtilidadesFecha.castDateUtilToSql(fechaFin));
-            fechaFinStr=" AND m.fechaIngreso<=?2  ";
+            if(fechaFinExacto!=null && fechaFinExacto)
+            {
+                fechaFinStr=" AND m.fechaSalida>=?21 and m.fechaSalida<=?22  ";
+                //fechaFinStr=" AND FUNC('TRUNC',m.fechaSalida)=FUNC('TRUNC',?2)  ";
+            }
+            else
+            {
+                fechaFinStr=" AND m.fechaIngreso<=?2  ";
+            }
         }
         
         String estado="";
@@ -93,6 +105,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         }
         
         String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado+marcaStr+ubicacionEnumStr+tallerStr;
+        Logger.getLogger(MantenimientoService.class.getName()).log(Level.INFO, queryStr);
         Query query = getEntityManager().createQuery(queryStr);
         
         
@@ -105,7 +118,17 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         
         if(fechaFin!=null)
         {
-            query.setParameter(2,fechaFin);
+            if(fechaFinExacto!=null && fechaFinExacto)
+            {
+                Date FechaFinInicio= UtilidadesFecha.eliminarHorasFecha(fechaFin);
+                Date FechaFinFinal=UtilidadesFecha.agregarTiempoFinalDia(UtilidadesFecha.castDateUtilToSql(fechaFin));
+                query.setParameter(21,FechaFinInicio);
+                query.setParameter(22,FechaFinFinal);
+            }
+            else
+            {
+                query.setParameter(2,fechaFin);
+            }
         }
         
         if(estadoEnum!=null)
