@@ -243,6 +243,7 @@ public class CerrarCajaModel extends CajaSessionModel
                         VentaReporteData reporteData = new VentaReporteData(                            
                                 ingresoCaja.getFactura().getSecuencial() + "",
                                 ingresoCaja.getFactura().getIdentificacion(),
+                                "Venta",
                                 ingresoCaja.getFactura().getRazonSocial(),
                                 formaPago.getTotal() + "",
                                 estadoNombre,
@@ -263,6 +264,7 @@ public class CerrarCajaModel extends CajaSessionModel
                         VentaReporteData compraData = new VentaReporteData(                            
                                     ingresoCaja.getCompra().getSecuencial() + "",
                                     ingresoCaja.getCompra().getIdentificacion(),
+                                    ingresoCaja.getCompra().getObservacion(),
                                     ingresoCaja.getCompra().getRazonSocial(),
                                     ingresoCaja.getCompra().getTotal()+"",
                                     ingresoCaja.getCompra().getEstado(),
