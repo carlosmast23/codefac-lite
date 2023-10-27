@@ -393,6 +393,11 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
                     
                     MantenimientoResult.DetalleTareaResult tareaDetalle=new MantenimientoResult.DetalleTareaResult(detalleMantenimiento.getTallerTarea().getTareaMantenimiento().getNombre(), "0",detalleMantenimiento.obtenerHorasTarea(),fechaInicio,fechaFin,horasProceso);
                     
+                    if(dato.getVehiculo().getVin().equals("LJNTGUC30RN409261"))
+                    {
+                        System.out.println("revisar ...");
+                    }
+                    
                     //Agregar las detalles del Informa
                     List<MantenimientoInformeDetalle> informeList=detalleMantenimiento.getInformeList();
                     for (MantenimientoInformeDetalle informe : informeList) 

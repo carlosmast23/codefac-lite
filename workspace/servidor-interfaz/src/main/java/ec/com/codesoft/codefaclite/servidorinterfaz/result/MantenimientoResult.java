@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.result;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNoConformidadEnum;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,9 @@ import java.util.logging.Logger;
  * @author CARLOS_CODESOFT
  */
 public class MantenimientoResult implements Serializable,Cloneable{
+    
+    private static Long idContador=0l;
+    public Long idTemp;
     
     public String modelo;
     public String marca;
@@ -53,6 +57,18 @@ public class MantenimientoResult implements Serializable,Cloneable{
     
     
     private List<DetalleTareaResult> tareaLista;
+
+    public MantenimientoResult() 
+    {
+        this.idTemp=idContador++;
+    }
+    
+    
+    public void asignarNuevoId()
+    {
+        this.idTemp=idContador++;
+    }
+    
     
     
     public void agregarTarea(DetalleTareaResult detalle)
@@ -80,46 +96,39 @@ public class MantenimientoResult implements Serializable,Cloneable{
                 for (DetalleTareaResult tareaResult : detalle.getTareaLista()) 
                 {           
                     
-                    try {                        
-                        
-                        MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
-                        detalleTmp.setTareaTitulo(tareaResult.titulo);
-                        detalleTmp.setTareaDescripcion(tareaResult.descripcion);
-                        detalleTmp.setDuracionDias(tareaResult.horas + "");
-                        
-                        detalleTmp.setFechaInicioProceso(tareaResult.fechaInicio);
-                        detalleTmp.setFechaFinProceso(tareaResult.fechaFin);
-                        detalleTmp.setHorasProceso(tareaResult.horasProceso);
-                        
-                        Integer duracionDiasTarea = (int) (tareaResult.horasProceso / 24);
-                        detalleTmp.setDuracionDias(duracionDiasTarea+"");
-                        
-                        
-                        if (noConformidades) {
-                            System.out.println("Consultando NO CONFORMIDADES ...");
-                            List<InformeDetalleResult> informeList = tareaResult.detalleList;
-                            if (informeList != null) {
-                                for (InformeDetalleResult informe : informeList) {
-                                    
-
-                                    //MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
-                                    //detalleTmp.setTareaTitulo(tareaResult.titulo);
-                                    //detalleTmp.setTareaDescripcion(tareaResult.descripcion);
-                                    //detalleTmp.setDuracionDias(duracionDiasTarea + "");
-                                    detalleTmp.setNoConformidad(informe.noConformidad);
-                                    detalleTmp.setParteVehiculo(informe.parteVehiculo);
-                                    resultadoList.add(detalleTmp);
-                                }
+                    MantenimientoResult detalleTmp=new MantenimientoResult();
+                    //UtilidadVarios.copiarObjetos(detalle, detalleTmp);
+                    //MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
+                    UtilidadVarios.copiarObjetos(detalle, detalleTmp);
+                    detalleTmp.setTareaTitulo(tareaResult.titulo);
+                    detalleTmp.setTareaDescripcion(tareaResult.descripcion);
+                    detalleTmp.setDuracionDias(tareaResult.horas + "");
+                    detalleTmp.setFechaInicioProceso(tareaResult.fechaInicio);
+                    detalleTmp.setFechaFinProceso(tareaResult.fechaFin);
+                    detalleTmp.setHorasProceso(tareaResult.horasProceso);
+                    Integer duracionDiasTarea = (int) (tareaResult.horasProceso / 24);
+                    detalleTmp.setDuracionDias(duracionDiasTarea+"");
+                    if (noConformidades) {
+                        System.out.println("Consultando NO CONFORMIDADES ...");
+                        List<InformeDetalleResult> informeList = tareaResult.detalleList;
+                        if (informeList != null) {
+                            for (InformeDetalleResult informe : informeList) {
+                                MantenimientoResult detalleTmp2=new MantenimientoResult();
+                                UtilidadVarios.copiarObjetos(detalleTmp, detalleTmp2);
+                                
+                                //MantenimientoResult detalleTmp = (MantenimientoResult) detalle.clone();
+                                //detalleTmp.setTareaTitulo(tareaResult.titulo);
+                                //detalleTmp.setTareaDescripcion(tareaResult.descripcion);
+                                //detalleTmp.setDuracionDias(duracionDiasTarea + "");
+                                detalleTmp2.setNoConformidad(informe.noConformidad);
+                                detalleTmp2.setParteVehiculo(informe.parteVehiculo);
+                                resultadoList.add(detalleTmp2);
                             }
                         }
-                        else
-                        {
-                            resultadoList.add(detalleTmp);
-                        }
-                        
-                        
-                    } catch (CloneNotSupportedException ex) {
-                        Logger.getLogger(MantenimientoResult.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    else
+                    {
+                        resultadoList.add(detalleTmp);
                     }
                     
                 }
@@ -345,6 +354,15 @@ public class MantenimientoResult implements Serializable,Cloneable{
         this.duracionHoras = duracionHoras;
     }
 
+    public Long getIdTemp() {
+        return idTemp;
+    }
+
+    public void setIdTemp(Long idTemp) {
+        this.idTemp = idTemp;
+    }
+
+    
     
     
     
