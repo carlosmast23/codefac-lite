@@ -111,6 +111,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnArqueoCaja = new javax.swing.JButton();
         btnEnviarCorreoProforma = new javax.swing.JButton();
         btnCargarComanda = new javax.swing.JButton();
+        btnConvertirProforma = new javax.swing.JButton();
         pnlPrincipal = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -313,6 +314,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         btnCargarComanda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/buscarDocumento.png"))); // NOI18N
         btnCargarComanda.setToolTipText("Buscar Comanda");
+
+        btnConvertirProforma.setText("Convertir Proforma");
 
         setClosable(true);
         setIconifiable(true);
@@ -1795,6 +1798,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnCargarComanda;
     private javax.swing.JButton btnCargarPedido;
     private javax.swing.JButton btnCargarProforma;
+    private javax.swing.JButton btnConvertirProforma;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarCliente;
     private javax.swing.JButton btnEditarDetalle;
@@ -2576,6 +2580,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setTblReembolso(JTable tblReembolso) {
         this.tblReembolso = tblReembolso;
+    }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Otros", visible = false)
+    public JButton getBtnConvertirProforma() {
+        return btnConvertirProforma;
+    }
+
+    public void setBtnConvertirProforma(JButton btnConvertirProforma) {
+        this.btnConvertirProforma = btnConvertirProforma;
     }
 
     

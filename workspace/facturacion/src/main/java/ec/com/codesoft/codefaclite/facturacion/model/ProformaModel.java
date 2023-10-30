@@ -349,6 +349,15 @@ public class ProformaModel extends FacturacionModel{
         }
     }
    
-    
+    @Override
+    public void postConstructorExterno(Object[] parametros) {
+        Factura facturaTmp=(Factura) parametros[0];
+        facturaTmp.setCodigoDocumentoEnum(DocumentoEnum.PROFORMA);
+        //Cuando cargue una factura a proforma le lleno con los datos y solo saco una copia
+        //this.factura=facturaTmp;
+        //this.cargarTotalesVista();
+        cargarDatosPantallaFactura(facturaTmp);
+        
+    }
     
 }

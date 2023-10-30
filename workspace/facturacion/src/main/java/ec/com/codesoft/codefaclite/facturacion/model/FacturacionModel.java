@@ -858,8 +858,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
         
         getBtnAplicarDescuentoGlobal().addActionListener(listenerDescuentoGlobal);
+        
+        getBtnConvertirProforma().addActionListener(listenerConvertirProforma);
 
+        
     }
+    
+    private ActionListener listenerConvertirProforma=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          
+           if (!estadoFormulario.equals(ESTADO_GRABAR)) 
+           {
+               DialogoCodefac.mensaje(new CodefacMsj("Solo se puede usar esta función en modo CREAR", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+               return;
+           }
+            
+           Boolean respuesta= DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea convertir la factura en proforma ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+           if(respuesta)
+           {
+               Object[] parametros=new Object[1];
+               parametros[0]=factura;
+               
+               //ProformaModel proformaModel=new ProformaModel();
+               panelPadre.crearVentanaCodefac(VentanaEnum.PROFORMA_VENTA, true, parametros);
+           }
+           
+        }
+    };
     
     private void eventoAgregarBtnVendedor()
     {
@@ -2729,7 +2755,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
     
-    private void cargarDatosPantallaFactura(Factura facturaTmp)
+    public void cargarDatosPantallaFactura(Factura facturaTmp)
     {
         limpiar();
         this.factura = facturaTmp;
