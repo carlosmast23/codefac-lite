@@ -232,12 +232,20 @@ public class CerrarCajaModel extends CajaSessionModel
 
                     for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
                     {
-                        String estadoNombre=ingresoCaja.getFactura().getEstadoEnum().getNombre();
+                        Factura factura=ingresoCaja.getFactura();
+                        String estadoNombre=factura.getEstadoEnum().getNombre();
                         //En el caso que la nota de credito este anulada en el reporte si aparece pero con estado anulado
 
                         if(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
                         {
                             estadoNombre=ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre();
+                        }
+                        
+                        //En el caso que tenga facturas anuladas o comprobantes anulados mejor pongo con valor cero para que no interfiera en los calculos
+                        String totalStr=formaPago.getTotal()+"";
+                        if(estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre()) || estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getNombre()) )
+                        {
+                            totalStr="0";
                         }
 
                         VentaReporteData reporteData = new VentaReporteData(                            
@@ -245,7 +253,7 @@ public class CerrarCajaModel extends CajaSessionModel
                                 ingresoCaja.getFactura().getIdentificacion(),
                                 "Venta",
                                 ingresoCaja.getFactura().getRazonSocial(),
-                                formaPago.getTotal() + "",
+                                totalStr,
                                 estadoNombre,
                                 formaPago.getSriFormaPago().getAlias(),
                                 dateFormatHora.format(fechaIngreso),
@@ -314,7 +322,7 @@ public class CerrarCajaModel extends CajaSessionModel
             public void excel() {
                 try {
                     Excel excel = new Excel();
-                    String nombreCabeceras[] = {"Secuencial", "Identificación", "Cliente", "Total"};
+                    String nombreCabeceras[] = {"Secuencial", "Identificación","Hora","Cliente","Descripción","Estado","Signo", "Total"};
                     excel.gestionarIngresoInformacionExcel(nombreCabeceras, detalleData);
                     excel.abrirDocumento();
                 } catch (Exception exc) {

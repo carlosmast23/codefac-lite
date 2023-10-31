@@ -123,7 +123,11 @@ public class VentaReporteData implements ExcelDatosInterface{
         
         tiposDatos.add(new TipoDato(this.secuencial,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.identificacion, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.hora,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.cliente,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.descripcion,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.estado, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.signo, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.total, Excel.TipoDataEnum.TEXTO));
         return tiposDatos;
     }
