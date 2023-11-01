@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
@@ -37,6 +38,7 @@ public class ProductoBusquedaDialogoFactory
     private Boolean isInventario=false;
     private EnumSiNo diponibleVenta;
     private Boolean mostrarPresentaciones=false;
+    private CategoriaProducto categoria;
 
     public ProductoBusquedaDialogoFactory(Sucursal sucursal,ResultadoEnum resultadoEnum) {
         this.sucursal = sucursal;
@@ -55,6 +57,14 @@ public class ProductoBusquedaDialogoFactory
         this.inventarioDefecto = inventarioDefecto;
         this.resultadoEnum = resultadoEnum;
         this.mostrarPresentaciones=mostrarPresentaciones;
+    }
+    
+    public ProductoBusquedaDialogoFactory(Sucursal sucursal, Boolean inventarioDefecto, ResultadoEnum resultadoEnum,Boolean mostrarPresentaciones,CategoriaProducto categoria) {
+        this.sucursal = sucursal;
+        this.inventarioDefecto = inventarioDefecto;
+        this.resultadoEnum = resultadoEnum;
+        this.mostrarPresentaciones=mostrarPresentaciones;
+        this.categoria=categoria;
     }
 
     
@@ -89,6 +99,7 @@ public class ProductoBusquedaDialogoFactory
                 }
                 
                 ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, false,mostrarPresentaciones);
+                productoInventarioBusquedaDialogo.setCategoria(categoria);
                 if(diponibleVenta!=null)
                 {
                     productoInventarioBusquedaDialogo.setDisponibleVenta(diponibleVenta);
@@ -202,6 +213,15 @@ public class ProductoBusquedaDialogoFactory
     public void setDiponibleVenta(EnumSiNo diponibleVenta) {
         this.diponibleVenta = diponibleVenta;
     }
+
+    public CategoriaProducto getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaProducto categoria) {
+        this.categoria = categoria;
+    }
+    
     
     
     

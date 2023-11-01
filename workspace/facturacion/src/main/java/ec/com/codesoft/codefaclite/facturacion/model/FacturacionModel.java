@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ComandaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
@@ -127,6 +128,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.TipoEmisionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
@@ -991,10 +993,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void cargarDetalleProducto()
     {
         
-        //DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         
-        
-        if(getChkFacturaReembolso().isSelected())
+        if(documentoEnum.equals(DocumentoEnum.COMANDA))
+        {
+            agregarProductoPorCategoria();
+        }
+        else if(getChkFacturaReembolso().isSelected())
         {
             //Caso espcial donde se genera una Factura de Reembolso y se tiene que mostrar otro dialogo
             agregarDetalleRembolso();
@@ -1015,7 +1020,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     break;
                 case INVENTARIO:
             try {
-                    agregarProductoInventario(EnumSiNo.SI);
+                    agregarProductoInventario(EnumSiNo.SI,null);
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
@@ -1029,6 +1034,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             }
         }        
+    }
+    
+    private void agregarProductoPorCategoria() 
+    {
+        CategoriaProductoBusquedaDialogo catProdBusquedaDialogo = new CategoriaProductoBusquedaDialogo(session.getEmpresa());
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(catProdBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        CategoriaProducto catProductoTmp = (CategoriaProducto) buscarDialogoModel.getResultado();
+        if (catProductoTmp != null) 
+        {
+            try {
+                agregarProductoInventario(EnumSiNo.SI,catProductoTmp);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     private void agregarDetalleRembolso()
@@ -1548,18 +1571,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             controlador.agregarProductoVista(productoSeleccionado,null,null,null,null,null);
     }
     
-    private void agregarProductoInventario(EnumSiNo manejaInventario) throws RemoteException, ServicioCodefacException
+    private void agregarProductoInventario(EnumSiNo manejaInventario,CategoriaProducto categoria) throws RemoteException, ServicioCodefacException
     {
-        //Bodega activa de venta
-        //TODO: Ver si esta parte de las bodegas de venta se pueden agregar dentro del metodo de busqueda
-        //BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
-        //Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
-        
-        //if(bodegaVenta==null)
-        //{
-        //    throw new ServicioCodefacException("No existe un tipo de Bodega de Venta Configurado");
-        //}
-                
+
         if(manejaInventario.equals(EnumSiNo.SI))
         {
             /*ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta,true);
@@ -1577,7 +1591,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);            
             //buscarDialogoModel.setVisible(true);
             //Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
-            ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX,true);
+            ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX,true,categoria);
             dialogoFactory.setDiponibleVenta(EnumSiNo.SI);
             
             Kardex kardexSeleccionadoTmp = (Kardex) dialogoFactory.ejecutarDialogo();
@@ -4794,8 +4808,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
         
         jPopupMenu.add(jMenuItemResponsable);
+        
+        agregarPopUpListenerComponenteProducto(jPopupMenu);
         getTblDetalleFactura().setComponentPopupMenu(jPopupMenu);
         
+    }
+    
+    private void agregarPopUpListenerComponenteProducto(JPopupMenu jPopupMenu)
+    {
+        JMenuItem jMenuItem=new JMenuItem("Agregar Componente");
+        
+        jMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ComponenteProductoModel dialog = new ComponenteProductoModel(null, true);
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+                
+            }
+        });
+        
+        jPopupMenu.add(jMenuItem);
     }
     
     private FacturaDetalle obtenerFacturaDetalleSeleccionado()

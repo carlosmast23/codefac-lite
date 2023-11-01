@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFin
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
@@ -65,6 +66,8 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
     
     private Boolean mostrarPresentaciones;
     
+    private CategoriaProducto categoria;
+    
     public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega,Boolean mostrarStockNegativo,Boolean mostrarPresentaciones) 
     {
         //this.isManejoInvetario = isManejoInvetario;
@@ -103,7 +106,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         
         //Kardex kardex;
-        //kardex.getProducto()
+        //kardex.getProducto().getCatalogoProducto().getCategoriaProducto();
         //kardex.getLote().getFechaVencimiento();
         String whereManejaInventario="";
         
@@ -168,6 +171,12 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
             filtroDisponibleVenta=" AND u.disponibleVenta=?7 ";
         }
         
+        String filtroCategoriaStr="";
+        if(categoria!=null)
+        {
+            filtroCategoriaStr=" AND u.catalogoProducto.categoriaProducto=?8 ";
+        }
+        
         //String whereMostrarPresentacion="";
         //String innerJoin="";
         //if(!mostrarPresentaciones)
@@ -184,7 +193,7 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
         //List<ProductoPresentacionDetalle> ppdList=p.getPresentacionList();
         
         //String queryString = "SELECT k,pp.productoEmpaquetado FROM Kardex k JOIN k.producto u LEFT JOIN u.presentacionList pp  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+whereMostrarPresentacion+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
-        String queryString = "SELECT k,k.producto FROM Kardex k JOIN k.producto u  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
+        String queryString = "SELECT k,k.producto FROM Kardex k JOIN k.producto u  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo+filtroCategoriaStr;      
         
         queryString+=" and (  LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
         
@@ -214,6 +223,11 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
         if(disponibleVenta!=null)
         {
             queryDialog.agregarParametro(7, disponibleVenta.getLetra());
+        }
+        
+        if(categoria!=null)
+        {
+            queryDialog.agregarParametro(8, categoria);
         }
        
         return queryDialog;
@@ -359,9 +373,16 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
     public void setDisponibleVenta(EnumSiNo disponibleVenta) {
         this.disponibleVenta = disponibleVenta;
     }
-    
-    
 
+    public CategoriaProducto getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaProducto categoria) {
+        this.categoria = categoria;
+    }
+    
+    
     @Override
     public List<Object[]> preProcessResult(List<Object[]> datos) 
     {
