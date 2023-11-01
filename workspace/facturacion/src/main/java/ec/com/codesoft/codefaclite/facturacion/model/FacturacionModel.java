@@ -1991,6 +1991,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 factura=servicio.grabarLiquidacionCompra(factura);
             }
+            else if(factura.getCodigoDocumento().equals(DocumentoEnum.COMANDA))
+            {
+                //factura=servicio.grabarComanda(factura, session.g);
+            }
             else
             {
                 
@@ -2686,13 +2690,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getCmbDocumento().setSelectedItem(factura.getCodigoDocumentoEnum());
         controlador.setTipoDocumentoEnumSeleccionado(tipoReferenciaEnum);
-        //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
         seleccionarPanelTipoDocumento(tipoReferenciaEnum);
 
         switch (tipoReferenciaEnum) {
             case ACADEMICO:
                 try {
-                    //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum)                        
 
                     FacturaAdicional facturaAdicional = buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
                     if(facturaAdicional!=null)
@@ -2719,7 +2721,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             case INVENTARIO:
             case LIBRE:
-                //getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.INVENTARIO);
                 setearValoresCliente();
                 break;
 
@@ -4287,6 +4288,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void seleccionarPanelTipoDocumento(TipoDocumentoEnum tipoDocumentoEnum)
     {
         getCmbPreciosVenta().setVisible(false);
+        
+        //Solo activar esta opcion si no esta haciendo una comanda
+        if(this.getClass().equals(ComandaModel.class))
+        {
+            return;
+        }
+        
         if (tipoDocumentoEnum != null) {
             switch(tipoDocumentoEnum)
             {
@@ -4334,7 +4342,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     
-    private void activarTabDatos(int indice)
+    protected void activarTabDatos(int indice)
     {
         for (int i = 0; i < getPanelTabDatos().getTabCount(); i++) {
             if(i==indice)

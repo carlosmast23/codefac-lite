@@ -55,8 +55,8 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 @ViewScoped
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
-    private List<MantenimientoEnum> estadoMantenimietoList;   
-    private List<MantenimientoResult> mantenimientoList; 
+    private List<MantenimientoEnum> estadoMantenimietoList;    
+    private List<MantenimientoResult> mantenimientoList;  
     private List<MarcaProducto> marcaList;  
     private List<Mantenimiento.UbicacionEnum> ubicacionList;
     private List<TareaMantenimiento> tareaList;
@@ -146,6 +146,8 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             //estadoMantenimietoList.remove(MantenimientoEnum.FACTURADO);
             
             tallerList=ServiceFactory.getFactory().getTallerServiceIf().obtenerActivos();
+            //tallerList.remove(3); //TODO: Por el momento remuevo directamente el indice que no necesito
+            
             System.out.println("Tarea 3 ");
             marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(sessionMb.getSession().getEmpresa());
             ubicacionList=UtilidadesLista.arrayToList(Mantenimiento.UbicacionEnum.values());

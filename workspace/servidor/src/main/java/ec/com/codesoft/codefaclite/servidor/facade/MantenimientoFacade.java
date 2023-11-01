@@ -103,6 +103,10 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         {
             tallerStr=" AND m.taller=?6 "; 
         }
+        else
+        {
+            tallerStr=" AND m.taller.nombre<>?66 "; 
+        }
         
         String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado+marcaStr+ubicacionEnumStr+tallerStr;
         Logger.getLogger(MantenimientoService.class.getName()).log(Level.INFO, queryStr);
@@ -153,6 +157,10 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         if(taller!=null)
         {
             query.setParameter(6, taller);
+        }
+        else
+        {
+            query.setParameter(66, "Taller Mecánico");
         }
         
         return query.getResultList();

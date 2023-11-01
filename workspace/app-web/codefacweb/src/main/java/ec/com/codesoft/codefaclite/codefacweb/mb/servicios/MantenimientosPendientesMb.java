@@ -233,6 +233,7 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
             setearDatos();
             if(modoEditar) 
             {
+                //ServiceFactory.getFactory().getMantenimientoServiceIf().finalizarTarea(tarea, empleado);
                 ServiceFactory.getFactory().getMantenimientoServiceIf().editar(mantenimiento);
                 modoEditar=false;
             }
@@ -279,7 +280,39 @@ public class MantenimientosPendientesMb extends GeneralAbstractMb implements Ser
             List<Mantenimiento> resultadoList= ServiceFactory.getFactory().getMantenimientoServiceIf().obtenerPendientesPorVin(sessionMb.getSession().getEmpresa(),mantenimiento.getVehiculo().getVin());
             if(resultadoList.size()>0)
             {
-                throw new ServicioCodefacException("No se puede ingresar vehiculos con MANTENIMIENTOS ACTIVOS");
+                if(resultadoList.size()==1)
+                {
+                    Mantenimiento mantenimientoGrabado=resultadoList.get(0);
+                    if(mantenimientoGrabado.getTaller().getNombre().equals("Taller Mecánico") && mantenimiento.getTaller().getNombre().equals("Taller Mecánico"))
+                    {
+                        throw new ServicioCodefacException("No se puede ingresar vehiculos que ya estan ingresados en el Taller Mecánico");
+                    }
+                    else
+                    {
+                        if(mantenimientoGrabado.getTaller().getNombre().equals("Taller Mecánico") && !mantenimiento.getTaller().getNombre().equals("Taller Mecánico"))
+                        {
+                            //TODO
+                        }
+                        else
+                        {
+                            if(!mantenimientoGrabado.getTaller().getNombre().equals("Taller Mecánico") && mantenimiento.getTaller().getNombre().equals("Taller Mecánico"))
+                            {
+                                //TODO
+                            }
+                            else
+                            {
+                                throw new ServicioCodefacException("No se puede ingresar vehiculos que ya estan ingresados en el Taller Mecánico");
+                            }
+                        }
+                    
+                    }
+                    
+                    
+                }
+                else
+                {
+                    throw new ServicioCodefacException("No se puede ingresar vehiculos con MANTENIMIENTOS ACTIVOS");
+                }                
             }
         } catch (RemoteException ex) {
             Logger.getLogger(MantenimientosPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
