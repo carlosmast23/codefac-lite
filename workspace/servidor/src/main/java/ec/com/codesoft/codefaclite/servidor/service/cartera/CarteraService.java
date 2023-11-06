@@ -79,6 +79,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return getFacade().getMovimientoCartera(persona);
     }
     
+    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Sucursal sucursal,BigDecimal valorCruzar) throws ServicioCodefacException,java.rmi.RemoteException
+    {        
+        //Cartera carteraAbono=crearCarteraSinTransaccion(tipoCartera, null, sucursal, DocumentoEnum.ABONOS.getCodigo(), UtilidadesFecha.getFechaHoyTimeStamp(),UtilidadesFecha.getFechaHoyTimeStamp(), "", "", Integer.SIZE);
+        return null;
+    }
+    
     /**
      * TODO: Verificar que los cruces solo deben actualizar ahora directo en el detalle
      * @param cartera
