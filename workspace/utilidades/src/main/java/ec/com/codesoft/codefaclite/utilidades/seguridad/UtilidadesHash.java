@@ -22,4 +22,10 @@ public class UtilidadesHash {
     {
         return BCrypt.hashpw(texto,BCrypt.gensalt(12));
     }
+    
+    @Deprecated
+    public static Long generarCodigoHashObjetoNegativo(Object objeto)
+    {
+        return Long.parseLong(System.identityHashCode(objeto)*-1+"");
+    }
 }

@@ -6,6 +6,10 @@
 package ec.com.codesoft.codefaclite.cartera.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecimalConverter;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
+import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoCarteraEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -160,6 +164,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
 
+    @ButtonBinding(actionListener = "controlador.listenerBotonBuscarCliente")
     public JButton getBtnBuscarCliente() {
         return btnBuscarCliente;
     }
@@ -168,6 +173,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         this.btnBuscarCliente = btnBuscarCliente;
     }
 
+    @ButtonBinding(actionListener = "controlador.listenerBotonBuscarFactura")
     public JButton getBtnBuscarFactura() {
         return btnBuscarFactura;
     }
@@ -176,6 +182,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         this.btnBuscarFactura = btnBuscarFactura;
     }
 
+    @ComboBoxBinding(source = "controlador.tipoList",valueSelect = "controlador.tipoCartera")
     public JComboBox<TipoCarteraEnum> getCmbTipoCartera() {
         return cmbTipoCartera;
     }
@@ -184,6 +191,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         this.cmbTipoCartera = cmbTipoCartera;
     }
 
+    @TextFieldBinding(value = "controlador.persona.nombresCompletos")
     public JTextField getTxtCliente() {
         return txtCliente;
     }
@@ -192,6 +200,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         this.txtCliente = txtCliente;
     }
 
+    @TextFieldBinding(value = "controlador.cartera.preimpreso")
     public JTextField getTxtFactura() {
         return txtFactura;
     }
@@ -200,6 +209,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         this.txtFactura = txtFactura;
     }
 
+    @TextFieldBinding(value = "controlador.valorCruzar",converter = StringToBigDecimalConverter.class)
     public JTextField getTxtValor() {
         return txtValor;
     }

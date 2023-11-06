@@ -801,6 +801,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             return;
         }
         
+        //Por el momento solo procesar cuando esta grabando
+        if(crudEnum.equals(CrudEnum.EDITAR))
+        {
+            return;
+        }
+        
+        
         //Verificar que no existe el mismo nombre o mandar a grabar en modo forzado
         ValidarDatoRepetidoIf validarRepetidoIf= new ValidarDatoRepetidoIf<Object>() {
             @Override

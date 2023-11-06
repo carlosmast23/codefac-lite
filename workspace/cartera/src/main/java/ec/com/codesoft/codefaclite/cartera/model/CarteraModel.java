@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.cartera.model;
 
-import ec.com.codesoft.codefaclite.cartera.busqueda.CarteraBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CarteraBusqueda;
 import ec.com.codesoft.codefaclite.cartera.panel.CarteraPanel;
 import ec.com.codesoft.codefaclite.cartera.reportdata.CarteraData;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
@@ -897,6 +897,7 @@ public class CarteraModel extends CarteraPanel{
         if(crudEnum.equals(CrudEnum.CREAR))
         {
             carteraDetalle.setSaldo(total);
+            //TODO: Esta forma de hacer las cosas esta my confusa pero le dejo de esa manera hasta entender bien
             carteraDetalle.setId(Long.parseLong(System.identityHashCode(carteraDetalle)*-1+"")); //Cuando creo un objeto por primera vez creo un hashCode para despues poder relacionar con los cruces
         }
                 

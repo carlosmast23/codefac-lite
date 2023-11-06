@@ -100,7 +100,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
      */
     public Boolean valoresModificados=false;
     
-    private Boolean procesarModoForzado=false;
+    private ModoProcesarEnum modoProcesarEnum=ModoProcesarEnum.NORMAL;
     
 
     public ProductoModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session,ProductoModelControlador.CommonIf interfaz,TipoVista tipoVista) {
@@ -305,7 +305,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        procesarModoForzado=false;
+        modoProcesarEnum=ModoProcesarEnum.NORMAL;
     }
 
     @Override
@@ -314,7 +314,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             UtilidadesImagenesCodefac.moverArchivo(producto.getPathFotoTmp(),session.getEmpresa());
             setearValoresProducto(producto);
             validar(producto);            
-            producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto,generarCodigoAutomatico,ModoProcesarEnum.NORMAL);
+            producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto,generarCodigoAutomatico,modoProcesarEnum);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             //DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) 
@@ -326,7 +326,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
                 Boolean continuar = DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.PROCESAR_MODO_FORZADO);
                 if (continuar) 
                 {
-                    procesarModoForzado = true;
+                    modoProcesarEnum =ModoProcesarEnum.FORZADO;
                     grabar();
                     return;
                 }

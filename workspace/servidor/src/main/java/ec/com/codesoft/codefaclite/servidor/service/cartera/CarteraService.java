@@ -46,6 +46,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -79,10 +80,45 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         return getFacade().getMovimientoCartera(persona);
     }
     
-    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Sucursal sucursal,BigDecimal valorCruzar) throws ServicioCodefacException,java.rmi.RemoteException
+    private void validarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar) throws ServicioCodefacException
+    {
+        if(tipoCartera==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar sin seleccionar un tipo de cartera");
+        }
+        
+        if(valorCruzar==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar el abono sin un valor de cruce");
+        }
+        
+        if(carteraAfectada==null)
+        {
+            throw new ServicioCodefacException("No se puede grabar sin seleccionar un documento para cruzar");
+        }
+    }
+    
+    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar) throws ServicioCodefacException,java.rmi.RemoteException
     {        
-        //Cartera carteraAbono=crearCarteraSinTransaccion(tipoCartera, null, sucursal, DocumentoEnum.ABONOS.getCodigo(), UtilidadesFecha.getFechaHoyTimeStamp(),UtilidadesFecha.getFechaHoyTimeStamp(), "", "", Integer.SIZE);
-        return null;
+        
+        validarAbono(tipoCartera, carteraAfectada, sucursal, valorCruzar);
+        Cartera carteraAbono=crearCarteraSinTransaccion(tipoCartera, null, sucursal, DocumentoEnum.ABONOS.getCodigo(), UtilidadesFecha.getFechaHoyTimeStamp(),UtilidadesFecha.getFechaHoy(), "0", "0", 0);
+        carteraAbono.setSaldo(valorCruzar);
+        carteraAbono.setTotal(valorCruzar);
+        //La persona del nuevo cliente, debe ser el mismo que de la anterior cartera
+        carteraAbono.setPersona(carteraAfectada.getPersona());
+        CarteraDetalle carteraDetalle=carteraAbono.crearCarteraDetalle(null,"Abono automatico", null, valorCruzar);
+        carteraDetalle.setId(UtilidadesHash.generarCodigoHashObjetoNegativo(carteraDetalle));
+        carteraAbono.addDetalle(carteraDetalle);
+                
+        //Generar el cruce para la cartera
+        CarteraCruce carteraCruce=new CarteraCruce(valorCruzar, carteraAfectada, carteraDetalle);
+        List<CarteraCruce> carteraCruceList=new ArrayList<CarteraCruce>();
+        carteraCruceList.add(carteraCruce);
+        
+        grabarCartera(carteraAbono, carteraCruceList);
+        
+        return carteraAbono;
     }
     
     /**

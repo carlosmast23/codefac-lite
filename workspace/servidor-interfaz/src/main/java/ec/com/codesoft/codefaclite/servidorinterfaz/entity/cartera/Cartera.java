@@ -481,6 +481,21 @@ public class Cartera implements Serializable{
      * =====================================================================
      */
     
+    public CarteraDetalle crearCarteraDetalle(DocumentoDetalleEnum documentoDetalleEnum,String descripcion,Long referenciaId,BigDecimal valor)
+    {
+        CarteraDetalle carteraDetalle=new CarteraDetalle();
+        carteraDetalle.setCartera(this);
+        carteraDetalle.setCodigoDetalleDocumentoEnum(documentoDetalleEnum);
+        carteraDetalle.setDescripcion(descripcion);
+        carteraDetalle.setReferenciaId(referenciaID);
+        carteraDetalle.setSaldo(valor);
+        //carteraDetalle.set
+        carteraDetalle.setTotal(valor);
+        
+        
+        return carteraDetalle;
+    }
+    
     public Integer calcularDiasFaltaPorVenderCredito()
     {
         if(diasCredito!=null )
