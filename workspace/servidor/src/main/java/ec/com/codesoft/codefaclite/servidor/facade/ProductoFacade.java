@@ -154,8 +154,10 @@ public class ProductoFacade extends AbstractFacade<Producto>
         return query.getResultList();
     }
     
-    public Producto buscarProductoActivoPorCodigoFacade(String codigo,Empresa empresa,Boolean consultarPresentaciones) throws ServicioCodefacException, RemoteException
+    public Producto buscarProductoActivoPorCodigoFacade(String codigo,String nombre,Empresa empresa,Boolean consultarPresentaciones) throws ServicioCodefacException, RemoteException
     {
+        //Producto p;
+        //p.getNombre()
         String whereEmpresa="";
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
         {
@@ -169,7 +171,20 @@ public class ProductoFacade extends AbstractFacade<Producto>
             wherePresentaciones=" AND p.tipoProductoCodigo<>?4";
         }
         
-        String queryString = "SELECT p FROM Producto p WHERE p.codigoPersonalizado=?1 AND p.estado=?2 "+wherePresentaciones+whereEmpresa ;
+        String whereCodigo="";
+        if(codigo!=null)
+        {
+            whereCodigo=" AND p.codigoPersonalizado=?1";
+        }
+        
+        String whereNombre="";
+        if(nombre!=null)
+        {
+            whereNombre=" AND p.nombre=?5 ";
+        }
+                
+        
+        String queryString = "SELECT p FROM Producto p WHERE p.estado=?2 "+wherePresentaciones+whereEmpresa +whereCodigo+whereNombre;
         
         Query query = getEntityManager().createQuery(queryString);
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
@@ -177,7 +192,11 @@ public class ProductoFacade extends AbstractFacade<Producto>
             query.setParameter(3,empresa);
         }
         
-        query.setParameter(1, codigo);
+        if(codigo!=null)
+        {
+            query.setParameter(1, codigo);
+        }
+        
         query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
         
         if(!consultarPresentaciones)
@@ -185,9 +204,10 @@ public class ProductoFacade extends AbstractFacade<Producto>
             query.setParameter(4, TipoProductoEnum.EMPAQUE.getLetra());
         }
         
-        //Map<String,Object> mapParametros=new HashMap<String,Object>();        
-        //mapParametros.put("codigoPersonalizado",codigo);
-        //mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
+        if(nombre!=null)
+        {
+                query.setParameter(5, nombre);
+        }
         
         //Cuando este configurado como datos compartidos no tomo en cuenta de donde esta cogiendo la empresa
         

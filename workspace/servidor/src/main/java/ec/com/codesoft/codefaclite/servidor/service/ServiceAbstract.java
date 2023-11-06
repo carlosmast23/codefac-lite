@@ -485,14 +485,14 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         {
             if(estadoEnum.equals(CrudEnum.CREAR))
             {
-                throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje);
+                throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje,ServicioCodefacException.TipoExcepcionEnum.VALIDACION_DATOS_DUPLICADOS);
             }
             else if(estadoEnum.equals(CrudEnum.EDITAR))
             {
                 //Si el dato obtenido corresponde al mismo entones no debe editar
                 if(!resultado.equals(datoProcesando))
                 {
-                    throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje);
+                    throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje,ServicioCodefacException.TipoExcepcionEnum.VALIDACION_DATOS_DUPLICADOS);
                 }
             }
         }

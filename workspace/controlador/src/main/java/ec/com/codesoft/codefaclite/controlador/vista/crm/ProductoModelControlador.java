@@ -100,6 +100,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
      */
     public Boolean valoresModificados=false;
     
+    private Boolean procesarModoForzado=false;
+    
 
     public ProductoModelControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session,ProductoModelControlador.CommonIf interfaz,TipoVista tipoVista) {
         super(mensajeVista, session,interfaz,tipoVista);
@@ -303,6 +305,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
     @Override
     public void nuevo() throws ExcepcionCodefacLite, RemoteException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        procesarModoForzado=false;
     }
 
     @Override
@@ -311,10 +314,24 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             UtilidadesImagenesCodefac.moverArchivo(producto.getPathFotoTmp(),session.getEmpresa());
             setearValoresProducto(producto);
             validar(producto);            
-            producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto,generarCodigoAutomatico);
+            producto=ServiceFactory.getFactory().getProductoServiceIf().grabar(producto,generarCodigoAutomatico,ModoProcesarEnum.NORMAL);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             //DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (ServicioCodefacException ex) {
+        } catch (ServicioCodefacException ex) 
+        {
+            
+            if(ex.getProcesarModoForzado())
+            {
+                mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+                Boolean continuar = DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.PROCESAR_MODO_FORZADO);
+                if (continuar) 
+                {
+                    procesarModoForzado = true;
+                    grabar();
+                    return;
+                }
+            }
+            
             mostrarMensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
             //DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");

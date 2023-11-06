@@ -208,14 +208,16 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //Integer ultimoId=utilidadService.obtenerCodigoMaximoPorId(Producto.NOMBRE_TABLA,Producto.NOMBRE_CAMPO_ID);
         producto.setCodigoPersonalizado(codigoPersonalizado);
     }
+    
+    
       
-    public Producto grabar(Producto p,Boolean generarCodigo) throws RemoteException, ServicioCodefacException
+    public Producto grabar(Producto p,Boolean generarCodigo,ModoProcesarEnum modoProcesar) throws RemoteException, ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
         {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(p,generarCodigo,true);
+                grabarSinTransaccion(p,generarCodigo,true,modoProcesar);
             }
         });        
         
@@ -241,7 +243,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     }
     
     //TODO: revisar una mejor solucion con lo de generar kardex
-    public void grabarSinTransaccion(Producto p,Boolean generarCodigo,Boolean generarKardex) throws java.rmi.RemoteException,ServicioCodefacException{
+    public void grabarSinTransaccion(Producto p,Boolean generarCodigo,Boolean generarKardex,ModoProcesarEnum modoProcesar) throws java.rmi.RemoteException,ServicioCodefacException{
         
         if(generarCodigo)
         {
@@ -249,7 +251,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
         
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-        validarGrabarProducto(p,CrudEnum.CREAR);
+        validarGrabarProducto(p,CrudEnum.CREAR,modoProcesar);
         
         //Agregando datos por defecto
         p.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());        
@@ -596,7 +598,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }*/
     
-    private void validarGrabarProducto(Producto p,CrudEnum estadoEnum) throws java.rmi.RemoteException,ServicioCodefacException    
+    private void validarGrabarProducto(Producto p,CrudEnum estadoEnum,ModoProcesarEnum modoProcesar) throws java.rmi.RemoteException,ServicioCodefacException    
     {
         
         if(p.getCodigoPersonalizado()==null || p.getCodigoPersonalizado().trim().isEmpty())
@@ -756,7 +758,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             }
         });
         
-        
+        //Validar advertencia de nombres iguales
+        advertenciaDatosProducto(p, estadoEnum, modoProcesar);
 
         ///////////////////////////////////////////////////////////////////////
         ///             HACER UNAS CORRECIONES ANTES DE GRABAR
@@ -790,9 +793,48 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
+    private void advertenciaDatosProducto(Producto p,CrudEnum crudEnum,ModoProcesarEnum modoProcesar) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        //Si se requiere procesar en modo forzado ya no hago mas validaciones
+        if(modoProcesar.equals(ModoProcesarEnum.FORZADO))
+        {
+            return;
+        }
+        
+        //Verificar que no existe el mismo nombre o mandar a grabar en modo forzado
+        ValidarDatoRepetidoIf validarRepetidoIf= new ValidarDatoRepetidoIf<Object>() {
+            @Override
+            public Object verificarDatoRepetido() throws ServicioCodefacException, RemoteException {
+               //Si es empaque no hago esa validacion por que esos datos son copias del principal
+                //TODO: toca revisar esa logica por que sideberia validar por que si modifica otro codigo conocido puede crear conflicto
+                if(!p.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+                {
+                    return buscarProductoActivoPorNombre(p.getNombre(),p.getEmpresa());
+                }
+                return null;
+            }
+        };
+        
+        try
+        {
+            validarDatoRepetido(p, crudEnum, validarRepetidoIf);
+        }
+        catch(ServicioCodefacException e)
+        {
+            if(e.getTipoExcepcionEnum().equals(ServicioCodefacException.TipoExcepcionEnum.VALIDACION_DATOS_DUPLICADOS))
+            {   
+                throw new ServicioCodefacException("Ya existe un producto con el mismo nombre", Boolean.TRUE);
+            }
+            
+            throw e;
+        }
+        
+        
+    }        
+    
     public void editarProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        validarGrabarProducto(producto,CrudEnum.EDITAR);
+        validarGrabarProducto(producto,CrudEnum.EDITAR,ModoProcesarEnum.NORMAL);
         producto.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -968,7 +1010,12 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public Producto buscarProductoActivoPorCodigo(String codigo,Boolean consultarPresentacion,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
-        return getFacade().buscarProductoActivoPorCodigoFacade(codigo,empresa,consultarPresentacion);
+        return getFacade().buscarProductoActivoPorCodigoFacade(codigo,null,empresa,consultarPresentacion);
+    }
+    
+    public Producto buscarProductoActivoPorNombre(String nombre,Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        return getFacade().buscarProductoActivoPorCodigoFacade(null, nombre,empresa,false);
     }
     
     public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException, RemoteException
@@ -994,7 +1041,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         {
             return productos.get(0);
         }*/
-        return getFacade().buscarProductoActivoPorCodigoFacade(codigo, empresa,false);
+        return getFacade().buscarProductoActivoPorCodigoFacade(codigo, null,empresa,false);
         
     }
                 
@@ -1177,7 +1224,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
            
            if(producto.getIdProducto()==null)
            {
-                producto=grabar(producto, Boolean.FALSE);
+                producto=grabar(producto, Boolean.FALSE,ModoProcesarEnum.NORMAL);
            }
            
            return producto;
@@ -1235,7 +1282,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //System.out.println("Costo: "+kardexDetalle.getKardex().getCostoPromedio());
                 if(p.getIdProducto()==null)
                 {
-                    grabarSinTransaccion(p,false,false); //graba el producto                
+                    grabarSinTransaccion(p,false,false,ModoProcesarEnum.NORMAL); //graba el producto                
                 }
                 else //Si ya tiene grabado el producto solo actualizo los datos
                 {
@@ -1317,7 +1364,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                     //Si no existe el producto lo que tenemos que hacer es grabar el nuevo producto
                     productoImportar.setIdProducto(null);
                     productoImportar.getCatalogoProducto().setId(null);
-                    grabar(productoImportar, Boolean.FALSE);
+                    grabar(productoImportar, Boolean.FALSE,ModoProcesarEnum.NORMAL);
                     cantidadGrabado++;
                 }            
             }   

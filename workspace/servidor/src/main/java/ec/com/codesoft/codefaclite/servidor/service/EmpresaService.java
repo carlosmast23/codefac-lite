@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
@@ -361,8 +362,8 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {
         ProductoService service=new ProductoService();
         Producto producto=service.crearProductoPorDefectoSinTransaccion(empresa,ivaDefecto);
-        //entityManager.persist(producto.getCatalogoProducto());
-        service.grabarSinTransaccion(producto,false,true);
+        //entityManager.persist(producto.getCatalogoProducto());        
+        service.grabarSinTransaccion(producto,false,true,ModoProcesarEnum.NORMAL);
     }
     
     

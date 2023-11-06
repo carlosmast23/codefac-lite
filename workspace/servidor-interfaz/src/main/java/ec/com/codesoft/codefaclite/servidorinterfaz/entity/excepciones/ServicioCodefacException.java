@@ -49,11 +49,11 @@ public class ServicioCodefacException extends Exception {
         this.tipoExcepcionEnum = tipoExcepcionEnum;
     }
     
-    
-    
+
     public enum TipoExcepcionEnum
     {
-        NC_SALDO_NEGATIVO;
+        NC_SALDO_NEGATIVO,
+        VALIDACION_DATOS_DUPLICADOS;
     }
     
 }
