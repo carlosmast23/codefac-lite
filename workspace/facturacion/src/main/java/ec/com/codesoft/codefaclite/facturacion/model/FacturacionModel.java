@@ -862,9 +862,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAplicarDescuentoGlobal().addActionListener(listenerDescuentoGlobal);
         
         getBtnConvertirProforma().addActionListener(listenerConvertirProforma);
-
+        
+        getBtnAbonoCartera().addActionListener(listenerAbonoCartera);
         
     }
+    
+    private ActionListener listenerAbonoCartera=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object[] parametros = {factura};
+            panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+                @Override
+                public void updateInterface(Persona entity) {
+                    //TODO: Metodo para recibir el resultado
+                }
+            }, VentanaEnum.ABONO, false, parametros, formularioActual);
+        }
+    };
     
     private ActionListener listenerConvertirProforma=new ActionListener() {
         @Override

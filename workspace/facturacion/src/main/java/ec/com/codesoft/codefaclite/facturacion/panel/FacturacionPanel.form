@@ -76,6 +76,11 @@
         <Property name="text" type="java.lang.String" value="Convertir Proforma"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JButton" name="btnAbonoCartera">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Abono"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="closable" type="boolean" value="true"/>

@@ -11,18 +11,27 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.cartera.AbonoControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class AbonoModel extends AbonoPanel implements ControladorVistaIf,AbonoControlador.SwingIf{
+public class AbonoModel extends AbonoPanel implements ControladorVistaIf,AbonoControlador.SwingIf,InterfazPostConstructPanel,DialogInterfacePanel<Cartera>{
     
     private AbonoControlador controlador;
 
@@ -113,6 +122,40 @@ public class AbonoModel extends AbonoPanel implements ControladorVistaIf,AbonoCo
 
     public void setControlador(AbonoControlador controlador) {
         this.controlador = controlador;
+    }
+
+    @Override
+    public void postConstructorExterno(Object[] parametros) {
+        if(parametros!=null)
+        {
+            try {
+                Factura facturaSeleccionda=(Factura) parametros[0];
+                Cartera cartera=ServiceFactory.getFactory().getCarteraServiceIf().obtenerCarteraPorFactura(facturaSeleccionda);
+                controlador.setTipoCartera(Cartera.TipoCarteraEnum.CLIENTE);
+                controlador.setPersona(cartera.getPersona());
+                controlador.setCartera(cartera);
+                controlador.setValorCruzar(cartera.getSaldo());
+                super.actualizarBindingCompontValues();
+                //controlador.setDescripcion(title);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(AbonoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AbonoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
+    }
+
+    @Override
+    public Cartera getResult() throws ExcepcionCodefacLite {
+        try {
+            controlador.grabar();
+        } catch (RemoteException ex) {
+            Logger.getLogger(AbonoModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
+        return null;
     }
     
     

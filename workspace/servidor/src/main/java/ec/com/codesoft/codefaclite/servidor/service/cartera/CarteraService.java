@@ -98,7 +98,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
     }
     
-    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar) throws ServicioCodefacException,java.rmi.RemoteException
+    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar,String descripcion) throws ServicioCodefacException,java.rmi.RemoteException
     {        
         
         validarAbono(tipoCartera, carteraAfectada, sucursal, valorCruzar);
@@ -107,7 +107,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         carteraAbono.setTotal(valorCruzar);
         //La persona del nuevo cliente, debe ser el mismo que de la anterior cartera
         carteraAbono.setPersona(carteraAfectada.getPersona());
-        CarteraDetalle carteraDetalle=carteraAbono.crearCarteraDetalle(null,"Abono automatico", null, valorCruzar);
+        if(descripcion==null)
+        {
+            descripcion="Abono Simple";
+        }
+        CarteraDetalle carteraDetalle=carteraAbono.crearCarteraDetalle(null,descripcion, null, valorCruzar);
         carteraDetalle.setId(UtilidadesHash.generarCodigoHashObjetoNegativo(carteraDetalle));
         carteraAbono.addDetalle(carteraDetalle);
                 
@@ -1261,6 +1265,21 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 }
             }
         });
+    }
+    
+    public Cartera obtenerCarteraPorFactura(Factura factura) throws ServicioCodefacException, RemoteException 
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("referenciaID",factura.getId());
+        mapParametros.put("codigoDocumento", factura.getCodigoDocumento());
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("tipoCartera", Cartera.TipoCarteraEnum.CLIENTE.getLetra());
+        List<Cartera> carteraList= getFacade().findByMap(mapParametros);
+        if(carteraList.size()>0)
+        {
+            return carteraList.get(0);
+        }
+        return null;
     }
     
     public Cartera obtenerRetencionPorFactura(Factura factura,Cartera.TipoCarteraEnum tipoCartera) throws ServicioCodefacException, RemoteException 

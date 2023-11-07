@@ -41,6 +41,7 @@ public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public BigDecimal listaCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento,Integer diasPorVencer) throws ServicioCodefacException, RemoteException;
     public Long listaCarteraSaldoCeroTamanio(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento,Integer diasPorVencer) throws ServicioCodefacException, RemoteException;
     public void eliminarCrucesPorCartera(Cartera carteraPadre) throws ServicioCodefacException, RemoteException;
-    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar,String descripcion) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Cartera obtenerCarteraPorFactura(Factura factura) throws ServicioCodefacException, RemoteException;
     
 }

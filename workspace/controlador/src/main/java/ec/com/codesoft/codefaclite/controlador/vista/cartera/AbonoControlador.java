@@ -102,7 +102,7 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
-            ServiceFactory.getFactory().getCarteraServiceIf().grabarAbono(tipoCartera,cartera,session.getSucursal(), valorCruzar);
+            ServiceFactory.getFactory().getCarteraServiceIf().grabarAbono(tipoCartera,cartera,session.getSucursal(), valorCruzar,descripcion);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ZonaControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,7 +113,7 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
 
     @Override
     public void editar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -133,7 +133,11 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        tipoCartera=null;
+        persona=null;
+        cartera=null;
+        valorCruzar=null;
+        descripcion=null;
     }
 
     @Override

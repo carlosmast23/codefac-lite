@@ -112,6 +112,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnEnviarCorreoProforma = new javax.swing.JButton();
         btnCargarComanda = new javax.swing.JButton();
         btnConvertirProforma = new javax.swing.JButton();
+        btnAbonoCartera = new javax.swing.JButton();
         pnlPrincipal = new javax.swing.JPanel();
         PanelDetalleFactura = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -314,6 +315,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnCargarComanda.setToolTipText("Buscar Comanda");
 
         btnConvertirProforma.setText("Convertir Proforma");
+
+        btnAbonoCartera.setText("Abono");
 
         setClosable(true);
         setIconifiable(true);
@@ -1768,6 +1771,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel PanelFormasPago;
     private javax.swing.JPanel PanelValores;
     private javax.swing.JLabel asdadsasd;
+    private javax.swing.JButton btnAbonoCartera;
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnAgregarDatosAdicionales;
     private javax.swing.JButton btnAgregarDetalleFactura;
@@ -2627,6 +2631,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setLblDescuento(JLabel lblDescuento) {
         this.lblDescuento = lblDescuento;
+    }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Cartera", visible = false)
+    public JButton getBtnAbonoCartera() {
+        return btnAbonoCartera;
+    }
+
+    public void setBtnAbonoCartera(JButton btnAbonoCartera) {
+        this.btnAbonoCartera = btnAbonoCartera;
     }
 
     
