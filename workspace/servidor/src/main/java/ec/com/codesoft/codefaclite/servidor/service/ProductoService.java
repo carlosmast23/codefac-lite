@@ -546,6 +546,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                     entityManager.flush();
                     
                 }
+                else
+                {
+                    //Actualizar algunos datos de la presentacion principal
+                    presentacionDetalle.getProductoEmpaquetado().setGarantia(producto.getGarantia());
+                    //presentacionDetalle.get
+                    entityManager.merge(presentacionDetalle.getProductoEmpaquetado());
+                    
+                }
+                
                 productoPresentacionNuevoList.add(presentacionDetalle);
             }
             

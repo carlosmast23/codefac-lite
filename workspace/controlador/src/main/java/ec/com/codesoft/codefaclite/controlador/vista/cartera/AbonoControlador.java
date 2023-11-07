@@ -43,6 +43,7 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
     private Persona persona;
     private Cartera cartera;
     private BigDecimal valorCruzar;
+    private String descripcion;
     
     public AbonoControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
         super(mensajeVista, session, interfaz, tipoVista);
@@ -219,6 +220,14 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
 
     public void setValorCruzar(BigDecimal valorCruzar) {
         this.valorCruzar = valorCruzar;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     
     

@@ -51,6 +51,8 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         btnBuscarCliente = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         txtFactura = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtDescripcion = new javax.swing.JTextField();
 
         jLabel2.setText("jLabel2");
 
@@ -68,7 +70,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         jPanel1.add(cmbTipoCartera, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio23, gridBagConstraints);
@@ -77,13 +79,13 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         jLabel4.setText("Valor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 5;
         gridBagConstraints.ipady = 5;
@@ -105,6 +107,8 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
+
+        txtCliente.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -124,13 +128,15 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         jPanel1.add(btnBuscarCliente, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Factura:");
+        jLabel6.setText("Descripción:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel6, gridBagConstraints);
+
+        txtFactura.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -141,6 +147,25 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtFactura, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Factura:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel7, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtDescripcion, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -157,9 +182,11 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblEspacio23;
     private javax.swing.JTextField txtCliente;
+    private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtFactura;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
@@ -216,6 +243,15 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
 
     public void setTxtValor(JTextField txtValor) {
         this.txtValor = txtValor;
+    }
+
+    @TextFieldBinding(value = "controlador.valorCruzar",converter = StringToBigDecimalConverter.class)
+    public JTextField getTxtDescripcion() {
+        return txtDescripcion;
+    }
+
+    public void setTxtDescripcion(JTextField txtDescripcion) {
+        this.txtDescripcion = txtDescripcion;
     }
 
     

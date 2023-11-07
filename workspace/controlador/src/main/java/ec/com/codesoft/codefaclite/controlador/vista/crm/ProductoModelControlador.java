@@ -368,6 +368,12 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             }*/
             
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
+            
+            if(producto.getPresentacionList().size()>0)
+            {
+                mostrarMensaje(new CodefacMsj("Recuerde que al editar un PRODUCTO CON PRESENTACIONES algunos datos de las presentaciones se tiene  que MODIFICAR DE FORMA MANUAL ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            }
+            
             //DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
