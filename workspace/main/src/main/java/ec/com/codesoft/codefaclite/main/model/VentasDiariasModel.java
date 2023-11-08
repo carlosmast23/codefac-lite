@@ -152,7 +152,19 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
+                                
+                Object resultado=buscarDialogoModel.getResultado();
+                Kardex kardex=null;
+                if(resultado instanceof Object[])
+                {
+                    Object[] resultadoLista=(Object[]) resultado;
+                    kardex=(Kardex) resultadoLista[0];
+                }
+                else
+                {
+                    kardex=(Kardex) buscarDialogoModel.getResultado();
+                }                
+               
                 agregarProductoVista(kardex.getProducto());
                 
             }
