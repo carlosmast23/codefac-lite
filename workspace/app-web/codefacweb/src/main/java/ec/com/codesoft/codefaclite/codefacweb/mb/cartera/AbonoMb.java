@@ -137,12 +137,18 @@ public class AbonoMb extends GeneralAbstractMb implements Serializable,AbonoCont
     
     @Deprecated
     //TODO: Unificar con un solo metodo en el controlador y agregar una interfaz para abrir
-    public void abrirDialogoBuscarFactura()
+    public void abrirDialogoBuscarFactura() 
     {
         Cartera.TipoCarteraEnum tipoCartera=controlador.getTipoCartera();
         Persona persona=controlador.getPersona();
         if(tipoCartera!=null)
         {
+            //Cambio temporal para poder manejar el objeto persona como null
+            if(persona.getIdCliente()==null)
+            {
+                persona=null;
+            }
+            
             CarteraBusqueda carteraBusqueda;
             if (tipoCartera.equals(Cartera.TipoCarteraEnum.CLIENTE)) 
             {
@@ -151,6 +157,7 @@ public class AbonoMb extends GeneralAbstractMb implements Serializable,AbonoCont
             else {
                 carteraBusqueda = new CarteraBusqueda(false, true, DocumentoEnum.obtenerPorCategoria(DocumentoCategoriaEnum.COMPROBANTES_VENTA),persona, true);
             }
+            carteraBusqueda.setNoFiltrarDocumentos(true);
             
             UtilidadesDialogo.abrirDialogoBusqueda(carteraBusqueda);
             

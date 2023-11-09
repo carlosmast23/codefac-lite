@@ -25,7 +25,7 @@
                             <h:outputLabel   value="Código Personalizado:" class="componente-responsive"/>
                         </div>
                         <div class="p-col-12 p-md-6 p-lg-3">                            
-                            <p:selectOneMenu   value="#{abonoMb.controlador.tipoCartera}" converter="tipoCarteraEnumConverter" >
+                            <p:selectOneMenu id="cmbTipoCartera"  value="#{abonoMb.controlador.tipoCartera}" converter="tipoCarteraEnumConverter" >
                                 <f:selectItems value="#{abonoMb.controlador.tipoList}" var="opcion" itemValue="#{opcion.letra}" />
                             </p:selectOneMenu>
                         </div> 
@@ -50,7 +50,7 @@
                         <div class="p-col-12 p-md-6 p-lg-3">                            
                             <p:inputText id="txtPreimpreso" readonly="true" value="#{abonoMb.controlador.cartera.preimpreso}" />
                             <p:commandButton actionListener="#{abonoMb.abrirDialogoBuscarFactura}" value="Buscar Factura " >
-                                <p:ajax event="dialogReturn" listener="#{abonoMb.seleccionarFactura(event)}" update="txtPreimpreso"  />
+                                <p:ajax event="dialogReturn" listener="#{abonoMb.seleccionarFactura}" update="txtPreimpreso,txtTotal,txtSaldo"  />
                             </p:commandButton>
                         </div> 
                     </div>
@@ -58,11 +58,11 @@
                     <div class="p-grid" style="text-align: left" >
                         <div class="p-col-12 p-md-6 p-lg-3">                            
                             <h:outputLabel   value="Total:" class="componente-responsive" style="font-weight: bolder"/>
-                            <p:outputLabel value="#{abonoMb.controlador.cartera.total}" style="margin-left: 10px" />
+                            <p:outputLabel id="txtTotal" value="#{abonoMb.controlador.cartera.total}" style="margin-left: 10px" />
                         </div>
                         <div class="p-col-12 p-md-6 p-lg-3">                            
                             <h:outputLabel   value="Saldo:" class="componente-responsive" style="font-weight: bolder"/>
-                            <p:outputLabel value="#{abonoMb.controlador.cartera.saldo}" style="margin-left: 10px" />
+                            <p:outputLabel id="txtSaldo" value="#{abonoMb.controlador.cartera.saldo}" style="margin-left: 10px" />
                         </div> 
                     </div>
 

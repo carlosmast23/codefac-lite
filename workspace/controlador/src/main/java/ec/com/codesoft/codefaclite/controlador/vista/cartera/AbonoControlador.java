@@ -102,12 +102,23 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
+            //fixParametros();
             ServiceFactory.getFactory().getCarteraServiceIf().grabarAbono(tipoCartera,cartera,session.getSucursal(), valorCruzar,descripcion);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ZonaControlador.class.getName()).log(Level.SEVERE, null, ex);
             mostrarMensaje(new CodefacMsj(ex.getMessage(),CodefacMsj.TipoMensajeEnum.ERROR));
             throw new ExcepcionCodefacLite(ex.getMessage());
+        }
+    }
+    
+    @Deprecated
+    //TODO: Metodo temporal para corregir problemas de la vista que no puede tener objetos vacios pero para la consulta necesito enviar un dato con null en la parte web
+    private void fixParametros()
+    {
+        if(persona.getIdCliente()==null)
+        {
+            persona=null;
         }
     }
 

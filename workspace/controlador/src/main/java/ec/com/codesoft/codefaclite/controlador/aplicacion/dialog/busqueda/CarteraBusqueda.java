@@ -36,6 +36,8 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialo
     private Boolean buscarTipoProveedor;
     private Persona persona;
     private List<DocumentoEnum> documentosEnum;
+    //Todo, solucion temporal para la parte web
+    private Boolean noFiltrarDocumentos=false;
 
     public CarteraBusqueda() {
         this.buscarTipoCliente = false;
@@ -79,7 +81,12 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialo
         //cartera.getPersona().getRazonSocial();
         //cartera.getPreimpreso();
         
+        
         String filtroStr=" AND ( u.codigoDocumento=?97 ) ";
+        if(noFiltrarDocumentos)
+        {
+            filtroStr="";
+        }
         
         String queryString = "SELECT u FROM Cartera u WHERE 1=1 "+ filtroStr;
         
@@ -166,6 +173,9 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialo
             queryDialog.agregarParametro(4,Cartera.TipoCarteraEnum.PROVEEDORES.getLetra());
         }
         
+        //Dato por defecto en el caso que no se seleccione ningun filtro
+        
+        
         return queryDialog;
     }
         
@@ -219,5 +229,15 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialo
         
         return filtroList;
     }
+
+    public Boolean getNoFiltrarDocumentos() {
+        return noFiltrarDocumentos;
+    }
+
+    public void setNoFiltrarDocumentos(Boolean noFiltrarDocumentos) {
+        this.noFiltrarDocumentos = noFiltrarDocumentos;
+    }
+    
+    
     
 }
