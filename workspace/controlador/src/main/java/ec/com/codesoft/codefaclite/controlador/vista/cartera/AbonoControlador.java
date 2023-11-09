@@ -134,8 +134,8 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
     @Override
     public void limpiar() {
         tipoCartera=null;
-        persona=null;
-        cartera=null;
+        persona=new Persona();
+        cartera=new Cartera();
         valorCruzar=null;
         descripcion=null;
     }

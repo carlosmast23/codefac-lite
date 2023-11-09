@@ -182,6 +182,17 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>abono</from-outcome>
+            <to-view-id>sistema/cartera/abono.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>datos_adicionales_dialogo</from-outcome>
             <to-view-id>sistema/dialog/datos_adicionales_dialogo.xhtml</to-view-id>
             <redirect>

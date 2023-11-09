@@ -9,7 +9,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ComponenteFiltro;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.FiltroDialogoIf;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
@@ -24,7 +25,7 @@ import java.util.Vector;
  *
  * @author Carlos
  */
-public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialogoIf
+public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialogoIf,InterfacesPropertisFindWeb
 {
     /**
      * Variable para filtrar solo los que tengan saldo pendiente
@@ -183,7 +184,16 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera> ,FiltroDialo
 
     @Override
     public Vector<String> getNamePropertysObject() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Vector<String> propiedades = new Vector<String>();
+        propiedades.add("codigo");
+        propiedades.add("secuencial");
+        propiedades.add("codigoDocumento");
+        propiedades.add("estado");
+        propiedades.add("persona.identificacion");
+        propiedades.add("persona.nombres");
+        propiedades.add("saldo");
+        propiedades.add("total");
+        return propiedades;
     }
 
     @Override

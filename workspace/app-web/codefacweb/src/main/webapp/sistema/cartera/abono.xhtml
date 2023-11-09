@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
+
+    <ui:composition  template="/template/codefac_template.xhtml">
+
+        <ui:define name="opciones" >
+            <p:menuitem oncomplete="PF('btnCargarProforma').jq.click();" value="Cargar desde la proforma"  icon="pi pi-clone"  />
+        </ui:define>
+
+        <ui:define name="vistaControlador" >
+            <f:event listener="#{controllerCodefacMb.agregarVista(abonoMb)}" type="preRenderComponent" /> 
+        </ui:define>
+
+        <ui:define name="contenido" >
+
+            <p:tabView>
+                <p:tab title="Datos Principales">
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12" >
+                            <h:outputLabel   value="Código Personalizado:" class="componente-responsive"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <p:selectOneMenu   value="#{abonoMb.controlador.tipoCartera}" converter="tipoCarteraEnumConverter" >
+                                <f:selectItems value="#{abonoMb.controlador.tipoList}" var="opcion" itemValue="#{opcion.letra}" />
+                            </p:selectOneMenu>
+                        </div> 
+                    </div>
+                    
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12" >
+                            <h:outputLabel   value="Cliente: " class="componente-responsive"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <p:inputText id="txtCliente"  value="#{abonoMb.controlador.persona.identificacion}" />
+                            <p:commandButton actionListener="#{abonoMb.abrirDialogoBuscarCliente}" value="Buscar Cliente " >
+                                <p:ajax event="dialogReturn" listener="#{abonoMb.seleccionarCliente}" update="txtCliente"  />
+                            </p:commandButton>
+                        </div> 
+                    </div>
+                    
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12" >
+                            <h:outputLabel   value="Factura: " class="componente-responsive"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <p:inputText id="txtPreimpreso" readonly="true" value="#{abonoMb.controlador.cartera.preimpreso}" />
+                            <p:commandButton actionListener="#{abonoMb.abrirDialogoBuscarFactura}" value="Buscar Factura " >
+                                <p:ajax event="dialogReturn" listener="#{abonoMb.seleccionarFactura(event)}" update="txtPreimpreso"  />
+                            </p:commandButton>
+                        </div> 
+                    </div>
+                    
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <h:outputLabel   value="Total:" class="componente-responsive" style="font-weight: bolder"/>
+                            <p:outputLabel value="#{abonoMb.controlador.cartera.total}" style="margin-left: 10px" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <h:outputLabel   value="Saldo:" class="componente-responsive" style="font-weight: bolder"/>
+                            <p:outputLabel value="#{abonoMb.controlador.cartera.saldo}" style="margin-left: 10px" />
+                        </div> 
+                    </div>
+
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12" >
+                            <h:outputLabel   value="Descripción: " class="componente-responsive"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-6">                            
+                            <p:inputText value="#{abonoMb.controlador.descripcion}" />                            
+                        </div> 
+                    </div>
+                    
+                    <div class="p-grid" style="text-align: left" >
+                        <div class="p-col-12" >
+                            <h:outputLabel   value="Valor: " class="componente-responsive"/>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">                            
+                            <p:inputText value="#{abonoMb.controlador.valorCruzar}" />                            
+                        </div> 
+                    </div>
+
+                </p:tab>
+
+            </p:tabView>
+        </ui:define>
+    </ui:composition>
+
+</html>
+
