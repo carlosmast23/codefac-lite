@@ -94,7 +94,7 @@ public class ControladorReporteFactura {
     private Boolean agregarCostos;
     private Producto productoFiltro;
     
-    private Boolean todasVentas;
+    private Boolean todasVentas=false;
     
 
     public ControladorReporteFactura(Empresa empresa) {

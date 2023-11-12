@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import java.io.Serializable;
@@ -323,6 +324,23 @@ public class GuiaRemision extends ComprobanteEntity<GuiaRemisionAdicional> imple
                 destinatario.getDetallesProductos().remove(detalle);
             }
         }
+    }
+    
+    
+    public DestinatarioGuiaRemision obtenerDestinatarioGuiaRemision(Persona destinatario)
+    {
+        if(destinatarios!=null)
+        {
+            for (DestinatarioGuiaRemision destinatarioGuia : destinatarios) 
+            {
+                if(destinatarioGuia.getDestinatorio().equals(destinatario))
+                {
+                    return destinatarioGuia;
+                }
+            }
+        }
+        
+        return null;
     }
     
     /**

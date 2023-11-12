@@ -844,47 +844,57 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
     
     private void listenerAgregarDetalleGuia()
     {
-        DestinatarioGuiaRemision destinatario = new DestinatarioGuiaRemision();
+        //Verifico si este un destinario ya esta creado o vuelvo a crear uno desde cero
+        DestinatarioGuiaRemision destinatario=guiaRemision.obtenerDestinatarioGuiaRemision(this.destinatario);
         
-        String autorizacionTxt=getTxtAutorizacion().getText();
-        if(UtilidadesTextos.verificarNullOVacio(autorizacionTxt))
+        if(destinatario==null)
         {
-            //por defecto dejo un numero de autorizacion solo para poder pasar la validacion
-            autorizacionTxt="0000000000";
+            //DestinatarioGuiaRemision destinatario = new DestinatarioGuiaRemision();
+            destinatario = new DestinatarioGuiaRemision();
+            
+            String autorizacionTxt=getTxtAutorizacion().getText();
+            if(UtilidadesTextos.verificarNullOVacio(autorizacionTxt))
+            {
+                //por defecto dejo un numero de autorizacion solo para poder pasar la validacion
+                autorizacionTxt="0000000000";
+            }
+
+            destinatario.setAutorizacionNumero(autorizacionTxt);
+
+            destinatario.setCodDucumentoSustento("001-001-000000001"); //TODO: Por defecto queda seteado de esta forma para el tema de los preimpresos
+            destinatario.setDestinatorio(this.destinatario);
+            destinatario.setDireccionDestino(getTxtDireccionDestino().getText());
+            Date fechaFactura=getCmbFechaFactura().getDate();
+            if(fechaFactura!=null)
+            {
+                destinatario.setFechaEmision(UtilidadesFecha.castDateUtilToSql(fechaFactura));
+            }
+            destinatario.setGuiaRemision(guiaRemision);
+
+            String motivoTrasladoTxt=getTxtMotivoTraslado().getText();
+            if(UtilidadesTextos.verificarNullOVacio(motivoTrasladoTxt))
+            {
+                motivoTrasladoTxt="s/m";
+            }
+
+            destinatario.setMotivoTranslado(motivoTrasladoTxt);
+            destinatario.setPreimpreso(getTxtPreimpreso().getText());
+            destinatario.setRazonSocial(this.destinatario.getRazonSocial());
+            destinatario.setRuta(getTxtRuta().getText());
+            destinatario.setFacturaReferencia(null);
+            destinatario.setIdentificacion(this.destinatario.getIdentificacion());
+
+            String codEstablecimientoTxt="";
+            if(UtilidadesTextos.verificarNullOVacio(codEstablecimientoTxt))
+            {
+                codEstablecimientoTxt="001";
+            }
+
+            destinatario.setCodigoEstablecimiento(codEstablecimientoTxt);
+            guiaRemision.addDestinario(destinatario);
         }
         
-        destinatario.setAutorizacionNumero(autorizacionTxt);
-                
-        destinatario.setCodDucumentoSustento("001-001-000000001"); //TODO: Por defecto queda seteado de esta forma para el tema de los preimpresos
-        destinatario.setDestinatorio(this.destinatario);
-        destinatario.setDireccionDestino(getTxtDireccionDestino().getText());
-        Date fechaFactura=getCmbFechaFactura().getDate();
-        if(fechaFactura!=null)
-        {
-            destinatario.setFechaEmision(UtilidadesFecha.castDateUtilToSql(fechaFactura));
-        }
-        destinatario.setGuiaRemision(guiaRemision);
-        
-        String motivoTrasladoTxt=getTxtMotivoTraslado().getText();
-        if(UtilidadesTextos.verificarNullOVacio(motivoTrasladoTxt))
-        {
-            motivoTrasladoTxt="s/m";
-        }
-        
-        destinatario.setMotivoTranslado(motivoTrasladoTxt);
-        destinatario.setPreimpreso(getTxtPreimpreso().getText());
-        destinatario.setRazonSocial(this.destinatario.getRazonSocial());
-        destinatario.setRuta(getTxtRuta().getText());
-        destinatario.setFacturaReferencia(null);
-        destinatario.setIdentificacion(this.destinatario.getIdentificacion());
-        
-        String codEstablecimientoTxt="";
-        if(UtilidadesTextos.verificarNullOVacio(codEstablecimientoTxt))
-        {
-            codEstablecimientoTxt="001";
-        }
-        
-        destinatario.setCodigoEstablecimiento(codEstablecimientoTxt);
+
         
         DetalleProductoGuiaRemision detalle = new DetalleProductoGuiaRemision();
         detalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
@@ -894,7 +904,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         detalle.setReferenciaId(null); //TODO: Por el momento mando null para saber que fue agregado manualmente
         destinatario.addProducto(detalle);
         
-        guiaRemision.addDestinario(destinatario);
+        
         //Actualizar los datos en la vista
         imprimirTabla();
         limpiarDetalleProductoGuia();
