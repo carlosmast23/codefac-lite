@@ -2019,9 +2019,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 factura=servicio.grabarLiquidacionCompra(factura);
             }
-            else if(factura.getCodigoDocumento().equals(DocumentoEnum.COMANDA))
+            else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
             {
                 //factura=servicio.grabarComanda(factura, session.g);
+                factura=servicio.grabarComanda(factura, session);
             }
             else
             {
@@ -2116,6 +2117,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     reporteVentaManual(factura,documentoEnum,true,false);
                 }
+            }
+            else if(documentoEnum.equals(DocumentoEnum.COMANDA))
+            {
+                DialogoCodefac.mensaje("Correcto", "La comanda fue grabada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                FacturaModelControlador.imprimirComanda(facturaProcesando, panelPadre);
             }
             else
             {

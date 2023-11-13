@@ -74,6 +74,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
@@ -256,7 +257,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return proforma;
     }
     
-    public Factura grabarComanda(Factura proforma,SessionCodefac sessionCodefac) throws RemoteException,ServicioCodefacException
+    public Factura grabarComanda(Factura proforma,SessionCodefacInterface sessionCodefac) throws RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -269,7 +270,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return proforma;
     }
     
-    private void imprimirComanda(Factura proforma,SessionCodefac sessionCodefac)
+    private void imprimirComanda(Factura proforma,SessionCodefacInterface sessionCodefac)
     {
         String cantidadStr=ParametroUtilidades.obtenerValorParametro(sessionCodefac.getEmpresa(),ParametroCodefac.COPIAS_IMPRESORA_COMANDA);
         if(!UtilidadesTextos.verificarNullOVacio(cantidadStr))

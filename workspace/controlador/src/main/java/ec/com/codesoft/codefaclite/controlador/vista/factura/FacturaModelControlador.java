@@ -1520,6 +1520,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
     }
     
+    public static void imprimirComanda(Factura facturaProcesando,InterfazComunicacionPanel panelPadre)
+    {
+        
+        Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando); 
+        //JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Comanda", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,"comanda_ticket_40.jrxml", mapParametros, dataReporte, panelPadre, "Comanda", OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.TICKET,null,ImpresionAutomaticaEnum.COMANDA);
+    }
+    
     /**
      * TODO: Falta organizar mejor este codigo
      * @param facturaProcesando
@@ -1622,6 +1631,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             impresionAutomaticaEnum=ImpresionAutomaticaEnum.VENTA;
         }
+                
+        
         //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
         ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion,impresionAutomaticaEnum);
 
@@ -1992,7 +2003,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return dataReporte;
     }
     
-    public static JasperPrint getReporteTicket(Factura factura,SessionCodefac sessionCodefac)
+    public static JasperPrint getReporteTicket(Factura factura,SessionCodefacInterface sessionCodefac)
     {
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
@@ -2008,7 +2019,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             nombreReporte="Nota de Venta";
         }
-        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionCodefac,nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
+        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, null,nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
         return jasperPrint;
         //UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,factura.getPreimpreso()+".pdf");
     }

@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
@@ -392,7 +393,7 @@ public class ReporteCodefac {
      * Metodo creado para ver si se compila el reporte y puedo tener un proxy de los reportes y acceder mas rapidos a los mismos
      * @Date 17/09/2019     
      */
-    public static JasperPrint construirReporte(InputStream pathReporte,Map<String,Object> parametros,Collection datos,SessionCodefac session,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
+    public static JasperPrint construirReporte(InputStream pathReporte,Map<String,Object> parametros,Collection datos,SessionCodefacInterface session,String tituloReporte,OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte)
     {
         try {
             //mapReportePlantilla(orientacionEnum, formatoReporte, session);
@@ -424,7 +425,7 @@ public class ReporteCodefac {
      * @param sessionCodefac
      * @return 
      */
-    public static Map<String, Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,SessionCodefac sessionCodefac) {
+    public static Map<String, Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte,SessionCodefacInterface sessionCodefac) {
         InputStream inputStream = null;
         
         SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
