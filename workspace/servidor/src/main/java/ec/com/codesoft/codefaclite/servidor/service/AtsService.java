@@ -383,7 +383,8 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         compraAts.setAutorizacion(autorizacion.trim()); //todo: En caso de que los comprobantes con código 11, 19 y 20 no posean numeración, así como en convenios de débito y recaudación deberán completar sus datos con nueves (9999999999)
         compraAts.setBaseNoGraIva(BigDecimal.ZERO);
         compraAts.setBaseImponible(compra.getSubtotalSinImpuestos().setScale(2, RoundingMode.HALF_UP));
-        compraAts.setBaseImpGrav(compra.getSubtotalImpuestos().setScale(2, RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
+        //compraAts.setBaseImpGrav(compra.getSubtotalImpuestos().setScale(2, RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
+        compraAts.setBaseImpGrav(compra.getSubtotalImpuestosMenosDescuento().setScale(2, RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
         compraAts.setBaseImpExe(BigDecimal.ZERO);//TODO: Revisar cuando se aplica este campo , el manula dice que son Base imponible exenta de IVA
         compraAts.setMontoIce(BigDecimal.ZERO);
         compraAts.setMontoIva(compra.getIva().setScale(2, RoundingMode.HALF_UP));
