@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import java.sql.Date;
 import java.util.List;
-import javax.persistence.Query;
+import jakarta.persistence.Query;
 
 /**
  *

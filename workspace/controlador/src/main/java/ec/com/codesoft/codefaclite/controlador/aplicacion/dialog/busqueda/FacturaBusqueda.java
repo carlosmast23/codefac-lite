@@ -19,8 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfacesPropertisFindWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;

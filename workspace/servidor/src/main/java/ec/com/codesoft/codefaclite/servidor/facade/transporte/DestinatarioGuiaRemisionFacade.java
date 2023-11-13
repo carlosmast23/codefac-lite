@@ -12,8 +12,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.Destinatar
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 
 /**
  *

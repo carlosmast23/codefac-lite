@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Query;
+import jakarta.persistence.Query;
 
 /**
  *

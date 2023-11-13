@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Query;
+import jakarta.persistence.Query;
 
 /**
  *

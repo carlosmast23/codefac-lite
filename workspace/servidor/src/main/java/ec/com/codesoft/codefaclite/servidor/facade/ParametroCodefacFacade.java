@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.FlushModeType;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.Query;
 
 /**
  *

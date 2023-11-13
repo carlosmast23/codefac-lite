@@ -59,7 +59,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityTransaction;
+import jakarta.persistence.EntityTransaction;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**

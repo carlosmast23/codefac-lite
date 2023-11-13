@@ -11,9 +11,9 @@ package ec.com.codesoft.codefaclite.test;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 /**
  *
@@ -36,7 +36,7 @@ public class Main {
         entityManager.persist(p);
         entityManager.getTransaction().commit();
         
-        javax.persistence.criteria.CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
+        jakarta.persistence.criteria.CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
         cq.select(cq.from(Persona.class));
         List<Persona> lista=entityManager.createQuery(cq).getResultList();
         for (Persona persona : lista) {

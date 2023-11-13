@@ -16,8 +16,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.persistence.FlushModeType;
-import javax.persistence.Query;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.Query;
 
 /**
  *

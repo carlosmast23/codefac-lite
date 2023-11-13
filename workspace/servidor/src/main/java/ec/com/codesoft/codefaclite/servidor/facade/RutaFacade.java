@@ -13,8 +13,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DiaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import java.util.List;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
+import jakarta.persistence.Query;
+import jakarta.persistence.TemporalType;
 
 /**
  *

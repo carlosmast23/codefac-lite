@@ -32,9 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -339,7 +339,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             //ex.printStackTrace();
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
-        }catch (javax.persistence.RollbackException e) {
+        }catch (jakarta.persistence.RollbackException e) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE,"GENERANDO RollbackException ...");
             e.printStackTrace();
             

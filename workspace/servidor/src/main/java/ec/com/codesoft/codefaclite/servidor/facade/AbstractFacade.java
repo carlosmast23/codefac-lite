@@ -19,14 +19,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.FlushModeType;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
-import javax.persistence.RollbackException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.Query;
+import jakarta.persistence.RollbackException;
 import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
@@ -117,15 +117,15 @@ public abstract class AbstractFacade<T>
     }
 
     public List<T> findAll() {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
         return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<T> findRange(int[] range) {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
-        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        jakarta.persistence.Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
         return q.getResultList();
@@ -223,8 +223,8 @@ public abstract class AbstractFacade<T>
             //Esta linea se ejecuta si existe la base de datos
             //TODO: Utilizar propertys para cambiar el url cuando es en Linux porque no funciona y tiene otra sintaxis
             Map<String,String> properties=new HashMap<String,String>();
-            properties.put("javax.persistence.jdbc.user", AbstractFacade.usuarioDb);
-            properties.put("javax.persistence.jdbc.password", AbstractFacade.claveDb);
+            properties.put("jakarta.persistence.jdbc.user", AbstractFacade.usuarioDb);
+            properties.put("jakarta.persistence.jdbc.password", AbstractFacade.claveDb);
             
             entityManager=Persistence.createEntityManagerFactory(namePersistence,properties).createEntityManager();
         }

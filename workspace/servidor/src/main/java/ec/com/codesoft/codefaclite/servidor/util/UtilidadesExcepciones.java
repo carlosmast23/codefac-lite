@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.util;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 

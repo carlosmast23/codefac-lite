@@ -36,9 +36,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.Entity;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**

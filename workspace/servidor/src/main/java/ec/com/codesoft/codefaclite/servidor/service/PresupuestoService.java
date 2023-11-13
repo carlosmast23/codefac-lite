@@ -52,8 +52,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceException;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.eclipse.jdt.internal.compiler.ast.Literal;
 

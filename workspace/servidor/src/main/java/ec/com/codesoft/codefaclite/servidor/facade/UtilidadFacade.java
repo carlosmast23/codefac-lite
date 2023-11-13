@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 
 /**
  *

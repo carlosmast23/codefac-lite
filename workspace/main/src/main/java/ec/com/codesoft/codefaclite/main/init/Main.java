@@ -93,7 +93,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
