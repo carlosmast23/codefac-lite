@@ -134,6 +134,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity.Tip
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
@@ -2023,6 +2024,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 //factura=servicio.grabarComanda(factura, session.g);
                 factura=servicio.grabarComanda(factura, session);
+                Factura.numeroOrdenComanda=factura.getNumeroOrden()+1; //Solucion temporal para manejar el número de orden
             }
             else
             {
@@ -2487,19 +2489,25 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        if(!factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR) && !factura.getCodigoDocumentoEnum().equals(factura.getCodigoDocumentoEnum().PROFORMA))
+        
+        DocumentoEnum documentoEnum=factura.getCodigoDocumentoEnum();
+        if(!factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR) && !documentoEnum.equals(factura.getCodigoDocumentoEnum().PROFORMA) && !documentoEnum.equals(factura.getCodigoDocumentoEnum().COMANDA))
         {
             DialogoCodefac.mensaje("Advertencia","La factura no se pueden modificar ",DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("cancelar el evento editar");
         }
         
-        if(!DialogoCodefac.dialogoPregunta(new CodefacMsj("Solo debe editar las ventas con supervición de una persona de SOPORTE.\nDesea continuar de todos modos? ", CodefacMsj.TipoMensajeEnum.ERROR)))
+        //Esta advertencia solo aplica cuando no sean comandas
+        if(!documentoEnum.equals(DocumentoEnum.COMANDA))
         {
-            throw new ExcepcionCodefacLite("cancelar el evento editar");
+            if(!DialogoCodefac.dialogoPregunta(new CodefacMsj("Solo debe editar las ventas con supervición de una persona de SOPORTE.\nDesea continuar de todos modos? ", CodefacMsj.TipoMensajeEnum.ERROR)))
+            {
+                throw new ExcepcionCodefacLite("cancelar el evento editar");
+            }
         }
         
         ///IMPORTANTE: Cuando sea factura tengo que solicitar clave para modificar
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        if(documentoEnum.equals(DocumentoEnum.FACTURA))
         {
             //Actualizar los secuenciales en el archivo de comprobacion en la base de datos para que por el momento puedan seguir continuando
             String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
@@ -2514,7 +2522,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             setearValoresDefaultFactura(CrudEnum.EDITAR);
             ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
             
-            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
             {
                 DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.EDITADO);
             }
@@ -2685,6 +2693,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                 }
             }
+            else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
+            {
+                FacturaModelControlador.imprimirComanda(factura, panelPadre);
+            }
         }
     }
     
@@ -2720,7 +2732,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         else
         {
             tipoReferenciaEnum = factura.getDetalles().get(0).getTipoDocumentoEnum();
-        }        
+        }       
+        
+        //cargar datos del restaurante
+        getCmbMesaComanda().setSelectedItem(factura.getMesa());
+        getTxtNotaMesa().setText(factura.getNota());
+        
+        if(factura.getNumeroOrden()!=null)
+        {
+            getSpnNumeroOrdenComanda().setValue(factura.getNumeroOrden());
+        }
         
         getCmbDocumento().setSelectedItem(factura.getCodigoDocumentoEnum());
         controlador.setTipoDocumentoEnumSeleccionado(tipoReferenciaEnum);
@@ -3457,6 +3478,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         factura.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
+        
+        //Datos seteados del tema de la comanda
+        factura.setNota(getTxtNotaMesa().getText());        
+        factura.setMesa((Mesa) getCmbMesaComanda().getSelectedItem());
+        factura.setNumeroOrden((Integer) getSpnNumeroOrdenComanda().getValue());
         
         /**
          * TODO: Seteado los valores temporales pero toca cambiar esta parte y setear

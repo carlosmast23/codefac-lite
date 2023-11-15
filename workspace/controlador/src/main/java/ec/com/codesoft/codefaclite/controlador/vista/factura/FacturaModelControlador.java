@@ -1791,7 +1791,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("descuento", facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos())+"");
             mapParametros.put("mesero", facturaProcesando.getUsuario().getNick());
             mapParametros.put("mesa",(facturaProcesando.getMesa()!=null)?facturaProcesando.getMesa().toString():"");
-            //mapParametros.put("nota", facturaProcesando);
+            mapParametros.put("nota", facturaProcesando.getNota());
+            mapParametros.put("numero_orden","# "+facturaProcesando.getNumeroOrden());
             
             String leyendaAdicional= ParametroUtilidades.obtenerValorParametro(facturaProcesando.getEmpresa(),ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);
             if(!UtilidadesTextos.verificarNullOVacio(leyendaAdicional))

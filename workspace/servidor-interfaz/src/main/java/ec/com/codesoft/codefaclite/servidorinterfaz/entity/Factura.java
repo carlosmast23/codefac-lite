@@ -51,6 +51,10 @@ import jakarta.persistence.Transient;
 @Table(name = Factura.NOMBRE_TABLA)
 public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional> implements Cloneable {
 
+    @Deprecated
+    //Solucion temporal hasta alguna idea mejor para las ordenes
+    public static Integer numeroOrdenComanda=1;
+    
     public static final String NOMBRE_TABLA="FACTURA";
     public static final String NOMBRE_PK="ID";
     
@@ -134,6 +138,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     @Column(name = "NOTA")
     private String nota;
+    
+    @Column(name = "ORDEN_NUMERO")
+    private Integer numeroOrden;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -592,6 +599,14 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     public void setPresupuestoId(Long presupuestoId) {
         this.presupuestoId = presupuestoId;
+    }
+
+    public Integer getNumeroOrden() {
+        return numeroOrden;
+    }
+
+    public void setNumeroOrden(Integer numeroOrden) {
+        this.numeroOrden = numeroOrden;
     }
     
     

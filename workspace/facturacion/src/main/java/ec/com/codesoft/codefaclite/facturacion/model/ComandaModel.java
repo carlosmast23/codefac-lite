@@ -5,11 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ComandaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.awt.Font;
 import java.rmi.RemoteException;
@@ -53,11 +59,35 @@ public class ComandaModel extends FacturacionModel{
         getCmbDocumento().removeAllItems();
         getCmbDocumento().addItem(DocumentoEnum.COMANDA);
         
+        
         //getPanelTabDatos().setEnabledAt(4,true);
         //getPanelTabDatos().setSelectedIndex(4);
         activarTabDatos(4);
         cargarDatosIniciales();
         
+    }
+
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite {
+        super.nuevo(); //To change body of generated methods, choose Tools | Templates.
+        //Setear el número de orden que tenga pendiente
+        getSpnNumeroOrdenComanda().setValue(Factura.numeroOrdenComanda);
+    }
+    
+    @Override
+    public InterfaceModelFind getBusquedaInterface()
+    {
+        /*FacturaBusqueda facturaBusqueda = null;
+        ParametroCodefac siNofiltrarFacturaPorUsuario = session.getParametrosCodefac().get(ParametroCodefac.FILTRAR_FACTURAS_POR_USUARIO);
+        EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((siNofiltrarFacturaPorUsuario != null ) ? siNofiltrarFacturaPorUsuario.getValor() : null);
+        if(enumSiNo != null && enumSiNo.equals(EnumSiNo.SI)){
+            facturaBusqueda = new FacturaBusqueda(session.getSucursal(), session.getUsuario());
+        }else{
+            facturaBusqueda = new FacturaBusqueda(session.getSucursal());
+        }
+        
+        return facturaBusqueda;*/
+        return new ComandaBusquedaDialogo(session.getEmpresa());
     }
     
     private void cargarDatosIniciales()
