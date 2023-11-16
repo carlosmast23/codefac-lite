@@ -267,6 +267,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel39 = new javax.swing.JLabel();
         jDateFechaEmision = new org.jdesktop.swingx.JXDatePicker();
         jDateFechaEmision1 = new org.jdesktop.swingx.JXDatePicker();
+        jPanel12 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lstComponentes = new javax.swing.JList<>();
+        btnAgregarComponente = new javax.swing.JButton();
+        cmbQuitarComponente = new javax.swing.JButton();
 
         btnExportar.setText("Exportar");
 
@@ -1690,6 +1695,41 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         tabMenu.addTab("Descuentos", jPanel8);
 
+        jPanel12.setLayout(new java.awt.GridBagLayout());
+
+        lstComponentes.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane5.setViewportView(lstComponentes);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jScrollPane5, gridBagConstraints);
+
+        btnAgregarComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarComponente.setText("Agregar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(btnAgregarComponente, gridBagConstraints);
+
+        cmbQuitarComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
+        cmbQuitarComponente.setText("Quitar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(cmbQuitarComponente, gridBagConstraints);
+
+        tabMenu.addTab("Comp", jPanel12);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -1729,6 +1769,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }//GEN-LAST:event_chkPsicotropicosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarComponente;
     private javax.swing.JButton btnAgregarEmpaque;
     private javax.swing.JButton btnAgregarEnsamble;
     private javax.swing.JButton btnBuscarImagen;
@@ -1765,6 +1806,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<PresentacionProducto> cmbPresentacionDefectoCompras;
     private javax.swing.JComboBox<PresentacionProducto> cmbPresentacionDefectoVentas;
     private javax.swing.JComboBox<PresentacionProducto> cmbPresentacionEmpaquetado;
+    private javax.swing.JButton cmbQuitarComponente;
     private javax.swing.JComboBox<SegmentoProducto> cmbSegmento;
     private javax.swing.JComboBox<TipoProducto> cmbTipo;
     private javax.swing.JComboBox<ProductoPresentacionDetalle.TipoPresentacionEnum> cmbTipoPresentacion;
@@ -1837,6 +1879,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1849,6 +1892,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
@@ -1869,6 +1913,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JLabel lblEstado123;
     private javax.swing.JLabel lblFoto;
+    private javax.swing.JList<String> lstComponentes;
     private ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona persona1;
     private javax.swing.JPanel pnlCostos;
     private javax.swing.JPanel pnlPresentacionAdicional;

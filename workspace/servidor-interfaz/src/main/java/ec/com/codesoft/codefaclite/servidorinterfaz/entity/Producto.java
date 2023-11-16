@@ -207,6 +207,9 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
     private List<ProductoActividad> actividadList;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
+    private List<ProductoComponente> componenteList;
+    
     @Transient
     private Path pathFotoTmp;
     
@@ -525,6 +528,15 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     public void setSegmentoProducto(SegmentoProducto segmentoProducto) {
         this.segmentoProducto = segmentoProducto;
     }
+
+    public List<ProductoComponente> getComponenteList() {
+        return componenteList;
+    }
+
+    public void setComponenteList(List<ProductoComponente> componenteList) {
+        this.componenteList = componenteList;
+    }
+    
     
     
     

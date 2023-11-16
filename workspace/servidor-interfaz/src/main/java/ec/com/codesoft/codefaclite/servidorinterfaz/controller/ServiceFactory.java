@@ -87,6 +87,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaEstablecimi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoComponenteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoPresentacionDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
@@ -267,6 +268,7 @@ public abstract class ServiceFactory {
     public MantenimientoTareaDetalleServiceIf getMantenimientoTareaDetalleServiceIf(){return (MantenimientoTareaDetalleServiceIf) getRecursosRMI(MantenimientoTareaDetalleServiceIf.class);};
     public TallerServiceIf getTallerServiceIf(){return (TallerServiceIf) getRecursosRMI(TallerServiceIf.class);};
     public TallerTareaServiceIf getTallerTareaServiceIf(){return (TallerTareaServiceIf) getRecursosRMI(TallerTareaServiceIf.class);};
+    public ProductoComponenteServiceIf getProductoComponenteServiceIf(){return (ProductoComponenteServiceIf) getRecursosRMI(ProductoComponenteServiceIf.class);};
     
     
     /**
