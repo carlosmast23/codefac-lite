@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoComponenteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -38,9 +39,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema.Exportacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
@@ -56,7 +58,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
@@ -209,6 +211,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         cargarFotoFormulario();
         
         verificarVisibleBotonEditarPresentacion();
+        actualizarListaComponente();
         
         getCmbPresentacionDefectoCompras().setSelectedItem(null);
         getCmbPresentacionDefectoVentas().setSelectedItem(null);
@@ -703,8 +706,27 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getBtnEditarEnsamble().addActionListener(listenerEditarEnsamble);
         getBtnEliminarEnsamble().addActionListener(listenerEliminarEnsamble);
+        getBtnAgregarComponente().addActionListener(listenerAgregarComponente);              
 
     }
+    
+    private ActionListener listenerAgregarComponente=new ActionListener() 
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            InterfaceModelFind busquedaInterface=new ProductoComponenteBusqueda();
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaInterface);
+            buscarDialogoModel.setVisible(true);
+            ProductoComponente productoComponente = (ProductoComponente) buscarDialogoModel.getResultado();
+            if(productoComponente!=null)
+            {
+                controlador.getProducto().addComponente(productoComponente);
+                actualizarListaComponente();
+           }
+        }
+    };
+    
+    //asdasd
     
     private void limpiarPresentacionVista()
     {
@@ -764,6 +786,22 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }        
         getTblEmpaquetado().setModel(tableModel);
         UtilidadesTablas.definirTamanioColumnas(getTblEmpaquetado(), new Integer[]{0});
+    }
+    
+    private void actualizarListaComponente()
+    {
+        List<ProductoComponenteDetalle> componenteList=controlador.getProducto().getComponenteList();
+        DefaultListModel<ProductoComponenteDetalle> listModel = new DefaultListModel<>();                
+        if(componenteList!=null)
+        {
+            for (ProductoComponenteDetalle productoComponenteDetalle : componenteList) 
+            {
+                listModel.addElement(productoComponenteDetalle);
+            }
+            
+        }
+        getLstComponentes().setModel(listModel);
+        
     }
 
     private void actualizarTablaEnsamble() {
@@ -891,6 +929,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         actualizarTablaEnsamble();
         actualizarTablaEmpaques();
+        actualizarListaComponente();
         verificarVisibleBotonEditarPresentacion();
         cargarDatoKardex(controlador.producto);
         cargarFotoFormulario();

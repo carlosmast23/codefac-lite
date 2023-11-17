@@ -4867,7 +4867,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         jMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ComponenteProductoModel dialog = new ComponenteProductoModel(null, true);
+                ComponenteProductoModel dialog = new ComponenteProductoModel(null, true,productoSeleccionado);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
                 

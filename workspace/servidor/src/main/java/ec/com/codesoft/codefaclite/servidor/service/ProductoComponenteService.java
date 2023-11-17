@@ -7,6 +7,9 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoComponenteFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoComponenteServiceIf;
 import java.rmi.RemoteException;
 
@@ -22,5 +25,55 @@ public class ProductoComponenteService extends ServiceAbstract<ProductoComponent
     }
     
     
+    @Override
+    public ProductoComponente grabar(ProductoComponente entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+
+                validar(entity);
+
+                entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                entityManager.persist(entity);
+
+            }
+        });
+        return entity;
+    }
+    
+    @Override
+    public void editar(ProductoComponente entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                validar(entity);
+
+                //entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                entityManager.merge(entity);
+            }
+        });
+    }
+
+    @Override
+    public void eliminar(ProductoComponente entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                entityManager.merge(entity);
+            }
+        });
+
+    }
+
+    
+ 
+    private void validar(ProductoComponente productoComponente) throws ServicioCodefacException, RemoteException 
+    {
+        if (productoComponente.getNombre().isEmpty()) {
+            throw new ServicioCodefacException("No se puede grabar sin nombre");
+        }
+
+    }
     
 }

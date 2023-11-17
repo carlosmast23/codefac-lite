@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -99,6 +100,19 @@ public class ProductoFacade extends AbstractFacade<Producto>
         }
         
         return null;
+    }
+    
+    public List<ProductoComponenteDetalle> buscarComponentePorProducto(Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        //ProductoComponenteDetalle pcd;
+        //pcd.getProducto();
+        
+        String queryString = "SELECT DISTINCT pd FROM ProductoComponenteDetalle pd WHERE pd.producto=?1 " ;
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, producto);
+        
+        return query.getResultList();
+    
     }
     
     public Producto buscarProductoEmpaquePrincipal(Producto producto) throws RemoteException,ServicioCodefacException

@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
@@ -280,6 +281,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         List<ProductoPresentacionDetalle> productoPresentacionList=p.getPresentacionList();
         p.setPresentacionList(null);
         
+        List<ProductoComponenteDetalle> componenteDetalleList=p.getComponenteList();
+        
         entityManager.flush();
         entityManager.persist(p);
         entityManager.flush();
@@ -307,6 +310,18 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             p.setCatalogoProducto(catalogoProducto);
         }
         
+        
+        //Grabar los componentes
+        if(componenteDetalleList!=null)
+        {
+            for (ProductoComponenteDetalle componente : componenteDetalleList) 
+            {
+                if(componente.getId()==null)
+                {
+                    entityManager.persist(componente);
+                }
+            }
+        }
                 
         //grabar los proveedor
         if(productoProveedorList!=null)
@@ -365,6 +380,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         }
         
+
+        
         grabarEmpaques(p, productoPresentacionList,CrudEnum.CREAR);
         
         
@@ -398,6 +415,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //p.setPresentacion(presentacion);
         p.setProductoProveedorList(productoProveedorList);
         p.setPresentacionList(productoPresentacionList);
+        p.setComponenteList(componenteDetalleList);
         //p.setPresentacionList(productoPresentacionList);
 
         //Si no son ensables remover datos para no tener incoherencias
@@ -856,6 +874,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
+                //Eliminar componentes que no se necesitan
+                eliminarComponentes(producto);
+                
                 //Buscar componentes ensambles eliminados
                 List<ProductoEnsamble> productoEnsambleEliminar=productoEnsamblesEliminados(producto);
                 
@@ -920,6 +941,25 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             e.printStackTrace();
         }
 
+    }
+    
+    public List<ProductoComponenteDetalle> buscarComponentePorProducto(Producto producto) throws RemoteException, ServicioCodefacException
+    {
+        return getFacade().buscarComponentePorProducto(producto);
+    }
+    
+    private void eliminarComponentes(Producto producto) throws RemoteException, ServicioCodefacException
+    {
+        List<ProductoComponenteDetalle> componenteList=producto.getComponenteList();
+        if(componenteList!=null)
+        {
+            List<ProductoComponenteDetalle> originalList= buscarComponentePorProducto(producto);
+            List<ProductoComponenteDetalle> eliminarList= UtilidadesLista.restarListas(originalList, componenteList);
+            
+            for (ProductoComponenteDetalle productoComponenteDetalle : eliminarList) {
+                entityManager.remove(productoComponenteDetalle);
+            }
+        }
     }
     
     private List<ProductoEnsamble> productoEnsamblesEliminados(Producto producto) throws ServicioCodefacException, RemoteException

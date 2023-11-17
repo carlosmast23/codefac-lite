@@ -35,11 +35,11 @@ public class ProductoComponente extends EntityAbstract<GeneralEnumEstado>
     @Column(name = "NOMBRE")
     private String nombre;
     
-    @Column(name = "ESTADO")
-    private String estado;
+   // @Column(name = "ESTADO")
+   // private String estado;
     
-    @JoinColumn(name = "PRODUCTO_ID")
-    private Producto producto;
+    //@JoinColumn(name = "PRODUCTO_ID")
+    //private Producto producto;
 
 
     public String getNombre() {
@@ -51,21 +51,21 @@ public class ProductoComponente extends EntityAbstract<GeneralEnumEstado>
     }
 
 
-    public String getEstado() {
+   /* public String getEstado() {
         return estado;
     }
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
+    }*/
 
-    public Producto getProducto() {
+    /*public Producto getProducto() {
         return producto;
     }
 
     public void setProducto(Producto producto) {
         this.producto = producto;
-    }
+    }*/
     
     
 

@@ -208,7 +208,7 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     private List<ProductoActividad> actividadList;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
-    private List<ProductoComponente> componenteList;
+    private List<ProductoComponenteDetalle> componenteList;
     
     @Transient
     private Path pathFotoTmp;
@@ -529,14 +529,14 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         this.segmentoProducto = segmentoProducto;
     }
 
-    public List<ProductoComponente> getComponenteList() {
+    public List<ProductoComponenteDetalle> getComponenteList() {
         return componenteList;
     }
 
-    public void setComponenteList(List<ProductoComponente> componenteList) {
+    public void setComponenteList(List<ProductoComponenteDetalle> componenteList) {
         this.componenteList = componenteList;
     }
-    
+
     
     
     
@@ -933,6 +933,21 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
             this.garantia=enumSiNo.getLetra();
         else
             this.garantia=null;
+    }
+    
+    public void addComponente(ProductoComponente detalle)
+    {
+        if(this.componenteList==null)
+        {
+            this.componenteList=new ArrayList<ProductoComponenteDetalle>();
+        }
+        
+        ProductoComponenteDetalle detalleTmp=new ProductoComponenteDetalle();
+        detalleTmp.setProducto(this);
+        detalleTmp.setProductoComponente(detalle);
+                
+        this.componenteList.add(detalleTmp);
+        
     }
     
     public void addProductoProveedor(ProductoProveedor productoProveedor)

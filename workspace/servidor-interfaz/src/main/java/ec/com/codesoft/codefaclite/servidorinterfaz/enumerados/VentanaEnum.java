@@ -178,6 +178,7 @@ public enum VentanaEnum implements Serializable{
     TAREAS_PENDIENTES("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "TAPE", "Tareas Pendientes", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,"tareas_pendientes"),
     REPORTE_MANTENIMIENTO("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "REMA", "Reportes", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,"reporte_mantenimiento"),
     CLASIFICAR_VEHICULOS_NUEVOS("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "CVNS", "Clasificar Vehiculos Ubicación", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,"clasificar_vehiculos_nuevos"),
+    PRODUCTO_COMPONENTE("ec.com.codesoft.codefaclite.crm.model.ProductoComponenteModel", "PCMP", "Producto Componente", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null,null),
     ;
     
 

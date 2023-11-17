@@ -20,6 +20,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
@@ -30,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -272,6 +275,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         lstComponentes = new javax.swing.JList<>();
         btnAgregarComponente = new javax.swing.JButton();
         cmbQuitarComponente = new javax.swing.JButton();
+        lblespacio123213 = new javax.swing.JLabel();
 
         btnExportar.setText("Exportar");
 
@@ -1697,11 +1701,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
-        lstComponentes.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane5.setViewportView(lstComponentes);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1727,6 +1726,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(cmbQuitarComponente, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel12.add(lblespacio123213, gridBagConstraints);
 
         tabMenu.addTab("Comp", jPanel12);
 
@@ -1913,7 +1918,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JLabel lblEstado123;
     private javax.swing.JLabel lblFoto;
-    private javax.swing.JList<String> lstComponentes;
+    private javax.swing.JLabel lblespacio123213;
+    private javax.swing.JList<ProductoComponenteDetalle> lstComponentes;
     private ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona persona1;
     private javax.swing.JPanel pnlCostos;
     private javax.swing.JPanel pnlPresentacionAdicional;
@@ -2712,6 +2718,26 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public void setChkPsicotropicos(JCheckBox chkPsicotropicos) {
         this.chkPsicotropicos = chkPsicotropicos;
     }
+
+    public JButton getBtnAgregarComponente() {
+        return btnAgregarComponente;
+    }
+
+    public void setBtnAgregarComponente(JButton btnAgregarComponente) {
+        this.btnAgregarComponente = btnAgregarComponente;
+    }
+
+    public JList<ProductoComponenteDetalle> getLstComponentes() {
+        return lstComponentes;
+    }
+
+    public void setLstComponentes(JList<ProductoComponenteDetalle> lstComponentes) {
+        this.lstComponentes = lstComponentes;
+    }
+
+    
+    
+    
     
    
 }
