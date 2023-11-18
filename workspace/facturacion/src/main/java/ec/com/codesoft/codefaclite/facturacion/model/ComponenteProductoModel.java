@@ -9,8 +9,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -34,14 +36,13 @@ public class ComponenteProductoModel extends ec.com.codesoft.codefaclite.factura
     
     private void construirTablaOpciones()
     {
-        String[] titulo={"","Op","Componente"};
-        DefaultTableModel modelTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{ProductoComponente.class,Boolean.class,String.class});
+        String[] titulo={"Op","Componente"};
+        DefaultTableModel modelTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Boolean.class,String.class});
         
         List<ProductoComponenteDetalle> componenteList=producto.getComponenteList();
         for (ProductoComponenteDetalle componente : componenteList) 
         {
-            Vector<Object> fila=new Vector<Object>();
-            fila.add(componente.getProductoComponente());
+            Vector<Object> fila=new Vector<Object>();            
             fila.add(false);
             fila.add(componente.getProductoComponente().getNombre());
             
@@ -52,6 +53,25 @@ public class ComponenteProductoModel extends ec.com.codesoft.codefaclite.factura
         getTblComponentes().setModel(modelTabla);
         
         
+    }
+    
+    public String getResultado()
+    {
+        List<String> componentesList=new ArrayList<String>();
+        for (int i = 0; i < getTblComponentes().getRowCount(); i++) {
+            Boolean seleccion= (Boolean) getTblComponentes().getModel().getValueAt(i, 0);
+            if(seleccion)
+            {
+                componentesList.add((String) getTblComponentes().getModel().getValueAt(i,1));
+            }
+        }
+        
+        if(componentesList.size()>0)
+        {
+            return UtilidadesLista.castListToString(componentesList,",");
+        }
+        
+        return "";
     }
     
     

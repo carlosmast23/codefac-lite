@@ -4871,6 +4871,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
                 
+                String resultado=dialog.getResultado();
+                facturaDetalleSeleccionado.setDescripcion(facturaDetalleSeleccionado.getDescripcion()+" | "+resultado);
+                facturaDetalleSeleccionado.setComponentesTexto(resultado);
+                cargarDatosDetalles();
+                
             }
         });
         

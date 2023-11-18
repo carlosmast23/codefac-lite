@@ -66,6 +66,9 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     @Column(name = "NUMERO_PVP")
     private Integer numeroPvp;
     
+    @Column(name = "COMPONENTES_TEXTO")
+    private String componentesTexto;
+    
     
     public FacturaDetalle() {
         
@@ -167,6 +170,14 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
 
     public void setNumeroPvp(Integer numeroPvp) {
         this.numeroPvp = numeroPvp;
+    }
+
+    public String getComponentesTexto() {
+        return componentesTexto;
+    }
+
+    public void setComponentesTexto(String componentesTexto) {
+        this.componentesTexto = componentesTexto;
     }
     
     
