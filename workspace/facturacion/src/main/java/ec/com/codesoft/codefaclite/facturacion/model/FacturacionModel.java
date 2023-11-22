@@ -4871,10 +4871,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
                 
-                String resultado=dialog.getResultado();
+                String resultado=dialog.getResultado();                
+                btnListenerEditar();
                 facturaDetalleSeleccionado.setDescripcion(facturaDetalleSeleccionado.getDescripcion()+" | "+resultado);
                 facturaDetalleSeleccionado.setComponentesTexto(resultado);
-                btnListenerEditar();
                 cargarDatosDetalles();
                 
                 

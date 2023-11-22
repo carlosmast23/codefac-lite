@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Frame;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -68,6 +69,8 @@ public class ComponenteProductoModel extends ec.com.codesoft.codefaclite.factura
         
         if(componentesList.size()>0)
         {
+            //Ordenar la lista en orden alfabetico
+            Collections.sort(componentesList);            
             return UtilidadesLista.castListToString(componentesList,",");
         }
         

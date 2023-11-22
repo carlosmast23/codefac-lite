@@ -94,6 +94,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     
     protected String credito;
     
+    protected String componenteProducto;
+    
     public ReporteFacturaData() {
     }
     
@@ -460,6 +462,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         this.credito = credito;
     }
 
+    public String getComponenteProducto() {
+        return componenteProducto;
+    }
+
+    public void setComponenteProducto(String componenteProducto) {
+        this.componenteProducto = componenteProducto;
+    }
+
     
     
     
@@ -568,6 +578,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
                 return puntoEmision;
             case AGRUPADO_POR_PRODUCTO:
                 return "[ "+codigoProducto+" ] "+nombreProducto;
+            case AGRUPADO_POR_COMPONENTE:
+                return nombreProducto;
             case AGRUPADO_POR_CATEGORIA:
                 return categoria;
             case AGRUPADO_POR_FORMA_PAGO:

@@ -537,6 +537,7 @@ public class ControladorReporteFactura {
                                 
                 dataFacturaCopia.setCategoria(nombreCategoria);
                 dataFacturaCopia.setPrecioUnitarioReporte(detalle.getPrecioUnitario().setScale(0,BigDecimal.ROUND_DOWN).toString());
+                dataFacturaCopia.setComponenteProducto(detalle.getComponentesTexto());
                 resultados.add(dataFacturaCopia);
             }
         } catch (CloneNotSupportedException ex) {
@@ -1226,6 +1227,14 @@ public class ControladorReporteFactura {
             @Override
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
                 return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_PRODUCTO).toString();
+                //return dato.getNombreProducto();
+            }
+        }),
+        
+        AGRUPADO_POR_COMPONENTE("Agrupado por componente", new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_COMPONENTE).toString();
                 //return dato.getNombreProducto();
             }
         }),

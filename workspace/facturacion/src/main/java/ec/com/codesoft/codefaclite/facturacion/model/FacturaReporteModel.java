@@ -166,6 +166,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_RESPONSABLE)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CATEGORIA)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR)
+                || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_COMPONENTE)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE)
             ) {
             controladorReporte.setReporteConDetallesFactura(true);            
