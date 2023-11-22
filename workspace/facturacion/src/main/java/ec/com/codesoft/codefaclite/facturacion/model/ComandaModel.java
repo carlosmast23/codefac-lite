@@ -73,6 +73,12 @@ public class ComandaModel extends FacturacionModel{
         //Setear el número de orden que tenga pendiente
         getSpnNumeroOrdenComanda().setValue(Factura.numeroOrdenComanda);
     }
+
+    @Override
+    public void limpiar() {
+        super.limpiar(); //To change body of generated methods, choose Tools | Templates.
+        getTxtNotaMesa().setText("");
+    }
     
     @Override
     public InterfaceModelFind getBusquedaInterface()

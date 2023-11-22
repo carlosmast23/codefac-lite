@@ -415,7 +415,12 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public BigDecimal obtenerPrecioUnitarioConIva()
     {
         BigDecimal precioUnitario=getPrecioUnitario();
-        BigDecimal iva=getIva().divide(cantidad,2,RoundingMode.HALF_UP);
+        
+        BigDecimal iva=BigDecimal.ZERO;
+        if(cantidad.compareTo(BigDecimal.ZERO)!=0)
+        {
+            iva=getIva().divide(cantidad,2,RoundingMode.HALF_UP);
+        }
         return precioUnitario.add(iva);
         //return precioUnitario.multiply(cantidad).add(iva);
     }

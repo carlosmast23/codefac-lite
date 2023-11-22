@@ -14,9 +14,12 @@ public enum TipoNoConformidadEnum {
     CORTADO("COR","Cortado"),
     DEFORMADO("DEF","Deformado"),
     DESPOSTILLADO("DES","Despotillado"),
+    FALLO_ELECTRONICO("FE","Fallo Electrónico"),
+    FALLO_MECANICO("FM","Fallo Mécanico"),
     FALLO_PINTURA("FDP","Fallo de Pintura"),
-    FALTANTE("FAL","Faltante"),
+    FALTANTE("FL","Faltante"),
     FISURADO("FIS","Fisurado"),
+    GARANTIA("GR","Garantia"),
     GOLPE("GPE","Golpe"),
     ESTAMPADO("EST","Estampado"),
     MAL_INSTALADO("MIN","Mal Instalado"),
@@ -29,6 +32,7 @@ public enum TipoNoConformidadEnum {
     RASPADO("RAS","Raspado"),
     RAYAS("RAY","Rayas"),
     ROTO("ROT","ROTO"),
+    SONIDO("SN","Sonido"),
     SUCIEDAD_INTERNA("SUC","Suciedad Interna");
     
     private String codigo;
