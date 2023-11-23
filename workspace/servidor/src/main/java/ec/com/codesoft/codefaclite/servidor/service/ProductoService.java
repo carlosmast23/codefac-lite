@@ -498,7 +498,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                                 productoEmpaquetado.setPrecioTarjeta(null);
                                 productoEmpaquetado.setPvp4(null);
                                 productoEmpaquetado.setPvp5(null);
-                                productoEmpaquetado.setPvp6(null);
+                                productoEmpaquetado.setPvp6(null);                                
                             }
                             
                             productoEmpaquetado.setIdProducto(null);
@@ -515,7 +515,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                             //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
                             if (presentacionDetalle.getPvpTmp() == null) 
                             {
-                                productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
+                                //TODO: Unificar en un solo metodo con los datos de abajo
+                                /*productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
                                 if(productoEmpaquetado.getPrecioDistribuidor()!=null)
                                 {
                                     productoEmpaquetado.setPrecioDistribuidor(productoEmpaquetado.getPrecioDistribuidor().multiply(presentacionDetalle.getCantidad()));
@@ -539,7 +540,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                                 if(productoEmpaquetado.getPvp6()!=null)
                                 {
                                     productoEmpaquetado.setPvp6(productoEmpaquetado.getPvp6().multiply(presentacionDetalle.getCantidad()));
-                                }
+                                }*/
+                                recalcularPreciosEmpaques(productoEmpaquetado,presentacionDetalle.getProductoOriginal(),presentacionDetalle);
                                 
                             } else {
                                 productoEmpaquetado.setValorUnitario(presentacionDetalle.getPvpTmp());
@@ -569,6 +571,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                     //Actualizar algunos datos de la presentacion principal
                     presentacionDetalle.getProductoEmpaquetado().setGarantia(producto.getGarantia());
                     //presentacionDetalle.get
+                    if(ParametroUtilidades.comparar(producto.getEmpresa(),ParametroCodefac.RECALCULA_EDITAR_PRECIO_EMPAQUE,EnumSiNo.SI))
+                    {
+                        recalcularPreciosEmpaques(presentacionDetalle.getProductoEmpaquetado(),presentacionDetalle.getProductoOriginal() ,presentacionDetalle);
+                    }
+                    
                     entityManager.merge(presentacionDetalle.getProductoEmpaquetado());
                     
                 }
@@ -588,6 +595,30 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
         
         return productoPresentacionNuevoList;
+    }
+    
+    private void recalcularPreciosEmpaques(Producto productoEmpaquetado,Producto productoOriginal,ProductoPresentacionDetalle presentacionDetalle)
+    {
+        productoEmpaquetado.setValorUnitario(productoOriginal.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
+        if (productoOriginal.getPrecioDistribuidor() != null) {
+            productoEmpaquetado.setPrecioDistribuidor(productoOriginal.getPrecioDistribuidor().multiply(presentacionDetalle.getCantidad()));
+        }
+
+        if (productoOriginal.getPrecioTarjeta() != null) {
+            productoEmpaquetado.setPrecioTarjeta(productoOriginal.getPrecioTarjeta().multiply(presentacionDetalle.getCantidad()));
+        }
+
+        if (productoOriginal.getPvp4() != null) {
+            productoEmpaquetado.setPvp4(productoOriginal.getPvp4().multiply(presentacionDetalle.getCantidad()));
+        }
+
+        if (productoOriginal.getPvp5() != null) {
+            productoEmpaquetado.setPvp5(productoOriginal.getPvp5().multiply(presentacionDetalle.getCantidad()));
+        }
+
+        if (productoOriginal.getPvp6() != null) {
+            productoEmpaquetado.setPvp6(productoOriginal.getPvp6().multiply(presentacionDetalle.getCantidad()));
+        }
     }
     
     private void eliminarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException, RemoteException

@@ -33,6 +33,15 @@ public enum TipoNoConformidadEnum {
     RAYAS("RAY","Rayas"),
     ROTO("ROT","ROTO"),
     SONIDO("SN","Sonido"),
+    OXIDOS("OX","Oxidos"),
+    ABOLLADO("OB","Obollado"),
+    RETOQUE("RT","Retoque"),
+    LLUVIA_ACIDA("LLA","Lluva acida"),
+    MAL_FUNCIONAMIENTO("MFC","Mal funcionamiento"),
+    INOPERANTE("INO","Inoperante"),
+    PPF("PPF","PPF"),
+    LAMINAS("LAM","Laminas"),
+    GRUMOS("GRM","Grumos"),
     SUCIEDAD_INTERNA("SUC","Suciedad Interna");
     
     private String codigo;

@@ -75,7 +75,6 @@ public enum ParteVehiculoEnum {
     MOLDURA("MOLDURA INTERNA/EXTERNA"),
     AROS("AROS"),
     ANTENA("ANTENA"),
-    LLUVIA_ACIDA("LLUVIA ÁCIDA"),
     
     TESTIGOS_ENCENDIDOS("TESTIGOS ENCENDIDOS"),
     PROBLEMA_CABLEADO_ARNEsES("PROBLEMA CABLEADO ARNEsES"),
@@ -146,6 +145,18 @@ public enum ParteVehiculoEnum {
     SISTEMA_LIMPIA_PARABRISAS("SISTEMA LIMPIA PARABRISAS"),
     PUERTAS("PUERTAS"),
     CABINA("CABINA"),
+    
+    TAPA_RECINTO_NOTOR("tapa recinto motor"),
+    PERNOS_AMORIGUADOR("pernos amortiguador"),
+    MOLDURA_PARACHOQUES("moldura parachoques posterior/delantero"),
+    VINCHAS("vinchas"),    
+    ACCESORIOS("accesorios"),    
+    MANIJAS_LH_RH("manijas LH/RH"),    
+    BALDE("balde"),    
+    TECHO_PANORAMICO("techo panoramico"),    
+    ALERON("aleron"),
+    PORTAPARILLA_LR_RH("portaparrilla LH/RH"),
+    CAUCHOS("cauchos")
     ;
     
     private String nombre;    

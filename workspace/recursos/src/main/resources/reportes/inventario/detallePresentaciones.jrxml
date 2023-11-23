@@ -32,7 +32,7 @@
 				<text><![CDATA[Unid]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="110" y="0" width="30" height="11" forecolor="#FFFFFF" backcolor="#808080" uuid="00fc7584-c1cf-4e03-a9bb-e805bcbbf254"/>
+				<reportElement mode="Opaque" x="113" y="0" width="27" height="11" forecolor="#FFFFFF" backcolor="#808080" uuid="00fc7584-c1cf-4e03-a9bb-e805bcbbf254"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -45,7 +45,7 @@
 				<text><![CDATA[Costo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="80" y="0" width="30" height="11" forecolor="#FFFFFF" backcolor="#808080" uuid="e359cb9b-5861-4350-b025-cd8e7c42652e"/>
+				<reportElement mode="Opaque" x="86" y="0" width="27" height="11" forecolor="#FFFFFF" backcolor="#808080" uuid="e359cb9b-5861-4350-b025-cd8e7c42652e"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -58,7 +58,7 @@
 				<text><![CDATA[Pvp]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="50" y="0" width="30" height="11" forecolor="#FFFFFF" backcolor="#808080" uuid="47981aa2-7ccf-46e6-8fd2-83639a776248"/>
+				<reportElement mode="Opaque" x="50" y="0" width="36" height="11" forecolor="#FFFFFF" backcolor="#808080" uuid="47981aa2-7ccf-46e6-8fd2-83639a776248"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -75,7 +75,7 @@
 	<detail>
 		<band height="9" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement mode="Opaque" x="80" y="0" width="30" height="9" uuid="ac4a956a-8989-409a-96c6-83b7624ba87a"/>
+				<reportElement mode="Opaque" x="86" y="0" width="27" height="9" uuid="ac4a956a-8989-409a-96c6-83b7624ba87a"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -89,7 +89,7 @@
 				<textFieldExpression><![CDATA[$F{pvp}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement mode="Opaque" x="110" y="0" width="30" height="9" uuid="bc947dcb-975c-4da7-b62f-6c24fe7d3b6f"/>
+				<reportElement mode="Opaque" x="113" y="0" width="27" height="9" uuid="bc947dcb-975c-4da7-b62f-6c24fe7d3b6f"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -117,7 +117,7 @@
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement mode="Opaque" x="50" y="0" width="30" height="9" uuid="d612b2c1-7187-48c7-9cb2-b9bc1471b95c"/>
+				<reportElement mode="Opaque" x="50" y="0" width="36" height="9" uuid="d612b2c1-7187-48c7-9cb2-b9bc1471b95c"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
