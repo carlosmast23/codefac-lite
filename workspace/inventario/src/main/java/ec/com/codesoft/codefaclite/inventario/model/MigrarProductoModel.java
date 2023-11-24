@@ -455,7 +455,8 @@ public class MigrarProductoModel extends MigrarModel {
     private KardexDetalle generarMovimientoInventario(EnumSiNo manejaInventarioEnumSiNo,ExcelMigrar.FilaResultado fila,Producto producto,Producto productoTmp) throws ServicioCodefacException, RemoteException, ExcelMigrar.ExcepcionExcel
     {
         KardexDetalle kardexDetalle=null;
-        if (manejaInventarioEnumSiNo != null && manejaInventarioEnumSiNo.equals(EnumSiNo.SI)) // Si cumple esta condicion vamos a grabar el resto de datos para el inventario
+        if(true)
+        //if (manejaInventarioEnumSiNo != null && manejaInventarioEnumSiNo.equals(EnumSiNo.SI)) // Si cumple esta condicion vamos a grabar el resto de datos para el inventario
         {
             String bodegaNombre = (String) fila.getByEnum(ExcelMigrarProductos.Enum.BODEGA).valor;
             Bodega bodega = ServiceFactory.getFactory().getBodegaServiceIf().buscarPorNombre(bodegaNombre);

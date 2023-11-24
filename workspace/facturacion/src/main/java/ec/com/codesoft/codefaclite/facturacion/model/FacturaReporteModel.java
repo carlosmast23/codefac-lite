@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -25,7 +26,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
@@ -73,6 +76,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
     //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     private Producto productoFiltro;
+    
+    private CategoriaProducto categoriaFiltro;
     
     private List<ReporteFacturaData> data;
     
@@ -157,7 +162,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
         controladorReporte.setAgregarCostos(getChkAgregarCostos().isSelected());
         
         controladorReporte.setProductoFiltro(productoFiltro);
+        controladorReporte.setCategoriaFiltro(categoriaFiltro);
         controladorReporte.setTodasVentas(getChkTodosVenta().isSelected());
+        controladorReporte.setVendedor((Empleado) getCmbVendedor().getSelectedItem());
         
 
         //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
@@ -482,7 +489,15 @@ public class FacturaReporteModel extends FacturaReportePanel {
     
     private void setearValoresProducto() {
 
-        getTxtProducto().setText(productoFiltro.getNombre());
+        if(productoFiltro!=null)
+        {
+            getTxtProducto().setText(productoFiltro.getNombre());
+        }
+        
+        if(categoriaFiltro!=null)
+        {
+            getTxtCategoria().setText(categoriaFiltro.getNombre());
+        }
     }
 
     @Override
@@ -520,7 +535,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         for (ComprobanteEntity.ComprobanteEnumEstado comprobanteEstado : ComprobanteEntity.ComprobanteEnumEstado.values()) {
             getCmbEstado().addItem(comprobanteEstado);
         }
-
+        
         
         //////////////CARGAR LOS PUNTOS DE EMISION ///////////////////        
         try {
@@ -531,6 +546,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
             List<Sucursal> sucursales= ServiceFactory.getFactory().getSucursalServiceIf().consultarActivosPorEmpresa(session.getEmpresa());
             UtilidadesComboBox.llenarComboBox(getCmbSucursal(),sucursales);
             getCmbSucursal().setSelectedItem(session.getSucursal());
+            
+            List<Empleado> empleadoList=ServiceFactory.getFactory().getEmpleadoServiceIf().buscarVendedores(session.getEmpresa());
+            
+            UtilidadesComboBox.llenarComboBox(getCmbVendedor(),empleadoList,true);
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -594,6 +613,21 @@ public class FacturaReporteModel extends FacturaReportePanel {
     }
 
     protected void listenerBotones() {
+        
+        getBtnBuscarCategoria().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CategoriaProductoBusquedaDialogo dialogoBusqueda = new CategoriaProductoBusquedaDialogo(session.getEmpresa());
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(dialogoBusqueda);
+                buscarDialogoModel.setVisible(true);
+                categoriaFiltro = (CategoriaProducto) buscarDialogoModel.getResultado();
+                if(categoriaFiltro!=null)
+                {
+                    setearValoresProducto();
+                }
+               
+            }
+        });
         
         getBtnBuscarProducto().addActionListener(new ActionListener() {
             @Override
@@ -680,6 +714,21 @@ public class FacturaReporteModel extends FacturaReportePanel {
     }
 
     protected void listenerChecks() {
+        
+        getChkTodosCategoria().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    categoriaFiltro = null;
+                    getTxtCategoria().setText("...");
+                    //getLblNombreCliente().setText("..");
+                    getBtnBuscarCategoria().setEnabled(false);
+                } else {
+                    getBtnBuscarCategoria().setEnabled(true);
+                }
+            }
+        });
+        
         
         getChkTodosProducto().addItemListener(new ItemListener() {
             @Override

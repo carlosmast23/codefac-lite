@@ -760,7 +760,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         try {
             FacturacionService facturacionService=new FacturacionService();
             //facturacionService.obtenerFacturasReporte(persona, fechaFinal, fechaFinal, enumEstado, Boolean.TRUE, referido, Boolean.TRUE, puntoEmision, empresa, documentoEnum, documentoEnum, sucursal, usuario)
-            List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,enumEstado,false,null,false,null,empresa,documentoEnum,null,null,null);
+            List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,enumEstado,false,null,false,null,empresa,documentoEnum,null,null,null,null);
             return facturas;
         } catch (RemoteException ex) {
             Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);

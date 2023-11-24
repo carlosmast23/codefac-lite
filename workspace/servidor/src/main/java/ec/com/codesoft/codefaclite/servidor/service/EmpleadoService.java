@@ -64,6 +64,16 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public List<Empleado> buscarVendedores(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        //Empleado e;
+        //e.getDepartamento().getTipo();
+        Map<String, Object> parametroMap = new HashMap<String, Object>();
+        parametroMap.put("departamento.tipo",Departamento.TipoEnum.Ventas.getLetra());
+        
+        return getFacade().findByMap(parametroMap);
+    }   
+    
     public List<Empleado> buscarPorDepartamento(Departamento departamento,Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
     {
         Map<String, Object> parametroMap = new HashMap<String, Object>();

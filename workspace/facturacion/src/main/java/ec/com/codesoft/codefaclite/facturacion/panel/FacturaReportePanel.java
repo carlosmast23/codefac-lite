@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura.TipoReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -30,6 +31,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
      */
     public FacturaReportePanel() {
         initComponents();
+        //Empleado empleado;
     }
 
     /**
@@ -107,6 +109,12 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         jLabel22 = new javax.swing.JLabel();
         lblSubtotalUtilidad = new javax.swing.JLabel();
         chkTodosVenta = new javax.swing.JCheckBox();
+        lblReferido2 = new javax.swing.JLabel();
+        txtCategoria = new javax.swing.JTextField();
+        btnBuscarCategoria = new javax.swing.JButton();
+        chkTodosCategoria = new javax.swing.JCheckBox();
+        lblReferido3 = new javax.swing.JLabel();
+        cmbVendedor = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -227,7 +235,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
         jLabel1.setText("           ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         getContentPane().add(jLabel1, gridBagConstraints);
 
@@ -469,7 +477,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         lblReferido.setText("Referido:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(lblReferido, gridBagConstraints);
@@ -484,7 +492,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
@@ -494,7 +502,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         btnBuscarReferido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(btnBuscarReferido, gridBagConstraints);
@@ -503,7 +511,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         chkTodosReferidos.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(chkTodosReferidos, gridBagConstraints);
@@ -587,10 +595,10 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         getContentPane().add(chkSucursalTodos, gridBagConstraints);
 
         lblReferido1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblReferido1.setText("Producto");
+        lblReferido1.setText("Categoria:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(lblReferido1, gridBagConstraints);
@@ -722,6 +730,67 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(chkTodosVenta, gridBagConstraints);
 
+        lblReferido2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblReferido2.setText("Vendedor:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(lblReferido2, gridBagConstraints);
+
+        txtCategoria.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCategoria.setText("...");
+        txtCategoria.setEnabled(false);
+        txtCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCategoriaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(txtCategoria, gridBagConstraints);
+
+        btnBuscarCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(btnBuscarCategoria, gridBagConstraints);
+
+        chkTodosCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkTodosCategoria.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(chkTodosCategoria, gridBagConstraints);
+
+        lblReferido3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblReferido3.setText("Producto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(lblReferido3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(cmbVendedor, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -745,9 +814,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUtilidadActionPerformed
 
+    private void txtCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCategoriaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelValores;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscarCategoria;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnBuscarReferido;
@@ -760,6 +834,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkReporteAgrupadoReferido;
     private javax.swing.JCheckBox chkSucursalTodos;
     private javax.swing.JCheckBox chkTodos;
+    private javax.swing.JCheckBox chkTodosCategoria;
     private javax.swing.JCheckBox chkTodosProducto;
     private javax.swing.JCheckBox chkTodosReferidos;
     private javax.swing.JCheckBox chkTodosVenta;
@@ -768,6 +843,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbPuntoEmision;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbSucursal;
     private javax.swing.JComboBox<TipoReporteEnum> cmbTipoReporte;
+    private javax.swing.JComboBox<Empleado> cmbVendedor;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JLabel jLabel1;
@@ -796,6 +872,8 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblIva12;
     private javax.swing.JLabel lblReferido;
     private javax.swing.JLabel lblReferido1;
+    private javax.swing.JLabel lblReferido2;
+    private javax.swing.JLabel lblReferido3;
     private javax.swing.JLabel lblSubtotal0;
     private javax.swing.JLabel lblSubtotal12;
     private javax.swing.JLabel lblSubtotalSinImpuesto;
@@ -806,6 +884,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JPanel panelOpciones;
     private javax.swing.JPanel pnlUtilidades;
     private javax.swing.JTable tblDocumentos;
+    private javax.swing.JTextField txtCategoria;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtProducto;
     private javax.swing.JTextField txtReferido;
@@ -1086,8 +1165,37 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         this.chkTodosVenta = chkTodosVenta;
     }
 
-    
-    
+    public JButton getBtnBuscarCategoria() {
+        return btnBuscarCategoria;
+    }
 
+    public void setBtnBuscarCategoria(JButton btnBuscarCategoria) {
+        this.btnBuscarCategoria = btnBuscarCategoria;
+    }
+
+    public JCheckBox getChkTodosCategoria() {
+        return chkTodosCategoria;
+    }
+
+    public void setChkTodosCategoria(JCheckBox chkTodosCategoria) {
+        this.chkTodosCategoria = chkTodosCategoria;
+    }
+
+    public JTextField getTxtCategoria() {
+        return txtCategoria;
+    }
+
+    public void setTxtCategoria(JTextField txtCategoria) {
+        this.txtCategoria = txtCategoria;
+    }
+
+    public JComboBox<Empleado> getCmbVendedor() {
+        return cmbVendedor;
+    }
+
+    public void setCmbVendedor(JComboBox<Empleado> cmbVendedor) {
+        this.cmbVendedor = cmbVendedor;
+    }
+    
     
 }

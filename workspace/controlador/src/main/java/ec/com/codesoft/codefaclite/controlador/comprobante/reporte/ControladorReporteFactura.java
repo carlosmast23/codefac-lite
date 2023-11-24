@@ -15,7 +15,9 @@ import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.UtilidadReporteJasper;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -93,6 +95,8 @@ public class ControladorReporteFactura {
     
     private Boolean agregarCostos;
     private Producto productoFiltro;
+    private CategoriaProducto categoriaFiltro;
+    private Empleado vendedor;
     
     private Boolean todasVentas=false;
     
@@ -163,10 +167,10 @@ public class ControladorReporteFactura {
             
             if(usuario != null)
             {
-                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,documentoEnum2,sucursal, usuario);
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,documentoEnum2,sucursal, usuario,vendedor);
             }
             else{
-                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,documentoEnum2,sucursal,null);
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFactura, filtrarReferidos, referido, reporteAgrupado,puntoEmision,empresa,documentoConsultaEnum,documentoEnum2,sucursal,null,vendedor);
             }   
             /**
              * ===============================================================
@@ -364,7 +368,7 @@ public class ControladorReporteFactura {
                         
                         if(reporteConDetallesFactura)
                         {
-                            List<ReporteFacturaData> respuesta=convertirDatosReportePorProducto(factura, reporteData,productoFiltro);
+                            List<ReporteFacturaData> respuesta=convertirDatosReportePorProducto(factura, reporteData,productoFiltro,categoriaFiltro);
                             data.addAll(respuesta);
                         }
                         else
@@ -480,7 +484,7 @@ public class ControladorReporteFactura {
      * @param factura
      * @param reporteData 
      */
-    private List<ReporteFacturaData> convertirDatosReportePorProducto(Factura factura,ReporteFacturaData reporteData,Producto productoFiltro)
+    private List<ReporteFacturaData> convertirDatosReportePorProducto(Factura factura,ReporteFacturaData reporteData,Producto productoFiltro,CategoriaProducto categoriaFiltro)
     {
         List<ReporteFacturaData> resultados=new ArrayList<ReporteFacturaData>();
         try {            
@@ -494,6 +498,15 @@ public class ControladorReporteFactura {
                         continue;
                     }
                 }
+                
+                if(categoriaFiltro!=null)
+                {
+                    if(!detalle.getCatalogoProducto().getCategoriaProducto().equals(categoriaFiltro))
+                    {
+                        continue;
+                    }
+                }
+                
                 //detalle.getIva()
                 ReporteFacturaData dataFacturaCopia=(ReporteFacturaData) reporteData.clone();
                 dataFacturaCopia.setCantidad(detalle.getCantidad()+"");
@@ -1168,6 +1181,25 @@ public class ControladorReporteFactura {
         this.todasVentas = todasVentas;
     }
 
+    public CategoriaProducto getCategoriaFiltro() {
+        return categoriaFiltro;
+    }
+
+    public void setCategoriaFiltro(CategoriaProducto categoriaFiltro) {
+        this.categoriaFiltro = categoriaFiltro;
+    }
+
+    public Empleado getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(Empleado vendedor) {
+        this.vendedor = vendedor;
+    }
+    
+    
+
+    
     
     
     
