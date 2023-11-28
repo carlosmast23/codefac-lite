@@ -136,6 +136,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS="agregar_producto_directo_lector_barras";
     
+    public static final String VENDEDOR_OBLIGATORIO_VENTA="vendedor_obligatorio_venta" ;
+    
     /**
      * Parametro parametro que me permite elegir si en los detalles me permiten agregar la información del lote del producto
      */

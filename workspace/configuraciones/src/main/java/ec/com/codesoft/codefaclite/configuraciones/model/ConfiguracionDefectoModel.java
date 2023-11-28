@@ -271,6 +271,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         UtilidadesComboBox.llenarComboBox(getCmbModificarPrecioMenor(), EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbAgregarProductoDirectoLectorBarras(), EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbVendedorObligatorioVenta(),EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbMostrarCostoConIva(), EnumSiNo.values());
         
@@ -701,6 +702,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroTmp != null) ? parametroTmp.getValor() : null);
             getCmbAgregarProductoDirectoLectorBarras().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            parametroTmp = parametrosTodos.get(ParametroCodefac.VENDEDOR_OBLIGATORIO_VENTA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroTmp != null) ? parametroTmp.getValor() : null);
+            getCmbVendedorObligatorioVenta().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             ParametroCodefac parametroMostrarCostoConIva = parametrosTodos.get(ParametroCodefac.MOSTRAR_COSTO_CON_IVA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroMostrarCostoConIva != null) ? parametroMostrarCostoConIva.getValor() : null);
             getCmbMostrarCostoConIva().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
@@ -970,6 +975,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbAgregarProductoDirectoLectorBarras() .getSelectedItem();
         agregarParametro(ParametroCodefac.AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS);
+        
+        enumSiNo = (EnumSiNo) getCmbVendedorObligatorioVenta().getSelectedItem();
+        agregarParametro(ParametroCodefac.VENDEDOR_OBLIGATORIO_VENTA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.VENDEDOR_OBLIGATORIO_VENTA);
         
         enumSiNo = (EnumSiNo) getCmbMostrarCostoConIva() .getSelectedItem();
         agregarParametro(ParametroCodefac.MOSTRAR_COSTO_CON_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);

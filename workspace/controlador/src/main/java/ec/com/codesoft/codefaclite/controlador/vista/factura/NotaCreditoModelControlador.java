@@ -104,6 +104,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
             notaDetalle.setValorIce(facturaDetalle.getValorIce());
             notaDetalle.setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
             notaDetalle.setIcePorcentaje(facturaDetalle.getIcePorcentaje());
+            notaDetalle.setLote(facturaDetalle.getLote());
 
             notaCredito.addDetalle(notaDetalle);
         }

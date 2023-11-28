@@ -155,6 +155,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbAgregarPvpAnterior = new javax.swing.JComboBox<>();
         jLabel115 = new javax.swing.JLabel();
         cmbEditarFechaEmision = new javax.swing.JComboBox<>();
+        jLabel121 = new javax.swing.JLabel();
+        cmbVendedorObligatorioVenta = new javax.swing.JComboBox<>();
         jPanel15 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
@@ -981,10 +983,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbModificarPrecioMenor, gridBagConstraints);
 
         jLabel81.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel81.setText("Agregar Producto Directo Lector Barras:");
+        jLabel81.setText("Vendedor Obligatorio:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel81, gridBagConstraints);
@@ -1140,6 +1142,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbEditarFechaEmision, gridBagConstraints);
+
+        jLabel121.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel121.setText("Agregar Producto Directo Lector Barras:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel121, gridBagConstraints);
+
+        cmbVendedorObligatorioVenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbVendedorObligatorioVenta, gridBagConstraints);
 
         jTabbedPane1.addTab("Ventas", jPanel4);
 
@@ -2640,6 +2659,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
     private javax.swing.JComboBox<TipoNegocioEnum> cmbTipoNegocio;
+    private javax.swing.JComboBox<EnumSiNo> cmbVendedorObligatorioVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbVentaProductoModoDescuento;
     private javax.swing.JComboBox<EnumSiNo> cmbVentanasMultiples;
     private javax.swing.JComboBox<EnumSiNo> jComboFiltrarFacturaPorUsuario;
@@ -2669,6 +2689,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel119;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel120;
+    private javax.swing.JLabel jLabel121;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -3796,6 +3817,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbRecalcularEditarPrecioEmpaque(JComboBox<EnumSiNo> cmbRecalcularEditarPrecioEmpaque) {
         this.cmbRecalcularEditarPrecioEmpaque = cmbRecalcularEditarPrecioEmpaque;
     }
+
+    public JComboBox<EnumSiNo> getCmbVendedorObligatorioVenta() {
+        return cmbVendedorObligatorioVenta;
+    }
+
+    public void setCmbVendedorObligatorioVenta(JComboBox<EnumSiNo> cmbVendedorObligatorioVenta) {
+        this.cmbVendedorObligatorioVenta = cmbVendedorObligatorioVenta;
+    }
+    
+    
     
     
     

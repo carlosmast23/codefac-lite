@@ -1982,6 +1982,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 throw new ExcepcionCodefacLite("Cliente no configurado el tipo de identificación");
             }
         }
+        
+        //Validar si es requerido agregar un vendedor
+        DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+        if(documentoSeleccionado.equals(DocumentoEnum.FACTURA) || documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.VENDEDOR_OBLIGATORIO_VENTA,EnumSiNo.SI))
+            {
+                if(factura.getVendedor()==null)
+                {
+                    DialogoCodefac.mensaje("Alerta", "El vendedor es obligatorio para realizar la venta ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    throw new ExcepcionCodefacLite("Vendedor obligatorio para grabar");
+                }
+            }
+        }
+                
                
 
     }
