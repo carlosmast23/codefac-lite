@@ -69,6 +69,9 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     @Column(name = "COMPONENTES_TEXTO")
     private String componentesTexto;
     
+    @Column(name = "DESCRIPCION_ORIGINAL")
+    private String descripcionOriginal;
+    
     
     public FacturaDetalle() {
         
@@ -178,6 +181,14 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
 
     public void setComponentesTexto(String componentesTexto) {
         this.componentesTexto = componentesTexto;
+    }
+
+    public String getDescripcionOriginal() {
+        return descripcionOriginal;
+    }
+
+    public void setDescripcionOriginal(String descripcionOriginal) {
+        this.descripcionOriginal = descripcionOriginal;
     }
     
     

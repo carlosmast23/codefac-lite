@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
 import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.NombreCampoAgrupadoIf;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
      */
     protected String codigoProducto;
     protected String nombreProducto;
+    protected String nombreProductoOriginal;
     protected String categoria;
     protected String cantidad;
     /**
@@ -470,6 +472,15 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         this.componenteProducto = componenteProducto;
     }
 
+    public String getNombreProductoOriginal() {
+        return nombreProductoOriginal;
+    }
+
+    public void setNombreProductoOriginal(String nombreProductoOriginal) {
+        this.nombreProductoOriginal = nombreProductoOriginal;
+    }
+
+    
     
     
     
@@ -579,7 +590,20 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
             case AGRUPADO_POR_PRODUCTO:
                 return "[ "+codigoProducto+" ] "+nombreProducto;
             case AGRUPADO_POR_COMPONENTE:
-                return nombreProducto;
+                String nombreProductoTmp=this.nombreProductoOriginal;
+                if(UtilidadesTextos.verificarNullOVacio(nombreProductoTmp))
+                {
+                    nombreProductoTmp=nombreProducto;
+                }
+                
+                String componenteStr="";
+                if(!UtilidadesTextos.verificarNullOVacio(componenteProducto))
+                {
+                    componenteStr=" | "+componenteProducto;
+                }
+                
+                return nombreProductoTmp+componenteStr;
+                
             case AGRUPADO_POR_CATEGORIA:
                 return categoria;
             case AGRUPADO_POR_FORMA_PAGO:

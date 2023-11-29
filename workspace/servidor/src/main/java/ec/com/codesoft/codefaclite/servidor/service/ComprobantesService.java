@@ -2377,11 +2377,23 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
     }
     
-    private void agregarDatosAdicionalVendedor(ComprobanteEntity comprobante)
+    private void agregarDatosAdicionalVendedor(ComprobanteEntity comprobante) throws RemoteException
     {
         DocumentoEnum documento=comprobante.getCodigoDocumentoEnum();
         if(documento.equals(DocumentoEnum.FACTURA) || documento.equals(DocumentoEnum.NOTA_VENTA) || documento.equals(DocumentoEnum.NOTA_VENTA_INTERNA) )
         {
+            ParametroCodefacService parametroService=new ParametroCodefacService();
+            ParametroCodefac parametroCodefac=parametroService.getParametroByNombre(ParametroCodefac.VENDEDOR_OBLIGATORIO_VENTA,comprobante.getEmpresa());
+            if(parametroCodefac!=null && parametroCodefac.getValor()!=null && !parametroCodefac.getValor().isEmpty())
+            {
+                //TODO: Solución para un cliente
+                //En el caso que tenga configurado este parametro no le hago que agregue el datos adicional
+                if(parametroCodefac.getValor().equals(EnumSiNo.SI.getLetra()))
+                {
+                    return;
+                }
+            }
+            
             Factura factura=(Factura) comprobante;
             if(factura.getVendedor()!=null)
             {

@@ -537,6 +537,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
         factura.setEstadoNotaCreditoEnum(Factura.EstadoNotaCreditoEnum.SIN_ANULAR);
         
+        
+        
         //Agregar por defecto la fecha de vecimiento de la factura cuando tenga habilitado el crédito y los días de crédito
         if(carteraParametro!=null)
         {
@@ -551,7 +553,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         //Setear campos adicionales del detalle
         for (FacturaDetalle detalle : factura.getDetalles()) 
-        {
+        {            
+            
             //Por defecto solo genera un unico codigo
             detalle.setCantidadPresentacion(BigDecimal.ONE);
             TipoDocumentoEnum tipoReferenciaEnum=detalle.getTipoDocumentoEnum();
@@ -568,6 +571,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         {
                             detalle.setCantidadPresentacion(presentacionDetalle.getCantidad());
                         }
+                        
+                        //Copiar el nombre original a otro campo para tener de auxiliar para algunos reportes
+                        detalle.setDescripcionOriginal(producto.getNombre());
+                        
                         break;
                     case ACADEMICO:
                         

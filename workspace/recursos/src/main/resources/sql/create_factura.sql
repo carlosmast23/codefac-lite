@@ -157,6 +157,8 @@ create table FACTURA_DETALLE
     IRBPNR decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.9.4)*/
     COMPONENTES_TEXTO varchar(150),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.9.8)*/
+    DESCRIPCION_ORIGINAL varchar(300),
     primary key (ID)
 );
 

@@ -67,9 +67,11 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
     public List<Empleado> buscarVendedores(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
     {
         //Empleado e;
+        //e.get
         //e.getDepartamento().getTipo();
         Map<String, Object> parametroMap = new HashMap<String, Object>();
         parametroMap.put("departamento.tipo",Departamento.TipoEnum.Ventas.getLetra());
+        parametroMap.put("estado",GeneralEnumEstado.ACTIVO.getLetra());
         
         return getFacade().findByMap(parametroMap);
     }   

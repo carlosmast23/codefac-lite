@@ -525,6 +525,7 @@ public class ControladorReporteFactura {
                     dataFacturaCopia.setTotalFinal(detalle.calcularTotalFinal()+"");
                 }
                 dataFacturaCopia.setNombreProducto(detalle.getDescripcion());
+                dataFacturaCopia.setNombreProductoOriginal(detalle.getDescripcionOriginal());
                 dataFacturaCopia.setCodigoProducto(detalle.getCodigoPrincipal());
                 dataFacturaCopia.setResponsable((detalle.getResponsable()!=null)?detalle.getResponsable().getNombresCompletos():"");
                 
