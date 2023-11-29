@@ -984,6 +984,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             Producto producto=facturaDetalle.consultarProductoEnlazado();
             if(producto!=null)
             {
+                facturaDetalleSeleccionado=facturaDetalle;
                 productoSeleccionado=producto;
                 kardexSeleccionado=facturaDetalle.getKardex();
                 //PresentacionProducto presentacionProducto= productoSeleccionado.buscarPresentacionProducto();
@@ -4882,6 +4883,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         jMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //System.out.println(facturaDetalleSeleccionado.getDescripcion());
                 ComponenteProductoModel dialog = new ComponenteProductoModel(null, true,productoSeleccionado);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
