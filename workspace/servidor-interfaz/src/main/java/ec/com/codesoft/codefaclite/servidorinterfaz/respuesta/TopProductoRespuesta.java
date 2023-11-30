@@ -16,19 +16,27 @@ import java.util.List;
  */
 public class TopProductoRespuesta implements Serializable
 {
+    public String codigo;
     public String descripcion;
     public BigDecimal cantidad;
 
     public TopProductoRespuesta() {
     }
 
-    public TopProductoRespuesta(String descripcion, BigDecimal cantidad) {
+    public TopProductoRespuesta(String codigo,String descripcion, BigDecimal cantidad) {
+        this.codigo=codigo;
         this.descripcion = descripcion;
         this.cantidad = cantidad;
     }
-    
-    
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    
     public String getDescripcion() {
         return descripcion;
     }
@@ -49,7 +57,7 @@ public class TopProductoRespuesta implements Serializable
     {
         List<TopProductoRespuesta> datosList=new ArrayList<TopProductoRespuesta>();
         for (Object[] dato : resultadoList) {
-            datosList.add(new TopProductoRespuesta((String)dato[0],(BigDecimal)dato[1]));
+            datosList.add(new TopProductoRespuesta((String)dato[0],(String)dato[1],(BigDecimal)dato[2]));
         }
         return datosList;
     }

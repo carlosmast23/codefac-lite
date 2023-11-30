@@ -689,7 +689,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         int acumulador=0;
         for (TopProductoRespuesta productoTop : topProductoRespuestaList) 
         {
-            DashBoardData.DashboardProductoTopData producto1=new DashBoardData.DashboardProductoTopData(productoTop.descripcion, productoTop.cantidad.setScale(0, RoundingMode.HALF_UP)+"");            
+            DashBoardData.DashboardProductoTopData producto1=new DashBoardData.DashboardProductoTopData(productoTop.codigo,productoTop.descripcion, productoTop.cantidad.setScale(0, RoundingMode.HALF_UP)+"");            
             listaDetalle.add(producto1);
             
             if((acumulador++)>10)

@@ -236,7 +236,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
     
     public List<TopProductoRespuesta> topProductosMasVendidosFacade() throws ServicioCodefacException, RemoteException
     {
-        String queryString = "SELECT FD.DESCRIPCION,SUM(CANTIDAD) AS CANTIDAD FROM FACTURA_DETALLE FD GROUP BY DESCRIPCION ORDER BY SUM(CANTIDAD) DESC " ;
+        String queryString = "SELECT FD.CODIGO_PRINCIPAL,FD.DESCRIPCION,SUM(CANTIDAD) AS CANTIDAD FROM FACTURA_DETALLE FD GROUP BY DESCRIPCION,CODIGO_PRINCIPAL ORDER BY SUM(CANTIDAD) DESC " ;
         Query query=getEntityManager().createNativeQuery(queryString);
         //Object resultado= query.getResultList();
         

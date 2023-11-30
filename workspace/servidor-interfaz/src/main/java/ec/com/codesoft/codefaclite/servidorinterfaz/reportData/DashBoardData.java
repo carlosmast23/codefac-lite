@@ -55,11 +55,14 @@ public class DashBoardData implements Serializable{
     public static class DashboardProductoTopData implements Serializable
     {
 
-        public DashboardProductoTopData(String nombre, String valor) {
+        public DashboardProductoTopData(String codigo,String nombre, String valor) 
+        {
+            this.codigo=codigo;
             this.nombre = nombre;
             this.valor = valor;
         }
                 
+        private String codigo;
         private String nombre;
         private String valor;
 
@@ -78,6 +81,15 @@ public class DashBoardData implements Serializable{
         public void setValor(String valor) {
             this.valor = valor;
         }
+
+        public String getCodigo() {
+            return codigo;
+        }
+
+        public void setCodigo(String codigo) {
+            this.codigo = codigo;
+        }
+        
         
         
         
