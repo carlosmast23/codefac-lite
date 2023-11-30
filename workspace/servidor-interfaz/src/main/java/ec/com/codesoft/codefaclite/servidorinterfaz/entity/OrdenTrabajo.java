@@ -48,7 +48,7 @@ public class OrdenTrabajo implements Serializable
     
     @JoinColumn(name = "OBJECTO_MANTENIMIENTO_ID")
     private ObjetoMantenimiento objetoMantenimiento;
-    
+
     /**
      * @deprecated 
      * Todo: Este estado me parece que esta mal ingresado
@@ -58,6 +58,9 @@ public class OrdenTrabajo implements Serializable
     
     @Column(name = "FECHA_INGRESO")
     private Date fechaIngreso;
+    
+    @Column(name = "KILOMETRAJE")
+    private Integer kilometraje;
     
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
@@ -160,6 +163,15 @@ public class OrdenTrabajo implements Serializable
     public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
         this.catalogoProducto = catalogoProducto;
     }
+
+    public Integer getKilometraje() {
+        return kilometraje;
+    }
+
+    public void setKilometraje(Integer kilometraje) {
+        this.kilometraje = kilometraje;
+    }
+    
     
     
     /*public String getEstadoDetalles() {

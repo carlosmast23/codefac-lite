@@ -401,15 +401,23 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         if (objetoMantenimiento != null) {
             objetoVehiculoTxt = " " + objetoMantenimiento.toString() + " ";
+            //kilometrajeTxt=
             kilometrajeTxt = objetoMantenimiento.getKilometraje() + "";
         }
         
         if (objetoMantenimiento != null) {
 
             factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.VEHICULO.getNombre(), objetoVehiculoTxt, ComprobanteAdicional.Tipo.TIPO_OTRO));
-            factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.KILOMETRAJE.getNombre(), kilometrajeTxt, ComprobanteAdicional.Tipo.TIPO_OTRO));
             
             OrdenTrabajo ordenTrabajo=presupuestoTmp.getOrdenTrabajoDetalle().getOrdenTrabajo();
+            
+            if(ordenTrabajo.getKilometraje()!=null)
+            {
+                kilometrajeTxt =ordenTrabajo.getKilometraje()+"";
+            }
+            
+            factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.KILOMETRAJE.getNombre(), kilometrajeTxt, ComprobanteAdicional.Tipo.TIPO_OTRO));
+            
             String fechaSrt=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(ordenTrabajo.getFechaIngreso());
             String ordenTrabajoTxt=ordenTrabajo.getId() + " ["+fechaSrt+"]";
             factura.addDatoAdicional(new FacturaAdicional(DatosAdicionalesComprobanteEnum.ORDEN_TRABAJO.getNombre(),ordenTrabajoTxt + "", ComprobanteAdicional.Tipo.TIPO_OTRO));

@@ -637,7 +637,20 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     presupuesto.setPersona(ordenTrabajo.getCliente());
                     getTxtCliente().setText(ordenTrabajo.getCliente().getIdentificacion()+" - "+ordenTrabajo.getCliente().getRazonSocial());
                     getLblObjetoMantenimiento().setText((ordenTrabajo.getObjetoMantenimiento()!=null)?ordenTrabajo.getObjetoMantenimiento().toString():"");
-                    getTxtKilometraje().setText((ordenTrabajo.getObjetoMantenimiento()!=null)?ordenTrabajo.getObjetoMantenimiento().getKilometraje()+"":"");
+                    
+                    String kilometrajeTxt="";
+                    if(ordenTrabajo.getObjetoMantenimiento()!=null)
+                    {
+                        if(ordenTrabajo.getKilometraje()!=null)
+                        {
+                            kilometrajeTxt=ordenTrabajo.getKilometraje()+"";
+                        }
+                        else
+                        {
+                            kilometrajeTxt=ordenTrabajo.getObjetoMantenimiento().getKilometraje()+"";
+                        }
+                    }
+                    getTxtKilometraje().setText(kilometrajeTxt);
                     cargarDetallesOrdenTrabajo(ordenTrabajo);
                 }
                 
