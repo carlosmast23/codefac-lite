@@ -184,31 +184,31 @@
                         <h:outputText value="#{m.estado}" />
                     </p:column>
                     
-                    <p:column headerText="Comentario">
+                    <p:column headerText="Comentario" style="display:#{reporteMantenimientoMb.visibleComentario ? 'table-cell' : 'none'}" >
                         <h:outputText value="#{m.comentario}" />
                     </p:column>
                     
-                    <p:column headerText="Fecha Inicio Tarea" width="100" >
+                    <p:column headerText="Fecha Inicio Tarea" width="100" style="display:#{reporteMantenimientoMb.visibleFechaInicioTarea ? 'table-cell' : 'none'}" >
                         <h:outputText value="#{m.fechaInicioProceso}" >
                             <f:convertDateTime pattern="MM-dd HH:mm" />
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Fecha Fin Tarea" width="100" >
+                    <p:column headerText="Fecha Fin Tarea" width="100" style="display:#{reporteMantenimientoMb.visibleFechaFinTarea ? 'table-cell' : 'none'}" >
                         <h:outputText value="#{m.fechaFinProceso}" >
                             <f:convertDateTime pattern="MM-dd HH:mm" />
                         </h:outputText>
                     </p:column>
                     
-                    <p:column headerText="Horas Proc" width="100" >
+                    <p:column headerText="Horas Proc" width="100" style="display:#{reporteMantenimientoMb.visibleHorasProc ? 'table-cell' : 'none'}" >
                         <h:outputText value="#{m.horasProceso}" />
                     </p:column>
                     
-                    <p:column headerText="Defecto">
+                    <p:column headerText="Defecto" style="display:#{reporteMantenimientoMb.visibleDefecto ? 'table-cell' : 'none'}" >
                         <h:outputText value="[#{m.noConformidad}] #{m.obtenerTallerNombre()}" />
                     </p:column>
                     
-                    <p:column headerText="Parte Vehiculo">
+                    <p:column headerText="Parte Vehiculo" style="display:#{reporteMantenimientoMb.visibleParteVehiculo ? 'table-cell' : 'none'}" >
                         <h:outputText value="#{m.parteVehiculo}" />
                     </p:column>
                     

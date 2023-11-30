@@ -181,7 +181,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             System.out.println("Tareas seleccionadas: "+tareaList.size());
             System.out.println("Fecha Inicial: "+fechaInicial);
             System.out.println("Fecha Final: "+fechaFinal);
-            
+            habilitarDeshabilitarColumnas(true);
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReporteMantenimientoMb.class.getName()).log(Level.SEVERE, null, ex);
@@ -225,6 +225,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     
     public void eventoMenuReporte()
     {
+        habilitarDeshabilitarColumnas(true);
         fechaFinal=null;
         //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
         fechaInicial=null;
@@ -237,23 +238,51 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             fechaFinalExacta=true;
             fechaFinal=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
             estadoSeleccionado=MantenimientoEnum.TERMINADO;
+            habilitarReporteLiberadas();
         }
-        else if(tipoReporte.equals("taller") || tipoReporte.equals("proceso"))
+        else if(tipoReporte.equals("taller"))
         {
             estadoSeleccionado=MantenimientoEnum.INGRESADO;
+            habilitarReporteLiberadas();
             //fechaFinal=null;
             //UtilidadesFecha.restarDiasFecha(fechaFinal, 0)
             //fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());   
-        } else if(tipoReporte.equals("noConformidad"))
+        }else if(tipoReporte.equals("proceso"))
+        {
+            estadoSeleccionado=MantenimientoEnum.INGRESADO;
+            habilitarReporteProceso();
+        }
+        else if(tipoReporte.equals("noConformidad"))
         {
             fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());
             estadoSeleccionado=null;
         }
+        else
+        {
+            habilitarReporteLiberadas();
+        }
+    }
+    
+    private void habilitarReporteProceso()
+    {
+        visibleDefecto=false;
+        visibleParteVehiculo=false;
+    }
+    
+    private void habilitarReporteLiberadas()
+    {
+        visibleTarea=false;
+        visibleComentario=false;
+        visibleFechaInicioTarea=false;
+        visibleFechaFinTarea=false;
+        visibleHorasProc=false;
+        visibleDefecto=false;
+        visibleParteVehiculo=false;
     }
     
     public void consultarMantenimientos() 
     {
-        visibleTarea=!visibleTarea;
+        //visibleTarea=!visibleTarea;
         //Encontrar sola las unidades finalmente terminadas
         /*if(tipoReporte.equals("liberadas"))
         {
@@ -314,6 +343,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         System.out.println("customXLSPostProcessor PROCESANDO ...");
         HSSFWorkbook wb = (HSSFWorkbook) document;
         HSSFSheet sheet = wb.getSheetAt(0);
+        ocultarTamanioExcel(sheet);
         
         CreationHelper createHelper = wb.getCreationHelper();
         CellStyle dateCellStyle = wb.createCellStyle();
@@ -382,12 +412,12 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         
         if(!visibleDefecto)
         {
-            sheet.setColumnWidth(15, 0);
+            sheet.setColumnWidth(16, 0);
         }
         
         if(!visibleParteVehiculo)
         {
-            sheet.setColumnWidth(16, 0);
+            sheet.setColumnWidth(17, 0);
         }
     }
     
@@ -562,5 +592,134 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         this.visibleTarea = visibleTarea;
     }
 
+    public Boolean getVisibleVin() {
+        return visibleVin;
+    }
+
+    public void setVisibleVin(Boolean visibleVin) {
+        this.visibleVin = visibleVin;
+    }
+
+    public Boolean getVisibleTaller() {
+        return visibleTaller;
+    }
+
+    public void setVisibleTaller(Boolean visibleTaller) {
+        this.visibleTaller = visibleTaller;
+    }
+
+    public Boolean getVisibleHoras() {
+        return visibleHoras;
+    }
+
+    public void setVisibleHoras(Boolean visibleHoras) {
+        this.visibleHoras = visibleHoras;
+    }
+
+    public Boolean getVisibleMarca() {
+        return visibleMarca;
+    }
+
+    public void setVisibleMarca(Boolean visibleMarca) {
+        this.visibleMarca = visibleMarca;
+    }
+
+    public Boolean getVisibleModelo() {
+        return visibleModelo;
+    }
+
+    public void setVisibleModelo(Boolean visibleModelo) {
+        this.visibleModelo = visibleModelo;
+    }
+
+    public Boolean getVisibleColor() {
+        return visibleColor;
+    }
+
+    public void setVisibleColor(Boolean visibleColor) {
+        this.visibleColor = visibleColor;
+    }
+
+    public Boolean getVisibleFechaIngreso() {
+        return visibleFechaIngreso;
+    }
+
+    public void setVisibleFechaIngreso(Boolean visibleFechaIngreso) {
+        this.visibleFechaIngreso = visibleFechaIngreso;
+    }
+
+    public Boolean getVisibleFechaSalida() {
+        return visibleFechaSalida;
+    }
+
+    public void setVisibleFechaSalida(Boolean visibleFechaSalida) {
+        this.visibleFechaSalida = visibleFechaSalida;
+    }
+
+    public Boolean getVisibleDuracionDias() {
+        return visibleDuracionDias;
+    }
+
+    public void setVisibleDuracionDias(Boolean visibleDuracionDias) {
+        this.visibleDuracionDias = visibleDuracionDias;
+    }
+
+    public Boolean getVisibleEstado() {
+        return visibleEstado;
+    }
+
+    public void setVisibleEstado(Boolean visibleEstado) {
+        this.visibleEstado = visibleEstado;
+    }
+
+    public Boolean getVisibleComentario() {
+        return visibleComentario;
+    }
+
+    public void setVisibleComentario(Boolean visibleComentario) {
+        this.visibleComentario = visibleComentario;
+    }
+
+    public Boolean getVisibleFechaInicioTarea() {
+        return visibleFechaInicioTarea;
+    }
+
+    public void setVisibleFechaInicioTarea(Boolean visibleFechaInicioTarea) {
+        this.visibleFechaInicioTarea = visibleFechaInicioTarea;
+    }
+
+    public Boolean getVisibleFechaFinTarea() {
+        return visibleFechaFinTarea;
+    }
+
+    public void setVisibleFechaFinTarea(Boolean visibleFechaFinTarea) {
+        this.visibleFechaFinTarea = visibleFechaFinTarea;
+    }
+
+    public Boolean getVisibleHorasProc() {
+        return visibleHorasProc;
+    }
+
+    public void setVisibleHorasProc(Boolean visibleHorasProc) {
+        this.visibleHorasProc = visibleHorasProc;
+    }
+
+    public Boolean getVisibleDefecto() {
+        return visibleDefecto;
+    }
+
+    public void setVisibleDefecto(Boolean visibleDefecto) {
+        this.visibleDefecto = visibleDefecto;
+    }
+
+    public Boolean getVisibleParteVehiculo() {
+        return visibleParteVehiculo;
+    }
+
+    public void setVisibleParteVehiculo(Boolean visibleParteVehiculo) {
+        this.visibleParteVehiculo = visibleParteVehiculo;
+    }
+
+    
     
 }
