@@ -128,9 +128,10 @@
                         </p:commandButton>    
                         <p:commandButton
                             disabled="#{m.estado eq 'G' or m.estado eq 'F'}"
-                            title="Asignar nueva tarea"
+                            title="Terminar tarea"
                             process="@this"
                             actionListener="#{tareasPendientesMb.finalizarTarea(m)}"         
+                            update="formulario:messages"
                             onclick="return confirm('¿Estás seguro que desea TERMINAR la tarea?')"
                             icon="fa fa-stop"
                             oncomplete="updateDataTable()"

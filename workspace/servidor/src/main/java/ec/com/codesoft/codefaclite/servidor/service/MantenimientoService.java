@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.rmi.RemoteException;
@@ -258,10 +259,23 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
         tarea.setFechaFin(UtilidadesFecha.getFechaHoyTimeStamp());
         tarea.setEstadoEnum(MantenimientoTareaDetalle.EstadoEnum.FINALIZADO);
         
+        //Hago de esta manera para siempre obtener los datos actualizados y evitar tener problemas con los datos temporales del objeto
+        MantenimientoTareaDetalleService mantenimientoTareaDetalleService=new MantenimientoTareaDetalleService();
+        //mantenimientoTareaDetalleService.buscarPorMantenimiento(tarea.getMantenimiento());
+        
         //Verificar si todas las tareas estan FINALIZADAS entonces cambio tambien el mantenimiento
-        List<MantenimientoTareaDetalle> tareaList=tarea.getMantenimiento().getTareaList();
+        //List<MantenimientoTareaDetalle> tareaList=tarea.getMantenimiento().getTareaList();
+        List<MantenimientoTareaDetalle> tareaList=mantenimientoTareaDetalleService.buscarPorMantenimiento(tarea.getMantenimiento());
         Boolean finalizarMantenimiento=true;
-        for (MantenimientoTareaDetalle mantenimientoTareaDetalle : tareaList) {
+        
+        //No se puede terminar la tarea si no tiene ingresado por lo menos 1 defecto
+        if(UtilidadesLista.verificarListaVaciaONull(tarea.getInformeList()))
+        {
+            throw new ServicioCodefacException("No se puede grabar sin Agregar Defectos");
+        }
+        
+        for (MantenimientoTareaDetalle mantenimientoTareaDetalle : tareaList) 
+        {
             if(!tarea.equals(mantenimientoTareaDetalle))
             {
                 if(!MantenimientoTareaDetalle.EstadoEnum.FINALIZADO.getNombre().equals(mantenimientoTareaDetalle.getEstadoNombre()))

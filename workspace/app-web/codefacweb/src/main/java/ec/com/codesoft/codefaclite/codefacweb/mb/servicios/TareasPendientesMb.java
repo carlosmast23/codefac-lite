@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ParteVehiculoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNoConformidadEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.io.IOException;
@@ -279,7 +280,9 @@ public class TareasPendientesMb extends GeneralAbstractMb implements Serializabl
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
-            MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            //MensajeMb.mostrarMensajeDialogo("Error", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
+            MensajeMb.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            
         } catch (RemoteException ex) {
             Logger.getLogger(TareasPendientesMb.class.getName()).log(Level.SEVERE, null, ex);
         }
