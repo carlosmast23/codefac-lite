@@ -55,8 +55,8 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 @ViewScoped
 public class ReporteMantenimientoMb extends GeneralAbstractMb implements Serializable
 {
-    private List<MantenimientoEnum> estadoMantenimietoList;    
-    private List<MantenimientoResult> mantenimientoList;  
+    private List<MantenimientoEnum> estadoMantenimietoList;     
+    private List<MantenimientoResult> mantenimientoList;   
     private List<MarcaProducto> marcaList;  
     private List<Mantenimiento.UbicacionEnum> ubicacionList;
     private List<TareaMantenimiento> tareaList;
@@ -73,6 +73,27 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     private String tipoReporte;
     private List<Taller> tallerList;  
     private Taller tallerSeleccionado;
+    
+    
+    private Boolean visibleVin;
+    private Boolean visibleTarea;
+    private Boolean visibleTaller;
+    private Boolean visibleHoras;
+    private Boolean visibleMarca;
+    private Boolean visibleModelo;
+    private Boolean visibleColor;
+    private Boolean visibleFechaIngreso;
+    private Boolean visibleFechaSalida;
+    private Boolean visibleDuracionDias;
+    private Boolean visibleEstado;
+    private Boolean visibleComentario;
+    private Boolean visibleFechaInicioTarea;
+    private Boolean visibleFechaFinTarea;
+    private Boolean visibleHorasProc;
+    private Boolean visibleDefecto;
+    private Boolean visibleParteVehiculo;
+    
+    //
     
     ///private String 
  
@@ -230,8 +251,9 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         }
     }
     
-    public void consultarMantenimientos()
+    public void consultarMantenimientos() 
     {
+        visibleTarea=!visibleTarea;
         //Encontrar sola las unidades finalmente terminadas
         /*if(tipoReporte.equals("liberadas"))
         {
@@ -248,7 +270,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
             fechaInicial=UtilidadesFecha.eliminarHorasFecha(UtilidadesFecha.getFechaHoraHoy());   
         }*/
                 
-        try {
+        try { 
             System.out.println("Datos Consulta | fechaIni: "+fechaInicial+" | fechaFin: "+fechaFinal+" | estado: "+estadoSeleccionado+" | marca: "+marcaSeleccionada+" | ubi: "+ubicacionSeleccionada+" | tarea: "+tareaSeleccionada);
             mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,fechaFinalExacta,tallerSeleccionado,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
             System.out.println("Datos consultados ANTES: "+mantenimientoList.size());  
@@ -315,7 +337,8 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
                     cell5.setCellValue(Double.parseDouble(cell5.getStringCellValue()));
                     cell5.setCellType(CellType.NUMERIC);  
                 } 
-                                
+                        
+                
                 
                 //Aplicar formato de fecha corta excel
                 cambiarEstiloFecha(row.getCell(8), wb,dateCellStyle,1);                
@@ -328,6 +351,66 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
                 
             }
         }
+    }
+    
+    private void ocultarTamanioExcel(HSSFSheet sheet)
+    {
+        if(!visibleTarea)
+        {
+            sheet.setColumnWidth(2, 0);
+        }
+        
+        if(!visibleComentario)
+        {
+            sheet.setColumnWidth(12, 0);
+        }
+        
+        if(!visibleFechaInicioTarea)
+        {
+            sheet.setColumnWidth(13, 0);
+        }
+        
+        if(!visibleFechaFinTarea)
+        {
+            sheet.setColumnWidth(14, 0);
+        }
+        
+        if(!visibleHorasProc)
+        {
+            sheet.setColumnWidth(15, 0);
+        }
+        
+        if(!visibleDefecto)
+        {
+            sheet.setColumnWidth(15, 0);
+        }
+        
+        if(!visibleParteVehiculo)
+        {
+            sheet.setColumnWidth(16, 0);
+        }
+    }
+    
+    private void habilitarDeshabilitarColumnas(Boolean estado)
+    {
+        visibleVin=estado;
+        visibleTarea=estado;
+        visibleTaller=estado;
+        visibleHoras=estado;
+        visibleMarca=estado;
+        visibleModelo=estado;
+        visibleColor=estado;
+        visibleFechaIngreso=estado;
+        visibleFechaSalida=estado;
+        visibleDuracionDias=estado;
+        visibleEstado=estado;
+        visibleComentario=estado;
+        visibleFechaInicioTarea=estado;
+        visibleFechaFinTarea=estado;
+        visibleHorasProc=estado;
+        visibleDefecto=estado;
+        visibleParteVehiculo=estado;
+
     }
     
     private void cambiarEstiloFecha(HSSFCell cellFecha,HSSFWorkbook wb,CellStyle dateCellStyle,int estilo)
@@ -470,6 +553,14 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     public void setFechaFinalExacta(Boolean fechaFinalExacta) {
         this.fechaFinalExacta = fechaFinalExacta;
     } 
+
+    public Boolean getVisibleTarea() { 
+        return visibleTarea;
+    }
+
+    public void setVisibleTarea(Boolean visibleTarea) {
+        this.visibleTarea = visibleTarea;
+    }
 
     
 }

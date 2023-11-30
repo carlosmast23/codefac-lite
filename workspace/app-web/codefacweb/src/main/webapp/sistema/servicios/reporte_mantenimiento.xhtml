@@ -135,11 +135,11 @@
                         <h:outputText value="#{rowIndex + 1}" />
                     </p:column>
                     
-                    <p:column headerText="Vin" width="130">
+                    <p:column headerText="Vin" width="130" >
                         <h:outputText value="#{m.vin}" />
                     </p:column>
                     
-                    <p:column headerText="Tarea" width="130">
+                    <p:column headerText="Tarea" width="130" style="display:#{reporteMantenimientoMb.visibleTarea ? 'table-cell' : 'none'}" >
                         <h:outputText value="#{m.tareaTitulo}" />
                     </p:column>
                     
