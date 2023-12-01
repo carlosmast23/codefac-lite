@@ -948,7 +948,16 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setBtnMenuAuxiliar(JButton btnMenuAuxiliar) {
         this.btnMenuAuxiliar = btnMenuAuxiliar;
     }
+
+    public JPanel getJPanelPiePagina() {
+        return JPanelPiePagina;
+    }
+
+    public void setJPanelPiePagina(JPanel JPanelPiePagina) {
+        this.JPanelPiePagina = JPanelPiePagina;
+    }
         
+    
     
     
 }

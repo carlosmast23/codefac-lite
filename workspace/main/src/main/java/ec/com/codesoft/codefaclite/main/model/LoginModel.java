@@ -223,6 +223,7 @@ public class LoginModel extends LoginFormDialog{
                         setVisible(false);
                         usuario=loginRespuesta.usuario;
                         panelPrincipal.setSessionCodefac(getDatosLogin());
+                        panelPrincipal.cambiarAspectoDependiendoUsuario(usuario);
                         //Grabar los datos de comprobacion de licencia para saber que se esta accediendo
                         //TODO: Hago esto de forma temporal porque aveces en el proceso interno de comprobar no se graba en la base de datos la fecha
                         UtilidadesServiceIf utilidadesService=ServiceFactory.getFactory().getUtilidadesServiceIf();

@@ -270,6 +270,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private JMenuItem menuCopiar;
     
+    /**
+     * Tipo de letra que siempre voy a utilizar para no crear a cada rato
+     */
+    private Font fontLetraPiePagina = new Font(getLblNombreEmpresa().getFont().getFontName(), Font.PLAIN, 12);    
+    private Color colorPiePagina=new Color(62, 93, 162);
+    
    
     public GeneralPanelModel() 
     {
@@ -3930,6 +3936,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }
     
     /**
+     * Metodo que me va a permitir alertar al cliente o persona de soporte cuando se ingrese con usuario soporte o root_soporte
+     */
+    public void cambiarAspectoDependiendoUsuario(Usuario usurio)
+    {
+        if(usurio.getNick().toLowerCase().contains("soporte"))
+        {
+            getJPanelPiePagina().setBackground(new Color(172,64,64));
+        }
+        else
+        {
+            
+        }
+        //setearEtiquetasPiePaginaPantallaPrincipal();
+    }
+    
+    /**
      * Metodo que permite escribir los datos inferiores de la empresa y el usuario
      */
     public void setearEtiquetasPiePaginaPantallaPrincipal()
@@ -3938,6 +3960,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             String nombreUsuario=(sessionCodefac.getUsuario()!=null)?sessionCodefac.getUsuario().getNick():"Sin usuario";
             String sucursal=(sessionCodefac.getSucursal()!=null)?sessionCodefac.getSucursal().getNombre():"Sin sucursal";
             getLblNombreEmpresa().setText(" Empresa: " + ((sessionCodefac.getEmpresa() != null) ? sessionCodefac.getEmpresa().getNombreLegal() : "Sin asignar") + " | "+sucursal+" | Usuario: " + nombreUsuario);
+            
+            if(nombreUsuario.toLowerCase().contains("soporte"))
+            {
+                Font font = new Font(getLblNombreEmpresa().getFont().getFontName(), Font.BOLD, 16);                
+                getLblNombreEmpresa().setText("***=> ADVERTENCIA: USUARIO SOLO PARA PRUEBAS Y MANTENIMIENTO <=*** | "+getLblNombreEmpresa().getText() );
+                getLblNombreEmpresa().setFont(font);
+                getJPanelPiePagina().setBackground(new Color(172,64,64));
+            }
+            else
+            {                
+                getLblNombreEmpresa().setFont(fontLetraPiePagina);
+                getJPanelPiePagina().setBackground(colorPiePagina);
+            }
+            
+            
             
             //Obtener el tipo de licencia para imprimir en la pantalla inicio
             UtilidadesServiceIf utilidadesService = ServiceFactory.getFactory().getUtilidadesServiceIf();
