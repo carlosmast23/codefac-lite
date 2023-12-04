@@ -9,21 +9,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
-import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
 
 /**
  *

@@ -148,6 +148,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -223,6 +224,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      */
     private Boolean modoEdicionDetalle;
 
+    private ModoProcesarEnum modoProcesarEnum=ModoProcesarEnum.NORMAL;
     
 
     public FacturacionModel() {
@@ -2093,7 +2095,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else                
                 {                   
-                    factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro);
+                    factura=servicio.grabar(factura,crearDatosPrestamo(),carteraParametro,modoProcesarEnum);
                     
                     /*UtilidadVarios.medirTiempoProceso(new UtilidadVarios.ProcesoTiempoIf() {
                         @Override
@@ -2159,6 +2161,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
      
         } catch (ServicioCodefacException ex) {
+            
+            if(ex.getProcesarModoForzado())
+            {
+                DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
+                Boolean continuar = DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.Preguntas.PROCESAR_MODO_FORZADO);
+                if (continuar) {
+                    modoProcesarEnum = ModoProcesarEnum.FORZADO;
+                    grabar();
+                    return;
+                }
+            }
+            
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error ","No se puede grabar: \nCausa: "+ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);            
             throw new ExcepcionCodefacLite("Error al grabar: "+ex.getMessage());
@@ -3649,7 +3663,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        
+        ModoProcesarEnum modoProcesarEnum1 = ModoProcesarEnum.NORMAL;
         //Antes de limpiar generar un log cuando tenga datos previamente ingresados y no van a guardar
         if (factura.getId()==null) {
             if (factura.getDetalles() != null && factura.getDetalles().size() > 0) {

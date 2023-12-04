@@ -601,7 +601,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public Factura grabar(final Factura factura,Prestamo prestamo,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException {
+    public Factura grabar(final Factura factura,Prestamo prestamo,CarteraParametro carteraParametro,ModoProcesarEnum modoProcesar) throws RemoteException, ServicioCodefacException {
         
         Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO, "Iniciando Metodo grabarFactura: " + factura.getPreimpreso() + " | fecha de emisión: " + factura.getFechaEmision() + " | cliente: " + factura.getRazonSocial() + " | documento: " + factura.getCodigoDocumentoEnum().getNombre() + " | iva: " + factura.getIva() + " | total: " + factura.getTotal());
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
@@ -639,6 +639,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                                 
                 agregarDatosParaCajaSession(factura);
                 
+                //Validaciones adicionales despues de hacer todo el proceso
+                validacionPostGrabar(factura,modoProcesar);
+                
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();
                 
@@ -666,6 +669,25 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }).start();
         
         return factura;
+    }
+    
+    private void validacionPostGrabar(Factura factura,ModoProcesarEnum modoProcesar) throws RemoteException, ServicioCodefacException 
+    {
+        Boolean validarUtilidadNegativa;
+        
+        if(modoProcesar.equals(ModoProcesarEnum.NORMAL))
+        {
+            for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
+            {
+                System.out.println("costoPromedio: "+facturaDetalle.getCostoPromedio()+" > p.unit: "+facturaDetalle.getPrecioUnitario());
+                if(facturaDetalle.getCostoPromedio().compareTo(facturaDetalle.getPrecioUnitario())<0)
+                {
+                    throw new ServicioCodefacException("El producto "+facturaDetalle.getDescripcion()+" va a generar una utilidad negativa",true);
+
+                }
+            }
+        }
+        
     }
     
     private void verificarPromocionDosPorUno(Factura factura) throws RemoteException, ServicioCodefacException
@@ -726,7 +748,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     @Deprecated
     public Factura grabar(Factura factura) throws RemoteException, ServicioCodefacException {
         
-        return grabar(factura, null, null);
+        return grabar(factura, null, null,ModoProcesarEnum.FORZADO);
         /*ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
@@ -752,7 +774,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             {
                 //´TODO: Por el momento todas las facturas en lote se van a facturar con la fecha actual
                 //factura.factura.setFechaEmision(UtilidadesFecha.getFechaHoy());                
-                Factura facturaGrabada=grabar(factura.factura,factura.prestamo,factura.carteraPrestamo);
+                Factura facturaGrabada=grabar(factura.factura,factura.prestamo,factura.carteraPrestamo,ModoProcesarEnum.FORZADO);
                 //Si la factura se termina de procesar correctamento agrego a la respuesta
                 respuesta.agregarFacturaProcesada(factura.factura);
             }
