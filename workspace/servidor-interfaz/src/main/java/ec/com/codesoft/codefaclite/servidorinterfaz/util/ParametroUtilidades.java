@@ -93,6 +93,12 @@ public abstract class ParametroUtilidades {
         return false; */
     }
     
+    public static <T extends ComparadorInterface> Boolean compararParametroCodefac(ParametroCodefac parametroCodefac,T valorComparar)
+    {
+        String valorParametro= obtenerDatoParametro(parametroCodefac);
+        return compararParametro(valorParametro, valorComparar);
+    }
+    
     private static <T extends ComparadorInterface> Boolean compararParametro(String valorParametro,T valorComparar)
     {
         //String valorParametro=obtenerValorParametro(empresa, nombreParametro);

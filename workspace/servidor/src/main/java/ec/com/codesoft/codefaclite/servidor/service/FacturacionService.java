@@ -673,19 +673,23 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     private void validacionPostGrabar(Factura factura,ModoProcesarEnum modoProcesar) throws RemoteException, ServicioCodefacException 
     {
-        Boolean validarUtilidadNegativa;
-        
-        if(modoProcesar.equals(ModoProcesarEnum.NORMAL))
-        {
-            for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
+        //Boolean validarUtilidadNegativa;
+        ParametroCodefac parametroAdvertencia=parametroService.getParametroByNombre(ParametroCodefac.ADVERTENCIA_UTILIDAD_NEGATIVA,factura.getEmpresa());
+        if(ParametroUtilidades.compararParametroCodefac(parametroAdvertencia, EnumSiNo.SI))
+        {   
+            if(modoProcesar.equals(ModoProcesarEnum.NORMAL))
             {
-                System.out.println("costoPromedio: "+facturaDetalle.getCostoPromedio()+" > p.unit: "+facturaDetalle.getPrecioUnitario());
-                if(facturaDetalle.getCostoPromedio().compareTo(facturaDetalle.getPrecioUnitario())<0)
+                for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
                 {
-                    throw new ServicioCodefacException("El producto "+facturaDetalle.getDescripcion()+" va a generar una utilidad negativa",true);
+                    System.out.println("costoPromedio: "+facturaDetalle.getCostoPromedio()+" > p.unit: "+facturaDetalle.getPrecioUnitario());
+                    if(facturaDetalle.getCostoPromedio().compareTo(facturaDetalle.getPrecioUnitario())>0)
+                    {
+                        throw new ServicioCodefacException("El producto "+facturaDetalle.getDescripcion()+" va a generar una utilidad negativa.\nPvp:"+facturaDetalle.getPrecioUnitario()+", Costo:"+facturaDetalle.getCostoPromedio(),true);
 
+                    }
                 }
             }
+        
         }
         
     }

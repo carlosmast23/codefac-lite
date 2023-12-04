@@ -138,6 +138,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String VENDEDOR_OBLIGATORIO_VENTA="vendedor_obligatorio_venta" ;
     
+    public static final String ADVERTENCIA_UTILIDAD_NEGATIVA="advertencia_utilidad_negativa";
+    
     /**
      * Parametro parametro que me permite elegir si en los detalles me permiten agregar la información del lote del producto
      */

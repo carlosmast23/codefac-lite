@@ -157,6 +157,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbEditarFechaEmision = new javax.swing.JComboBox<>();
         jLabel121 = new javax.swing.JLabel();
         cmbVendedorObligatorioVenta = new javax.swing.JComboBox<>();
+        jLabel122 = new javax.swing.JLabel();
+        cmbAdvertenciaUtilidadNegativa = new javax.swing.JComboBox<>();
         jPanel15 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
@@ -983,10 +985,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbModificarPrecioMenor, gridBagConstraints);
 
         jLabel81.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel81.setText("Vendedor Obligatorio:");
+        jLabel81.setText("Advertencia utilidad negativa:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel81, gridBagConstraints);
@@ -1159,6 +1161,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbVendedorObligatorioVenta, gridBagConstraints);
+
+        jLabel122.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel122.setText("Vendedor Obligatorio:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel122, gridBagConstraints);
+
+        cmbAdvertenciaUtilidadNegativa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbAdvertenciaUtilidadNegativa, gridBagConstraints);
 
         jTabbedPane1.addTab("Ventas", jPanel4);
 
@@ -2597,6 +2616,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbActivarNotaVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos;
+    private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaUtilidadNegativa;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarInfoAdicionalLoteFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarLoteFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarProductoDirectoLectorBarras;
@@ -2690,6 +2710,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel120;
     private javax.swing.JLabel jLabel121;
+    private javax.swing.JLabel jLabel122;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -3824,6 +3845,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbVendedorObligatorioVenta(JComboBox<EnumSiNo> cmbVendedorObligatorioVenta) {
         this.cmbVendedorObligatorioVenta = cmbVendedorObligatorioVenta;
+    }
+
+    public JComboBox<EnumSiNo> getCmbAdvertenciaUtilidadNegativa() {
+        return cmbAdvertenciaUtilidadNegativa;
+    }
+
+    public void setCmbAdvertenciaUtilidadNegativa(JComboBox<EnumSiNo> cmbAdvertenciaUtilidadNegativa) {
+        this.cmbAdvertenciaUtilidadNegativa = cmbAdvertenciaUtilidadNegativa;
     }
     
     
