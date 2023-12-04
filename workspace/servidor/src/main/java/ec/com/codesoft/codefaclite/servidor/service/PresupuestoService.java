@@ -362,11 +362,11 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         return getFacade().consultarUltimaOTporObjectoMantenimientoFacade(objetoMantenimiento);
     }
     
-    public ReportDataAbstract<ActividadPresupuestoData> consultarActividadesPresupuesto(Date fechaInicial, Date fechaFinal,Persona cliente,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException, RemoteException
+    public ReportDataAbstract<ActividadPresupuestoData> consultarActividadesPresupuesto(Date fechaInicial, Date fechaFinal,Persona cliente,Usuario usuario,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException, RemoteException
     {
         ReportDataAbstract<ActividadPresupuestoData> reporte=new ActividadPresupuestoReport("Actividades Presupuesto");
         
-        List<PresupuestoDetalleActividad> resultadoList=getFacade().consultarActividades(fechaInicial, fechaFinal, cliente,codigoObjetoMantenimiento,estadoEnum);        
+        List<PresupuestoDetalleActividad> resultadoList=getFacade().consultarActividades(fechaInicial, fechaFinal, cliente,usuario,codigoObjetoMantenimiento,estadoEnum);        
         for (PresupuestoDetalleActividad detalle : resultadoList) 
         {
             ActividadPresupuestoData data=new ActividadPresupuestoData();

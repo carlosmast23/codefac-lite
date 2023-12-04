@@ -174,9 +174,11 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 getCmbEstado().addItem(estadoEnum);
             }
             
-            List<Usuario> usuarioList= ServiceFactory.getFactory().getUsuarioServicioIf().obtenerTodos();            
+            List<Usuario> usuarioList= ServiceFactory.getFactory().getUsuarioServicioIf().consultarUsuariosActivos(session.getEmpresa());            
             UtilidadesComboBox.llenarComboBox(getCmbUsuario(), usuarioList,true);
         } catch (RemoteException ex) {
+            Logger.getLogger(ReportePresupuestosModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(ReportePresupuestosModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

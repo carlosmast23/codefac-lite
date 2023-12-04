@@ -67,6 +67,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnImprimir = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
         btnMenuAuxiliar = new javax.swing.JButton();
+        lblReloj = new javax.swing.JLabel();
         JPanelPiePagina = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         lblTextoSecundario = new javax.swing.JLabel();
@@ -239,6 +240,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnMenuAuxiliar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenuAuxiliar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(btnMenuAuxiliar);
+
+        lblReloj.setBackground(new java.awt.Color(0, 153, 102));
+        lblReloj.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        lblReloj.setForeground(new java.awt.Color(51, 51, 51));
+        lblReloj.setText("00:00:00");
+        lblReloj.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        jToolBar2.add(lblReloj);
 
         JPanelMenu.add(jToolBar2, new java.awt.GridBagConstraints());
 
@@ -606,6 +614,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenu jmenuTemas;
     private javax.swing.JLabel lblNombreEmpresa;
     private javax.swing.JLabel lblPiePagina;
+    private javax.swing.JLabel lblReloj;
     private javax.swing.JLabel lblTextoSecundario;
     // End of variables declaration//GEN-END:variables
 
@@ -955,6 +964,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setJPanelPiePagina(JPanel JPanelPiePagina) {
         this.JPanelPiePagina = JPanelPiePagina;
+    }
+
+    public JLabel getLblReloj() {
+        return lblReloj;
+    }
+
+    public void setLblReloj(JLabel lblReloj) {
+        this.lblReloj = lblReloj;
     }
         
     

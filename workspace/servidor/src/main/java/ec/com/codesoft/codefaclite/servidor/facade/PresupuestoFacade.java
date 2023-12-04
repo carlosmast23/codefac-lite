@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalleActividad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -99,9 +100,10 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         return query.getResultList();
     }
     
-    public List<PresupuestoDetalleActividad> consultarActividades(Date fechaInicial, Date fechaFinal, Persona cliente,String codigoObjetoMantenimiento, Presupuesto.EstadoEnum estadoEnum) 
+    public List<PresupuestoDetalleActividad> consultarActividades(Date fechaInicial, Date fechaFinal, Persona cliente,Usuario usuario,String codigoObjetoMantenimiento, Presupuesto.EstadoEnum estadoEnum) 
     {
         //PresupuestoDetalleActividad p;
+        //p.getUsuario()
         //p.getPresupuestoDetalle().getPresupuesto();
         //presupuestoDetalleActividad.get
         //Presupuesto presupuesto;
@@ -126,6 +128,11 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
             queryString += " AND p.presupuestoDetalle.presupuesto.estado=?4";
         }
         
+        if(usuario!=null)
+        {
+            queryString+=" AND p.usuario=?5";
+        }
+        
         if(!UtilidadesTextos.verificarNullOVacio(codigoObjetoMantenimiento))
         {
             queryString+=" AND p.presupuestoDetalle.presupuesto.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento.codigo=?5 "; 
@@ -147,6 +154,11 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
 
         if (estadoEnum != null) {
             query.setParameter(4, estadoEnum.getLetra());
+        }
+        
+        if(usuario!=null)
+        {
+            query.setParameter(5,usuario);
         }
         
         if(!UtilidadesTextos.verificarNullOVacio(codigoObjetoMantenimiento))

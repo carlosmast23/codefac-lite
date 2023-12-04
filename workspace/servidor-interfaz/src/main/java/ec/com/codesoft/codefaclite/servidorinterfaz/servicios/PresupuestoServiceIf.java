@@ -35,6 +35,6 @@ public interface PresupuestoServiceIf  extends ServiceAbstractIf<Presupuesto> {
    public Presupuesto consultarUltimaPorObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException;
    public Presupuesto grabar(Presupuesto entity,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException;
    public void editar(Presupuesto p,Boolean enviarCorreo) throws RemoteException, ServicioCodefacException;
-   public ReportDataAbstract<ActividadPresupuestoData> consultarActividadesPresupuesto(Date fechaInicial, Date fechaFinal,Persona cliente,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException, RemoteException;
+   public ReportDataAbstract<ActividadPresupuestoData> consultarActividadesPresupuesto(Date fechaInicial, Date fechaFinal,Persona cliente,Usuario usuario,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException, RemoteException;
    
 }

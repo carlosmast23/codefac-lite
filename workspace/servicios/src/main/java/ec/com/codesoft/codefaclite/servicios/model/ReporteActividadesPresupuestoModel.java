@@ -33,7 +33,7 @@ public class ReporteActividadesPresupuestoModel extends ReportePresupuestosModel
     
     @Override
     protected void ejecutarConsulta(Presupuesto.EstadoEnum estadoEnum, Date fechaInicial, Date fechaFinal, Persona cliente, String placa,Usuario usuario) throws ServicioCodefacException, RemoteException {
-        reportResult=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarActividadesPresupuesto(fechaInicial, fechaFinal, cliente, placa, estadoEnum);
+        reportResult=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarActividadesPresupuesto(fechaInicial, fechaFinal, cliente,usuario, placa, estadoEnum);
         mostrarDatosTabla();
          
     }

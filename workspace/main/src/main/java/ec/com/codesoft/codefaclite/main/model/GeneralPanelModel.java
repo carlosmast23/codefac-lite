@@ -176,6 +176,7 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -276,6 +277,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private Font fontLetraPiePagina = new Font(getLblNombreEmpresa().getFont().getFontName(), Font.PLAIN, 12);    
     private Color colorPiePagina=new Color(62, 93, 162);
     
+    //FormatoHoraReloj
+    private SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        
    
     public GeneralPanelModel() 
     {
@@ -303,7 +307,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         actualizarTituloCodefac();        
         habilitarBotones(false);  
         abrirAsistenteConfiguracion();
-        
+        iniciarReloj();
+    }
+    
+    private void iniciarReloj()
+    {
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getLblReloj().setText(formatoHora.format(new Date()));
+            }
+        });
+        timer.start();
     }
     
     public void abrirAsistenteConfiguracion()
