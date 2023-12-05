@@ -163,6 +163,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         
         controladorReporte.setProductoFiltro(productoFiltro);
         controladorReporte.setCategoriaFiltro(categoriaFiltro);
+        controladorReporte.setResponsableFiltro((Empleado) getCmbResponsable().getSelectedItem());
         controladorReporte.setTodasVentas(getChkTodosVenta().isSelected());
         controladorReporte.setVendedor((Empleado) getCmbVendedor().getSelectedItem());
         
@@ -550,6 +551,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             List<Empleado> empleadoList=ServiceFactory.getFactory().getEmpleadoServiceIf().buscarVendedores(session.getEmpresa());
             
             UtilidadesComboBox.llenarComboBox(getCmbVendedor(),empleadoList,true);
+            UtilidadesComboBox.llenarComboBox(getCmbResponsable(), empleadoList,true);
             
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);

@@ -96,6 +96,7 @@ public class ControladorReporteFactura {
     private Boolean agregarCostos;
     private Producto productoFiltro;
     private CategoriaProducto categoriaFiltro;
+    private Empleado responsableFiltro;
     private Empleado vendedor;
     
     private Boolean todasVentas=false;
@@ -368,7 +369,7 @@ public class ControladorReporteFactura {
                         
                         if(reporteConDetallesFactura)
                         {
-                            List<ReporteFacturaData> respuesta=convertirDatosReportePorProducto(factura, reporteData,productoFiltro,categoriaFiltro);
+                            List<ReporteFacturaData> respuesta=convertirDatosReportePorProducto(factura, reporteData,productoFiltro,categoriaFiltro,responsableFiltro);
                             data.addAll(respuesta);
                         }
                         else
@@ -484,12 +485,20 @@ public class ControladorReporteFactura {
      * @param factura
      * @param reporteData 
      */
-    private List<ReporteFacturaData> convertirDatosReportePorProducto(Factura factura,ReporteFacturaData reporteData,Producto productoFiltro,CategoriaProducto categoriaFiltro)
+    private List<ReporteFacturaData> convertirDatosReportePorProducto(Factura factura,ReporteFacturaData reporteData,Producto productoFiltro,CategoriaProducto categoriaFiltro,Empleado responsableFiltro)
     {
         List<ReporteFacturaData> resultados=new ArrayList<ReporteFacturaData>();
         try {            
             for (FacturaDetalle detalle : factura.getDetalles()) 
             {
+                if(responsableFiltro!=null)                
+                {
+                    if(!responsableFiltro.equals(detalle.getResponsable()))
+                    {
+                        continue;
+                    }
+                }                
+                
                 if(productoFiltro!=null)
                 {
                     //Si no coincide con el filtro entonces busco el siguiente producto
@@ -1189,6 +1198,16 @@ public class ControladorReporteFactura {
     public void setCategoriaFiltro(CategoriaProducto categoriaFiltro) {
         this.categoriaFiltro = categoriaFiltro;
     }
+
+    public Empleado getResponsableFiltro() {
+        return responsableFiltro;
+    }
+
+    public void setResponsableFiltro(Empleado responsableFiltro) {
+        this.responsableFiltro = responsableFiltro;
+    }
+    
+    
 
     public Empleado getVendedor() {
         return vendedor;

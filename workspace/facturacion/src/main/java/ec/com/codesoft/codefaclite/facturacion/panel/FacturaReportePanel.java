@@ -115,6 +115,8 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         chkTodosCategoria = new javax.swing.JCheckBox();
         lblReferido3 = new javax.swing.JLabel();
         cmbVendedor = new javax.swing.JComboBox<>();
+        lblReferido4 = new javax.swing.JLabel();
+        cmbResponsable = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -127,7 +129,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         lblCliente.setText("Tipo de Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblCliente, gridBagConstraints);
@@ -199,7 +201,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -242,11 +244,11 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         jLabel12.setText("           ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         getContentPane().add(jLabel12, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         getContentPane().add(jLabel21, gridBagConstraints);
 
         btnLimpiarFechaFin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
@@ -400,7 +402,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -519,9 +521,10 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         chkReporteAgrupadoReferido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkReporteAgrupadoReferido.setText("Reporte Agrupado Referido");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(chkReporteAgrupadoReferido, gridBagConstraints);
 
@@ -562,7 +565,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -716,7 +719,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -791,6 +794,24 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(cmbVendedor, gridBagConstraints);
 
+        lblReferido4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblReferido4.setText("Responsable:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(lblReferido4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        getContentPane().add(cmbResponsable, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -841,6 +862,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbPuntoEmision;
+    private javax.swing.JComboBox<Empleado> cmbResponsable;
     private javax.swing.JComboBox<ComprobanteEntity.ComprobanteEnumEstado> cmbSucursal;
     private javax.swing.JComboBox<TipoReporteEnum> cmbTipoReporte;
     private javax.swing.JComboBox<Empleado> cmbVendedor;
@@ -874,6 +896,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblReferido1;
     private javax.swing.JLabel lblReferido2;
     private javax.swing.JLabel lblReferido3;
+    private javax.swing.JLabel lblReferido4;
     private javax.swing.JLabel lblSubtotal0;
     private javax.swing.JLabel lblSubtotal12;
     private javax.swing.JLabel lblSubtotalSinImpuesto;
@@ -1196,6 +1219,15 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     public void setCmbVendedor(JComboBox<Empleado> cmbVendedor) {
         this.cmbVendedor = cmbVendedor;
     }
+
+    public JComboBox<Empleado> getCmbResponsable() {
+        return cmbResponsable;
+    }
+
+    public void setCmbResponsable(JComboBox<Empleado> cmbResponsable) {
+        this.cmbResponsable = cmbResponsable;
+    }
+    
     
     
 }

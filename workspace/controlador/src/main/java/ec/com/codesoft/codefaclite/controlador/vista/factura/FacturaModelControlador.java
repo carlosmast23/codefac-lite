@@ -590,6 +590,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 tipoDocumentoEnum,
                 descuentoDefecto);
         
+        if(productoSeleccionado!=null && productoSeleccionado.getResponsableRequeridoEnum()!=null)
+        {
+            facturaDetalle.setResponsableRequerido(productoSeleccionado.getResponsableRequeridoEnum().getBool());
+        }
+        
         verificarProductoConNotaVentaInterna(facturaDetalle);
         
         if(calcularAhorro)

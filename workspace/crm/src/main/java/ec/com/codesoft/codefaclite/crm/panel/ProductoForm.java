@@ -262,6 +262,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         lblEspacio23 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         txtPrecio1SinSubsidio = new javax.swing.JTextField();
+        chkResponsableRequerido = new javax.swing.JCheckBox();
         jPanel8 = new javax.swing.JPanel();
         lblEspacio24 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
@@ -1616,7 +1617,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jPanel7.add(chkOcultarDetalleVenta, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel7.add(lblEspacio23, gridBagConstraints);
@@ -1625,7 +1626,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel28.setText("PVP1 sin subsidio:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel7.add(jLabel28, gridBagConstraints);
@@ -1633,11 +1634,19 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         txtPrecio1SinSubsidio.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel7.add(txtPrecio1SinSubsidio, gridBagConstraints);
+
+        chkResponsableRequerido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkResponsableRequerido.setText("Responsable Requerido");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel7.add(chkResponsableRequerido, gridBagConstraints);
 
         tabMenu.addTab("Otros", jPanel7);
 
@@ -1793,6 +1802,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
     private javax.swing.JCheckBox chkPsicotropicos;
+    private javax.swing.JCheckBox chkResponsableRequerido;
     private javax.swing.JCheckBox chkTransportarGuiaRemision;
     private javax.swing.JCheckBox chkVentas;
     private javax.swing.JComboBox<CasaComercial> cmbCasaComercial;
@@ -2733,6 +2743,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setLstComponentes(JList<ProductoComponenteDetalle> lstComponentes) {
         this.lstComponentes = lstComponentes;
+    }
+
+    public JCheckBox getChkResponsableRequerido() {
+        return chkResponsableRequerido;
+    }
+
+    public void setChkResponsableRequerido(JCheckBox chkResponsableRequerido) {
+        this.chkResponsableRequerido = chkResponsableRequerido;
     }
 
     

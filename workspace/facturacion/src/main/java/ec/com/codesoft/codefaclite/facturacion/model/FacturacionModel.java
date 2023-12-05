@@ -2000,7 +2000,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         }
                 
-               
+        for(FacturaDetalle detalle: factura.getDetalles())
+        {
+            if(detalle.getResponsableRequerido()!=null && detalle.getResponsableRequerido())
+            {
+                if(detalle.getResponsable()==null)
+                {
+                    throw new ExcepcionCodefacLite("Responsable requerido para grabar, en el producto: "+detalle.getDescripcion());
+                }
+            }
+        }
 
     }
     

@@ -130,6 +130,9 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     @Column(name = "OCULTAR_DETALLE_VENTA")
     private String ocultarDetalleVenta;
     
+    @Column(name = "RESPONSABLE_REQUERIDO")
+    private String responsableRequerido;
+    
     @Column(name = "TRANSPORTAR_EN_GUIA_REMISION")
     private String transportarEnGuiaRemision;
     
@@ -484,6 +487,34 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     public void setOcultarDetalleVenta(String ocultarDetalleVenta) {
         this.ocultarDetalleVenta = ocultarDetalleVenta;
     }
+
+    public String getResponsableRequerido() {
+        return responsableRequerido;
+    }
+
+    public void setResponsableRequerido(String responsableRequerido) {
+        this.responsableRequerido = responsableRequerido;
+    }
+    
+    public EnumSiNo getResponsableRequeridoEnum() {
+        return EnumSiNo.getEnumByLetra(responsableRequerido);
+    }
+
+    public void setResponsableRequeridoEnum(EnumSiNo responsableRequeridoEnum) {
+        if(responsableRequeridoEnum!=null)
+        {
+            this.responsableRequerido=responsableRequeridoEnum.getLetra();
+        }
+        else
+        {
+            this.responsableRequerido = null;
+        }
+        
+    }
+    
+    
+    
+    
     
     public EnumSiNo getOcultarDetalleVentaEnum() {
         if(ocultarDetalleVenta==null)

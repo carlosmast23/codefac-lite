@@ -155,6 +155,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         enumSiNo=enumSiNo.getEnumByBoolean(getChkOcultarDetalleVenta().isSelected());        
         producto.setOcultarDetalleVentaEnum(enumSiNo);
         
+        enumSiNo=enumSiNo.getEnumByBoolean(getChkResponsableRequerido().isSelected());        
+        producto.setResponsableRequeridoEnum(enumSiNo);
+        
         producto.setEmpresa(session.getEmpresa());
         producto.setDisponibleVentaEnum(EnumSiNo.getEnumByBoolean(getChkVentas().isSelected()));
         producto.setDisponibleCompraEnum(EnumSiNo.getEnumByBoolean(getChkCompras().isSelected()));
@@ -206,6 +209,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getChkTransportarGuiaRemision().setSelected(true);
         
         getChkOcultarDetalleVenta().setEnabled(true);
+        getChkResponsableRequerido().setSelected(false);
         getChkGenerarCodigoAutomatico().setSelected(false);
         actualizarTablaEmpaques();
         cargarFotoFormulario();
@@ -922,6 +926,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getChkTransportarGuiaRemision().setSelected(controlador.producto.getTransportarEnGuiaRemisionEnum().getBool());
         getChkOcultarDetalleVenta().setSelected(controlador.producto.getOcultarDetalleVentaEnum().getBool());
+        getChkResponsableRequerido().setSelected((controlador.producto.getResponsableRequeridoEnum()!=null)?controlador.producto.getResponsableRequeridoEnum().getBool():false);
         
         getChkCompras().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getDisponibleCompra(),EnumSiNo.SI).getBool());
         getChkVentas().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getDisponibleVenta(),EnumSiNo.SI).getBool());

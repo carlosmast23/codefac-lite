@@ -30,6 +30,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 /**
  *
@@ -72,6 +73,8 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     @Column(name = "DESCRIPCION_ORIGINAL")
     private String descripcionOriginal;
     
+    @Transient
+    private Boolean responsableRequerido;
     
     public FacturaDetalle() {
         
@@ -105,7 +108,7 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         setIva(facturaDetalle.getIva());
         setReservado(facturaDetalle.getReservado());
         setCodigoPrincipal(facturaDetalle.getCodigoPrincipal());
-        
+        setResponsableRequerido(responsableRequerido);
         
         //this.factura=facturaDetalle.factura;
     }
@@ -190,8 +193,14 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     public void setDescripcionOriginal(String descripcionOriginal) {
         this.descripcionOriginal = descripcionOriginal;
     }
-    
-    
+
+    public Boolean getResponsableRequerido() {
+        return responsableRequerido;
+    }
+
+    public void setResponsableRequerido(Boolean responsableRequerido) {
+        this.responsableRequerido = responsableRequerido;
+    }
     
     
     @Override
