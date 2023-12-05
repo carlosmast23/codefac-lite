@@ -673,6 +673,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     private void validacionPostGrabar(Factura factura,ModoProcesarEnum modoProcesar) throws RemoteException, ServicioCodefacException 
     {
+        //Cuando no sean documentos que no sean facturas o notas de venta interna entonces no hago ninguna validacion
+        if(!(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA)))
+        {
+            return ;
+        }
+        
         //Boolean validarUtilidadNegativa;
         ParametroCodefac parametroAdvertencia=parametroService.getParametroByNombre(ParametroCodefac.ADVERTENCIA_UTILIDAD_NEGATIVA,factura.getEmpresa());
         if(ParametroUtilidades.compararParametroCodefac(parametroAdvertencia, EnumSiNo.SI))
@@ -994,6 +1000,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 //Verificar cual es el item o los items que tiene problemas 
                 
                 throw new ServicioCodefacException("Error de inconsistencia en el detalle, existe una diferencia de "+diferencia+" en el producto "+ detalle.getDescripcion()+"\nPosibles Causas:\n - El producto fue editado el precio\n - El producto requiere más decimales para el calculo exacto\n ");
+            }
+            
+            //Validar que no pueda grabar si no tiene un codigo del producto asignado
+            if(UtilidadesTextos.verificarNullOVacio(detalle.getCodigoPrincipal()))
+            {
+               throw new ServicioCodefacException("No se puede grabar un producto con Código Vacio, Nombre= "+detalle.getDescripcion());
             }
             
             //Validar que los detalles de las facturas no puedan tener más de 300 caracteres
