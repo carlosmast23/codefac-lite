@@ -1060,6 +1060,24 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
         }   
         
+        //Validacion de datos adicionales 
+        if(factura.getDatosAdicionales()!=null)
+        {
+            for (FacturaAdicional datosAdicional : factura.getDatosAdicionales()) 
+            {
+                if(UtilidadesTextos.verificarNullOVacio(datosAdicional.getCampo()))
+                {
+                    throw new ServicioCodefacException("No se puede grabar Datos Adicionales con titulo vacio");
+                }
+                
+                if(UtilidadesTextos.verificarNullOVacio(datosAdicional.getValor()))
+                {
+                    throw new ServicioCodefacException("No se puede grabar Datos Adicionales con valor vacio");
+                }
+                
+            }
+        }
+        
         if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
         {
             
