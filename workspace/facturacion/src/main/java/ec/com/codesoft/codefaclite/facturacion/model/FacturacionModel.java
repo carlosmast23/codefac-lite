@@ -162,6 +162,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
@@ -2776,6 +2777,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //cargar datos del restaurante
         getCmbMesaComanda().setSelectedItem(factura.getMesa());
         getTxtNotaMesa().setText(factura.getNota());
+        getTxtValorRecibido().setText(factura.getValorRecibido()+"");
         
         if(factura.getNumeroOrden()!=null)
         {
@@ -3584,6 +3586,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         factura.setCodigoOrigenTransaccionEnum(Factura.OrigenTransaccionEnum.ESCRITORIO);
         //factura.setVendedor(vendedor);
+        
+        BigDecimal valorRecibido= UtilidadBigDecimal.obtenerValorJTextField(getTxtValorRecibido());        
+        factura.setValorRecibido(valorRecibido);
         
 
         

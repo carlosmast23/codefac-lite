@@ -110,6 +110,9 @@ public class MigrarProductoModel extends MigrarModel {
                     //Obtener el nombre generico                    
                     producto.setNombreGenerico(getValor(ExcelMigrarProductos.Enum.NOMBRE_GENERICO, fila));
                     
+                    //Obtenre el dato de registro sanitario
+                    producto.setRegistroSanitario(getValor(ExcelMigrarProductos.Enum.REGISTRO_SANITARIO, fila));
+                    
                     //Obtener datos iniciales del inventario que necesito
                     String manejaInventario=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MANEJA_INVENTARIO).valor;
                     EnumSiNo manejaInventarioEnumSiNo=EnumSiNo.getEnumByLetra(manejaInventario.substring(0,1));
@@ -485,7 +488,14 @@ public class MigrarProductoModel extends MigrarModel {
                             lote=new Lote();
                         }
                         
-                        lote.setCodigo(producto.getCodigoPersonalizado());
+                        //Verificar si tiene ingresado un lote o crear el lote con el mismo codigo del producto
+                        String codigoLote=getValor(ExcelMigrarProductos.Enum.LOTE_CODIGO, fila);
+                        if(UtilidadesTextos.verificarNullOVacio(codigoLote)) 
+                        {
+                            codigoLote = producto.getCodigoPersonalizado();
+                        }
+                        
+                        lote.setCodigo(codigoLote);
                         lote.setEmpresa(session.getEmpresa());
                         lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                         lote.setFechaVencimiento(UtilidadesFecha.castDateUtilToSql(fechaCaducidad));

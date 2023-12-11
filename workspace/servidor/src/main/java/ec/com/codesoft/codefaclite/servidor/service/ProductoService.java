@@ -1369,7 +1369,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //System.out.println("Costo: "+kardexDetalle.getKardex().getCostoPromedio());
                 if(p.getIdProducto()==null)
                 {
-                    grabarSinTransaccion(p,false,false,ModoProcesarEnum.NORMAL); //graba el producto                
+                    grabarSinTransaccion(p,false,false,ModoProcesarEnum.FORZADO); //graba el producto                
                 }
                 else //Si ya tiene grabado el producto solo actualizo los datos
                 {

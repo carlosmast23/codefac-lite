@@ -1805,6 +1805,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("mesero", facturaProcesando.getUsuario().getNick());
             mapParametros.put("mesa",(facturaProcesando.getMesa()!=null)?facturaProcesando.getMesa().toString():"");
             mapParametros.put("nota", facturaProcesando.getNota());
+            mapParametros.put("pl_recibido", facturaProcesando.getValorRecibido()+"");
+            mapParametros.put("pl_vuelto", facturaProcesando.calcularVuelto()+"");
             mapParametros.put("numero_orden","# "+facturaProcesando.getNumeroOrden());
             
             String leyendaAdicional= ParametroUtilidades.obtenerValorParametro(facturaProcesando.getEmpresa(),ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);

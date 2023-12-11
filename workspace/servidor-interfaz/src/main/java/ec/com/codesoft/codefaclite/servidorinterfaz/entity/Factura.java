@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -141,6 +142,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     @Column(name = "ORDEN_NUMERO")
     private Integer numeroOrden;
+    
+    @Column(name = "VALOR_RECIBIDO")
+    private BigDecimal valorRecibido;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -608,6 +612,15 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setNumeroOrden(Integer numeroOrden) {
         this.numeroOrden = numeroOrden;
     }
+
+    public BigDecimal getValorRecibido() {
+        return valorRecibido;
+    }
+
+    public void setValorRecibido(BigDecimal valorRecibido) {
+        this.valorRecibido = valorRecibido;
+    }
+    
     
     
 
@@ -641,6 +654,16 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
             }
         }
         return false;
+    }
+    
+    public BigDecimal calcularVuelto()
+    {
+        BigDecimal valorVuelto=BigDecimal.ZERO;
+        if(valorRecibido!=null)
+        {
+            valorVuelto=valorRecibido.subtract(total);
+        }
+        return valorVuelto;
     }
 
     public BigDecimal calcularSubsidio() {
