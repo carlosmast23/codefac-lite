@@ -795,13 +795,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(estadoFormulario.equals(ESTADO_GRABAR))
                 {
                     PuntoEmision puntoEmision=(PuntoEmision) getCmbPuntoEmision().getSelectedItem();
-                    if(puntoEmision.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
-                    {                    
-                        java.util.Date fecha = getjDateFechaEmision().getDate();
-                        if (!comprobarRangoDeFechaPermitido(fecha)) 
-                        {
-                            //DialogoCodefac.mensaje("Advertencia fecha", "La fecha seleccionada esta fuera del rango de autorizaciòn del SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                            //getjDateFechaEmision().setDate(UtilidadesFecha.getFechaHoy()); //volver a setear la fecha de hoy para que no puedan grabar con un fecha incorrecta
+                    if(puntoEmision!=null)
+                    {
+                        if(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.equals(puntoEmision.getTipoFacturacionEnum()))
+                        {                    
+                            java.util.Date fecha = getjDateFechaEmision().getDate();
+                            if (!comprobarRangoDeFechaPermitido(fecha)) 
+                            {
+                                //DialogoCodefac.mensaje("Advertencia fecha", "La fecha seleccionada esta fuera del rango de autorizaciòn del SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                                //getjDateFechaEmision().setDate(UtilidadesFecha.getFechaHoy()); //volver a setear la fecha de hoy para que no puedan grabar con un fecha incorrecta
+                            }
                         }
                     }
                 }

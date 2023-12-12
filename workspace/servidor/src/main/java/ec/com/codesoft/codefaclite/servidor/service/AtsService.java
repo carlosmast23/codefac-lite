@@ -298,7 +298,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
         for (Compra compra : compras) 
         {
-            if(compra.getSecuencial()==1778)
+            if(compra.getSecuencial()==677072)
             {
                 System.out.println("Revisar compra");
             }
@@ -384,7 +384,15 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         compraAts.setBaseNoGraIva(BigDecimal.ZERO);
         compraAts.setBaseImponible(compra.getSubtotalSinImpuestos().setScale(2, RoundingMode.HALF_UP));
         //compraAts.setBaseImpGrav(compra.getSubtotalImpuestos().setScale(2, RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
-        compraAts.setBaseImpGrav(compra.getSubtotalImpuestosMenosDescuento().setScale(2, RoundingMode.HALF_UP)); //TODO: Por el momento redondeo por que aveces causa problemas
+        BigDecimal baseImpGrav=compra.getSubtotalImpuestosMenosDescuento().setScale(2, RoundingMode.HALF_UP);
+        
+        //En el caso que por algun motivo tenga descuentos que generen saldos negativos tomo el minimo valor que es cero
+        if(baseImpGrav.compareTo(BigDecimal.ZERO)<0)
+        {
+            baseImpGrav=BigDecimal.ZERO;
+        }
+        
+        compraAts.setBaseImpGrav(baseImpGrav); //TODO: Por el momento redondeo por que aveces causa problemas
         compraAts.setBaseImpExe(BigDecimal.ZERO);//TODO: Revisar cuando se aplica este campo , el manula dice que son Base imponible exenta de IVA
         compraAts.setMontoIce(BigDecimal.ZERO);
         compraAts.setMontoIva(compra.getIva().setScale(2, RoundingMode.HALF_UP));

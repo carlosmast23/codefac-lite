@@ -102,16 +102,16 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         query.setParameter(6, documentoEnum.getCodigo());
         
         
-        String queryString2 = "SELECT f FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4  AND f.codigoDocumento=?6 ";
-        Query query2 = getEntityManager().createQuery(queryString2);
+        //String queryString2 = "SELECT f FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4  AND f.codigoDocumento=?6 ";
+        //Query query2 = getEntityManager().createQuery(queryString2);
         
-        query2.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier 
+        /*query2.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier 
         query2.setParameter(2, empresa);
         query2.setParameter(3, puntoEstablecimiento);
         query2.setParameter(4, puntoEmision);
         query2.setParameter(6, documentoEnum.getCodigo());
         
-        Object resultado=query2.getResultList();
+        Object resultado=query2.getResultList();*/
         
         return (Integer) query.getSingleResult();
     }

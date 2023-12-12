@@ -845,6 +845,12 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //Validar temas de los detalles de la factura de compra
         for (CompraDetalle detalle : compra.getDetalles()) 
         {
+            //Verificar que los descuentos no tengan valores negativos
+            if(detalle.getSubtotalRestadoDescuentos().compareTo(new BigDecimal("-1"))<0)
+            {
+                throw new ServicioCodefacException("El detalle con el producto: "+detalle.getProductoProveedor().getProducto().getNombre()+" tiene problemas por que va a generar descuentos negativos"+"\nPosible Solución: corregir descuento");
+            }
+            
             BigDecimal subtotal=detalle.getSubtotal().setScale(2, RoundingMode.HALF_UP);
             if(subtotal.compareTo(BigDecimal.ZERO)<0)
             {
