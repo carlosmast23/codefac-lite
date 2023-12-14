@@ -689,16 +689,34 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         {
             //Si el precio unitario tiene Null significa que no se tiene que recalcular los valores
             if(kardexDetalle.getPrecioUnitario()!=null)
-            {            
+            {                   
                 ///Verificar si quieren hacer los calculos de los costos tomando en cuenta los descuentos
                 if(ParametroUtilidades.comparar(kardex.getProducto().getEmpresa(),ParametroCodefac.CALCULAR_DESCUENTO_COSTO, EnumSiNo.SI))
                 {
                     //ALMACENA EL ULTIMO VALOR INGRESADO SIEMPRE QUE SEA UNA COMPRA
-                    kardex.setPrecioUltimo(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+                    //En esta parte toma en cuenta si tiene un valor cero no almacena porque para los casos practicos el usuario debe querer ver el último precio valido
+                    Boolean actualizarUltimoPrecio=true;
+                    BigDecimal precioConDescuento= kardexDetalle.obtenerPrecioUnitarioConDescuento();
+                    if(kardexDetalle.getDescuento().compareTo(BigDecimal.ZERO)>0)
+                    {
+                        if(precioConDescuento.compareTo(BigDecimal.ZERO)<=0)
+                        {
+                            actualizarUltimoPrecio=false;
+                        }
+                    }
+                    
+                    if(actualizarUltimoPrecio)
+                    {
+                        kardex.setPrecioUltimo(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+                    }
                 }
                 else
                 {
-                    kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                    //Solo almacenar el precio unitario si es mayor que cero
+                    if(kardexDetalle.getPrecioUnitario().compareTo(BigDecimal.ZERO)>=0)
+                    {
+                        kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                    }                    
                 }
                 
                 //Hacer un redondeo por el momento a 4 digitos para saber que hicieron la compra

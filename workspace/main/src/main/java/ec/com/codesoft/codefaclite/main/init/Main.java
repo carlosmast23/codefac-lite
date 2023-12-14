@@ -655,10 +655,11 @@ public class Main {
             if(UtilidadesSistema.verificarClaveSoporte(claveIngresada))
             {
                 //Actualizar los secuenciales en el archivo de comprobacion en la base de datos para que por el momento puedan seguir continuando
-                if(DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea corregir los secuenciales?\nNOTA: Recuerde que los comprobantes con problemas tienen que ingresar manualmente.   ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
-                {
-                    archivo.corregirDatosComprobacion();
-                }                
+                //if(DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea corregir los secuenciales?\nNOTA: Recuerde que los comprobantes con problemas tienen que ingresar manualmente.   ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
+                //{
+                archivo.corregirDatosComprobacion();
+                DialogoCodefac.mensaje(new CodefacMsj("Los secuenciales fueron CORREGIDOS AUTOMATICAMENTE, recuerde ingresar los comprobantes faltante de forma manual", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                //}                
             }
             else
             {
