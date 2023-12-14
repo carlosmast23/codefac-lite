@@ -202,7 +202,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
             @Override
             public void actionPerformed(ActionEvent e) {
                 //ComprobanteEntity.ComprobanteEnumEstado.values();
-                ComprobanteEntity.ComprobanteEnumEstado opcionSeleccionada=(ComprobanteEntity.ComprobanteEnumEstado) JOptionPane.showInputDialog(null,"Seleccione el estado para cambiar:","Cambiar estado", JOptionPane.QUESTION_MESSAGE, null, ComprobanteEntity.ComprobanteEnumEstado.values(), ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+                /*ComprobanteEntity.ComprobanteEnumEstado opcionSeleccionada=(ComprobanteEntity.ComprobanteEnumEstado) JOptionPane.showInputDialog(null,"Seleccione el estado para cambiar:","Cambiar estado", JOptionPane.QUESTION_MESSAGE, null, ComprobanteEntity.ComprobanteEnumEstado.values(), ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
                 if(opcionSeleccionada!=null)
                 {
                     ComprobanteEntity comprobanteEntidad=comprobante.getComprobante();
@@ -216,7 +216,8 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                         Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
                         DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
                     }
-                }
+                }*/
+                cambiarEstadoComprobante(comprobante.getComprobante());
             }
         });
         
@@ -545,5 +546,29 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
     
     
  
+    public static void cambiarEstadoComprobante(ComprobanteEntity comprobanteEntidad)
+    {
+        //Validacion que ingrese la clave de soporte para poder continuar
+        String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+        if (!UtilidadesSistema.verificarClaveSoporte(claveIngresada)) {
+            DialogoCodefac.mensaje(new CodefacMsj("Clave de acceso incorrecta", CodefacMsj.TipoMensajeEnum.ERROR));
+            return;
+        }
+        
+        ComprobanteEntity.ComprobanteEnumEstado opcionSeleccionada = (ComprobanteEntity.ComprobanteEnumEstado) JOptionPane.showInputDialog(null, "Seleccione el estado para cambiar:", "Cambiar estado", JOptionPane.QUESTION_MESSAGE, null, ComprobanteEntity.ComprobanteEnumEstado.values(), ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+        if (opcionSeleccionada != null) {
+            //ComprobanteEntity comprobanteEntidad = comprobante.getComprobante();
+            comprobanteEntidad.setEstado(opcionSeleccionada.getEstado());
+            try {
+                ServiceFactory.getFactory().getComprobanteServiceIf().editar(comprobanteEntidad);
+                DialogoCodefac.dialogoPregunta(MensajeCodefacSistema.AccionesFormulario.PROCESO_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            }
+        }
+    }
     
 }

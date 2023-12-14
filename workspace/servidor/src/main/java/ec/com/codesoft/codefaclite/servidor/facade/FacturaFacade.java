@@ -404,6 +404,16 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           }
       }
       
+    public List<Factura> buscarPorAutorizacionFacade(String autorizacion) throws RemoteException,ServicioCodefacException
+    {
+        //Factura f;
+        //f.getClaveAcceso();
+        String queryString=" SELECT f FROM Factura f WHERE f.claveAcceso=?1 ";
+        Query query=getEntityManager().createQuery(queryString);
+        query.setParameter(1,autorizacion);
+        return query.getResultList();
+    }
+      
       public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor)
       {
           //Factura f;

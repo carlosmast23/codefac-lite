@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
@@ -45,6 +46,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -843,6 +845,38 @@ public class FacturaReporteModel extends FacturaReportePanel {
             }
         });
         jpopMenuItem.add(itemRide);
+        JMenuItem itemBuscar= new JMenuItem("Cambiar Estado");
+        itemBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //Obtener Factura Seleccionada
+                    Integer filaSeleccionado=getTblDocumentos().getSelectedRow();
+                                        
+                    if(filaSeleccionado>=0)
+                    {
+                        String claveAcceso=controladorReporte.getData().get(filaSeleccionado).getClaveAcceso();
+                        Factura facturaCargada= ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorAutorizacion(claveAcceso);
+                        
+                        /*FacturacionModel facturacionModel = new FacturacionModel();
+                        panelPadre.crearVentanaCodefac(facturacionModel, true);
+                        facturacionModel.iniciar();
+                        facturacionModel.cargarFacturaDesdeProforma(facturaCargada,facturaCargada.getCodigoDocumentoEnum(),true);*/
+                        ComponenteDatosComprobanteElectronicosPanel.cambiarEstadoComprobante(facturaCargada);
+                        generarReporte();
+                    }                    
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        jpopMenuItem.add(itemBuscar);
+        //Agregar nuevo evento para abrir la factura en modo edición
+        
                 
         getTblDocumentos().setComponentPopupMenu(jpopMenuItem);
     }

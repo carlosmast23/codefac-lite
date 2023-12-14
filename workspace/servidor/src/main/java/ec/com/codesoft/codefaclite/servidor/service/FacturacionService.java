@@ -142,6 +142,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return getFacade().buscarPorPremimpresoYEstadoFacade(secuencial, puntoEstablecimiento, puntoEmision, estadoEnum);
     }
     
+    public Factura buscarPorAutorizacion(String autorizacion) throws RemoteException,ServicioCodefacException
+    {
+        List<Factura> resultadoList=getFacade().buscarPorAutorizacionFacade(autorizacion);
+        
+        if(resultadoList.size()>0)
+        {
+            return resultadoList.get(0);
+        }
+        return null;
+    }
+    
     /**
      * TODO: Este metodo me parece que debe estar en compra y no en servicio de factura
      * @param proforma
