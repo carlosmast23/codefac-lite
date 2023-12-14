@@ -46,7 +46,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         return query.getResultList();
     }
     
-    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Boolean fechaFinExacto,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum) throws ServicioCodefacException, RemoteException
+    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Boolean fechaFinExacto,Boolean todosTaller,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum) throws ServicioCodefacException, RemoteException
     {
         //Mantenimiento m;
         //m.getTaller().getNombre();
@@ -99,13 +99,16 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         }
         
         String tallerStr="";
-        if(taller!=null)
+        if(!todosTaller)
         {
-            tallerStr=" AND m.taller=?6 "; 
-        }
-        else
-        {
-            tallerStr=" AND m.taller.nombre<>?66 "; 
+            if(taller!=null)
+            {
+                tallerStr=" AND m.taller=?6 "; 
+            }
+            else
+            {
+                tallerStr=" AND m.taller.nombre<>?66 "; 
+            }
         }
         
         String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado+marcaStr+ubicacionEnumStr+tallerStr;
@@ -154,13 +157,16 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
             query.setParameter(5, ubicacionEnum.getLetra());
         }
         
-        if(taller!=null)
+        if(!todosTaller)
         {
-            query.setParameter(6, taller);
-        }
-        else
-        {
-            query.setParameter(66, "Taller Mecánico");
+            if(taller!=null)
+            {
+                query.setParameter(6, taller);
+            }
+            else
+            {
+                query.setParameter(66, "Taller Mecánico");
+            }
         }
         
         return query.getResultList();

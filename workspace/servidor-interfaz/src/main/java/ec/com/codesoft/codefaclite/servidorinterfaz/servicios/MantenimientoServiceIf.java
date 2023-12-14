@@ -29,7 +29,7 @@ public interface MantenimientoServiceIf extends ServiceAbstractIf<Mantenimiento>
     public List<Mantenimiento> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException;
     public int grabarPorLote(List<Mantenimiento> mantenimientoList,Empresa empresa,Usuario usuarioCreacion)  throws ServicioCodefacException, RemoteException;
     public List<Mantenimiento> obtenerPendientes(Empresa empresa) throws ServicioCodefacException, RemoteException ;
-    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Boolean fechaFinExacto,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados,TareaMantenimiento tareaMantenimiento) throws ServicioCodefacException, RemoteException;
+    public List<MantenimientoResult> consultarMantenimiento(Date fechaInicio, Date fechaFin,Boolean fechaFinExacto,Boolean todosTaller,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum ,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,Boolean eliminados,TareaMantenimiento tareaMantenimiento) throws ServicioCodefacException, RemoteException;
     public List<Mantenimiento> obtenerPendientesClasificarUbicacion(Empresa empresa) throws ServicioCodefacException, RemoteException;
     public void editarLote(List<Mantenimiento> mantenimientoList,Usuario usuarioEditar) throws ServicioCodefacException, RemoteException;
     public List<Mantenimiento> obtenerPendientesPorVin(Empresa empresa,String vin) throws ServicioCodefacException, RemoteException;

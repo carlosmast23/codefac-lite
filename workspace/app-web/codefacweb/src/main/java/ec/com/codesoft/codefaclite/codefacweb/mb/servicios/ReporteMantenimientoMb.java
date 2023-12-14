@@ -73,6 +73,7 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
     private String tipoReporte;
     private List<Taller> tallerList;  
     private Taller tallerSeleccionado;
+    private Boolean todosTalleres;
     
     
     private Boolean visibleVin;
@@ -300,8 +301,8 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
         }*/
                 
         try { 
-            System.out.println("Datos Consulta | fechaIni: "+fechaInicial+" | fechaFin: "+fechaFinal+" | estado: "+estadoSeleccionado+" | marca: "+marcaSeleccionada+" | ubi: "+ubicacionSeleccionada+" | tarea: "+tareaSeleccionada);
-            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,fechaFinalExacta,tallerSeleccionado,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
+            System.out.println("Datos Consulta | fechaIni: "+fechaInicial+" | fechaFin: "+fechaFinal+" | estado: "+estadoSeleccionado+" | marca: "+marcaSeleccionada+" | ubi: "+ubicacionSeleccionada+" | tarea: "+tareaSeleccionada+" | taller: "+tallerSeleccionado+" | tallerTod:"+todosTalleres);
+            mantenimientoList=ServiceFactory.getFactory().getMantenimientoServiceIf().consultarMantenimiento(fechaInicial,fechaFinal,fechaFinalExacta,todosTalleres,tallerSeleccionado,estadoSeleccionado,marcaSeleccionada,ubicacionSeleccionada,true,tareaSeleccionada);
             System.out.println("Datos consultados ANTES: "+mantenimientoList.size());  
             if(tipoReporte.equals("proceso")) 
             {
@@ -718,6 +719,14 @@ public class ReporteMantenimientoMb extends GeneralAbstractMb implements Seriali
 
     public void setVisibleParteVehiculo(Boolean visibleParteVehiculo) {
         this.visibleParteVehiculo = visibleParteVehiculo;
+    }
+
+    public Boolean getTodosTalleres() {
+        return todosTalleres;
+    }
+
+    public void setTodosTalleres(Boolean todosTalleres) {
+        this.todosTalleres = todosTalleres;
     }
 
     
