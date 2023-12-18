@@ -221,6 +221,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jLabel47 = new javax.swing.JLabel();
         txtRegistroSanitario = new javax.swing.JTextField();
         chkPsicotropicos = new javax.swing.JCheckBox();
+        btnCrearCasaComercial = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatosEnsamble = new javax.swing.JTable();
@@ -1284,13 +1285,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(txtNombreGenerico, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -1323,6 +1324,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 150;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -1343,6 +1345,16 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel9.add(chkPsicotropicos, gridBagConstraints);
+
+        btnCrearCasaComercial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnCrearCasaComercial.setFocusable(false);
+        btnCrearCasaComercial.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCrearCasaComercial.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel9.add(btnCrearCasaComercial, gridBagConstraints);
 
         tabMenu.addTab("Farmacia", jPanel9);
 
@@ -1851,6 +1863,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarEnsamble;
     private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnBuscarProductoEnsamble;
+    private javax.swing.JButton btnCrearCasaComercial;
     private javax.swing.JButton btnCrearCategoria;
     private javax.swing.JButton btnCrearMarca;
     private javax.swing.JButton btnCrearPresentacion;
@@ -2864,6 +2877,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setCmbQuitarActividad(JButton cmbQuitarActividad) {
         this.btnQuitarActividad = cmbQuitarActividad;
+    }
+
+    public JButton getBtnCrearCasaComercial() {
+        return btnCrearCasaComercial;
+    }
+
+    public void setBtnCrearCasaComercial(JButton btnCrearCasaComercial) {
+        this.btnCrearCasaComercial = btnCrearCasaComercial;
     }
 
     

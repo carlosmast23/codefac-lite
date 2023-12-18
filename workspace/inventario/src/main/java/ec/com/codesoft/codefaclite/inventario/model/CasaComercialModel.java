@@ -11,20 +11,24 @@ import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ModelControladorAbstract;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.CasaComercialControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.inventario.MarcaProductoControlador;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.CasaComercialPanel;
 import ec.com.codesoft.codefaclite.inventario.panel.MarcaProductoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class CasaComercialModel extends CasaComercialPanel implements ControladorVistaIf,CasaComercialControlador.SwingIf{
+public class CasaComercialModel extends CasaComercialPanel implements ControladorVistaIf,CasaComercialControlador.SwingIf,DialogInterfacePanel<CasaComercial>{
     
     private CasaComercialControlador controlador;
 
@@ -111,6 +115,17 @@ public class CasaComercialModel extends CasaComercialPanel implements Controlado
 
     public void setControlador(CasaComercialControlador controlador) {
         this.controlador = controlador;
+    }
+
+    @Override
+    public CasaComercial getResult() throws ExcepcionCodefacLite {
+        try {
+            this.controlador.grabar();
+            return this.controlador.getCasaComercial();
+        } catch (RemoteException ex) {
+            Logger.getLogger(CasaComercialModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     

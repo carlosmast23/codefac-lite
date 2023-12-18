@@ -204,8 +204,9 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         
         
         try {        
-            cargarMarcasActivas();
-            casaComercialList=ServiceFactory.getFactory().getCasaComercialServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+            cargarMarcasActivas();  
+            cargarCasasComercialesActivas();
+            
             tipoProductoList=ServiceFactory.getFactory().getTipoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             segmentoProductoList=ServiceFactory.getFactory().getSegmentoProductoServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
             
@@ -220,6 +221,18 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         cargarDatosIce();
         cargarDatosIrbpnr();
 
+    }
+    
+    public void cargarCasasComercialesActivas()
+    {
+        try {
+            casaComercialList=ServiceFactory.getFactory().getCasaComercialServiceIf().obtenerActivosPorEmpresa(session.getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        casaComercialList.add(0,null);
     }
     
     public void cargarCategoriasActivas()

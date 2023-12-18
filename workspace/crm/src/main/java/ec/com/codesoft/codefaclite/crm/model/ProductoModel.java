@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.dataExport.ProductoExportar;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CasaComercial;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -603,6 +604,22 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                     }
                 }, VentanaEnum.CATEGORIA_PRODUCTO, false, formularioActual);
                 
+            }
+        });
+        
+        getBtnCrearCasaComercial().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //CasaComercial
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<CasaComercial>() {
+                    @Override
+                    public void updateInterface(CasaComercial entity) {
+                        controlador.cargarCasasComercialesActivas();
+                        getCmbCasaComercial().setSelectedItem(entity);
+                        actualizarBindingComponent(true, true);
+                        
+                    }
+                }, VentanaEnum.CASA_COMERCIAL, false, formularioActual);
             }
         });
         
