@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -100,6 +101,18 @@ public class ProductoFacade extends AbstractFacade<Producto>
         }
         
         return null;
+    }
+    
+    public List<ProductoActividad> buscarActividadPorProducto(Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        //ProductoActividad pa;
+        //pa.getProducto()
+        
+        String queryString = "SELECT DISTINCT pa FROM ProductoActividad pa WHERE pa.producto=?1 " ;
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, producto);
+        
+        return query.getResultList();
     }
     
     public List<ProductoComponenteDetalle> buscarComponentePorProducto(Producto producto) throws RemoteException,ServicioCodefacException

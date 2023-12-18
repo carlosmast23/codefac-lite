@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
@@ -216,6 +217,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         verificarVisibleBotonEditarPresentacion();
         actualizarListaComponente();
+        actualizaListaActividades();
         
         getCmbPresentacionDefectoCompras().setSelectedItem(null);
         getCmbPresentacionDefectoVentas().setSelectedItem(null);
@@ -710,9 +712,36 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getBtnEditarEnsamble().addActionListener(listenerEditarEnsamble);
         getBtnEliminarEnsamble().addActionListener(listenerEliminarEnsamble);
-        getBtnAgregarComponente().addActionListener(listenerAgregarComponente);              
-
+        getBtnAgregarComponente().addActionListener(listenerAgregarComponente);           
+        getBtnAgregarActividad().addActionListener(listenerAgregarActividad);
+        getBtnQuitarActividad().addActionListener(listenerBtnQuitarActividad);
+        
     }
+    private ActionListener listenerBtnQuitarActividad=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ProductoActividad datoSeleccionado=getLstActividad().getSelectedValue();
+            controlador.getProducto().quitarActividad(datoSeleccionado);
+            actualizaListaActividades();
+            
+        }
+    };
+    
+    private ActionListener listenerAgregarActividad=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            if(!UtilidadesTextos.verificarNullOVacio(getTxtNombreActividad().getText()))
+            {
+                ProductoActividad productoActividad=new ProductoActividad();
+                productoActividad.setNombre(getTxtNombreActividad().getText());            
+
+                controlador.getProducto().addActividad(productoActividad);     
+                getTxtNombreActividad().setText("");
+                actualizaListaActividades();
+            }
+        }
+    };
     
     private ActionListener listenerAgregarComponente=new ActionListener() 
     {
@@ -790,6 +819,22 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }        
         getTblEmpaquetado().setModel(tableModel);
         UtilidadesTablas.definirTamanioColumnas(getTblEmpaquetado(), new Integer[]{0});
+    }
+    
+    private void actualizaListaActividades()
+    {
+        List<ProductoActividad> resultadoList= controlador.getProducto().getActividadList();
+        DefaultListModel<ProductoActividad> listModel=new DefaultListModel<ProductoActividad>();
+        
+        if(resultadoList!=null)
+        {
+            for (ProductoActividad productoActividad : resultadoList) 
+            {
+                listModel.addElement(productoActividad);
+            }
+        }        
+        getLstActividad().setModel(listModel);
+        
     }
     
     private void actualizarListaComponente()
@@ -935,6 +980,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         actualizarTablaEnsamble();
         actualizarTablaEmpaques();
         actualizarListaComponente();
+        actualizaListaActividades();
         verificarVisibleBotonEditarPresentacion();
         cargarDatoKardex(controlador.producto);
         cargarFotoFormulario();

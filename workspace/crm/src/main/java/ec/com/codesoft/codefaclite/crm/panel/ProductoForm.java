@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
@@ -282,7 +283,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         jScrollPane6 = new javax.swing.JScrollPane();
         lstActividad = new javax.swing.JList<>();
         btnAgregarActividad = new javax.swing.JButton();
-        cmbQuitarActividad = new javax.swing.JButton();
+        btnQuitarActividad = new javax.swing.JButton();
         lblespacio123214 = new javax.swing.JLabel();
         txtNombreActividad = new javax.swing.JTextField();
 
@@ -1781,14 +1782,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel13.add(btnAgregarActividad, gridBagConstraints);
 
-        cmbQuitarActividad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
-        cmbQuitarActividad.setText("Quitar");
+        btnQuitarActividad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
+        btnQuitarActividad.setText("Quitar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel13.add(cmbQuitarActividad, gridBagConstraints);
+        jPanel13.add(btnQuitarActividad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -1859,6 +1860,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnEliminarEnsamble;
     private javax.swing.JButton btnExportar;
     private javax.swing.JButton btnImportar;
+    private javax.swing.JButton btnQuitarActividad;
     private javax.swing.JButton btnUtilidadesCostos;
     private javax.swing.JCheckBox chkCompras;
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
@@ -1883,7 +1885,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<PresentacionProducto> cmbPresentacionDefectoCompras;
     private javax.swing.JComboBox<PresentacionProducto> cmbPresentacionDefectoVentas;
     private javax.swing.JComboBox<PresentacionProducto> cmbPresentacionEmpaquetado;
-    private javax.swing.JButton cmbQuitarActividad;
     private javax.swing.JButton cmbQuitarComponente;
     private javax.swing.JComboBox<SegmentoProducto> cmbSegmento;
     private javax.swing.JComboBox<TipoProducto> cmbTipo;
@@ -1996,7 +1997,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblespacio123213;
     private javax.swing.JLabel lblespacio123214;
-    private javax.swing.JList<ProductoComponenteDetalle> lstActividad;
+    private javax.swing.JList<ProductoActividad> lstActividad;
     private javax.swing.JList<ProductoComponenteDetalle> lstComponentes;
     private ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona persona1;
     private javax.swing.JPanel pnlCostos;
@@ -2830,13 +2831,24 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         this.btnAgregarActividad = btnAgregarActividad;
     }
 
-    public JList<ProductoComponenteDetalle> getLstActividad() {
+    public JButton getBtnQuitarActividad() {
+        return btnQuitarActividad;
+    }
+
+    public void setBtnQuitarActividad(JButton btnQuitarActividad) {
+        this.btnQuitarActividad = btnQuitarActividad;
+    }
+
+
+    public JList<ProductoActividad> getLstActividad() {
         return lstActividad;
     }
 
-    public void setLstActividad(JList<ProductoComponenteDetalle> lstActividad) {
+    public void setLstActividad(JList<ProductoActividad> lstActividad) {
         this.lstActividad = lstActividad;
     }
+
+    
 
     public JTextField getTxtNombreActividad() {
         return txtNombreActividad;
@@ -2847,11 +2859,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     }
 
     public JButton getCmbQuitarActividad() {
-        return cmbQuitarActividad;
+        return btnQuitarActividad;
     }
 
     public void setCmbQuitarActividad(JButton cmbQuitarActividad) {
-        this.cmbQuitarActividad = cmbQuitarActividad;
+        this.btnQuitarActividad = cmbQuitarActividad;
     }
 
     

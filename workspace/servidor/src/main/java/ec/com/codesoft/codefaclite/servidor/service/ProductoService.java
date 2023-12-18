@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
@@ -282,6 +283,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         p.setPresentacionList(null);
         
         List<ProductoComponenteDetalle> componenteDetalleList=p.getComponenteList();
+        List<ProductoActividad> actividadList=p.getActividadList();
         
         entityManager.flush();
         entityManager.persist(p);
@@ -621,6 +623,22 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
     }
     
+    private void eliminarActividades(Producto producto) throws ServicioCodefacException, RemoteException
+    {
+                        
+        List<ProductoActividad> actividadList = producto.getActividadList();        
+        if (actividadList != null) {
+            List<ProductoActividad> originalList= buscarProductoActividadPorProducto(producto);
+            //List<ProductoComponenteDetalle> originalList = buscarComponentePorProducto(producto);
+            List<ProductoActividad> eliminarList = UtilidadesLista.restarListas(originalList, actividadList);
+
+            for (ProductoActividad productoActividad : eliminarList) 
+            {
+                entityManager.remove(productoActividad);
+            }
+        }
+    }
+    
     private void eliminarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException, RemoteException
     {
         //Detalle Original
@@ -907,6 +925,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 
                 //Eliminar componentes que no se necesitan
                 eliminarComponentes(producto);
+                eliminarActividades(producto);
                 
                 //Buscar componentes ensambles eliminados
                 List<ProductoEnsamble> productoEnsambleEliminar=productoEnsamblesEliminados(producto);
@@ -972,6 +991,11 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             e.printStackTrace();
         }
 
+    }
+    
+    public List<ProductoActividad> buscarProductoActividadPorProducto(Producto producto) throws RemoteException, ServicioCodefacException
+    {
+        return getFacade().buscarActividadPorProducto(producto);
     }
     
     public List<ProductoComponenteDetalle> buscarComponentePorProducto(Producto producto) throws RemoteException, ServicioCodefacException

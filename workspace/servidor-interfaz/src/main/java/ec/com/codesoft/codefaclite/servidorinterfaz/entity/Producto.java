@@ -966,6 +966,25 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
             this.garantia=null;
     }
     
+    public void quitarActividad(ProductoActividad productoActividad)
+    {
+        if(this.actividadList!=null)
+        {
+            this.actividadList.remove(productoActividad);
+        }
+    }
+    
+    public void addActividad(ProductoActividad productoActividad)
+    {
+        if(this.actividadList==null)
+        {
+            this.actividadList=new ArrayList<ProductoActividad>();
+        }
+        
+        productoActividad.setProducto(this);
+        this.actividadList.add(productoActividad);        
+    }
+    
     public void addComponente(ProductoComponente detalle)
     {
         if(this.componenteList==null)

@@ -68,6 +68,10 @@ public class ProductoActividad extends EntityAbstract<GeneralEnumEstado>{
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
-    
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
     
 }
