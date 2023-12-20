@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresentacionProductoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,17 @@ public class PresentacionProductoService extends ServiceAbstract<PresentacionPro
     
     private void validarGrabar(PresentacionProducto presentacionProducto) throws ServicioCodefacException, RemoteException
     {
+        
+        if(UtilidadesTextos.verificarNullOVacio(presentacionProducto.getNombre()))
+        {
+            throw new ServicioCodefacException("Error Validación: No se puede grabar sin ingresar un código");
+        }
+        
+        if(presentacionProducto.getNombre().length()<=10)
+        {
+            throw new ServicioCodefacException("Error Validación: las presentaciones no puede tener un tamaño superior a 10 caracteres");
+        }
+        
         if(presentacionProducto.getEmpresa()==null)
         {
             throw new ServicioCodefacException("Error Validación: No se puede grabar sin registrar una empresa");
