@@ -42,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -522,7 +523,7 @@ public class ControladorReporteFactura {
                 dataFacturaCopia.setDescFactura(detalle.getDescuento()+"");
                 dataFacturaCopia.setIvaDoceFactura(detalle.getIva()+"");
                 //dataFacturaCopia.setTotalFactura(detalle.getPrecioUnitario()+"");
-                dataFacturaCopia.setTotalFactura(detalle.calcularTotalFinal()+"");
+                dataFacturaCopia.setTotalFactura(detalle.calcularTotalFinalConTodosDecimales().setScale(2, RoundingMode.HALF_UP)+"");
                 
                 //if(!factura.getEstadoNotaCreditoEnum().equals(Factura.EstadoNotaCreditoEnum.SIN_ANULAR))
                 if(!Factura.EstadoNotaCreditoEnum.SIN_ANULAR.equals(factura.getEstadoNotaCreditoEnum()))
@@ -531,7 +532,7 @@ public class ControladorReporteFactura {
                 }
                 else
                 {
-                    dataFacturaCopia.setTotalFinal(detalle.calcularTotalFinal()+"");
+                    dataFacturaCopia.setTotalFinal(detalle.calcularTotalFinalConTodosDecimales().setScale(2, RoundingMode.HALF_UP)+"");
                 }
                 dataFacturaCopia.setNombreProducto(detalle.getDescripcion());
                 dataFacturaCopia.setNombreProductoOriginal(detalle.getDescripcionOriginal());

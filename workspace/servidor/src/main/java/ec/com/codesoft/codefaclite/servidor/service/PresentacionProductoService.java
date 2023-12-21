@@ -37,9 +37,9 @@ public class PresentacionProductoService extends ServiceAbstract<PresentacionPro
             throw new ServicioCodefacException("Error Validación: No se puede grabar sin ingresar un código");
         }
         
-        if(presentacionProducto.getNombre().length()<=10)
+        if(presentacionProducto.getNombre().length()>50)
         {
-            throw new ServicioCodefacException("Error Validación: las presentaciones no puede tener un tamaño superior a 10 caracteres");
+            throw new ServicioCodefacException("Error Validación: las presentaciones no puede tener un tamaño superior a 50 caracteres");
         }
         
         if(presentacionProducto.getEmpresa()==null)
