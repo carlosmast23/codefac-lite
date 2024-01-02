@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -452,18 +453,25 @@ public class CajaSession implements Serializable
                     if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )
                     {
                         //Verificar si fue anulado con NOTA DE CREDITO para igual no tomar en cuenta por el momento
-                        if(!Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
-                        {
+                        //if(!Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
+                        //{
                             for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
                             {
                                 //Solo agregar las formas de pago en efectivo
                                 if(formaPago.getSriFormaPago().getAlias().equals(SriFormaPago.ALIAS_FORMA_PAGO_EFECTIVO))
                                 {
                                     //System.out.println("Efectivo :"+ingre);
-                                    totalVentas = totalVentas.add(formaPago.getTotal());
+                                    if(ingresoCaja.getSignoIngresoEnum().equals(SignoEnum.POSITIVO))
+                                    {
+                                        totalVentas = totalVentas.add(formaPago.getTotal());
+                                    }
+                                    else
+                                    {
+                                        totalVentas = totalVentas.subtract(formaPago.getTotal());
+                                    }
                                 }                        
                             }
-                        }
+                        //}
 
                     }
                 }

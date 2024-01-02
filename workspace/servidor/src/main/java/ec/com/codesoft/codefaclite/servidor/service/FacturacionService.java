@@ -41,6 +41,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
@@ -2004,6 +2005,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);
             ingresoCaja.setCompra((Compra) factura);
         }   
+        else if(factura instanceof NotaCredito)
+        {
+            ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);
+            NotaCredito notaCreditoTmp=(NotaCredito) factura;
+            ingresoCaja.setFactura(notaCreditoTmp.getFactura());
+        }
         
         //Si tiene un signo como parametro entonces dejo agregando ese signo
         if(signoEnum!=null)

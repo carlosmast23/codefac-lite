@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -208,6 +209,9 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 
                 //Actualizar la cartera cuando se hacen notas de credito
                 grabarCarteraSinTransaccion(notaCredito,modoProcesarEnum);
+                
+                FacturacionService facturaService=new FacturacionService();
+                facturaService.agregarDatosParaCajaSession(notaCredito,SignoEnum.NEGATIVO);
 
 
             }

@@ -605,6 +605,12 @@ public class UtilidadesFecha {
     }
     
     public static java.util.Date agregarTiempoFinalDia(Date fecha) {
+        
+        if(fecha==null)
+        {
+            return null;
+        }
+        
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fecha);
         calendar.set(Calendar.HOUR_OF_DAY, 23);
