@@ -676,7 +676,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 FacturacionService facturaService=new FacturacionService();
                 if(carteraParametro.pagarConCaja)
                 {
-                    facturaService.agregarDatosParaCajaSession(compra);
+                    facturaService.agregarDatosParaCajaSession(compra,null);
                 }
                 
                 grabarCartera(compra,carteraParametro); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera

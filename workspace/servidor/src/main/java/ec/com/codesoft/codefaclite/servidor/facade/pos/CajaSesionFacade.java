@@ -61,7 +61,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
         try
         {
             Timestamp fechaInicioTimeStamp = UtilidadesFecha.castDateSqlToTimeStampSql(fechaInicio);
-            Timestamp fechaFinTimeStamp = UtilidadesFecha.castDateSqlToTimeStampSql(fechaFin);
+            Timestamp fechaFinTimeStamp = UtilidadesFecha.castDateSqlToTimeStampSql(UtilidadesFecha.agregarTiempoFinalDia(fechaFin));
             
             String cajaStr="";
             if(caja!=null)

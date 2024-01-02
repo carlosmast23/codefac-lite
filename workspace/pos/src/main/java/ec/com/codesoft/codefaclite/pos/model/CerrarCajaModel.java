@@ -222,6 +222,9 @@ public class CerrarCajaModel extends CajaSessionModel
         
          SimpleDateFormat dateFormatHora = new SimpleDateFormat("HH:mm");
         
+         //BigDecimal a;
+         //a.multiply(new BigDecimal("-1"));
+         
         if(ingresoCajaList!=null)
         {
             for (IngresoCaja ingresoCaja : ingresoCajaList) 
@@ -243,10 +246,10 @@ public class CerrarCajaModel extends CajaSessionModel
                         
                         //En el caso que tenga facturas anuladas o comprobantes anulados mejor pongo con valor cero para que no interfiera en los calculos
                         String totalStr=formaPago.getTotal()+"";
-                        if(estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre()) || estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getNombre()) )
-                        {
-                            totalStr="0";
-                        }
+                        //if(estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre()) || estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getNombre()) )
+                        //{
+                        //    totalStr="0";
+                        //}
 
                         VentaReporteData reporteData = new VentaReporteData(                            
                                 ingresoCaja.getFactura().getSecuencial() + "",
@@ -257,7 +260,7 @@ public class CerrarCajaModel extends CajaSessionModel
                                 estadoNombre,
                                 formaPago.getSriFormaPago().getAlias(),
                                 dateFormatHora.format(fechaIngreso),
-                                "+"
+                                ingresoCaja.getSignoIngresoEnum()+""
                         );
 
                         detalleData.add(reporteData);

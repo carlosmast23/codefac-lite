@@ -648,7 +648,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     prestamoService.grabarSinTransaccion(prestamo, factura);
                 }
                                 
-                agregarDatosParaCajaSession(factura);
+                agregarDatosParaCajaSession(factura,null);
                 
                 //Validaciones adicionales despues de hacer todo el proceso
                 validacionPostGrabar(factura,modoProcesar);
@@ -1748,6 +1748,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                             carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO);
                         }
                     
+                        //Crear un registro negativo en la caja session
+                        agregarDatosParaCajaSession(factura,SignoEnum.NEGATIVO);
                     
                 }
             });
@@ -1898,7 +1900,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws ServicioCodefacException
      * @throws RemoteException 
      */
-    public void agregarDatosParaCajaSession(ComprobanteVentaNotaCreditoAbstract factura) throws ServicioCodefacException, RemoteException
+    public void agregarDatosParaCajaSession(ComprobanteVentaNotaCreditoAbstract factura,SignoEnum signoEnum) throws ServicioCodefacException, RemoteException
     {
         //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
         List<CajaPermiso> cajasPermisosList = cajaPermisoService.buscarPermisosCajasActivos(factura.getUsuario());
@@ -2002,6 +2004,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);
             ingresoCaja.setCompra((Compra) factura);
         }   
+        
+        //Si tiene un signo como parametro entonces dejo agregando ese signo
+        if(signoEnum!=null)
+        {
+            ingresoCaja.setSignoIngresoEnum(signoEnum);
+        }
         
         entityManager.persist(ingresoCaja);
             

@@ -24,6 +24,13 @@ public enum SignoEnum {
     public int getValor() {
         return valor;
     }
+
+    @Override
+    public String toString() {
+        return (valor<0)?"-":"+";
+    }
+    
+    
     
     public static SignoEnum consultarPorValor(Integer valor)
     {

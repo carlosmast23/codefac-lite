@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="2.5892034107948705"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="568"/>
+	<property name="ireport.y" value="364"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -55,16 +55,16 @@
 	<field name="signo" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<variable name="SUBTOTAL_GROUP" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
-		<variableExpression><![CDATA[($F{signo}=="+")?new BigDecimal($F{total}):new BigDecimal("-"+$F{total})]]></variableExpression>
+		<variableExpression><![CDATA[($F{signo}.equals("+"))?new BigDecimal($F{total}):new BigDecimal("0")]]></variableExpression>
 	</variable>
 	<variable name="ELIMINADOS_TOT" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
-		<variableExpression><![CDATA[($F{estado}.equals("Eliminado"))?new BigDecimal($F{total}):BigDecimal.ZERO;]]></variableExpression>
+		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal($F{total}):BigDecimal.ZERO;]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_FINAL" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[($F{signo}=="+")?new BigDecimal($F{total}):new BigDecimal("-"+$F{total})]]></variableExpression>
+		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total})]]></variableExpression>
 	</variable>
-	<variable name="TOTAL_GROUP" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$V{SUBTOTAL_GROUP}.subtract($V{ELIMINADOS_TOT}).abs()]]></variableExpression>
+	<variable name="TOTAL_GROUP" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
+		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total})]]></variableExpression>
 	</variable>
 	<group name="GROUP_FORMA_PAGO">
 		<groupExpression><![CDATA[$F{formaPago}]]></groupExpression>
@@ -274,7 +274,7 @@
 						<font size="12" isBold="true"/>
 						<paragraph leftIndent="3" rightIndent="3"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{SUBTOTAL_GROUP}.subtract($V{ELIMINADOS_TOT}).abs()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{TOTAL_GROUP}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
