@@ -130,6 +130,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
+    
 
     public void setPrecioUnitario(BigDecimal precioUnitario) {
         
@@ -334,6 +335,16 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         return precioUnitario.multiply(cantidad).subtract(descuento);
     }
     
+    public BigDecimal getValorUnitarioConDescuento()
+    {
+        if(descuento==null)
+        {
+            descuento=BigDecimal.ZERO;
+        }
+        BigDecimal descuentoUnitario=descuento.divide(cantidad,6,BigDecimal.ROUND_UP);
+        return precioUnitario.subtract(descuentoUnitario);
+    }
+    
     /**
      * Metodo que me permite calcular el iva
      * @param porcentajeDescuento
@@ -410,7 +421,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
     public BigDecimal obtenerPrecioUnitarioConIva()
     {
-        BigDecimal precioUnitario=getPrecioUnitario();
+        BigDecimal precioUnitario=getValorUnitarioConDescuento();
         
         BigDecimal iva=BigDecimal.ZERO;
         if(cantidad.compareTo(BigDecimal.ZERO)!=0)
