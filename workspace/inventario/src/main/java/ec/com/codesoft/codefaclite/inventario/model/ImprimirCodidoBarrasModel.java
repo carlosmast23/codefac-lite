@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -181,7 +182,21 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         
         if(!UtilidadesTextos.verificarNullOVacio(anchoTxt))
         {
-            manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_ANCHO_DOCUMENTO, anchoTxt);
+            //Cambiar lo valores de los bordes
+            //String bordeIzquierdoTxt=getTxtBordeIzquierdo().getText();
+            BigDecimal bordeIzquierdo=UtilidadBigDecimal.obtenerValorJTextField(getTxtBordeIzquierdo());
+            if(bordeIzquierdo.compareTo(BigDecimal.ZERO)>0)
+            {
+                BigDecimal ancho=new BigDecimal(anchoTxt);
+                ancho=ancho.add(bordeIzquierdo);
+                manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_ANCHO_DOCUMENTO, ancho+"");
+                manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_MERGEN_IZQUIERDO, bordeIzquierdo+"");
+            }
+            else
+            {
+                manager.setearValor(ManagerReporteFacturaFisica.NOMBRE_ANCHO_DOCUMENTO, anchoTxt);
+            }
+            
             
         }
         

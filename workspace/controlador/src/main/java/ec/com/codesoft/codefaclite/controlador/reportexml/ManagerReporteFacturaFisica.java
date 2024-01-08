@@ -41,6 +41,7 @@ public class ManagerReporteFacturaFisica {
     public static final String NOMBRE_ALTO_COMPONENTE="height";
     public static final String NOMBRE_FONT_COMPONENTE="size";
     public static final String NOMBRE_BOLD_COMPONENTE="isBold";
+    public static final String NOMBRE_MERGEN_IZQUIERDO="leftMargin";
     
     /**
      * Este campo va en funcion del ancho de la pagina y parece que es el mismo valor menos los margenes

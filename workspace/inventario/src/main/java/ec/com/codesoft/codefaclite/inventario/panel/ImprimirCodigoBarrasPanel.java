@@ -62,6 +62,8 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         cmbFormatoHoja = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         txtPiePagina = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtBordeIzquierdo = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -123,10 +125,10 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbFormatoImpresion, gridBagConstraints);
 
-        jLabel2.setText("Alto:");
+        jLabel2.setText("Borde:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -253,6 +255,20 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtPiePagina, gridBagConstraints);
 
+        jLabel11.setText("Alto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel11, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtBordeIzquierdo, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -269,6 +285,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<UtilidadCodigoBarras.CodigoBarrasEnum> cmbTipoCodigoBarras;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -283,6 +300,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
     private javax.swing.JTable tblDatos;
     private javax.swing.JTextField txtAlto;
     private javax.swing.JTextField txtAncho;
+    private javax.swing.JTextField txtBordeIzquierdo;
     private javax.swing.JSpinner txtDpi;
     private javax.swing.JTextField txtPiePagina;
     // End of variables declaration//GEN-END:variables
@@ -381,6 +399,14 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
 
     public void setTxtPiePagina(JTextField txtPiePagina) {
         this.txtPiePagina = txtPiePagina;
+    }
+
+    public JTextField getTxtBordeIzquierdo() {
+        return txtBordeIzquierdo;
+    }
+
+    public void setTxtBordeIzquierdo(JTextField txtBordeIzquierdo) {
+        this.txtBordeIzquierdo = txtBordeIzquierdo;
     }
 
     
