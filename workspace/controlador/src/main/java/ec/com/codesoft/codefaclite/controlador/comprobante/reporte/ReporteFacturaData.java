@@ -30,6 +30,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     protected String fechaFactura;
     protected String identificacionCliente;
     protected String razonSocialCliente;
+    public String razonSocialTmp;
     protected String nombreLegalCliente;
     protected String estadoFactura;
     protected String tipoEmision;
@@ -619,7 +620,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
             case AGRUPADO_POR_CAMPO_ADICIONAL:
                 return campoAdicional;
             case AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE:
-                return campoAdicional;
+                String campoAgrupadoDetalle=campoAdicional+" | "+razonSocialTmp;
+                return campoAgrupadoDetalle;
         }
         
         /*String nombreCampo=nombreCampoAgrupadoIf.getNombreCampoAgrupado();

@@ -872,6 +872,8 @@ public class ControladorReporteFactura {
     {
         for (ReporteFacturaData reporteFacturaData : data) 
         {
+            //Propiedad temporal para no perder el campo de la razon social
+            reporteFacturaData.razonSocialTmp=reporteFacturaData.getRazonSocialCliente();
             reporteFacturaData.setRazonSocialCliente(reporteFacturaData.getNombreProducto());
         }
     }
@@ -1342,7 +1344,7 @@ public class ControladorReporteFactura {
         AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE("Agrupado por campo adicional - detalle",new CampoAgruparIf() {
             @Override
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
-                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL).toString();
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE).toString();
             }
         }),
         
