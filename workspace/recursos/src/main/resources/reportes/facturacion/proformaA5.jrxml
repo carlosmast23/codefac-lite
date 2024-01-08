@@ -385,7 +385,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="68" y="0" width="40" height="12" uuid="c3d21b87-a0d2-4b41-a2b8-6d6bd9bc9d4e"/>
 				<box>
 					<topPen lineWidth="1.0"/>
