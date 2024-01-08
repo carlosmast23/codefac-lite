@@ -791,6 +791,7 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             
             //TODO: Ver si el tema de los decimales se puede hacer configurable
             valorUnitario=valorUnitario.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            setIvaOpcionSeleccionado(IvaOpcionEnum.SIN_IVA);
             //TODO: Agregar el resto de los calculos para los demas precios
                         
             //pvp4=pvp4.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
@@ -802,26 +803,31 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         if(getIvaOpcion2().equals(IvaOpcionEnum.CON_IVA))
         {
             precioDistribuidor=precioDistribuidor.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            setIvaOpcion2(IvaOpcionEnum.SIN_IVA);
         }
         
         if(getIvaOpcion3().equals(IvaOpcionEnum.CON_IVA))
         {
             precioTarjeta=precioTarjeta.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            setIvaOpcion3(IvaOpcionEnum.SIN_IVA);
         }
         
         if(getIvaOpcion4().equals(IvaOpcionEnum.CON_IVA))
         {
             pvp4=pvp4.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            setIvaOpcion4(IvaOpcionEnum.SIN_IVA);
         }
         
         if(getIvaOpcion5().equals(IvaOpcionEnum.CON_IVA))
         {
             pvp5=pvp5.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            setIvaOpcion5(IvaOpcionEnum.SIN_IVA);
         }
         
         if(getIvaOpcion6().equals(IvaOpcionEnum.CON_IVA))
         {
             pvp6=pvp6.divide(ivaTmp,4,BigDecimal.ROUND_HALF_UP);
+            setIvaOpcion6(IvaOpcionEnum.SIN_IVA);
         }
         
         
