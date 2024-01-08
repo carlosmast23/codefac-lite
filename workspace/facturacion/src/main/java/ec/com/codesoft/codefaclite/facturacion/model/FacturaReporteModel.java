@@ -178,6 +178,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_VALOR)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_COMPONENTE)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE)
+                || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE)
             ) {
             controladorReporte.setReporteConDetallesFactura(true);            
         }
@@ -190,7 +191,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
         data = controladorReporte.getData();
         
-        if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE))
+        if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE) || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE))
         {
             controladorReporte.intercambiarInfoProductosReporte();
         }

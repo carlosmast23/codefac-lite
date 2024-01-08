@@ -1339,6 +1339,13 @@ public class ControladorReporteFactura {
             }
         }),
         
+        AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE("Agrupado por campo adicional - detalle",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL).toString();
+            }
+        }),
+        
         AGRUPADO_POR_RUTA("Agrupado por ruta",new CampoAgruparIf() {
             @Override
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {

@@ -618,6 +618,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
                 return mesa;
             case AGRUPADO_POR_CAMPO_ADICIONAL:
                 return campoAdicional;
+            case AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE:
+                return campoAdicional;
         }
         
         /*String nombreCampo=nombreCampoAgrupadoIf.getNombreCampoAgrupado();
