@@ -59,7 +59,7 @@ public class CarteraDetalle implements Serializable,Cloneable {
     
     @Column(name = "CODIGO_DETALLE_DOCUMENTO")
     private String codigoDetalleDocumento;
-        
+    
     @JoinColumn(name="CARTERA_ID")
     @ManyToOne(optional = false)
     private Cartera cartera;

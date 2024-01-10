@@ -1324,7 +1324,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                CarteraParametro carteraParametro=new CarteraParametro(true,0);
+                CarteraParametro carteraParametro=new CarteraParametro(true,0,1);
                 grabarCarteraSinTransaccion(factura,carteraParametro);
             }
         });

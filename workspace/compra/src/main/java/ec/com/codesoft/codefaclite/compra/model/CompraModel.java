@@ -239,7 +239,9 @@ public class CompraModel extends CompraPanel{
             setearValores();
             CarteraParametro carteraParametro=new CarteraParametro(
                     Boolean.TRUE, 
-                    (Integer)getTxtDiasCredito().getValue());      
+                    (Integer)getTxtDiasCredito().getValue(),
+                    1
+            );      
             
             carteraParametro.pagarConCaja=getChkPagarCaja().isSelected();
             

@@ -2058,11 +2058,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 Factura.numeroOrdenComanda=factura.getNumeroOrden()+1; //Solucion temporal para manejar el número de orden
             }
             else
-            {
-                
+            {                
                 CarteraParametro carteraParametro=new CarteraParametro(
                         getChkHabilitarCredito().isSelected(), 
-                        (Integer) getTxtDiasCredito().getValue());
+                        (Integer) getTxtDiasCredito().getValue(),
+                        (Integer)getTxtNumeroCuotas().getValue()
+                );
                 
                 
                 //Solo procesar normal si es una venta fisíca y distinto de una nota de venta interna
@@ -2956,6 +2957,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbPresentacionProducto().removeAllItems();
         getCmbConsumidorFinal().setSelected(false); //Ver si esta dato esta parametrizado en configuraciones
         getTxtDiasCredito().setValue(0);
+        getTxtNumeroCuotas().setValue(1);
         getTxtDescuentoGlobal().setText("0");
         actualizarVistaReembolso();
         

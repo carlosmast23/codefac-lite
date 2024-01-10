@@ -15,10 +15,12 @@ public class CarteraParametro implements Serializable{
     public Boolean habilitarCredito;
     public Integer diasCredito;
     public Boolean pagarConCaja;
+    public Integer numeroCuotas;
 
-    public CarteraParametro(Boolean habilitarCredito, Integer diasCredito) {
+    public CarteraParametro(Boolean habilitarCredito, Integer diasCredito,Integer numeroCuotas) {
         this.habilitarCredito = habilitarCredito;
         this.diasCredito = diasCredito;
+        this.numeroCuotas=numeroCuotas;
     }
     
 }

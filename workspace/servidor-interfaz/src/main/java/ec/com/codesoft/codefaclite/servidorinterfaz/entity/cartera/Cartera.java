@@ -137,6 +137,9 @@ public class Cartera implements Serializable{
     @Column(name = "SEGUNDA_REFERENCIA_DESCRIPCION")
     private String segundaReferenciaDescripcion;
     
+    @Column(name = "NUMERO_CUOTA")
+    private Integer numeroCuota;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
@@ -446,6 +449,16 @@ public class Cartera implements Serializable{
         return TipoCarteraEnum.buscarPorLetra(tipoCartera);
     }
     //Metodos personalizados
+
+    public Integer getNumeroCuota() {
+        return numeroCuota;
+    }
+
+    public void setNumeroCuota(Integer numeroCuota) {
+        this.numeroCuota = numeroCuota;
+    }
+    
+    
     
     public void addDetalle(CarteraDetalle carteraDetalle)
     {

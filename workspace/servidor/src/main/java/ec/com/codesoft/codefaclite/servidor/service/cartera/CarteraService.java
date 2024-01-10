@@ -47,6 +47,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -540,9 +541,45 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
         }
         
-        //Grabar el documento con los cruces generados
+        //Si existen más de 1 cuota creo que las diferentes cuotas
+        Boolean crearCarteraUnica=true;
+        if(carteraParametro.numeroCuotas!=null)
+        {
+            if(carteraParametro.numeroCuotas>1)
+            {
+                crearCarteraUnica=false;
+                //cartera.getTotal().di
+                BigDecimal valorCuota=cartera.getTotal().divide(new BigDecimal(carteraParametro.numeroCuotas+""),2,RoundingMode.HALF_UP);
+                //Crear las cuotas con diferentes fechas
+                for (int i = 0; i < carteraParametro.numeroCuotas; i++) 
+                {
+                    Cartera carteraTmp=new Cartera();
+                    UtilidadVarios.copiarObjetos(cartera, carteraTmp);                    
+                    
+                    for (CarteraDetalle carteraDetalleTmp : carteraTmp.getDetalles()) 
+                    {
+                        carteraDetalleTmp.setCartera(carteraTmp);
+                        carteraDetalleTmp.setSaldo(valorCuota);
+                        carteraDetalleTmp.setTotal(valorCuota);
+                        carteraDetalleTmp.setDescripcion("Cuota #"+(i+1));                        
+                    }
+                    
+                    carteraTmp.setNumeroCuota(i+1);
+                    carteraTmp.setFechaEmision(UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarMesesFecha(carteraTmp.getFechaEmision(),i+1)));
+                    carteraTmp.setTotal(valorCuota);
+                    carteraTmp.setSaldo(valorCuota);
+                    grabarCarteraSinTransaccion(carteraTmp, cruces,CrudEnum.CREAR);
+                }
+                
+                
+            }            
+        }
         
-        grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
+        if(crearCarteraUnica)
+        {
+            //Grabar el documento con los cruces generados        
+            grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
+        }
     }
     
     
@@ -1207,8 +1244,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
         
     }
-
-    public Cartera buscarCarteraPorReferencia(Long referenciaId,DocumentoEnum documento,GeneralEnumEstado estadoEnum,Cartera.TipoCarteraEnum tipoCarteraEnum,Sucursal sucursal)
+    
+    public List<Cartera> buscarCarteraPorReferenciaTodos(Long referenciaId,DocumentoEnum documento,GeneralEnumEstado estadoEnum,Cartera.TipoCarteraEnum tipoCarteraEnum,Sucursal sucursal)
     {
         if(referenciaId==null)
         {
@@ -1223,6 +1260,31 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         mapParametros.put("sucursal",sucursal);
         mapParametros.put("tipoCartera",tipoCarteraEnum.getLetra());
         List<Cartera> cartera=getFacade().findByMap(mapParametros);
+        return cartera;
+        /*if(cartera.size()>0)
+        {
+            return cartera.get(0);
+        }
+        return null;*/
+    }
+
+    public Cartera buscarCarteraPorReferencia(Long referenciaId,DocumentoEnum documento,GeneralEnumEstado estadoEnum,Cartera.TipoCarteraEnum tipoCarteraEnum,Sucursal sucursal)
+    {
+        /*if(referenciaId==null)
+        {
+            return null;
+        }
+        //Cartera c;
+        //c.getTipoCartera()
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("referenciaID", referenciaId);
+        mapParametros.put("codigoDocumento", documento.getCodigo());
+        mapParametros.put("estado",estadoEnum.getEstado());
+        mapParametros.put("sucursal",sucursal);
+        mapParametros.put("tipoCartera",tipoCarteraEnum.getLetra());
+        List<Cartera> cartera=getFacade().findByMap(mapParametros);*/
+        
+        List<Cartera> cartera=buscarCarteraPorReferenciaTodos(referenciaId, documento, estadoEnum, tipoCarteraEnum, sucursal);
         if(cartera.size()>0)
         {
             return cartera.get(0);

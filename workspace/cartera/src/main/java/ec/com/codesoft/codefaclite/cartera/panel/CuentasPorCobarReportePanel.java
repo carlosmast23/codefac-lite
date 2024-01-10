@@ -144,6 +144,8 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         cmbTipoReporte = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         txtDiasPorVencer = new javax.swing.JSpinner();
+        jLabel9 = new javax.swing.JLabel();
+        txtSecuencial = new javax.swing.JTextField();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -240,7 +242,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -258,7 +260,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         btnBuscar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
@@ -266,7 +268,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         jLabel5.setText("Saldo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel5, gridBagConstraints);
@@ -275,7 +277,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         lblTotal.setText("                ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -290,7 +292,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         jLabel6.setText("Tipo de Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel6, gridBagConstraints);
@@ -313,16 +315,16 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbTipoReporte, gridBagConstraints);
 
-        jLabel8.setText("Tipo Cartera:");
+        jLabel8.setText("# Secuencial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
@@ -333,6 +335,21 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtDiasPorVencer, gridBagConstraints);
+
+        jLabel9.setText("Tipo Cartera:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel9, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 70;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtSecuencial, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -353,6 +370,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinner1;
@@ -362,6 +380,7 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     private javax.swing.JTable tableCuentasPorCobrar;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JSpinner txtDiasPorVencer;
+    private javax.swing.JTextField txtSecuencial;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<CarteraEstadoReporteEnum> getCmbTipoReporteCartera() {
@@ -380,6 +399,15 @@ public abstract class CuentasPorCobarReportePanel extends ControladorCodefacInte
     public void setCmbTipoReporte(JComboBox<TipoReporteJasperEnum> cmbTipoReporte) {
         this.cmbTipoReporte = cmbTipoReporte;
     }
+
+    public JTextField getTxtSecuencial() {
+        return txtSecuencial;
+    }
+
+    public void setTxtSecuencial(JTextField txtSecuencial) {
+        this.txtSecuencial = txtSecuencial;
+    }
+    
     
     
 

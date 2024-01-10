@@ -261,6 +261,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel2 = new javax.swing.JLabel();
         txtDiasCredito = new javax.swing.JSpinner();
         chkHabilitarCredito = new javax.swing.JCheckBox();
+        jLabel41 = new javax.swing.JLabel();
+        txtNumeroCuotas = new javax.swing.JSpinner();
         pnlReembolso = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         tblReembolso = new javax.swing.JTable();
@@ -1512,7 +1514,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         chkActivarFinanciamiento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkActivarFinanciamiento.setText("Activar Financiamiento");
-        chkActivarFinanciamiento.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1550,7 +1551,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.ipadx = 20;
         jPanel4.add(txtDiasCredito, gridBagConstraints);
 
         chkHabilitarCredito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -1559,8 +1560,26 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel4.add(chkHabilitarCredito, gridBagConstraints);
+
+        jLabel41.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel41.setText("No Cuotas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel4.add(jLabel41, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel4.add(txtNumeroCuotas, gridBagConstraints);
 
         jTabCartera.addTab("Cartera", jPanel4);
 
@@ -1870,6 +1889,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
@@ -1962,6 +1982,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JSpinner txtFinanciamientoNumeroCuotas;
     private javax.swing.JTextField txtFinanciamientoTarifa;
     private javax.swing.JTextArea txtNotaMesa;
+    private javax.swing.JSpinner txtNumeroCuotas;
     private javax.swing.JTextField txtReferenciaContacto;
     private javax.swing.JTextField txtValorRecibido;
     private javax.swing.JTextField txtValorTotal;
@@ -2680,6 +2701,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setSpnNumeroOrdenComanda(JSpinner spnNumeroOrdenComanda) {
         this.spnNumeroOrdenComanda = spnNumeroOrdenComanda;
+    }
+
+    public JSpinner getTxtNumeroCuotas() {
+        return txtNumeroCuotas;
+    }
+
+    public void setTxtNumeroCuotas(JSpinner txtNumeroCuotas) {
+        this.txtNumeroCuotas = txtNumeroCuotas;
     }
     
     

@@ -473,7 +473,7 @@ public class FacturaPedidoLoteModelControlador extends ModelControladorAbstract<
                 facturaNueva.setPuntoEmisionId(puntoEmisionSeleccionado.getId());
                 facturaNueva.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
                 
-                FacturaParametro facturaParametro=new FacturaParametro(facturaNueva, new CarteraParametro(proformaTmp.credito, proformaTmp.dias),null);
+                FacturaParametro facturaParametro=new FacturaParametro(facturaNueva, new CarteraParametro(proformaTmp.credito, proformaTmp.dias,1),null);
                 facturasProcesar.add(facturaParametro);
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(FacturaPedidoLoteModelControlador.class.getName()).log(Level.SEVERE, null, ex);

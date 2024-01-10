@@ -32,6 +32,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraSer
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -243,7 +245,8 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                     }
                     
                     Integer diasPorVencer=(Integer) getTxtDiasPorVencer().getValue();
-                            
+                    
+                    Integer secuencial=UtilidadesNumeros.castStringToInteger(getTxtSecuencial().getText());
                     
                     List<Cartera> carteras = carteraServiceIf.listaCarteraSaldoCero(
                             persona, 
@@ -258,7 +261,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                             session.getSucursal(),
                             null,
                             diasPorVencer,
-                            null);
+                            secuencial);
                     
                     carteraResultado=carteras;
                     mostrarDatosTabla(carteras);
