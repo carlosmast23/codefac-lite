@@ -1259,8 +1259,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         mapParametros.put("estado",estadoEnum.getEstado());
         mapParametros.put("sucursal",sucursal);
         mapParametros.put("tipoCartera",tipoCarteraEnum.getLetra());
-        List<Cartera> cartera=getFacade().findByMap(mapParametros);
-        return cartera;
+        List<Cartera> carteraList=getFacade().findByMap(mapParametros);
+        return carteraList;
         /*if(cartera.size()>0)
         {
             return cartera.get(0);

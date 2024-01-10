@@ -1737,18 +1737,21 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         //ELIMINAR el registro de la CARTERA
                         CarteraService carteraService=new CarteraService();
                         
-                        Cartera carteraFactura=carteraService.buscarCarteraPorReferencia(
+                        List<Cartera> carteraFacturaList=carteraService.buscarCarteraPorReferenciaTodos(
                         factura.getId(),
                         factura.getCodigoDocumentoEnum(),
                         GeneralEnumEstado.ACTIVO,
                         Cartera.TipoCarteraEnum.CLIENTE,
                         factura.getSucursalEmpresa());
                         
-                        if(carteraFactura!=null)
+                        for (Cartera carteraFactura : carteraFacturaList) 
                         {
-                            carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO);
+                            if(carteraFactura!=null)
+                            {
+                                carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO);
+                            }
                         }
-                    
+                        
                         //Crear un registro negativo en la caja session
                         agregarDatosParaCajaSession(factura,SignoEnum.NEGATIVO);
                     

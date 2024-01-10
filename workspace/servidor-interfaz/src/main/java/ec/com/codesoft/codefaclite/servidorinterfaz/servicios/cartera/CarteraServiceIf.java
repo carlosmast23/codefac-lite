@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
 import java.math.BigDecimal;
@@ -43,5 +44,6 @@ public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public void eliminarCrucesPorCartera(Cartera carteraPadre) throws ServicioCodefacException, RemoteException;
     public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar,String descripcion) throws ServicioCodefacException,java.rmi.RemoteException;
     public Cartera obtenerCarteraPorFactura(Factura factura) throws ServicioCodefacException, RemoteException;
+    //public List<Cartera> buscarCarteraPorReferenciaTodos(Long referenciaId,DocumentoEnum documento,GeneralEnumEstado estadoEnum,Cartera.TipoCarteraEnum tipoCarteraEnum,Sucursal sucursal);
     
 }
