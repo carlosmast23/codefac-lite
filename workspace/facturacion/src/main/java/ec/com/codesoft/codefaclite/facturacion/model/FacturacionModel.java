@@ -5269,7 +5269,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //getTxtDescuento().setText(descuento.toString());
         getCmbDescuento().addItem(descuento.toString());
         getCmbDescuento().setSelectedItem(descuento.toString());
-        //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         //Dar foco a la cantidad a ingresar
         getTxtCantidad().setText("1");
         getTxtCodigoDetalle().setText(codigo);

@@ -61,6 +61,7 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("codigo", lote.getCodigo());
         mapParametros.put("estado", lote.getEstadoEnum().ACTIVO.getLetra());
+        mapParametros.put("producto", lote.getProducto());
         List<Lote> resultadoList=getFacade().findByMap(mapParametros);
         
         if(resultadoList.size()>0)
