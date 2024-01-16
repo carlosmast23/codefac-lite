@@ -543,7 +543,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //Kardex k;
         //k.getProducto().getTipoProductoCodigo();
         ///k.getId();
-        String whereTipoProducto=" AND k.producto.tipoProductoCodigo=?12 ";
+        String whereTipoProducto=" AND ( k.producto.tipoProductoCodigo=?12 OR k.producto.tipoProductoCodigo=?13 ) ";
         
         String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id FROM Kardex k WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+whereTipoProducto+orderBy;
         Query query = getEntityManager().createQuery(queryString);
@@ -588,6 +588,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         
         query.setParameter(11, EnumSiNo.SI.getLetra());
         query.setParameter(12, TipoProductoEnum.PRODUCTO.getLetra());
+        query.setParameter(13, TipoProductoEnum.EMSAMBLE.getLetra());
         
         //query.setParameter(3,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
