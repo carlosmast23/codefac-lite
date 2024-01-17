@@ -16,7 +16,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -28,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -155,7 +161,7 @@ public class ControladorReporteCompra {
     public void reporteCompraExcel() {
         try {
             Excel excel = new Excel();
-            String[] nombreCabeceras = {"Preimpreso","Documento","Autorización", "Identificación", "Nombre", "Fecha", "Subtotal12", "Sutotal0", "Descuento","IVA","Total"};
+            String[] nombreCabeceras = {"Preimpreso","Documento","Autorización", "Identificación", "Nombre", "Fecha", "Subtotal12", "Sutotal0", "Descuento","IVA","V.Afecta","Total"};
             excel.gestionarIngresoInformacionExcel(nombreCabeceras, compraDataReportes(compras));
             excel.abrirDocumento();
         } catch (IOException ex) {
@@ -372,11 +378,39 @@ public class ControladorReporteCompra {
         return parametros;
     }
     
-    public List<CompraDataReporte> compraDataReportes(List<Compra> compras)
+    @Deprecated
+    //TODO: Solucion temporal para buscar los comprobantes anulados, deberia consultar directamente desde el servidor los datos formateados para sacar el reporte
+    public static List<CompraDataReporte> compraDataReportes(List<Compra> compras)
     {
+        List<Cartera> notasCredito=new ArrayList<Cartera>();
+        try {
+            //Consultar todos los comprobantes anulados para ver si existen notas de credito que afecten a la factura de compra
+            notasCredito = ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCero(
+                    null,
+                    null,
+                    null,
+                    null,
+                    DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+                    Cartera.TipoCarteraEnum.PROVEEDORES,
+                    Cartera.TipoSaldoCarteraEnum.TODOS,
+                    Cartera.TipoOrdenamientoEnum.POR_PREIMPRESO,
+                    CarteraEstadoReporteEnum.TODO,
+                    null,
+                    DocumentoEnum.NOTA_CREDITO,
+                    null,
+                    null);
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ControladorReporteCompra.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ControladorReporteCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         List<CompraDataReporte> compraDataReportes = new ArrayList<>();
         //Parametros dinámicos que se envian para realizar el Reporte
-        for (Compra compra : compras) {
+        for (Compra compra : compras) 
+        {
             CompraDataReporte cdr = new CompraDataReporte();
             cdr.setPreimpreso(compra.getPreimpreso());
             cdr.setDocumento(compra.getCodigoDocumentoEnum().getNombre());
@@ -391,8 +425,14 @@ public class ControladorReporteCompra {
             cdr.setDescuento0((compra.getDescuentoSinImpuestos()!=null)?compra.getDescuentoSinImpuestos().toString():BigDecimal.ZERO.toString());
             cdr.setDescuento12((compra.getDescuentoImpuestos()!=null)?compra.getDescuentoImpuestos().toString():BigDecimal.ZERO.toString());
             cdr.setIva((compra.getIva()!=null)?compra.getIva().toString():BigDecimal.ZERO.toString());
-            cdr.setTotal((compra.getTotal()!=null)?compra.getTotal().toString():BigDecimal.ZERO.toString());
+            
+            BigDecimal valorAfecta=buscarValorNotaCredito(compra,notasCredito);
+            BigDecimal total=compra.getTotal().subtract(valorAfecta).setScale(2, RoundingMode.HALF_UP);
+            cdr.setValorAfecta(valorAfecta.setScale(2, RoundingMode.HALF_UP)+"");            
+            cdr.setTotal((compra.getTotal()!=null)?total.toString():BigDecimal.ZERO.toString());
+            
             compraDataReportes.add(cdr);
+            
         }
 
         Collections.sort(compraDataReportes, new Comparator<CompraDataReporte>() {
@@ -403,7 +443,37 @@ public class ControladorReporteCompra {
         return compraDataReportes;
     }
     
-    public BigDecimal sumarValores(BigDecimal d1, BigDecimal d2) {
+    private static BigDecimal buscarValorNotaCredito(Compra compra, List<Cartera> carteraList)
+    {
+        for (Cartera cartera : carteraList) 
+        {
+            System.out.println("cartera compra: "+cartera.getPreimpreso()+" > "+cartera.getCodigo());
+            for (CarteraDetalle detalle : cartera.getDetalles()) 
+            {
+                if(detalle.getCruces()!=null)
+                {
+                    for (CarteraCruce cruce : detalle.getCruces()) 
+                    {
+                        if(compra.getId().equals(cruce.getCarteraAfectada().getReferenciaID()))
+                        {
+                            if(GeneralEnumEstado.ACTIVO.equals(cruce.getCarteraAfectada().getEstadoEnum()))
+                            {
+                                return cruce.getValor();
+                            }
+                        }
+                    }
+                }
+            }
+            if(compra.getId().equals(cartera.getReferenciaID()))
+            {
+                return cartera.getTotal();
+            }
+        }
+        
+        return BigDecimal.ZERO;
+    }
+    
+    public static BigDecimal sumarValores(BigDecimal d1, BigDecimal d2) {
         if (d1 == null) {
             d1 = BigDecimal.ZERO;
         }

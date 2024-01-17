@@ -31,6 +31,8 @@ public class CompraDataReporte  implements ExcelDatosInterface
     private String iva;
     private String total;
     private String autorizacion;
+    private String valorAfecta;
+    
 
     public CompraDataReporte() {
        
@@ -147,6 +149,14 @@ public class CompraDataReporte  implements ExcelDatosInterface
     public void setDocumento(String documento) {
         this.documento = documento;
     }
+
+    public String getValorAfecta() {
+        return valorAfecta;
+    }
+
+    public void setValorAfecta(String valorAfecta) {
+        this.valorAfecta = valorAfecta;
+    }
     
     
 
@@ -164,6 +174,7 @@ public class CompraDataReporte  implements ExcelDatosInterface
         tiposDatos.add(new TipoDato(this.subtotal0,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.descuento,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.iva,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.valorAfecta,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.total,Excel.TipoDataEnum.NUMERO));
         return tiposDatos;
     }

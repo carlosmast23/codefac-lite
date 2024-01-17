@@ -480,28 +480,36 @@ public class MigrarProductoModel extends MigrarModel {
                     //Si el producto ya existe entonces busco el lote del producto previamente creado
                     if (productoTmp != null) {
                         lote = ServiceFactory.getFactory().getLoteSeviceIf().buscarPorProductoYFechaCaducidad(productoTmp, UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
-                    } else {
+                    } 
+                    /*else {                        
                         
-                        //si no existe un lote anteriormente entonces creo uno
-                        if(lote==null)
-                        {
-                            lote=new Lote();
-                        }
-                        
+                    }*/
+                    //si no existe un lote anteriormente entonces creo uno
+                    if (lote == null) {
+                        lote = new Lote();
                         //Verificar si tiene ingresado un lote o crear el lote con el mismo codigo del producto
-                        String codigoLote=getValor(ExcelMigrarProductos.Enum.LOTE_CODIGO, fila);
-                        if(UtilidadesTextos.verificarNullOVacio(codigoLote)) 
-                        {
+                        String codigoLote = getValor(ExcelMigrarProductos.Enum.LOTE_CODIGO, fila);
+                        if (UtilidadesTextos.verificarNullOVacio(codigoLote)) {
                             codigoLote = producto.getCodigoPersonalizado();
                         }
-                        
+
                         lote.setCodigo(codigoLote);
                         lote.setEmpresa(session.getEmpresa());
                         lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                         lote.setFechaVencimiento(UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
-                        lote.setProducto(producto);
+                        
+                        //Si el producto ya existe creo la referencia que el producto existente
+                        if(productoTmp!=null)
+                        {
+                            lote.setProducto(productoTmp);
+                        }
+                        else
+                        {
+                            lote.setProducto(producto);
+                        }
                         lote.setUsuarioCreacion(session.getUsuario());
                     }
+                    
                     //kardex.setLote(lote);
                 }
                 
@@ -560,9 +568,7 @@ public class MigrarProductoModel extends MigrarModel {
                     //}
                     //else //En este caso se supone que ya existe el PRODUCTO y tengo que actualizar los movimientos para que coincida con el nuevo total
                     if(productoTmp!=null)
-                    {
-                        
-                        
+                    {   
                         
                         if(kardex==null)
                         {
@@ -595,63 +601,44 @@ public class MigrarProductoModel extends MigrarModel {
                     
                     kardex.setLote(lote);
                     
-                    //Verificar si tiene una fecha de caducidad para crear un lote por defecto
-                    /*Date fechaCaducidad=getValorDate(ExcelMigrarProductos.Enum.FECHA_CADUCIDAD, fila);
-                    if(fechaCaducidad!=null)
+                    
+                    //Solo crear las presentaciones si es la primera vez que se esta creando el producto, si ya existe no hacer nada
+                    if(productoTmp==null || productoTmp.getIdProducto()==null)
                     {
-                        Lote lote=new Lote();
-                        //Si el producto ya existe entonces busco el lote del producto previamente creado
-                        if (productoTmp != null) 
+                        //Crear un ensamble o combo cuando lo requiera el sistema
+                        Double cantidadPorCaja = getValorDouble(ExcelMigrarProductos.Enum.CANTIDAD_CAJA, fila);
+                        if(cantidadPorCaja!=null)
                         {
-                            lote=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorProductoYFechaCaducidad(productoTmp,UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
-                        }
-                        else
-                        {
+                            ProductoPresentacionDetalle detallePresentacion=new ProductoPresentacionDetalle();
+                            detallePresentacion.setCantidad(new BigDecimal(cantidadPorCaja));                        
+                            PresentacionProducto presentacionCaja=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(session.getEmpresa(),"CAJA");
 
-                            lote.setCodigo(producto.getCodigoPersonalizado());
-                            lote.setEmpresa(session.getEmpresa());
-                            lote.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-                            lote.setFechaVencimiento(UtilidadesFecha.castDateUtilToSql(fechaCaducidad));
-                            lote.setProducto(producto);
-                            lote.setUsuarioCreacion(session.getUsuario());                            
+                            if(presentacionCaja==null)
+                            {
+                                throw new ExcelMigrar.ExcepcionExcel("No existe la unidad para migrar CAJA");
+                            }
+                            detallePresentacion.setPresentacionProducto(presentacionCaja);
+                            detallePresentacion.setProductoOriginal(producto);
+                            detallePresentacion.setTipoEnum(ProductoPresentacionDetalle.TipoPresentacionEnum.ADICIONAL);
+
+                            Double pvpPresentacionCaja = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.PVP_PRESENTACION);
+
+                            if(pvpPresentacionCaja!=null)
+                            {
+                                detallePresentacion.setPvpTmp(new BigDecimal(pvpPresentacionCaja).setScale(5, RoundingMode.HALF_UP));
+                            }
+
+                            producto.addPresentacion(detallePresentacion);
+
+                            //Si el sistema va a utilizar unidades busco una unidad por defecto
+                            PresentacionProducto presentacionUnidad=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(session.getEmpresa(),"UNI");
+                            if(presentacionUnidad==null)
+                            {
+                                throw new ExcelMigrar.ExcepcionExcel("No existe la unidad para migrar UNI");
+                            }
+                            producto.agregarPresentacionOriginal(presentacionUnidad);
+
                         }
-                        kardex.setLote(lote);
-                    }*/
-                    
-                    
-                    //Crear un ensamble o combo cuando lo requiera el sistema
-                    Double cantidadPorCaja = getValorDouble(ExcelMigrarProductos.Enum.CANTIDAD_CAJA, fila);
-                    if(cantidadPorCaja!=null)
-                    {
-                        ProductoPresentacionDetalle detallePresentacion=new ProductoPresentacionDetalle();
-                        detallePresentacion.setCantidad(new BigDecimal(cantidadPorCaja));                        
-                        PresentacionProducto presentacionCaja=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(session.getEmpresa(),"CAJA");
-                        
-                        if(presentacionCaja==null)
-                        {
-                            throw new ExcelMigrar.ExcepcionExcel("No existe la unidad para migrar CAJA");
-                        }
-                        detallePresentacion.setPresentacionProducto(presentacionCaja);
-                        detallePresentacion.setProductoOriginal(producto);
-                        detallePresentacion.setTipoEnum(ProductoPresentacionDetalle.TipoPresentacionEnum.ADICIONAL);
-                        
-                        Double pvpPresentacionCaja = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.PVP_PRESENTACION);
-                        
-                        if(pvpPresentacionCaja!=null)
-                        {
-                            detallePresentacion.setPvpTmp(new BigDecimal(pvpPresentacionCaja).setScale(5, RoundingMode.HALF_UP));
-                        }
-                               
-                        producto.addPresentacion(detallePresentacion);
-                        
-                        //Si el sistema va a utilizar unidades busco una unidad por defecto
-                        PresentacionProducto presentacionUnidad=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(session.getEmpresa(),"UNI");
-                        if(presentacionUnidad==null)
-                        {
-                            throw new ExcelMigrar.ExcepcionExcel("No existe la unidad para migrar UNI");
-                        }
-                        producto.agregarPresentacionOriginal(presentacionUnidad);
-                        
                     }
                     
                     kardexDetalle.setKardex(kardex);

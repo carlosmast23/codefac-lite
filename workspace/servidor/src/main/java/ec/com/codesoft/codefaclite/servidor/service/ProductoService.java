@@ -1399,6 +1399,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 {
                     //TODO: Ver si puedo utilizar el metodo de actualizar para evitar alguna inconsistencia
                     entityManager.merge(p);
+                    entityManager.flush();
                 }
                                 
                 

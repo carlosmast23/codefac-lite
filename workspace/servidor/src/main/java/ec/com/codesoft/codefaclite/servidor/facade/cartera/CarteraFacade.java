@@ -111,11 +111,17 @@ public class CarteraFacade extends AbstractFacade<Cartera>
             whereTipoCarteraVencida=" AND c.fechaFinCredito >= ?9 ";
         }
 
-        String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");
+        //TODO: Tener cuidado con este cambio que no afecte a otros filtres que tenga que tener todos los documentos
+        //String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento");
+        String whereDocumentos="";
         
         if(documentoEnum!=null)
         {
             whereDocumento=" AND c.codigoDocumento=?7 ";
+        }
+        else
+        {
+            whereDocumentos=" AND ("+obtenerDocumentosDesdeCategoriaDocumento(categoriaMenuEnum,"c.codigoDocumento")+") ";
         }
         
         //Verificar si requiere realizar un filtro por la SEGUNDA REFERENCIA de la CARTERA
@@ -166,7 +172,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         }
         
         try {
-            String queryString = selectStr+" FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+whereDocumento+whereSegundaReferencia+whereSecuencial+ " AND ("+whereDocumentos+") "+whereSucursal+" AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
+            String queryString = selectStr+" FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+whereDocumento+whereSegundaReferencia+whereSecuencial+whereDocumentos+whereSucursal+" AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
             //System.out.println("QUERY==> "+queryString);
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {

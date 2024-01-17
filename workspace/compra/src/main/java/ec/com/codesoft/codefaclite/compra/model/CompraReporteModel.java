@@ -89,6 +89,7 @@ public class CompraReporteModel extends CompraReportePanel {
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         super.validacionDatosIngresados = false;
+        getPnlTotales().setVisible(false);
 
         agregarListener();
         agregarListenerChecks();
@@ -377,6 +378,7 @@ public class CompraReporteModel extends CompraReportePanel {
                 estadoEnum,
                 banderaBusqueda,
                 session.getEmpresa());
+        
         controladorReporteCompra.generarReporte();
                         
         //this.compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum, estadoEnum);
@@ -392,24 +394,26 @@ public class CompraReporteModel extends CompraReportePanel {
 
 
     public void mostrarDatosEnTabla(List<Compra> compras) {
-        String titulos[] = {"Preimpreso", "Identificacion", "Nombre", "Fecha", "Subtotal 12%", "Subtotal 0%", "Descuento", "IVA", "TOTAL"};
+        String titulos[] = {"Preimpreso", "Identificacion", "Nombre", "Fecha", "Subtotal 12%", "Subtotal 0%", "Descuento", "IVA","V.Afecta","TOTAL"};
         this.modeloTablaDetallesCompras = new DefaultTableModel(titulos, 0);
 
-        for (Compra compra : compras) {
+        List<CompraDataReporte> compraDataReporteList=ControladorReporteCompra.compraDataReportes(compras);
+        for (CompraDataReporte compraData : compraDataReporteList) {
             Vector<String> fila = new Vector();
-            fila.add(compra.getPreimpreso());
-            fila.add(compra.getProveedor().getIdentificacion());
-            fila.add(compra.getProveedor().getRazonSocial());
-            fila.add(compra.getFechaFactura() + "");
-            fila.add(compra.getSubtotalImpuestos() + "");
-            fila.add(compra.getSubtotalSinImpuestos() + "");
-            BigDecimal descuento = new BigDecimal(BigInteger.ZERO);
-            BigDecimal descuentoImpuestos = (compra.getDescuentoImpuestos() != null) ? compra.getDescuentoImpuestos() : BigDecimal.ZERO;
-            BigDecimal descuentoSinImpuestos = (compra.getDescuentoSinImpuestos() != null) ? compra.getDescuentoSinImpuestos() : BigDecimal.ZERO;
-            descuento = descuento.add(descuentoImpuestos).add(descuentoSinImpuestos);
-            fila.add(descuento + "");
-            fila.add(compra.getIva() + "");
-            fila.add(compra.getTotal() + "");
+            fila.add(compraData.getPreimpreso());
+            fila.add(compraData.getIdentificacion());
+            fila.add(compraData.getNombre());
+            fila.add(compraData.getFecha());
+            fila.add(compraData.getSubtotal12());
+            fila.add(compraData.getSubtotal0());
+            //BigDecimal descuento = new BigDecimal(BigInteger.ZERO);
+            //BigDecimal descuentoImpuestos = (compra.getDescuentoImpuestos() != null) ? compra.getDescuentoImpuestos() : BigDecimal.ZERO;
+            //BigDecimal descuentoSinImpuestos = (compra.getDescuentoSinImpuestos() != null) ? compra.getDescuentoSinImpuestos() : BigDecimal.ZERO;
+            //descuento = descuento.add(descuentoImpuestos).add(descuentoSinImpuestos);
+            fila.add(compraData.getDescuento());
+            fila.add(compraData.getIva());
+            fila.add(compraData.getValorAfecta());
+            fila.add(compraData.getTotal());
             this.modeloTablaDetallesCompras.addRow(fila);;
         }
         getTableDetalleCompras().setModel(modeloTablaDetallesCompras);

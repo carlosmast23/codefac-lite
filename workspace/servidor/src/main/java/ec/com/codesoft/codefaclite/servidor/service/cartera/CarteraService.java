@@ -543,36 +543,39 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         //Si existen más de 1 cuota creo que las diferentes cuotas
         Boolean crearCarteraUnica=true;
-        if(carteraParametro.numeroCuotas!=null)
+        if(carteraParametro!=null)
         {
-            if(carteraParametro.numeroCuotas>1)
+            if(carteraParametro.numeroCuotas!=null)
             {
-                crearCarteraUnica=false;
-                //cartera.getTotal().di
-                BigDecimal valorCuota=cartera.getTotal().divide(new BigDecimal(carteraParametro.numeroCuotas+""),2,RoundingMode.HALF_UP);
-                //Crear las cuotas con diferentes fechas
-                for (int i = 0; i < carteraParametro.numeroCuotas; i++) 
+                if(carteraParametro.numeroCuotas>1)
                 {
-                    Cartera carteraTmp=new Cartera();
-                    UtilidadVarios.copiarObjetos(cartera, carteraTmp);                    
-                    
-                    for (CarteraDetalle carteraDetalleTmp : carteraTmp.getDetalles()) 
+                    crearCarteraUnica=false;
+                    //cartera.getTotal().di
+                    BigDecimal valorCuota=cartera.getTotal().divide(new BigDecimal(carteraParametro.numeroCuotas+""),2,RoundingMode.HALF_UP);
+                    //Crear las cuotas con diferentes fechas
+                    for (int i = 0; i < carteraParametro.numeroCuotas; i++) 
                     {
-                        carteraDetalleTmp.setCartera(carteraTmp);
-                        carteraDetalleTmp.setSaldo(valorCuota);
-                        carteraDetalleTmp.setTotal(valorCuota);
-                        carteraDetalleTmp.setDescripcion("Cuota #"+(i+1));                        
+                        Cartera carteraTmp=new Cartera();
+                        UtilidadVarios.copiarObjetos(cartera, carteraTmp);                    
+
+                        for (CarteraDetalle carteraDetalleTmp : carteraTmp.getDetalles()) 
+                        {
+                            carteraDetalleTmp.setCartera(carteraTmp);
+                            carteraDetalleTmp.setSaldo(valorCuota);
+                            carteraDetalleTmp.setTotal(valorCuota);
+                            carteraDetalleTmp.setDescripcion("Cuota #"+(i+1));                        
+                        }
+
+                        carteraTmp.setNumeroCuota(i+1);
+                        carteraTmp.setFechaEmision(UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarMesesFecha(carteraTmp.getFechaEmision(),i+1)));
+                        carteraTmp.setTotal(valorCuota);
+                        carteraTmp.setSaldo(valorCuota);
+                        grabarCarteraSinTransaccion(carteraTmp, cruces,CrudEnum.CREAR);
                     }
-                    
-                    carteraTmp.setNumeroCuota(i+1);
-                    carteraTmp.setFechaEmision(UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarMesesFecha(carteraTmp.getFechaEmision(),i+1)));
-                    carteraTmp.setTotal(valorCuota);
-                    carteraTmp.setSaldo(valorCuota);
-                    grabarCarteraSinTransaccion(carteraTmp, cruces,CrudEnum.CREAR);
-                }
-                
-                
-            }            
+
+
+                }            
+            }
         }
         
         if(crearCarteraUnica)

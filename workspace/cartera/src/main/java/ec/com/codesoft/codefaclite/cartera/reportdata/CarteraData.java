@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.cartera.reportdata;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -140,8 +141,8 @@ public class CarteraData {
                     data.setDocumento(cruce.getCarteraAfectada().getCarteraDocumentoEnum().getNombre());
                     data.setFecha(cruce.getCarteraAfectada().getFechaEmision().toString());
                     data.setPreimpreso(cruce.getCarteraAfectada().getPreimpreso());
-                    data.setSaldoDocCruzado(cruce.getCarteraAfectada().getSaldo().toString());
-                    data.setTotalDocCruzado(cruce.getCarteraAfectada().getTotal().toString());
+                    data.setSaldoDocCruzado(cruce.getCarteraAfectada().getSaldo().setScale(2, RoundingMode.HALF_UP).toString());
+                    data.setTotalDocCruzado(cruce.getCarteraAfectada().getTotal().setScale(2, RoundingMode.HALF_UP).toString());
                     data.setValorCruzado(cruce.getValor().toString());
                     resultadoData.add(data);                    
                     ningunCruce=false;
@@ -170,8 +171,8 @@ public class CarteraData {
         CarteraData data = new CarteraData();
         data.setId(detalle.getId().toString());
         data.setDescripcion(detalle.getDescripcion());
-        data.setValor(detalle.getTotal().toString());
-        data.setSaldo(detalle.getSaldo().toString());
+        data.setValor(detalle.getTotal().setScale(2, RoundingMode.HALF_UP).toString());
+        data.setSaldo(detalle.getSaldo().setScale(2,RoundingMode.HALF_UP).toString());
         return data;
     }
     
