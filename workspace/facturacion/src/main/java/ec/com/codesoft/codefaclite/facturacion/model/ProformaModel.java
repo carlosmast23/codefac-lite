@@ -74,6 +74,8 @@ public class ProformaModel extends FacturacionModel{
         //desactivar el panel formas de pago porque no utilizo
         getPanelFormasPago().setVisible(false);    
         getPnlVuelto().setVisible(false);
+        getChkEnviarCorreo().setVisible(true);
+        getChkEnviarCorreo().setSelected(true);
         
     }
 
@@ -144,7 +146,7 @@ public class ProformaModel extends FacturacionModel{
                     setearValoresDefaultFactura(CrudEnum.CREAR);
                     //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
 
-                    factura = servicio.grabarProforma(factura);
+                    factura = servicio.grabarProforma(factura,getChkEnviarCorreo().isSelected());
                     //DialogoCodefac.mensaje("Correcto", "Proforma generada correctamente", MENSAJE_CORRECTO);
                     imprimirProforma();
 

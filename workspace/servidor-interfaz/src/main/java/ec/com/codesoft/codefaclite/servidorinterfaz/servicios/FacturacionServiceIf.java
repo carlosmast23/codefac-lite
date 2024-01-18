@@ -89,4 +89,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public Factura buscarPorAutorizacion(String autorizacion) throws RemoteException,ServicioCodefacException;
     
+    public Factura editarProforma(Factura proforma,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException;
+    
 }

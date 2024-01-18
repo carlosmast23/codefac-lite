@@ -497,6 +497,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
+        return editarProforma(proforma,false);
+    }
+    
+    public Factura editarProforma(Factura proforma,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException
+    {
         validacionInicialFacturar(proforma,null,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -508,7 +513,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
                 setearDatosClienteYDistribuidor(proforma);
                 entityManager.merge(proforma);                
-                eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma), proforma.getDetalles());                
+                eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma), proforma.getDetalles());
+                        
+                if (enviarCorreo) {
+                    enviarCorreoProforma(proforma);
+                }
             }
         });
         imprimirLogFactura(proforma, CrudEnum.EDITAR);

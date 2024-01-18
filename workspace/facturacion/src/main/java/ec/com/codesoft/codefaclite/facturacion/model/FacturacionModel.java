@@ -2564,7 +2564,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
         try {
             setearValoresDefaultFactura(CrudEnum.EDITAR);
-            ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura);
+            ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura,getChkEnviarCorreo().isSelected());
             
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
             {
@@ -2859,6 +2859,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void cargarDatosPantallaFactura(Factura facturaTmp)
     {
         limpiar();
+        //TODO: Este cambio es para las proformas por el momento que no sea por defecto enviar a los correos
+        this.getChkEnviarCorreo().setSelected(false);
         this.factura = facturaTmp;
         cargarDatosBuscar();
         validacionesParaEditar();
@@ -4045,6 +4047,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbIvaDescuento().addItem(EnumSiNo.SI);
         getCmbIvaDescuento().addItem(EnumSiNo.NO);
         
+        getChkEnviarCorreo().setVisible(false);
         
         cargarComboPuntosVenta();
        
