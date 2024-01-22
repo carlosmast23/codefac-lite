@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
+import java.awt.Image;
+
 /**
  *
  * @author Carlos
@@ -19,6 +21,7 @@ public class ComprobanteVentaData {
     private String total;
     private String iva;
     private String unidad;
+    private Image imagen;
     
     /**
      * Datos adicionales en especial para el reporte de las proformas
@@ -126,6 +129,15 @@ public class ComprobanteVentaData {
     public void setPrecioUnitarioConIva(String precioUnitarioConIva) {
         this.precioUnitarioConIva = precioUnitarioConIva;
     }
+
+    public Image getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Image imagen) {
+        this.imagen = imagen;
+    }
+    
     
     
     

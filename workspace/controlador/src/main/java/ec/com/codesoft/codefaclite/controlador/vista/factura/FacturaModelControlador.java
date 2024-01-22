@@ -11,6 +11,8 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPa
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac.ImpresionAutomaticaEnum;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
+import static ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac.buscarImagenServidorInputStream;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
@@ -65,6 +67,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -72,6 +75,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
+import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -2004,12 +2008,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 total=total.setScale(redondedoDecimalesPrecios,BigDecimal.ROUND_UP);
                 
                 precioUnitarioCoIva=precioUnitarioCoIva.setScale(redondedoDecimalesPrecios,BigDecimal.ROUND_UP);
-            }                        
+            }     
+            
+            data.setImagen(getImagenProducto(detalle));
             
             data.setPrecioUnitario(precioUnitario.toString());
             data.setPrecioUnitarioConIva(precioUnitarioCoIva.toString());
             data.setTotal(total.toString());
             
+                        
             //Datos adicionales para las proformas
             data.setDescuento(detalle.getDescuento().toString());
             data.setDescripcion(detalle.getDescripcion());
@@ -2018,6 +2025,29 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             dataReporte.add(data);
         }
         return dataReporte;
+    }
+    
+    //TODO: Cambio pendiente de optimizar para ver si se graba la refernecia de la imagen o se pone un parametro para poder configurar si se debe o no imprimir las imagenes
+    @Deprecated
+    public static Image getImagenProducto(FacturaDetalle detalle)
+    {
+        Image imagenProducto = null;
+        if (detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO) || detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE)) {
+            try {
+                Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                if (!UtilidadesTextos.verificarNullOVacio(producto.getImagen())) {
+                    InputStream inputStreamImagen = UtilidadesImagenesCodefac.buscarImagenServidorInputStream(detalle.getFactura().getEmpresa(), producto.getImagen());
+                    imagenProducto = UtilidadImagen.castInputStreamToImage(inputStreamImagen);
+                    return imagenProducto;
+                }
+
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            detalle.getReferenciaId();
+        }
+        return imagenProducto;
     }
     
     public static JasperPrint getReporteTicket(Factura factura,SessionCodefacInterface sessionCodefac)
