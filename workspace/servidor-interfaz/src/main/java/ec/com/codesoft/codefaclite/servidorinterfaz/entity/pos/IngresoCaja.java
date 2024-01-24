@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -62,6 +63,10 @@ public class IngresoCaja implements Serializable
     @JoinColumn(name = "COMPRA_ID")
     @ManyToOne
     private Compra compra;
+    
+    @JoinColumn(name = "CARTERA_ID")
+    @ManyToOne
+    private Cartera cartera;
     
     @Column(name = "SIGNO")    
     private Integer signoIngreso;
@@ -124,6 +129,16 @@ public class IngresoCaja implements Serializable
     public void setSignoIngresoEnum(SignoEnum signoIngresoEnum) {
         this.signoIngreso = signoIngresoEnum.getValor();
     }
+
+    public Cartera getCartera() {
+        return cartera;
+    }
+
+    public void setCartera(Cartera cartera) {
+        this.cartera = cartera;
+    }
+    
+    
     
     
    

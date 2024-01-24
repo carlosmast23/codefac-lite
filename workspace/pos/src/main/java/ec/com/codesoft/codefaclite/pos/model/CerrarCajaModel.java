@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
@@ -283,6 +284,24 @@ public class CerrarCajaModel extends CajaSessionModel
                                     dateFormatHora.format(fechaIngreso),
                                     "-"
                             );
+                        detalleData.add(compraData);
+                    }
+                }
+                else if(ingresoCaja.getCartera()!=null)
+                {
+                    if(ingresoCaja.getCartera().getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                    {
+                        VentaReporteData compraData = new VentaReporteData(
+                                ingresoCaja.getCartera().getId() + "",
+                                ingresoCaja.getCartera().getPersona().getIdentificacion(),
+                                ingresoCaja.getCartera().getCarteraDocumentoEnum().getNombre(),
+                                ingresoCaja.getCartera().getPersona().getRazonSocial(),
+                                ingresoCaja.getCartera().getTotal()+"",
+                                ingresoCaja.getCartera().getEstado(),
+                                "Efetivo",
+                                dateFormatHora.format(ingresoCaja.getCartera().getFechaEmision()),
+                                ingresoCaja.getSignoIngresoEnum()+""
+                        );
                         detalleData.add(compraData);
                     }
                 }

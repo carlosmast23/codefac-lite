@@ -484,6 +484,13 @@ public class CajaSession implements Serializable
                     }
                     
                 }
+                else if(ingresoCaja.getCartera()!=null)
+                {
+                    if(ingresoCaja.getCartera().getEstadoEnum().equals(ingresoCaja.getCartera().getEstadoEnum()))
+                    {
+                        
+                    }
+                }
             }
         }
         

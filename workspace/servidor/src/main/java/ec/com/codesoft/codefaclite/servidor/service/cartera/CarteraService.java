@@ -34,6 +34,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoO
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEstadoReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
@@ -41,6 +43,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
@@ -244,6 +247,37 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         //TODO:Metodo temporal para actualizar las referencias de los cruces y que esten actualizadas las listas que tienen referencias
         actualizarReferenciasCartera(cartera);
+        
+        //Grabar los datos para la caja para ver como sale en la cartera
+        grabarMovimientosCaja(cartera);
+        
+    }
+    
+    private void grabarMovimientosCaja(Cartera cartera) throws RemoteException, ServicioCodefacException
+    {
+        CajaSession cajaSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorPuntoEmisionYUsuario(null, cartera.getUsuario());
+        
+        if(cajaSession == null)
+        {
+            throw new ServicioCodefacException("No se encontro ninguna session para el punto de emisión");
+        }
+        
+        IngresoCaja ingresoCaja=new IngresoCaja();
+        ingresoCaja.setCajaSession(cajaSession);
+        ingresoCaja.setValor(cartera.getTotal());        
+        ingresoCaja.setCartera(cartera);
+        
+        if(cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.CLIENTE))
+        {
+            ingresoCaja.setSignoIngresoEnum(SignoEnum.POSITIVO);        
+        }
+        else if (cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.PROVEEDORES))
+        {
+            ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);
+        }
+        
+        entityManager.persist(ingresoCaja);
+        
     }
     
     private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
