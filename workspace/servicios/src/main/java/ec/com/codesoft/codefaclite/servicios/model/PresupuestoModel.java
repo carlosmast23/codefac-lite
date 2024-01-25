@@ -634,6 +634,15 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 OrdenTrabajo ordenTrabajo = (OrdenTrabajo) dialogoModel.getResultado();
                 if(ordenTrabajo != null)
                 {
+                    //Verificar que no tenga un presupuesto generado para lanzar una advertencia                                        
+                    if(verificarPresupuestoActivo(ordenTrabajo))
+                    {
+                        if(!DialogoCodefac.dialogoPregunta(new CodefacMsj("Advertencia","Ya existe un presupuesto para esta orden de trabajo, desea continuar ?",CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA)))
+                        {
+                            return;
+                        }
+                    }
+                    
                     presupuesto.setPersona(ordenTrabajo.getCliente());
                     getTxtCliente().setText(ordenTrabajo.getCliente().getIdentificacion()+" - "+ordenTrabajo.getCliente().getRazonSocial());
                     getLblObjetoMantenimiento().setText((ordenTrabajo.getObjetoMantenimiento()!=null)?ordenTrabajo.getObjetoMantenimiento().toString():"");
@@ -753,6 +762,23 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 eliminarDetallePresupuesto();
             }
         });
+    }
+    
+    private Boolean verificarPresupuestoActivo(OrdenTrabajo ordenTrabajo)
+    {
+        try {
+            List<Presupuesto> presupuestoList=ServiceFactory.getFactory().getPresupuestoServiceIf().consultarPorOrdenTrabajo(ordenTrabajo);
+            if(presupuestoList.size()>0)
+            {
+                return true;
+            }
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
     
     private void buscarProductoSinInventario()
