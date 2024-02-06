@@ -250,6 +250,16 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //procesarLoteEnFormaIndividual(sinEnviarList, ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE+1,empresa);
         solucionarProblemasProcesar(sinEnviarList, ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa);
         
+        //Obtener la cantidad de documentos que no se pudieron procesar
+        int carpeta1=getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa).size();
+        int carpeta2=getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa).size();
+        
+        int comprobantesSinAutorizar=carpeta1+carpeta2;
+        if(comprobantesSinAutorizar>0)
+        {
+            throw new ServicioCodefacException("ADVERTENCIA: "+comprobantesSinAutorizar+" comprobantes NO se pudieron AUTORIZAR.\nNOTA: Vuelva a intentar en unas horas y si no funciona por favor ponerse en contacto con una persona de SOPORTE");
+        }
+        
     }
     
     private void procesarLoteEnFormaIndividual(List<ComprobanteElectronico> comprobanteList,Integer etapaInicial,Empresa empresa) throws RemoteException,ServicioCodefacException

@@ -568,7 +568,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            terminarAutorizarComprobantesPendientes();
+            terminarAutorizarComprobantesPendientes(sessionCodefac.getEmpresa());
             cerrandoEntityManagerBaseDatos();
             UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web                
             dispose();
@@ -607,24 +607,25 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-    private void terminarAutorizarComprobantesPendientes()
+    public static void terminarAutorizarComprobantesPendientes(Empresa empresa)
     {
         try {
-            Integer totalComprobantePendientes=ServiceFactory.getFactory().getComprobanteServiceIf().obtenerTotalComprobantesSinTerminarProcesar(sessionCodefac.getEmpresa());
+            Integer totalComprobantePendientes=ServiceFactory.getFactory().getComprobanteServiceIf().obtenerTotalComprobantesSinTerminarProcesar(empresa);
             
             if(totalComprobantePendientes>0)
             {
-                Boolean continuar=DialogoCodefac.dialogoPregunta(new CodefacMsj("El sistema detecta comprobantes pendientes, desea intentar terminar de autorizar ?", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                Boolean continuar=DialogoCodefac.dialogoPregunta(new CodefacMsj("El sistema detecta comprobantes pendientes, desea intentar terminar de autorizar ?\n NOTA: No debe dejar más de 72 HORAS comprobantes sin autorizar porque puede ocacionar MULTAS", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                 if(continuar)
                 {
 
-                        ServiceFactory.getFactory().getComprobanteServiceIf().procesarSinAutorizarYEnviadosPendientes(sessionCodefac.getEmpresa());
+                        ServiceFactory.getFactory().getComprobanteServiceIf().procesarSinAutorizarYEnviadosPendientes(empresa);
 
                 }
             }
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         

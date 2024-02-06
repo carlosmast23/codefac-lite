@@ -192,7 +192,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             ComprobanteElectronico comprobante = ComprobanteElectronicoService.obtenerComprobanteDataDesdeXml(archivo);
             if(comprobante==null)
             {
-                throw new ServicioCodefacException("No se pudo encontrar el comprobante en el SRI.\n Posibles Causas:\n 1.- La clave de acceso es incorrecta.\n 2.- El comprobante aun no esta disponible en el Sri, vuelva a intentar en unas horas.");
+                throw new ServicioCodefacException("No se pudo encontrar el comprobante en el SRI.\n Posibles Causas:\n 1.- La clave de acceso es incorrecta.\n 2.- El Sri solo permite consultar facturas de compra recientes, descargue el xml. \n 3.- El comprobante aun no esta disponible en el Sri, vuelva a intentar en unas horas.");
             }
             //return obtenerCompraDesdeXml(comprobante, empresa);
             return comprobante;

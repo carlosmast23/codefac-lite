@@ -17,9 +17,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -46,6 +48,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +123,38 @@ public class LoginModel extends LoginFormDialog{
         getBtnSalir().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Empresa empresaSeleccionada= (Empresa) getCmbEmpresa().getSelectedItem();
+                if(empresaSeleccionada!=null)
+                {
+                    try {
+                        //mostrar alertas de 30 días antes porque ya antes no tiene sentido
+                        java.sql.Date fechaInicial=UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.restarDiasFecha(UtilidadesFecha.obtenerTiempoActual(), 30));
+                        Long totalComprobantesSinProcesar=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTamanio(
+                                null,
+                                fechaInicial,
+                                null,
+                                ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR,
+                                Boolean.FALSE,
+                                null,
+                                Boolean.FALSE,
+                                null,
+                                empresaSeleccionada,
+                                DocumentoEnum.FACTURA,
+                                null,
+                                null,
+                                null,
+                                null);
+                        
+                        if(totalComprobantesSinProcesar>0)
+                        {
+                            DialogoCodefac.mensaje(new CodefacMsj("ADVERTENCIA: tiene "+totalComprobantesSinProcesar+" comprobantes SIN AUTORIZAR,\nNOTA: Recuerde que los comprobantes tiene 76 horas para autorizar o pueden generar MULTAS",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                        }
+                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
                 salirSistema();
             }
         });
