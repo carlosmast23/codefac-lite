@@ -55,6 +55,7 @@ public class ProformaModel extends FacturacionModel{
         getCmbPuntoEmision().setVisible(false);
         getLblEstablecimiento().setVisible(false);
         getChkReserva().setVisible(true);
+        getChkImprimirSinCodigo().setVisible(true);
         
         //Deshabilitiar componentes de comprobantes electronicos
         super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_COMP_ELECTRONICOS).setVisible(false);
@@ -116,7 +117,7 @@ public class ProformaModel extends FacturacionModel{
             @Override
             public void procesar() {
                 try {
-                    ServiceFactory.getFactory().getFacturacionServiceIf().enviarCorreoProforma(factura);
+                    ServiceFactory.getFactory().getFacturacionServiceIf().enviarCorreoProforma(factura,getChkImprimirSinCodigo().isSelected());
                     DialogoCodefac.mensaje(MensajeCodefacSistema.CorreoElectronico.CORREO_ENVIADO);
                 } catch (RemoteException ex) {
                     Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -146,7 +147,7 @@ public class ProformaModel extends FacturacionModel{
                     setearValoresDefaultFactura(CrudEnum.CREAR);
                     //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
 
-                    factura = servicio.grabarProforma(factura,getChkEnviarCorreo().isSelected());
+                    factura = servicio.grabarProforma(factura,getChkEnviarCorreo().isSelected(),getChkImprimirSinCodigo().isSelected());
                     //DialogoCodefac.mensaje("Correcto", "Proforma generada correctamente", MENSAJE_CORRECTO);
                     imprimirProforma();
 
@@ -215,7 +216,7 @@ public class ProformaModel extends FacturacionModel{
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
         
         ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"proforma.jrxml",mapParametros, dataReporte, this.panelPadre, "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);*/
-        JasperPrint jasperReporte=FacturaModelControlador.getReporteJasperProforma(factura,formatoReporte);
+        JasperPrint jasperReporte=FacturaModelControlador.getReporteJasperProforma(factura,formatoReporte,getChkImprimirSinCodigo().isSelected());
         
         
         
@@ -227,7 +228,7 @@ public class ProformaModel extends FacturacionModel{
 
     //@Override
     public List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando) {
-        return FacturaModelControlador.getDetalleDataReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
+        return FacturaModelControlador.getDetalleDataReporte(facturaProcesando,getChkImprimirSinCodigo().isSelected()); //To change body of generated methods, choose Tools | Templates.
     }
     
     

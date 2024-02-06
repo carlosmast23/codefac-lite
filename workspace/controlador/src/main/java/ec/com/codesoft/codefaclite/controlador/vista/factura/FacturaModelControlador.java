@@ -1541,7 +1541,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     {
         
         Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando); 
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando,false); 
         //JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Comanda", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
         ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,"comanda_ticket_40.jrxml", mapParametros, dataReporte, panelPadre, "Comanda", OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.TICKET,null,ImpresionAutomaticaEnum.COMANDA);
     }
@@ -1592,7 +1592,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             return;
         }
 
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);       
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando,false);       
         Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
         
         String nombreReporte="comprobante_venta.jrxml";
@@ -1713,7 +1713,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         for (Factura factura : facturas) 
         {
             Factura facturaProcesando=factura;
-            List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando);
+            List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando,false);
         
             Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
             //InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta.jrxml");
@@ -1972,7 +1972,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //return null;
     }
         
-    public static List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando)
+    public static List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando,Boolean codigoBlanco)
     {
         
         List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
@@ -1981,7 +1981,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             ComprobanteVentaData data = new ComprobanteVentaData();
             data.setCantidad(detalle.getCantidad().setScale(2, RoundingMode.HALF_UP).toString());
-            data.setCodigo(detalle.getCodigoPrincipal());
+            
+            if(Boolean.FALSE.equals(codigoBlanco))
+            {
+                data.setCodigo(detalle.getCodigoPrincipal());
+            }            
+            
             data.setNombre(detalle.getDescripcion().toString());
             
             //Agregar la presentacion en el detalle en el caso que tenga
@@ -2053,7 +2058,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     public static JasperPrint getReporteTicket(Factura factura,SessionCodefacInterface sessionCodefac)
     {
         Map<String, Object> mapParametros = getMapParametrosReporte(factura);
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura,false);
         InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("comprobante_venta_ticket.jrxml");
         
         if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
@@ -2071,7 +2076,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,factura.getPreimpreso()+".pdf");
     }
     
-    public static JasperPrint getReporteJasperProforma(Factura proforma,FacturaModelControlador.FormatoReporteEnum formatoEnum)
+    public static JasperPrint getReporteJasperProforma(Factura proforma,FacturaModelControlador.FormatoReporteEnum formatoEnum,Boolean codigosBlanco)
     {
         //Formato A4 por defecto para el reporte de proformas
         String nombreReporte="proforma.jrxml";
@@ -2099,7 +2104,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(proforma);
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(proforma,codigosBlanco);
 
         //map de los parametros faltantes
         Map<String, Object> mapParametros = getMapParametrosReporteProforma(proforma);

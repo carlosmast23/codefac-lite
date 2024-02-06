@@ -220,10 +220,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
-        return grabarProforma(proforma,true);
+        return grabarProforma(proforma,true,false);
     }
     
-    public Factura grabarProforma(Factura proforma,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException
+    public Factura grabarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimiSinCodigo) throws RemoteException,ServicioCodefacException
     {            
             //validacionInicialFacturar(proforma,null,CrudEnum.CREAR);
         
@@ -260,7 +260,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         if(enviarCorreo)
                         {
-                            enviarCorreoProforma(proforma);
+                            enviarCorreoProforma(proforma,imprimiSinCodigo);
                         }
                }
             });
@@ -384,7 +384,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     
     
-    public void enviarCorreoProforma(Factura proforma) throws RemoteException,ServicioCodefacException
+    public void enviarCorreoProforma(Factura proforma,Boolean imprimirSinCodigo) throws RemoteException,ServicioCodefacException
     {
         //Solo enviar al correo si tiene un cliente asignado
         if(proforma.getCliente()==null)
@@ -404,7 +404,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         CodefacMsj mensaje = MensajeCodefacSistema.ProformasMensajes.PROFORMA_ENVIADA_CORREO.agregarParametros(mapParametro);
         //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
         
-        JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
+        JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4,imprimirSinCodigo);
         enviarReporteCorreo(jasperReporte, proforma.getEmpresa(), "Proforma", secuencialStr, mensaje, destinatarios);
         //Controlador
         /*JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
@@ -497,10 +497,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
-        return editarProforma(proforma,false);
+        return editarProforma(proforma,false,false);
     }
     
-    public Factura editarProforma(Factura proforma,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException
+    public Factura editarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo) throws RemoteException,ServicioCodefacException
     {
         validacionInicialFacturar(proforma,null,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -516,7 +516,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma), proforma.getDetalles());
                         
                 if (enviarCorreo) {
-                    enviarCorreoProforma(proforma);
+                    enviarCorreoProforma(proforma,imprimirSinCodigo);
                 }
             }
         });

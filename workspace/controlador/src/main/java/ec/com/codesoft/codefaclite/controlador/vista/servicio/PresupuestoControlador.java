@@ -6,9 +6,6 @@
 package ec.com.codesoft.codefaclite.controlador.vista.servicio;
 
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
-import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.getDetalleDataReporte;
-import static ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador.getMapParametrosReporteProforma;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;

@@ -366,7 +366,7 @@
 	</columnHeader>
 	<detail>
 		<band height="15" splitType="Stretch">
-			<textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="71" height="15" uuid="96aacd30-59f9-4ce5-9542-5691ac80b57c"/>
 				<box>
 					<topPen lineWidth="0.5"/>

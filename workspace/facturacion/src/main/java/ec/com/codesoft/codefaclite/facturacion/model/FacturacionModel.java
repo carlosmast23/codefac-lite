@@ -2564,7 +2564,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
         try {
             setearValoresDefaultFactura(CrudEnum.EDITAR);
-            ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura,getChkEnviarCorreo().isSelected());
+            ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura,getChkEnviarCorreo().isSelected(),getChkImprimirSinCodigo().isSelected());
             
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
             {
@@ -4048,6 +4048,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbIvaDescuento().addItem(EnumSiNo.NO);
         
         getChkEnviarCorreo().setVisible(false);
+        getChkImprimirSinCodigo().setVisible(false);
         
         cargarComboPuntosVenta();
        
