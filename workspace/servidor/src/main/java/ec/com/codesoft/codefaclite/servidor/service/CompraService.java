@@ -208,7 +208,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     }
     
     public Compra obtenerCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException
-    {        
+    {       
+        
+        //Verificar que el tipo de documento sea una factura para poder cargar a las compras
+        if(!(comprobanteElectronico instanceof FacturaComprobante))
+        {
+            throw new ServicioCodefacException("El formato del comprobante no es una FACTURA");
+        }
+        
         //InputStream inputStream=null;
         try {            
             //ParametroCodefac parametroEmpresa = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS, empresa);

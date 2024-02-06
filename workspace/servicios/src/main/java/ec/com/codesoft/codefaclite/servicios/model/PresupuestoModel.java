@@ -447,6 +447,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             }
             
             getLblIndicarFechaValidez().setText(""+this.presupuesto.getFechaValidez());
+            getTxtKilometraje().setText(""+this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getKilometraje());
             //ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
             calcularTotales(false);

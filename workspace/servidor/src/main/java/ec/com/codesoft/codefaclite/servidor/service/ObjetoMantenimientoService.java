@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Vehiculo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -49,6 +50,25 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
 
         
     }
+    
+    private void validarCodigoEditar(ObjetoMantenimiento objetoMantenimiento,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException
+    {
+       //validarDatoRepetidoObjectoMantenimiento(objetoMantenimiento);
+       
+        //Verificar que al momento de editar no pueda editar los códigos de los datos
+        validarEdicionCampo(objetoMantenimiento.getEmpresa(), crudEnum, new ValidarEdicionCampoIf<ObjetoMantenimiento>() {
+            @Override
+            public Object getId() {
+                return objetoMantenimiento.getId();
+            }
+
+            @Override
+            public Boolean compararCampos(ObjetoMantenimiento dato) {
+                return objetoMantenimiento.getCodigo().equals(dato.getCodigo());
+            }
+        });
+    }
+    
     
     private void validarDatoRepetidoObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
     {
@@ -108,7 +128,8 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                                
+            public void transaccion() throws ServicioCodefacException, RemoteException {           
+                validarCodigoEditar(entity, CrudEnum.EDITAR);
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
                 setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
                 editarSinTransaccion(entity);

@@ -50,15 +50,16 @@ public class PresupuestoControlador {
         parametros.put("codigo", presupuesto.getId().toString());
         
         String objetoMantenimiento="";
-        String kilometraje="";
+        //String kilometraje="";
         if(presupuesto.obtenerObjectoMantenimiento()!=null)
         {
             objetoMantenimiento=presupuesto.obtenerObjectoMantenimiento().toString();
-            kilometraje=presupuesto.obtenerObjectoMantenimiento().getKilometraje()+"";
+            //kilometraje=presupuesto.obtenerObjectoMantenimiento().getKilometraje()+"";           
         }
-        
+        String kilometrajeStr=presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getKilometraje()+"";
+       
         parametros.put("objectoMantenimiento", objetoMantenimiento);
-        parametros.put("kilometraje", kilometraje);
+        parametros.put("kilometraje", kilometrajeStr);
         
         parametros.put("notas", presupuesto.getOrdenTrabajoDetalle().getNotas());
         

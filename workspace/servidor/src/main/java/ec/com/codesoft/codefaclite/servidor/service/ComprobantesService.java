@@ -2211,6 +2211,13 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
         }
         
+        //Validacion cuando no tengo que poner la palabra de regimen
+        if(!UtilidadesTextos.verificarNullOVacio(empresa.getContribuyenteEspecial()))
+        {
+            leyendaRegimen="";
+        }
+        
+        
         
         parametros.put("tipoRegimen", leyendaRegimen);
         

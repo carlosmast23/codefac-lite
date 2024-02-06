@@ -7,8 +7,6 @@
  * Author:  Carlos
  * Created: 6/12/2017
  */
-
-
 create table NOTA_CREDITO
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
@@ -37,7 +35,7 @@ create table NOTA_CREDITO
     RAZON_SOCIAL varchar(256),
     IDENTIFICACION varchar(15),
     DIRECCION varchar(1024),
-    TELEFONO varchar(10),
+    TELEFONO varchar(64),
     TIPO_FACTURACION varchar(1),
     CODIGO_DOCUMENTO varchar(3),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.1)*/

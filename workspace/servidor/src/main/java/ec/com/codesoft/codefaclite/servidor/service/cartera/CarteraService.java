@@ -259,7 +259,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         if(cajaSession == null)
         {
-            throw new ServicioCodefacException("No se encontro ninguna session para el punto de emisión");
+            //Si no tiene caja configurada no hacer ningun movimiento en la caja
+            return;
+            //throw new ServicioCodefacException("No se encontro ninguna session para el punto de emisión");
         }
         
         IngresoCaja ingresoCaja=new IngresoCaja();
