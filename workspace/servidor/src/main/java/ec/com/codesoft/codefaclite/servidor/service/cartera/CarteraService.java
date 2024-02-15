@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
@@ -102,11 +103,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
     }
     
-    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar,String descripcion) throws ServicioCodefacException,java.rmi.RemoteException
+    public Cartera grabarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,Usuario usuario,BigDecimal valorCruzar,String descripcion) throws ServicioCodefacException,java.rmi.RemoteException
     {        
         
         validarAbono(tipoCartera, carteraAfectada, sucursal, valorCruzar);
-        Cartera carteraAbono=crearCarteraSinTransaccion(tipoCartera, null, sucursal, DocumentoEnum.ABONOS.getCodigo(), UtilidadesFecha.getFechaHoyTimeStamp(),UtilidadesFecha.getFechaHoy(), "0", "0", 0);
+        Cartera carteraAbono=crearCarteraSinTransaccion(tipoCartera, null, sucursal,usuario, DocumentoEnum.ABONOS.getCodigo(), UtilidadesFecha.getFechaHoyTimeStamp(),UtilidadesFecha.getFechaHoy(), "0", "0", 0);
         carteraAbono.setSaldo(valorCruzar);
         carteraAbono.setTotal(valorCruzar);
         //La persona del nuevo cliente, debe ser el mismo que de la anterior cartera
@@ -536,7 +537,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         }
         //CarteraRe
         //comprobante.getFechaEmision()
-        Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), UtilidadesFecha.castDateUtilToSql(comprobante.getFechaEmision()), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial());
+        Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),null,comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), UtilidadesFecha.castDateUtilToSql(comprobante.getFechaEmision()), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial());
         
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
         
@@ -626,6 +627,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             Cartera.TipoCarteraEnum tipo,
             CarteraParametro carteraParametro,
             Sucursal sucursal,
+            Usuario usuario,
             String codigoDocumento,
             Timestamp fechaCreacion,
             Date fechaEmision,
@@ -639,6 +641,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
          * ====================================================================
          */
         Cartera cartera = new Cartera();
+        cartera.setUsuario(usuario);
         cartera.setCodigoDocumento(codigoDocumento);
         cartera.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
         cartera.setFechaEmision(new java.sql.Date(fechaEmision.getTime()));

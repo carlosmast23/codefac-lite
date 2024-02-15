@@ -103,7 +103,7 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
         try {
             //fixParametros();
-            ServiceFactory.getFactory().getCarteraServiceIf().grabarAbono(tipoCartera,cartera,session.getSucursal(), valorCruzar,descripcion);
+            ServiceFactory.getFactory().getCarteraServiceIf().grabarAbono(tipoCartera,cartera,session.getSucursal(),session.getUsuario(), valorCruzar,descripcion);
             mostrarMensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ZonaControlador.class.getName()).log(Level.SEVERE, null, ex);
