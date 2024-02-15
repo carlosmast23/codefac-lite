@@ -107,31 +107,47 @@ public class DetalleFacturaComprobante extends DetalleComprobanteAbstract {
         this.precioSinSubsidio = precioSinSubsidio;
     }
     
+    public ImpuestoComprobante obtenerIvaDetalle()
+    {
+        if(impuestos!=null)
+        {
+            for (ImpuestoComprobante impuesto : impuestos) 
+            {
+                if(impuesto.getCodigo().equals("2"))
+                {
+                    return impuesto;
+                }
+            }
+        }
+        return null;
+    }
+    
     @Deprecated 
     public BigDecimal obtenerIvaPorcentaje()
     {
-        BigDecimal resultado=BigDecimal.ZERO;
+        //BigDecimal resultado=BigDecimal.ZERO;
         for (ImpuestoComprobante impuesto : impuestos) 
         {
             //TODO: Parametrizar de mejor manera pero por el momento asumo que el codigo 3 es para el ICE
-            if(!impuesto.getCodigo().equals("3"))
+            if(impuesto.getCodigo().equals("2"))
             {
-                resultado=impuesto.getTarifa();
+                return impuesto.getTarifa();
             }
         }
-        return resultado;
+        return BigDecimal.ZERO;
     }
     
     @Deprecated
     public BigDecimal obtenerIvaValor() {
-        BigDecimal resultado = BigDecimal.ZERO;
+        //BigDecimal resultado = BigDecimal.ZERO;
         for (ImpuestoComprobante impuesto : impuestos) {
             //TODO: Parametrizar de mejor manera pero por el momento asumo que el codigo 3 es para el ICE
-            if (!impuesto.getCodigo().equals("3")) {
-                resultado = impuesto.getValor();
+            if (impuesto.getCodigo().equals("2")) 
+            {
+                return  impuesto.getValor();
             }
         }
-        return resultado;
+        return BigDecimal.ZERO;
     }
     
     @Deprecated //TODO: Mejorar esta parte

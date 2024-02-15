@@ -69,6 +69,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
@@ -546,6 +547,7 @@ public class CompraModel extends CompraPanel{
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
         getTxtCostoItem().setText("");
+        getTxtIrbpnrDetalle().setText("");
         getTxtDescuentoItem().setText("0");
         getTxtCostoItem().setText("");
         getTxtCantidadItem().setText("");
@@ -1079,10 +1081,10 @@ public class CompraModel extends CompraPanel{
                     getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
                     seleccionarComboTipoIva(compraDetalle.getIvaPorcentaje());
                     getTxtCostoItem().setText((compraDetalle.getCostoUnitario()!=null)?compraDetalle.getCostoUnitario()+"":"");
+                    getTxtIrbpnrDetalle().setText(compraDetalle.getIrbpnr()+"");
                     getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
                     getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
                     getTxtDescuentoItem().setText(compraDetalle.getDescuento()+"");
-                    //getTxtCostoItem().setText(compraDetalle.getCo);
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
                     getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
                     getCmbIvaDetalle().setSelectedItem(compraDetalle.getIvaPorcentaje());
@@ -1348,10 +1350,12 @@ public class CompraModel extends CompraPanel{
             return;
         }
         
+        BigDecimal irbpnr=UtilidadBigDecimal.obtenerValorJTextField(getTxtIrbpnrDetalle());
+        
         //TODO:Verificar por que existen 2 validaciones para la vista
         if(verificarCamposValidados())
         {
-            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario,descuento,getTxtProductoItem().getText(),getTxtDescripcionItem().getText(),porcentajeIva);
+            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario,descuento,getTxtProductoItem().getText(),getTxtDescripcionItem().getText(),porcentajeIva,irbpnr);
         }
         
     }
@@ -1405,7 +1409,7 @@ public class CompraModel extends CompraPanel{
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {
                     //TODO:Mejorar esta parte para no pasar los mismos datos                    
-                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getCodigoPrincipal(),compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje());
+                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getCodigoPrincipal(),compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje(),compraDetalle.getIrbpnr());
                     
                 }
                 
@@ -1704,6 +1708,7 @@ public class CompraModel extends CompraPanel{
         getTxtCantidadItem().setEnabled(true);
         getTxtPrecionUnitarioItem().setEnabled(true);
         getTxtCostoItem().setEnabled(true);
+        getTxtIrbpnrDetalle().setEnabled(true);
         getTxtDescuentoItem().setEnabled(true);
         
     }
@@ -1715,6 +1720,7 @@ public class CompraModel extends CompraPanel{
         getTxtCantidadItem().setEnabled(false);
         getTxtPrecionUnitarioItem().setEnabled(false);
         getTxtCostoItem().setEnabled(false);
+        getTxtIrbpnrDetalle().setEnabled(false);
         getTxtDescuentoItem().setEnabled(false);
     }
     
@@ -1723,6 +1729,7 @@ public class CompraModel extends CompraPanel{
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
         getTxtCostoItem().setText("");
+        getTxtIrbpnr().setText("");
         getTxtDescuentoItem().setText("0");
         getTxtProductoItem().setText("");
         getTxtCantidadItem().setText("");
@@ -1756,7 +1763,7 @@ public class CompraModel extends CompraPanel{
     }
    
     //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
-    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,BigDecimal descuento,String codigo,String descripcion,Integer porcentajeIva)
+    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,BigDecimal descuento,String codigo,String descripcion,Integer porcentajeIva,BigDecimal irbpnr)
     {
         Boolean agregar = true;
         
@@ -1782,6 +1789,7 @@ public class CompraModel extends CompraPanel{
             compraDetalle.setCantidad(cantidadItem);
             
             compraDetalle.setIvaPorcentaje(porcentajeIva);
+            compraDetalle.setIrbpnr(irbpnr);
             
             
             //BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 

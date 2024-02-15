@@ -377,12 +377,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     CompraDetalle compraDetalleTmp=(CompraDetalle) compraDetalle;
                     ProductoProveedor productoProveedor=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarActivoPorCodigoProveedor(codigoPrincipal,compra.getEmpresa());
                     if(productoProveedor!=null)
-                    {
-                        //List<ProductoProveedor> productoProveedorList=ServiceFactory.getFactory().getProductoProveedorServiceIf().buscarProductoProveedorActivo(producto, compra.getProveedor());
-                        //if(productoProveedorList.size()>0)
-                        //{
+                    {                        
                         compraDetalleTmp.setProductoProveedor(productoProveedor);
-                        //}
                     }
                     else
                     {
@@ -391,7 +387,9 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                         Producto productoTmp=new Producto();
                         
                         CatalogoProducto catalogoProductoTmp=new CatalogoProducto();
-                        ImpuestoDetalle impuestoDetalleIvaTmp=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorCodigo(Integer.parseInt(detalleXml.getImpuestos().get(0).getCodigoPorcentaje()));
+                        Integer codigoPorcentaje=Integer.parseInt(detalleXml.obtenerIvaDetalle().getCodigoPorcentaje());
+                        ImpuestoDetalle impuestoDetalleIvaTmp=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorCodigo(codigoPorcentaje);
+                        //ImpuestoDetalle impuestoDetalleIvaTmp=ServiceFactory.getFactory().getImpuestoDetalleServiceIf().buscarPorCodigo(Integer.parseInt(detalleXml.getImpuestos().get(0).getCodigoPorcentaje()));
                         
                         
                         productoProveedorTmp.setProducto(productoTmp);

@@ -367,6 +367,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         Vector<String> titulo = new Vector<>();
         titulo.add("Preimpreso");
         titulo.add("Referencia");
+        titulo.add("Campo Adicional");
         titulo.add("Usuario");
         titulo.add("Fecha");
         titulo.add("Fecha Autorización");

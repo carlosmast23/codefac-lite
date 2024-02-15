@@ -224,6 +224,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         txtDescuentoItem = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
         txtCostoItem = new javax.swing.JTextField();
+        jLabel34 = new javax.swing.JLabel();
+        txtIrbpnrDetalle = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblFacturaReembolso = new javax.swing.JTable();
@@ -951,7 +953,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1155,9 +1157,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jPanel2.add(txtDescuentoItem, gridBagConstraints);
 
         jLabel31.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel31.setText("Unidad:");
+        jLabel31.setText("Irbpnr:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1170,6 +1172,23 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtCostoItem, gridBagConstraints);
+
+        jLabel34.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel34.setText("Unidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel34, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 45;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        jPanel2.add(txtIrbpnrDetalle, gridBagConstraints);
 
         jTabbedPane2.addTab("Detalles", jPanel2);
 
@@ -1312,6 +1331,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel42;
@@ -1367,6 +1387,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtEstablecimientoCompra;
     private javax.swing.JTextField txtIce;
     private javax.swing.JTextField txtIrbpnr;
+    private javax.swing.JTextField txtIrbpnrDetalle;
     private javax.swing.JTextField txtLoteNombre;
     private javax.swing.JTextField txtObservacion;
     private javax.swing.JTextField txtOrdenCompra;
@@ -1882,6 +1903,16 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setChkPagarCaja(JCheckBox chkPagarCaja) {
         this.chkPagarCaja = chkPagarCaja;
     }
+
+    public JTextField getTxtIrbpnrDetalle() {
+        return txtIrbpnrDetalle;
+    }
+
+    public void setTxtIrbpnrDetalle(JTextField txtIrbpnrDetalle) {
+        this.txtIrbpnrDetalle = txtIrbpnrDetalle;
+    }
+    
+    
     
     
     

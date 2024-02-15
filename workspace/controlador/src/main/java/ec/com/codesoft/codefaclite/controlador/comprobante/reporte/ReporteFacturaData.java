@@ -514,6 +514,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.cantidad, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.referencia, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.campoAdicional, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.usuario, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaFactura, Excel.TipoDataEnum.FECHA));
         tiposDatos.add(new TipoDato((this.fechaAutorizacion!=null)?this.fechaAutorizacion:"", Excel.TipoDataEnum.TEXTO));
