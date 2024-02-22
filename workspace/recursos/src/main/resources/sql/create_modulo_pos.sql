@@ -115,8 +115,15 @@ create table INGRESO_CAJA(
     SIGNO INT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.0.7)*/
     CARTERA_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.1.0)*/
+    SRI_FORMA_PAGO_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.1.2)*/
+    DESCRIPCION varchar(1024),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.1.2)*/
+    SECUENCIAL varchar(32),
 
     primary key (ID),
+    CONSTRAINT id_forma_pago_fk2 FOREIGN KEY (SRI_FORMA_PAGO_ID) REFERENCES SRI_FORMA_PAGO(ID),
     constraint id_ingreso_caja_caja_session_fk foreign key(CAJA_SESSION_ID) references CAJA_SESSION(ID),
     constraint id_ingreso_caja_venta_fk foreign key(VENTA_ID) references VENTA(ID)
 );

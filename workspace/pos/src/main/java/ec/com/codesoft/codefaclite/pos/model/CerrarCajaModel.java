@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.InputStream;
@@ -221,7 +222,7 @@ public class CerrarCajaModel extends CajaSessionModel
         
         List<IngresoCaja> ingresoCajaList=cajaSession.getIngresosCaja();
         
-         SimpleDateFormat dateFormatHora = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat dateFormatHora = new SimpleDateFormat("HH:mm");
         
          //BigDecimal a;
          //a.multiply(new BigDecimal("-1"));
@@ -230,6 +231,9 @@ public class CerrarCajaModel extends CajaSessionModel
         {
             for (IngresoCaja ingresoCaja : ingresoCajaList) 
             {
+                String ingresoDescripcionTmp=ingresoCaja.getDescripcion();
+                String referenciaSecuencial=ingresoCaja.getSecuencial();
+                
                 if(ingresoCaja.getFactura()!=null)
                 {
                     Timestamp fechaIngreso=ingresoCaja.getFactura().getFechaCreacion();
@@ -251,11 +255,16 @@ public class CerrarCajaModel extends CajaSessionModel
                         //{
                         //    totalStr="0";
                         //}
+                        
+                        if(UtilidadesTextos.verificarNullOVacio(ingresoDescripcionTmp))
+                        {
+                            ingresoDescripcionTmp="Venta";
+                        }
 
                         VentaReporteData reporteData = new VentaReporteData(                            
                                 ingresoCaja.getFactura().getSecuencial() + "",
                                 ingresoCaja.getFactura().getIdentificacion(),
-                                "Venta",
+                                ingresoDescripcionTmp,
                                 ingresoCaja.getFactura().getRazonSocial(),
                                 totalStr,
                                 estadoNombre,
@@ -272,6 +281,10 @@ public class CerrarCajaModel extends CajaSessionModel
                     //Tomar en cuenta para el calculo siempre y cuando no este eliminado
                     if(!ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado().equals(ingresoCaja.getCompra().getEstado()))
                     {
+                        if (UtilidadesTextos.verificarNullOVacio(ingresoDescripcionTmp)) {
+                            ingresoDescripcionTmp = "U.Compras";
+                        }
+                        
                         Timestamp fechaIngreso=ingresoCaja.getCompra().getFechaCreacion();
                         VentaReporteData compraData = new VentaReporteData(                            
                                     ingresoCaja.getCompra().getSecuencial() + "",
@@ -280,7 +293,7 @@ public class CerrarCajaModel extends CajaSessionModel
                                     ingresoCaja.getCompra().getRazonSocial(),
                                     ingresoCaja.getCompra().getTotal()+"",
                                     ingresoCaja.getCompra().getEstado(),
-                                    "U.Compras",
+                                    ingresoDescripcionTmp,
                                     dateFormatHora.format(fechaIngreso),
                                     "-"
                             );
@@ -290,11 +303,21 @@ public class CerrarCajaModel extends CajaSessionModel
                 else if(ingresoCaja.getCartera()!=null)
                 {
                     if(ingresoCaja.getCartera().getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
-                    {
+                    {                        
+                        if (UtilidadesTextos.verificarNullOVacio(ingresoDescripcionTmp)) 
+                        {
+                            ingresoDescripcionTmp = ingresoCaja.getCartera().getCarteraDocumentoEnum().getNombre();
+                        }
+                        
+                        if(UtilidadesTextos.verificarNullOVacio(referenciaSecuencial))
+                        {
+                            referenciaSecuencial=ingresoCaja.getCartera().getId()+"";
+                        }
+                        
                         VentaReporteData compraData = new VentaReporteData(
-                                ingresoCaja.getCartera().getId() + "",
+                                referenciaSecuencial,
                                 ingresoCaja.getCartera().getPersona().getIdentificacion(),
-                                ingresoCaja.getCartera().getCarteraDocumentoEnum().getNombre(),
+                                ingresoDescripcionTmp,
                                 ingresoCaja.getCartera().getPersona().getRazonSocial(),
                                 ingresoCaja.getCartera().getTotal()+"",
                                 ingresoCaja.getCartera().getEstado(),
@@ -305,6 +328,8 @@ public class CerrarCajaModel extends CajaSessionModel
                         detalleData.add(compraData);
                     }
                 }
+                
+
                 
             }
         }

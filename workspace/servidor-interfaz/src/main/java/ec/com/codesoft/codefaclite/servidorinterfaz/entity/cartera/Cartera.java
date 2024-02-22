@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NombresEntidadesJPA;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
@@ -139,6 +140,9 @@ public class Cartera implements Serializable{
     
     @Column(name = "NUMERO_CUOTA")
     private Integer numeroCuota;
+    
+    @JoinColumn(name = "SRI_FORMA_PAGO_ID")
+    private SriFormaPago sriFormaPago;
     
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
@@ -376,6 +380,14 @@ public class Cartera implements Serializable{
     public void setSegundaReferenciaDescripcion(String segundaReferenciaDescripcion) {
         this.segundaReferenciaDescripcion = segundaReferenciaDescripcion;
     }
+
+    public SriFormaPago getSriFormaPago() {
+        return sriFormaPago;
+    }
+
+    public void setSriFormaPago(SriFormaPago sriFormaPago) {
+        this.sriFormaPago = sriFormaPago;
+    }
     
     
     
@@ -595,6 +607,23 @@ public class Cartera implements Serializable{
         return total;
     }
     
+    /**
+     * Metodo que permite especialmente desde abonos buscar la factura original de venta o compra
+     * @param cartera
+     * @return 
+     */
+    public Cartera buscarCarteraOriginal()
+    {
+        if(cruces!=null)
+        {
+            for (CarteraCruce cruce : cruces) 
+            {
+               return cruce.getCarteraAfectada();
+            }
+        }
+        return null ;
+    }
+    
     ///////////////////////////////////////////////////////////////////////////
     //          CLASES Y ENUMS ADICIONALES
     //////////////////////////////////////////////////////////////////////////
@@ -621,6 +650,7 @@ public class Cartera implements Serializable{
         }
         
     }
+    
     
     /**
      * Enum que identifica que tipo de cartera es de cliente o de proveedores

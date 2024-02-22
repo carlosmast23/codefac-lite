@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.Banco;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
@@ -41,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -445,6 +447,10 @@ public class CarteraModel extends CarteraPanel{
             //cargar los datos de los bancos
             List<Banco> bancoList= ServiceFactory.getFactory().getBancoServiceIf().obtenerActivosPorEmpresa(null);
             UtilidadesComboBox.llenarComboBox(getCmbBanco(), bancoList);
+            SriServiceIf service=ServiceFactory.getFactory().getSriServiceIf();
+            List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
+            UtilidadesComboBox.llenarComboBox(getCmbFormaPagoSri(), formasPagoSri);
+            
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(CarteraModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -453,6 +459,14 @@ public class CarteraModel extends CarteraPanel{
     }
 
     private void listenerCombos() {
+        
+        /*getCmbFormaPagoSri().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });*/
+        
         getCmbTipoCartera().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1172,6 +1186,7 @@ public class CarteraModel extends CarteraPanel{
         cartera.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         cartera.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());
         cartera.setFechaEmision(new java.sql.Date(getCmbFechaEmision().getDate().getTime()));
+        cartera.setSriFormaPago((SriFormaPago) getCmbFormaPagoSri().getSelectedItem());
         
         String puntoEmision="";
         String puntoEstablecimiento="";

@@ -196,12 +196,12 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     @PostConstruct
     public void init() {
-        System.out.println("Creando controlador");
+        System.out.println("Creando controlador");    
         controlador=new FacturaModelControlador(sessionMb.getSession(),this,MensajeMb.intefaceMensaje);
-        String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());
+        String tipoPagina = UtilidadesWeb.buscarParametroPeticion(parametrosWeb.getCampoTipoFacturaOProforma());       
         tipoPaginaEnum = TipoPaginaEnum.getByNombreParametro(tipoPagina);
         
-        visualizarCargarProforma=true;
+        visualizarCargarProforma=true;  
         
         //Si no puede encontrar el tipo de la pantala por defecto abre como factura
         if(tipoPaginaEnum==null)
@@ -215,6 +215,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         }
         else if(tipoPaginaEnum.equals(TipoPaginaEnum.COMANDA))
         {
+            //TODO: Por el momento esta parte dejo descativando
             visualizarComanda=true;
             //documentoSeleccionado=DocumentoEnum.PROFORMA;
             documentoSeleccionado=DocumentoEnum.COMANDA;
@@ -496,7 +497,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void seleccionarProducto(SelectEvent event) {
         System.out.println("Metodo ejecutando seleccionar producto");
-        System.out.println("Documento seleccionado : "+documentoSeleccionado.getNombre());
+        //System.out.println("Documento seleccionado : "+documentoSeleccionado.getNombre());
         productoSeleccionado = (Producto) event.getObject(); 
         precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();
         controlador.agregarProductoVista(productoSeleccionado,null,null,BigDecimal.ZERO,null,null);
@@ -1074,6 +1075,10 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
             //UtilidadesComboBox.
             //documentos.add(DocumentoEnum.FACTURA);
         }
+        else if(tipoPaginaEnum.equals(tipoPaginaEnum.COMANDA))
+        {
+            documentos.add(DocumentoEnum.COMANDA);
+        }
     }
     
     public void abrirDialogoDatosAdicionales()
@@ -1378,7 +1383,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     }
 
     @Override
-    public void cargarPreciosPorcentaje(List<BigDecimal> descuentos) {
+    public void cargarPreciosPorcentaje(List<BigDecimal> descuentos,Boolean porcentajes) {
         
     }
 

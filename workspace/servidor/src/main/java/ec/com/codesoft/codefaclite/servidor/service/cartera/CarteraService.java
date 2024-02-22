@@ -256,6 +256,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     private void grabarMovimientosCaja(Cartera cartera) throws RemoteException, ServicioCodefacException
     {
+        //TODO: Los únicos movimientos que pueden generar movimiento en cartera van a ser los ingresos y egresos
+        if(!cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.ABONOS))
+        {
+            return;
+        }
+        
         CajaSession cajaSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorPuntoEmisionYUsuario(null, cartera.getUsuario());
         
         if(cajaSession == null)
@@ -265,10 +271,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             //throw new ServicioCodefacException("No se encontro ninguna session para el punto de emisión");
         }
         
+        
         IngresoCaja ingresoCaja=new IngresoCaja();
         ingresoCaja.setCajaSession(cajaSession);
         ingresoCaja.setValor(cartera.getTotal());        
         ingresoCaja.setCartera(cartera);
+        //ingresoCaja.setSecuencial(secuencial);
         
         if(cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.CLIENTE))
         {
@@ -278,6 +286,35 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         {
             ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);
         }
+        
+        //CarteraCruceService cc=new CarteraCruceService();
+        //List<CarteraCruce> carteraCruceList=cc.buscarPorCarteraDetalle(cartera.getDetalles().get(0));
+        
+        //Cartera carteraTmp= buscarPorId(cartera.getId());
+        //Cartera carteraOriginal=carteraTmp.buscarCarteraOriginal();
+        //Poner el nombre de la descripción
+        String descripcionIngreso="S/N";
+        
+        /*if(carteraOriginal.getCarteraDocumentoEnum().getCategoria().equals(DocumentoCategoriaEnum.COMPROBANTES_VENTA))
+        {
+            descripcionIngreso="Venta";
+        }
+        else if(carteraOriginal.getCarteraDocumentoEnum().getCategoria().equals(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS))
+        {
+            descripcionIngreso="Comprobante";
+            
+            if(cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.CLIENTE))
+            {
+                descripcionIngreso="Ingreso";
+            }
+            else if(cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.CLIENTE))
+            {
+                descripcionIngreso="Egreso";
+            }
+        }*/
+        ingresoCaja.setDescripcion(cartera.getDetalles().get(0).getDescripcion());
+        ingresoCaja.setSecuencial(cartera.getReferenciaManual());
+        
         
         entityManager.persist(ingresoCaja);
         
@@ -785,11 +822,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
                 //Crear la cartera detalle del abono
                 CarteraDetalle carteraDetalleAbono = new CarteraDetalle();
+                carteraDetalleAbono.setReferenciaId(Long.parseLong(factura.getSecuencial()+""));
                 carteraDetalleAbono.setCartera(carteraAbono);
                 carteraDetalleAbono.setCruces(new ArrayList<CarteraCruce>());
-                carteraDetalleAbono.setDescripcion("cruce automatica");
+                carteraDetalleAbono.setDescripcion("venta #"+factura.getSecuencial());
                 carteraDetalleAbono.setSaldo(formaPago.getTotal());
                 carteraDetalleAbono.setTotal(formaPago.getTotal());
+                
+                carteraAbono.setReferenciaManual(factura.getSecuencial()+"");
                 
                 carteraAbono.addDetalle(carteraDetalleAbono);
                 

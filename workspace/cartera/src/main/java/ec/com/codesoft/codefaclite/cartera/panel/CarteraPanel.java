@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.cartera.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.banco.Banco;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoCarteraEnum;
@@ -75,6 +76,8 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         txtReferenciaManual = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         cmbBanco = new javax.swing.JComboBox<>();
+        jLabel21 = new javax.swing.JLabel();
+        cmbFormaPagoSri = new javax.swing.JComboBox<SriFormaPago>();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtValorDetalle = new javax.swing.JTextField();
@@ -297,10 +300,10 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jPanel3.add(txtCodigoAuxiliar, gridBagConstraints);
 
         jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel15.setText("Autorización:");
+        jLabel15.setText("Forma de Pago:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel15, gridBagConstraints);
@@ -327,6 +330,23 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(cmbBanco, gridBagConstraints);
+
+        jLabel21.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel21.setText("Autorización:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel21, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(cmbFormaPagoSri, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -719,6 +739,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
     private com.toedter.calendar.JDateChooser cmbFechaCruzar;
     private com.toedter.calendar.JDateChooser cmbFechaEmision;
+    private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoSri;
     private javax.swing.JComboBox<TipoCarteraEnum > cmbTipoCartera;
     private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -735,6 +756,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1042,6 +1064,15 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     public void setTxtDiasCredito(JTextField txtDiasCredito) {
         this.txtDiasCredito = txtDiasCredito;
     }
+
+    public JComboBox<SriFormaPago> getCmbFormaPagoSri() {
+        return cmbFormaPagoSri;
+    }
+
+    public void setCmbFormaPagoSri(JComboBox<SriFormaPago> cmbFormaPagoSri) {
+        this.cmbFormaPagoSri = cmbFormaPagoSri;
+    }
+    
     
     
     

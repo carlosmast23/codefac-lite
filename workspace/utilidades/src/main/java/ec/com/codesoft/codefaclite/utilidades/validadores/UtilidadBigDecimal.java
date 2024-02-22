@@ -45,6 +45,19 @@ public class UtilidadBigDecimal {
         return redondear(valor,4);
     }
     
+    public static BigDecimal convertirTextoEnBigDecimal(String textoNumero)
+    {
+        try
+        {
+            return new BigDecimal(textoNumero);
+        }
+        catch(Exception e)
+        {
+            
+        }
+        return null;
+    }
+    
     public static BigDecimal obtenerValorJTextField(JTextField textField)
     {
         try

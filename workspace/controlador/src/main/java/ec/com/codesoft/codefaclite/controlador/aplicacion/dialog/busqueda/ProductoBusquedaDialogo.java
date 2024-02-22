@@ -93,7 +93,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
-        titulo.add(new ColumnaDialogo("Código", 0.2d));        
+        titulo.add(new ColumnaDialogo("Código", 0.2d));                
         titulo.add(new ColumnaDialogo("Unidad", 0.2d));
         titulo.add(new ColumnaDialogo("Marca", 0.2d));
         if(aplicacionColumna)
@@ -101,9 +101,10 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             titulo.add(new ColumnaDialogo("Aplicación",0.2d));
         }
         titulo.add(new ColumnaDialogo("Pvp1 ", 0.05d));
-        titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.05d));
+        titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.05d));        
         titulo.add(new ColumnaDialogo("IVA", 0.05d));        
         titulo.add(new ColumnaDialogo("ICE", 0.05d));        
+        titulo.add(new ColumnaDialogo("Imagen", 0.2d));
         return titulo;
     }
 
@@ -287,14 +288,19 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
 
     @Override
     public Vector<String> getNamePropertysObject() {
+        //Producto producto;
+        //producto.getMarcaProducto().getNombre();
+        //producto.getImagen();
         Vector<String> propiedades = new Vector<String>();
         propiedades.add("nombre");
-        propiedades.add("codigoPersonalizado");   
+        propiedades.add("codigoPersonalizado");           
         propiedades.add("codigoPersonalizado");
+        propiedades.add("marcaProducto.nombre");
         propiedades.add("valorUnitario");
-        propiedades.add("valorUnitarioConIva");
+        propiedades.add("valorUnitarioConIva");        
         propiedades.add("catalogoProducto.iva");
         propiedades.add("catalogoProducto.ice");
+        propiedades.add("imagen");
         return propiedades;
     }
 

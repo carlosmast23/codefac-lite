@@ -172,20 +172,33 @@
                                 <f:facet name="header">
                                     <h2>#{producto.nombre}</h2>
                                 </f:facet>
+                                
+                                <div class="p-grid" style="text-align: center" >
+                                    <div class="p-col-12 p-md-6 p-lg-12" >
+                                        <p:graphicImage value="#{imagenMb.imageProducto}" height="130px" >
+                                            <f:param name="imagenPath" value="#{producto.imagen}" />
+                                            <f:param name="empresaId" value="#{sessionMb.session.empresa.id.toString()}" />
+                                        </p:graphicImage>
+                                    </div>
+                                    
+                                    <div class="p-col-12 p-md-6 p-lg-12" >
+                                        <div class="product-item">
+                                            <div class="product-item-content">                                        
+                                                <div>
+                                                    <h4 >#{producto.codigoPersonalizado} | #{producto.nombre} [#{producto.valorUnitarioDefectoFormat}$] </h4>
 
-                                <div class="product-item">
-                                    <div class="product-item-content">                                        
-                                        <div>
-                                            <h4 class="mb-1">#{producto.codigoPersonalizado} [#{producto.valorUnitarioDefectoFormat}$]</h4>
-                                            <p>#{producto.nombre}</p>                                            
-                                            <div class="mt-5" >                                                                                                
-                                                <p:keyboard id="keypad" value="#{producto.registroSanitario}" keypadOnly="true" style="font-size: 20px;width: 100px" />
-                                                <p:commandButton process="@this, keypad" update=":formulario:tblProductoDetalles,keypad" actionListener="#{proformaMb.agregarProductoPorDefecto(producto)}" icon="pi pi-plus" styleClass="rounded-button mr-2" style="font-size: 20px;" />
-                                                <p:commandButton process="@this, keypad" update=":formulario:tblProductoDetalles,keypad" actionListener="#{proformaMb.disminuirProducto(producto)}" icon="pi pi-minus" styleClass="rounded-button mr-2" style="font-size: 20px;" />
+                                                    <div  >                                                                                                
+                                                        <p:keyboard id="keypad" value="#{producto.registroSanitario}" keypadOnly="true" style="font-size: 20px;width: 50px" />
+                                                        <p:commandButton process="@this, keypad" update=":formulario:tblProductoDetalles,keypad" actionListener="#{proformaMb.agregarProductoPorDefecto(producto)}" icon="pi pi-plus" styleClass="rounded-button mr-2" style="font-size: 20px;" />
+                                                        <p:commandButton process="@this, keypad" update=":formulario:tblProductoDetalles,keypad" actionListener="#{proformaMb.disminuirProducto(producto)}" icon="pi pi-minus" styleClass="rounded-button mr-2" style="font-size: 20px;" />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    
                                 </div>
+                                
 
                             </p:carousel>
                         </p:tab>

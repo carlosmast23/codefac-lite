@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import java.io.Serializable;
@@ -43,6 +45,12 @@ public class IngresoCaja implements Serializable
     @Column(name = "VALOR")
     private BigDecimal valor;
     
+    @Column(name = "DESCRIPCION")
+    private String descripcion;
+    
+    @Column(name = "SECUENCIAL")
+    private String secuencial;
+    
     /*
      * Constructor
      */
@@ -67,6 +75,10 @@ public class IngresoCaja implements Serializable
     @JoinColumn(name = "CARTERA_ID")
     @ManyToOne
     private Cartera cartera;
+    
+    @JoinColumn(name = "SRI_FORMA_PAGO_ID")
+    @ManyToOne
+    private SriFormaPago formaPago;
     
     @Column(name = "SIGNO")    
     private Integer signoIngreso;
@@ -121,6 +133,16 @@ public class IngresoCaja implements Serializable
     public void setSignoIngreso(Integer signoIngreso) {
         this.signoIngreso = signoIngreso;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
+    
     
     public SignoEnum getSignoIngresoEnum() {
         return SignoEnum.consultarPorValor(signoIngreso);
@@ -136,6 +158,22 @@ public class IngresoCaja implements Serializable
 
     public void setCartera(Cartera cartera) {
         this.cartera = cartera;
+    }
+
+    public SriFormaPago getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(SriFormaPago formaPago) {
+        this.formaPago = formaPago;
+    }
+
+    public String getSecuencial() {
+        return secuencial;
+    }
+
+    public void setSecuencial(String secuencial) {
+        this.secuencial = secuencial;
     }
     
     

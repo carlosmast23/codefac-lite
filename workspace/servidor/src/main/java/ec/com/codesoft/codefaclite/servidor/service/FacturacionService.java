@@ -2001,7 +2001,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             }
         
         }
-        
+        /* TODO: Esta parte queda
         //Grabar el valor de la venta para contavilizar cuando se termine la session de la caja
         IngresoCaja ingresoCaja = new IngresoCaja();
         ingresoCaja.setCajaSession(cajaSession);
@@ -2032,7 +2032,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         entityManager.persist(ingresoCaja);
         
-        entityManager.merge(cajaSession);
+        entityManager.merge(cajaSession);*/
     }
     
     @Override

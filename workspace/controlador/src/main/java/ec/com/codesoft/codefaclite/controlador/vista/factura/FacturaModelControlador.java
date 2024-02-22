@@ -71,6 +71,7 @@ import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
@@ -503,7 +504,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //cargarPrecios(productoSeleccionado);
         interfaz.cargarPrecios(productoSeleccionado);
         //List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado,1);
-        interfaz.cargarPreciosPorcentaje(descuentos);
+        interfaz.cargarPreciosPorcentaje(descuentos,true);
         interfaz.cargarPresentaciones(productoSeleccionado);
         
         //Solo ejecutar cuando no se esta recargando presentaciones desde el combo box
@@ -579,6 +580,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             tipoDocumentoEnum=interfaz.obtenerTipoDocumentoSeleccionado();
         }
         
+        if (calcularAhorro) {
+            descuentoDefecto=productoSeleccionado.getValorUnitario().subtract(valorUnitario);
+            valorUnitario=productoSeleccionado.getValorUnitario();            
+            //El precio para hacer e calculo del ahorro siempre va a hacer el primero
+            //facturaDetalle.setPrecioSinAhorro(productoSeleccionado.getValorUnitario());
+            //facturaDetalle.setDescuento(productoSeleccionado.getValorUnitario().subtract(valorUnitario));
+            //interfaz.setearDescuentoTxt(descuentoDefecto+"");
+        }
+        
         
         FacturaDetalle facturaDetalle=crearFacturaDetalle(
                 BigDecimal.ONE,
@@ -601,11 +611,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         verificarProductoConNotaVentaInterna(facturaDetalle);
         
-        if(calcularAhorro)
-        {           
-            //El precio para hacer e calculo del ahorro siempre va a hacer el primero
-            facturaDetalle.setPrecioSinAhorro(productoSeleccionado.getValorUnitario());
-        }
+
         
         //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
         interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
@@ -870,6 +876,17 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             interfaz.habilitarComboIva(true);
         }
         
+        //TODO: Este artificio solo sirve para el tema de farmacias cuando necesitan calcular con el ahorro
+        BigDecimal descuentoAnterior=null;
+        if(calcularAhorro)
+        {
+            descuentoAnterior=UtilidadBigDecimal.convertirTextoEnBigDecimal(interfaz.obtenerTxtDescuento());
+            if(descuentoAnterior!=null)
+            {
+                precioUnitario=precioUnitario.add(descuentoAnterior);
+            }
+        }
+        
         //TODO: Ver alguna forma de cargar por defecto el precio guardado en la base de datos
         if (ivaPorcentaje>0 && ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI)) {
             //getCmbIva().setSelectedItem(EnumSiNo.SI);
@@ -892,8 +909,21 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //Cargar los descuentos disponibles por cada precio
         if(numeroPvp!=null && productoSeleccionado!=null)
         {
+            
             List<BigDecimal> descuentosList = consultarDescuentoPorProducto(productoSeleccionado, numeroPvp);
-            interfaz.cargarPreciosPorcentaje(descuentosList);
+            Boolean seleccionarPorcentaje=true;
+            //Agregar el descuento de ahorro adicional para esta parte por defecto
+            if(calcularAhorro)
+            {
+                Producto.PrecioVenta.buscaTextoPorPosicion(1);
+                                
+                if(descuentoAnterior!=null)
+                {
+                    descuentosList.add(descuentoAnterior);
+                    seleccionarPorcentaje=false;
+                }
+            }
+            interfaz.cargarPreciosPorcentaje(descuentosList,false);
         }
         //Dejar seleccionado el ultimo precio por defecto para que las siguientes veces continue con ese mismo precio
         if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.AGREGAR_PVP_ANTERIOR,EnumSiNo.SI))
@@ -2125,6 +2155,15 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 );
     }
 
+    public Boolean getCalcularAhorro() {
+        return calcularAhorro;
+    }
+
+    public void setCalcularAhorro(Boolean calcularAhorro) {
+        this.calcularAhorro = calcularAhorro;
+    }
+
+    
     ////////////////////////////////////////////////////////////////////////////
     ///                 CLASES E INTERFACES ADICIONALES
     ////////////////////////////////////////////////////////////////////////////
@@ -2150,7 +2189,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         */
         public void cargarPrecios(Producto producto);
         
-        public void cargarPreciosPorcentaje(List<BigDecimal> descuentos );
+        public void cargarPreciosPorcentaje(List<BigDecimal> descuentos,Boolean porcentajes);
         
         public void cargarPresentaciones(Producto producto);
         

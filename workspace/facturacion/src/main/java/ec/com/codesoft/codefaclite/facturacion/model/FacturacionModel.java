@@ -1784,14 +1784,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
     }
     
-    public void cargarPreciosPorcentaje(List<BigDecimal> descuentos ) {
+    public void cargarPreciosPorcentaje(List<BigDecimal> descuentos,Boolean porcentajes) {
         getCmbDescuento().removeAllItems();
         for (BigDecimal descuento : descuentos) 
         {
             getCmbDescuento().addItem(descuento+"");
             
             //Optimizar para poner fuera del ciclo repetitivo
-            getCheckPorcentaje().setSelected(true);
+            getCheckPorcentaje().setSelected(porcentajes);
         }
     }
     
@@ -5434,7 +5434,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblValorIce().setText(""+factura.getIce());
         getLblIva12().setText("" + factura.getIva());
         getTxtValorTotal().setText("" + this.factura.getTotal());
-        getLblAhorro().setText(""+factura.getAhorro());
+        getLblAhorro().setText(""+factura.calcularDescuentosTotales());
         getLblSubTotalDescuentoConImpuesto().setText("" + factura.getDescuentoImpuestos());
         getLblSubTotalDescuentoSinImpuesto().setText("" + factura.getDescuentoSinImpuestos());
         getLblTotalDescuento().setText("" + factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
