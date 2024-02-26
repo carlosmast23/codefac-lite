@@ -1409,7 +1409,7 @@ public class CompraModel extends CompraPanel{
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {
                     //TODO:Mejorar esta parte para no pasar los mismos datos                    
-                    agregarDetallesCompra(compraDetalle,loteSeleccionado,compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getCodigoPrincipal(),compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje(),compraDetalle.getIrbpnr());
+                    agregarDetallesCompra(compraDetalle,compraDetalle.getLote(),compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getCodigoPrincipal(),compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje(),compraDetalle.getIrbpnr());
                     
                 }
                 

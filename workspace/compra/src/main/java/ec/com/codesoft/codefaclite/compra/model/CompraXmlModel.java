@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
@@ -67,11 +68,52 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
         jMenuItemNuevoProveedor.addActionListener(listenerCrearProducto);
         jPopupMenu.add(jMenuItemNuevoProveedor);
         
+        //MENU PARA CREAR O AGREGAR UN NUEVO LOTE
+        JMenuItem jMenuItemNuevoLote = new JMenuItem("Crear Lote");
+        jMenuItemNuevoLote.addActionListener(listenerCrearLote);
+        jPopupMenu.add(jMenuItemNuevoLote);
+        //jMenuItemNuevoLote.addActionListener();
+                
+        
         getTblDetalles().setComponentPopupMenu(jPopupMenu);
         
         
         
     }
+    
+    private ActionListener listenerCrearLote=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            int fila=getTblDetalles().getSelectedRow();
+            if(fila<0)
+            {
+                return ;
+            }
+            
+            CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(fila, COLUMNA_OBJETO);
+            
+            Object[] paramPostConstruct = new Object[1];
+            Producto productoCrearLote= compraDetalle.getProductoProveedor().getProducto();
+            paramPostConstruct[0] = productoCrearLote;
+            
+            ObserverUpdateInterface observerCreate=new ObserverUpdateInterface<Lote>() 
+            {
+                @Override
+                public void updateInterface(Lote entity) {
+                    if(entity!=null)
+                    {
+                        compraDetalle.setLote(entity);
+                        actualizarBindingCompontValues();
+                        //enlazarProductoTabla(entity, fila);
+                    }
+
+                }
+            };
+            panelPadre.crearDialogoCodefac(observerCreate, VentanaEnum.LOTE, false,paramPostConstruct,formularioActual);        
+        }
+    };
+            
     
     private ActionListener listenerEnlazarProveedor=new ActionListener() {
         @Override
@@ -267,8 +309,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     }
 
     public void crearModeloTabla() {
-        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema", "Cod Xml", "Descripción compra","Iva","Ice","Cantidad","Precio","Desc"};
-        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class, String.class, String.class, String.class,String.class,String.class,String.class});
+        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema", "Cod Xml", "Descripción compra","Iva","Ice","Cantidad","Precio","Desc","Lote"};
+        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class, String.class, String.class, String.class,String.class,String.class,String.class,String.class});
         getTblDetalles().setModel(modelo);
         UtilidadesTablas.definirTamanioColumnas(getTblDetalles(), new Integer[]{0});
     }
@@ -290,6 +332,12 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     
                 }
                 
+                String codigoLote="";
+                if(value.getLote()!=null)
+                {
+                    codigoLote=value.getLote().getCodigo(); 
+                }
+                
 
                 return new Object[]{
                     value,
@@ -302,6 +350,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     value.getCantidad(),
                     value.getPrecioUnitario() + "",
                     value.getDescuento()+"",
+                    codigoLote
                 };
             }
 
