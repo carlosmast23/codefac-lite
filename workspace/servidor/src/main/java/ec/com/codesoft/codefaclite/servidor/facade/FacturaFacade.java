@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -414,7 +415,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         return query.getResultList();
     }
       
-      public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor)
+      public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto)
       {
           //Factura f;
           //f.getEstadoEnum().AUTORIZADO

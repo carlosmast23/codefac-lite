@@ -4938,6 +4938,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         jPopupMenu.add(jMenuItem);
     }
     
+    public FacturaDetalle obtenerFacturaDetalle()
+    {
+        return facturaDetalleSeleccionado;
+    }
+    
     private FacturaDetalle obtenerFacturaDetalleSeleccionado()
     {
         int fila = getTblDetalleFactura().getSelectedRow();

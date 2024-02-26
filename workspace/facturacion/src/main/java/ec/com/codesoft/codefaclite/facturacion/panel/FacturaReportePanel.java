@@ -44,7 +44,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        lblCliente = new javax.swing.JLabel();
+        lblTipoReporte = new javax.swing.JLabel();
         txtCliente = new javax.swing.JTextField();
         btnBuscarCliente = new javax.swing.JButton();
         dateFechaInicio = new com.toedter.calendar.JDateChooser();
@@ -125,14 +125,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         setTitle("Reporte Facturas");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        lblCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblCliente.setText("Tipo de Reporte:");
+        lblTipoReporte.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblTipoReporte.setText("Tipo de Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(lblCliente, gridBagConstraints);
+        getContentPane().add(lblTipoReporte, gridBagConstraints);
 
         txtCliente.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCliente.setText("...");
@@ -885,7 +885,6 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblCliente1;
     private javax.swing.JLabel lblCliente2;
     private javax.swing.JLabel lblCostoUtilidad;
@@ -901,6 +900,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSubtotal12;
     private javax.swing.JLabel lblSubtotalSinImpuesto;
     private javax.swing.JLabel lblSubtotalUtilidad;
+    private javax.swing.JLabel lblTipoReporte;
     private javax.swing.JLabel lblTotalDescuento;
     private javax.swing.JLabel lblValorTotal;
     private javax.swing.JLabel lblValorTotal1;
@@ -1227,6 +1227,16 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     public void setCmbResponsable(JComboBox<Empleado> cmbResponsable) {
         this.cmbResponsable = cmbResponsable;
     }
+
+    public JLabel getLblTipoReporte() {
+        return lblTipoReporte;
+    }
+
+    public void setLblTipoReporte(JLabel lblTipoReporte) {
+        this.lblTipoReporte = lblTipoReporte;
+    }
+    
+    
     
     
     

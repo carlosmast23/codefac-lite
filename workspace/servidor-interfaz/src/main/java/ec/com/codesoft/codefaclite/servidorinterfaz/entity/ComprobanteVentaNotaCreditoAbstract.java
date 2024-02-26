@@ -306,7 +306,11 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
         
         for (DetalleFacturaNotaCeditoAbstract detalle : detalles) 
         {
-
+            if(detalle.getDescripcion().equals("ASPIRINA 100MG TAB. "))
+            {
+                System.out.println("probar...");
+            }
+            System.out.println(detalle.getDescripcion());
             //Sumar el valor del Ice
             resultado.ice = resultado.ice.add(detalle.getValorIce());
             resultado.irbpnr=resultado.irbpnr.add(detalle.getIrbpnr());

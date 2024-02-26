@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaReportePanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -56,7 +57,10 @@ public class UtilidadReporteModel extends FacturaReporteModel
         getLblSubtotalUtilidad().setText("0");
         getLblCostoUtilidad().setText("0");
         getTxtUtilidad().setText("0");
-        listenerBotones();        
+        getCmbTipoReporte().setVisible(false);
+        getLblTipoReporte().setVisible(false);
+        
+        //listenerBotones();        
     }
     
     /*public void listenerBotones()
@@ -81,8 +85,8 @@ public class UtilidadReporteModel extends FacturaReporteModel
         try {
             java.sql.Date fechaInicio = UtilidadesFecha.castDateUtilToSql(getDateFechaInicio().getDate());
             java.sql.Date fechaFin = UtilidadesFecha.castDateUtilToSql(getDateFechaFin().getDate());
-            
-            utilidadReport=ServiceFactory.getFactory().getFacturacionServiceIf().consultaUtilidadVentas(fechaInicio,fechaFin);
+            //CategoriaProducto categoriaProducto=getcmb            
+            utilidadReport=ServiceFactory.getFactory().getFacturacionServiceIf().consultaUtilidadVentas(fechaInicio,fechaFin,categoriaFiltro);
             llenarTabla();
             
         } catch (RemoteException ex) {

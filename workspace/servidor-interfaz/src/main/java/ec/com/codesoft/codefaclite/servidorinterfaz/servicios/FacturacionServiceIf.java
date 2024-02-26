@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -79,7 +80,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public void enviarCorreoProforma(Factura proforma,Boolean imprimirSinCodigo) throws RemoteException,ServicioCodefacException;
     
-    public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor) throws RemoteException,ServicioCodefacException  ;
+    public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto) throws RemoteException,ServicioCodefacException  ;
     
     public BigDecimal obtenerFacturasReporteTotalVenta(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) throws java.rmi.RemoteException;
     

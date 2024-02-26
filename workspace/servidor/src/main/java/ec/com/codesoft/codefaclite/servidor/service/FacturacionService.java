@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -2054,11 +2055,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return null;
     }    
     
-   public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor) throws RemoteException,ServicioCodefacException 
+   public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto) throws RemoteException,ServicioCodefacException 
    {
        
        UtilidadReport reporte=new UtilidadReport("Reporte de Utilidades");
-       List<UtilidadResult> datosList= getFacade().consultaUtilidadFacade(fechaMenor,fechaMayor);       
+       List<UtilidadResult> datosList= getFacade().consultaUtilidadFacade(fechaMenor,fechaMayor,categoriaProducto);       
        reporte.setDetalleList(datosList);
        
        return reporte;

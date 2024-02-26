@@ -1402,6 +1402,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         
     }
 
+    @Override
+    public FacturaDetalle obtenerFacturaDetalle() {
+        return facturaDetalle;
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA

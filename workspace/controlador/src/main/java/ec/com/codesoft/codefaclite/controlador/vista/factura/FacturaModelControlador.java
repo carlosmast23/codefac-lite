@@ -478,10 +478,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param stock 
      */
     public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad,Boolean recargarPresentacion) {
+        //Si no existe ningun producto seleccionado no realiza ningun calculo
         if (productoSeleccionado == null) {
             return;
         }
-        
         
         //Consultar el Valor Unitario segun el PVP confgurado por defecto
         BigDecimal valorUnitario=productoSeleccionado.buscarPrecioPorNombre(pvpDefecto);
@@ -584,7 +584,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             descuentoDefecto=productoSeleccionado.getValorUnitario().subtract(valorUnitario);
             valorUnitario=productoSeleccionado.getValorUnitario();            
             //El precio para hacer e calculo del ahorro siempre va a hacer el primero
-            //facturaDetalle.setPrecioSinAhorro(productoSeleccionado.getValorUnitario());
+            
             //facturaDetalle.setDescuento(productoSeleccionado.getValorUnitario().subtract(valorUnitario));
             //interfaz.setearDescuentoTxt(descuentoDefecto+"");
         }
@@ -603,6 +603,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 EnumSiNo.NO,
                 tipoDocumentoEnum,
                 descuentoDefecto);
+        
+        if(calcularAhorro)
+        {
+            BigDecimal precioOriginal= productoSeleccionado.getValorUnitario();
+            facturaDetalle.setPrecioSinAhorro(precioOriginal);
+        }
         
         if(productoSeleccionado!=null && productoSeleccionado.getResponsableRequeridoEnum()!=null)
         {
@@ -880,7 +886,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         BigDecimal descuentoAnterior=null;
         if(calcularAhorro)
         {
-            descuentoAnterior=UtilidadBigDecimal.convertirTextoEnBigDecimal(interfaz.obtenerTxtDescuento());
+            FacturaDetalle detalleSeleccionado= interfaz.obtenerFacturaDetalle();
+            //descuentoAnterior=UtilidadBigDecimal.convertirTextoEnBigDecimal(interfaz.obtenerTxtDescuento());
+            descuentoAnterior=detalleSeleccionado.getPrecioSinAhorro().subtract(precioUnitario);
             if(descuentoAnterior!=null)
             {
                 precioUnitario=precioUnitario.add(descuentoAnterior);
@@ -2255,6 +2263,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public Kardex obtenerKardexDesdeProducto(Producto producto);
         public void seleccionarPvpPorNombre(String nombrePvp);
         public void mostrarEtiquetasAhorro(Boolean activar);
+        public FacturaDetalle obtenerFacturaDetalle();
         
     }
     

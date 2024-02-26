@@ -79,7 +79,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     
     private Producto productoFiltro;
     
-    private CategoriaProducto categoriaFiltro;
+    protected CategoriaProducto categoriaFiltro;
     
     private List<ReporteFacturaData> data;
     
