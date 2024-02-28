@@ -564,7 +564,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     
-    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException
+    public void transferirProductoBodegas(Producto producto,Lote lote,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -584,14 +584,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 Empresa empresa=producto.getEmpresa();
                 //==========> Buscar Primero para ver si existe el kardex del producto y la bodega <==========//
-                List<Kardex> kardexResultado=buscarPorProductoYBodega(producto, bodegaOrigen);
-                if(kardexResultado==null || kardexResultado.size()==0)
+                Kardex kardexResultado=buscarKardexPorProductoyBodegayLote(bodegaOrigen,producto,lote);
+                if(kardexResultado==null )
                 {
                     throw new ServicioCodefacException("No existe un kardex para el producto en la bodega");
                 }
                 
                 //==============> Verificar si tiene la cantidad disponible para transferir <============//
-                Kardex kardexOrigen=kardexResultado.get(0);
+                Kardex kardexOrigen=kardexResultado;
                 
                 if(cantidad.compareTo(kardexOrigen.getStock())>0)
                 //if(cantidad>kardexOrigen.getStock())
@@ -607,9 +607,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 }
                 
                 //=============> Obtener el Kardex del producto de destino o crearlo <==================//
-                kardexResultado=buscarPorProductoYBodega(producto, bodegaDestino);
+                kardexResultado=buscarKardexPorProductoyBodegayLote(bodegaDestino,producto,lote);
                 Kardex kardexDestino=null; //Referencia para guardar el kardex de destino
-                if(kardexResultado==null || kardexResultado.size()==0)
+                if(kardexResultado==null )
                 {
                     //Si no existe el kardex de destino creo uno similar con los datos del otro Kardex
                     kardexDestino=crearObjeto(bodegaDestino,producto,null);
@@ -618,7 +618,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 }
                 else//Si existe el kardex solo lo cargo
                 {
-                    kardexDestino=kardexResultado.get(0);
+                    kardexDestino=kardexResultado;
                 }
                 
                 

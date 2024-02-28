@@ -43,7 +43,7 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
     /**
      * Referencia del producto que desean grabar
      */
-    private Producto productoSeleccionado;
+    private Kardex kardexSeleccionado;
     
     private Bodega bodegaOrigen;
     
@@ -84,7 +84,8 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
         try {
             setearVariables();
             ServiceFactory.getFactory().getKardexServiceIf().transferirProductoBodegas(
-                    productoSeleccionado, 
+                    kardexSeleccionado.getProducto(), 
+                    kardexSeleccionado.getLote(),
                     bodegaOrigen, 
                     bodegaDestino, 
                     getTxtDescripcion().getText(), 
@@ -124,7 +125,7 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
 
     @Override
     public void limpiar() {
-        productoSeleccionado=null;
+        kardexSeleccionado=null;
         getCmbFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
         getCmbBodegaOrigen().setSelectedIndex(0);
         getCmbBodegaDestino().setSelectedIndex(0);
@@ -206,7 +207,7 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
         getBtnBuscarProductoEspecifico().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoInventarioEspecificoDialogo dialogoBusqueda=new ProductoInventarioEspecificoDialogo(productoSeleccionado);
+                ProductoInventarioEspecificoDialogo dialogoBusqueda=new ProductoInventarioEspecificoDialogo(kardexSeleccionado.getProducto());
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(dialogoBusqueda);
                 buscarDialogo.setVisible(true);
 
@@ -234,16 +235,16 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
                 {
                     if(datoResultado instanceof Producto)
                     {
-                        productoSeleccionado=(Producto) datoResultado;
+                        kardexSeleccionado.setProducto((Producto) datoResultado);
                     }
                     else if(datoResultado instanceof Object[])
                     {
                         Object[] resultado=(Object[]) datoResultado;
                         Kardex kardex= (Kardex) resultado[0];                    
-                        productoSeleccionado=kardex.getProducto();
+                        kardexSeleccionado=kardex;
                     }                   
                     
-                    getTxtProducto().setText(productoSeleccionado.toString());
+                    getTxtProducto().setText(kardexSeleccionado.toString());
                     buscarCostoTransferencia();
                 }
                 
@@ -253,7 +254,7 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
     
     private void buscarCostoTransferencia()
     {
-        if(this.productoSeleccionado!=null)
+        if(this.kardexSeleccionado!=null)
         {
             //Buscar si existe una bodega que por defecto este seleccionada
             Bodega bodegaSeleccionada=(Bodega) getCmbBodegaOrigen().getSelectedItem();
@@ -261,7 +262,7 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
             {
                 try {
                     //buscar el kardex detalle para sacar el costo para poder hacer una transferencia
-                    Kardex kardex=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaSeleccionada, productoSeleccionado,null);
+                    Kardex kardex=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaSeleccionada, kardexSeleccionado.getProducto(),null);
                     if(kardex!=null)
                     {
                         getTxtPrecio().setText(kardex.getPrecioUltimo()+"");

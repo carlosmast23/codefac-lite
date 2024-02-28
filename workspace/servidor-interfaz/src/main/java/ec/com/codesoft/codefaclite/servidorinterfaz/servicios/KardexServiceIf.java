@@ -53,7 +53,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public List<Kardex> buscarPorBodega(Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
     public List<Object[]> consultarStock(Bodega bodega,String nombreProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento,Empresa empresa) throws java.rmi.RemoteException;
     public List<Kardex> buscarPorProductoYBodega(Producto producto,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
-    public void transferirProductoBodegas(Producto producto,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException;
+    public void transferirProductoBodegas(Producto producto,Lote lote,Bodega bodegaOrigen,Bodega bodegaDestino, String descripcion,BigDecimal cantidad,BigDecimal precio,Date fechaTransaccion,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException;
     public  KardexDetalle crearKardexDetalleSinPersistencia(Kardex kardex,TipoDocumentoEnum tipoDocumentoEnum,BigDecimal precioUnitario,BigDecimal cantidad,Usuario usuario) throws java.rmi.RemoteException,ServicioCodefacException;
     public void recalcularValoresKardex(Kardex kardex,KardexDetalle kardexDetalle) throws java.rmi.RemoteException,ServicioCodefacException;
     public boolean obtenerSiNoExisteStockProducto(Bodega bodega, Producto producto, BigDecimal cantidad) throws java.rmi.RemoteException;
