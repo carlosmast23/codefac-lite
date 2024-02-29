@@ -234,12 +234,18 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             Boolean impuestoDoce=false;
             Boolean impuestoCero=false;
             Boolean impuestoOcho=false;
+            Boolean impuestoQuince=false;
             
             List<DetalleFacturaNotaCeditoAbstract> detalles= comprobante.getDetallesComprobante();
             for (DetalleFacturaNotaCeditoAbstract detalle : detalles) 
             {
                 if(detalle.getCatalogoProducto()!=null)
                 {
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==15)
+                    {
+                        impuestoQuince=true;
+                    }
+                    
                     if(detalle.getCatalogoProducto().getIva().getTarifa()==12)
                     {
                         impuestoDoce=true;
@@ -257,6 +263,11 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 }
                 else
                 {
+                    if(detalle.getIvaPorcentaje()==15)
+                    {
+                        impuestoQuince=true;
+                    }
+                    
                     if(detalle.getIvaPorcentaje()==12)
                     {
                         impuestoDoce=true;
@@ -301,10 +312,15 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
            
             //Crear el IMPUESTO DEL IVA cuando exista
             //if(comprobante.getIva().compareTo(BigDecimal.ZERO)>0)
-            if(impuestoDoce || impuestoOcho)
+            if(impuestoDoce || impuestoOcho || impuestoQuince)
             {   
                 ImpuestoDetalle impuestoDetalleIva=null;
-                if(impuestoDoce)
+                
+                if(impuestoQuince)
+                {
+                    impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_QUINCE);
+                }
+                else if(impuestoDoce)
                 {
                     impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE);
                     

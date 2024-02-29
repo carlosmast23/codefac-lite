@@ -32,6 +32,7 @@ public class ImpuestoDetalle implements Serializable
 {
     public static final Integer TARIFA_IVA_OCHO=8;
     
+    public static final Integer CODIGO_IVA_QUINCE=9;
     public static final Integer CODIGO_IVA_OCHO=8;
     public static final Integer CODIGO_IVA_DOCE=2;
     public static final Integer CODIGO_IVA_CERO=0;
