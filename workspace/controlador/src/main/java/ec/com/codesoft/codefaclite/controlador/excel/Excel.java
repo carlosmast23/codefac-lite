@@ -137,6 +137,7 @@ public class Excel<T>
                 switch(tipo)
                 {
                     case TEXTO:
+                        //System.out.println(valorDato.valor);
                         Object valor = (valorDato.valor!=null)?valorDato.valor:"";
                         celda.setCellValue(valor.toString());
                     break;
@@ -146,11 +147,13 @@ public class Excel<T>
                         celda.setCellStyle(estilo.get("fecha"));
                     break;
                     case NUMERO:
-                        if(valorDato.valor==null || valorDato.valor=="112.00")
-                        {
-                            System.out.println("detener");
-                        }
+                        //System.out.println(valorDato.valor);                                            
                         Object valor3 = (valorDato.valor!=null)?valorDato.valor:"0";
+                        //TODO: Si no tiene valor por defecto le pongo cero
+                        if(valor3==null || valor3.equals("null"))
+                        {
+                            valor3="0";
+                        }
                         celda.setCellValue(Double.parseDouble(valor3.toString()));
                         if(b)
                         {
