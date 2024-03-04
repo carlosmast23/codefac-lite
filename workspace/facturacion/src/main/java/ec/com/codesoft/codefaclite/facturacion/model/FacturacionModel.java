@@ -1397,6 +1397,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         if (cliente != null) 
         {
+            //Si el cliente tiene un pvp por defecto le cambio al pvp del cliente
+            controlador.seleccionarPvpDefecto(cliente.getPersona());
+            
             factura.setCliente(cliente.getPersona());
             factura.setSucursal(cliente);
             //Elimino datos adicionales del anterior cliente si estaba seleccionado

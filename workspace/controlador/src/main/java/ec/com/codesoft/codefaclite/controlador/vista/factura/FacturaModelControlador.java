@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
@@ -155,12 +156,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     public void nuevo()
     {
-        //Buscar cual es el precio por defecto que se debe cargar cuando se esta utilizando otro adicional
-        String pvpDefecto=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.PRECIO_VENTA_DEFECTO);
-        if(!UtilidadesTextos.verificarNullOVacio(pvpDefecto))
-        {
-            this.pvpDefecto=pvpDefecto;
-        }
+
+        seleccionarPvpDefecto(null);
         //Verificar si se deben mostrar el campo de ahorro total de los productos
         if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_AHORRO_VENTA,EnumSiNo.SI))
         {
@@ -172,6 +169,27 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             this.interfaz.mostrarEtiquetasAhorro(Boolean.FALSE);
             this.calcularAhorro=Boolean.FALSE;
         }
+    }
+    
+    public void seleccionarPvpDefecto(Persona persona)
+    {
+        String pvpDefecto =null;
+        if(persona!=null)
+        {
+            pvpDefecto=persona.getPvpDefecto();
+        }
+        
+        //si no existe pvp de un cliente lo intento de nuevo
+        if(UtilidadesTextos.verificarNullOVacio(pvpDefecto))
+        {
+            //Buscar cual es el precio por defecto que se debe cargar cuando se esta utilizando otro adicional
+            String pvpDefectoTmp = ParametroUtilidades.obtenerValorParametro(session.getEmpresa(), ParametroCodefac.PRECIO_VENTA_DEFECTO);
+            if (!UtilidadesTextos.verificarNullOVacio(pvpDefectoTmp)) {
+                pvpDefecto=pvpDefectoTmp;
+            }
+        }
+        
+        this.pvpDefecto=pvpDefecto;
     }
     
     /**
