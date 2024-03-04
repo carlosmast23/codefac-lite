@@ -294,12 +294,29 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         this.estadoNotaCredito=estadoNotaCreditoEnum.getEstado();
     }
 
-    public void addDetalle(FacturaDetalle detalle) {
-        if (this.detalles == null) {
+    public void addDetalle(FacturaDetalle detalle,Boolean inicio) 
+    {
+        if (this.detalles == null) 
+        {
             this.detalles = new ArrayList<FacturaDetalle>();
         }
         detalle.setFactura(this);
+        
+        if(inicio!=null)
+        {
+            if(inicio)
+            {
+                this.detalles.add(0,detalle);
+                return;
+            }
+        }
+        
+        //Por defecto agrego al último
         this.detalles.add(detalle);
+    }
+    
+    public void addDetalle(FacturaDetalle detalle) {
+        
     }
 
     /**

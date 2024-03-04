@@ -1269,7 +1269,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             //Solo agregar si no esta en modo edicion
             if (!interfaz.getModoEdicionDetalle()) {
-                interfaz.obtenerFactura().addDetalle(facturaDetalle);
+                interfaz.obtenerFactura().addDetalle(facturaDetalle,true);
             }
             
             interfaz.cargarDatosDetalles();            
