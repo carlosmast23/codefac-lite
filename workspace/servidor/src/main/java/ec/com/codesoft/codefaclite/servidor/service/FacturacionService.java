@@ -1758,6 +1758,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         {
                             if(carteraFactura!=null)
                             {
+                                //tambien eliminar los cruces para evitar inconsistencias
+                                carteraService.eliminarCrucesPorCartera(carteraFactura);
+                                
                                 carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO);
                             }
                         }

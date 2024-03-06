@@ -137,19 +137,6 @@
 					<text><![CDATA[Total]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="422" y="23" width="59" height="13" uuid="6a0f5b87-0d3c-406f-a20d-16b50d0804ed"/>
-					<box>
-						<topPen lineWidth="1.0"/>
-						<leftPen lineWidth="1.0"/>
-						<bottomPen lineWidth="1.0"/>
-						<rightPen lineWidth="1.0"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Estado]]></text>
-				</staticText>
-				<staticText>
 					<reportElement x="124" y="23" width="35" height="13" uuid="32adb14f-11c8-45e7-af0f-ee94ba5ddf45"/>
 					<box>
 						<topPen lineWidth="1.0"/>
@@ -176,7 +163,7 @@
 					<text><![CDATA[Signo]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="317" y="23" width="105" height="13" uuid="85e97fa8-c395-4256-855f-a3123b89a81c"/>
+					<reportElement x="317" y="23" width="164" height="13" uuid="85e97fa8-c395-4256-855f-a3123b89a81c"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -838,21 +825,6 @@
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="422" y="0" width="59" height="13" uuid="234bf4cc-8dd7-433b-bc2c-08df122dd712"/>
-				<box>
-					<pen lineWidth="0.75"/>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.75"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement>
-					<font size="9"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="124" y="0" width="35" height="13" uuid="dc6b3a56-7b3d-404b-b0f4-847372474865"/>
 				<box>
 					<pen lineWidth="0.75"/>
@@ -876,14 +848,14 @@
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
 				</box>
-				<textElement textAlignment="Right">
-					<font size="9"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="false"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{signo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="317" y="0" width="105" height="13" uuid="6efe3054-3004-4b8e-a461-23ff0575f70b"/>
+				<reportElement x="317" y="0" width="164" height="13" uuid="6efe3054-3004-4b8e-a461-23ff0575f70b"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>

@@ -250,11 +250,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         actualizarReferenciasCartera(cartera);
         
         //Grabar los datos para la caja para ver como sale en la cartera
-        grabarMovimientosCaja(cartera);
+        grabarMovimientosCaja(cartera,false);
         
     }
     
-    private void grabarMovimientosCaja(Cartera cartera) throws RemoteException, ServicioCodefacException
+    private void grabarMovimientosCaja(Cartera cartera,Boolean eliminar) throws RemoteException, ServicioCodefacException
     {
         //TODO: Los únicos movimientos que pueden generar movimiento en cartera van a ser los ingresos y egresos
         if(!cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.ABONOS))
@@ -276,15 +276,24 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         ingresoCaja.setCajaSession(cajaSession);
         ingresoCaja.setValor(cartera.getTotal());        
         ingresoCaja.setCartera(cartera);
+        ingresoCaja.setFormaPago(cartera.getSriFormaPago());
         //ingresoCaja.setSecuencial(secuencial);
         
         if(cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.CLIENTE))
         {
             ingresoCaja.setSignoIngresoEnum(SignoEnum.POSITIVO);        
+            if(eliminar)
+            {
+                ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);        
+            }
         }
         else if (cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.PROVEEDORES))
         {
-            ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);
+            ingresoCaja.setSignoIngresoEnum(SignoEnum.NEGATIVO);        
+            if(eliminar)
+            {
+                ingresoCaja.setSignoIngresoEnum(SignoEnum.POSITIVO);        
+            }
         }
         
         //CarteraCruceService cc=new CarteraCruceService();
@@ -313,6 +322,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             }
         }*/
         ingresoCaja.setDescripcion(cartera.getDetalles().get(0).getDescripcion());
+        
+        if(eliminar)
+        {
+            ingresoCaja.setDescripcion("[ Anulación ] "+ingresoCaja.getDescripcion());
+        }
+        
         ingresoCaja.setSecuencial(cartera.getReferenciaManual());
         
         
@@ -819,6 +834,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                         factura.getSucursalEmpresa(),
                         factura.getUsuario(),
                         GeneralEnumEstado.ACTIVO);
+                
+                //Grabar la forma de pago que se esta generando con la cartera
+                carteraAbono.setSriFormaPago(formaPago.getSriFormaPago());
 
                 //Crear la cartera detalle del abono
                 CarteraDetalle carteraDetalleAbono = new CarteraDetalle();
@@ -943,6 +961,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             cartera.setReferenciaID(notaCredito.getId());
             cartera.setSaldo(notaCredito.getTotal());
             cartera.setTotal(notaCredito.getTotal());
+            cartera.setUsuario(comprobante.getUsuario());
             
             /**
              * ==========================================================================
@@ -987,6 +1006,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 System.out.println(carteraDetalle.getTotal());
                 carteraDetalle.setId(carteraDetalle.generarIdTemporal() * -1l);
                 cartera.addDetalle(carteraDetalle);
+                
+                //grabarMovimientosCaja(cartera);
                 
                 /**
                  * ==========================================================================
@@ -1262,7 +1283,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         //TODO: Ver alguna manera de identificar cuales son carteras principales (factura) y cuales son cartera que afectan (abonos)
         quitarCruceCarteraPrincipal(entity);
         quitarCruceCarteraAfectan(entity);
-        entityManager.flush();                
+        entityManager.flush();         
+        
+        //Procesar con la caja en el caso que sean eliminación de abonos
+        grabarMovimientosCaja(entity,true);
                 
     }
     

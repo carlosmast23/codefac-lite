@@ -23,13 +23,14 @@ import java.util.Map;
  */
 public class StockMinimoData implements ExcelDatosInterface{
     
-    public static String NOMBRE_CABECERA_EXCEL[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad","F.Caducidad"};
+    public static String NOMBRE_CABECERA_EXCEL[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad","F.Caducidad","Reg.Sanitario"};
     
     private Long kardexId;
     private String codigo;
     private String codigo2;
     private String lote;
     private String fechaCaducidad;
+    private String registroSanitario;
     private String producto;
     private String stock;
     private String cantidadMinima;
@@ -292,6 +293,16 @@ public class StockMinimoData implements ExcelDatosInterface{
     public void setFechaCaducidad(String fechaCaducidad) {
         this.fechaCaducidad = fechaCaducidad;
     }
+
+    public String getRegistroSanitario() {
+        return registroSanitario;
+    }
+
+    public void setRegistroSanitario(String registroSanitario) {
+        this.registroSanitario = registroSanitario;
+    }
+    
+    
     
     
     
@@ -330,7 +341,7 @@ public class StockMinimoData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.ultimoCosto,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.utilidad1,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.fechaCaducidad,Excel.TipoDataEnum.TEXTO));
-        
+        tiposDatos.add(new TipoDato(this.registroSanitario,Excel.TipoDataEnum.TEXTO));        
         
         return tiposDatos;
     }

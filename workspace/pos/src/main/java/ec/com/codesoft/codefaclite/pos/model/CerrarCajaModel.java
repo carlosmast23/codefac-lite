@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
@@ -161,15 +162,8 @@ public class CerrarCajaModel extends CajaSessionModel
         return CajaSesionModelControlador.TipoProcesoCajaEnum.CIERRE_CAJA; //To change body of generated methods, choose Tools | Templates.
     }
     
-    //TODO: Optimizar esta parte para poner en otro lado más general por ejemplo el contralador
-    public static void generarReporteCaja(CajaSession cajaSession,InterfazComunicacionPanel panelPadre)
+    private static Map<String,Object> generarMapReporte(CajaSession cajaSession)
     {
-        
-        if(cajaSession.getCaja()==null)
-        {
-            return;
-        }
-        
         Map<String,Object> parametros = new HashMap<String,Object>();
         
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -215,7 +209,60 @@ public class CerrarCajaModel extends CajaSessionModel
         parametros.put("20usd", cajaSession.getBillete20()+"");
         parametros.put("50usd", cajaSession.getBillete50()+"");
         parametros.put("100usd", cajaSession.getBillete100()+"");
+        return parametros;
+    
+    }
+    
+    public static void agregarDetalleCaja(List<VentaReporteData> detalleData,IngresoCaja ingresoCaja,BigDecimal total,SriFormaPago formaPago)
+    {
+        Timestamp fechaIngreso=ingresoCaja.getFactura().getFechaCreacion();
+        SimpleDateFormat dateFormatHora = new SimpleDateFormat("HH:mm");
+        String ingresoDescripcionTmp=ingresoCaja.getDescripcion();
+        Factura factura = ingresoCaja.getFactura();
+        String estadoNombre = factura.getEstadoEnum().getNombre();
+        //En el caso que la nota de credito este anulada en el reporte si aparece pero con estado anulado
+
+        if (Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum())) {
+            estadoNombre = ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre();
+        }
+
+        //En el caso que tenga facturas anuladas o comprobantes anulados mejor pongo con valor cero para que no interfiera en los calculos
+        //String totalStr = formaPago.getTotal() + "";
+        String totalStr = total + "";
+        //if(estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre()) || estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getNombre()) )
+        //{
+        //    totalStr="0";
+        //}
+
+        if (UtilidadesTextos.verificarNullOVacio(ingresoDescripcionTmp)) {
+            ingresoDescripcionTmp = "Venta";
+        }
+
+        VentaReporteData reporteData = new VentaReporteData(
+                ingresoCaja.getFactura().getSecuencial() + "",
+                ingresoCaja.getFactura().getIdentificacion(),
+                ingresoDescripcionTmp,
+                ingresoCaja.getFactura().getRazonSocial(),
+                totalStr,
+                estadoNombre,
+                formaPago.getAlias(),
+                dateFormatHora.format(fechaIngreso),
+                ingresoCaja.getSignoIngresoEnum() + ""
+        );
+
+        detalleData.add(reporteData);
+    }
+    
+    //TODO: Optimizar esta parte para poner en otro lado más general por ejemplo el contralador
+    public static void generarReporteCaja(CajaSession cajaSession,InterfazComunicacionPanel panelPadre)
+    {
         
+        if(cajaSession.getCaja()==null)
+        {
+            return;
+        }
+        
+        Map<String,Object> parametros=generarMapReporte(cajaSession);
         
         //Cargar los datos de los detalles
         List<VentaReporteData> detalleData=new ArrayList<VentaReporteData>();
@@ -232,49 +279,28 @@ public class CerrarCajaModel extends CajaSessionModel
             for (IngresoCaja ingresoCaja : ingresoCajaList) 
             {
                 String ingresoDescripcionTmp=ingresoCaja.getDescripcion();
+
                 String referenciaSecuencial=ingresoCaja.getSecuencial();
                 
                 if(ingresoCaja.getFactura()!=null)
                 {
-                    Timestamp fechaIngreso=ingresoCaja.getFactura().getFechaCreacion();
-
-                    for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) 
+                    
+                    
+                    //TODO: Metodo definitivo que debe funcionar
+                    if(ingresoCaja.getFormaPago()!=null)
                     {
-                        Factura factura=ingresoCaja.getFactura();
-                        String estadoNombre=factura.getEstadoEnum().getNombre();
-                        //En el caso que la nota de credito este anulada en el reporte si aparece pero con estado anulado
-
-                        if(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.equals(ingresoCaja.getFactura().getEstadoNotaCreditoEnum()))
-                        {
-                            estadoNombre=ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre();
-                        }
-                        
-                        //En el caso que tenga facturas anuladas o comprobantes anulados mejor pongo con valor cero para que no interfiera en los calculos
-                        String totalStr=formaPago.getTotal()+"";
-                        //if(estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre()) || estadoNombre.equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getNombre()) )
-                        //{
-                        //    totalStr="0";
-                        //}
-                        
-                        if(UtilidadesTextos.verificarNullOVacio(ingresoDescripcionTmp))
-                        {
-                            ingresoDescripcionTmp="Venta";
-                        }
-
-                        VentaReporteData reporteData = new VentaReporteData(                            
-                                ingresoCaja.getFactura().getSecuencial() + "",
-                                ingresoCaja.getFactura().getIdentificacion(),
-                                ingresoDescripcionTmp,
-                                ingresoCaja.getFactura().getRazonSocial(),
-                                totalStr,
-                                estadoNombre,
-                                formaPago.getSriFormaPago().getAlias(),
-                                dateFormatHora.format(fechaIngreso),
-                                ingresoCaja.getSignoIngresoEnum()+""
-                        );
-
-                        detalleData.add(reporteData);
+                        agregarDetalleCaja(detalleData, ingresoCaja, ingresoCaja.getValor(), ingresoCaja.getFormaPago());
                     }
+                    else
+                    {
+                        //TODO: Forma antigua de gestionar el ingreso para hacer compatible con las versiones anteriores
+                        
+                        for (FormaPago formaPago : ingresoCaja.getFactura().getFormaPagos()) {
+                            agregarDetalleCaja(detalleData, ingresoCaja, formaPago.getTotal(), formaPago.getSriFormaPago());
+                        }
+                    }
+                    
+                    
                 }
                 else if(ingresoCaja.getCompra()!=null)
                 {
@@ -302,31 +328,32 @@ public class CerrarCajaModel extends CajaSessionModel
                 }
                 else if(ingresoCaja.getCartera()!=null)
                 {
-                    if(ingresoCaja.getCartera().getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
-                    {                        
-                        if (UtilidadesTextos.verificarNullOVacio(ingresoDescripcionTmp)) 
-                        {
-                            ingresoDescripcionTmp = ingresoCaja.getCartera().getCarteraDocumentoEnum().getNombre();
-                        }
-                        
-                        if(UtilidadesTextos.verificarNullOVacio(referenciaSecuencial))
-                        {
-                            referenciaSecuencial=ingresoCaja.getCartera().getId()+"";
-                        }
-                        
-                        VentaReporteData compraData = new VentaReporteData(
-                                referenciaSecuencial,
-                                ingresoCaja.getCartera().getPersona().getIdentificacion(),
-                                ingresoDescripcionTmp,
-                                ingresoCaja.getCartera().getPersona().getRazonSocial(),
-                                ingresoCaja.getCartera().getTotal()+"",
-                                ingresoCaja.getCartera().getEstado(),
-                                "Efetivo",
-                                dateFormatHora.format(ingresoCaja.getCartera().getFechaEmision()),
-                                ingresoCaja.getSignoIngresoEnum()+""
-                        );
-                        detalleData.add(compraData);
+                    if (UtilidadesTextos.verificarNullOVacio(ingresoDescripcionTmp)) {
+                        ingresoDescripcionTmp = ingresoCaja.getCartera().getCarteraDocumentoEnum().getNombre();
                     }
+
+                    if (UtilidadesTextos.verificarNullOVacio(referenciaSecuencial)) {
+                        referenciaSecuencial = ingresoCaja.getCartera().getId() + "";
+                    }
+
+                    String formaPagoStr = "Sin Definir";
+                    if (ingresoCaja.getFormaPago() != null) {
+                        formaPagoStr = ingresoCaja.getFormaPago().getAlias();
+                    }
+
+                    VentaReporteData compraData = new VentaReporteData(
+                            referenciaSecuencial,
+                            ingresoCaja.getCartera().getPersona().getIdentificacion(),
+                            ingresoDescripcionTmp,
+                            ingresoCaja.getCartera().getPersona().getRazonSocial(),
+                            ingresoCaja.getCartera().getTotal() + "",
+                            ingresoCaja.getCartera().getEstado(),
+                            formaPagoStr,
+                            dateFormatHora.format(ingresoCaja.getCartera().getFechaEmision()),
+                            ingresoCaja.getSignoIngresoEnum() + ""
+                    );
+                    detalleData.add(compraData);
+
                 }
                 
 
