@@ -202,9 +202,6 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         getCmbActivarModuloCartera().addItem(EnumSiNo.NO);
         getCmbActivarModuloCartera().addItem(EnumSiNo.SI);
         
-        getCmbGenerarVentaSinCredito().removeAllItems();
-        getCmbGenerarVentaSinCredito().addItem(EnumSiNo.NO);
-        getCmbGenerarVentaSinCredito().addItem(EnumSiNo.SI);
         
         //Agregar las opcion para esocger si o no en activar los comprobantes de venta
         getCmbActivarNotaVenta().removeAllItems();
@@ -441,10 +438,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra((parametroActivarCarteras != null) ? parametroActivarCarteras.getValor() : null);
             getCmbActivarModuloCartera().setSelectedItem(enumSiNo);
             
-            ParametroCodefac parametroGenerarCarteraSinCredito = parametrosTodos.get(ParametroCodefac.GENERAR_CARTERA_VENTA_SIN_CREDITO);
-            enumSiNo = EnumSiNo.getEnumByLetra((parametroGenerarCarteraSinCredito != null) ? parametroGenerarCarteraSinCredito.getValor() : null);
-            getCmbGenerarVentaSinCredito().setSelectedItem(enumSiNo);
-            
+           
             ParametroCodefac parametroFiltroBusquedaRapido = parametrosTodos.get(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroFiltroBusquedaRapido != null) ? parametroFiltroBusquedaRapido.getValor() : null);
             getCmbFiltroRapidoBusqueda().setSelectedItem(enumSiNo);
@@ -935,10 +929,6 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         EnumSiNo enumSiNo = (EnumSiNo) getCmbActivarModuloCartera().getSelectedItem();
         agregarParametro(ParametroCodefac.ACTIVAR_CARTERA,(enumSiNo!=null)?enumSiNo.getLetra():EnumSiNo.NO.getLetra()); //Por defecto va a guardar no activar cartera
         agregarParametroEditar(ParametroCodefac.ACTIVAR_CARTERA);
-        
-        enumSiNo = (EnumSiNo) getCmbGenerarVentaSinCredito().getSelectedItem();
-        agregarParametro(ParametroCodefac.GENERAR_CARTERA_VENTA_SIN_CREDITO,(enumSiNo!=null)?enumSiNo.getLetra():EnumSiNo.NO.getLetra()); //Por defecto va a guardar no activar cartera
-        agregarParametroEditar(ParametroCodefac.GENERAR_CARTERA_VENTA_SIN_CREDITO);
         
         enumSiNo = (EnumSiNo) getCmbCreditoDefectoFacturas().getSelectedItem();
         agregarParametro(ParametroCodefac.CREDITO_DEFECTO_VENTAS,(enumSiNo!=null)?enumSiNo.getLetra():EnumSiNo.NO.getLetra()); //Por defecto va a guardar no activar cartera

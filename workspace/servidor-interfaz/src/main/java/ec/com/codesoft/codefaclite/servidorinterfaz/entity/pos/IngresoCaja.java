@@ -23,6 +23,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -82,6 +83,9 @@ public class IngresoCaja implements Serializable
     
     @Column(name = "SIGNO")    
     private Integer signoIngreso;
+    
+    @Column(name = "FECHA_HORA")    
+    private java.util.Date fechaHora;
     
     /*
     * Get and Set
@@ -176,6 +180,18 @@ public class IngresoCaja implements Serializable
         this.secuencial = secuencial;
     }
     
+    public BigDecimal obtenerValorConSigno()
+    {
+        return valor.multiply(getSignoIngresoEnum().getValorBigDecimal());
+    }
+
+    public Date getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(Date fechaHora) {
+        this.fechaHora = fechaHora;
+    }
     
     
     

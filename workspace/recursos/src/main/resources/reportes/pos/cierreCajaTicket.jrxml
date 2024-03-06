@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="180" pageHeight="400" columnWidth="170" leftMargin="5" rightMargin="5" topMargin="10" bottomMargin="10" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="3.7908527137449366"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="624"/>
+	<property name="ireport.y" value="432"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -110,7 +110,7 @@
 					<text><![CDATA[Identicación]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="110" y="14" width="25" height="11" uuid="0f98ced4-10cd-4f6a-a52b-d2911ecd20f0"/>
+					<reportElement x="110" y="14" width="30" height="11" uuid="0f98ced4-10cd-4f6a-a52b-d2911ecd20f0"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -121,19 +121,6 @@
 						<font size="7" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="150" y="14" width="20" height="11" uuid="b26514ca-7dd0-41d2-b030-0364bc46d746"/>
-					<box>
-						<topPen lineWidth="0.75"/>
-						<leftPen lineWidth="0.75"/>
-						<bottomPen lineWidth="0.75"/>
-						<rightPen lineWidth="0.75"/>
-					</box>
-					<textElement textAlignment="Center">
-						<font size="7" isBold="true"/>
-					</textElement>
-					<text><![CDATA[E]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
 					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="2" width="110" height="12" backcolor="#E3E3E3" uuid="faa8a528-124f-4d9b-a0b0-737bbd56e9d5"/>
@@ -150,7 +137,7 @@
 					<textFieldExpression><![CDATA[$F{formaPago}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="135" y="14" width="15" height="11" uuid="63aa2005-abc1-40d5-b480-eb447f574f24"/>
+					<reportElement x="140" y="14" width="29" height="11" uuid="63aa2005-abc1-40d5-b480-eb447f574f24"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -368,7 +355,7 @@
 				<textFieldExpression><![CDATA[$F{secuencial}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="110" y="0" width="25" height="10" uuid="a0af36eb-c959-4d6f-a011-17643dbbdd46"/>
+				<reportElement stretchType="RelativeToBandHeight" x="110" y="0" width="30" height="10" uuid="a0af36eb-c959-4d6f-a011-17643dbbdd46"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -380,20 +367,6 @@
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="150" y="0" width="20" height="10" uuid="8d6ff242-6bec-4a55-b85c-cc3b3f38ff0e"/>
-				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true"/>
-					<paragraph leftIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{estado}.substring(0, 1);]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="30" y="0" width="20" height="10" uuid="0eb05e78-0115-479d-baf5-8881f001b90b"/>
@@ -410,7 +383,7 @@
 				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="135" y="0" width="15" height="10" uuid="477784d9-c443-48d0-bb7e-9ede697a0de7"/>
+				<reportElement stretchType="RelativeToBandHeight" x="140" y="0" width="29" height="10" uuid="477784d9-c443-48d0-bb7e-9ede697a0de7"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -418,7 +391,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true"/>
+					<font size="7" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{signo}]]></textFieldExpression>

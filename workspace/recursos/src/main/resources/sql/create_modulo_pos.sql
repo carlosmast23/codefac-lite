@@ -121,6 +121,9 @@ create table INGRESO_CAJA(
     DESCRIPCION varchar(1024),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.1.2)*/
     SECUENCIAL varchar(32),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.1.5)*/
+    FECHA_HORA timestamp,
+
 
     primary key (ID),
     CONSTRAINT id_forma_pago_fk2 FOREIGN KEY (SRI_FORMA_PAGO_ID) REFERENCES SRI_FORMA_PAGO(ID),

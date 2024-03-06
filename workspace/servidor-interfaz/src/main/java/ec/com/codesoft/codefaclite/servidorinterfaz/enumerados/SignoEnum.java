@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author CARLOS_CODESOFT
@@ -24,6 +26,10 @@ public enum SignoEnum {
     public int getValor() {
         return valor;
     }
+    
+    public BigDecimal getValorBigDecimal() {
+        return new BigDecimal(valor+"");
+    }
 
     @Override
     public String toString() {
@@ -34,7 +40,11 @@ public enum SignoEnum {
     
     public static SignoEnum consultarPorValor(Integer valor)
     {
-        if(valor.equals(0))
+        if(valor==null)
+        {
+            return NEUTRO;
+        }
+        else if(valor.equals(0))
         {
             return NEUTRO;
         }

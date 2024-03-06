@@ -340,16 +340,22 @@ public class CerrarCajaModel extends CajaSessionModel
                     if (ingresoCaja.getFormaPago() != null) {
                         formaPagoStr = ingresoCaja.getFormaPago().getAlias();
                     }
+                    
+                    String fechaHoraStr="";
+                    if(ingresoCaja.getFechaHora()!=null)
+                    {
+                        fechaHoraStr=dateFormatHora.format(ingresoCaja.getFechaHora());
+                    }
 
                     VentaReporteData compraData = new VentaReporteData(
                             referenciaSecuencial,
                             ingresoCaja.getCartera().getPersona().getIdentificacion(),
                             ingresoDescripcionTmp,
                             ingresoCaja.getCartera().getPersona().getRazonSocial(),
-                            ingresoCaja.getCartera().getTotal() + "",
-                            ingresoCaja.getCartera().getEstado(),
+                            ingresoCaja.getValor() + "",
+                            "",
                             formaPagoStr,
-                            dateFormatHora.format(ingresoCaja.getCartera().getFechaEmision()),
+                            fechaHoraStr,
                             ingresoCaja.getSignoIngresoEnum() + ""
                     );
                     detalleData.add(compraData);

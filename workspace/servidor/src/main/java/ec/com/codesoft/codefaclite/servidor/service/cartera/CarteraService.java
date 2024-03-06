@@ -273,6 +273,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         
         IngresoCaja ingresoCaja=new IngresoCaja();
+        ingresoCaja.setFechaHora(UtilidadesFecha.getFechaHoraHoy());
         ingresoCaja.setCajaSession(cajaSession);
         ingresoCaja.setValor(cartera.getTotal());        
         ingresoCaja.setCartera(cartera);
@@ -583,10 +584,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro,CrudEnum crudEnum,ModoProcesarEnum modoProcesar) throws RemoteException, ServicioCodefacException 
     {
         //Si no esta activo el modulo de cartera no continua
-        if(!ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
-        {
-            return;
-        }
+        //if(!ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
+        //{
+        //    return;
+        //}
         //CarteraRe
         //comprobante.getFechaEmision()
         Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),null,comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), UtilidadesFecha.castDateUtilToSql(comprobante.getFechaEmision()), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial());

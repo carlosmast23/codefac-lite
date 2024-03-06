@@ -1353,25 +1353,25 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         CarteraService carteraService = new CarteraService();
         
         //Verificar si se tiene que generar la cartera
-        ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
-        ParametroCodefac parametroCodefac=parametroCodefacService.getParametroByNombre(ParametroCodefac.GENERAR_CARTERA_VENTA_SIN_CREDITO,factura.getEmpresa());
+        //ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
+        //ParametroCodefac parametroCodefac=parametroCodefacService.getParametroByNombre(ParametroCodefac.GENERAR_CARTERA_VENTA_SIN_CREDITO,factura.getEmpresa());
         
-        Boolean generarCartera=Boolean.TRUE;
-        if(parametroCodefac!=null)
-        {
-            if(parametroCodefac.getValor().equals(EnumSiNo.NO.getLetra()))
-            {
-                if(carteraParametro==null || !carteraParametro.habilitarCredito)
-                {
-                    generarCartera=Boolean.FALSE;
-                }
-            }            
-        }
+        //Boolean generarCartera=Boolean.TRUE;
+        //if(parametroCodefac!=null)
+        //{
+        //    if(parametroCodefac.getValor().equals(EnumSiNo.NO.getLetra()))
+        //    {
+        //        if(carteraParametro==null || !carteraParametro.habilitarCredito)
+        //        {
+        //            generarCartera=Boolean.FALSE;
+        //        }
+        //    }            
+        //}
         
-        if(generarCartera)
-        {
+        //if(generarCartera)
+        //{
             carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE,carteraParametro,CrudEnum.CREAR,ModoProcesarEnum.NORMAL);
-        }
+        //}
     }
     
     private void afectarPresupuesto(Factura factura) throws RemoteException
