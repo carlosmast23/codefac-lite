@@ -311,6 +311,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             if(parametroCodefac!=null)
             {
                 map.put("tarifa", Integer.parseInt(parametroCodefac.getValor()));
+                map.put("impuesto.idImpuesto", 1);
                 List<ImpuestoDetalle> lista = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
                 getCmbIvaDefault().getModel().setSelectedItem(lista.get(0));
             }

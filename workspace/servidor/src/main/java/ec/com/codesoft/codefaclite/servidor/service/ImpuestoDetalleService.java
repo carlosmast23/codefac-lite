@@ -85,6 +85,7 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
             public Object consulta() throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new HashMap<String, Object>();
                 mapParametros.put("tarifa",tarifa);
+                mapParametros.put("impuesto.idImpuesto",1); //TODO: Mejorar esta parte para que sea paramtrizada
                 return getFacade().findByMap(mapParametros);
             }
         });

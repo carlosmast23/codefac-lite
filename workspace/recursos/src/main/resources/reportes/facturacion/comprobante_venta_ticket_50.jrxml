@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="180" pageHeight="400" columnWidth="156" leftMargin="12" rightMargin="12" topMargin="5" bottomMargin="5" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="6.105206204013354"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1953"/>
+	<property name="ireport.y" value="1041"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -43,6 +43,7 @@
 	<parameter name="descuento" class="java.lang.String"/>
 	<parameter name="leyenda_documento" class="java.lang.String"/>
 	<parameter name="pl_rimpe" class="java.lang.String"/>
+	<parameter name="iva_porcentaje" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -389,13 +390,6 @@
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
 			</subreport>
-			<staticText>
-				<reportElement x="53" y="31" width="40" height="10" uuid="3ab372e1-e031-4570-893d-83b3f79fba82"/>
-				<textElement textAlignment="Right">
-					<font size="7" isBold="false"/>
-				</textElement>
-				<text><![CDATA[IVA 12%:]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="98" y="21" width="58" height="10" uuid="fa2fded6-f15e-4019-8a47-da3e18a87703"/>
 				<box>
@@ -460,6 +454,13 @@
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{leyenda_documento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="46" y="31" width="47" height="11" uuid="0a2936ec-a5b4-4156-8424-f584d140b43d"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["IVA " +$P{iva_porcentaje}+"%:"]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>

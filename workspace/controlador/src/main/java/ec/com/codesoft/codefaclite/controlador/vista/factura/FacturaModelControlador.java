@@ -1868,6 +1868,18 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("pl_recibido", facturaProcesando.getValorRecibido()+"");
             mapParametros.put("pl_vuelto", facturaProcesando.calcularVuelto()+"");
             mapParametros.put("numero_orden","# "+facturaProcesando.getNumeroOrden());
+         
+            String porcentajeIva = "";
+            if (facturaProcesando.getIvaSriId() != null) {
+                porcentajeIva = facturaProcesando.getIvaSriId().getPorcentaje().setScale(2).toString();
+            }
+            else
+            {
+                porcentajeIva=facturaProcesando.getDetalles().get(0).getIvaPorcentaje()+""; //TODO: Ver si mejor guardo el porcentaje directamente en la factura para no hacer doble consulta
+            }
+            
+            mapParametros.put("iva_porcentaje", porcentajeIva);
+   
             
             String leyendaAdicional= ParametroUtilidades.obtenerValorParametro(facturaProcesando.getEmpresa(),ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);
             if(!UtilidadesTextos.verificarNullOVacio(leyendaAdicional))
