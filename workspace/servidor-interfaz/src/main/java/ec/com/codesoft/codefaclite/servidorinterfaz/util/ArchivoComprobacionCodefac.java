@@ -127,6 +127,11 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
                     secuencial=puntoEmision.getSecuencialNotaCredito();
                     puntoEmision.setSecuencialNotaCredito(secuencialArchivo);
                 }
+                else if(nombreDocumento.equals(DocumentoEnum.LIQUIDACION_COMPRA.getNombre()))
+                {
+                    secuencial=puntoEmision.getSecuencialLiquidacionCompra();
+                    puntoEmision.setSecuencialLiquidacionCompra(secuencialArchivo);
+                }
                 
                 compararSecuencialConDocumento(nombreDocumento, secuencialArchivo, secuencial, errores);
                 
@@ -189,6 +194,7 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
                 agregarCampo(puntoEmision.getId().toString().concat(SEPARADOR).concat(DocumentoEnum.RETENCIONES.getNombre()),puntoEmision.getSecuencialRetenciones()+"");
                 agregarCampo(puntoEmision.getId().toString().concat(SEPARADOR).concat(DocumentoEnum.GUIA_REMISION.getNombre()),puntoEmision.getSecuencialGuiaRemision()+"");
                 agregarCampo(puntoEmision.getId().toString().concat(SEPARADOR).concat(DocumentoEnum.NOTA_CREDITO.getNombre()),puntoEmision.getSecuencialNotaCredito()+"");
+                agregarCampo(puntoEmision.getId().toString().concat(SEPARADOR).concat(DocumentoEnum.LIQUIDACION_COMPRA.getNombre()),puntoEmision.getSecuencialLiquidacionCompra()+"");
                 
             }
             guardar();

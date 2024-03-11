@@ -11,8 +11,10 @@ import static com.sun.tools.xjc.reader.Ring.add;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronicoFacturaAndLiquidacionAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra.LiquidacionCompraComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
@@ -202,8 +204,19 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     public Factura obtenerFacturaDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException
     {
-        Factura factura=generFacturaDesdeXml((FacturaComprobante) comprobanteElectronico, empresa);
-        return factura;
+        
+        if(comprobanteElectronico instanceof FacturaComprobante)
+        {
+            Factura factura=generFacturaDesdeXml((FacturaComprobante) comprobanteElectronico, empresa);
+            return factura;
+        }
+        else if (comprobanteElectronico instanceof LiquidacionCompraComprobante)
+        {
+            LiquidacionCompraComprobante liquidacionCompraComprobante=(LiquidacionCompraComprobante) comprobanteElectronico;
+            return generFacturaDesdeXml(liquidacionCompraComprobante, empresa);
+        }
+        return null;
+        
         
     }
     
@@ -249,7 +262,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         return null;
     }
     
-    public Factura generFacturaDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException
+    public Factura generFacturaDesdeXml(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException
     {
         Factura facturaNueva=(Factura) generarComprobanteDesdeXml(comprobanteElectronico, empresa,new Factura());        
         //Cargar los DETALLES DE LA COMPRA
@@ -292,7 +305,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         
     }
     
-    private ComprobanteVentaNotaCreditoAbstract generarComprobanteDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa,ComprobanteVentaNotaCreditoAbstract comprobanteNuevo) throws RemoteException, ServicioCodefacException
+    private ComprobanteVentaNotaCreditoAbstract generarComprobanteDesdeXml(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteElectronico,Empresa empresa,ComprobanteVentaNotaCreditoAbstract comprobanteNuevo) throws RemoteException, ServicioCodefacException
     {
         //ComprobanteVentaNotaCreditoAbstract comprobanteNuevo=new ComprobanteVentaNotaCreditoAbstract();
         
@@ -343,7 +356,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         return detalles;
     }
     
-    private List<FacturaDetalle> cargarProductoFacturaDetalleDesdeXml(FacturaComprobante comprobanteElectronico,ComprobanteVentaNotaCreditoAbstract compra) throws ServicioCodefacException, RemoteException
+    private List<FacturaDetalle> cargarProductoFacturaDetalleDesdeXml(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteElectronico,ComprobanteVentaNotaCreditoAbstract compra) throws ServicioCodefacException, RemoteException
     {
         List<FacturaDetalle> detalles=new ArrayList<FacturaDetalle>();        
         
@@ -359,7 +372,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     
     
-    private List<DetalleFacturaNotaCeditoAbstract> cargarProductoComprobanteDetalleDesdeXml(FacturaComprobante comprobanteElectronico,ComprobanteVentaNotaCreditoAbstract compra,Class claseObjeto) throws ServicioCodefacException, RemoteException
+    private List<DetalleFacturaNotaCeditoAbstract> cargarProductoComprobanteDetalleDesdeXml(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteElectronico,ComprobanteVentaNotaCreditoAbstract compra,Class claseObjeto) throws ServicioCodefacException, RemoteException
     {
         List<DetalleFacturaNotaCeditoAbstract> detalles=new ArrayList<DetalleFacturaNotaCeditoAbstract>();        
         for (DetalleFacturaComprobante detalleXml : comprobanteElectronico.getDetalles()) 
@@ -478,23 +491,46 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     }
    
     
-    private Persona cargarProveedorCompraDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa) throws ServicioCodefacException, RemoteException
+    private Persona cargarProveedorCompraDesdeXml(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteElectronico,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
+        String rucProveedor="";
+        String razonSocial="";
+        String direccion="";
+        if(comprobanteElectronico instanceof LiquidacionCompraComprobante)
+        {            
+            LiquidacionCompraComprobante liquidacionCompra=(LiquidacionCompraComprobante)comprobanteElectronico;
+            rucProveedor=liquidacionCompra.getInformacionLiquidacionCompra().getIdentificacionProveedor();
+            razonSocial=liquidacionCompra.getInformacionLiquidacionCompra().getRazonSocialProveedor();
+            direccion=liquidacionCompra.getInformacionLiquidacionCompra().getDireccionProveedor();
+        }
+        else
+        {
+            rucProveedor=comprobanteElectronico.getInformacionTributaria().getRuc();
+            razonSocial=comprobanteElectronico.getInformacionTributaria().getRazonSocial();
+            direccion=comprobanteElectronico.getInformacionTributaria().getDirecionMatriz();
+        }
+        
+        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=Persona.TipoIdentificacionEnum.RUC;
+        
+        //Validacion sencilla
+        if(rucProveedor.length()==10)
+        {
+            tipoIdentificacionEnum=Persona.TipoIdentificacionEnum.CEDULA;
+        }
+        
         ///TODO: Revisar el problema para grabar en Utf porque algunos datos estan viniendo con tildes
-        String rucProveedor=comprobanteElectronico.getInformacionTributaria().getRuc();
+        
         Persona proveedor=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacionYestado(rucProveedor, GeneralEnumEstado.ACTIVO);
         //Si no existe el proveedor entonces creo un nuevo proveedor
         if(proveedor==null)
-        {
-            String razonSocial=comprobanteElectronico.getInformacionTributaria().getRazonSocial();
-            String direccion=comprobanteElectronico.getInformacionTributaria().getDirecionMatriz();
+        {            
             //String tipoIdentificacion=comprobanteElectronico.getTipoDocumento()
             
                         
             proveedor=ServiceFactory.getFactory().getPersonaServiceIf().crearPlantillaPersona(
                     empresa, 
                     rucProveedor, 
-                    Persona.TipoIdentificacionEnum.RUC,  //Todo: Por el momento siempre dejo RUC, por que si me mandan factura electronica tiene que ser ruc
+                    tipoIdentificacionEnum,  //Todo: Por el momento siempre dejo RUC, por que si me mandan factura electronica tiene que ser ruc
                     razonSocial, 
                     direccion, 
                     OperadorNegocioEnum.PROVEEDOR

@@ -184,6 +184,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     
                 }
             });
+            
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
+                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO, "Grabando datos en el archivo de configuracion ..");
+            }
+        }).start();
        
         
         return liquidacionCompra;

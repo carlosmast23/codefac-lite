@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.vistas.converter.StringToBigDecim
 import ec.com.codesoft.codefaclite.controlador.vistas.core.TextFieldBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ButtonBinding;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ComboBoxBinding;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoCarteraEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,7 +25,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
     /**
      * Creates new form AbonoPanel
      */
-    public AbonoPanel() {
+    public AbonoPanel() {        
         initComponents();
     }
 
@@ -57,6 +58,8 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         txtSaldo = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtTotal = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        cmbFormaPagoSri = new javax.swing.JComboBox<SriFormaPago>();
 
         jLabel2.setText("jLabel2");
 
@@ -80,13 +83,13 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         jPanel1.add(cmbTipoCartera, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(lblEspacio23, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 5;
         gridBagConstraints.ipady = 5;
@@ -174,7 +177,7 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         jLabel8.setText("Valor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel8, gridBagConstraints);
@@ -219,6 +222,23 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtTotal, gridBagConstraints);
 
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel15.setText("Forma de Pago:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel15, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbFormaPagoSri, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -228,9 +248,11 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarFactura;
+    private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoSri;
     private javax.swing.JComboBox<TipoCarteraEnum> cmbTipoCartera;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -328,5 +350,15 @@ public abstract class AbonoPanel extends ControladorCodefacInterface {
         this.txtTotal = txtTotal;
     }
 
+    @ComboBoxBinding(source = "controlador.formaPagoList",valueSelect ="controlador.cartera.sriFormaPago")
+    public JComboBox<SriFormaPago> getCmbFormaPagoSri() {
+        return cmbFormaPagoSri;
+    }
+
+    public void setCmbFormaPagoSri(JComboBox<SriFormaPago> cmbFormaPagoSri) {
+        this.cmbFormaPagoSri = cmbFormaPagoSri;
+    }
+
+    
     
 }

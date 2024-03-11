@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.interfaces.VistaCodefacIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
@@ -23,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import java.math.BigDecimal;
@@ -45,7 +47,10 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
     private BigDecimal valorCruzar;
     private String descripcion;
     
-    public AbonoControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {
+    private List<SriFormaPago> formaPagoList;
+    //privet
+    
+    public AbonoControlador(MensajeVistaInterface mensajeVista, SessionCodefacInterface session, CommonIf interfaz, TipoVista tipoVista) {        
         super(mensajeVista, session, interfaz, tipoVista);
     }
     
@@ -92,6 +97,10 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         
         tipoList=UtilidadesLista.arrayToList(Cartera.TipoCarteraEnum.values());
+        
+        SriServiceIf service=ServiceFactory.getFactory().getSriServiceIf();
+        formaPagoList=service.obtenerFormasPagoActivo();
+        
     }
 
     @Override
@@ -243,6 +252,14 @@ public class AbonoControlador extends ModelControladorAbstract<AbonoControlador.
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public List<SriFormaPago> getFormaPagoList() {
+        return formaPagoList;
+    }
+
+    public void setFormaPagoList(List<SriFormaPago> formaPagoList) {
+        this.formaPagoList = formaPagoList;
     }
     
     

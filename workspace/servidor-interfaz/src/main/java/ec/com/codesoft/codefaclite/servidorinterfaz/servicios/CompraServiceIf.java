@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronicoFacturaAndLiquidacionAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -45,7 +46,7 @@ public interface CompraServiceIf extends ServiceAbstractIf<Compra>
     public Compra obtenerCompraDesdeClaveDeAcceso(String claveAcceso,Empresa empresa) throws RemoteException,ServicioCodefacException;
     public ComprobanteElectronico obtenerComprobanteElectronicoConClaveAcceso(String claveAcceso, Empresa empresa) throws RemoteException, ServicioCodefacException;
     
-    public Factura generFacturaDesdeXml(FacturaComprobante comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException;
+    public Factura generFacturaDesdeXml(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteElectronico,Empresa empresa) throws RemoteException, ServicioCodefacException;
     public Factura obtenerFacturaDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException;
     
 }

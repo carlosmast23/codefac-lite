@@ -253,12 +253,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         getChkPagoConCartera().setVisible(false);
         if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.ACTIVAR_CARTERA,EnumSiNo.SI))
-        {
-            getChkHabilitarCredito().setSelected(false);
-            getChkHabilitarCredito().setEnabled(false);
-            getChkPagoConCartera().setVisible(true);
-            
+        {            
+            getChkPagoConCartera().setVisible(true);            
         }
+        else
+        {
+            getChkHabilitarCredito().setSelected(false);            
+            getChkHabilitarCredito().setEnabled(false);
+        }
+        
         if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
         {
             getLblCostoDetalle().setVisible(false);
