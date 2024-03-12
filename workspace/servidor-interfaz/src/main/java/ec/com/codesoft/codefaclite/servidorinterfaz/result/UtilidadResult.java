@@ -19,6 +19,8 @@ import jakarta.persistence.Id;
  */
 public class UtilidadResult extends AbstractResult{
     
+    public Long facturaDetalleId;
+    
     private String secuencial;
     
     public Date fechaEmision;
@@ -42,15 +44,16 @@ public class UtilidadResult extends AbstractResult{
     
     @Override
     public void constructor(Object[] dato) {
-        secuencial=(String) dato[0];
-        fechaEmision=(Date) dato[1];
-        razonSocial=(String) dato[2];
-        identificacion=(String)dato[3];
-        nombreProducto=(String)dato[4];
-        facturaId=(Long) dato[5];
-        subtotal=(BigDecimal) dato[6];
-        costo=(BigDecimal) dato[7];
-        utilidad=(BigDecimal) dato[8];
+        facturaDetalleId=(Long) dato[0];
+        secuencial=(String) dato[1];
+        fechaEmision=(Date) dato[2];
+        razonSocial=(String) dato[3];
+        identificacion=(String)dato[4];
+        nombreProducto=(String)dato[5];
+        facturaId=(Long) dato[6];
+        subtotal=(BigDecimal) dato[7];
+        costo=(BigDecimal) dato[8];
+        utilidad=(BigDecimal) dato[9];
         
         //Setear la fecha de emision
         fechaEmisionStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaEmision);
@@ -149,6 +152,15 @@ public class UtilidadResult extends AbstractResult{
     public void setNombreProducto(String nombreProducto) {
         this.nombreProducto = nombreProducto;
     }
+
+    public Long getFacturaDetalleId() {
+        return facturaDetalleId;
+    }
+
+    public void setFacturaDetalleId(Long facturaDetalleId) {
+        this.facturaDetalleId = facturaDetalleId;
+    }
+    
     
     
 

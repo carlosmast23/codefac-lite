@@ -789,7 +789,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         });
     }
 
-    private void listenerTablas() {
+    public void listenerTablas() {
         JPopupMenu jpopMenuItem=new JPopupMenu();
         JMenuItem itemRide= new JMenuItem("RIDE");
         itemRide.addActionListener(new ActionListener() {

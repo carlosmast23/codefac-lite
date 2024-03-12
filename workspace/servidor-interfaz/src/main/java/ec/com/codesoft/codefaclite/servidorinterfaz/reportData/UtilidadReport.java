@@ -23,6 +23,7 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
     @Override
     public String[] getTitulos() {
         return new String[]{
+            DatoEnum.OBJETO.nombre,
             DatoEnum.SECUENCIAL.nombre,
             DatoEnum.FECHA.nombre,
             DatoEnum.RAZON_SOCIAL.nombre,
@@ -37,6 +38,7 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
     @Override
     public void construirFilaTabla(UtilidadResult dato, Vector<Object> fila) {
         
+        fila.add(dato);
         fila.add(dato.getSecuencial());
         fila.add(dato.getFechaEmision());
         fila.add(dato.getRazonSocial());
@@ -56,6 +58,7 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         
     public enum DatoEnum implements DataReportIf
     {
+        OBJETO(""),
         SECUENCIAL("Secuencial"),
         FECHA("Fecha"),
         RAZON_SOCIAL("Razón Social"),

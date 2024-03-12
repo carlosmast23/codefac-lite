@@ -4,33 +4,34 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
-import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
-import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.facturacion.panel.FacturaReportePanel;
-import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 /**
  *
@@ -59,7 +60,7 @@ public class UtilidadReporteModel extends FacturaReporteModel
         getTxtUtilidad().setText("0");
         getCmbTipoReporte().setVisible(false);
         getLblTipoReporte().setVisible(false);
-        
+        listenerTablas();
         //listenerBotones();        
     }
     
@@ -101,6 +102,7 @@ public class UtilidadReporteModel extends FacturaReporteModel
         if(utilidadReport!=null)
         {
             getTblDocumentos().setModel(utilidadReport.obtenerModeloTabla());
+            UtilidadesTablas.ocultarColumna(getTblDocumentos(),0);
             
             getLblSubtotalUtilidad().setText(utilidadReport.getTotalFormatStr(UtilidadReport.DatoEnum.SUBTOTAL));
             getLblCostoUtilidad().setText(utilidadReport.getTotalFormatStr(UtilidadReport.DatoEnum.COSTO));
@@ -209,6 +211,41 @@ public class UtilidadReporteModel extends FacturaReporteModel
         return permisos;
     }
 
+    @Override
+    public void listenerTablas() {
+        JPopupMenu jpopMenuItem=new JPopupMenu();
+        JMenuItem itemCambiarCosto= new JMenuItem("Cambiar Costo");
+        itemCambiarCosto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String valor=JOptionPane.showInputDialog("Ingrese el costo nuevo:");
+                BigDecimal costoNuevo=UtilidadBigDecimal.convertirTextoEnBigDecimal(valor);
+                int filaSeleccionada=getTblDocumentos().getSelectedRow();
+                if(filaSeleccionada>-1)
+                {
+                    try {
+                        UtilidadResult dataReport= (UtilidadResult) getTblDocumentos().getValueAt(filaSeleccionada,0);
+                        //dataReport.getFacturaDetalleId();
+                        FacturaDetalle facturaDetalle= ServiceFactory.getFactory().getFacturaDetalleServiceIf().buscarPorId(dataReport.getFacturaDetalleId());
+                        facturaDetalle.setCostoPromedio(costoNuevo);
+                        ServiceFactory.getFactory().getFacturaDetalleServiceIf().editar(facturaDetalle);
+                        listenerBuscar();
+                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(UtilidadReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(UtilidadReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+                
+            }
+        });
+        jpopMenuItem.add(itemCambiarCosto);
+        getTblDocumentos().setComponentPopupMenu(jpopMenuItem);
+    }
+
+    
     
     
 }
