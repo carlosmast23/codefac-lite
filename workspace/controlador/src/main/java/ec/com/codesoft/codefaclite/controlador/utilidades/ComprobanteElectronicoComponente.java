@@ -80,6 +80,7 @@ public class ComprobanteElectronicoComponente {
 
                         switch (comprobante.getCodigoDocumentoEnum()) {
                             case NOTA_VENTA:
+                            case LIQUIDACION_COMPRA:
                             case FACTURA:
                                 ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura((Factura) comprobante);
                                 break;

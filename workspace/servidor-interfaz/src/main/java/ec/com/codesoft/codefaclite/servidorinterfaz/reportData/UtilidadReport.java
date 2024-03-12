@@ -27,6 +27,7 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
             DatoEnum.FECHA.nombre,
             DatoEnum.RAZON_SOCIAL.nombre,
             DatoEnum.IDENTIFICACION.nombre,
+            DatoEnum.PRODUCTO.nombre,
             DatoEnum.SUBTOTAL.nombre,
             DatoEnum.COSTO.nombre,
             DatoEnum.UTILIDAD.nombre,
@@ -40,6 +41,7 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         fila.add(dato.getFechaEmision());
         fila.add(dato.getRazonSocial());
         fila.add(dato.getIdentificacion());
+        fila.add(dato.getNombreProducto());
         fila.add(dato.getSubtotal().setScale(2, RoundingMode.HALF_UP));
         fila.add(dato.getCosto().setScale(2, RoundingMode.HALF_UP));
         fila.add(dato.getUtilidad().setScale(2, RoundingMode.HALF_UP));
@@ -58,6 +60,7 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         FECHA("Fecha"),
         RAZON_SOCIAL("Razón Social"),
         IDENTIFICACION("Identificación"),
+        PRODUCTO("Producto"),
         SUBTOTAL("Subtotal"),
         COSTO("Costo"),
         UTILIDAD("Utilidad");

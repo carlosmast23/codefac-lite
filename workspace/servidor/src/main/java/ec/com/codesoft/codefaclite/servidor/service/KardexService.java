@@ -52,6 +52,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.ObtenerFecha;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -725,6 +726,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardex.setPrecioUltimo(kardex.getPrecioUltimo().setScale(4, RoundingMode.HALF_UP));
                 }
 
+                System.out.println(kardex.getCostoPromedio());
+                System.out.println(kardexDetalle.obtenerPrecioUnitarioConDescuento());
 
                 //Calcular el precio promedio con respecto al nuevo valor
                 if(kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)>0)
@@ -916,15 +919,69 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 ordenarDetallesKardex(detalles);
-                for (KardexDetalle detalle : detalles) 
+                List<KardexDetalle> detallesTmp=agruparDetallesKardex(detalles);
+                
+                for (KardexDetalle detalle : detallesTmp) 
                 {
                     //System.out.println(detalle.getPrecioUnitario()+" > "+detalle.getDescripcion());
                     grabarKardexDetallSinTransaccion(detalle,detalle.getKardex().getLote(),false);                    
-                }
+                } 
                 
             }
         });
     }
+    
+    /**
+     * Funcion que me va a permitir unificar en un solo detalle cuando en una factura de compra por ejemplo tienen varios detalles del mismo productos
+     * esto lo usan para diferenciar que productos son de regalo pero a nivel interno me complica los calculos
+     */
+    private List<KardexDetalle> agruparDetallesKardex(List<KardexDetalle> detalleList)
+    {        
+        Map<Kardex,KardexDetalle> mapKardex=new HashMap<Kardex,KardexDetalle>();
+        
+        //Solo hacer este artificio cuando hay muchos datos
+        if(detalleList.size()>1)
+        {
+            KardexDetalle detalleAnt=detalleList.get(0);
+            mapKardex.put(detalleAnt.getKardex(), detalleAnt);
+            
+            for (int i = 1; i<detalleList.size(); i++) 
+            {
+                KardexDetalle detalleActual=detalleList.get(i);
+                if(detalleAnt.getKardex().equals(detalleActual.getKardex()))
+                {                    
+                    //calcular el nuevo precio unitario para los calculos
+                    BigDecimal totalGeneral=detalleActual.getPrecioTotal().add(detalleAnt.getPrecioTotal());
+                    System.out.println("totalGeneral: "+totalGeneral);
+                    BigDecimal precioUnitarioGlobal=totalGeneral.divide(detalleActual.getCantidad().add(detalleAnt.getCantidad()),4,BigDecimal.ROUND_HALF_UP);
+                    
+                    detalleActual.setPrecioUnitario(precioUnitarioGlobal);
+                    
+                    System.out.println("Pvp unit: "+detalleActual.getPrecioUnitario());
+                    detalleActual.setCantidad(detalleActual.getCantidad().add(detalleAnt.getCantidad()));
+                    detalleActual.setDescuento(detalleActual.getDescuento().add(detalleAnt.getDescuento()));
+                    detalleActual.setPrecioTotal(detalleActual.getPrecioTotal().add(detalleAnt.getPrecioTotal()));                    
+                    
+                    
+                }
+
+                mapKardex.put(detalleActual.getKardex(),detalleActual);
+                
+                detalleAnt=detalleActual;
+            }
+            
+            //Finalmente paso los Maps a un List
+            List<KardexDetalle> detalleListFinal= UtilidadesMap.castMapToList(mapKardex);
+            return detalleListFinal;
+        }
+        else
+        {
+            return detalleList;
+        }
+        
+        
+    }
+    
     
     /**
      * Esta funcion es importante porque por ejemplo en los productos de compra se existen 2 veces en el detalle productos y algunos tiene precio unitario cero y luego si tiene otro precio unitario

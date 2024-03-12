@@ -24,6 +24,8 @@ public class UtilidadResult extends AbstractResult{
     public Date fechaEmision;
     
     private String razonSocial;
+    
+    private String nombreProducto;
             
     public String identificacion;
     
@@ -44,10 +46,11 @@ public class UtilidadResult extends AbstractResult{
         fechaEmision=(Date) dato[1];
         razonSocial=(String) dato[2];
         identificacion=(String)dato[3];
-        facturaId=(Long) dato[4];
-        subtotal=(BigDecimal) dato[5];
-        costo=(BigDecimal) dato[6];
-        utilidad=(BigDecimal) dato[7];
+        nombreProducto=(String)dato[4];
+        facturaId=(Long) dato[5];
+        subtotal=(BigDecimal) dato[6];
+        costo=(BigDecimal) dato[7];
+        utilidad=(BigDecimal) dato[8];
         
         //Setear la fecha de emision
         fechaEmisionStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaEmision);
@@ -137,6 +140,14 @@ public class UtilidadResult extends AbstractResult{
 
     public void setFechaEmisionStr(String fechaEmisionStr) {
         this.fechaEmisionStr = fechaEmisionStr;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
     
     

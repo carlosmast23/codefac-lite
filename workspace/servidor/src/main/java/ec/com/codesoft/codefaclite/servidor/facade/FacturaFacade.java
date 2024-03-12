@@ -438,10 +438,14 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           
           whereEstado=" AND (F.ESTADO='A' OR F.ESTADO='S' ) ";
           
-          String queryString="SELECT F.SECUENCIAL,F.FECHA_EMISION ,F.RAZON_SOCIAL,F.IDENTIFICACION,F.ID,FD.SUBTOTAL,FD.COSTO,FD.UTILIDAD FROM FACTURA F INNER JOIN " +
+          /*String queryString="SELECT F.SECUENCIAL,F.FECHA_EMISION ,F.RAZON_SOCIAL,F.IDENTIFICACION,F.ID,FD.SUBTOTAL,FD.COSTO,FD.UTILIDAD FROM FACTURA F INNER JOIN " +
                         "(" +
                         "	SELECT FD.FACTURA_ID ,SUM(FD.TOTAL) AS SUBTOTAL ,SUM(FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION) AS COSTO , SUM(FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION) AS UTILIDAD FROM FACTURA_DETALLE FD  GROUP BY FD.FACTURA_ID " +
-                        ") FD ON F.ID =FD.FACTURA_ID WHERE 1=1  "+whereFechaMayor+whereFechaMenor+whereEstado ;
+                        ") FD ON F.ID =FD.FACTURA_ID WHERE 1=1  "+whereFechaMayor+whereFechaMenor+whereEstado ;*/
+          
+          String queryString="SELECT F.SECUENCIAL,F.FECHA_EMISION ,F.RAZON_SOCIAL,F.IDENTIFICACION,FD.DESCRIPCION AS NOMBRE_PRODUCTO  ,FD.FACTURA_ID,FD.TOTAL AS SUBTOTAL ,FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION AS COSTO , \n" +
+"			FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION AS UTILIDAD \n" +
+"		FROM FACTURA_DETALLE FD	INNER JOIN FACTURA F ON F.ID =FD.FACTURA_ID WHERE 1=1 "+ whereFechaMayor+whereFechaMenor+whereEstado ;
       
           Query query=getEntityManager().createNativeQuery(queryString);
           Logger.getLogger(FacturaFacade.class.getName()).log(Level.INFO,queryString);

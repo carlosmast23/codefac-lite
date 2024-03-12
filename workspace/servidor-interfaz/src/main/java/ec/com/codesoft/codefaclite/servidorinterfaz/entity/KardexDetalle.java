@@ -61,6 +61,10 @@ public class KardexDetalle implements Serializable {
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
     
+    /**
+     * Este valor ya se esta grabando menos el descuento, es decir es
+     * subtotal menos descuentos
+     */
     @Column(name = "PRECIO_TOTAL")
     private BigDecimal precioTotal;
     
@@ -411,6 +415,11 @@ public class KardexDetalle implements Serializable {
         }
         
         
+    }
+    
+    public BigDecimal obtenerSubtotalMenosDescuento()
+    {
+        return this.precioTotal.subtract(descuento);
     }
     
 

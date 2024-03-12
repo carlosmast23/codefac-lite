@@ -179,6 +179,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         setearDatosClienteYDistribuidor(liquidacionCompra);
                         grabarDetallesFacturaSinTransaccion(liquidacionCompra); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
+                        imprimirLogFactura(liquidacionCompra, CrudEnum.CREAR);
                     
                     //Relanzar la excepcion si sucede algun problema interno
                     
@@ -771,11 +772,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     private void imprimirLogFactura(Factura factura,CrudEnum crudEnum)
     {
-        String accionFactura="Creando Factura # :";
+        String nombreDocumento=factura.getCodigoDocumentoEnum().getNombre()+" #: ";
+        
+        String accionFactura="Creando "+nombreDocumento;
         if(crudEnum.equals(CrudEnum.EDITAR))
         {
-            accionFactura="Editando Factura #: ";
+            accionFactura="Editando "+nombreDocumento;
         }
+        else if(crudEnum.equals(crudEnum.ELIMINAR))
+        {
+            accionFactura="Eliminando "+nombreDocumento;
+        }
+        
         //Genero un LOG DE LAS VENTAS para tener un registro en los logs por algun caso si la base de datos falla
         Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO, accionFactura + factura.getPreimpreso() + " | fecha de emisión: " + factura.getFechaEmision() + " | cliente: " + factura.getRazonSocial() + " | documento: " + factura.getCodigoDocumentoEnum().getNombre() + " | iva: " + factura.getIva() + " | total: " + factura.getTotal());
         //Genero un Log de los detalles de las ventas
@@ -1775,6 +1783,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         //Crear un registro negativo en la caja session
                         agregarDatosParaCajaSession(factura,SignoEnum.NEGATIVO);
+                        
+                        imprimirLogFactura(factura, CrudEnum.ELIMINAR);
                     
                 }
             });
