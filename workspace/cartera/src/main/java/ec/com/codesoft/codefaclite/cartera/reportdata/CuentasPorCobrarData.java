@@ -36,6 +36,7 @@ public class CuentasPorCobrarData implements ExcelDatosInterface,AgrupadoReporte
     private String diasFaltantesVencerCartera;
     private String campoAgrupado;
     private String numeroCuota;
+    private String descripcion;
 
     public CuentasPorCobrarData() {
     }
@@ -151,6 +152,14 @@ public class CuentasPorCobrarData implements ExcelDatosInterface,AgrupadoReporte
     public void setNumeroCuota(String numeroCuota) {
         this.numeroCuota = numeroCuota;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
     
     
     
@@ -207,6 +216,7 @@ public class CuentasPorCobrarData implements ExcelDatosInterface,AgrupadoReporte
             data.setCobrado(cartera.calcularValorCobrado().setScale(2, RoundingMode.HALF_UP).toString());
             data.setTotal(cartera.getTotal().setScale(2, RoundingMode.HALF_UP).toString());
             data.setDiasCredito((cartera.getDíasCredito()!=null)?cartera.getDíasCredito().toString():"");
+            data.setDescripcion(cartera.getDescripcion());
             Integer diasFaltaPorVenderCredito=cartera.calcularDiasFaltaPorVenderCredito();
             data.setDiasFaltantesVencerCartera((diasFaltaPorVenderCredito!=null)?diasFaltaPorVenderCredito.toString():"");
             dataReport.add(data);

@@ -24,15 +24,16 @@ public class ImpuestoDetalleFacade extends AbstractFacade<ImpuestoDetalle>
     
      public List<ImpuestoDetalle> getImpuestoVigenteByName(String nombre)
     {
-        /*
-        Impuesto i;
+        
+        /*Impuesto i;
         i.getNombre();
                 
         ImpuestoDetalle id=new ImpuestoDetalle();
         id.getFechaInicio();
         id.getFechaFin();
         id.getImpuesto();
-*/
+        id.getTarifa()*/
+
         Date fechaHoy=new Date();
         
         //String queryString = "SELECT id FROM Impuesto i,ImpuestoDetalle id WHERE id.impuesto=i and  id.fechaInicio=>?1 and id.fechaFin<=?1 and i.nombre=?2 ";
@@ -40,7 +41,8 @@ public class ImpuestoDetalleFacade extends AbstractFacade<ImpuestoDetalle>
                 + "FROM Impuesto i, ImpuestoDetalle id WHERE "
                 + "id.impuesto=i and  "
                 + "((?1>=id.fechaInicio and ?1<=id.fechaFin) or id.fechaFin is null) and "
-                + "i.nombre=?2";
+                + "i.nombre=?2 "
+                + "ORDER BY id.tarifa asc ";
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1,fechaHoy);
         query.setParameter(2,nombre);

@@ -140,6 +140,9 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     //NOTA: Dejo solo como long por que si hago mucho JoinColum cada vez que obtengo el objeto se hace muy pesado
     @Column(name = "PUNTO_EMISION_ID")
     protected Long puntoEmisionId;
+    
+    @Column(name ="OBSERVACION")
+    protected String observacion;
 
     public ComprobanteEntity() {
     }
@@ -525,6 +528,15 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         return ComprobanteEntity.ComprobanteEnumEstado.getEnum(estado);
     }
 
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    
     public enum ComprobanteEnumEstado implements ParametroUtilidades.ComparadorInterface<ComprobanteEnumEstado>{
         /**
          * Cuando la factura se grabo y se autorizo en el SRI y no aplica

@@ -144,6 +144,9 @@ public class Cartera implements Serializable{
     @JoinColumn(name = "SRI_FORMA_PAGO_ID")
     private SriFormaPago sriFormaPago;
     
+    @Column(name = "DESCRIPCION")
+    private String descripcion;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
@@ -388,6 +391,15 @@ public class Cartera implements Serializable{
     public void setSriFormaPago(SriFormaPago sriFormaPago) {
         this.sriFormaPago = sriFormaPago;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
     
     
     

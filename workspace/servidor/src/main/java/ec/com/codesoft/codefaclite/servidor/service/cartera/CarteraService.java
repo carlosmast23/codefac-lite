@@ -108,7 +108,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     {        
         
         validarAbono(tipoCartera, carteraAfectada, sucursal, valorCruzar);
-        Cartera carteraAbono=crearCarteraSinTransaccion(tipoCartera, null, sucursal,usuario, DocumentoEnum.ABONOS.getCodigo(), UtilidadesFecha.getFechaHoyTimeStamp(),UtilidadesFecha.getFechaHoy(), "0", "0", 0,carteraAfectada.getSriFormaPago());
+        Cartera carteraAbono=crearCarteraSinTransaccion(tipoCartera, null, sucursal,usuario, DocumentoEnum.ABONOS.getCodigo(), UtilidadesFecha.getFechaHoyTimeStamp(),UtilidadesFecha.getFechaHoy(), "0", "0", 0,carteraAfectada.getSriFormaPago(),"");
         carteraAbono.setSaldo(valorCruzar);
         carteraAbono.setTotal(valorCruzar);
         //La persona del nuevo cliente, debe ser el mismo que de la anterior cartera
@@ -591,7 +591,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         //}
         //CarteraRe
         //comprobante.getFechaEmision()
-        Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),null,comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), UtilidadesFecha.castDateUtilToSql(comprobante.getFechaEmision()), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial(),null);
+        Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),null,comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), UtilidadesFecha.castDateUtilToSql(comprobante.getFechaEmision()), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial(),null,comprobante.getObservacion());
         
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
         
@@ -688,7 +688,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             String puntoEmision,
             String puntoEstablecimiento,
             Integer secuencial,
-            SriFormaPago formaPagoSri
+            SriFormaPago formaPagoSri,
+            String descripcion
             )
     {
     /**
@@ -709,6 +710,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         cartera.setSucursal(sucursal);
         cartera.setDíasCredito((carteraParametro != null) ? carteraParametro.diasCredito : null);
         cartera.setSriFormaPago(formaPagoSri);
+        cartera.setDescripcion(descripcion);
         //Calculando el campo de fecha de credito si esta activado esa opción para facturar
         if (carteraParametro != null && carteraParametro.diasCredito != null) {
             java.util.Date fechaFinCredito = UtilidadesFecha.sumarDiasFecha(

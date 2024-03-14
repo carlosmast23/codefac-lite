@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="2.8481237518743727"/>
-	<property name="ireport.x" value="314"/>
-	<property name="ireport.y" value="294"/>
+	<property name="ireport.zoom" value="2.3538212825408036"/>
+	<property name="ireport.x" value="177"/>
+	<property name="ireport.y" value="193"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -41,6 +41,7 @@
 	<field name="diasFaltantesVencerCartera" class="java.lang.String"/>
 	<field name="campoAgrupado" class="java.lang.String"/>
 	<field name="numeroCuota" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
 	<variable name="totalFinal" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[new BigDecimal($F{total})]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
@@ -193,7 +194,7 @@
 						<font size="8" isBold="true"/>
 						<paragraph leftIndent="3" rightIndent="3"/>
 					</textElement>
-					<text><![CDATA[Nombre Empresa]]></text>
+					<text><![CDATA[Descripción]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="627" y="20" width="45" height="15" uuid="2d549b73-ec47-4767-aabd-c0926a785290"/>
@@ -514,7 +515,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="419" y="0" width="163" height="13" uuid="b843ea85-8cab-4be6-932f-f2573e175fa2"/>
 				<box>
 					<topPen lineWidth="0.5"/>
@@ -526,7 +527,7 @@
 					<font size="7"/>
 					<paragraph leftIndent="2" rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{nombreComercial}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="672" y="0" width="40" height="13" uuid="899f2421-e0c3-403f-a03d-9809da9299d9"/>

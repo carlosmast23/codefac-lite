@@ -126,8 +126,8 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     @Column(name ="INVENTARIO_INGRESO")
     private String inventarioIngreso;
     
-    @Column(name ="OBSERVACION")
-    private String observacion;
+    //@Column(name ="OBSERVACION")
+    //private String observacion;
     
     @Column(name ="ESTADO_RETENCION")
     private String estadoRetencion;
@@ -495,13 +495,13 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
         this.ordenCompra = ordenCompra;
     }
 
-    public String getObservacion() {
+    /*public String getObservacion() {
         return observacion;
     }
 
     public void setObservacion(String observacion) {
         this.observacion = observacion;
-    }
+    }*/
 
     /*public void setTipoIdentificacionCodigoSri(String tipoIdentificacionCodigoSri) {
         this.tipoIdentificacionCodigoSri = tipoIdentificacionCodigoSri;

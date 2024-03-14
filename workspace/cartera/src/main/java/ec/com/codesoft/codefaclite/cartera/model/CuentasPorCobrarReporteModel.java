@@ -110,8 +110,8 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
                             "Preimpreso",
                             "Fecha",
                             "Identificación",
-                            "Razón Social",
-                            "Nombre Comercial",
+                            "Razón Social",                            
+                            "Descripción",                            
                             "Días Crédito",
                             "Total",
                             "Saldo",
@@ -345,9 +345,10 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
             fila.add(cuentaPorCobrarData.getDocumento());
             fila.add(cuentaPorCobrarData.getPreimpreso());
             fila.add(cuentaPorCobrarData.getFechaEmision());
-            fila.add(cuentaPorCobrarData.getIdentificacion());
+            fila.add(cuentaPorCobrarData.getIdentificacion());            
             fila.add(cuentaPorCobrarData.getRazonSocial());
-            fila.add(cuentaPorCobrarData.getNombreComercial());            
+            fila.add(cuentaPorCobrarData.getDescripcion());
+            //fila.add(cuentaPorCobrarData.getNombreComercial());            
             fila.add(cuentaPorCobrarData.getTotal());
             fila.add(cuentaPorCobrarData.getSaldo());
             
