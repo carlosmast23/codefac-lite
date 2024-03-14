@@ -989,6 +989,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getBtnAgregarDetalleFactura().setEnabled(false);
             getBtnAgregarProducto().setEnabled(false);
             getBtnCrearProducto().setEnabled(false);
+            getTxtCodigoDetalle().setEnabled(false);
             //getCmbIva().setSelectedItem(EnumSiNo.NO);
             
             //Cargar los datos de producto cuando sea el caso
@@ -2946,6 +2947,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAgregarDetalleFactura().setEnabled(true);
         getBtnAgregarProducto().setEnabled(true);
         getBtnCrearProducto().setEnabled(true);
+        getTxtCodigoDetalle().setEnabled(true);
         
         //Borrar los datos del estudiantes y los representantes
         getCmbRepresentante().removeAllItems();
@@ -5007,6 +5009,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             getBtnAgregarProducto().setEnabled(true);
             getBtnCrearProducto().setEnabled(true);
+            getTxtCodigoDetalle().setEnabled(true);
             getBtnAgregarDetalleFactura().setEnabled(true);
             
             getCmbDocumento().setEnabled(true);
