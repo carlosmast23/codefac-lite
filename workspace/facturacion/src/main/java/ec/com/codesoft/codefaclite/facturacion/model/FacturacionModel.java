@@ -1645,9 +1645,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     this.kardexSeleccionado=kardexSeleccionadoTmp;
                 }             
+
+                //Buscar si tiene una presentacion por defecto para cargar
+                Producto productoTmp = productoSeleccionado.buscarProductoPorPresentacionPvpDefecto(session.getEmpresa());
+                if (productoTmp != null) {
+                    productoSeleccionado = productoTmp;
+                }
+
                 
-                
-                cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado,false);
+                cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado);
             }
             
         }
@@ -1657,14 +1663,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busqueda);
             buscarDialogoModel.setVisible(true);
             productoSeleccionado=(Producto) buscarDialogoModel.getResultado();
-            cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado,false);
+            cargarProductoInventario(manejaInventario,kardexSeleccionado,productoSeleccionado);
         }
         
         
         //ParametroCodefac.        
     }
     
-    private void cargarProductoInventario(EnumSiNo manejaInventario,Kardex kardexSeleccionado,Producto productoSeleccionado,Boolean recargarPresentacion) throws RemoteException, ServicioCodefacException
+    private void cargarProductoInventario(EnumSiNo manejaInventario,Kardex kardexSeleccionado,Producto productoSeleccionado) throws RemoteException, ServicioCodefacException
     {
         /**
          * ==========================================================================
@@ -1734,7 +1740,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         //productoSeleccionado = (Producto)resultados[0];
         getCmbIva().setSelectedItem(EnumSiNo.NO);
-
+        
         if (manejaInventario.equals(EnumSiNo.SI)) 
         {
             //controlador.agregarProductoVista(kardexSeleccionado.getProducto(), kardexSeleccionado.getLote());
@@ -1746,16 +1752,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     fechaCaducidad=kardexSeleccionado.getLote().getFechaVencimiento();
                 }
                 
-                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecifico,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad,recargarPresentacion);
+                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecifico,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
             }
             else
             {
-                controlador.agregarProductoVista(productoSeleccionado, null,null,null,null,null,recargarPresentacion);
+                controlador.agregarProductoVista(productoSeleccionado, null,null,null,null,null);
             }
             
         } 
         else if (manejaInventario.equals(EnumSiNo.NO)) {
-            controlador.agregarProductoVista(productoSeleccionado, null,null,BigDecimal.ZERO,null,null,recargarPresentacion);
+            controlador.agregarProductoVista(productoSeleccionado, null,null,BigDecimal.ZERO,null,null);
         }
     }
     
@@ -1827,7 +1833,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                 }
                 //Volver a cargar los productos pero con la nueva presentacion
-                cargarProductoInventario(enumBusqueda, kardex, producto,true);
+                cargarProductoInventario(enumBusqueda, kardex, producto);
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
@@ -1897,15 +1903,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     public void cargarPresentaciones(Producto producto)
-    {
-        /*getCmbPresentacionProducto().getActionListeners()
-        //Agrego un listener vacio para evitar conflicto de redundancia de eventsos
-        getCmbPresentacionProducto().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //vacio
-            }
-        });*/
+    { 
+        PresentacionProducto presentacionProducto=producto.buscarPresentacionProducto();
         eliminarTodosListener(getCmbPresentacionProducto());
         
         getCmbPresentacionProducto().removeAllItems();
@@ -1922,10 +1921,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             
             //Volver a seleccionar la presentacion correcta en el caso que existe el producto
-            if(productoSeleccionado!=null)
+            if(presentacionProducto!=null)
             {
                 //getCmbPresentacionProducto().setSelectedItem(productoSeleccionado.buscarPresentacionOriginal());
-                PresentacionProducto presentacionProducto=productoSeleccionado.buscarPresentacionProducto();
+                //PresentacionProducto presentacionProducto=productoSeleccionado.buscarPresentacionProducto();
                 getCmbPresentacionProducto().setSelectedItem(presentacionProducto);
             }
         }

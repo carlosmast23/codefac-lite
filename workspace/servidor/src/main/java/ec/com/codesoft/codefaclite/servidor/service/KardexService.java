@@ -1035,9 +1035,6 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 {
                     LoteService loteService=new LoteService();                    
                     loteService.grabarSinTransaccion(lote, kardex.getProducto().getEmpresa(), null);
-                    
-                    //entityManager.persist(kardex.getLote());
-                    
                     em.flush();
                 }
             }
@@ -1059,6 +1056,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     em.flush();
                 }
             }
+            
             
             if(kardex.getId()==null)
             {

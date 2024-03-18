@@ -1356,6 +1356,24 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         return null;
     }
     
+    public Producto buscarProductoPorPresentacionPvpDefecto(Empresa empresas)
+    {
+        PresentacionProducto presentacionDefecto;
+        try {
+            presentacionDefecto = ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(empresa,this.getCodigoPresentacionDefectoVenta());
+            if(presentacionDefecto!=null)
+            {
+                return buscarProductoPorPresentacion(presentacionDefecto);
+            }
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
     public Producto buscarProductoPorPresentacion(PresentacionProducto presentacion)
     {
         try {

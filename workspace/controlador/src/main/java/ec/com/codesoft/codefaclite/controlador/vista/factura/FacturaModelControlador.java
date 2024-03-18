@@ -468,12 +468,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return new ArrayList<BigDecimal>();
     }
     
-    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad)
+    /*public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad)
     {
         
-        agregarProductoVista(productoSeleccionado, lote, itemEspecifico, stock, costo, fechaCaducidad, false);
+        agregarProductoVista(productoSeleccionado, lote, itemEspecifico, stock, costo, fechaCaducidad);
         
-    }    
+    } */   
     
     public void agregarProductoReembolsoVista(ReembolsoDetalle rembolsoDetalle)
     {
@@ -495,7 +495,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      * @param lote
      * @param stock 
      */
-    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad,Boolean recargarPresentacion) {
+    public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad) {
         //Si no existe ningun producto seleccionado no realiza ningun calculo
         if (productoSeleccionado == null) {
             return;
@@ -526,7 +526,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         interfaz.cargarPresentaciones(productoSeleccionado);
         
         //Solo ejecutar cuando no se esta recargando presentaciones desde el combo box
-        if(!recargarPresentacion)
+        /*if(!recargarPresentacion)
         {
             //Si el producto cargado es un empaque cargo directamente la misma presentacion en la vista
             if(productoSeleccionado.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
@@ -537,7 +537,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             {
                 interfaz.seleccionarPresentacion(productoSeleccionado.getCodigoPresentacionDefectoVenta());
             }
-        }
+        }*/
         
         //TODO
         //Por el momento busco un descuento por defecto cuando tiene varios
