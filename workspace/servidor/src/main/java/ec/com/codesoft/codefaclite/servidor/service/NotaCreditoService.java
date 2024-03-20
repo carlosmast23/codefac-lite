@@ -59,11 +59,13 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     NotaCreditoFacade notaCreditoFacade;
     NotaCreditoDetalleFacade notaCreditoDetalleFacade;
     ParametroCodefacService parametroCodefacService;
+    PresupuestoService presupuestoService;
 
     public NotaCreditoService() throws RemoteException {
         super(NotaCreditoFacade.class);
         this.notaCreditoFacade = new NotaCreditoFacade();
         this.notaCreditoDetalleFacade = new NotaCreditoDetalleFacade();
+        this.presupuestoService=new PresupuestoService();
         parametroCodefacService = new ParametroCodefacService();
     }
     
@@ -238,12 +240,12 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         entityManager.merge(rubroEstudiante);
     }
     
-    private void anularPresupuesto(Long referenciaId) throws RemoteException
+    private void anularPresupuesto(Presupuesto presupuestoEliminar) throws RemoteException
     {
-        PresupuestoService presupuestoServicio = new PresupuestoService();
-        Presupuesto presupuesto = presupuestoServicio.buscarPorId(referenciaId);
-        presupuesto.setEstado(Presupuesto.EstadoEnum.ANULADO.getLetra());
-        entityManager.merge(presupuesto);
+        //PresupuestoService presupuestoServicio = new PresupuestoService();
+        //Presupuesto presupuesto = presupuestoServicio.buscarPorId(referenciaId);
+        presupuestoEliminar.setEstado(Presupuesto.EstadoEnum.ANULADO.getLetra());
+        entityManager.merge(presupuestoEliminar);
     }
     /**
      * Metodo que me permite anular el proceso adicional que esta relacionado con las documentos como las facturas o notas de credito
@@ -254,6 +256,13 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
      */
     public void anularProcesoFactura(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
     {
+        //Anular directamente cuando viene de un presupuesto
+        if (facturaDetalle.getFactura().getPresupuestoId() != null) {
+            Presupuesto presupuestoEliminar = presupuestoService.buscarPorId(facturaDetalle.getFactura().getPresupuestoId());
+            facturaDetalle.getFactura().getPresupuestoId();
+            anularPresupuesto(presupuestoEliminar);
+        }
+        
         //TipoDocumentoEnum tipoDocumento,Long referenciaId,BigDecimal total
         TipoDocumentoEnum tipoDocumentoEnum=facturaDetalle.getTipoDocumentoEnum();
         switch (tipoDocumentoEnum) {
@@ -261,9 +270,14 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 anularRubroEstudiante(facturaDetalle.getReferenciaId(),facturaDetalle.getTotal());
                 break;
 
-            case PRESUPUESTOS:
-                anularPresupuesto(facturaDetalle.getReferenciaId());
-                break;
+            /*case PRESUPUESTOS:
+                if(facturaDetalle.getFactura().getPresupuestoId()!=null)
+                {
+                    Presupuesto presupuestoEliminar=presupuestoService.buscarPorId(facturaDetalle.getFactura().getPresupuestoId());
+                    facturaDetalle.getFactura().getPresupuestoId();
+                    anularPresupuesto(presupuestoEliminar);
+                }
+                break;*/
                 
             case INVENTARIO:
                 Bodega bodega=obtenerBodegaAfecta(facturaDetalle.getFactura());
@@ -307,14 +321,26 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     
     public void anularProcesoNotCredito(NotaCreditoDetalle notaDetalle) throws RemoteException, ServicioCodefacException
     {
+        //Anular directo cuando viene de un presupuesto
+        if (notaDetalle.getNotaCredito().getFactura().getPresupuestoId() != null) {
+            Presupuesto presupuestoEliminar = presupuestoService.buscarPorId(notaDetalle.getNotaCredito().getFactura().getPresupuestoId());
+            anularPresupuesto(presupuestoEliminar);
+        }
+        
         switch (notaDetalle.getTipoDocumentoEnum()) {
             case ACADEMICO:
                 anularRubroEstudiante(notaDetalle.getReferenciaId(),notaDetalle.getTotal());
                 break;
 
-            case PRESUPUESTOS:
-                anularPresupuesto(notaDetalle.getReferenciaId());
-                break;
+            /*case PRESUPUESTOS:
+                
+                if(notaDetalle.getNotaCredito().getFactura().getPresupuestoId()!=null)
+                {
+                    Presupuesto presupuestoEliminar=presupuestoService.buscarPorId(notaDetalle.getNotaCredito().getFactura().getPresupuestoId());
+                    anularPresupuesto(presupuestoEliminar);
+                }
+                
+                break;*/
                 
             case INVENTARIO:
                 Bodega bodega=obtenerBodegaAfecta(notaDetalle.getNotaCredito());

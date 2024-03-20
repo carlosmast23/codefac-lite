@@ -428,6 +428,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             getTxtCliente().setText(this.presupuesto.getPersona().getIdentificacion()+" - "+this.presupuesto.getPersona().getRazonSocial());  
             getTxtAreaObservaciones().setText(this.presupuesto.getObservaciones());
             getCmbTipoPresupuesto().setSelectedItem(presupuesto.getCatalogoProducto());
+            getTxtDescripcion().setText(this.presupuesto.getDescripcion());
             /**
              * Cargar detalles que existian de la Orden de trabajo
              */
