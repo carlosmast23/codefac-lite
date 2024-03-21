@@ -5,7 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -13,5 +17,5 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
  */
 public interface PresupuestoDetalleServiceIf extends ServiceAbstractIf<PresupuestoDetalle>
 {
-    
+    public List<PresupuestoDetalle> buscarPorPresupuesto(Presupuesto presupuesto) throws ServicioCodefacException, RemoteException;
 }

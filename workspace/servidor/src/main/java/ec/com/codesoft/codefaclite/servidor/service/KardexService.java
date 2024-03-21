@@ -923,6 +923,9 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 for (KardexDetalle detalle : detallesTmp) 
                 {
+                    System.out.println(detalle.getKardex().getProducto().getCodigoPersonalizado());
+                    System.out.println(detalle.getKardex().getProducto());
+                    
                     //System.out.println(detalle.getPrecioUnitario()+" > "+detalle.getDescripcion());
                     grabarKardexDetallSinTransaccion(detalle,detalle.getKardex().getLote(),false);                    
                 } 
@@ -934,21 +937,22 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     /**
      * Funcion que me va a permitir unificar en un solo detalle cuando en una factura de compra por ejemplo tienen varios detalles del mismo productos
      * esto lo usan para diferenciar que productos son de regalo pero a nivel interno me complica los calculos
+     * TODO: Esto puede fallar cuando ingrese 2 lotes distintos
      */
     private List<KardexDetalle> agruparDetallesKardex(List<KardexDetalle> detalleList)
     {        
-        Map<Kardex,KardexDetalle> mapKardex=new HashMap<Kardex,KardexDetalle>();
+        Map<Producto,KardexDetalle> mapKardex=new HashMap<Producto,KardexDetalle>();
         
         //Solo hacer este artificio cuando hay muchos datos
         if(detalleList.size()>1)
         {
             KardexDetalle detalleAnt=detalleList.get(0);
-            mapKardex.put(detalleAnt.getKardex(), detalleAnt);
+            mapKardex.put(detalleAnt.getKardex().getProducto(), detalleAnt);
             
             for (int i = 1; i<detalleList.size(); i++) 
             {
                 KardexDetalle detalleActual=detalleList.get(i);
-                if(detalleAnt.getKardex().equals(detalleActual.getKardex()))
+                if(detalleAnt.getKardex().getProducto().equals(detalleActual.getKardex().getProducto()))
                 {                    
                     //calcular el nuevo precio unitario para los calculos
                     BigDecimal totalGeneral=detalleActual.getPrecioTotal().add(detalleAnt.getPrecioTotal());
@@ -965,7 +969,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     
                 }
 
-                mapKardex.put(detalleActual.getKardex(),detalleActual);
+                mapKardex.put(detalleActual.getKardex().getProducto(),detalleActual);
                 
                 detalleAnt=detalleActual;
             }

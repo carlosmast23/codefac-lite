@@ -34,6 +34,20 @@ public abstract class UtilidadesLista {
                 .filter(i -> Collections.frequency(list, i) > 1)
                 .collect(Collectors.toSet());
     }
+    
+    public static <T> T buscarDatoLista(List<T> list,DatoCompararIf compararIf )
+    {
+        for (T t : list) 
+        {
+            Object datoComparar=compararIf.getDato(t);
+            Boolean resulBoolean=(Boolean) datoComparar;
+            if(resulBoolean)
+            {
+                return t;
+            }
+        }
+        return null;
+    }
 
     public static String castListToString(List lista,String caracter)
     {

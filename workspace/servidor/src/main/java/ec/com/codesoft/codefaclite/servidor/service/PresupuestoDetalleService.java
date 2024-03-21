@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.PresupuestoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -19,6 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -77,6 +80,15 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
     public List<PresupuestoDetalle> buscar()
     {
         return presupuestoDetalleFacade.findAll();
+    }
+    
+    public List<PresupuestoDetalle> buscarPorPresupuesto(Presupuesto presupuesto) throws ServicioCodefacException, RemoteException
+    {
+        /*PresupuestoDetalle pd;
+        pd.getPresupuesto()*/
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("Presupuesto", presupuesto);
+        return this.obtenerPorMap(mapParametros);
     }
     
     

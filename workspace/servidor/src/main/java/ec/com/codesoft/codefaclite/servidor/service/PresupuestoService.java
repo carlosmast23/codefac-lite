@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -41,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ActividadPresupue
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -119,12 +121,66 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 entityManager.merge(p);
                 procesosRelacionados(p);
+                editarReservaProductos(p);
                 verificarEnviarCorreo(enviarCorreo, p);
                 
             }
         });
-
     }
+    
+    public void editarReservaProductos(Presupuesto p) throws RemoteException, ServicioCodefacException
+    {
+        //Editar los presupuestos
+        List<PresupuestoDetalle> detallesAnteriorList=ServiceFactory.getFactory().getPresupuestoDetalleServiceIf().buscarPorPresupuesto(p);
+        for (PresupuestoDetalle presupuestoDetalle : p.getPresupuestoDetalles()) 
+        {
+            if(EnumSiNo.SI.equals(presupuestoDetalle.getReservadoEnum()))
+            {
+                
+                PresupuestoDetalle detalleAnterior=UtilidadesLista.buscarDatoLista(detallesAnteriorList, new UtilidadesLista.DatoCompararIf<PresupuestoDetalle>() {
+                    @Override
+                    public Object getDato(PresupuestoDetalle detalle) 
+                    {
+                        if(presupuestoDetalle.getId().equals(detalle.getId()))
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                
+                //TODO: En este caso que se MODIFIQUE la cantidad de un producto
+                if(detalleAnterior!=null)
+                {
+                    BigDecimal cantidadModificar= presupuestoDetalle.getCantidad().subtract(detalleAnterior.getCantidad());
+                    if(cantidadModificar.compareTo(BigDecimal.ZERO)!=0)
+                    {
+                        presupuestoDetalle.getKardex().setReserva(presupuestoDetalle.getKardex().getReserva().add(cantidadModificar));
+                        entityManager.merge(presupuestoDetalle.getKardex());
+                    }
+                }
+                else
+                {
+                    //TODO: Este caso significa que es un PRODUCTO NUEVO ....
+                    presupuestoDetalle.getKardex().setReserva(presupuestoDetalle.getKardex().getReserva().add(presupuestoDetalle.getCantidad()));
+                    entityManager.merge(presupuestoDetalle.getKardex());
+                }
+            }       
+        }
+        
+        //Buscar la lista de los PRODUCTOS ELIMINADOS
+        List<PresupuestoDetalle> detalleList=UtilidadesLista.restarListas(detallesAnteriorList, p.getPresupuestoDetalles());
+        for (PresupuestoDetalle presupuestoDetalle : detalleList) 
+        {
+            if(EnumSiNo.SI.equals(presupuestoDetalle.getReservadoEnum()))
+            {
+                presupuestoDetalle.getKardex().setReserva(presupuestoDetalle.getKardex().getReserva().subtract(presupuestoDetalle.getCantidad()));
+                entityManager.merge(presupuestoDetalle.getKardex());
+            }
+        }
+        
+    }
+    
     
     public Presupuesto grabar(Presupuesto entity,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException
     {
