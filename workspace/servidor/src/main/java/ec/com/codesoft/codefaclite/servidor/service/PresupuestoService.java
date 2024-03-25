@@ -119,9 +119,9 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
-                entityManager.merge(p);
-                procesosRelacionados(p);
                 editarReservaProductos(p);
+                entityManager.merge(p);
+                procesosRelacionados(p);                
                 verificarEnviarCorreo(enviarCorreo, p);
                 
             }
@@ -134,9 +134,10 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         List<PresupuestoDetalle> detallesAnteriorList=ServiceFactory.getFactory().getPresupuestoDetalleServiceIf().buscarPorPresupuesto(p);
         for (PresupuestoDetalle presupuestoDetalle : p.getPresupuestoDetalles()) 
         {
+            
             if(EnumSiNo.SI.equals(presupuestoDetalle.getReservadoEnum()))
             {
-                
+                Kardex kardex=presupuestoDetalle.getKardex();
                 PresupuestoDetalle detalleAnterior=UtilidadesLista.buscarDatoLista(detallesAnteriorList, new UtilidadesLista.DatoCompararIf<PresupuestoDetalle>() {
                     @Override
                     public Object getDato(PresupuestoDetalle detalle) 
@@ -152,18 +153,21 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                 //TODO: En este caso que se MODIFIQUE la cantidad de un producto
                 if(detalleAnterior!=null)
                 {
+                    System.out.println(detalleAnterior.getCantidad()+" - "+presupuestoDetalle.getCantidad());
                     BigDecimal cantidadModificar= presupuestoDetalle.getCantidad().subtract(detalleAnterior.getCantidad());
                     if(cantidadModificar.compareTo(BigDecimal.ZERO)!=0)
                     {
-                        presupuestoDetalle.getKardex().setReserva(presupuestoDetalle.getKardex().getReserva().add(cantidadModificar));
-                        entityManager.merge(presupuestoDetalle.getKardex());
+                        kardex.setReserva(kardex.getReserva().add(cantidadModificar));
+                        kardex.setStock(kardex.getStock().subtract(cantidadModificar));
+                        entityManager.merge(kardex);
                     }
                 }
                 else
                 {
                     //TODO: Este caso significa que es un PRODUCTO NUEVO ....
-                    presupuestoDetalle.getKardex().setReserva(presupuestoDetalle.getKardex().getReserva().add(presupuestoDetalle.getCantidad()));
-                    entityManager.merge(presupuestoDetalle.getKardex());
+                    kardex.setReserva(kardex.getReserva().add(presupuestoDetalle.getCantidad()));
+                    kardex.setStock(kardex.getStock().subtract(presupuestoDetalle.getCantidad()));
+                    entityManager.merge(kardex);
                 }
             }       
         }
@@ -174,8 +178,10 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         {
             if(EnumSiNo.SI.equals(presupuestoDetalle.getReservadoEnum()))
             {
-                presupuestoDetalle.getKardex().setReserva(presupuestoDetalle.getKardex().getReserva().subtract(presupuestoDetalle.getCantidad()));
-                entityManager.merge(presupuestoDetalle.getKardex());
+                Kardex kardex=presupuestoDetalle.getKardex();
+                kardex.setReserva(kardex.getReserva().subtract(presupuestoDetalle.getCantidad()));
+                kardex.setStock(kardex.getStock().add(presupuestoDetalle.getCantidad()));
+                entityManager.merge(kardex);
             }
         }
         

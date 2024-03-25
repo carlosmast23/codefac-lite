@@ -923,10 +923,6 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 for (KardexDetalle detalle : detallesTmp) 
                 {
-                    System.out.println(detalle.getKardex().getProducto().getCodigoPersonalizado());
-                    System.out.println(detalle.getKardex().getProducto());
-                    
-                    //System.out.println(detalle.getPrecioUnitario()+" > "+detalle.getDescripcion());
                     grabarKardexDetallSinTransaccion(detalle,detalle.getKardex().getLote(),false);                    
                 } 
                 

@@ -87,7 +87,7 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
         /*PresupuestoDetalle pd;
         pd.getPresupuesto()*/
         Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("Presupuesto", presupuesto);
+        mapParametros.put("presupuesto", presupuesto);
         return this.obtenerPorMap(mapParametros);
     }
     

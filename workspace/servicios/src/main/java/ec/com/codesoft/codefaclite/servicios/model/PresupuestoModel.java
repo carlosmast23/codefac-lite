@@ -1331,6 +1331,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         this.persona = presupuestoDetalle.getPersona();
         this.empleadoDetalle=presupuestoDetalle.getEmpleado();
         this.productoProveedor = presupuestoDetalle.getProductoProveedor();
+        this.kardex=presupuestoDetalle.getKardex();
         getTxtProveedorDetalle().setText(presupuestoDetalle.getPersona().getIdentificacion()+" - "+presupuestoDetalle.getPersona().getRazonSocial() );
         getTxtProductoDetalle().setText(presupuestoDetalle.getProducto().getCodigoEAN()+" - "+presupuestoDetalle.getProducto().getNombre());
         getTxtPrecioCompra().setText(presupuestoDetalle.getPrecioCompra()+"");
