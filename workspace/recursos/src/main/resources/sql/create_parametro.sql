@@ -23,4 +23,6 @@ create table
     VERSION varchar(32), 
     CAMBIO_ACTUALIZADO varchar(1),
     DESCRIPCION varchar(1024), 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.1.9)*/
+    FECHA_EJECUCION date,
     primary key (ID));

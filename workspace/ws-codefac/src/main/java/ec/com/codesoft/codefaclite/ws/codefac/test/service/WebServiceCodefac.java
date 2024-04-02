@@ -214,6 +214,10 @@ public abstract class WebServiceCodefac {
         {            
             e.printStackTrace();
         }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         
         return null;
         

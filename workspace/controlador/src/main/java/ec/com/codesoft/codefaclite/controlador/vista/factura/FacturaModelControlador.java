@@ -692,7 +692,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     {
                         //TODO: Corregir esta parte para que no dependa del catalago del producto
                         //Editar el catalogo para luego poder manejar con el 8%
-                        facturaDetalle.getCatalogoProducto().getIva().setCodigo(ImpuestoDetalle.CODIGO_IVA_OCHO);
+                        facturaDetalle.getCatalogoProducto().getIva().setCodigo(ImpuestoDetalle.CODIGO_IVA_CINCO);
                         facturaDetalle.getCatalogoProducto().getIva().setTarifa(ImpuestoDetalle.TARIFA_IVA_OCHO);
                         tarifa=ImpuestoDetalle.TARIFA_IVA_OCHO;
                     }
@@ -1878,6 +1878,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 porcentajeIva=facturaProcesando.getDetalles().get(0).getIvaPorcentaje()+""; //TODO: Ver si mejor guardo el porcentaje directamente en la factura para no hacer doble consulta
             }
             
+            if(porcentajeIva.equals("12"))
+            {
+                porcentajeIva="15";
+            }
+            
             mapParametros.put("iva_porcentaje", porcentajeIva);
    
             
@@ -1984,6 +1989,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         if(facturaProcesando.getIvaSriId()!=null)
         {
             porcentajeIva=facturaProcesando.getIvaSriId().getPorcentaje().setScale(2).toString();
+        }
+        
+        if (porcentajeIva.equals("12")) 
+        {
+            porcentajeIva = "15";
         }
         
         mapParametros.put("iva_porcentaje",porcentajeIva);

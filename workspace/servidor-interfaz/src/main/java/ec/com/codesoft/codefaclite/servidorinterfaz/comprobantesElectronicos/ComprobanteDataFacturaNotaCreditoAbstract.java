@@ -233,7 +233,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             //Buscar los tipos de impuestos disponibles en los detalles para los totales
             Boolean impuestoDoce=false;
             Boolean impuestoCero=false;
-            Boolean impuestoOcho=false;
+            Boolean impuestoCinco=false;
             Boolean impuestoQuince=false;
             
             List<DetalleFacturaNotaCeditoAbstract> detalles= comprobante.getDetallesComprobante();
@@ -251,9 +251,9 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                         impuestoDoce=true;
                     }
                     
-                    if(detalle.getCatalogoProducto().getIva().getTarifa()==8)
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==5)
                     {
-                        impuestoOcho=true;
+                        impuestoCinco=true;
                     }
                     
                     if(detalle.getCatalogoProducto().getIva().getTarifa()==0)
@@ -273,9 +273,9 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                         impuestoDoce=true;
                     }
                     
-                    if(detalle.getIvaPorcentaje()==8)
+                    if(detalle.getIvaPorcentaje()==5)
                     {
-                        impuestoOcho=true;
+                        impuestoCinco=true;
                     }
                     
                     if(detalle.getIvaPorcentaje()==0)
@@ -312,7 +312,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
            
             //Crear el IMPUESTO DEL IVA cuando exista
             //if(comprobante.getIva().compareTo(BigDecimal.ZERO)>0)
-            if(impuestoDoce || impuestoOcho || impuestoQuince)
+            if(impuestoDoce || impuestoCinco || impuestoQuince)
             {   
                 ImpuestoDetalle impuestoDetalleIva=null;
                 
@@ -324,9 +324,9 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 {
                     impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE);
                     
-                }else if(impuestoOcho)
+                }else if(impuestoCinco)
                 {
-                    impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_OCHO);
+                    impuestoDetalleIva=mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_CINCO);
                     
                 }
                 

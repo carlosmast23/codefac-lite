@@ -191,15 +191,15 @@ public abstract class ComprobanteElectronicoReporte
     @Deprecated
     public Integer calcularPorcentajeIva(List<TotalImpuesto> impuestos)
     {
-        for (TotalImpuesto impuesto : impuestos) 
+        /*for (TotalImpuesto impuesto : impuestos) 
         {
             if(impuesto.getTarifa()!=null && impuesto.getTarifa().compareTo(BigDecimal.ZERO)>0)
             {
                 return impuesto.getTarifa().intValue();
             }
-        }
+        }*/
         //Si no encuentra otro iva devuelvo el 12 por defecto
-        return 12;
+        return 15;
     }
     
     public class ImpuestosTotalesResponse

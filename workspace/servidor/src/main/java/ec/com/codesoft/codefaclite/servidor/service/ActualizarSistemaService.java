@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,32 @@ public class ActualizarSistemaService extends ServiceAbstract<ActualizarSistema,
             Logger.getLogger(ActualizarSistemaService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    //Todo: Mejorar esta parte
+    public Boolean cambiosIvaQuinceIngresados() throws RemoteException,ServicioCodefacException
+    {
+         try {
+            List<ActualizarSistema> resultadoList= (List<ActualizarSistema>) ejecutarConsulta(new MetodoInterfaceConsulta() {
+                @Override
+                public Object consulta() throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //mapParametros.put("cambioActualizado", EnumSiNo.NO.getLetra());
+                    return getFacade().findByMap(mapParametros);
+                }
+            });
+            
+             for (ActualizarSistema actualizarSistema : resultadoList) 
+             {
+                if(actualizarSistema.getNombreMetodo().equals("cambiarIvaMismoPrecio") || actualizarSistema.getNombreMetodo().equals("cambiarIvaQuinceDistintoPrecio") )
+                {
+                    return true;
+                }
+             }
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ActualizarSistemaService.class.getName()).log(Level.SEVERE, null, ex);
+        };
+        return false;
     }
     
     /*public void actualizarEstado(EnumSiNo enumSiNo,ActualizarSistema entidad) throws RemoteException

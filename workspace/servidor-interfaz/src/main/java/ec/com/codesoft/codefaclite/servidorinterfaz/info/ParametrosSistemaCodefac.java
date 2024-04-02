@@ -27,7 +27,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.3.1.1.8";
+    public static final String VERSION="1.3.1.2.0";
     /*
      * El modo de conf9.6.7guracion del sistema
      */
@@ -101,7 +101,9 @@ public abstract class ParametrosSistemaCodefac {
      * Variable que establece el iva actual que esta manejando el sistema
      * TODO: Analizar este tema porque actualmente lo controla como parametro en la base de datos pero parece ser una variable del sistema mas que de l base
      */
-    public static final String IVA_DEFECTO="12";
+    @Deprecated
+    //TODO: Revisar este parametro porque deberia tener en funcion de la base de datos para controlar desde la base de datos seleccionada
+    public static final String IVA_DEFECTO="15";
     
     /**
      * Formato Estandar de las fechas , ver si este tema puede ser seleccionado si algun rato algun cliente tan personalizado que ese dato sea parametrizable

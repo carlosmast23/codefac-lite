@@ -4712,6 +4712,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
         //kardexSeleccionado=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);ASD
         kardexSeleccionado = obtenerKardexDesdeProducto(producto);
+        //Obtener el producto original para cargar desde codigo porque daba problemas
         Lote lote = null;
         java.sql.Date fechaCaducidad = null;
         BigDecimal ultimoCosto = BigDecimal.ZERO;

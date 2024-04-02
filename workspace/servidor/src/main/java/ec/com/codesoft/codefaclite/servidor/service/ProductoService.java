@@ -102,7 +102,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
         
         //TODO: Codigo por el momento para encontrar un error que puede dar al querer convertir un empaque en producto normal
-        if (!presentacionDetalle.getProductoOriginal().getTipoProductoEnum().equals(TipoProductoEnum.PRODUCTO)) {
+        if (presentacionDetalle.getProductoOriginal().getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) {
             String mensajeError = "Error al convertir el Producto:" + presentacionDetalle.getProductoOriginal().getNombre() + " en la presentacion original para poder guardar.\\n Error con id producto original: " + presentacionDetalle.getProductoOriginal().getIdProducto() + " id producto secundario: " + productoEmpaqueSecundario.getIdProducto();
             Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, mensajeError);
             throw new ServicioCodefacException(mensajeError);

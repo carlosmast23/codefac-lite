@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.sql.Date;
 
 /**
  *
@@ -37,6 +38,9 @@ public class ActualizarSistema implements Serializable{
     
     @Column(name = "DESCRIPCION")
     private String descripcion;
+    
+    @Column(name = "FECHA_EJECUCION")
+    private Date fechaEjecucion;
 
     public long getId() {
         return id;
@@ -85,6 +89,15 @@ public class ActualizarSistema implements Serializable{
     public void setCambioActualizadoEnum(EnumSiNo cambioActualizado) {
         this.cambioActualizado = cambioActualizado.getLetra();
     }
+
+    public Date getFechaEjecucion() {
+        return fechaEjecucion;
+    }
+
+    public void setFechaEjecucion(Date fechaEjecucion) {
+        this.fechaEjecucion = fechaEjecucion;
+    }
+    
 
     @Override
     public int hashCode() {

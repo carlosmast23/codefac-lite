@@ -71,6 +71,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoComandoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -1071,8 +1072,66 @@ public class Main {
      */
     private static void ejecutarActualizacionesCodefac() {
         try {
+            Boolean cambiosIvaQuince=ServiceFactory.getFactory().getActualizarSistemaServiceIf().cambiosIvaQuinceIngresados();
+            if(!cambiosIvaQuince)
+            {
+                //Si no tiene cambios creados ingreso un nuevo registro
+                String[] options = {"1) Mantener el mismo precio pero con IVA 15%", "2) Aumentar los precios con el nuevo IVA 15%", "Omitir"};
+
+                int opcion = JOptionPane.showOptionDialog(
+                        null,
+                        "Por favor seleccione una opción para el Cambio del IVA 15%:\n  -La primera opción permite mantener los mismos precios pero ahora con el iva 15%.\n  -La segunda opción cambia los precios para que ahora se calcule el Iva 15% al momento de hacer las facturas.\n  *Si tiene dudas puede comunicarse con los números de soporte para más información. ",
+                        "Selector de Opciones",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
+                
+                switch(opcion) {
+                    case 0:
+                        ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarVariasConsultaNativa("INSERT INTO ACTUALIZAR_SISTEMA (NOMBRE_METODO,VERSION,CAMBIO_ACTUALIZADO,DESCRIPCION,FECHA_EJECUCION) VALUES('cambiarIvaMismoPrecio','1.3.1.1.9','n','Actualizar el iva 15%','2024-04-01');", TipoComandoEnum.PROCESO);
+                        //DialogoCodefac.mensaje(new CodefacMsj("Agregado cambio para el IVA 15% ...", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                        break;
+                    case 1:
+                        ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarVariasConsultaNativa("INSERT INTO ACTUALIZAR_SISTEMA (NOMBRE_METODO,VERSION,CAMBIO_ACTUALIZADO,DESCRIPCION,FECHA_EJECUCION) VALUES('cambiarIvaQuinceDistintoPrecio','1.3.1.1.9','n','Actualizar el iva 15%','2024-04-01');", TipoComandoEnum.PROCESO);
+                        //DialogoCodefac.mensaje(new CodefacMsj("Agregado cambio para el IVA 15% ...", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(null, "No has seleccionado ninguna opción.");
+                }
+  
+            }
+            
+            
             List<ActualizarSistema> actualizaciones=ServiceFactory.getFactory().getActualizarSistemaServiceIf().obtenerCambiosPendientes();
+            int contador=1;
             for (ActualizarSistema actualizacion : actualizaciones) {
+                
+                //Verificar que corresponda a la fecha posteror
+                if(actualizacion.getFechaEjecucion()!=null)
+                {
+                    
+                    //SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                    
+                    java.sql.Date fechaActualizacion=UtilidadesFecha.castDateUtilToSql(actualizacion.getFechaEjecucion());                    
+                    java.sql.Date fechaActual=UtilidadesFecha.getFechaHoy();
+                    
+                    if(UtilidadesFecha.compararFechaSinImportarHora(fechaActual,fechaActualizacion)>=0)
+                    {
+                        //Caso en el que si cumpla solo continua
+                        System.out.println("falta implementar");
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje(new CodefacMsj((contador++)+") Actualizaciones pendientes para el "+actualizacion.getFechaEjecucion()+" | "+actualizacion.getNombreMetodo(), CodefacMsj.TipoMensajeEnum.CORRECTO));
+                        System.out.println("no esta implementado");
+                        //Cuando es la fecha solo sigue hasta que se cumpla
+                        continue;
+                    }
+                    
+                }
+                
                  String nombreMetodo=actualizacion.getNombreMetodo();
                  Method metodo=ActualizacionSistemaUtil.class.getMethod(nombreMetodo,null);
                  if(metodo!=null)
@@ -1082,6 +1141,8 @@ public class Main {
                       actualizacion.setCambioActualizadoEnum(EnumSiNo.SI);
                       ServiceFactory.getFactory().getActualizarSistemaServiceIf().editar(actualizacion);
                       LOG.log(Level.INFO,"Actualizado metodo  :"+nombreMetodo);
+                      DialogoCodefac.mensaje(new CodefacMsj("Se recomienda abrir de nuevo el sistema para ejecutar las actualizaciones ...", CodefacMsj.TipoMensajeEnum.CORRECTO));
+                      System.exit(0);
                  }
                  else
                  {
@@ -1102,7 +1163,10 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (Exception e)
+        {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+        }   
     }
 
     

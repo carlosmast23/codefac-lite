@@ -184,6 +184,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
     public Producto buscarProductoActivoPorCodigoFacade(String codigo,String nombre,Empresa empresa,Boolean consultarPresentaciones) throws ServicioCodefacException, RemoteException
     {
         //Producto p;
+        //p.getTipoProductoCodigo()
         //p.getNombre()
         String whereEmpresa="";
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
@@ -211,7 +212,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         }
                 
         
-        String queryString = "SELECT p FROM Producto p WHERE p.estado=?2 "+wherePresentaciones+whereEmpresa +whereCodigo+whereNombre;
+        String queryString = "SELECT p FROM Producto p WHERE p.estado=?2 and ( p.tipoProductoCodigo=?7 or p.tipoProductoCodigo=?8 ) "+wherePresentaciones+whereEmpresa +whereCodigo+whereNombre;
         
         Query query = getEntityManager().createQuery(queryString);
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
@@ -235,6 +236,9 @@ public class ProductoFacade extends AbstractFacade<Producto>
         {
                 query.setParameter(5, nombre);
         }
+        
+        query.setParameter(7, "p");
+        query.setParameter(8, "e");
         
         //Cuando este configurado como datos compartidos no tomo en cuenta de donde esta cogiendo la empresa
         

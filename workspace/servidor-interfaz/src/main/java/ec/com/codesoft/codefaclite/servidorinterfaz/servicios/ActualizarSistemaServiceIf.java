@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ActualizarSistema;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -16,4 +17,5 @@ import java.util.List;
 public interface ActualizarSistemaServiceIf extends ServiceAbstractIf<ActualizarSistema>
 { 
     public List<ActualizarSistema> obtenerCambiosPendientes() throws RemoteException;
+    public Boolean cambiosIvaQuinceIngresados() throws RemoteException,ServicioCodefacException;
 }

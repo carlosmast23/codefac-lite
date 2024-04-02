@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
@@ -21,6 +22,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoComandoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +52,46 @@ public class ActualizacionSistemaUtil {
             
         }
     }
+    
+   
+    
+    public static void cambiarIvaQuinceDistintoPrecio()
+    {
+       ParametroCodefac parametroCodefac;
+        try {
+            parametroCodefac = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombreSinEmpresa(ParametroCodefac.IVA_DEFECTO);
+            if (parametroCodefac != null) 
+            {
+                //Cambiar el valor a 15 por ciento por defecto
+                parametroCodefac.setValor("15");
+                ServiceFactory.getFactory().getParametroCodefacServiceIf().editar(parametroCodefac);
+            }
+            
+            
+            //Cambiar precios
+            ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarVariasConsultaNativa("UPDATE CATALOGO_PRODUCTO SET IVA_ID =11 WHERE IVA_ID =2;", TipoComandoEnum.PROCESO);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+    }
+    
+    public static void cambiarIvaMismoPrecio()
+    {
+        try {
+            cambiarIvaQuinceDistintoPrecio();
+            ServiceFactory.getFactory().getParametroCodefacServiceIf().ejecutarVariasConsultaNativa("UPDATE PRODUCTO SET VALOR_UNITARIO = VALOR_UNITARIO *(112/CAST(115 AS DOUBLE)), PRECIO_DISTRIBUIDOR =PRECIO_DISTRIBUIDOR *(112/CAST(115 AS DOUBLE)),PRECIO_TARJETA =PRECIO_TARJETA*(112/CAST(115 AS DOUBLE)), PVP_4 =PVP_4 *(112/CAST(115 AS DOUBLE)),PVP_5 =PVP_5 *(112/CAST(115 AS DOUBLE)),PVP_6 =PVP_6 *(112/CAST(115 AS DOUBLE)) WHERE ID_PRODUCTO IN(	SELECT P.ID_PRODUCTO FROM ROOT.PRODUCTO P INNER JOIN CATALOGO_PRODUCTO CP ON P.CATALOGO_PRODUCTO_ID =CP.ID WHERE CP.IVA_ID =11) ;", TipoComandoEnum.PROCESO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ActualizacionSistemaUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }
+    
+     
     
     /*@Deprecated //TODO:No se esta usando
     public static void actualizaComprobantesElectronicos()
