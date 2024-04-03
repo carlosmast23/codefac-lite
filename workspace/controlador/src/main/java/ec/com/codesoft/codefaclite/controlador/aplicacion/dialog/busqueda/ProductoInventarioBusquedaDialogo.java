@@ -62,6 +62,8 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
     
     private Boolean mostrarCosto=true;
     
+    private Boolean mostrarCostoConIva=true;
+    
     private EnumSiNo disponibleVenta;
     
     private Boolean mostrarPresentaciones;
@@ -79,6 +81,11 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
         if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
         {
             this.mostrarCosto=false;
+        }
+        
+        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.NO))
+        {
+            this.mostrarCostoConIva=false;
         }
     }
 
@@ -294,7 +301,15 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
         
         if(mostrarCosto)
         {
-            vector.add((kardex.getPrecioUltimoConIva()!=null)?kardex.getPrecioUltimoConIva().setScale(3,RoundingMode.HALF_UP)+"":"");
+            if(mostrarCostoConIva)
+            {
+                vector.add((kardex.getPrecioUltimoConIva()!=null)?kardex.getPrecioUltimoConIva().setScale(3,RoundingMode.HALF_UP)+"":"");
+            }
+            else
+                
+            {
+                vector.add((kardex.getPrecioUltimo()!=null)?kardex.getPrecioUltimo().setScale(3,RoundingMode.HALF_UP)+"":"");
+            }
         }
         else
         {

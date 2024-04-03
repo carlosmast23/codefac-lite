@@ -53,7 +53,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     private BigDecimal iva;
 
     @Column(name = "IVA_PORCENTAJE")
-    private Integer ivaPorcentaje;
+    protected Integer ivaPorcentaje;
 
 
 

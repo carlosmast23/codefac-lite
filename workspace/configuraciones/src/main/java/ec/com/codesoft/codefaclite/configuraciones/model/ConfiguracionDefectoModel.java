@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -1342,6 +1343,16 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
     
     private void agregarParametroEditar(String parametro)
     {
+        //Todo: comprobacion temporal
+        if(parametrosEditar.size()>25)
+        {
+            ParametroCodefac parametroFinal= parametrosEditar.get(25);
+            if(UtilidadesTextos.verificarNullOVacio(parametroFinal.getValor()))
+            {
+                System.out.println("revisar");
+            }
+        }
+        
         ParametroCodefac parametroCodefac=parametrosTodos.get(parametro);
         if(parametroCodefac!=null)
         {

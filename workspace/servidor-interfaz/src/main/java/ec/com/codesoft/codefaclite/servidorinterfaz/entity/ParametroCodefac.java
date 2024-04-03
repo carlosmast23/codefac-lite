@@ -36,6 +36,7 @@ public class ParametroCodefac implements Serializable {
      * No confundir con el IVA_DEFECTO de parametro del sistema que solo es un valor referencial para saber el iva actual
      * En este caso se puede SELECCIONAR IVA 12 O IVA CERO
      */
+    @Deprecated
     public static final String IVA_DEFECTO= "iva_defecto";
     
     public static final String EDITAR_DESCRIPCION_FACTURA= "edit_descripcion_factura";
@@ -50,7 +51,7 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String MODIFICAR_PRECIO_MENOR="modificar_precio_menor";
     
-    public static final String MOSTRAR_COSTO_CON_IVA="mostrar_precio_con_iva";
+    public static final String MOSTRAR_COSTO_CON_IVA="mostrar_costo_con_iva";
     
     
     //public static final String SRI_WS_RECEPCION= "sri_ws_recepcion";

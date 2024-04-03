@@ -181,7 +181,9 @@ public class CompraDetalle extends DetalleFacturaNotaCeditoAbstract implements S
             return iva;
         }
         
-        return total.multiply(new BigDecimal("0.12")).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal ivaDecimalPorcentaje = new BigDecimal(((float)ivaPorcentaje /(float) 100) + "");
+        return total.multiply(ivaDecimalPorcentaje.setScale(2, RoundingMode.HALF_UP));
+        //return total.multiply(new BigDecimal("0.12")).setScale(2, RoundingMode.HALF_UP);
     }
 
     public Compra getCompra() {
