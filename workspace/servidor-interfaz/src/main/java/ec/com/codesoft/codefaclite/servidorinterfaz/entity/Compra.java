@@ -630,7 +630,7 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
      * Informacion adicional
      * TODO: Ver si en vez de enviar el iva desde el formulario se puede grabar el dato para calcular internamente 
      */
-    public void calcularTotales(BigDecimal ivaConDecimales)
+    public void calcularTotales()
     {
         //this.subtotalImpuestos=BigDecimal.ZERO;
         setSubtotalImpuestos(BigDecimal.ZERO);
@@ -654,7 +654,7 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
                 { //Sumar los subtotales con valor 12
                     //subtotalImpuestos=subtotalImpuestos.add(detalle.getTotal());
                     setSubtotalImpuestos(getSubtotalImpuestos().add(detalle.getTotal()));
-                    
+                    iva=iva.add(detalle.getIva());
                     //iva=iva.add(detalle.getIva());
                 }
             }
@@ -669,7 +669,7 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
             
             //Setear la escala del iva y del valor total
             //iva=subtotalImpuestos.multiply(ivaConDecimales);
-            iva=getSubtotalImpuestos().multiply(ivaConDecimales);
+            //iva=getSubtotalImpuestos().multiply(ivaConDecimales);
             iva=iva.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
             
             

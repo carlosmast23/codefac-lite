@@ -1401,7 +1401,8 @@ public class CompraModel extends CompraPanel{
         public void updateInterface(Object entity) {
             if(entity!=null)
             {
-                compra=(Compra) entity;                
+                compra=(Compra) entity;          
+                System.out.println(compra.getIva());
                 //Agregar todos los detalles de la forma estandar en la compra para ir haciendo los calculos necesarios de la pantalla de COMPRA
                 List<CompraDetalle> detallesTemporal=compra.getDetalles();
                 //compra.setDetalles(null);
@@ -1413,7 +1414,7 @@ public class CompraModel extends CompraPanel{
                     
                 }
                 
-                compra.calcularTotales(session.obtenerIvaActualDecimal());
+                compra.calcularTotales();
                 cargarDatosCompra(compra);
             }
         }
@@ -1915,11 +1916,11 @@ public class CompraModel extends CompraPanel{
         {
             case 1:
                 compra.setDescuentoImpuestos(descuento.setScale(2, RoundingMode.HALF_UP));
-                compra.calcularTotales(session.obtenerIvaActualDecimal());
+                compra.calcularTotales();
                 break;
             case 2:
                 compra.setDescuentoSinImpuestos(descuento.setScale(2,RoundingMode.HALF_UP));
-                compra.calcularTotales(session.obtenerIvaActualDecimal());
+                compra.calcularTotales();
                 break;
         }
         
