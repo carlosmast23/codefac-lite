@@ -486,7 +486,10 @@ public class CajaSession implements Serializable
                 }
                 else if(ingresoCaja.getCartera()!=null)
                 {
-                    totalVentas=totalVentas.add(ingresoCaja.obtenerValorConSigno());
+                    if(ingresoCaja.getFormaPago().getAlias().equals("Efectivo"))
+                    {
+                        totalVentas=totalVentas.add(ingresoCaja.obtenerValorConSigno());
+                    }
                 }
             }
         }

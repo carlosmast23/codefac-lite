@@ -443,8 +443,11 @@ public class KardexModel extends KardexPanel {
             String horaKardex="";
             if(kardexDetalle!=null)
             {
-                SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");    
-                horaKardex=formatoHora.format(kardexDetalle.getFechaCreacion());
+                SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");  
+                if(kardexDetalle.getFechaCreacion()!=null)
+                {
+                    horaKardex=formatoHora.format(kardexDetalle.getFechaCreacion());
+                }
             }
             kardexData.setHora(horaKardex);
 

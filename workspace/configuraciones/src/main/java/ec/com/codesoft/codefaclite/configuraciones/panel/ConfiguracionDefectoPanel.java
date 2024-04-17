@@ -157,6 +157,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbVendedorObligatorioVenta = new javax.swing.JComboBox<>();
         jLabel122 = new javax.swing.JLabel();
         cmbAdvertenciaUtilidadNegativa = new javax.swing.JComboBox<>();
+        jLabel85 = new javax.swing.JLabel();
+        cmbAgregarDetalleInicio = new javax.swing.JComboBox<>();
         jPanel15 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
@@ -966,10 +968,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbModificarPrecioMenor, gridBagConstraints);
 
         jLabel81.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel81.setText("Advertencia utilidad negativa:");
+        jLabel81.setText("Agregar nuevo detalle al inicio:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel81, gridBagConstraints);
@@ -1159,6 +1161,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbAdvertenciaUtilidadNegativa, gridBagConstraints);
+
+        jLabel85.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel85.setText("Advertencia utilidad negativa:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel85, gridBagConstraints);
+
+        cmbAgregarDetalleInicio.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbAgregarDetalleInicio, gridBagConstraints);
 
         jTabbedPane1.addTab("Ventas", jPanel4);
 
@@ -2598,6 +2617,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbActivarReporteSimpleGuiaRemision;
     private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaActualizarCostos;
     private javax.swing.JComboBox<EnumSiNo> cmbAdvertenciaUtilidadNegativa;
+    private javax.swing.JComboBox<EnumSiNo> cmbAgregarDetalleInicio;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarInfoAdicionalLoteFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarLoteFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbAgregarProductoDirectoLectorBarras;
@@ -2770,6 +2790,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel82;
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
+    private javax.swing.JLabel jLabel85;
     private javax.swing.JLabel jLabel86;
     private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel88;
@@ -3824,6 +3845,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbAdvertenciaUtilidadNegativa(JComboBox<EnumSiNo> cmbAdvertenciaUtilidadNegativa) {
         this.cmbAdvertenciaUtilidadNegativa = cmbAdvertenciaUtilidadNegativa;
+    }
+
+    public JComboBox<EnumSiNo> getCmbAgregarDetalleInicio() {
+        return cmbAgregarDetalleInicio;
+    }
+
+    public void setCmbAgregarDetalleInicio(JComboBox<EnumSiNo> cmbAgregarDetalleInicio) {
+        this.cmbAgregarDetalleInicio = cmbAgregarDetalleInicio;
     }
     
     

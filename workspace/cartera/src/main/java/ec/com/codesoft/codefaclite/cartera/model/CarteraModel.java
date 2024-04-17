@@ -131,7 +131,7 @@ public class CarteraModel extends CarteraPanel{
             setearVariables();
             validar();
             CarteraServiceIf carteraServiceIf=ServiceFactory.getFactory().getCarteraServiceIf();
-            Cartera carteraTmp=carteraServiceIf.grabarCartera(cartera, cruces);
+            Cartera carteraTmp=carteraServiceIf.grabarCartera(cartera, cruces,getChkAfectarCaja().isSelected());
             DialogoCodefac.mensaje("Cartera Grabado correctamente","El registro fue grabado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             imprimirPdf(carteraTmp);
         } catch (ServicioCodefacException ex) {

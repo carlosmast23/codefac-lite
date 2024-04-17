@@ -37,6 +37,21 @@ public class IngresoCajaService extends ServiceAbstract<IngresoCaja, IngresoCaja
         });
         return entity;
     }
+
+    
+    public void eliminarPorId(Long id) throws ServicioCodefacException, RemoteException {
+        IngresoCaja ingresoCaja=getFacade().find(id);
+        super.eliminar(ingresoCaja);
+        /*ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });*/
+        
+    }
+    
+    
     
     public List<IngresoCaja> consultarPorCajaSession(CajaSession cajaSession) throws ServicioCodefacException, RemoteException 
     {

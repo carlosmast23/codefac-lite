@@ -142,6 +142,11 @@ public class ParametroCodefac implements Serializable {
     public static final String ADVERTENCIA_UTILIDAD_NEGATIVA="advertencia_utilidad_negativa";
     
     /**
+     * Permite que se agregue los detalles nuevos de las facturas al inicio y no al final
+     */
+    public static final String AGREGAR_DETALLE_INICIO="agregar_detalle_inicio";
+    
+    /**
      * Parametro parametro que me permite elegir si en los detalles me permiten agregar la información del lote del producto
      */
     public static final String AGREGAR_LOTE_FACTURA="agregar_lote_factura";

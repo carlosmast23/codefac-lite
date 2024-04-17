@@ -17,6 +17,7 @@ import java.util.List;
  */
 public class VentaReporteData implements ExcelDatosInterface{
 
+    private String id;
     private String secuencial;
     private String identificacion;
     private String cliente;
@@ -27,7 +28,8 @@ public class VentaReporteData implements ExcelDatosInterface{
     private String signo;
     private String descripcion;
 
-    public VentaReporteData(String secuencial, String identificacion,String descripcion, String cliente, String total,String estado,String formaPago,String hora,String signo) {
+    public VentaReporteData(String id,String secuencial, String identificacion,String descripcion, String cliente, String total,String estado,String formaPago,String hora,String signo) {
+        this.id=id;
         this.secuencial = secuencial;
         this.identificacion = identificacion;
         this.cliente = cliente;
@@ -111,6 +113,14 @@ public class VentaReporteData implements ExcelDatosInterface{
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
     
     

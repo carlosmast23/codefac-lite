@@ -203,6 +203,11 @@ public class DialogoBuscarMb implements Serializable {
 
     private Object buscarPropiedadEnObjecto(Object objeto, String propiedadNombre) {
 
+        if(objeto==null)
+        {
+            return null;
+        }
+        
         Method[] metodos = objeto.getClass().getMethods();
         String metodoNombre="get"+StringUtils.capitalize(propiedadNombre);
         

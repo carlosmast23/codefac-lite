@@ -4,14 +4,11 @@
  * and open the template in the editor.
  */
 package ec.com.codesoft.codefaclite.codefacweb.filter;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import java.io.IOException;
-import javax.servlet.ServletResponse;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 /**

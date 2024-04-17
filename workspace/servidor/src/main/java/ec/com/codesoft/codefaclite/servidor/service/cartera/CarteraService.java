@@ -126,7 +126,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         List<CarteraCruce> carteraCruceList=new ArrayList<CarteraCruce>();
         carteraCruceList.add(carteraCruce);
         
-        grabarCartera(carteraAbono, carteraCruceList);
+        grabarCartera(carteraAbono, carteraCruceList,true);
         
         return carteraAbono;
     }
@@ -139,14 +139,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @throws ServicioCodefacException
      * @throws java.rmi.RemoteException 
      */
-    public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
+    public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces,Boolean afectarCaja) throws ServicioCodefacException,java.rmi.RemoteException
     {
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws RemoteException, ServicioCodefacException {
                 validacionGrabar(cartera);
-                grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
+                grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR,afectarCaja);
             }
         });
         
@@ -212,7 +212,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @throws ServicioCodefacException
      * @throws java.rmi.RemoteException 
      */
-    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces,CrudEnum crudEnum) throws ServicioCodefacException,java.rmi.RemoteException
+    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces,CrudEnum crudEnum,Boolean afectarCaja) throws ServicioCodefacException,java.rmi.RemoteException
     {
         /**
          * ===========================================================
@@ -251,7 +251,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         actualizarReferenciasCartera(cartera);
         
         //Grabar los datos para la caja para ver como sale en la cartera
-        grabarMovimientosCaja(cartera,false);
+        if(afectarCaja)
+        {
+            grabarMovimientosCaja(cartera,false);
+        }
         
     }
     
@@ -661,7 +664,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                         carteraTmp.setFechaEmision(UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarMesesFecha(carteraTmp.getFechaEmision(),i+1)));
                         carteraTmp.setTotal(valorCuota);
                         carteraTmp.setSaldo(valorCuota);
-                        grabarCarteraSinTransaccion(carteraTmp, cruces,CrudEnum.CREAR);
+                        grabarCarteraSinTransaccion(carteraTmp, cruces,CrudEnum.CREAR,true);
                     }
 
 
@@ -672,7 +675,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         if(crearCarteraUnica)
         {
             //Grabar el documento con los cruces generados        
-            grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR);
+            grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR,true);
         }
     }
     
@@ -859,7 +862,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 carteraAbono.addDetalle(carteraDetalleAbono);
                 
                 //Grabar la NUEVA CARTERA DEL ABONO
-                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR);
+                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR,true);
                 
                 
                 //TODO: Este artificio toca hacer porque aunque se supone que el detalle debe estar relacionado por referencia al mismo objeto
@@ -1209,7 +1212,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 //Falta agregar validaciones porque no siempre se puede editar cualquier dato
-                grabarCarteraSinTransaccion(entity, cruces,CrudEnum.EDITAR);
+                grabarCarteraSinTransaccion(entity, cruces,CrudEnum.EDITAR,true);
             }
         });
     }

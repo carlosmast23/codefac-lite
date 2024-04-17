@@ -1721,6 +1721,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 kardexDetalle.setPuntoEstablecimiento(puntoEstablecimiento);
                 kardexDetalle.setSecuencial(secuencial);
                 kardexDetalle.setFechaDocumento(fechaDocumento);
+                kardexDetalle.setSigno(tipoDocumento.getSignoInventarioNumero());
                 
                 kardex.addDetalleKardex(kardexDetalle);
                 //NOTA: Es importante persistir y hacer flush antes del metodo recalcularStock
@@ -1730,8 +1731,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //Actualizar los valores del kardex
                 //kardex.setStock(kardex.getStock().add(kardexDetalle.getCantidad()));
                 //TODO
-                kardex.setStock(kardex.recalcularStock());
-                //kardex.setStock(kardex.getStock().add(kardexDetalle.obtenerCantidadConSigno()));
+                //kardex.setStock(kardex.recalcularStock());
+                kardex.setStock(kardex.getStock().add(kardexDetalle.obtenerCantidadConSigno()));
                 //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
                 //kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
                 kardex.calcularPrecioTotal();

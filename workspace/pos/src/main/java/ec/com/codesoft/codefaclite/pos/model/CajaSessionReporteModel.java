@@ -17,16 +17,19 @@ import ec.com.codesoft.codefaclite.pos.reportdata.CajaSessionReporteData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -290,14 +293,45 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
         }
     };
     
+    private ActionListener listenerEliminarDetalleCaja=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            String idTxt= DialogoCodefac.mensajeTextoIngreso(new CodefacMsj("Ingrese el id del detalle a eliminar: \n!Recuerde usar esta opción con precaución!", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+            if(!UtilidadesTextos.verificarNullOVacio(idTxt))
+            {
+                try {
+                    ServiceFactory.getFactory().getIngresoCajaServiceIf().eliminarPorId(Long.parseLong(idTxt));
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.ELIMINADO_CORRECTAMENTE);
+                    
+                } catch (ServicioCodefacException ex) {
+                    DialogoCodefac.mensaje("Error", ex.getMessage(), CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO);
+                    Logger.getLogger(CajaSessionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(CajaSessionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        }
+    };
+    
     private void listenerTabla()
     {
+        
          JPopupMenu jPopupMenu = new JPopupMenu();
         
         //MENU PARA ENLAZAR DE UN PRODUCTO EXISTENTE
         JMenuItem jMenuItemEnlazarProveedor = new JMenuItem("Imprimir Detalle");
         jMenuItemEnlazarProveedor.addActionListener(listenerImprimirReporteCaja);
         jPopupMenu.add(jMenuItemEnlazarProveedor);
+        
+        JMenuItem jMenuItemEliminarDetalle = new JMenuItem("Eliminar Detalle");
+        jMenuItemEliminarDetalle.addActionListener(listenerEliminarDetalleCaja);
+        jPopupMenu.add(jMenuItemEliminarDetalle);
+        
+        JMenuItem jMenuItemEditarCierreCaja = new JMenuItem("Editar Cierre Teorico y Practico");
+        jMenuItemEditarCierreCaja.addActionListener(listenerEliminarDetalleCaja);
+        jPopupMenu.add(jMenuItemEditarCierreCaja);
         
         getTblCajasSession().setComponentPopupMenu(jPopupMenu);
     }

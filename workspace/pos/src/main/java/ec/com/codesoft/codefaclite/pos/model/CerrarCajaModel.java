@@ -239,6 +239,7 @@ public class CerrarCajaModel extends CajaSessionModel
         }
 
         VentaReporteData reporteData = new VentaReporteData(
+                ingresoCaja.getId()+"",
                 ingresoCaja.getFactura().getSecuencial() + "",
                 ingresoCaja.getFactura().getIdentificacion(),
                 ingresoDescripcionTmp,
@@ -312,7 +313,8 @@ public class CerrarCajaModel extends CajaSessionModel
                         }
                         
                         Timestamp fechaIngreso=ingresoCaja.getCompra().getFechaCreacion();
-                        VentaReporteData compraData = new VentaReporteData(                            
+                        VentaReporteData compraData = new VentaReporteData(   
+                                    ingresoCaja.getId()+"",
                                     ingresoCaja.getCompra().getSecuencial() + "",
                                     ingresoCaja.getCompra().getIdentificacion(),
                                     ingresoCaja.getCompra().getObservacion(),
@@ -348,6 +350,7 @@ public class CerrarCajaModel extends CajaSessionModel
                     }
 
                     VentaReporteData compraData = new VentaReporteData(
+                            ingresoCaja.getId()+"",
                             referenciaSecuencial,
                             ingresoCaja.getCartera().getPersona().getIdentificacion(),
                             ingresoDescripcionTmp,

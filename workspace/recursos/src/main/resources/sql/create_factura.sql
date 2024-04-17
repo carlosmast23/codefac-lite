@@ -163,6 +163,8 @@ create table FACTURA_DETALLE
     COMPONENTES_TEXTO varchar(150),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.9.8)*/
     DESCRIPCION_ORIGINAL varchar(300),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.2.3)*/
+    TOTAL_FINAL decimal(13,2),
     primary key (ID)
 );
 

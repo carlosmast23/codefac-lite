@@ -782,7 +782,8 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         BigDecimal pvp6=producto.getPvp6();
         //valorUnitario = new BigDecimal(getTextValorUnitario().getText());
         
-        BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+        //BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+        BigDecimal ivaDefecto=new BigDecimal(producto.getCatalogoProducto().getIva().getTarifa());
         BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
 
         //Si el valor esta incluido el iva calculo el valor sin iva

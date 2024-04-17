@@ -1074,6 +1074,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 throw new ServicioCodefacException("El producto "+detalle.getDescripcion()+" tiene un tipo un descuento superior al permitido");
             }
             
+            //Verificar que no haya inconsistencia que se graba con iva cero cuando tiene registrado el producto otro iva distinto de cero
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+            {
+                if(!detalle.getIvaPorcentaje().equals(detalle.getCatalogoProducto().getIva().getTarifa()))
+                {
+                    throw new ServicioCodefacException("Inconsistencia con los porcentajes de IVA, vuelva a agregar el producto: "+detalle.getDescripcion());
+                }
+            }
+            
             
             ///Verificar que si tiene lotes, el lote tenga el mismo producto para evitar inconsistencia
             if(detalle.getKardexId()!=null)

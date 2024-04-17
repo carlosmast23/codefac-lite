@@ -248,13 +248,15 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
             //Guardo el precio anterior
             BigDecimal precioUnitarioTmp=new BigDecimal(this.getPrecioUnitario()+"");
             //Obtengo el nuevo precio sin iva
-            this.setPrecioUnitario(UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(),this.getPrecioUnitario(), 4));
+            //this.setPrecioUnitario(UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(),this.getPrecioUnitario(), 4));
+            this.setPrecioUnitario(UtilidadesImpuestos.quitarValorIva(new BigDecimal(catalogoProducto.getIva().getTarifa()),this.getPrecioUnitario(), 4));
             
             //Seteo el valor del IVA, que en este caso es la resta del valor anterior y el valor nuevo
             this.setIva(precioUnitarioTmp.subtract(this.getPrecioUnitario()));
             
             //Seteo que el producto si debe llevar IVA
-            this.setIvaPorcentaje(ParametrosSistemaCodefac.obtenerIvaDefecto().intValue());
+            //this.setIvaPorcentaje(ParametrosSistemaCodefac.obtenerIvaDefecto().intValue());
+            this.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
             
         }
         

@@ -49,6 +49,11 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
 
     @Column(name = "TOTAL")
     private BigDecimal total;
+    
+    //Se refiere al total ya con todo e impuestos
+    @Column(name = "TOTAL_FINAL")
+    private BigDecimal totalFinal;
+    
     @Column(name = "IVA")
     private BigDecimal iva;
 
@@ -300,6 +305,14 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void setIrbpnr(BigDecimal irbpnr) {
         this.irbpnr = irbpnr;
     }
+
+    public BigDecimal getTotalFinal() {
+        return totalFinal;
+    }
+
+    public void setTotalFinal(BigDecimal totalFinal) {
+        this.totalFinal = totalFinal;
+    }
     
     
     
@@ -376,6 +389,17 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         //facturaDetalle.setDescuento(descuento);
     }
     
+    public void calcularTotalConImpuestos()
+    {
+        BigDecimal subtotalMenosDescuento=getCalcularTotalDetalle();
+        
+        BigDecimal valorIvaDecimal = new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
+        totalFinal=subtotalMenosDescuento.multiply(valorIvaDecimal);
+        //En teoria la diferencia es el iva que debe ir para cuadrar
+        
+        //return setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
+    
+    }
 
     public void calculaIva() {
         //Verifico que el valor del ice no cea null para no tener errores
@@ -418,6 +442,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         
              
         calculaIva();
+        calcularTotalConImpuestos();
     }
     public BigDecimal obtenerPrecioUnitarioConIva()
     {
@@ -497,6 +522,10 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         this.presentacionCodigo = presentacionCodigo;
     }
     
+    public BigDecimal getIvaPorcentajeDecimal() {
+        return new BigDecimal(ivaPorcentaje+"").divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+    }
+
     
     
 

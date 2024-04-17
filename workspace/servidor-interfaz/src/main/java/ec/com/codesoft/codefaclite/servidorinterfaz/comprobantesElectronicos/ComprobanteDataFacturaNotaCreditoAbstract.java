@@ -236,49 +236,68 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             Boolean impuestoCinco=false;
             Boolean impuestoQuince=false;
             
+            ///Soucion temporal
+            BigDecimal subtotalQuince=BigDecimal.ZERO;
+            BigDecimal subtotalDoce=BigDecimal.ZERO;
+            
+            Map<Integer,TotalImpuesto> mapImpuestos=new HashMap<Integer,TotalImpuesto>();
+            
             List<DetalleFacturaNotaCeditoAbstract> detalles= comprobante.getDetallesComprobante();
             for (DetalleFacturaNotaCeditoAbstract detalle : detalles) 
             {
-                if(detalle.getCatalogoProducto()!=null)
+                Boolean notaCredito=false;
+                if (comprobante.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO)) 
                 {
-                    if(detalle.getCatalogoProducto().getIva().getTarifa()==15)
-                    {
-                        impuestoQuince=true;
-                    }
-                    
-                    if(detalle.getCatalogoProducto().getIva().getTarifa()==12)
-                    {
-                        impuestoDoce=true;
-                    }
-                    
-                    if(detalle.getCatalogoProducto().getIva().getTarifa()==5)
-                    {
-                        impuestoCinco=true;
-                    }
-                    
-                    if(detalle.getCatalogoProducto().getIva().getTarifa()==0)
-                    {
-                        impuestoCero=true;
-                    }
+                    notaCredito=true;
                 }
-                else
+                
+                if(detalle.getIvaPorcentaje()!=null)
                 {
                     if(detalle.getIvaPorcentaje()==15)
                     {
+                        llenarDatosMapImpuestos(mapImpuestos, detalle, mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_QUINCE), notaCredito);
                         impuestoQuince=true;
                     }
                     
                     if(detalle.getIvaPorcentaje()==12)
                     {
+                        llenarDatosMapImpuestos(mapImpuestos, detalle, mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE), notaCredito);
                         impuestoDoce=true;
                     }
                     
                     if(detalle.getIvaPorcentaje()==5)
                     {
+                        llenarDatosMapImpuestos(mapImpuestos, detalle, mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_CINCO), notaCredito);
                         impuestoCinco=true;
                     }
                     
                     if(detalle.getIvaPorcentaje()==0)
+                    {
+                        impuestoCero=true;
+                    }
+                    
+                }
+                else
+                {
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==15)
+                    {
+                        llenarDatosMapImpuestos(mapImpuestos, detalle, mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_QUINCE), notaCredito);
+                        impuestoQuince=true;
+                    }
+                    
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==12)
+                    {
+                        llenarDatosMapImpuestos(mapImpuestos, detalle, mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_DOCE), notaCredito);
+                        impuestoDoce=true;
+                    }
+                    
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==5)
+                    {
+                        llenarDatosMapImpuestos(mapImpuestos, detalle, mapImpuestoDetalle.get(ImpuestoDetalle.CODIGO_IVA_CINCO), notaCredito);
+                        impuestoCinco=true;
+                    }
+                    
+                    if(detalle.getCatalogoProducto().getIva().getTarifa()==0)
                     {
                         impuestoCero=true;
                     }
@@ -314,7 +333,16 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             //if(comprobante.getIva().compareTo(BigDecimal.ZERO)>0)
             if(impuestoDoce || impuestoCinco || impuestoQuince)
             {   
-                ImpuestoDetalle impuestoDetalleIva=null;
+                
+                for (Map.Entry<Integer, TotalImpuesto> entry : mapImpuestos.entrySet()) 
+                {
+                    Integer tarifa = entry.getKey();
+                    TotalImpuesto totalImpuesto = entry.getValue();
+                    
+                    totalImpuestos.add(totalImpuesto);
+                    
+                }
+                /*ImpuestoDetalle impuestoDetalleIva=null;
                 
                 if(impuestoQuince)
                 {
@@ -344,7 +372,7 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 }
                 
                 totalImpuestoIva.setValor(comprobante.getIva());
-                totalImpuestos.add(totalImpuestoIva);
+                totalImpuestos.add(totalImpuestoIva);*/
             }
             
             //Crear el IMPUESTO DEL ICE cuando exista
@@ -371,6 +399,33 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
         redondearImpuestosTotales(totalImpuestos);
         return totalImpuestos;
     } 
+    
+    private void llenarDatosMapImpuestos(Map<Integer,TotalImpuesto> mapImpuestos,DetalleFacturaNotaCeditoAbstract detalle,ImpuestoDetalle impuestoDetalleIva,Boolean notaCredito)
+    {
+        TotalImpuesto totalImpuestoIva =mapImpuestos.get(impuestoDetalleIva.getTarifa());
+        if(totalImpuestoIva==null)
+        {
+            totalImpuestoIva = new TotalImpuesto();
+            totalImpuestoIva.setBaseImponible(detalle.getTotal());
+            totalImpuestoIva.setCodigo(impuestoDetalleIva.getImpuesto().getCodigoSri());
+            totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIva.getCodigo() + "");
+            totalImpuestoIva.setValor(detalle.getIva());
+        }
+        else
+        {
+            totalImpuestoIva.setBaseImponible(totalImpuestoIva.getBaseImponible().add(detalle.getTotal()));
+            totalImpuestoIva.setValor(totalImpuestoIva.getValor().add(detalle.getIva()));
+        }
+        
+        
+        //TODO: Este parte es importante porque las  notas de credito no deben llegar este atributo
+        if (!notaCredito) 
+        {
+            totalImpuestoIva.setTarifa(new BigDecimal(impuestoDetalleIva.getTarifa() + ""));
+        }
+        
+        mapImpuestos.put(impuestoDetalleIva.getTarifa(),totalImpuestoIva);
+    }
     
     private TotalImpuesto generarTotalImpuestoIce(ImpuestoDetalle impuestoDetalle,List<DetalleFacturaNotaCeditoAbstract> detalleList)
     {

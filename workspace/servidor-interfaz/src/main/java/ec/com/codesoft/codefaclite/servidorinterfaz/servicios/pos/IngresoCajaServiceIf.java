@@ -19,4 +19,5 @@ import java.util.List;
 public interface IngresoCajaServiceIf extends ServiceAbstractIf<IngresoCaja>{
     
     public List<IngresoCaja> consultarPorCajaSession(CajaSession cajaSession) throws ServicioCodefacException, RemoteException;
+    public void eliminarPorId(Long id) throws ServicioCodefacException, RemoteException;
 }

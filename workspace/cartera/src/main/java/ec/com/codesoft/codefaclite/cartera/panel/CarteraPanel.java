@@ -65,6 +65,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         cmbDocumentoCartera = new javax.swing.JComboBox<>();
         jLabel20 = new javax.swing.JLabel();
         txtDiasCredito = new javax.swing.JTextField();
+        chkAfectarCaja = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtAutorizacion = new javax.swing.JTextField();
@@ -241,6 +242,9 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtDiasCredito, gridBagConstraints);
+
+        chkAfectarCaja.setText("Afectar Caja");
+        jPanel2.add(chkAfectarCaja, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -732,6 +736,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JButton btnEliminarDocumentoCruzar;
+    private javax.swing.JCheckBox chkAfectarCaja;
     private javax.swing.JCheckBox chkSeleccionarTodoDetalleSinCruzar;
     private javax.swing.JComboBox<Banco> cmbBanco;
     private javax.swing.JComboBox<DocumentoDetalleEnum > cmbDetalleDocumento;
@@ -1071,6 +1076,14 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
 
     public void setCmbFormaPagoSri(JComboBox<SriFormaPago> cmbFormaPagoSri) {
         this.cmbFormaPagoSri = cmbFormaPagoSri;
+    }
+
+    public JCheckBox getChkAfectarCaja() {
+        return chkAfectarCaja;
+    }
+
+    public void setChkAfectarCaja(JCheckBox chkAfectarCaja) {
+        this.chkAfectarCaja = chkAfectarCaja;
     }
     
     

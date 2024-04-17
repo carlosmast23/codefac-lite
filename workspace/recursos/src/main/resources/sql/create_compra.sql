@@ -135,6 +135,8 @@ create table COMPRA_DETALLE
     PRESENTACION_CODIGO varchar(15),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.5.5)*/
     IRBPNR decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.2.3)*/
+    TOTAL_FINAL decimal(13,2),
     primary key (ID)
 );
 

@@ -300,6 +300,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             Vector<String> fila = new Vector<String>();
             fila.add(reporteFacturaData.getNumeroFactura());
             fila.add(reporteFacturaData.getReferencia());
+            fila.add(reporteFacturaData.getCampoAdicional());
             fila.add(reporteFacturaData.getUsuario());
             fila.add(reporteFacturaData.getFechaFactura());
             fila.add(reporteFacturaData.getFechaAutorizacion());
@@ -397,7 +398,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
     protected Vector<String>  crearCabezeraExcel(TipoReporteEnum tipoReporteEnum)
     {
         Vector<String> titulos=crearCabezeraTabla();        
+        
         titulos.add(titulos.size(),"Costo");
+        titulos.add(titulos.size(),"Forma de Pago");
+        
         titulos.add(0,"Clave de Acceso");
         titulos.add(1,"Fecha Max Pago");
         titulos.add(2,"Vendedor");

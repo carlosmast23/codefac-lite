@@ -323,13 +323,29 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                 resultado.subTotalSinImpuestos = resultado.subTotalSinImpuestos.add(precio.multiply(detalle.getCantidad()));
                 resultado.descuentoSinImpuestos = resultado.descuentoSinImpuestos.add((detalle.getDescuento() != null) ? detalle.getDescuento() : BigDecimal.ZERO);
             } else {
+                
+                //Obtener el subtotal y el iva a partir del total del detalle
+                
+                
                 resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(precio.multiply(detalle.getCantidad()));
                 resultado.descuentoConImpuestos = resultado.descuentoConImpuestos.add((detalle.getDescuento() != null) ? detalle.getDescuento() : BigDecimal.ZERO);
                 
                 //Artificio para no perder la referencia
                 resultado.ivaDecimal = new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
-                ///resultado.impuestoIva = resultado.subTotalConImpuestos.add(resultado.ice).subtract(resultado.descuentoConImpuestos).multiply(resultado.ivaDecimal);
-                resultado.impuestoIva = resultado.subTotalConImpuestos.add(resultado.ice).subtract(resultado.descuentoConImpuestos).multiply(resultado.ivaDecimal);
+                
+                //Esto hago porque datos anteriores no pueden tener esa información
+                //TODO: Revisar
+                if(detalle.getTotalFinal()!=null)
+                {
+                    resultado.impuestoIva=resultado.impuestoIva.add(detalle.getTotalFinal().subtract(detalle.getTotal()));
+                }
+                else
+                {
+                    resultado.impuestoIva = resultado.impuestoIva.add(detalle.getIva());
+                }   
+                //resultado.impuestoIva = resultado.impuestoIva.add(detalle.getIva());
+                //resultado.impuestoIva = resultado.subTotalConImpuestos.add(resultado.ice).subtract(resultado.descuentoConImpuestos).multiply(resultado.ivaDecimal);
+                //resultado.impuestoIva = resultado.subTotalConImpuestos.add(resultado.ice).subtract(resultado.descuentoConImpuestos).multiply(resultado.ivaDecimal);
             }
 
         }
@@ -341,6 +357,11 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                 .add(resultado.impuestoIva)
                 .add(resultado.ice)
                 .add(resultado.irbpnr);
+        
+        //TODO: por el momento hago este artificio pero esta de revisar
+        //@Deprecated: hago esto porque si necesito tener el valor exacto pero del iva no necesito sabe el valor 
+        resultado.total=resultado.total.setScale(2, RoundingMode.HALF_UP);
+        resultado.impuestoIva=resultado.impuestoIva.setScale(2, RoundingMode.HALF_UP);
     
         return resultado;
     }
@@ -464,7 +485,9 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
          */
         BigDecimal ivaDecimalTmp = ivaDecimal.add(BigDecimal.ONE); //1.12 por ejemplo
 
-        BigDecimal subtotalMenosImpuestosConIce = totalConImpuestos.divide(ivaDecimalTmp, 2, BigDecimal.ROUND_HALF_UP);
+        //TODO: Por el momento obtengo el valor directo de los datos calculados desde el detalle
+        //BigDecimal subtotalMenosImpuestosConIce = totalConImpuestos.divide(ivaDecimalTmp, 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal subtotalMenosImpuestosConIce = totalConImpuestos.subtract(resultado.impuestoIva);
 
         /**
          * ==================================================================================
@@ -491,6 +514,10 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
          */
         //Calcular el iva de la resta del del total -subtotal
         this.iva = totalConImpuestos.subtract(subtotalMenosImpuestosConIce);
+        /*this.iva = BigDecimal.ZERO;
+        for (DetalleFacturaNotaCeditoAbstract detalle : detalles) {
+            this.iva=this.iva.add(detalle.getIva());
+        }*/
         //this.iva=this.iva.setScale(2,BigDecimal.ROUND_HALF_UP);        
 
     }

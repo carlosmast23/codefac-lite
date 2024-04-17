@@ -316,7 +316,7 @@ public class Kardex implements Serializable,Cloneable {
     
     public BigDecimal recalcularStock()
     {
-        BigDecimal stock=BigDecimal.ZERO;
+        BigDecimal stockTmp=BigDecimal.ZERO;
         List<KardexDetalle> detallesKardex=getDetallesKardexPersistencia();
         if(detallesKardex!=null)
         {
@@ -329,10 +329,15 @@ public class Kardex implements Serializable,Cloneable {
                 }
                 
                 //System.out.println(signo+" > "+kardexDetalle.getCantidad());
-                stock=stock.add(kardexDetalle.getCantidad().multiply(new BigDecimal(signo)));
+                stockTmp=stockTmp.add(kardexDetalle.getCantidad().multiply(new BigDecimal(signo)));
             }
         }
-        return stock;
+        
+        if(!stockTmp.equals(stock))
+        {
+            Logger.getLogger(Kardex.class.getName()).log(Level.WARNING,"Recalculando stock desde detalle del producto: "+producto.getNombre()+"\n Stock antiguo: "+stockTmp+" / Stock nuevo: "+stock);
+        }
+        return stockTmp;
     }
     
     public void procesarReserva(BigDecimal cantidadReserva,SignoEnum sigEnum)

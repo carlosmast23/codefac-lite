@@ -847,7 +847,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 
                 //producto.getCatalogoProducto().getIva().setTarifa(0);
                 //producto.getCatalogoProducto().getIva().setPorcentaje(BigDecimal.ZERO);
-                BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
+                //BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),valorUnitario);
+                BigDecimal nuevoValorUnitario=UtilidadesImpuestos.agregarValorIva(new BigDecimal(ivaPorcentaje+""),valorUnitario);
                 //Por defecto si no tiene configurada ninguna opcion asume que el valor de la nota de venta interna debe ser con el valor
                 if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.NVI_TOTAL_CON_IVA,EnumSiNo.NO))
                 {
@@ -1197,9 +1198,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             BigDecimal porcentajeIce=(facturaDetalle.getIcePorcentaje()!=null)?facturaDetalle.getIcePorcentaje():null;
             valorTotalUnitario=UtilidadIva.calcularValorUnitario(
-                    session.obtenerIvaActualDecimal(),
+                    facturaDetalle.getIvaPorcentajeDecimal(),
                     porcentajeIce,
                     valorTotalUnitario);
+            /*valorTotalUnitario=UtilidadIva.calcularValorUnitario(
+                    session.obtenerIvaActualDecimal(),
+                    porcentajeIce,
+                    valorTotalUnitario);*/
         }
         facturaDetalle.setPrecioUnitario(valorTotalUnitario);
         /**
@@ -1269,7 +1274,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             
             //Solo agregar si no esta en modo edicion
             if (!interfaz.getModoEdicionDetalle()) {
-                interfaz.obtenerFactura().addDetalle(facturaDetalle,true);
+                
+                Boolean agregarInicio=false;
+                if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.AGREGAR_DETALLE_INICIO,EnumSiNo.SI))
+                {
+                    agregarInicio=true;
+                }
+                
+                interfaz.obtenerFactura().addDetalle(facturaDetalle,agregarInicio);
             }
             
             interfaz.cargarDatosDetalles();            
