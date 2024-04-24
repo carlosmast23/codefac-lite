@@ -138,7 +138,7 @@ public class ComprobanteAdicional implements Serializable{
         TELEFONOS_CLIENTES("telefonos_cliente"),
         CELULAR("celular"),
         CORREO("correo"),
-        FECHA_VENCIMIENTO("Fecha Maxima de Pago"),
+        FECHA_VENCIMIENTO("[Venta a Crédito] fecha de Pago"),
         GUIA_REMISION("Guia de Remision"),
         VENDEDOR("Vendedor"),
         ADICIONAL("Adicional");

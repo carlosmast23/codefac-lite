@@ -249,7 +249,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
      * @param puntoEstablecimiento
      * @return 
      */
-    public Integer obtenerMaximoCodigoNotaVentaInterna(Integer puntoEmision,BigDecimal puntoEstablecimiento,Empresa empresa)
+    public Integer obtenerMaximoCodigoPorDocumento(Integer puntoEmision,BigDecimal puntoEstablecimiento,DocumentoEnum documentoEnum,Empresa empresa)
     {   
         //Compra compra;
         //compra.getEmpresa();
@@ -264,7 +264,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1,puntoEmision);
         query.setParameter(2,puntoEstablecimiento);
-        query.setParameter(3,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
+        query.setParameter(3,documentoEnum.getCodigo());
         query.setParameter(4,empresa);
         
         Long secuencialMaximo=(Long) query.getSingleResult();

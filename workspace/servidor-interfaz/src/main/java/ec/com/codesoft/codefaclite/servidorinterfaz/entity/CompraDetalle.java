@@ -243,7 +243,11 @@ public class CompraDetalle extends DetalleFacturaNotaCeditoAbstract implements S
     {
         //Todo: revisar el valor del iva 12 que esta quemado
         //return getSubtotal().multiply( new BigDecimal("0.12"));
-        return UtilidadesImpuestos.calcularValorIva(new BigDecimal(getIvaPorcentaje()+""),getSubtotal());
+        BigDecimal valorIce=getValorIce();
+        BigDecimal valorSubtotal=getSubtotal();
+        BigDecimal valorIva= UtilidadesImpuestos.calcularValorIva(new BigDecimal(getIvaPorcentaje()+""),valorIce.add(valorSubtotal));
+        //System.out.println("valorIva:"+valorIva+" | valorIce:"+valorIce+" | valorSubtotal:"+valorSubtotal);
+        return valorIva;
     }
     
     public BigDecimal calcularTotal()

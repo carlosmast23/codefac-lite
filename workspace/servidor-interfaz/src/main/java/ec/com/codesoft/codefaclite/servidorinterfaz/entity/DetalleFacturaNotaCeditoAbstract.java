@@ -396,7 +396,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         BigDecimal valorIvaDecimal = new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
         totalFinal=subtotalMenosDescuento.multiply(valorIvaDecimal);
         //En teoria la diferencia es el iva que debe ir para cuadrar
-        
+        totalFinal=totalFinal.setScale(2, BigDecimal.ROUND_HALF_UP);
         //return setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     
     }

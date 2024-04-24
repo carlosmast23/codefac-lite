@@ -457,7 +457,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 ProductoModelControlador.IvaOpcionEnum ivaOpcionEnum=(ProductoModelControlador.IvaOpcionEnum) getCmbIvaOpcionPrecioVentaPresentacion().getSelectedItem();
                 if(ivaOpcionEnum.equals(ivaOpcionEnum.CON_IVA))
                 {                    
-                    pvp=UtilidadesImpuestos.quitarValorIva(session.obtenerIvaActual(), pvp, 6);
+                    ImpuestoDetalle impuestoIva=(ImpuestoDetalle) getComboIva().getSelectedItem();
+                    //pvp=UtilidadesImpuestos.quitarValorIva(session.obtenerIvaActual(), pvp, 6);
+                    pvp=UtilidadesImpuestos.quitarValorIva(new BigDecimal(impuestoIva.getTarifa()+""), pvp, 6);
                 }
                 
             }

@@ -23,15 +23,18 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
 {
     private Sucursal sucursal;
     private Boolean filtrarComprasSinProcesarRetencion;
+    private Boolean filtrarOrdenCompra;
 
     public CompraBusquedaDialogo(Sucursal sucursal) {
         this.sucursal = sucursal;
         this.filtrarComprasSinProcesarRetencion=false;
+        filtrarOrdenCompra=false;
     }
     
     public CompraBusquedaDialogo(Sucursal sucursal,Boolean filtrarComprasSinProcesarRetencion) {
         this.sucursal = sucursal;
         this.filtrarComprasSinProcesarRetencion=filtrarComprasSinProcesarRetencion;
+        filtrarOrdenCompra=false;
     }
     
     @Override
@@ -50,17 +53,26 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //Compra compra;
+        //compra.getCodigoDocumento();
         //compra.getSucursalEmpresa().
         //compra.getE
         //Compra c;
         //c.getEstadoEnum().ELIMINADO;
         
+        String whereDocumentoFiltro="";
+        if(filtrarOrdenCompra)
+        {
+            whereDocumentoFiltro=" and c.codigoDocumento=?5 ";
+        }
+        
         String queryString = "SELECT c FROM Compra c WHERE c.sucursalEmpresa=?4 and c.estado<>?3 and ";
         queryString+= " ( LOWER(c.secuencial) like ?1 OR  LOWER(c.razonSocial) like ?1 )";
         if(filtrarComprasSinProcesarRetencion)
         {
-            queryString+= " and c.estadoRetencion=?2"; 
+            queryString+= " and c.estadoRetencion=?2 "; 
         }
+        
+        queryString=queryString+whereDocumentoFiltro;
         
         queryString+=" order by c.id desc";
         
@@ -74,6 +86,12 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
         
         queryDialog.agregarParametro(3,GeneralEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(4,sucursal);
+        
+        if(filtrarOrdenCompra)
+        {
+            queryDialog.agregarParametro(5,DocumentoEnum.ORDEN_COMPRA.getCodigo());
+        }
+        
         return queryDialog;
     }
 
@@ -100,5 +118,15 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
     public Vector<String> getNamePropertysObject() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public Boolean getFiltrarOrdenCompra() {
+        return filtrarOrdenCompra;
+    }
+
+    public void setFiltrarOrdenCompra(Boolean filtrarOrdenCompra) {
+        this.filtrarOrdenCompra = filtrarOrdenCompra;
+    }
+
+    
     
 }

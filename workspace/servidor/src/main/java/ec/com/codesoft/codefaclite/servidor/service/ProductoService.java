@@ -1075,6 +1075,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         }
                     }
                 }
+                
+                //Cuando este relacionado con presentaciones eliminar las presentaciones                
+                List<ProductoPresentacionDetalle> presentacionList= p.getPresentacionList();
+                for (ProductoPresentacionDetalle presentacionProducto : presentacionList) {
+                    Producto productoEmpaquetado= presentacionProducto.getProductoEmpaquetado();
+                    productoEmpaquetado.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+                    entityManager.merge(productoEmpaquetado);
+                }
 
                 //============================================//
                 // SI NO TIENEN NINGUNA RESTRICCION ENTONCES ELIMINO EL PRODUCTO Y EL KARDEX //

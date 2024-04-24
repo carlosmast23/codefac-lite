@@ -337,6 +337,10 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                 //TODO: Revisar
                 if(detalle.getTotalFinal()!=null)
                 {
+                    System.out.println("TotalFinal: "+detalle.getTotalFinal());
+                    System.out.println("Total: "+detalle.getTotal());
+                    System.out.println("Iva: "+detalle.getTotal());
+                    
                     resultado.impuestoIva=resultado.impuestoIva.add(detalle.getTotalFinal().subtract(detalle.getTotal()));
                 }
                 else

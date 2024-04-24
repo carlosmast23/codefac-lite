@@ -773,6 +773,9 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
             getInterazEscritorio().setearValoresProducto(producto);
         }
 
+        
+        CatalogoProducto catalogoProducto=crearCatalogoProducto(producto);
+        producto.setCatalogoProducto(catalogoProducto);
           
         BigDecimal valorUnitario=producto.getValorUnitario();
         BigDecimal precioDistribuidor=producto.getPrecioDistribuidor();
@@ -840,9 +843,6 @@ public class ProductoModelControlador extends ModelControladorAbstract<ProductoM
         producto.setPvp5(pvp5);
         producto.setPvp6(pvp6);
         
-        
-        CatalogoProducto catalogoProducto=crearCatalogoProducto(producto);
-        producto.setCatalogoProducto(catalogoProducto);
         
         producto.setEmpresa(session.getEmpresa());
         

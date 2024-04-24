@@ -830,6 +830,12 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     }*/
 
     public List<ProductoPresentacionDetalle> getPresentacionList() {
+        
+        if(presentacionList==null)
+        {
+            presentacionList=new ArrayList<ProductoPresentacionDetalle>();
+        }
+        
         return presentacionList;
     }
 

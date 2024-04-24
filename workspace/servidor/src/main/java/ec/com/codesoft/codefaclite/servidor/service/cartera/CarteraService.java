@@ -587,6 +587,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      */
     public void grabarDocumentoCartera(ComprobanteEntity comprobante,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro,CrudEnum crudEnum,ModoProcesarEnum modoProcesar) throws RemoteException, ServicioCodefacException 
     {
+        
         //Si no esta activo el modulo de cartera no continua
         //if(!ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
         //{
@@ -597,6 +598,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         Cartera cartera=crearCarteraSinTransaccion(tipo, carteraParametro, comprobante.getSucursalEmpresa(),null,comprobante.getCodigoDocumento(), comprobante.getFechaCreacion(), UtilidadesFecha.castDateUtilToSql(comprobante.getFechaEmision()), comprobante.getPuntoEmision().toString(), comprobante.getPuntoEstablecimiento().toString(), comprobante.getSecuencial(),null,comprobante.getObservacion());
         
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
+        
+        //Documentos que no generan movimientos y no toca hacer nada
+        if(DocumentoEnum.ORDEN_COMPRA.equals(documentoEnum))
+        {
+            return;
+        }
         
         List<CarteraCruce> cruces=new ArrayList<CarteraCruce>();
         //TODO: Ver la forma para clasificar en general a todos los comprobante sy no una por una
@@ -630,7 +637,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 crearCarteraNotaCredito(comprobante, cartera, cruces,modoProcesar);
                 break;
                 
-            default:
+            default:                
                 throw new ServicioCodefacException("Documento no configurado en cartera");
                 
         }

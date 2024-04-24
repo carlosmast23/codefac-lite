@@ -732,7 +732,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     {
         //Para documento de nota de venta interna ingreso unos datos adicionales automaticos
         DocumentoEnum documentoEnum=compra.getCodigoDocumentoEnum();
-        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) || documentoEnum.equals(DocumentoEnum.ORDEN_COMPRA))
         {
             if(compra.getAutorizacion()==null || compra.getAutorizacion().trim().isEmpty())
             {
@@ -751,7 +751,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             
             if(compra.getSecuencial()==null || compra.getPuntoEmision().equals("000000000") )
             {
-                Integer secuencial=getFacade().obtenerMaximoCodigoNotaVentaInterna(compra.getPuntoEmision(),compra.getPuntoEstablecimiento(),compra.getEmpresa());
+                Integer secuencial=getFacade().obtenerMaximoCodigoPorDocumento(compra.getPuntoEmision(),compra.getPuntoEstablecimiento(),documentoEnum,compra.getEmpresa());
                 compra.setSecuencial(secuencial);
             }
             

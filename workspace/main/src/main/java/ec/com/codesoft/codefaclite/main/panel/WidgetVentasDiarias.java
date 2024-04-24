@@ -290,7 +290,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel11.setText("SUBTOTAL 12%");
+        jLabel11.setText("SUBTOTAL 15%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -326,7 +326,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel3.add(lblSubtotal0, gridBagConstraints);
 
         jLabel15.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel15.setText("IVA 12%");
+        jLabel15.setText("IVA 15%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;

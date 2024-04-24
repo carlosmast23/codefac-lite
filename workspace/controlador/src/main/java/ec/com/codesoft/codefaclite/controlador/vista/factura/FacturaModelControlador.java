@@ -1332,12 +1332,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
     }
     
+    //TODO: Por defecto recalcula totales exepto cuando estoy consultando
+    public void cargarTotales()
+    {
+        cargarTotales(true);
+    }
     
-    public void cargarTotales() {
+    public void cargarTotales(Boolean recalcularTotales) {
         Factura factura=interfaz.obtenerFactura();
         //if(estadoFormulario.equals(ESTADO_GRABAR))
         //{
-        factura.calcularTotalesDesdeDetalles();
+        if(recalcularTotales)
+        {
+            factura.calcularTotalesDesdeDetalles();
+        }
         //}
         /**
          * Setear los componentes graficos despues de los calculos

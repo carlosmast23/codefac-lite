@@ -70,6 +70,7 @@ import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwing;
@@ -415,10 +416,18 @@ public class CompraModel extends CompraPanel{
     public void actualizar() throws ExcepcionCodefacLite {
         
     }
+    
+    public Boolean getVistaOrdenTrabajo()
+    {
+        return false;
+    }
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getSucursal());
+        
+        compraBusqueda.setFiltrarOrdenCompra(getVistaOrdenTrabajo());
+            
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
         buscarDialogoModel.setVisible(true);
         Compra compra = (Compra)buscarDialogoModel.getResultado();
@@ -734,7 +743,7 @@ public class CompraModel extends CompraPanel{
     
     private void cargarCompraDesdeOrdenCompra()
     {
-        OrdenCompra ordenCompra=compra.getOrdenCompra();
+        /*OrdenCompra ordenCompra=compra.getOrdenCompra();
         
         compra=new Compra();
         compra.setFechaFactura(UtilidadesFecha.getFechaHoy());
@@ -766,7 +775,11 @@ public class CompraModel extends CompraPanel{
             compra.addDetalle(compraDetalle);
         }
         
-        //Cargar los datos en la vista
+        //Cargar los datos en la vista*/
+        Compra ordenCompra=compra.getOrdenCompra();
+        this.compra=new Compra();
+        UtilidadVarios.copiarObjetos(ordenCompra,compra);
+        this.compra.calcularTotalesDesdeDetalles(); //Solucion temporal porque no cargan los totale
         cargarDatosCompra(this.compra);
         
     }
@@ -918,13 +931,17 @@ public class CompraModel extends CompraPanel{
         getBtnOrdenCompraBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                OrdenCompraBusqueda ordenCompraBusqueda = new OrdenCompraBusqueda();
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(ordenCompraBusqueda);
+                CompraBusquedaDialogo compraBusqueda = new CompraBusquedaDialogo(session.getSucursal());
+                compraBusqueda.setFiltrarOrdenCompra(true);
+
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
                 buscarDialogoModel.setVisible(true);
-                OrdenCompra ordenCompra = (OrdenCompra) buscarDialogoModel.getResultado();
+                
+                Compra ordenCompra = (Compra) buscarDialogoModel.getResultado();
+
                 if (ordenCompra != null) {
                     compra.setOrdenCompra(ordenCompra);
-                    getTxtOrdenCompra().setText(ordenCompra.getId()+"-"+ordenCompra.getObservacion());
+                    getTxtOrdenCompra().setText(ordenCompra.getSecuencial()+"-"+ordenCompra.getObservacion());
                     cargarCompraDesdeOrdenCompra();
                 }
             }
@@ -1355,7 +1372,8 @@ public class CompraModel extends CompraPanel{
         //TODO:Verificar por que existen 2 validaciones para la vista
         if(verificarCamposValidados())
         {
-            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario,descuento,getTxtProductoItem().getText(),getTxtDescripcionItem().getText(),porcentajeIva,irbpnr);
+            agregarDetallesCompra(compraDetalle,loteSeleccionado,productoProveedor ,costo, cantidad, precioUnitario,descuento,getTxtProductoItem().getText(),getTxtDescripcionItem().getText(),porcentajeIva,irbpnr,true);
+            actualizarDatosMostrarVentana();
         }
         
     }
@@ -1410,9 +1428,10 @@ public class CompraModel extends CompraPanel{
                 for (CompraDetalle compraDetalle : detallesTemporal) 
                 {
                     //TODO:Mejorar esta parte para no pasar los mismos datos                    
-                    agregarDetallesCompra(compraDetalle,compraDetalle.getLote(),compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getCodigoPrincipal(),compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje(),compraDetalle.getIrbpnr());
+                    agregarDetallesCompra(compraDetalle,compraDetalle.getLote(),compraDetalle.getProductoProveedor() ,compraDetalle.getPrecioUnitario(), compraDetalle.getCantidad(), compraDetalle.getPrecioUnitario(),compraDetalle.getDescuento() ,compraDetalle.getCodigoPrincipal(),compraDetalle.getDescripcion(),compraDetalle.getIvaPorcentaje(),compraDetalle.getIrbpnr(),false);
                     
                 }
+                actualizarDatosMostrarVentana();
                 
                 compra.calcularTotales();
                 cargarDatosCompra(compra);
@@ -1730,7 +1749,7 @@ public class CompraModel extends CompraPanel{
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
         getTxtCostoItem().setText("");
-        getTxtIrbpnr().setText("");
+        getTxtIrbpnrDetalle().setText("");
         getTxtDescuentoItem().setText("0");
         getTxtProductoItem().setText("");
         getTxtCantidadItem().setText("");
@@ -1764,7 +1783,7 @@ public class CompraModel extends CompraPanel{
     }
    
     //TODO: Pasar esta logica de agregar un producto a la entidad de compra para poder usar desde otras partes por ejemplo de la capa del servidor
-    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,BigDecimal descuento,String codigo,String descripcion,Integer porcentajeIva,BigDecimal irbpnr)
+    private void agregarDetallesCompra(CompraDetalle compraDetalle,Lote lote,ProductoProveedor productoProveedor,BigDecimal costo,BigDecimal cantidadItem,BigDecimal precioUnitario,BigDecimal descuento,String codigo,String descripcion,Integer porcentajeIva,BigDecimal irbpnr,Boolean recalcularTotales)
     {
         Boolean agregar = true;
         
@@ -1793,51 +1812,24 @@ public class CompraModel extends CompraPanel{
             compraDetalle.setIrbpnr(irbpnr);
             
             
-            //BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
-            //compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
             compraDetalle.setPrecioUnitario(precioUnitario ); //TODO: Ver si es necesario escalar los valores o este proceso lo debe hacer el usuario
             compraDetalle.setCompra(compra);
             compraDetalle.setCodigoPrincipal(codigo);
             compraDetalle.setDescripcion(descripcion);
             compraDetalle.setDescuento(descuento);
             compraDetalle.setLote(lote);
-            /*if(productoProveedor.getProducto().getCatalogoProducto().getIva().getPorcentaje().compareTo(BigDecimal.ZERO)==0)
-            {
-                compraDetalle.setIva(BigDecimal.ZERO);                
-            }
-            else
-            {
-                compraDetalle.setIva(compraDetalle.calcularValorIva());
-            }*/
             
-            compraDetalle.setIva(compraDetalle.calcularValorIva());
-            
-            //SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
-            //SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
-            
-            //compraDetalle.setSriRetencionIva(sriRetencionIva);
-            //compraDetalle.setSriRetencionRenta(sriRetencionRenta);
-            
+                        
             compraDetalle.setProductoProveedor(productoProveedor);
-            //compraDetalle.setTotal(compraDetalle.getSubtotal());
-            compraDetalle.calcularSubtotalSinIva();
+            
+            if(recalcularTotales)
+            {
+                compraDetalle.setIva(compraDetalle.calcularValorIva());            
+                compraDetalle.calcularSubtotalSinIva();
+            }
             
             
-            aplicarRetencionDetalle(compraDetalle);
-            
-            //BigDecimal valorRetencionIVA = compraDetalle.getIva().multiply(new BigDecimal(sriRetencionIva.getPorcentaje()+"")).divide(new BigDecimal("100"));
-            //BigDecimal valorRetencionRenta = compraDetalle.getTotal().multiply(new BigDecimal(sriRetencionRenta.getPorcentaje()+"")).divide(new BigDecimal("100"));
-            
-            
-            //compraDetalle.setValorSriRetencionIVA(valorRetencionIVA.setScale(2,BigDecimal.ROUND_HALF_UP));
-            //compraDetalle.setValorSriRetencionRenta(valorRetencionRenta.setScale(2,BigDecimal.ROUND_HALF_UP));
-            
-            //BigDecimal valorTotalRetencion = valorRetencionIVA.add(valorRetencionRenta);
-            
-            //compraDetalle.setTotal(compraDetalle.getTotal().subtract(valorTotalRetencion));
-            
-            //compraDetalle.setValorIce(BigDecimal.ZERO);
-            
+            aplicarRetencionDetalle(compraDetalle);            
             
             compraDetalle.setCodigoSustentoSriEnum((SriSustentoComprobanteEnum)getCmbSustentoComprobante().getSelectedItem());
 
@@ -1846,7 +1838,7 @@ public class CompraModel extends CompraPanel{
                 compra.addDetalle(compraDetalle);              
             }
             getTxtProductoItem().requestFocus(); //Despues de agregar setear nuevamente en el campo para ingresar otro codigo
-            actualizarDatosMostrarVentana();
+            //actualizarDatosMostrarVentana(); //TODO: Actualizo luego del metodo que llamma el agregar
             getCmbSustentoComprobante().setSelectedIndex(0); //Selecionar el primer sustento despues de agregar
         
      

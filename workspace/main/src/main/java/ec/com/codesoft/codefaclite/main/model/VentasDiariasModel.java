@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -451,7 +452,8 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             if (catalogoProducto.getIva().getTarifa().equals(0)) {
                     facturaDetalle.setIva(BigDecimal.ZERO);
                 } else {
-                    BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal iva=UtilidadesImpuestos.calcularValorIva(new BigDecimal(catalogoProducto.getIva().getTarifa()+""),facturaDetalle.getTotal());
+                    //BigDecimal iva = facturaDetalle.getTotal().multiply(new BigDecimal(catalogoProducto.getIva().getTarifa()+"")).setScale(2, BigDecimal.ROUND_HALF_UP);
                     facturaDetalle.setIva(iva);
                 }
             //Solo agregar si se enviar un dato vacio
@@ -608,7 +610,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         
     }
     
-    public void calcularSubtotal12y0(List<FacturaDetalle> facturaDetalles) {
+    /*public void calcularSubtotal12y0(List<FacturaDetalle> facturaDetalles) {
         this.factura.setSubtotalImpuestos(BigDecimal.ZERO);
         this.factura.setSubtotalSinImpuestos(BigDecimal.ZERO);        
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
@@ -624,32 +626,33 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         
         this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
         this.factura.setSubtotalSinImpuestos(factura.getSubtotalSinImpuestos().setScale(2,BigDecimal.ROUND_HALF_UP));
-    }
+    }*/
     
-     public void calcularSubtotales() {
+     /*public void calcularSubtotales() {
      
         this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().subtract(this.factura.getSubtotalImpuestos()));
         this.factura.setDescuentoSinImpuestos(new BigDecimal(0));
-    }
+    }*/
 
-    public void calcularIva12() {
+    /*public void calcularIva12() {
         this.factura.setIva(this.factura.getSubtotalImpuestos().subtract(this.factura.getDescuentoImpuestos()).multiply(obtenerValorIva()));
         this.factura.setIva(this.factura.getIva().setScale(2, BigDecimal.ROUND_HALF_UP));
-    }
+    }*/
 
-    public void calcularValorTotal() {
+    /*public void calcularValorTotal() {
         this.factura.setTotal(
                 factura.getSubtotalImpuestos().subtract(this.factura.getDescuentoImpuestos()).
                         add(factura.getSubtotalSinImpuestos().subtract(factura.getDescuentoSinImpuestos())).
                         add(factura.getIva()));
-    }
+    }*/
     
     public void procesarTotales()
     {
-        calcularSubtotal12y0(factura.getDetalles());
-        calcularSubtotales();
-        calcularIva12();
-        calcularValorTotal();
+        //calcularSubtotal12y0(factura.getDetalles());
+        //calcularSubtotales();
+        //calcularIva12();
+        factura.calcularTotalesDesdeDetalles();
+        //calcularValorTotal();
         mostrarTotales();
     }
     
@@ -661,7 +664,8 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         this.getLblValorTotal().setText(""+this.factura.getTotal());
     }
     
-    public BigDecimal obtenerValorIva() {
+    @Deprecated //Este metodo tiene que ser general para cualquier iva
+    /*public BigDecimal obtenerValorIva() {
         try {
             Map<String, Object> map = new HashMap<>();
             ImpuestoDetalleServiceIf impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
@@ -675,7 +679,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
+    }*/
     
     public void definirFechaFacturacion()
     {   

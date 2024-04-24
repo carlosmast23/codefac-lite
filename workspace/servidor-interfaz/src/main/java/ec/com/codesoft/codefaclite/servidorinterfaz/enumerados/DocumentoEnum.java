@@ -63,8 +63,18 @@ public enum DocumentoEnum implements ParametroUtilidades.ComparadorInterface{
             false,
             "00",
             false
-    
     ),
+    
+    ORDEN_COMPRA("Orden de Compra",
+            "ODC",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
+            false,
+            false,
+            "00",
+            false
+    ),
+    
     LIQUIDACION_COMPRA("Liquidación Compra",
             "LDC",
             DocumentoCategoriaEnum.COMPROBANTES_VENTA,

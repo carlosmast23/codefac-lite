@@ -136,7 +136,7 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     private String autorizacion;
     
     @JoinColumn(name ="ORDEN_COMPRA_ID")
-    private OrdenCompra ordenCompra;
+    private Compra ordenCompra;
     
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
@@ -192,6 +192,10 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     }
     
     public String getSecuencialFormat() {
+        if(secuencial==null)
+        {
+            return "";
+        }
         return UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(),9,"0");
     }
 
@@ -200,6 +204,10 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     }*/
     
     public String getPuntoEstablecimientoFormat() {
+        if(getPuntoEstablecimiento()==null)
+        {
+            return "";
+        }
         return UtilidadesTextos.llenarCarateresIzquierda(getPuntoEstablecimiento().toString(),3,"0");
     }
     
@@ -208,6 +216,10 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     }*/
     
     public String getPuntoEmisionFormat() {
+        if(super.getPuntoEmision()==null)
+        {
+            return "";
+        }
         return UtilidadesTextos.llenarCarateresIzquierda(super.getPuntoEmision().toString(), 3, "0");
     }
     
@@ -487,11 +499,11 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     }
     
 
-    public OrdenCompra getOrdenCompra() {
+    public Compra getOrdenCompra() {
         return ordenCompra;
     }
 
-    public void setOrdenCompra(OrdenCompra ordenCompra) {
+    public void setOrdenCompra(Compra ordenCompra) {
         this.ordenCompra = ordenCompra;
     }
 
@@ -562,10 +574,27 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     
     
     public BigDecimal getSubtotalImpuestosSinDescuentos() {
+        
+        if(getSubtotalImpuestos()==null)
+        {
+            setSubtotalImpuestos(BigDecimal.ZERO);
+        }
+        
         return getSubtotalImpuestos().add(descuentoImpuestos);
     }
     
     public BigDecimal getSubtotalSinImpuestosSinDescuentos() {
+        
+        if(subtotalSinImpuestos==null)
+        {
+            subtotalSinImpuestos=BigDecimal.ZERO;
+        }
+        
+        if(descuentoSinImpuestos==null)
+        {
+            descuentoSinImpuestos=BigDecimal.ZERO;
+        }
+        
         return subtotalSinImpuestos.add(descuentoSinImpuestos);
     }
 

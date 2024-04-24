@@ -1607,31 +1607,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         if(manejaInventario.equals(EnumSiNo.SI))
         {
-            /*ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(),bodegaVenta,true);
-            
-            //cambiar el tipo de buscador si tiene activo el parametro de farmacia
-            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.FARMACIA))
-            {
-                productoInventarioBusquedaDialogo=new FarmaciaProductoInventarioBusquedaDialogo(manejaInventario, session.getEmpresa(), bodegaVenta);
-            }
-            else if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.TIPO_NEGOCIO,TipoNegocioEnum.TALLER_AUTOMOTRIZ))
-            {
-                productoInventarioBusquedaDialogo=new TallerMecanicoInventarioBusquedaDialogo(manejaInventario,session.getEmpresa(), bodegaVenta);
-            }*/
-            
-            //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo,1100);            
-            //buscarDialogoModel.setVisible(true);
-            //Kardex kardex=(Kardex) buscarDialogoModel.getResultado();
+
             ProductoBusquedaDialogoFactory dialogoFactory=new ProductoBusquedaDialogoFactory(session.getSucursal(),true, ProductoBusquedaDialogoFactory.ResultadoEnum.KARDEX,true,categoria);
             dialogoFactory.setDiponibleVenta(EnumSiNo.SI);
             
             Kardex kardexSeleccionadoTmp = (Kardex) dialogoFactory.ejecutarDialogo();
-            /*if(kardexSeleccionado==null)
-            {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.WARNING,"Error al agregar un producto a la factura que al parecer no tiene kardex pero esta marcado con inventario en si");
-                throw new ServicioCodefacException("Error al agregar al inventario un producto que no tiene kardex");
-            }
-            else*/
             if(kardexSeleccionadoTmp!=null)
             {
                 productoSeleccionado=kardexSeleccionadoTmp.getProducto();
@@ -2836,7 +2816,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         cargarDatosDetalles();
         controlador.limpiarDetalleFactura();
-        controlador.cargarTotales();
+        controlador.cargarTotales(false);
         cargarValoresAdicionales();
         cargarFormasPagoTabla();
         cargarTablaDatosAdicionales();
@@ -4167,7 +4147,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 //Cuando se tenga que agregar el iva no tiene que sumar el iva al subtotal
                                 if(!agregarIvaNVI)
                                 {
-                                    pvp=UtilidadesImpuestos.agregarValorIva(session.obtenerIvaActual(),pvp);
+                                    pvp=UtilidadesImpuestos.agregarValorIva(new BigDecimal(ivaPorcentaje),pvp);
                                 }
                                 
                             }
