@@ -950,7 +950,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     seleccionarPorcentaje=false;
                 }
             }
-            interfaz.cargarPreciosPorcentaje(descuentosList,false);
+            interfaz.cargarPreciosPorcentaje(descuentosList,true);
         }
         //Dejar seleccionado el ultimo precio por defecto para que las siguientes veces continue con ese mismo precio
         if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.AGREGAR_PVP_ANTERIOR,EnumSiNo.SI))
