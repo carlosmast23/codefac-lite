@@ -576,7 +576,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             if(carteraParametro.habilitarCredito && carteraParametro.diasCredito>0)
             {
                 java.util.Date fechaVencimiento=UtilidadesFecha.sumarDiasFecha(factura.getFechaEmision(),carteraParametro.diasCredito);
-                String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaVencimiento);                
+                String fechaStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaVencimiento);      
+                fechaStr+=" ["+carteraParametro.diasCredito+" días de crédito]";
                 factura.addDatoAdicional(new FacturaAdicional(ComprobanteAdicional.CampoDefectoEnum.FECHA_VENCIMIENTO.getNombre(), fechaStr,ComprobanteAdicional.Tipo.TIPO_OTRO));
             }
         }

@@ -184,6 +184,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
     public Producto buscarProductoActivoPorCodigoFacade(String codigo,String nombre,Empresa empresa,Boolean consultarPresentaciones) throws ServicioCodefacException, RemoteException
     {
         //Producto p;
+        //p.getCodigoUPC();
         //p.getTipoProductoCodigo()
         //p.getNombre()
         String whereEmpresa="";
@@ -202,7 +203,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         String whereCodigo="";
         if(codigo!=null)
         {
-            whereCodigo=" AND p.codigoPersonalizado=?1";
+            whereCodigo=" AND ( p.codigoPersonalizado=?1 OR p.codigoUPC=?1 ) ";
         }
         
         String whereNombre="";
