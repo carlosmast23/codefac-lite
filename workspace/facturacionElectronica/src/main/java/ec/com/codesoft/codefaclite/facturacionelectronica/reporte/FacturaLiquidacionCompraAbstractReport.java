@@ -87,7 +87,8 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
         /**
          * Falta setear el iva que se esta usando en el sistema
          */
-        map.put("iva_porcentaje",calcularPorcentajeIva(impuestos).toString());
+        //map.put("iva_porcentaje",calcularPorcentajeIva(impuestos).toString());
+        map.put("iva_porcentaje","15");
         return map;
     }
     

@@ -240,7 +240,7 @@ public class CompraModel extends CompraPanel{
             CompraServiceIf servicio=ServiceFactory.getFactory().getCompraServiceIf();
             setearValores();
             CarteraParametro carteraParametro=new CarteraParametro(
-                    Boolean.TRUE, 
+                    getChkCompraCredito().isSelected(), 
                     (Integer)getTxtDiasCredito().getValue(),
                     1
             );      
@@ -609,6 +609,7 @@ public class CompraModel extends CompraPanel{
             }
         }
         
+        getChkCompraCredito().setSelected(false);
         getTxtDiasCredito().setValue(0);
         getCmbSustentoComprobante().setSelectedIndex(0); //Selecionar el primer sustento despues de agregar
         mostrarDatosFacturasReembolso();

@@ -109,6 +109,7 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         setReservado(facturaDetalle.getReservado());
         setCodigoPrincipal(facturaDetalle.getCodigoPrincipal());
         setResponsableRequerido(responsableRequerido);
+        setCatalogoProducto(facturaDetalle.getCatalogoProducto());
         
         //this.factura=facturaDetalle.factura;
     }

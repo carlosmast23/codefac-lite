@@ -391,7 +391,7 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     
     public void calcularTotalConImpuestos()
     {
-        BigDecimal subtotalMenosDescuento=getCalcularTotalDetalle();
+        BigDecimal subtotalMenosDescuento=getCalcularTotalDetalleSinRedondeo();
         
         BigDecimal valorIvaDecimal = new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
         totalFinal=subtotalMenosDescuento.multiply(valorIvaDecimal);
@@ -471,8 +471,13 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         //return setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     
-    public BigDecimal getCalcularTotalDetalle() {
+    public BigDecimal getCalcularTotalDetalleSinRedondeo() {
         BigDecimal setTotal = getCantidad().multiply(getPrecioUnitario()).subtract(getDescuento());
+        return setTotal;
+    }
+    
+    public BigDecimal getCalcularTotalDetalle() {
+        BigDecimal setTotal = getCalcularTotalDetalleSinRedondeo();
         return setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
