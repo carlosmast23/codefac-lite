@@ -1047,5 +1047,19 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         });
         return facturaDetalleList;
     }
+    
+    @Deprecated //Metodo que no es optimo, lo mejor seria grabar como dato en la factura
+    public BigDecimal obtenerIvaCinco()
+    {        
+        BigDecimal ivaQuince=BigDecimal.ZERO;
+        for (FacturaDetalle detalle : detalles) 
+        {
+            if(detalle.getIvaPorcentaje()==5)
+            {
+                ivaQuince=ivaQuince.add(detalle.getIva());
+            }
+        }
+        return ivaQuince;
+    }
 
 }

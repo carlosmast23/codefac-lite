@@ -920,8 +920,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             interfaz.setComboIva(EnumSiNo.SI);
             //BigDecimal porcentajeIce = (facturaDetalle.getIcePorcentaje() != null) ? facturaDetalle.getIcePorcentaje() : null;
             BigDecimal porcentajeIce = (icePorcentaje != null) ? icePorcentaje : null;
+            BigDecimal porcentajeIvaDecimal=new BigDecimal(ivaPorcentaje).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
             BigDecimal valorConIva = UtilidadIva.calcularValorConIvaIncluido(
-                    session.obtenerIvaActualDecimal(),
+                    porcentajeIvaDecimal,
                     porcentajeIce,
                     precioUnitario);
             //getTxtValorUnitario().setText(valorConIva.toString());
@@ -1877,7 +1878,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("telefonos", facturaProcesando.getTelefono());
             mapParametros.put("fechaIngreso", facturaProcesando.getFechaEmision().toString());
             mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
-            mapParametros.put("iva", facturaProcesando.getIva().toString());
+            mapParametros.put("iva", facturaProcesando.getIva().toString());            
             mapParametros.put("ice", facturaProcesando.getIce().toString());
             mapParametros.put("total", facturaProcesando.getTotal().toString());
             mapParametros.put("autorizacion", facturaProcesando.getClaveAcceso());
@@ -1888,6 +1889,16 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("pl_recibido", facturaProcesando.getValorRecibido()+"");
             mapParametros.put("pl_vuelto", facturaProcesando.calcularVuelto()+"");
             mapParametros.put("numero_orden","# "+facturaProcesando.getNumeroOrden());
+            
+            //Poner los valore cuando tenga iva del cinco porcentaje
+            BigDecimal ivaCinco=facturaProcesando.obtenerIvaCinco();
+            if(ivaCinco.compareTo(BigDecimal.ZERO)!=0)
+            {
+                BigDecimal ivaQuince=facturaProcesando.getIva().subtract(ivaCinco);
+                mapParametros.put("ivaCinco", ivaCinco+"");
+                mapParametros.put("iva", ivaQuince+"");                
+            }
+            
          
             String porcentajeIva = "";
             if (facturaProcesando.getIvaSriId() != null) {

@@ -569,8 +569,8 @@ public class KardexModel extends KardexPanel {
     }*/
 
     private void construirModeloTabla() {
-        String[] titulo = {"#", "Fecha", "Documento","Comentario","Preimpreso", "Proveedor", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total"};
-        String[] primeraFila = {" ", "", "KARDEX", "", "","", "", "INGRESO", "", "", "EGRESO", "", "", "SALDO", ""};
+        String[] titulo = {"#", "Fecha", "Documento","Comentario","Preimpreso", "Proveedor", "Cant", "P.Unit", "P.Total", "Cant", "P.Unit", "P.Total", "Cant"};
+        String[] primeraFila = {" ", "", "KARDEX", "", "","", "", "INGRESO", "", "", "EGRESO", "","SALDO"};
 
         DefaultTableModel modeloTabla = new DefaultTableModel(primeraFila, 0);
         modeloTabla.addRow(titulo);
@@ -596,8 +596,6 @@ public class KardexModel extends KardexPanel {
             fila.add(kardexData.getEgreso_totalFormat());
 
             fila.add(kardexData.getSaldo_cantidad());
-            fila.add(kardexData.getSaldo_precioFormat());
-            fila.add(kardexData.getSaldo_totalFormat());
 
             modeloTabla.addRow(fila);
         }

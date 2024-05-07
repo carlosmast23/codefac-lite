@@ -327,7 +327,7 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                 //Obtener el subtotal y el iva a partir del total del detalle
                 
                 
-                resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(precio.multiply(detalle.getCantidad()));
+                
                 resultado.descuentoConImpuestos = resultado.descuentoConImpuestos.add((detalle.getDescuento() != null) ? detalle.getDescuento() : BigDecimal.ZERO);
                 
                 //Artificio para no perder la referencia
@@ -337,15 +337,24 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                 //TODO: Revisar
                 if(detalle.getTotalFinal()!=null)
                 {
-                    System.out.println("TotalFinal: "+detalle.getTotalFinal());
-                    System.out.println("Total: "+detalle.getTotal());
-                    System.out.println("Iva: "+detalle.getTotal());
+                    System.out.println("TotalFinal: " + detalle.getTotalFinal());
+                    System.out.println("Total: " + detalle.getTotal());
+                    System.out.println("Iva: " + detalle.getIva());                    
                     
-                    resultado.impuestoIva=resultado.impuestoIva.add(detalle.getTotalFinal().subtract(detalle.getTotal()));
+                    //System.out.println("Total: " + detalle.());
+                    
+                    BigDecimal ivaTmp=detalle.getTotalFinal().subtract(detalle.getTotal());
+                    resultado.impuestoIva=resultado.impuestoIva.add(ivaTmp);
+                    
+                    //resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(precio.multiply(detalle.getCantidad()));
+                    //resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getTotal());
+                    resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getSubtotalSinDescuentos());
                 }
                 else
                 {
                     resultado.impuestoIva = resultado.impuestoIva.add(detalle.getIva());
+                    //TODO: Queda esta solucion de forma temporal
+                    resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(precio.multiply(detalle.getCantidad()));
                 }   
                 //resultado.impuestoIva = resultado.impuestoIva.add(detalle.getIva());
                 //resultado.impuestoIva = resultado.subTotalConImpuestos.add(resultado.ice).subtract(resultado.descuentoConImpuestos).multiply(resultado.ivaDecimal);

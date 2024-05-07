@@ -153,6 +153,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbCreditoDefectoFacturas(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbNotaVentaInternaIva(), EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbPermitirEditarNVI(), EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbNVITotalConIva(), EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbEnviarNVIalCorreo(), EnumSiNo.values());
         
@@ -466,6 +467,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac notaVentaInternaIva = parametrosTodos.get(ParametroCodefac.NOTA_VENTA_INTERNA_IVA);
             enumSiNo = EnumSiNo.getEnumByLetra((notaVentaInternaIva != null) ? notaVentaInternaIva.getValor() : null);
             getCmbNotaVentaInternaIva().setSelectedItem(enumSiNo);
+            
+            ParametroCodefac permitirEditarNVI = parametrosTodos.get(ParametroCodefac.PERMITIR_EDITAR_NVI);
+            enumSiNo = EnumSiNo.getEnumByLetra((permitirEditarNVI != null) ? permitirEditarNVI.getValor() : null);
+            getCmbPermitirEditarNVI().setSelectedItem(enumSiNo);
             
             ParametroCodefac nviTotalConIva = parametrosTodos.get(ParametroCodefac.NVI_TOTAL_CON_IVA);
             enumSiNo = EnumSiNo.getEnumByLetra((nviTotalConIva != null) ? nviTotalConIva.getValor() : null);
@@ -1076,6 +1081,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbNotaVentaInternaIva().getSelectedItem();
         agregarParametro(ParametroCodefac.NOTA_VENTA_INTERNA_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA);
+        
+        enumSiNo = (EnumSiNo) getCmbPermitirEditarNVI().getSelectedItem();
+        agregarParametro(ParametroCodefac.PERMITIR_EDITAR_NVI, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.PERMITIR_EDITAR_NVI);
 
         enumSiNo = (EnumSiNo) getCmbNVITotalConIva().getSelectedItem();
         agregarParametro(ParametroCodefac.NVI_TOTAL_CON_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);

@@ -2532,14 +2532,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Esta advertencia solo aplica cuando no sean comandas
         if(!documentoEnum.equals(DocumentoEnum.COMANDA))
         {
-            if(!DialogoCodefac.dialogoPregunta(new CodefacMsj("Solo debe editar las ventas con supervición de una persona de SOPORTE.\nDesea continuar de todos modos? ", CodefacMsj.TipoMensajeEnum.ERROR)))
+            if(!DialogoCodefac.dialogoPregunta(new CodefacMsj("Solo debe editar las ventas con supervición de una persona de SOPORTE.\nDesea continuar de todos modos? \n Nota: recuerde que si quita o aumenta productos tiene que modificar el inventario, cartera manualmente para cuadrar", CodefacMsj.TipoMensajeEnum.ERROR)))
             {
                 throw new ExcepcionCodefacLite("cancelar el evento editar");
             }
         }
         
+        Boolean validarConClave=false;
+        
         ///IMPORTANTE: Cuando sea factura tengo que solicitar clave para modificar
         if(documentoEnum.equals(DocumentoEnum.FACTURA))
+        {
+            validarConClave=true;
+        }
+        
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
+            validarConClave=true;
+            if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.PERMITIR_EDITAR_NVI,EnumSiNo.SI))
+            {
+                validarConClave=false;
+            }
+            
+        }
+        
+        if(validarConClave)
         {
             //Actualizar los secuenciales en el archivo de comprobacion en la base de datos para que por el momento puedan seguir continuando
             String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
@@ -5471,6 +5488,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         setearCodigoDetalleTxt("");
         setearCostoDetalleTxt("0");
         setearFechaCaducidadTxt("");
+        getCheckPorcentaje().setSelected(false);
         
     }
 
