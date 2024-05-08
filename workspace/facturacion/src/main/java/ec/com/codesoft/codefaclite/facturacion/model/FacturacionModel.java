@@ -160,6 +160,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox.ProcesoComboBoxIf;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesFormularios;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
@@ -4218,7 +4219,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-        
+                
        getCmbDocumento().addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -4293,6 +4294,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             //factura.setProforma(null);
                             
                             corregirCambioDocumentoIva(descuentosImpuestos,descuentosSinImpuestos, documentoNuevo);
+                            
                         }
                         else
                         {
@@ -4300,7 +4302,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 @Override
                                 public void run() {
                                     //ejecutarListenerComboDocumento=false;
-                                    getCmbDocumento().setSelectedItem(documentoAnterior);
+                                    
+                                    ProcesoComboBoxIf proceso=new UtilidadesComboBox.ProcesoComboBoxIf() {
+                                        @Override
+                                        public void proceso() {
+                                            getCmbDocumento().setSelectedItem(documentoAnterior);
+                                        }
+                                    };
+                                    UtilidadesComboBox.ejecutarProcesoSinListener(getCmbDocumento(),proceso);
+                                    //getCmbDocumento().setSelectedItem(documentoAnterior);
                                     cargarSecuencial();
                                 }
                             })).start();
