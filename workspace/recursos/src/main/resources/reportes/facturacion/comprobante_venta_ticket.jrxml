@@ -610,7 +610,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA["IVA 5%:"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="37" y="30" width="30" height="9" uuid="a2745422-91ab-44cb-9ae4-2a865042247a"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>

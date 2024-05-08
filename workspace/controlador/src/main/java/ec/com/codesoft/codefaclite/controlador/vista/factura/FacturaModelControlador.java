@@ -1865,6 +1865,63 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return ParametroUtilidades.<ConfiguracionImpresoraEnum>obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,ConfiguracionImpresoraEnum.NINGUNA);
         //return null;
     }
+    
+    
+    //TODO: Unificar con el metodo de abajo
+    public static Map<String, Object> getMapParametrosReporteProforma(Factura facturaProcesando) 
+    {
+        Map<String, Object> mapParametros= FacturaModelControlador.getMapParametrosReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
+        //mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());    
+        ComprobanteEntity.ComprobanteEnumEstado estadoEnum= facturaProcesando.getEstadoEnum();
+        mapParametros.put("estado",estadoEnum.getNombre());        
+        //subtotal_cero
+        //Datos adicionales para las proformas
+        mapParametros.put("telefono", facturaProcesando.getTelefono());
+        //mapParametros.put("direccion", facturaProcesando.getDireccion());
+        mapParametros.put("secuencial", facturaProcesando.getSecuencial().toString());
+        mapParametros.put("cliente_nombres", facturaProcesando.getRazonSocial());
+        mapParametros.put("cliente_identificacion", facturaProcesando.getIdentificacion());
+        mapParametros.put("fecha_emision", facturaProcesando.getFechaEmisionFormat());
+        mapParametros.put("subtotal_cero",facturaProcesando.getSubtotalSinImpuestos().toString());
+        //mapParametros.put("descuento",facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos()).toString());
+        /*String porcentajeIva="";
+        if(facturaProcesando.getIvaSriId()!=null)
+        {
+            porcentajeIva=facturaProcesando.getIvaSriId().getPorcentaje().setScale(2).toString();
+        }
+        
+        if (porcentajeIva.equals("0")) 
+        {
+            porcentajeIva = "15";
+        }
+        
+        mapParametros.put("iva_porcentaje",porcentajeIva);*/
+        
+        mapParametros.put("informacionAdicionalList",obtenerDatosAdicionales(facturaProcesando));
+
+        try {
+            //TODO: Optimizar guardando en un memoria de cache
+            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            InputStream inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml"));
+            JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
+            mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
+            
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml"));
+            reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
+            mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //SUBREPORT_INFO_ADICIONAL
+        
+        // mapParametros.put("estado",facturaProcesando.getEstadoEnum());
+        return mapParametros;
+    }
 
         
     public static Map<String,Object> getMapParametrosReporte(Factura facturaProcesando)
@@ -1909,7 +1966,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 porcentajeIva=facturaProcesando.getDetalles().get(0).getIvaPorcentaje()+""; //TODO: Ver si mejor guardo el porcentaje directamente en la factura para no hacer doble consulta
             }
             
-            if(porcentajeIva.equals("12"))
+            if(porcentajeIva.equals("0"))
             {
                 porcentajeIva="15";
             }
@@ -2000,60 +2057,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         return datosAdicionalesData;
     }
     
-    public static Map<String, Object> getMapParametrosReporteProforma(Factura facturaProcesando) 
-    {
-        Map<String, Object> mapParametros= FacturaModelControlador.getMapParametrosReporte(facturaProcesando); //To change body of generated methods, choose Tools | Templates.
-        //mapParametros.put("estado",factura.getEnumEstadoProforma().getNombre());    
-        ComprobanteEntity.ComprobanteEnumEstado estadoEnum= facturaProcesando.getEstadoEnum();
-        mapParametros.put("estado",estadoEnum.getNombre());        
-        //subtotal_cero
-        //Datos adicionales para las proformas
-        mapParametros.put("telefono", facturaProcesando.getTelefono());
-        mapParametros.put("direccion", facturaProcesando.getDireccion());
-        mapParametros.put("secuencial", facturaProcesando.getSecuencial().toString());
-        mapParametros.put("cliente_nombres", facturaProcesando.getRazonSocial());
-        mapParametros.put("cliente_identificacion", facturaProcesando.getIdentificacion());
-        mapParametros.put("fecha_emision", facturaProcesando.getFechaEmisionFormat());
-        mapParametros.put("subtotal_cero",facturaProcesando.getSubtotalSinImpuestos().toString());
-        mapParametros.put("descuento",facturaProcesando.getDescuentoImpuestos().add(facturaProcesando.getDescuentoSinImpuestos()).toString());
-        String porcentajeIva="";
-        if(facturaProcesando.getIvaSriId()!=null)
-        {
-            porcentajeIva=facturaProcesando.getIvaSriId().getPorcentaje().setScale(2).toString();
-        }
-        
-        if (porcentajeIva.equals("12")) 
-        {
-            porcentajeIva = "15";
-        }
-        
-        mapParametros.put("iva_porcentaje",porcentajeIva);
-        //mapParametros.put("iva_porcentaje",session.obtenerIvaActual().toString());        
-        mapParametros.put("informacionAdicionalList",obtenerDatosAdicionales(facturaProcesando));
-
-        try {
-            //TODO: Optimizar guardando en un memoria de cache
-            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
-            InputStream inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionalesA4.jrxml"));
-            JasperReport reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
-            mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
-            
-            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"datos_adicionales.jrxml"));
-            reportDatosAdicionales = JasperCompileManager.compileReport(inputStream);
-            mapParametros.put("SUBREPORT_INFO_ADICIONAL",reportDatosAdicionales);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
-            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        //SUBREPORT_INFO_ADICIONAL
-        
-        // mapParametros.put("estado",facturaProcesando.getEstadoEnum());
-        return mapParametros;
-    }
+    
     
     //TODO: poner en otra parte como utilidades
     public static Integer obtenerDecimalesRedondeo(Empresa empresa)
