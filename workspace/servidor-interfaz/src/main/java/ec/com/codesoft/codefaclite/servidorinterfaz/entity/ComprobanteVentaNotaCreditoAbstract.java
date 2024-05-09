@@ -327,8 +327,8 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                 //Obtener el subtotal y el iva a partir del total del detalle
                 
                 
-                
-                resultado.descuentoConImpuestos = resultado.descuentoConImpuestos.add((detalle.getDescuento() != null) ? detalle.getDescuento() : BigDecimal.ZERO);
+                BigDecimal descuentoTmp=(detalle.getDescuento() != null) ? detalle.getDescuento() : BigDecimal.ZERO;
+                resultado.descuentoConImpuestos = resultado.descuentoConImpuestos.add(descuentoTmp);
                 
                 //Artificio para no perder la referencia
                 resultado.ivaDecimal = new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
@@ -348,7 +348,8 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                     
                     //resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(precio.multiply(detalle.getCantidad()));
                     //resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getTotal());
-                    resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getSubtotalSinDescuentos());
+                    //resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getSubtotalSinDescuentos());
+                    resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getTotalFinal().subtract(ivaTmp)).add(descuentoTmp);
                 }
                 else
                 {
