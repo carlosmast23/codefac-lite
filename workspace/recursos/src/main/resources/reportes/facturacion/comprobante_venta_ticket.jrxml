@@ -604,14 +604,18 @@
 				<textFieldExpression><![CDATA["IVA " +$P{iva_porcentaje}+"%:"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1" y="29" width="35" height="11" uuid="6fdff559-0bc3-4dc9-9962-d2300f185128"/>
+				<reportElement x="1" y="29" width="35" height="11" uuid="6fdff559-0bc3-4dc9-9962-d2300f185128">
+					<printWhenExpression><![CDATA[new Boolean($P{ivaCinco}!=null && !$P{ivaCinco}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA["IVA 5%:"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="37" y="30" width="30" height="9" uuid="a2745422-91ab-44cb-9ae4-2a865042247a"/>
+				<reportElement x="37" y="30" width="30" height="9" uuid="a2745422-91ab-44cb-9ae4-2a865042247a">
+					<printWhenExpression><![CDATA[new Boolean($P{ivaCinco}!=null && !$P{ivaCinco}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
