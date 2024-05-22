@@ -4166,6 +4166,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 if(!agregarIvaNVI)
                                 {
                                     pvp=UtilidadesImpuestos.agregarValorIva(new BigDecimal(ivaPorcentaje),pvp);
+                                    
+                                    //Todo: Solucion temporal para no volver a cargar de nuevo el iva del porcentaje
+                                    ivaPorcentaje=0;
                                 }
                                 
                             }

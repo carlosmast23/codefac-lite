@@ -937,18 +937,25 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      */
     private List<KardexDetalle> agruparDetallesKardex(List<KardexDetalle> detalleList)
     {        
-        Map<Producto,KardexDetalle> mapKardex=new HashMap<Producto,KardexDetalle>();
+        Map<String,KardexDetalle> mapKardex=new HashMap<String,KardexDetalle>();
         
         //Solo hacer este artificio cuando hay muchos datos
         if(detalleList.size()>1)
         {
             KardexDetalle detalleAnt=detalleList.get(0);
-            mapKardex.put(detalleAnt.getKardex().getProducto(), detalleAnt);
+            
+            String codigoAnteriorLote=(detalleAnt.getKardex().getLote()!=null)?detalleAnt.getKardex().getLote().getCodigo():"";            
+            String codigonAnterior=detalleAnt.getKardex().getProducto().getCodigoPersonalizado()+codigoAnteriorLote;
+            mapKardex.put(codigonAnterior, detalleAnt);
             
             for (int i = 1; i<detalleList.size(); i++) 
             {
                 KardexDetalle detalleActual=detalleList.get(i);
-                if(detalleAnt.getKardex().getProducto().equals(detalleActual.getKardex().getProducto()))
+                
+                String codigoLoteActual=(detalleActual.getKardex().getLote()!=null)?detalleActual.getKardex().getLote().getCodigo():"";
+                String codigoActual=detalleActual.getKardex().getProducto().getCodigoPersonalizado()+codigoLoteActual;
+                
+                if(codigonAnterior.equals(codigoActual))
                 {                    
                     //calcular el nuevo precio unitario para los calculos
                     BigDecimal totalGeneral=detalleActual.getPrecioTotal().add(detalleAnt.getPrecioTotal());
@@ -965,9 +972,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     
                 }
 
-                mapKardex.put(detalleActual.getKardex().getProducto(),detalleActual);
+                System.out.println("totalDetalle: "+detalleActual.getCantidad());
+                mapKardex.put(codigoActual,detalleActual);
                 
                 detalleAnt=detalleActual;
+                //TODO: Optimizar esta parte porque 
+                codigoAnteriorLote=(detalleAnt.getKardex().getLote()!=null)?detalleAnt.getKardex().getLote().getCodigo():"";            
+                codigonAnterior=detalleAnt.getKardex().getProducto().getCodigoPersonalizado()+codigoAnteriorLote;
+                
             }
             
             //Finalmente paso los Maps a un List

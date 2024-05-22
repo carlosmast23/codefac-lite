@@ -397,6 +397,13 @@ public class Kardex implements Serializable,Cloneable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return producto.getNombre();
+    }
+    
+    
+
     
     
 }
