@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -26,7 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
+import java.util.Map;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
@@ -58,7 +60,7 @@ public class ProformaModel extends FacturacionModel{
         getChkImprimirSinCodigo().setVisible(true);
         
         //Deshabilitiar componentes de comprobantes electronicos
-        super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_COMP_ELECTRONICOS).setVisible(false);
+        //super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_COMP_ELECTRONICOS).setVisible(false);
         super.buscarPanelCategoriaLateral(FacturacionPanel.NOMBRE_PANEL_LATERAL_REENVIO_CORREO_PROFORMA).setVisible(true);
     }
     
@@ -361,6 +363,12 @@ public class ProformaModel extends FacturacionModel{
         //this.cargarTotalesVista();
         cargarDatosPantallaFactura(facturaTmp);
         
+    }
+    
+    @ComponenteSecundarioAnotacion(nombreCategoria = FacturacionPanel.NOMBRE_PANEL_LATERAL_COMP_ELECTRONICOS,visible = false)
+    @Override
+    public ComponenteDatosComprobanteElectronicosPanel getPnlDatosAdicionales() {
+        return super.getPnlDatosAdicionales();
     }
     
 }

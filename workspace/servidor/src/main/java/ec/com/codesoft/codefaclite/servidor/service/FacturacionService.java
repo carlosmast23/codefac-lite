@@ -211,7 +211,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //Agregado vendedor de forma automatica si el usuario tiene relacionado un empleado con departamento de ventas
         asignarVendedorProforma(proforma);
 
+        
         proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa(),proforma.getCodigoDocumentoEnum()).intValue());
+        proforma.setClaveAcceso(proforma.getSecuencial()+"");
         //proforma.setSecuencial(null); //Solo para probar la validacion de JPA
         proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
 
