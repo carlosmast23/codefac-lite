@@ -98,7 +98,7 @@ public class ProductoBusquedaDialogoFactory
                     }
                 }
                 
-                ProductoInventarioBusquedaDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, false,mostrarPresentaciones);
+                ProductoInventarioBusquedaSimpleDialogo productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, false,mostrarPresentaciones);
                 productoInventarioBusquedaDialogo.setCategoria(categoria);
                 if(diponibleVenta!=null)
                 {
@@ -110,7 +110,10 @@ public class ProductoBusquedaDialogoFactory
                     productoInventarioBusquedaDialogo = new FarmaciaProductoInventarioBusquedaDialogo(EnumSiNo.SI, sucursal.getEmpresa(), bodegaVenta);
                 } else if (ParametroUtilidades.comparar(sucursal.getEmpresa(), ParametroCodefac.TIPO_NEGOCIO, TipoNegocioEnum.TALLER_AUTOMOTRIZ)) {
                     productoInventarioBusquedaDialogo = new TallerMecanicoInventarioBusquedaDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta);
+                } else if(ParametroUtilidades.comparar(sucursal.getEmpresa(), ParametroCodefac.TIPO_NEGOCIO, TipoNegocioEnum.SIMPLE)) {
+                    productoInventarioBusquedaDialogo = new ProductoInventarioBusquedaSimpleDialogo(EnumSiNo.SI,sucursal.getEmpresa(), bodegaVenta, false,mostrarPresentaciones);
                 }
+                
                 isInventario=true;
                 return productoInventarioBusquedaDialogo;
                 //BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoInventarioBusquedaDialogo, 1100);                

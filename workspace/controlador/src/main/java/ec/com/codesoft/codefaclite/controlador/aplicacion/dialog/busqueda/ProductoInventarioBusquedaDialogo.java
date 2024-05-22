@@ -49,48 +49,13 @@ import javax.swing.JPanel;
  *
  * @author Carlos
  */
-public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Object[]> , InterfacesPropertisFindWeb,FiltroDialogoIf,DialogPanelAuxIf<Object[]>  ,DialogoConfigAuxIf<Object[]>
+public class ProductoInventarioBusquedaDialogo extends ProductoInventarioBusquedaSimpleDialogo
 {
     
-    public static final int PARAMETRO_FILTRO_STOCK=-93;
-    
-    protected Empresa empresa;
-    //private EnumSiNo isManejoInvetario;
-    private Bodega bodega;
-    
-    private Boolean mostrarStockNegativo;
-    
-    private Boolean mostrarCosto=true;
-    
-    private Boolean mostrarCostoConIva=true;
-    
-    private EnumSiNo disponibleVenta;
-    
-    private Boolean mostrarPresentaciones;
-    
-    private CategoriaProducto categoria;
-    
-    public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega,Boolean mostrarStockNegativo,Boolean mostrarPresentaciones) 
-    {
-        //this.isManejoInvetario = isManejoInvetario;
-        this.empresa = empresa;
-        this.bodega = bodega;
-        this.mostrarStockNegativo=mostrarStockNegativo;
-        this.mostrarPresentaciones=mostrarPresentaciones;
-        
-        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_COSTOS_FACTURAR, EnumSiNo.NO))
-        {
-            this.mostrarCosto=false;
-        }
-        
-        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.NO))
-        {
-            this.mostrarCostoConIva=false;
-        }
+    public ProductoInventarioBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa, Bodega bodega, Boolean mostrarStockNegativo, Boolean mostrarPresentaciones) {
+        super(isManejoInvetario, empresa, bodega, mostrarStockNegativo, mostrarPresentaciones);
     }
-
-
-    @Override
+    
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Codigo", 0.2d));
@@ -105,360 +70,28 @@ public class ProductoInventarioBusquedaDialogo implements InterfaceModelFind<Obj
         titulo.add(new ColumnaDialogo("Costo", 0.10d));
         titulo.add(new ColumnaDialogo("Pvp+Iva", 0.10d));
         titulo.add(new ColumnaDialogo("IVA", 0.05d));        
-        titulo.add(new ColumnaDialogo("Stock", 0.05d));        
+        titulo.add(new ColumnaDialogo("Stock", 0.08d));        
         return titulo;
     }
 
     @Override
-    public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
-        
-        //Kardex kardex;
-        //kardex.getProducto().getCatalogoProducto().getCategoriaProducto();
-        //kardex.getLote().getFechaVencimiento();
-        String whereManejaInventario="";
-        
-        String whereBodega="";
-        
-        String whereStockNegativo="";
-        
-
-        
-        String queryFiltroEmpresa=" and u.empresa=?4";
-        Boolean datosCompartidosEmpresas=false;
-        datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);
-        
-        if (datosCompartidosEmpresas) 
-        {
-            //Si los datos son compratidos entre empresas entoces no hago ningun filtro
-            queryFiltroEmpresa = "";
-        }
-        
-        if(bodega!=null)
-        {
-            whereBodega=" and k.bodega=?5 ";
-        }
-        
-        
-        if(!mostrarStockNegativo)
-        {
-            whereStockNegativo=" and ( k.stock>0 and k.lote is not null or k.lote is null)  ";
-        }
-        
-        TipoStockEnum tipoStockEnum= (TipoStockEnum) mapFiltro.get(PARAMETRO_FILTRO_STOCK);
-        String whereFiltroStock="";
-        if(tipoStockEnum!=null)
-        {
-            if(tipoStockEnum.equals(TipoStockEnum.CON_STOCK))
-            {
-                whereFiltroStock=" AND k.stock>0 ";
-            }
-            else if(tipoStockEnum.equals(TipoStockEnum.SIN_STOCK))
-            {
-                whereFiltroStock=" AND k.stock<=0 ";
-            }
-            else if(tipoStockEnum.equals(TipoStockEnum.TODOS))
-            {
-                whereFiltroStock=" ";
-            }            
-        }
-         
-        
-        String filtroMarca=getFiltroPorMarca();
-        
-        String filtroCodigo=getFiltroPorCodigo();
-        
-        String filtroAplicacion=getFiltroPorAplicacion();
-        
-        String filtroSegmento=getFiltroPorSegmento();
-        
-        String filtroDisponibleVenta="";
-        
-        if(disponibleVenta!=null)
-        {
-            filtroDisponibleVenta=" AND u.disponibleVenta=?7 ";
-        }
-        
-        String filtroCategoriaStr="";
-        if(categoria!=null)
-        {
-            filtroCategoriaStr=" AND u.catalogoProducto.categoriaProducto=?8 ";
-        }
-        
-        //String whereMostrarPresentacion="";
-        //String innerJoin="";
-        //if(!mostrarPresentaciones)
-        //{
-        //    whereMostrarPresentacion=" AND ( pp.tipo='O' OR pp.id IS NULL ) ";
-        //}
-        
-        //ProductoPresentacionDetalle ppd;
-        //ppd.getTipoEnum().ORIGINAL
-        //ppd.getProductoEmpaquetado().getCodigoPersonalizado();
-        //ppd.getProductoEmpaquetado();
-        //ppd.getPresentacionProducto()
-        //Producto p;
-        //List<ProductoPresentacionDetalle> ppdList=p.getPresentacionList();
-        
-        //String queryString = "SELECT k,pp.productoEmpaquetado FROM Kardex k JOIN k.producto u LEFT JOIN u.presentacionList pp  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+whereMostrarPresentacion+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo;      
-        String queryString = "SELECT k,k.producto FROM Kardex k JOIN k.producto u  WHERE 1=1 AND k.estado<>'E'  AND k.producto.tipoProductoCodigo<>?6 "+filtroMarca+filtroDisponibleVenta+filtroCodigo+filtroAplicacion+filtroSegmento+whereFiltroStock+queryFiltroEmpresa+" and (u.estado=?1)"+whereManejaInventario+whereBodega+whereStockNegativo+filtroCategoriaStr;      
-        
-        queryString+=" and (  LOWER(u.nombre) like ?2 OR LOWER(u.codigoPersonalizado) like ?2 OR LOWER(u.codigoUPC) like ?2 OR LOWER(u.nombreGenerico) like ?2 ) ORDER BY u.nombre, u.codigoPersonalizado,k.lote";
-        
-        QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.tipoQuery=TipoQueryEnum.JPQL;
-        queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
-        queryDialog.agregarParametro(2,filter);
-        
-        if (!datosCompartidosEmpresas) 
-        {
-           queryDialog.agregarParametro(4,empresa);
-        }
-        
-        if(bodega!=null)
-        {
-           queryDialog.agregarParametro(5,bodega);
-        }
-        
-        //Solo mostrar los productos que son distintos de empaque
-        queryDialog.agregarParametro(6, TipoProductoEnum.EMPAQUE.getLetra());
-        
-        /*if(isManejoInvetario!=null)
-        {
-            queryDialog.agregarParametro(98,isManejoInvetario.getLetra());
-        }*/
-        
-        if(disponibleVenta!=null)
-        {
-            queryDialog.agregarParametro(7, disponibleVenta.getLetra());
-        }
-        
-        if(categoria!=null)
-        {
-            queryDialog.agregarParametro(8, categoria);
-        }
-       
-        return queryDialog;
-    }
-    
-    
-    
-    
-    public String getFiltroPorSegmento()
-    {
-        return "";
-    }
-    
-    public String getFiltroPorCodigo()
-    {
-        return "";
-    }
-    
-    public String getFiltroPorMarca()
-    {
-        return " AND ( u.marcaProducto=?97 ) ";
-    }
-    
-    public String getFiltroPorAplicacion()
-    {
-        return "";
-    }
-    
-    public Producto obtenerProductoDisponible(Object[] resultado)
-    {
-        Kardex kardex=(Kardex) resultado[0];
-        Producto producto=(Producto) resultado[1];
-        
-        if(producto==null)
-        {
-            producto=kardex.getProducto();
-        }
-        return producto;
-    }
-    
-    @Override
-    public void agregarObjeto(Object[] resultado, Vector vector) {
+    public void agregarDatosAdicionales(Object[] resultado, Vector vector) {
         Kardex kardex=(Kardex) resultado[0];
         Producto producto=obtenerProductoDisponible(resultado);
-        //Producto kardex=(Kardex) resultado[1];
-        //KardexServiceIf servicio = ServiceFactory.getFactory().getKardexServiceIf();
-        //Kardex kardex = servicio.buscarKardexPorProductoyBodega(this.bodega, producto);
-        //Producto producto=kardex.getProducto();
-        vector.add(producto.getCodigoPersonalizado());
-        vector.add(producto.getCodigoUPC());
-        vector.add(producto.getNombre());
-        vector.add(producto.obtenerNombrePresentacion());
         
-        if (kardex.getLote() != null) {
-            vector.add((kardex.getLote().getCodigo()));
+        //vector.add(3, empresa);
+        vector.add(3,(producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
+        vector.add(3,producto.obtenerNombrePresentacion());
+        
+        /*if (kardex.getLote() != null) {
+            vector.add(3,(kardex.getLote().getCodigo()));
         } else {
-            vector.add("");
-        }
+            vector.add(3,"");
+        }*/
         
         //vector.add((kardex.getLote()!=null)?kardex.getLote().getCodigo():"");
-        vector.add((producto.getMarcaProducto()!=null)?producto.getMarcaProducto().getNombre():"");
-        vector.add((producto.getAplicacionProducto()!=null)?producto.getAplicacionProducto():"");
-        vector.add((producto.getUbicacion()!=null)?producto.getUbicacion():"");
         
-        if(mostrarCosto)
-        {
-            if(mostrarCostoConIva)
-            {
-                vector.add((kardex.getPrecioUltimoConIva()!=null)?kardex.getPrecioUltimoConIva().setScale(3,RoundingMode.HALF_UP)+"":"");
-            }
-            else
-                
-            {
-                vector.add((kardex.getPrecioUltimo()!=null)?kardex.getPrecioUltimo().setScale(3,RoundingMode.HALF_UP)+"":"");
-            }
-        }
-        else
-        {
-            vector.add("");
-        }
-        //vector.add(producto.getValorUnitario().setScale(3,RoundingMode.HALF_UP));
-        vector.add(producto.getValorUnitarioConIva().setScale(3,RoundingMode.HALF_UP));
-        vector.add((producto.getCatalogoProducto()!=null && producto.getCatalogoProducto().getIva()!=null)?producto.getCatalogoProducto().getIva().getTarifa().toString():"SN");        
-        
-        if(producto.getManejarInventarioEnum()!=null && producto.getManejarInventarioEnum().equals(EnumSiNo.SI))
-        {
-            vector.add((kardex.getStock()!=null)?kardex.getStock().setScale(2,RoundingMode.HALF_UP):"");
-        }
-        else
-        {
-            vector.add("");
-        }
-        
-    }
-
-    @Override
-    public Vector<String> getNamePropertysObject() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.        
-    }
-
-    @Override
-    public Vector<ComponenteFiltro> getfiltrosList() {
-        try {
-            
-            Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();            
-            
-            List<MarcaProducto> marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(empresa);
-            ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"marca: ",97,marcaList);
-            
-            
-            
-            filtroList.add(componenteFiltro);
-            
-            return filtroList;
-            
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    @Override
-    public JPanel getPanelAuxiliar(Object[] resultado) {
-        
-        
-        TallerMecanicoDialogoInfo panelAux=new TallerMecanicoDialogoInfo();
-        
-        if(resultado!=null)
-        {        
-            Kardex dato=(Kardex) resultado[0];
-            panelAux.getLblNombreProducto().setText(dato.getProducto().getNombre());
-            SegmentoProducto segmento=dato.getProducto().getSegmentoProducto();
-            if(segmento!=null)
-            {
-                panelAux.getLblSegmento().setText(segmento.getNombre());                
-            }
-            
-            panelAux.getLblUbicacion().setText(dato.getProducto().getUbicacion());
-            panelAux.getLblAplicacion().setText(dato.getProducto().getAplicacionProducto());
-        }
-        
-        return panelAux;
-    }
-
-    public EnumSiNo getDisponibleVenta() {
-        return disponibleVenta;
-    }
-
-    public void setDisponibleVenta(EnumSiNo disponibleVenta) {
-        this.disponibleVenta = disponibleVenta;
-    }
-
-    public CategoriaProducto getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CategoriaProducto categoria) {
-        this.categoria = categoria;
     }
     
-    
-    @Override
-    public List<Object[]> preProcessResult(List<Object[]> datos) 
-    {
-        List<Object[]> listTemp=new ArrayList<Object[]>(datos);
-        List<Object[]> resultadoList=new ArrayList<Object[]>(datos);
-        
-        
-        for( Object[] resultados : datos )
-        {
-            Kardex kardex=(Kardex) resultados[0];
-            //Verifico si tiene lote para eliminar el otro dato que no tenga lote
-            if(kardex.getLote()!=null)
-            {
-                //Recorro la lista que tiene todos los datos para eliminar los que no necesito
-                for (Object[] resultadoTmp : listTemp) 
-                {
-                    Kardex kardexTmp=(Kardex) resultadoTmp[0];
-                    //No tomo en cuenta el mismo dato del kardex
-                    if(!kardex.equals(kardexTmp))
-                    {
-                        //Si encuentra otro dato con el mismo producto y bodega con stock en cero o negativo lo voy a eliminar
-                        if(kardexTmp.getProducto().equals(kardex.getProducto()) && kardexTmp.getBodega().equals(kardex.getBodega()))
-                        {
-                            //Si no tiene stock entonces dejo eliminando
-                            if(kardexTmp.getStock().compareTo(BigDecimal.ZERO)<=0)
-                            {
-                                resultadoList.remove(kardexTmp);
-                            }
-                        }
-                    }
-                }
-            }
-            
-        }
-        
-        //Ahora agrego presentaciones en el caso que tengan 
-        
-        if (mostrarPresentaciones) {
-            List<Object[]> resultadoFinalList=new ArrayList<Object[]>();
-            for( Object[] resultados : resultadoList )
-            {
-                //Agregar primero el primer resultado
-                resultadoFinalList.add(resultados);
-                Kardex kardex=(Kardex) resultados[0];
-                //Cuando un producto tiene varias Presentaciones agrego el resto de presentaciones
-                List<ProductoPresentacionDetalle> presentacionesList = kardex.getProducto().getPresentacionList();
-                //List<ProductoPresentacionDetalle> presentacionesList=ServiceFactory.getFactory().getProductoPresentacionDetalleServiceIf().buscarPorProducto(kardex.getProducto());
-                for (ProductoPresentacionDetalle productoPresentacionDetalle : presentacionesList) {
-                    if (productoPresentacionDetalle.getTipoEnum().equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ADICIONAL)) {
-                        Object[] datoNuevo = {kardex, productoPresentacionDetalle.getProductoEmpaquetado()};
-                        resultadoFinalList.add(datoNuevo);
-                    }
-                }
-            }  
-            return resultadoFinalList;
-        }
-        else
-        {
-            return resultadoList;
-        }
-                
-    }
     
 }

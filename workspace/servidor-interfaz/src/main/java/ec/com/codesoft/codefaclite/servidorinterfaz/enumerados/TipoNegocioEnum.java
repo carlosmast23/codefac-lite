@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
  */
 public enum TipoNegocioEnum implements ParametroUtilidades.ComparadorInterface<TipoNegocioEnum> {    
     SIMPLE("s","simple"),
+    NORMAL("n","normal"),
     TALLER_AUTOMOTRIZ("t","taller automotriz"),
     FARMACIA("f","farmacia");    
     
