@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
+import jakarta.persistence.EntityManagerFactory;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -502,8 +503,10 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
                 //TODO: Solo ejecuto el metodo para forzar a que se gener un commit y un flush para evitar perdidads de datos
             }
         });
-        //entityManager.getEntityManagerFactory().close();
+        
+        EntityManagerFactory managerFactory= entityManager.getEntityManagerFactory();
         entityManager.close();
+        managerFactory.close();
         
         Logger.getLogger(EmpresaService.class.getName()).log(Level.INFO,"Cerrando Conexión Base de Datos");
         

@@ -930,6 +930,15 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         });
     }
     
+    private void validarIngresoMercaderia(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        for (KardexDetalle detalle : detalles) 
+        {
+            
+            
+        }
+    }
+    
     /**
      * Funcion que me va a permitir unificar en un solo detalle cuando en una factura de compra por ejemplo tienen varios detalles del mismo productos
      * esto lo usan para diferenciar que productos son de regalo pero a nivel interno me complica los calculos
@@ -1144,6 +1153,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 //TODO:Mejorar esta parte porque esta grabando muchas veces lo mismo cuando hay varios detalles apuntando a la misma compra
                 CompraService compraService = new CompraService();
                 Compra compra = compraService.buscarPorId(detalle.getReferenciaDocumentoId());
+                
+                if(EnumSiNo.SI.equals(compra.getInventarioIngresoEnum()))
+                {
+                    throw new ServicioCodefacException("La compra :"+compra.getPreimpreso()+" ya ESTA INGRESADA en el inventario");
+                }
+                
                 compra.setInventarioIngreso(EnumSiNo.SI.getLetra());
                 em.merge(compra);
                 break;
