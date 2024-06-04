@@ -235,6 +235,7 @@ public class TransferenciaBodegasModel extends TransferenciaBodegasPanel{
                 {
                     if(datoResultado instanceof Producto)
                     {
+                        kardexSeleccionado=new Kardex();//Creo un kardex vacio solo como artificio para llevar la información de los productos a migrar
                         kardexSeleccionado.setProducto((Producto) datoResultado);
                     }
                     else if(datoResultado instanceof Object[])
