@@ -27,6 +27,8 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
     private final static String SEPARADOR="-"; 
     private static ArchivoComprobacionCodefac instanciaEstatica;
     
+    public static final String CAMPO_MENSAJE_ERROR = "mensaje_error";
+    
     private static final String NOMBRE_ARCHIVO_CONFIGURACION = "comprobacion.codefac";
     
     private List<PuntoEmision> puntoEmisionCorregidoList;

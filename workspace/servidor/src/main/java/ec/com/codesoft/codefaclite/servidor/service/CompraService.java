@@ -424,6 +424,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     compraDetalle.setCodigoPrincipal(codigoPrincipal);
                     
                     Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(codigoPrincipal, compra.getEmpresa());
+                    if(producto==null)
+                    {
+                        throw new ServicioCodefacException("No se puede cargar la factura porque no tiene el producto !!! \nCódigo: "+codigoPrincipal+"\nNombre: "+detalleXml.getDescripcion()+"\nIva: "+detalleXml.getImpuestos().get(0).getTarifa()+"\nValor: "+detalleXml.getPrecioUnitario());
+                    }
                     facturaDetalleTmp.setReferenciaId(producto.getIdProducto());                    
                     facturaDetalleTmp.setCatalogoProducto(producto.getCatalogoProducto());                                        
                     

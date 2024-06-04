@@ -98,7 +98,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         if(presentacionDetalle==null)
         {
-            throw new ServicioCodefacException("No se pudo encontrar la presentación principal para el producto: "+productoEmpaqueSecundario.getNombre());
+            throw new ServicioCodefacException("No se pudo encontrar la presentación principal para el producto: "+productoEmpaqueSecundario.getNombre()+"\n Posible Solución: Volver a REINGRESAR LA COMPRA");
         }
         
         //TODO: Codigo por el momento para encontrar un error que puede dar al querer convertir un empaque en producto normal

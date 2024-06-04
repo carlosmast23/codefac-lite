@@ -103,6 +103,7 @@ import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
@@ -649,25 +650,40 @@ public class Main {
         List<String> errorList=archivo.comprobarIntegridadDatos();
         if(errorList.size()>0)
         {
+            //Si existe error siempre voy a corregir
             String errores=UtilidadesLista.castListToString(errorList,"\n");
-            DialogoCodefac.mensaje(new CodefacMsj("Error GRAVE DE INTEGRIDAD DE DATOS, porfavor antes de continuar llame a una persona de soporte.\n"+errores, CodefacMsj.TipoMensajeEnum.ERROR));
+            //DialogoCodefac.mensaje(new CodefacMsj("Error GRAVE DE INTEGRIDAD DE DATOS, porfavor antes de continuar llame a una persona de soporte.\n"+errores, CodefacMsj.TipoMensajeEnum.ERROR));
             //Preguntar si desea continuar para que ingresen la clave de seguridad y que los secuenciales se muevan de forma automatica
-            String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
-            if(UtilidadesSistema.verificarClaveSoporte(claveIngresada))
-            {
+            //String claveIngresada=DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+            //if(UtilidadesSistema.verificarClaveSoporte(claveIngresada))
+            //{
                 //Actualizar los secuenciales en el archivo de comprobacion en la base de datos para que por el momento puedan seguir continuando
                 //if(DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea corregir los secuenciales?\nNOTA: Recuerde que los comprobantes con problemas tienen que ingresar manualmente.   ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA)))
                 //{
                 archivo.corregirDatosComprobacion();
-                DialogoCodefac.mensaje(new CodefacMsj("Los secuenciales fueron CORREGIDOS AUTOMATICAMENTE, recuerde ingresar los comprobantes faltante de forma manual", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                //}                
-            }
-            else
-            {
+                archivo.agregarCampo(ArchivoComprobacionCodefac.CAMPO_MENSAJE_ERROR,errores);
+            try {
+                archivo.guardar();
+                //DialogoCodefac.mensaje(new CodefacMsj("Los secuenciales fueron CORREGIDOS AUTOMATICAMENTE, recuerde ingresar los comprobantes faltante de forma manual", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                //}
+                //}
+                //else
+                //{
                 //Si la clave es incorrecto termino el sistema y no les permito abrir
-                System.exit(0);
+                //    System.exit(0);
+                //}
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        //Verificar si existen mensaje de error para mostrar
+        String mensajeError=archivo.obtenerTodosLosValores().get(ArchivoComprobacionCodefac.CAMPO_MENSAJE_ERROR);
+        if(!UtilidadesTextos.verificarNullOVacio(mensajeError))
+        {
+            DialogoCodefac.mensaje(new CodefacMsj("Existe un problema con la integridad de los secuenciales, Presione aceptar para continuar !!!\n"+mensajeError+"\nNOTA: Para quitar este mensaje puede ponerse en contacto con una persona de SOPORTE ", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+        }
+        
     }
     
     
