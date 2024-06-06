@@ -918,6 +918,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion() throws ServicioCodefacException, RemoteException {
+                validarIngresoKardex(detalles);
                 ordenarDetallesKardex(detalles);
                 List<KardexDetalle> detallesTmp=agruparDetallesKardex(detalles);
                 
@@ -928,6 +929,23 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
             }
         });
+    }
+    
+    private void validarIngresoKardex(List<KardexDetalle> detalles)throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        for (KardexDetalle detalle : detalles) {
+            switch (detalle.getCodigoTipoDocumentoEnum()) {
+                case COMPRA_INVENTARIO:
+                    CompraService compraService = new CompraService();
+                    Compra compra = compraService.buscarPorId(detalle.getReferenciaDocumentoId());
+
+                    if (EnumSiNo.SI.equals(compra.getInventarioIngresoEnum())) {
+                        throw new ServicioCodefacException("La compra :" + compra.getPreimpreso() + " ya ESTA INGRESADA en el inventario");
+                    }
+                    break;
+
+            }
+        }
     }
     
     private void validarIngresoMercaderia(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException
@@ -942,7 +960,6 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     /**
      * Funcion que me va a permitir unificar en un solo detalle cuando en una factura de compra por ejemplo tienen varios detalles del mismo productos
      * esto lo usan para diferenciar que productos son de regalo pero a nivel interno me complica los calculos
-     * TODO: Esto puede fallar cuando ingrese 2 lotes distintos
      */
     private List<KardexDetalle> agruparDetallesKardex(List<KardexDetalle> detalleList)
     {        
@@ -966,8 +983,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 if(codigonAnterior.equals(codigoActual))
                 {                    
-                    //calcular el nuevo precio unitario para los calculos
-                    BigDecimal totalGeneral=detalleActual.getPrecioTotal().add(detalleAnt.getPrecioTotal());
+                    detalleActual.setDescuento(detalleActual.getDescuento().add(detalleAnt.getDescuento()));
+                    
+                    //Agrego el valor del descuento porque se supone que los precios unitario son SIN TOMAR en cuenta el descuento
+                    BigDecimal totalGeneral=detalleActual.getPrecioTotal().add(detalleAnt.getPrecioTotal()).add(detalleActual.getDescuento());
                     System.out.println("totalGeneral: "+totalGeneral);
                     BigDecimal precioUnitarioGlobal=totalGeneral.divide(detalleActual.getCantidad().add(detalleAnt.getCantidad()),4,BigDecimal.ROUND_HALF_UP);
                     
@@ -975,7 +994,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     
                     System.out.println("Pvp unit: "+detalleActual.getPrecioUnitario());
                     detalleActual.setCantidad(detalleActual.getCantidad().add(detalleAnt.getCantidad()));
-                    detalleActual.setDescuento(detalleActual.getDescuento().add(detalleAnt.getDescuento()));
+                    
                     detalleActual.setPrecioTotal(detalleActual.getPrecioTotal().add(detalleAnt.getPrecioTotal()));                    
                     
                     
@@ -1154,10 +1173,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 CompraService compraService = new CompraService();
                 Compra compra = compraService.buscarPorId(detalle.getReferenciaDocumentoId());
                 
-                if(EnumSiNo.SI.equals(compra.getInventarioIngresoEnum()))
+                /*if(EnumSiNo.SI.equals(compra.getInventarioIngresoEnum()))
                 {
                     throw new ServicioCodefacException("La compra :"+compra.getPreimpreso()+" ya ESTA INGRESADA en el inventario");
-                }
+                }*/
                 
                 compra.setInventarioIngreso(EnumSiNo.SI.getLetra());
                 em.merge(compra);

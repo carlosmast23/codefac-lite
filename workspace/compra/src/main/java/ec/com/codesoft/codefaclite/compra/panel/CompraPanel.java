@@ -146,13 +146,13 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         lblSubtotalImpuestos = new javax.swing.JLabel();
         lblSubtotalSinImpuestos = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
-        lblTotal = new javax.swing.JLabel();
-        lblIva = new javax.swing.JLabel();
         lblEspacio15 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         txtIce = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         txtIrbpnr = new javax.swing.JTextField();
+        txtIva = new javax.swing.JTextField();
+        txtTotal = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalleProductos = new javax.swing.JTable();
         cmbDocumento = new javax.swing.JComboBox<>();
@@ -528,29 +528,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jLabel24, gridBagConstraints);
-
-        lblTotal.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
-        lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblTotal.setText("0.00");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 25;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel1.add(lblTotal, gridBagConstraints);
-
-        lblIva.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
-        lblIva.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblIva.setText("0.00");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel1.add(lblIva, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
@@ -599,6 +576,29 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(txtIrbpnr, gridBagConstraints);
+
+        txtIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtIva.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtIva.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel1.add(txtIva, gridBagConstraints);
+
+        txtTotal.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        txtTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtTotal.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel1.add(txtTotal, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 13;
@@ -1369,7 +1369,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio15;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio2324;
-    private javax.swing.JLabel lblIva;
     private javax.swing.JLabel lblSubtotalImpuestoSinDescuento;
     private javax.swing.JLabel lblSubtotalImpuestos;
     private javax.swing.JLabel lblSubtotalSinImpuestoSinDescuento;
@@ -1377,7 +1376,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSustentoSri;
     private javax.swing.JLabel lblSustentoSri1;
     private javax.swing.JLabel lblSustentoSri2;
-    private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblTotalIvaRet;
     private javax.swing.JLabel lblTotalRentaRet;
     private javax.swing.JPanel panelRetencion;
@@ -1399,6 +1397,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtIce;
     private javax.swing.JTextField txtIrbpnr;
     private javax.swing.JTextField txtIrbpnrDetalle;
+    private javax.swing.JTextField txtIva;
     private javax.swing.JTextField txtLoteNombre;
     private javax.swing.JTextField txtObservacion;
     private javax.swing.JTextField txtOrdenCompra;
@@ -1407,6 +1406,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtProveedor;
     private javax.swing.JTextField txtPuntoEmisionCompra;
     private javax.swing.JTextField txtSecuencialCompra;
+    private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<DocumentoEnum> getCmbDocumento() {
@@ -1561,13 +1561,16 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.txtDescuentoSinImpuestos = txtDescuentoSinImpuestos;
     }
 
-    public JLabel getLblIva() {
-        return lblIva;
+    public JTextField getTxtIva() {
+        return txtIva;
     }
 
-    public void setLblIva(JLabel lblIva) {
-        this.lblIva = lblIva;
+    public void setTxtIva(JTextField txtIva) {
+        this.txtIva = txtIva;
     }
+    
+    
+
 
     public JLabel getLblSubtotalImpuestoSinDescuento() {
         return lblSubtotalImpuestoSinDescuento;
@@ -1585,16 +1588,16 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.lblSubtotalSinImpuestoSinDescuento = lblSubtotalSinImpuestoSinDescuento;
     }
 
+    public JTextField getTxtTotal() {
+        return txtTotal;
+    }
+
+    public void setTxtTotal(JTextField txtTotal) {
+        this.txtTotal = txtTotal;
+    }
+
     
-
-    public JLabel getLblTotal() {
-        return lblTotal;
-    }
-
-    public void setLblTotal(JLabel lblTotal) {
-        this.lblTotal = lblTotal;
-    }
-
+    
     public JTable getTblDetalleProductos() {
         return tblDetalleProductos;
     }

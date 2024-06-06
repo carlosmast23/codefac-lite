@@ -79,6 +79,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -575,8 +576,8 @@ public class CompraModel extends CompraPanel{
         getTxtDescuentoImpuestos().setText("0.00");
         getTxtDescuentoSinImpuestos().setText("0.00");
         getLblSubtotalImpuestos().setText("0.00");
-        getLblIva().setText("0.00");
-        getLblTotal().setText("0.00");
+        getTxtIva().setText("0.00");
+        getTxtTotal().setText("0.00");
         getCmbFechaCompra().setDate(new java.util.Date());
         this.compra = new Compra();
         this.compra.setDetalles(new ArrayList<CompraDetalle>());
@@ -1682,10 +1683,10 @@ public class CompraModel extends CompraPanel{
         getTxtDescuentoSinImpuestos().setText(compra.getDescuentoSinImpuestos()+"");
         getLblSubtotalImpuestos().setText(compra.getSubtotalImpuestos().setScale(3, RoundingMode.HALF_UP)+"");
         getLblSubtotalSinImpuestos().setText(compra.getSubtotalSinImpuestos()+"");
-        getLblIva().setText(compra.getIva()+"");
+        getTxtIva().setText(compra.getIva()+"");
         getTxtIce().setText(compra.getIce()+"");
         getTxtIrbpnr().setText(compra.getIrbpnr()+"");
-        getLblTotal().setText(compra.getTotal()+"");
+        getTxtTotal().setText(compra.getTotal()+"");
         
         getLblTotalIvaRet().setText(compra.calcularTotalRentencionIva()+"");
         getLblTotalRentaRet().setText(compra.calcularTotalRentencionRenta()+"");
@@ -2046,6 +2047,40 @@ public class CompraModel extends CompraPanel{
     }
 
     private void agregarListenerTextoBox() {
+        
+        getTxtTotal().addKeyListener(new KeyAdapter() 
+        {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // Verificar si la tecla presionada es Enter
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    BigDecimal total = UtilidadBigDecimal.convertirTextoEnBigDecimal(getTxtTotal().getText());
+                    if (total != null) {
+                        compra.setTotal(total);
+                    }
+
+                }
+            }
+            
+        });
+        
+        getTxtIva().addKeyListener(new KeyAdapter() {            
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // Verificar si la tecla presionada es Enter
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) 
+                {
+                    BigDecimal iva= UtilidadBigDecimal.convertirTextoEnBigDecimal(getTxtIva().getText());
+                    if(iva!=null)
+                    {
+                        compra.setIva(iva);
+                    }
+                    
+                }
+            }
+            
+        });
+        
         
         getTxtProductoItem().addKeyListener(new KeyListener() {
             @Override
