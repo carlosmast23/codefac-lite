@@ -1972,7 +1972,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 porcentajeIva="15";
             }
             
-            mapParametros.put("iva_porcentaje", porcentajeIva);
+            mapParametros.put("iva_porcentaje", "15"); //TODO: Revisar pero por el momento mando 15%
    
             
             String leyendaAdicional= ParametroUtilidades.obtenerValorParametro(facturaProcesando.getEmpresa(),ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);
