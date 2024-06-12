@@ -114,10 +114,10 @@ import java.util.Arrays;
 @ViewScoped 
 public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterface, Serializable {
 
-    private static final String ID_COMPONENTE_MONITOR="monitor";   
+    private static final String ID_COMPONENTE_MONITOR="monitor";        
     
         
-    private Factura factura;     
+    private Factura factura;      
 
     /**
      * Esta referencia me permite saber cual factura esta seleccionada para editar 
@@ -887,6 +887,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         return null;
     }
 
+    @Deprecated
     /**
      * TODO: Ver alguna forma de unir con el metodo de factura de escritorio
      * porque se repite los metodos
@@ -910,6 +911,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         mapParametros.put("mesero", facturaProcesando.getUsuario().getNick());
         mapParametros.put("mesa",(facturaProcesando.getMesa()!=null)?facturaProcesando.getMesa().toString():"");
         mapParametros.put("nota",facturaProcesando.getNota());
+        mapParametros.put("tipo_orden",facturaProcesando.getTipoOrden());
         
         JasperReport reportDatosAdicionales =buscarReporteDatosAdicionales(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionalesA4.jrxml");
         mapParametros.put("SUBREPORT_INFO_OTRO",reportDatosAdicionales);
@@ -919,6 +921,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         
         //reportDatosAdicionales=buscarReporteDatosAdicionales(RecursoCodefac.JASPER, "pl_firmas_factura.jrxml");
         //mapParametros.put("pl_firmas_factura",reportDatosAdicionales);
+        
         
 
         /*try {

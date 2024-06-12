@@ -46,6 +46,7 @@
 	<parameter name="mesa" class="java.lang.String"/>
 	<parameter name="nota" class="java.lang.String"/>
 	<parameter name="numero_orden" class="java.lang.String"/>
+	<parameter name="tipo_orden" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -88,13 +89,13 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="57" splitType="Stretch">
+		<band height="61" splitType="Stretch">
 			<textField>
 				<reportElement x="21" y="39" width="120" height="12" uuid="395e42bd-bd0e-47b4-8040-30122e4da97f"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{fechaIngreso}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{pl_fecha_hora}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="20" y="27" width="120" height="12" uuid="deed9b40-fb1e-4271-8427-d09f34d11985"/>
@@ -123,7 +124,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA["Mesero: "+$P{mesero}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="21" y="0" width="36" height="15" uuid="e7090ad0-5bb5-4772-a903-581a8dd54687"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -135,6 +136,13 @@
 					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{numero_orden}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="21" y="51" width="119" height="10" uuid="a1ac932f-bd86-4152-a27d-5034cbdf9bfd"/>
+				<textElement>
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tipo Orden: "+$P{tipo_orden}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

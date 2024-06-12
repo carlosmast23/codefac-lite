@@ -2777,7 +2777,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             if(desactivarPublicidadEnum.equals(EnumSiNo.NO))
             {
-                cargarPublicidad();
+                //cargarPublicidad();
             }
             
             AccesoDirectoServiceIf servicio=ServiceFactory.getFactory().getAccesoDirectoServiceIf();            

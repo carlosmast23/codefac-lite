@@ -389,21 +389,23 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         return true;
     }
     
+    //Esta seteado los valores por defecto del iva
+    /*@Deprecated
     public BigDecimal obtenerValorIva() {
         try {
             Map<String, Object> map = new HashMap<>();
             ImpuestoDetalleServiceIf impuestoDetalleService =ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
-            map.put("tarifa", 12); //TODO Parametrizar el iva con la variable del sistema
+            map.put("tarifa", 5); //TODO Parametrizar el iva con la variable del sistema
             List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
             listaImpuestoDetalles.forEach((iD) -> {
                 BigDecimal iva = iD.getPorcentaje();
             });
-            return new BigDecimal(0.120);
+            return new BigDecimal(0.150);
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
+    }*/
     
     public boolean agregarDetallesFactura(NotaCreditoDetalle facturaDetalle) {
         boolean agregar = true;
@@ -509,7 +511,9 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             if (catalogoProducto.getIva().getTarifa().equals(0)) {
                 facturaDetalle.setIva(BigDecimal.ZERO);
             } else {
-                BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                
+                BigDecimal iva = facturaDetalle.getTotal().multiply(catalogoProducto.getIva().getPorcentaje()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                //BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
                 facturaDetalle.setIva(iva);
             }
             if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {

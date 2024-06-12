@@ -410,6 +410,10 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             totalImpuestoIva.setCodigo(impuestoDetalleIva.getImpuesto().getCodigoSri());
             totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIva.getCodigo() + "");
             totalImpuestoIva.setValor(detalle.getIva());
+            
+            System.out.println("D> Base imponible: "+detalle.getTotal());
+            System.out.println("D> Valor: "+detalle.getIva());
+            
         }
         else
         {
@@ -417,6 +421,9 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             totalImpuestoIva.setValor(totalImpuestoIva.getValor().add(detalle.getIva()));
         }
         
+        System.out.println("Base imponible: "+totalImpuestoIva.getBaseImponible());
+        System.out.println("Iva: "+totalImpuestoIva.getValor());
+        System.out.println("Tarifa: "+totalImpuestoIva.getTarifa());
         
         //TODO: Este parte es importante porque las  notas de credito no deben llegar este atributo
         if (!notaCredito) 

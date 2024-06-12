@@ -148,7 +148,7 @@ public class Main {
         {
             //Sincronizar automaticamente derby para evitar tener datos en memoria y simpre sincronizar en el disco
             System.setProperty("derby.system.syncMode", "sync");
-            System.setProperty("derby.system.durability", "test");
+            System.setProperty("derby.system.durability", "default");
             
             System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
             //Desabilito para que no se veo nada de la pantalla que contiene el proceso de inicio

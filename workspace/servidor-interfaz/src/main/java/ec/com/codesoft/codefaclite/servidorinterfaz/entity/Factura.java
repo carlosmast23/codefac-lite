@@ -143,6 +143,9 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @Column(name = "ORDEN_NUMERO")
     private Integer numeroOrden;
     
+    @Transient
+    private String tipoOrden;
+    
     @Column(name = "VALOR_RECIBIDO")
     private BigDecimal valorRecibido;
 
@@ -642,6 +645,14 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     public void setValorRecibido(BigDecimal valorRecibido) {
         this.valorRecibido = valorRecibido;
+    }
+
+    public String getTipoOrden() {
+        return tipoOrden;
+    }
+
+    public void setTipoOrden(String tipoOrden) {
+        this.tipoOrden = tipoOrden;
     }
     
     

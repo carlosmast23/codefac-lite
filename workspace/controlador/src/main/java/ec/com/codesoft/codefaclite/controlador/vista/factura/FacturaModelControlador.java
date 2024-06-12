@@ -1946,6 +1946,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("pl_recibido", facturaProcesando.getValorRecibido()+"");
             mapParametros.put("pl_vuelto", facturaProcesando.calcularVuelto()+"");
             mapParametros.put("numero_orden","# "+facturaProcesando.getNumeroOrden());
+            mapParametros.put("tipo_orden",facturaProcesando.getTipoOrden());
             
             //Poner los valore cuando tenga iva del cinco porcentaje
             BigDecimal ivaCinco=facturaProcesando.obtenerIvaCinco();

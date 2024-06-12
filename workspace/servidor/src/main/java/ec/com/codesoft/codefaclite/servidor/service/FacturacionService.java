@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -221,6 +222,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         setearDatosClienteYDistribuidor(proforma);
         grabarDetallesFacturaSinTransaccion(proforma); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
+        
+        //Grabar la mesa con el estado ocupado
+        if(proforma.getMesa()!=null)
+        {
+            proforma.getMesa().setEstadoEnum(Mesa.MesaEstadoEnum.OCUPADO);
+            entityManager.merge(proforma.getMesa());
+        }
+        
 
         /**
          * Gestionar el tema de reservas en el INVENTARIO
@@ -1197,6 +1206,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         //Si es nota de venta generar un número de autorización cualquiera
         asignarClaveAccesoDocumentosNoElectronicos(factura);
+        
+        //Cambiar de estado la mesa en el caso que venga de una comanda
+        //guardar el nuevo estado de la mesa en el caso que venga de una comanda
+        if(factura.getProforma()!=null)
+        {
+            if(factura.getProforma().getMesa()!=null)
+            {
+                factura.getProforma().getMesa().setEstadoEnum(Mesa.MesaEstadoEnum.LIBRE);
+                entityManager.merge(factura.getProforma().getMesa());
+            }
+        }
 
         ComprobantesService servicioComprobante = new ComprobantesService();
         servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);
