@@ -640,8 +640,11 @@ public class CarteraModel extends CarteraPanel{
                 mapDetalles.put(carteraDetalle, valor.subtract(saldoDocumento));
                 //Utilizo el valor de cruce que necesito
                 valor=UtilidadBigDecimal.copiar(saldoDocumento);
-                
-                
+            }
+            else
+            {
+                //En el caso que se va a cruzar todo el valor disponible ya no debe tener saldo disponible
+                mapDetalles.put(carteraDetalle, BigDecimal.ZERO);
             }
             
             CarteraCruce carteraCruce=new CarteraCruce();
@@ -740,6 +743,12 @@ public class CarteraModel extends CarteraPanel{
                     {
                         actualizarTablaDocumentosCruzar();
                         actualizarTablaCruces();
+                    }
+                    else
+                    {
+                        //Si sale un error ya no continuamos con el proceso
+                        //TODO: Mejorar esta parte
+                        break;
                     }
                 }
                               

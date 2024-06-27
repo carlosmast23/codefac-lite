@@ -338,6 +338,8 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
                 {
                     Integer tarifa = entry.getKey();
                     TotalImpuesto totalImpuesto = entry.getValue();
+                    //Cambio por el momento porque aveces estaba generando 
+                    //totalImpuesto.setTarifa(new BigDecimal(tarifa));
                     
                     totalImpuestos.add(totalImpuesto);
                     

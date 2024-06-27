@@ -99,6 +99,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     
     protected String componenteProducto;
     
+    protected String porcentajeIva;
+    
     public ReporteFacturaData() {
     }
     
@@ -481,6 +483,15 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         this.nombreProductoOriginal = nombreProductoOriginal;
     }
 
+    public String getPorcentajeIva() {
+        return porcentajeIva;
+    }
+
+    public void setPorcentajeIva(String porcentajeIva) {
+        this.porcentajeIva = porcentajeIva;
+    }
+
+    
     
     
     
@@ -536,6 +547,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.formaPago,Excel.TipoDataEnum.TEXTO));
         
 
+        tiposDatos.add(new TipoDato(this.porcentajeIva, Excel.TipoDataEnum.TEXTO));
+        
         return tiposDatos;
     }
     
@@ -649,30 +662,6 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     }
     
     
-
-    /*public static class ValoresAgrupar implements NombreCampoAgrupadoIf
-    {
-        public static ValoresAgrupar VENDEDOR=new ValoresAgrupar("vendedor");
-        public static ValoresAgrupar PUNTO_EMISION=new ValoresAgrupar("punto_emision");
-        public static ValoresAgrupar PRODUCTO=new ValoresAgrupar("punto_emision");
-        public static ValoresAgrupar CATEGORIA=new ValoresAgrupar("punto_emision");
-        public static ValoresAgrupar FORMA_PAGO=new ValoresAgrupar("punto_emision");
-        public static ValoresAgrupar VALOR=new ValoresAgrupar("punto_emision");
-        public static ValoresAgrupar PUNTO_EMISION=new ValoresAgrupar("punto_emision");
-        public static ValoresAgrupar PUNTO_EMISION=new ValoresAgrupar("punto_emision");
-        
-
-        public ValoresAgrupar(String nombre) {
-            this.nombre = nombre;
-        }
-        
-        public String nombre;
-
-        @Override
-        public String getNombreCampoAgrupado() {
-            return nombre;
-        }
-    }*/
     
 
 }

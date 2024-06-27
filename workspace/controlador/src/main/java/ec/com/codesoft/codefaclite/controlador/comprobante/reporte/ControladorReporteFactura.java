@@ -540,6 +540,7 @@ public class ControladorReporteFactura {
                 dataFacturaCopia.setResponsable((detalle.getResponsable()!=null)?detalle.getResponsable().getNombresCompletos():"");
                 
                 dataFacturaCopia.setCosto(detalle.getCostoPromedio()+"");
+                dataFacturaCopia.setPorcentajeIva(detalle.getCatalogoProducto().getIva().getTarifa()+"");
                 
                 //TODO: Por el momento se realiza la consulta directa del producto pero esta parte tiene que estar en el servidor
                 String nombreCategoria="Sin asignar";
@@ -609,7 +610,7 @@ public class ControladorReporteFactura {
         titulo.add("Subtotal 12%");
         titulo.add("Subtotal 0% ");
         titulo.add("Descuentos");
-        titulo.add("IVA 12%");
+        titulo.add("IVA tot");
         titulo.add("Valor Afecta");
         titulo.add("Total");
         return titulo;

@@ -233,6 +233,8 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         incluyeIvaDetalleEnum=EnumSiNo.SI;
         cmbIvaDetalleEnable=false;
         modoEdicionDetalle=false;
+        productoPorCategoriaList=new ArrayList<Producto>();
+        indiceTabComanda=0;
         
         cargarDatosPorDefecto();
         cargarDatosLista();
@@ -1003,6 +1005,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
+        controlador.nuevo();
         limpiar(); //Llamo a este metodo para que se seteen en blanco las variables
         System.err.println("Ejecutando metodo de nuevo");
     }

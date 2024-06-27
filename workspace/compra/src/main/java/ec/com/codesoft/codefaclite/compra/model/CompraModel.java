@@ -1608,6 +1608,11 @@ public class CompraModel extends CompraPanel{
                 codigoProducto=producto.getCodigoPersonalizado();
             }
             
+            if(detalle.getDescripcion().equals("SIKA EMPASTE EXTERIOR 18KG MONOTOP EC BG"))
+            {
+                System.out.println("Revisar ....");
+            }
+            
             fila.add(detalle);
             fila.add(codigoProducto);
             fila.add(detalle.getCantidad().setScale(3, RoundingMode.HALF_UP)+"");

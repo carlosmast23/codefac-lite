@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="2.8531167061101095"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="841"/>
+	<property name="ireport.zoom" value="6.727499949325876"/>
+	<property name="ireport.x" value="2382"/>
+	<property name="ireport.y" value="2944"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -87,6 +87,7 @@
 	<parameter name="tipoRegimen" class="java.lang.String"/>
 	<parameter name="SUBREPORT_CABECERA" class="java.lang.Object"/>
 	<parameter name="telefonos_cliente" class="java.lang.String"/>
+	<parameter name="ivaCinco" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -659,7 +660,7 @@
 				<textFieldExpression><![CDATA["Subtotal " +$P{iva_porcentaje}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="417" y="55" width="69" height="13" uuid="ce24b8b6-6c0d-4c94-b178-b0259fe4a0de"/>
+				<reportElement x="417" y="51" width="69" height="11" uuid="ce24b8b6-6c0d-4c94-b178-b0259fe4a0de"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -699,7 +700,7 @@
 				<textFieldExpression><![CDATA[$P{subtotal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="29" width="69" height="13" uuid="8a100274-a825-4483-b3f3-e03db4b09966"/>
+				<reportElement x="486" y="29" width="69" height="11" uuid="8a100274-a825-4483-b3f3-e03db4b09966"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -707,12 +708,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{descuento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="55" width="69" height="13" uuid="eab30fe7-35ac-44db-b399-0ef6901bbfa0"/>
+				<reportElement x="486" y="51" width="69" height="11" uuid="eab30fe7-35ac-44db-b399-0ef6901bbfa0"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -720,12 +722,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{iva}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="68" width="69" height="13" uuid="ee338e0e-e028-4795-88d7-e613f19ad4d3"/>
+				<reportElement x="486" y="73" width="69" height="14" uuid="ee338e0e-e028-4795-88d7-e613f19ad4d3"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -733,12 +736,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="417" y="42" width="69" height="13" uuid="9980df47-d88d-4d68-b7a6-49d00de3f6fc"/>
+				<reportElement x="417" y="40" width="69" height="11" uuid="9980df47-d88d-4d68-b7a6-49d00de3f6fc"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -752,7 +756,7 @@
 				<text><![CDATA[ICE]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="486" y="42" width="69" height="13" uuid="f7cbd9a3-487d-45b1-8990-33285f0b613d"/>
+				<reportElement x="486" y="40" width="69" height="11" uuid="f7cbd9a3-487d-45b1-8990-33285f0b613d"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -760,6 +764,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ice}]]></textFieldExpression>
@@ -808,7 +813,7 @@
 				<text><![CDATA[Subtotal 0%]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="417" y="29" width="69" height="13" uuid="22f6aafd-6c5f-4f01-99ba-88f0f6dc7ec2"/>
+				<reportElement x="417" y="29" width="69" height="11" uuid="22f6aafd-6c5f-4f01-99ba-88f0f6dc7ec2"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -822,15 +827,15 @@
 				<text><![CDATA[Descuento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="417" y="68" width="69" height="13" uuid="aa551d68-e966-4e06-baab-38a79ed77e21"/>
+				<reportElement x="417" y="73" width="69" height="14" uuid="aa551d68-e966-4e06-baab-38a79ed77e21"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement>
-					<font size="8" isBold="true"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
@@ -843,7 +848,7 @@
 				<subreportExpression><![CDATA[$P{SUBREPORT_FORMA_PAGO}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="486" y="98" width="69" height="13" uuid="92476382-c423-4894-b58f-6e176d8a9fa3">
+				<reportElement x="486" y="103" width="69" height="10" uuid="92476382-c423-4894-b58f-6e176d8a9fa3">
 					<printWhenExpression><![CDATA[new Boolean($P{ahorroPorSubsidio}!=null && !$P{ahorroPorSubsidio}.isEmpty() )]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -860,7 +865,7 @@
 				<textFieldExpression><![CDATA[$P{ahorroPorSubsidio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="85" width="69" height="13" uuid="ca917d5b-ab9e-44f6-9945-37b218aae331">
+				<reportElement x="486" y="93" width="69" height="10" uuid="ca917d5b-ab9e-44f6-9945-37b218aae331">
 					<printWhenExpression><![CDATA[new Boolean($P{valorTotalSinSubsidio}!=null && !$P{valorTotalSinSubsidio}.isEmpty() )]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -877,7 +882,7 @@
 				<textFieldExpression><![CDATA[$P{valorTotalSinSubsidio}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="417" y="98" width="69" height="13" uuid="39c9b00f-81cf-4654-8df6-33c9c276452d">
+				<reportElement x="417" y="103" width="69" height="10" uuid="39c9b00f-81cf-4654-8df6-33c9c276452d">
 					<printWhenExpression><![CDATA[new Boolean($P{ahorroPorSubsidio}!=null && !$P{ahorroPorSubsidio}.isEmpty() )]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -894,7 +899,7 @@
 				<text><![CDATA[Ahorro por subsidio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="417" y="85" width="69" height="13" uuid="9d743f21-5f09-4468-a2e7-1c4ec8f1469b">
+				<reportElement x="417" y="93" width="69" height="10" uuid="9d743f21-5f09-4468-a2e7-1c4ec8f1469b">
 					<printWhenExpression><![CDATA[new Boolean($P{valorTotalSinSubsidio}!=null && !$P{valorTotalSinSubsidio}.isEmpty() )]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -924,6 +929,34 @@
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{pl_firmas_factura}]]></subreportExpression>
 			</subreport>
+			<textField>
+				<reportElement x="417" y="62" width="69" height="11" uuid="74289c9c-475f-4d5b-a502-4a6a031c98bb"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["IVA 5%"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="486" y="62" width="69" height="11" uuid="9206c2ba-5194-4284-b7d7-d47c7a66202e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ivaCinco}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

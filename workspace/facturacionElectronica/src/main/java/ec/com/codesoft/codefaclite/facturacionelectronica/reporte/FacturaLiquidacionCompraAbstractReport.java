@@ -83,6 +83,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
         
         map.put("ice",respuesta.ice.toString());
         map.put("iva",respuesta.iva.toString());
+        map.put("ivaCinco",respuesta.ivaCinco.toString());
         map.put("total",totalFactura()+"");
         /**
          * Falta setear el iva que se esta usando en el sistema

@@ -172,7 +172,10 @@ public class Excel<T>
     {
         for(Integer posicionColumna: posicionesColumnas)
         {
+            //System.out.println("posicionColumna: "+posicionColumna);
             String formula = obtenerFormulaSuma(posicionColumna, f);
+            //System.out.println("formula: "+formula);
+            
             celda = fila.createCell((int)posicionColumna);
             celda.setCellType(CellType.FORMULA);
             celda.setCellFormula(formula);

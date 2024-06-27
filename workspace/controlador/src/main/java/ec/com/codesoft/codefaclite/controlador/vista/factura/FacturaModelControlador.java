@@ -143,10 +143,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Obtener la forma de pago
             formaPagoDefecto=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoDefecto();
             formaPagoConCartera=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoConCartera();
-            /**
-             * TODO: Filtrar luego solo las mesas que esten activas
-             */
-            mesaList=ServiceFactory.getFactory().getMesaSeviceIf().obtenerTodosActivos(session.getEmpresa());
+            mesaList = ServiceFactory.getFactory().getMesaSeviceIf().obtenerTodosActivos(session.getEmpresa());
+
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
@@ -168,6 +166,17 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             this.interfaz.mostrarEtiquetasAhorro(Boolean.FALSE);
             this.calcularAhorro=Boolean.FALSE;
+        }
+        
+        try {
+            /**
+             * TODO: Filtrar luego solo las mesas que esten activas
+             */
+            mesaList = ServiceFactory.getFactory().getMesaSeviceIf().obtenerTodosActivos(session.getEmpresa());
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

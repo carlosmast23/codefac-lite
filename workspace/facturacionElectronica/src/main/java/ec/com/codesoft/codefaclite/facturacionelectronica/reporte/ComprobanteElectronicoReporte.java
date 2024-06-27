@@ -155,6 +155,7 @@ public abstract class ComprobanteElectronicoReporte
         BigDecimal subTotalCero=BigDecimal.ZERO;
         BigDecimal subTotalImpuesto=BigDecimal.ZERO;
         BigDecimal iva=BigDecimal.ZERO;
+        BigDecimal ivaCinco=BigDecimal.ZERO;
         //BigDecimal descuentos=BigDecimal.ZERO;
         BigDecimal ice=BigDecimal.ZERO;
         
@@ -166,6 +167,12 @@ public abstract class ComprobanteElectronicoReporte
                 {
                     subTotalCero=subTotalCero.add(impuesto.getBaseImponible());
 
+                }
+                else if(impuesto.getTarifa()!=null && new BigDecimal("5").compareTo(impuesto.getTarifa())==0)
+                {
+                    
+                    //subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible());
+                    ivaCinco=ivaCinco.add(impuesto.getValor());
                 }
                 else
                 {
@@ -182,6 +189,7 @@ public abstract class ComprobanteElectronicoReporte
         ImpuestosTotalesResponse respuesta=new ImpuestosTotalesResponse();
         respuesta.ice=ice;
         respuesta.iva=iva;
+        respuesta.ivaCinco=ivaCinco;
         respuesta.subTotalCero=subTotalCero;
         respuesta.subTotalImpuesto=subTotalImpuesto;
         return respuesta;
@@ -207,6 +215,7 @@ public abstract class ComprobanteElectronicoReporte
         public BigDecimal subTotalCero=BigDecimal.ZERO;
         public BigDecimal subTotalImpuesto=BigDecimal.ZERO;
         public BigDecimal iva=BigDecimal.ZERO;
+        public BigDecimal ivaCinco=BigDecimal.ZERO;
         public BigDecimal ice=BigDecimal.ZERO;
 
         public ImpuestosTotalesResponse() {
