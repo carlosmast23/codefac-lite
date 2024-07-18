@@ -133,7 +133,7 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 
                 PresupuestoReporteDetalleData dataDetalle=new PresupuestoReporteDetalleData(data);
                 dataDetalle.setProveedor(presupuestoDetalle.getPersona().getNombreSimple());
-                dataDetalle.setProducto(presupuestoDetalle.getProducto().getNombre());
+                dataDetalle.setProducto(presupuestoDetalle.getProducto().getNombre());                
                 dataDetalle.setPrecioCompra(presupuestoDetalle.getPrecioCompra());
                 dataDetalle.setDescuentoCompra(presupuestoDetalle.getDescuentoCompra());
                 dataDetalle.setCantidadCompra(presupuestoDetalle.getCantidad());
@@ -142,6 +142,14 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
                 //dataDetalle.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre():"");
                 dataDetalle.setCodigoProducto(presupuestoDetalle.getProducto().getCodigoPersonalizado());
                 dataDetalle.setReserva(presupuestoDetalle.getReservadoEnum().getNombre().toUpperCase());
+                
+                //Buscar el objeto que estamos haciendo mantenimiento
+                //ObjetoMantenimiento objetoMantenimiento=presupuestoDetalle.getPresupuesto().obtenerObjectoMantenimiento();
+                //if(objetoMantenimiento!=null)
+                //{
+                    dataDetalle.setKilometraje(presupuestoDetalle.getPresupuesto().getOrdenTrabajoDetalle().getOrdenTrabajo().getKilometraje());
+                //}
+                
                 
                 //Dejo en cero el total de la venta para luego no generar inconsistencias con la sumatoria total
                 if(primerRegistro)

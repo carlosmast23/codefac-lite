@@ -73,6 +73,8 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         txtGuiaRemisionInterna = new javax.swing.JSpinner();
         jLabel20 = new javax.swing.JLabel();
         cmbTipoNotaVentaIntena = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        txtAutorizacion = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -298,8 +300,8 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(txtNotaVentaInterna, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel2.add(lblEspacio5, gridBagConstraints);
@@ -336,6 +338,23 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(cmbTipoNotaVentaIntena, gridBagConstraints);
 
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText("Autorización:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel13, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 200;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(txtAutorizacion, gridBagConstraints);
+
         jTabbedPane1.addTab("Documentos Internos", jPanel2);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
@@ -352,6 +371,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -370,6 +390,7 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacio5;
+    private javax.swing.JTextField txtAutorizacion;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JSpinner txtFactura;
     private javax.swing.JSpinner txtGuiaRemision;
@@ -455,6 +476,14 @@ public abstract class PuntoEmisionPanel extends ControladorCodefacInterface {
 
     public void setCmbTipoNotaVentaIntena(JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoNotaVentaIntena) {
         this.cmbTipoNotaVentaIntena = cmbTipoNotaVentaIntena;
+    }
+
+    public JTextField getTxtAutorizacion() {
+        return txtAutorizacion;
+    }
+
+    public void setTxtAutorizacion(JTextField txtAutorizacion) {
+        this.txtAutorizacion = txtAutorizacion;
     }
     
     

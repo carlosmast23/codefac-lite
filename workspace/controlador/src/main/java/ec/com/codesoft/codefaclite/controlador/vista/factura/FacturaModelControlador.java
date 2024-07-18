@@ -2000,6 +2000,21 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
 
             datoAdicionalList.add(informacionAdicional);
             }
+            
+            //Agregar la forma de pago
+            FormaPago formaPago=facturaProcesando.getFormaPagos().get(0);
+            datoAdicionalList.add(new InformacionAdicional("Forma de Pago",formaPago.getSriFormaPago().getAlias()));
+            
+            //Agregar dato de la autorizacion si es manual y tiene seteado ese campo en la nota de venta
+            if(facturaProcesando.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
+            {
+                if(!UtilidadesTextos.verificarNullOVacio(facturaProcesando.getClaveAcceso()))
+                {
+                    datoAdicionalList.add(new InformacionAdicional("Autorización",facturaProcesando.getClaveAcceso()));
+                }
+            }
+            
+            
 
             //Agregar datos adicionales para facturas electrónicas
             agregarDatosFacturacionElectronica(facturaProcesando, datoAdicionalList);
@@ -2094,8 +2109,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 });
         //return null;
     }
-        
+    
     public static List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando,Boolean codigoBlanco)
+    {
+        //Por defecto no hago ninguna impresion
+        return getDetalleDataReporte(facturaProcesando, codigoBlanco,false);
+    }
+        
+    public static List<ComprobanteVentaData> getDetalleDataReporte(Factura facturaProcesando,Boolean codigoBlanco,Boolean imprimirUbicacion)
     {
         
         List<ComprobanteVentaData> dataReporte = new ArrayList<ComprobanteVentaData>();
@@ -2111,6 +2132,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             }            
             
             data.setNombre(detalle.getDescripcion().toString());
+            
+
             
             //Agregar la presentacion en el detalle en el caso que tenga
             /*if(!UtilidadesTextos.verificarNullOVacio(detalle.getPresentacionCodigo()))
@@ -2149,6 +2172,27 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             data.setDescuento(detalle.getDescuento().toString());
             data.setDescripcion(detalle.getDescripcion());
             data.setUnidad(detalle.getPresentacionCodigo());
+            
+                        //Agregar la ubicación en el caso que sea solicitado
+            if(imprimirUbicacion)
+            {
+                try {
+                    ReferenciaDetalleFacturaRespuesta respuesta=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(detalle.getTipoDocumentoEnum(), detalle.getReferenciaId());
+                    if(respuesta.objecto instanceof Producto)
+                    {                        
+                        Producto productoConsultado=(Producto) respuesta.objecto;
+                        if(!UtilidadesTextos.verificarNullOVacio(productoConsultado.getUbicacion()))
+                        {
+                            data.setDescripcion(data.getDescripcion()+ " <"+productoConsultado.getUbicacion()+">");
+                        }
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
 
             dataReporte.add(data);
         }
@@ -2194,12 +2238,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             nombreReporte="Nota de Venta";
         }
-        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, null,nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
+        JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionCodefac,nombreReporte, OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
         return jasperPrint;
         //UtilidadesReporteWeb.generarReporteHojaNuevaPdf(jasperPrint,factura.getPreimpreso()+".pdf");
     }
     
-    public static JasperPrint getReporteJasperProforma(Factura proforma,FacturaModelControlador.FormatoReporteEnum formatoEnum,Boolean codigosBlanco)
+    public static JasperPrint getReporteJasperProforma(Factura proforma,FacturaModelControlador.FormatoReporteEnum formatoEnum,Boolean codigosBlanco,Boolean imprimirUbicacion)
     {
         //Formato A4 por defecto para el reporte de proformas
         String nombreReporte="proforma.jrxml";
@@ -2227,7 +2271,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         
-        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(proforma,codigosBlanco);
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(proforma,codigosBlanco,imprimirUbicacion);
 
         //map de los parametros faltantes
         Map<String, Object> mapParametros = getMapParametrosReporteProforma(proforma);

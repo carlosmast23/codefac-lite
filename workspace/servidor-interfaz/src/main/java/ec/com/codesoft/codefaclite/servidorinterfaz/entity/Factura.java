@@ -695,12 +695,14 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         BigDecimal valorVuelto=BigDecimal.ZERO;
         if(valorRecibido!=null)
         {
-            valorVuelto=valorRecibido.subtract(total);
-        }
-        
-        if(valorRecibido.compareTo(BigDecimal.ZERO)==0)
-        {
-            valorVuelto=BigDecimal.ZERO;
+            if (valorRecibido.compareTo(BigDecimal.ZERO) == 0) 
+            {
+                valorVuelto = BigDecimal.ZERO;
+            }
+            else
+            {            
+                valorVuelto=valorRecibido.subtract(total);
+            }
         }
         
         return valorVuelto;

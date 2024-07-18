@@ -213,6 +213,27 @@ public class CompraModel extends CompraPanel{
             }
         });
         
+        
+        
+        //Menu para ver con que producto esta enlazado la compra
+        JMenuItem jMenuItemProductoEnlazado = new JMenuItem("Ver Producto Enlazado");
+        jMenuItemProductoEnlazado.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblDetalleProductos().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    CompraDetalle compraDetalle = (CompraDetalle) getTblDetalleProductos().getValueAt(filaSeleccionada, 0);
+                    Producto producto= compraDetalle.getProductoProveedor().getProducto();
+                    CodefacMsj codefacMsj=new CodefacMsj("Código: "+producto.getCodigoPersonalizado()+"\nNombre: "+producto.getNombre(),CodefacMsj.TipoMensajeEnum.CORRECTO);
+                    DialogoCodefac.mensaje(codefacMsj);
+                }
+                
+                
+            }
+        });
+        
+        jPopupMenu.add(jMenuItemProductoEnlazado);
         jPopupMenu.add(jMenuItemDatoAdicional);
         getTblDetalleProductos().setComponentPopupMenu(jPopupMenu);
     }

@@ -431,7 +431,7 @@ public class ReporteCodefac {
         SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("pl_fecha_hora", formateador.format(new Date()));
-        parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
+        parametros.put("pl_usuario", (sessionCodefac.getUsuario()!=null)?sessionCodefac.getUsuario().getNick():"");
         parametros.put("pl_direccion", sessionCodefac.getSucursal().getDirecccion()); //TODO: Ver si agregar la direccion general de la matriz
         
         String nombreComercial=sessionCodefac.getEmpresa().getNombreLegal();

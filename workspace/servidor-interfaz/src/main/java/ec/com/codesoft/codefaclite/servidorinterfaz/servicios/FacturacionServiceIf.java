@@ -61,7 +61,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public void eliminarFactura(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
     public Long obtenerSecuencialProformas(Empresa empresa,DocumentoEnum documentoEnum) throws RemoteException;
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
-    public Factura grabarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo) throws RemoteException,ServicioCodefacException;
+    public Factura grabarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo,Boolean imprimirUbicacion) throws RemoteException,ServicioCodefacException;
     public Factura grabarComanda(Factura proforma,SessionCodefacInterface sessionCodefac) throws RemoteException,ServicioCodefacException;
     public void eliminarProforma(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException;
     public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException;
@@ -78,7 +78,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public Factura obtenerPedidoVentaDiariaActivo(Sucursal sucursal) throws RemoteException,ServicioCodefacException;
     
-    public void enviarCorreoProforma(Factura proforma,Boolean imprimirSinCodigo) throws RemoteException,ServicioCodefacException;
+    public void enviarCorreoProforma(Factura proforma,Boolean imprimirSinCodigo,Boolean imprimirUbicacion) throws RemoteException,ServicioCodefacException;
     
     public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto) throws RemoteException,ServicioCodefacException  ;
     
@@ -90,6 +90,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public Factura buscarPorAutorizacion(String autorizacion) throws RemoteException,ServicioCodefacException;
     
-    public Factura editarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo) throws RemoteException,ServicioCodefacException;
+    public Factura editarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo,Boolean imprimirUbicacion) throws RemoteException,ServicioCodefacException;
     
 }

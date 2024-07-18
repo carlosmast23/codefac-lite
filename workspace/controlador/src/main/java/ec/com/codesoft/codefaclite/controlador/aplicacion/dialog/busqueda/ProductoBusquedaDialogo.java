@@ -142,7 +142,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         
         if(t.getCatalogoProducto().getIva()!=null)
         {
-            dato.add(t.getCatalogoProducto().getIva().toString());
+            dato.add(t.getCatalogoProducto().getIva().getTarifa()+"");
         }
         else
         {

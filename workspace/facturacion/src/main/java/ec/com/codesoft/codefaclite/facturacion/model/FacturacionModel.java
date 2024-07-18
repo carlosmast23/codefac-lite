@@ -2155,7 +2155,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else if(puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {
-                    reporteVentaManual(factura,documentoEnum,true,false);
+                    if(!UtilidadesTextos.verificarNullOVacio(puntoEmision.getAutorizacion()))
+                    {
+                        factura.setClaveAcceso(puntoEmision.getAutorizacion());
+                        FacturaModelControlador.imprimirComprobanteVenta(factura, "Nota de Venta",false,session,panelPadre,getEstadoFormularioEnum());
+                    }
+                    else
+                    {
+                        reporteVentaManual(factura,documentoEnum,true,false);
+                    }                        
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 }
                 
@@ -2570,7 +2578,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
         try {
             setearValoresDefaultFactura(CrudEnum.EDITAR);
-            ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura,getChkEnviarCorreo().isSelected(),getChkImprimirSinCodigo().isSelected());
+            ServiceFactory.getFactory().getFacturacionServiceIf().editarProforma(factura,getChkEnviarCorreo().isSelected(),getChkImprimirSinCodigo().isSelected(),getChkImprimirUbicacion().isSelected());
             
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
             {
@@ -4056,7 +4064,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getChkEnviarCorreo().setVisible(false);
         getChkImprimirSinCodigo().setVisible(false);
-        
+        getChkImprimirUbicacion().setVisible(false);
+       
         cargarComboPuntosVenta();
        
     }

@@ -76,6 +76,9 @@ public class PuntoEmision implements Serializable{
     @Column(name = "TIPO_NOTA_VENTA_INTERNA")
     private String tipoNotaVentaInterna;
     
+    @Column(name = "AUTORIZACION")
+    private String autorizacion;
+    
     @JoinColumn(name = "SUCURSAL_ID")
     private Sucursal sucursal;
 
@@ -228,6 +231,16 @@ public class PuntoEmision implements Serializable{
     public void setTipoNotaVentaInternaEnum(ComprobanteEntity.TipoEmisionEnum tipoEmisionEnum) {
         this.tipoFacturacion = tipoEmisionEnum.getLetra();
     }
+
+    public String getAutorizacion() {
+        return autorizacion;
+    }
+
+    public void setAutorizacion(String autorizacion) {
+        this.autorizacion = autorizacion;
+    }
+    
+    
     
     
     

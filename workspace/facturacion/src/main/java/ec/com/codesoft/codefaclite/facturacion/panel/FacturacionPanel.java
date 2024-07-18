@@ -201,6 +201,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         chkFacturaReembolso = new javax.swing.JCheckBox();
         chkEnviarCorreo = new javax.swing.JCheckBox();
         chkImprimirSinCodigo = new javax.swing.JCheckBox();
+        chkImprimirUbicacion = new javax.swing.JCheckBox();
         panelTabDatos = new javax.swing.JTabbedPane();
         panelProductos = new javax.swing.JPanel();
         panelDatosEmpresa1 = new javax.swing.JPanel();
@@ -973,7 +974,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         panelDatosFactura.add(jLabel38, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         panelDatosFactura.add(lblEspacio1234, gridBagConstraints);
@@ -1118,6 +1119,20 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         panelDatosFactura.add(chkImprimirSinCodigo, gridBagConstraints);
+
+        chkImprimirUbicacion.setFont(new java.awt.Font("Arial", 3, 11)); // NOI18N
+        chkImprimirUbicacion.setText("Imprimir Ubicación");
+        chkImprimirUbicacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkImprimirUbicacionActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+        panelDatosFactura.add(chkImprimirUbicacion, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1842,6 +1857,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_chkImprimirSinCodigoActionPerformed
 
+    private void chkImprimirUbicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkImprimirUbicacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkImprimirUbicacionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDatosAdicionales;
@@ -1879,6 +1898,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JCheckBox chkHabilitarCredito;
     private javax.swing.JCheckBox chkImprimirSinCodigo;
+    private javax.swing.JCheckBox chkImprimirUbicacion;
     private javax.swing.JCheckBox chkOTDetalleUnico;
     private javax.swing.JCheckBox chkPagoConCartera;
     private javax.swing.JCheckBox chkPorcentajeDescuentoGlobal;
@@ -2765,8 +2785,16 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setChkImprimirSinCodigo(JCheckBox chkImprimirSinCodigo) {
         this.chkImprimirSinCodigo = chkImprimirSinCodigo;
     }
+
+    public JCheckBox getChkImprimirUbicacion() {
+        return chkImprimirUbicacion;
+    }
+
+    public void setChkImprimirUbicacion(JCheckBox chkImprimirUbicacion) {
+        this.chkImprimirUbicacion = chkImprimirUbicacion;
+    }
     
-        
+    
     
 
     

@@ -1031,8 +1031,15 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     {
         UtilidadesLista.ordenarLista(detalleList,new Comparator<KardexDetalle>() {
             @Override
-            public int compare(KardexDetalle o1, KardexDetalle o2) {
-                return o1.getPrecioUnitario().compareTo(o2.getPrecioUnitario());
+            public int compare(KardexDetalle o1, KardexDetalle o2) 
+            {
+                int ordenacion=o1.getKardex().getProducto().getCodigoPersonalizado().compareTo(o2.getKardex().getProducto().getCodigoPersonalizado());
+                if(ordenacion==0)
+                {
+                    return o1.getPrecioUnitario().compareTo(o2.getPrecioUnitario());
+                }
+                return ordenacion;
+                //return o1.getPrecioUnitario().compareTo(o2.getPrecioUnitario());
             }
         });
     }

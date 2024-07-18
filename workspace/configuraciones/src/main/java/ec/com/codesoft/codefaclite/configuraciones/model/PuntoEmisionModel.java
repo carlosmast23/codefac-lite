@@ -204,6 +204,7 @@ public class PuntoEmisionModel extends PuntoEmisionPanel{
         puntoEmision.setSecuencialNotaVentaInterna((getTxtNotaVentaInterna().getValue()!=null)?(Integer)getTxtNotaVentaInterna().getValue():new Integer(0));
         puntoEmision.setSecuencialLiquidacionCompra((Integer) getTxtLiquidacionCompra().getValue());
         puntoEmision.setSecuencialGuiaRemisionInterna((Integer) getTxtGuiaRemisionInterna().getValue());
+        puntoEmision.setAutorizacion(getTxtAutorizacion().getText());
         
         Sucursal sucursal=(Sucursal) getCmbSucursal().getSelectedItem();
         puntoEmision.setSucursal(sucursal);

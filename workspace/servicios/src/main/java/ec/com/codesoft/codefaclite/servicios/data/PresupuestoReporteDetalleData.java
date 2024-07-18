@@ -23,6 +23,7 @@ public class PresupuestoReporteDetalleData extends PresupuestoReporteData{
     private BigDecimal precioCompra;
     private BigDecimal descuentoCompra;
     private BigDecimal cantidadCompra;
+    private Integer kilometraje;
     private BigDecimal totalCompra;
     private String codigoProducto;
     private String placa;
@@ -44,6 +45,7 @@ public class PresupuestoReporteDetalleData extends PresupuestoReporteData{
         setTipo(presupuestoReporteData.getTipo());
         setObjetoMantenimiento(presupuestoReporteData.getObjetoMantenimiento());
         setPlaca(presupuestoReporteData.getPlaca());
+        //setKilometraje(presupuestoReporteData.getKilometraje());
         //setReserva(presupuestoReporteData.getRe);
     }
     
@@ -123,6 +125,19 @@ public class PresupuestoReporteDetalleData extends PresupuestoReporteData{
     public void setReserva(String reserva) {
         this.reserva = reserva;
     }
+
+    public Integer getKilometraje() {
+        return kilometraje;
+    }
+
+    public void setKilometraje(Integer kilometraje) {
+        this.kilometraje = kilometraje;
+    }
+
+    
+
+    
+    
     
     
     
@@ -151,6 +166,8 @@ public class PresupuestoReporteDetalleData extends PresupuestoReporteData{
         tiposDatos.add(new TipoDato(this.getCompras(), Excel.TipoDataEnum.NUMERO));        
         tiposDatos.add(new TipoDato(this.getProduccionInterna(), Excel.TipoDataEnum.NUMERO));        
         tiposDatos.add(new TipoDato(this.getUtilidad(), Excel.TipoDataEnum.NUMERO));        
+        
+        tiposDatos.add(new TipoDato(this.getKilometraje(), Excel.TipoDataEnum.NUMERO));
         
         
         return tiposDatos;

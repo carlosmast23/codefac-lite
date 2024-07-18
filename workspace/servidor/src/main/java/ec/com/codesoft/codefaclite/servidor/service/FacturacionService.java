@@ -91,6 +91,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCode
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.hora.UtilidadesHora;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
@@ -241,10 +242,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura grabarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
-        return grabarProforma(proforma,true,false);
+        return grabarProforma(proforma,true,false,false);
     }
     
-    public Factura grabarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimiSinCodigo) throws RemoteException,ServicioCodefacException
+    public Factura grabarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimiSinCodigo,Boolean imprimirUbicacion) throws RemoteException,ServicioCodefacException
     {            
             //validacionInicialFacturar(proforma,null,CrudEnum.CREAR);
         
@@ -281,7 +282,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         if(enviarCorreo)
                         {
-                            enviarCorreoProforma(proforma,imprimiSinCodigo);
+                            enviarCorreoProforma(proforma,imprimiSinCodigo,imprimirUbicacion);
                         }
                }
             });
@@ -405,7 +406,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     
     
-    public void enviarCorreoProforma(Factura proforma,Boolean imprimirSinCodigo) throws RemoteException,ServicioCodefacException
+    public void enviarCorreoProforma(Factura proforma,Boolean imprimirSinCodigo,Boolean imprimirUbicacion) throws RemoteException,ServicioCodefacException
     {
         //Solo enviar al correo si tiene un cliente asignado
         if(proforma.getCliente()==null)
@@ -425,7 +426,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         CodefacMsj mensaje = MensajeCodefacSistema.ProformasMensajes.PROFORMA_ENVIADA_CORREO.agregarParametros(mapParametro);
         //TODO: Verificar que no exista problema que los correos vienen separados por coma y no por arreglos
         
-        JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4,imprimirSinCodigo);
+        JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4,imprimirSinCodigo,imprimirUbicacion);
         enviarReporteCorreo(jasperReporte, proforma.getEmpresa(), "Proforma", secuencialStr, mensaje, destinatarios);
         //Controlador
         /*JasperPrint jasperReporte = FacturaModelControlador.getReporteJasperProforma(proforma,FacturaModelControlador.FormatoReporteEnum.A4);
@@ -518,10 +519,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException
     {
-        return editarProforma(proforma,false,false);
+        return editarProforma(proforma,false,false,false);
     }
     
-    public Factura editarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo) throws RemoteException,ServicioCodefacException
+    public Factura editarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo,Boolean imprimirUbicacion) throws RemoteException,ServicioCodefacException
     {
         validacionInicialFacturar(proforma,null,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -537,7 +538,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma), proforma.getDetalles());
                         
                 if (enviarCorreo) {
-                    enviarCorreoProforma(proforma,imprimirSinCodigo);
+                    enviarCorreoProforma(proforma,imprimirSinCodigo,imprimirUbicacion);
                 }
             }
         });
@@ -875,6 +876,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             }
            
 
+        }
+        
+        //Verificar que tiene que estar seleccionado al menos una forma de pago
+        if(factura.getCodigoDocumentoEnum().getDocumentoLegal())
+        {
+            if(UtilidadesLista.verificarListaVaciaONull(factura.getFormaPagos()))
+            {
+                throw new ServicioCodefacException("No se puede grabar sin agregar una FORMA DE PAGO");
+            }
         }
         
         //Validaciones exclusivas cuando el tipo de documento es PROFORMA
