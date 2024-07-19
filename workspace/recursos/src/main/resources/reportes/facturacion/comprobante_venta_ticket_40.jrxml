@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="145" pageHeight="400" columnWidth="141" leftMargin="2" rightMargin="2" topMargin="5" bottomMargin="5" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="4.16993798511943"/>
+	<property name="ireport.zoom" value="3.7908527137449366"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="586"/>
+	<property name="ireport.y" value="530"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -46,6 +46,7 @@
 	<parameter name="pl_razon_social" class="java.lang.String"/>
 	<parameter name="pl_ruc" class="java.lang.String"/>
 	<parameter name="iva_porcentaje" class="java.lang.String"/>
+	<parameter name="subtotal_cero" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -298,16 +299,16 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="220">
+		<band height="227">
 			<staticText>
-				<reportElement x="13" y="106" width="128" height="32" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
+				<reportElement x="13" y="114" width="128" height="32" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
 				<text><![CDATA[Este documento es informativo y no tiene validez legal, para descargar el comprobante electrónico puede acceder desde su correo electrónico registrado o desde el portal del Sri.]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="7" y="91" width="134" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003"/>
+				<reportElement x="7" y="99" width="134" height="15" uuid="e8fafbc1-02a6-442d-9b9d-c4b0ed1d9003"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Dotted"/>
 					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
@@ -318,7 +319,7 @@
 				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="2" width="42" height="10" uuid="1b7c80a0-5967-40a9-b967-71fdf687f2c4"/>
+				<reportElement x="98" y="10" width="42" height="10" uuid="1b7c80a0-5967-40a9-b967-71fdf687f2c4"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -332,7 +333,7 @@
 				<textFieldExpression><![CDATA[$P{subtotal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="32" width="42" height="10" uuid="e977f67f-b513-4c41-92ec-769515f4e371"/>
+				<reportElement x="98" y="40" width="42" height="10" uuid="e977f67f-b513-4c41-92ec-769515f4e371"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -346,7 +347,7 @@
 				<textFieldExpression><![CDATA[$P{iva}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="42" width="42" height="12" uuid="992c7fdc-b6c9-4a5d-96f0-e548771a1288"/>
+				<reportElement x="98" y="50" width="42" height="12" uuid="992c7fdc-b6c9-4a5d-96f0-e548771a1288"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -360,14 +361,14 @@
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="58" y="42" width="35" height="12" uuid="a60f1027-befe-4fee-bf71-5d44050d319e"/>
+				<reportElement x="58" y="50" width="35" height="12" uuid="a60f1027-befe-4fee-bf71-5d44050d319e"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="13" y="138" width="128" height="80" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
+				<reportElement x="13" y="146" width="128" height="80" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
 				<subreportParameter name="pl_img_whatsapp">
 					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -399,7 +400,7 @@
 				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="98" y="22" width="42" height="10" uuid="fa2fded6-f15e-4019-8a47-da3e18a87703"/>
+				<reportElement x="98" y="30" width="42" height="10" uuid="fa2fded6-f15e-4019-8a47-da3e18a87703"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -413,28 +414,28 @@
 				<textFieldExpression><![CDATA[$P{ice}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="53" y="22" width="40" height="11" uuid="43928de5-6fb5-4b4d-a012-e140d8d3416a"/>
+				<reportElement x="53" y="30" width="40" height="11" uuid="43928de5-6fb5-4b4d-a012-e140d8d3416a"/>
 				<textElement textAlignment="Right">
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[ICE:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="42" y="2" width="51" height="10" uuid="cb949dc1-be6f-4bf0-b546-27213f679f07"/>
+				<reportElement x="42" y="10" width="51" height="10" uuid="cb949dc1-be6f-4bf0-b546-27213f679f07"/>
 				<textElement textAlignment="Right">
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="42" y="12" width="51" height="10" uuid="5b02e139-5e17-4ee8-881a-6603f9cd5827"/>
+				<reportElement x="42" y="20" width="51" height="10" uuid="5b02e139-5e17-4ee8-881a-6603f9cd5827"/>
 				<textElement textAlignment="Right">
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[DESCUENTO:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="98" y="12" width="42" height="10" uuid="4a2da739-8c09-47d6-9950-c802c4f4f1b7"/>
+				<reportElement x="98" y="20" width="42" height="10" uuid="4a2da739-8c09-47d6-9950-c802c4f4f1b7"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -448,7 +449,7 @@
 				<textFieldExpression><![CDATA[$P{descuento}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="60" width="141" height="31" uuid="76df9525-e49a-4d8b-9529-a084c71183bc">
+				<reportElement x="0" y="68" width="141" height="31" uuid="76df9525-e49a-4d8b-9529-a084c71183bc">
 					<printWhenExpression><![CDATA[new Boolean($P{leyenda_documento}!=null && !$P{leyenda_documento}.isEmpty() )]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -465,11 +466,32 @@
 				<textFieldExpression><![CDATA[$P{leyenda_documento}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="46" y="32" width="47" height="11" uuid="756a54bc-42db-471f-9128-525748a97362"/>
+				<reportElement x="46" y="40" width="47" height="11" uuid="756a54bc-42db-471f-9128-525748a97362"/>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA["IVA " +$P{iva_porcentaje}+"%:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="42" y="0" width="51" height="10" uuid="2200dd2d-c6f5-4317-a142-0d241200c5ff"/>
+				<textElement textAlignment="Right">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL 0%:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="98" y="0" width="42" height="10" uuid="32ebee15-5256-4f7b-87d5-0fd491b05b11"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{subtotal_cero}]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>

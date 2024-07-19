@@ -1943,7 +1943,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("direccion", facturaProcesando.getDireccion());
             mapParametros.put("telefonos", facturaProcesando.getTelefono());
             mapParametros.put("fechaIngreso", facturaProcesando.getFechaEmision().toString());
-            mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
+            //mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
+            mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().toString());
             mapParametros.put("iva", facturaProcesando.getIva().toString());            
             mapParametros.put("ice", facturaProcesando.getIce().toString());
             mapParametros.put("total", facturaProcesando.getTotal().toString());
@@ -1956,6 +1957,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("pl_vuelto", facturaProcesando.calcularVuelto()+"");
             mapParametros.put("numero_orden","# "+facturaProcesando.getNumeroOrden());
             mapParametros.put("tipo_orden",facturaProcesando.getTipoOrden());
+            mapParametros.put("subtotal_cero",facturaProcesando.getSubtotalSinImpuestos().toString());
             
             //Poner los valore cuando tenga iva del cinco porcentaje
             BigDecimal ivaCinco=facturaProcesando.obtenerIvaCinco();
@@ -1993,12 +1995,20 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Agregar datos adicionales para imprimir en el ticket
             List<InformacionAdicional> datoAdicionalList=new ArrayList<InformacionAdicional>();
             
-            for (FacturaAdicional facturaAdicional : facturaProcesando.getDatosAdicionalesComprobante()) {
-            InformacionAdicional informacionAdicional = new InformacionAdicional();
-            informacionAdicional.setNombre(facturaAdicional.getCampo());
-            informacionAdicional.setValor(facturaAdicional.getValor());
+            for (FacturaAdicional facturaAdicional : facturaProcesando.getDatosAdicionalesComprobante()) 
+            {
+                InformacionAdicional informacionAdicional = new InformacionAdicional();
+                informacionAdicional.setNombre(facturaAdicional.getCampo());
+                informacionAdicional.setValor(facturaAdicional.getValor());
 
-            datoAdicionalList.add(informacionAdicional);
+                datoAdicionalList.add(informacionAdicional);
+            }
+            
+            
+            ///Agregar el tipo de Emisión en el caso que sea factura electronica
+            if(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.equals(facturaProcesando.getTipoFacturacionEnum()))
+            {
+                datoAdicionalList.add(new InformacionAdicional("Emisión","Normal"));
             }
             
             //Agregar la forma de pago
