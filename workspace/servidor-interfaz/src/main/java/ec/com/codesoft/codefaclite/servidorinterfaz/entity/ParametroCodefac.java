@@ -44,6 +44,7 @@ public class ParametroCodefac implements Serializable {
     public static final String EDITAR_PRECIO_UNIT_FACTURA= "edit_precio_unit_factura";
     public static final String MOSTRAR_COSTOS_FACTURAR="mostrar_costos_facturar";
     public static final String MOSTRAR_AHORRO_VENTA="mostrar_ahorro_venta";
+    public static final String MOSTRAR_STOCK_VENTA="mostrar_stock_venta";
     public static final String EDITAR_FECHA_FACTURA= "edit_fecha_factura";
     
     /**

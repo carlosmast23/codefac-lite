@@ -159,6 +159,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbAdvertenciaUtilidadNegativa = new javax.swing.JComboBox<>();
         jLabel85 = new javax.swing.JLabel();
         cmbAgregarDetalleInicio = new javax.swing.JComboBox<>();
+        jLabel124 = new javax.swing.JLabel();
+        cmbMostrarStockVenta = new javax.swing.JComboBox<>();
         jPanel15 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
@@ -849,7 +851,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel43.setText("Proformas");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1081,10 +1083,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbMostrarAhorroVenta, gridBagConstraints);
 
         jLabel98.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel98.setText("Mostrar Ahorro:");
+        jLabel98.setText("Mostrar Stock:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel98, gridBagConstraints);
@@ -1180,6 +1182,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbAgregarDetalleInicio, gridBagConstraints);
+
+        jLabel124.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel124.setText("Mostrar Ahorro:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel124, gridBagConstraints);
+
+        cmbMostrarStockVenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbMostrarStockVenta, gridBagConstraints);
 
         jTabbedPane1.addTab("Ventas", jPanel4);
 
@@ -2681,6 +2700,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarCostoConIva;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarCostosFacturar;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarPreciosConIva;
+    private javax.swing.JComboBox<EnumSiNo> cmbMostrarStockVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbMostrarTituloFactFisica;
     private javax.swing.JComboBox<EnumSiNo> cmbNVITotalConIva;
     private javax.swing.JComboBox<EnumSiNo> cmbNotaVentaInternaIva;
@@ -2734,6 +2754,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel121;
     private javax.swing.JLabel jLabel122;
     private javax.swing.JLabel jLabel123;
+    private javax.swing.JLabel jLabel124;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -3885,8 +3906,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbPermitirEditarNVI(JComboBox<EnumSiNo> cmbPermitirEditarNVI) {
         this.cmbPermitirEditarNVI = cmbPermitirEditarNVI;
     }
-    
-    
+
+    public JComboBox<EnumSiNo> getCmbMostrarStockVenta() {
+        return cmbMostrarStockVenta;
+    }
+
+    public void setCmbMostrarStockVenta(JComboBox<EnumSiNo> cmbMostrarStockVenta) {
+        this.cmbMostrarStockVenta = cmbMostrarStockVenta;
+    }
     
     
     
