@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronicoFacturaAndLiquidacionAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.liquidacionCompra.LiquidacionCompraComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
@@ -295,6 +296,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         RetencionEnumCompras estadoRetencion=Compra.RetencionEnumCompras.SIN_CONTABILIDAD;
         compraNueva.setEstadoRetencionEnum(estadoRetencion);
         
+        //TODO: Metodo temporal para buscar descuentos adicionales
+        buscarDescuentosAdicionales(comprobanteElectronico, compraNueva);
         
         //Cargar los DETALLES DE LA COMPRA
         List<CompraDetalle> detallesCompra=cargarProductoCompraDetalleDesdeXml(comprobanteElectronico, compraNueva);
@@ -302,6 +305,25 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         compraNueva.calcularTotalesDesdeDetalles();
         
         return compraNueva;
+        
+    }
+    
+    private void buscarDescuentosAdicionales(FacturaComprobante comprobanteElectronico,Compra compraNueva)
+    {
+        List<TotalImpuesto> impuestosList=comprobanteElectronico.getInformacionFactura().getTotalImpuestos();
+        
+        BigDecimal descuentoAdicional=BigDecimal.ZERO;
+        for (TotalImpuesto totalImpuesto : impuestosList) 
+        {
+            if(!UtilidadesTextos.verificarNullOVacio(totalImpuesto.getDescuentoAdicional()))
+            {
+                if(totalImpuesto.getValor().floatValue()>0)
+                {
+                    descuentoAdicional=descuentoAdicional.add(new BigDecimal(totalImpuesto.getDescuentoAdicional()));
+                }
+            }
+        }
+        compraNueva.setDescuentoImpuestosAdicional(descuentoAdicional);
         
     }
     
