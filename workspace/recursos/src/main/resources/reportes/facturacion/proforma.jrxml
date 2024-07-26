@@ -259,7 +259,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="111" y="1" width="174" height="20" uuid="e2e445cc-53d4-4f16-bbf4-8aa1de7fd349"/>
+				<reportElement x="111" y="1" width="170" height="20" uuid="e2e445cc-53d4-4f16-bbf4-8aa1de7fd349"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -311,7 +311,7 @@
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="351" y="1" width="30" height="20" uuid="eb9ec666-cb14-47c4-b340-108dc1b564bc"/>
+				<reportElement x="341" y="1" width="40" height="20" uuid="eb9ec666-cb14-47c4-b340-108dc1b564bc"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -350,7 +350,7 @@
 				<text><![CDATA[P + iva]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="285" y="1" width="66" height="20" uuid="2f21923e-3012-4b1d-af9a-cd968235877d"/>
+				<reportElement x="281" y="1" width="60" height="20" uuid="2f21923e-3012-4b1d-af9a-cd968235877d"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -381,7 +381,7 @@
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="111" y="0" width="174" height="15" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="111" y="0" width="170" height="15" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -437,7 +437,7 @@
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="351" y="0" width="30" height="15" uuid="cfc15e5e-ab7b-4e72-ae28-10cd519ff378"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="341" y="0" width="40" height="15" uuid="cfc15e5e-ab7b-4e72-ae28-10cd519ff378"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -479,7 +479,7 @@
 				<textFieldExpression><![CDATA[$F{precioUnitarioConIva}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="RealHeight">
-				<reportElement stretchType="RelativeToBandHeight" x="285" y="0" width="66" height="15" uuid="1b796ef3-7c17-427a-9ac1-28b4f85d1e23"/>
+				<reportElement stretchType="RelativeToBandHeight" x="281" y="0" width="60" height="15" uuid="1b796ef3-7c17-427a-9ac1-28b4f85d1e23"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>

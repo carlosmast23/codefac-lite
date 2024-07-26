@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.sri.SriSustentoCo
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -388,7 +389,15 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
             
             }
         }
-        descuentoImpuestos=descuentoImpuestosTmp.setScale(2, RoundingMode.HALF_UP);
+        
+        if(descuentoImpuestosAdicional==null)
+        {
+            this.descuentoImpuestosAdicional=BigDecimal.ZERO;
+        }
+        
+        descuentoImpuestos=descuentoImpuestosTmp.setScale(2, RoundingMode.HALF_UP).add(this.descuentoImpuestosAdicional);
+        
+        
         
         return descuentoImpuestos;
     }
@@ -580,7 +589,12 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
             setSubtotalImpuestos(BigDecimal.ZERO);
         }
         
-        return getSubtotalImpuestos().add(descuentoImpuestos);
+        if(descuentoImpuestosAdicional==null)
+        {
+            descuentoImpuestosAdicional=BigDecimal.ZERO;
+        }
+        
+        return getSubtotalImpuestos().add(descuentoImpuestos).add(descuentoImpuestosAdicional);
     }
     
     public BigDecimal getSubtotalSinImpuestosSinDescuentos() {
@@ -706,6 +720,22 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
             
             //redondeo despues de redondear el iva para tener un valor coherente con la sumatoria de los valores redondeados
             total=total.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
+            
+            correcionTemporalDescuentoAdicional();
+        }
+    }
+    
+    private void correcionTemporalDescuentoAdicional()
+    {
+        if(descuentoImpuestosAdicional!=null && descuentoImpuestosAdicional.floatValue()>0)
+        {
+            this.total=this.total.subtract(descuentoImpuestosAdicional);
+            setSubtotalImpuestos(getSubtotalImpuestos().subtract(descuentoImpuestosAdicional));
+            
+            BigDecimal ivaDefecto=ParametrosSistemaCodefac.obtenerIvaDefecto().setScale(2, RoundingMode.HALF_UP);
+            BigDecimal ivaTmp=UtilidadesImpuestos.calcularValorIva(ivaDefecto, descuentoImpuestosAdicional).setScale(2, RoundingMode.HALF_UP);
+            this.iva=this.iva.subtract(ivaTmp).setScale(2, RoundingMode.HALF_UP);
+            this.total=this.total.subtract(ivaTmp);
         }
     }
 

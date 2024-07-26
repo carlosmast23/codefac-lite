@@ -511,9 +511,13 @@ public class ControladorReporteFactura {
                 
                 if(categoriaFiltro!=null)
                 {
-                    if(!detalle.getCatalogoProducto().getCategoriaProducto().equals(categoriaFiltro))
+                    CategoriaProducto categoriaProducto=detalle.getCatalogoProducto().getCategoriaProducto();
+                    if(categoriaProducto!=null)
                     {
-                        continue;
+                        if(!categoriaProducto.equals(categoriaFiltro))
+                        {
+                            continue;
+                        }
                     }
                 }
                 

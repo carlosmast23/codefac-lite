@@ -61,6 +61,8 @@ public class ProductoInventarioBusquedaSimpleDialogo implements InterfaceModelFi
     
     private Boolean mostrarCostoConIva=true;
     
+    private Boolean mostrarStock=true;
+    
     private EnumSiNo disponibleVenta;
     
     private Boolean mostrarPresentaciones;
@@ -84,6 +86,13 @@ public class ProductoInventarioBusquedaSimpleDialogo implements InterfaceModelFi
         {
             this.mostrarCostoConIva=false;
         }
+        
+        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.MOSTRAR_STOCK_VENTA, EnumSiNo.NO))
+        {
+            this.mostrarStock=false;
+        }
+        
+        
     }
 
 
@@ -323,7 +332,10 @@ public class ProductoInventarioBusquedaSimpleDialogo implements InterfaceModelFi
         
         if(producto.getManejarInventarioEnum()!=null && producto.getManejarInventarioEnum().equals(EnumSiNo.SI))
         {
-            vector.add((kardex.getStock()!=null)?kardex.getStock().setScale(1,RoundingMode.HALF_UP):"");
+            if(mostrarStock)
+            {
+                vector.add((kardex.getStock()!=null)?kardex.getStock().setScale(1,RoundingMode.HALF_UP):"");
+            }
         }
         else
         {

@@ -56,6 +56,9 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     @Column(name = "DESCUENTO_IVA_CERO")
     protected BigDecimal descuentoSinImpuestos;
     
+    @Column(name = "DESCUENTO_IVA_ADICIONAL")
+    protected BigDecimal descuentoImpuestosAdicional;
+    
     /**
      * Valor del descuento de los productos que cobran iva
      */
@@ -222,6 +225,14 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
 
     public void setUsuarioUltimaEdicion(Usuario usuarioUltimaEdicion) {
         this.usuarioUltimaEdicion = usuarioUltimaEdicion;
+    }
+
+    public BigDecimal getDescuentoImpuestosAdicional() {
+        return descuentoImpuestosAdicional;
+    }
+
+    public void setDescuentoImpuestosAdicional(BigDecimal descuentoImpuestosAdicional) {
+        this.descuentoImpuestosAdicional = descuentoImpuestosAdicional;
     }
     
     
