@@ -125,37 +125,15 @@ public class LoginModel extends LoginFormDialog{
             public void actionPerformed(ActionEvent e) {
                 Empresa empresaSeleccionada= (Empresa) getCmbEmpresa().getSelectedItem();
                 if(empresaSeleccionada!=null)
-                {
-                    try {
-                        //mostrar alertas de 30 días antes porque ya antes no tiene sentido
-                        java.sql.Date fechaInicial=UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.restarDiasFecha(UtilidadesFecha.obtenerTiempoActual(), 30));
-                        Long totalComprobantesSinProcesar=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTamanio(
-                                null,
-                                fechaInicial,
-                                null,
-                                ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR,
-                                Boolean.FALSE,
-                                null,
-                                Boolean.FALSE,
-                                null,
-                                empresaSeleccionada,
-                                DocumentoEnum.FACTURA,
-                                null,
-                                null,
-                                null,
-                                null);
-                        
-                        if(totalComprobantesSinProcesar>0)
-                        {
-                            DialogoCodefac.mensaje(new CodefacMsj("ADVERTENCIA: tiene "+totalComprobantesSinProcesar+" comprobantes SIN AUTORIZAR,\nNOTA: Recuerde que los comprobantes tiene 76 horas para autorizar o pueden generar MULTAS",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-                        }
-                        
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                {                    
+                    GeneralPanelModel.terminarAutorizarComprobantesPendientes(empresaSeleccionada);        
+                    GeneralPanelModel.generarRespaldoBaseDatosPorCorreo(empresaSeleccionada);
+                    
                 }
                 
-                salirSistema();
+                GeneralPanelModel.salirSistema(panelPrincipal, usuario);
+                
+                //salirSistema();
             }
         });
         
@@ -181,6 +159,8 @@ public class LoginModel extends LoginFormDialog{
         });
     }
     
+    @Deprecated
+    //TODO: Unificar metodo con el de GeneralPanelModel
     public void salirSistema()
     {
         try {

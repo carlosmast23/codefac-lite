@@ -164,6 +164,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -459,7 +460,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     /**
      * Este metodo sirve para ejecutar de forma automatica el envio cada cierto tiempo
      */
-    private void generarRespaldoAutomaticoSistema()
+    private static void generarRespaldoAutomaticoSistema(Empresa empresa)
     {
         Boolean generarRespaldo=false;
         String fechaStr = ParametroUtilidades.obtenerValorParametroSinEmpresa(ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
@@ -485,11 +486,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         if(generarRespaldo)
         {
             try {        
-                RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa(),ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO,true);
+                RespaldosModelUtilidades.generarRespaldoUbicacion(true,empresa,ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO,true);
                 
                 //Si termina de enviar el correo sin novedades grabo la nueva fecha de respaldo del dia de hoy                
                 ServiceFactory.getFactory().getParametroCodefacServiceIf().grabarOEditar(
-                    sessionCodefac.getEmpresa(),
+                    empresa,
                     ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA,
                     UtilidadesFecha.formatDate(UtilidadesFecha.hoy(),ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA));
                 
@@ -502,11 +503,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-    private void generarRespaldoBaseDatosPorCorreo()
+    public static void generarRespaldoBaseDatosPorCorreo(Empresa empresa)
     {
-        generarRespaldoAutomaticoSistema();
+        generarRespaldoAutomaticoSistema(empresa);
         //Respaldar solo cuando tiene configurado el parametro de grabar la base de datos
-        if(ParametroUtilidades.comparar(sessionCodefac.getEmpresa(),ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,EnumSiNo.SI))
+        if(ParametroUtilidades.comparar(empresa,ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,EnumSiNo.SI))
         {
             //Validar que solo se ejectute en el SERVIDOR o en CLIENTE-SERVIDOR
             if(modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE))
@@ -516,7 +517,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             try {
                 //Enviar al correo y generar el respaldo de la base de datos
-                RespaldosModelUtilidades.generarRespaldoUbicacion(true, sessionCodefac.getEmpresa(),null,false);
+                RespaldosModelUtilidades.generarRespaldoUbicacion(true, empresa,null,false);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
@@ -550,7 +551,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         public void procesar() {
                             //Grabar las posiciones de los widgets al momento de salir
                             grabarDatosPosicionesWidgetSalir();
-                            generarRespaldoBaseDatosPorCorreo();                            
+                            generarRespaldoBaseDatosPorCorreo(sessionCodefac.getEmpresa());                            
                             
                             //Solo detener la publicidad cuando exista
                             if (hiloPublicidadCodefac != null) {
@@ -569,11 +570,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             }
             terminarAutorizarComprobantesPendientes(sessionCodefac.getEmpresa());
-            cerrandoEntityManagerBaseDatos();
-            UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web                
-            dispose();
-            LOG.log(Level.INFO, "SALIENDO DEL SISTEMA, usuario actual:"+sessionCodefac.getUsuario().getNick());                        
-            System.exit(0);
+            salirSistema(this,sessionCodefac.getUsuario());
+            
             break;
             
             case 1: //opcion cambiar de usuario
@@ -592,7 +590,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-    private void cerrandoEntityManagerBaseDatos()
+    public static void salirSistema(JFrame jframe,Usuario usuario)
+    {
+        cerrandoEntityManagerBaseDatos();
+        UtilidadServicioWeb.apagarServicioWeb(); //Apagar el servicio web             
+        
+        if (!modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
+            try {
+                ServiceFactory.getFactory().getEmpresaServiceIf().cerrarConexionDB();
+            } catch (RemoteException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        jframe.dispose();
+        String usuarioTxt=(usuario!=null)?usuario.getNick():"Sin usuario";
+        LOG.log(Level.INFO, "SALIENDO DEL SISTEMA, usuario actual:" + usuarioTxt);
+        System.exit(0);
+    }
+    
+    public static void cerrandoEntityManagerBaseDatos()
     {
         //Si el modo de aplicativo es Servidor o Cliente-Servidor termino las conexiones
         if (!modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) 
