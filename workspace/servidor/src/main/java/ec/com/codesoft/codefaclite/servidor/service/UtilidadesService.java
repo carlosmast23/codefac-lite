@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
@@ -739,6 +740,11 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     public void grabarFechaRevisionLicencia(ParametroCodefac parametroFechaValidacion,Empresa empresa)throws RemoteException,ServicioCodefacException
     {
         UtilidadesService.grabarFechaRevision(parametroFechaValidacion, empresa);
+    }
+    
+    public TipoBaseDatosEnum obtenerTipoBaseDatos() throws RemoteException,ServicioCodefacException
+    {
+        return AbstractFacade.baseDatosEnum;
     }
 
 

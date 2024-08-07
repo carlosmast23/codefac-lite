@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
@@ -72,5 +73,7 @@ public interface UtilidadesServiceIf extends Remote
     public String obtenerVersionServidor() throws RemoteException,ServicioCodefacException;
     
     public void grabarFechaRevisionLicencia(ParametroCodefac parametroFechaValidacion,Empresa empresa)throws RemoteException,ServicioCodefacException;
+    
+    public TipoBaseDatosEnum obtenerTipoBaseDatos() throws RemoteException,ServicioCodefacException;
     
 }

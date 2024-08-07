@@ -22,6 +22,7 @@ public class BaseDatosCredenciales {
     private static BaseDatosCredenciales entity;
     private static final String CAMPO_USUARIO_DB="usuario_db";
     private static final String CAMPO_CLAVE_DB="clave_db";
+    private static final String CAMPO_NOMBRE_DB="nombre_db";
     
     private static final String NOMBRE_ARCHIVO="key.codefac";
         
@@ -80,6 +81,21 @@ public class BaseDatosCredenciales {
             
         }
         return null;
+    }
+    
+    public String getNombreDb()
+    {
+        return propiedades.getProperty(CAMPO_NOMBRE_DB);
+    }
+    
+    public void setNombreDb(String nombreDb)
+    {
+        try {
+            propiedades.put(CAMPO_NOMBRE_DB,nombreDb);
+            propiedades.store(new FileWriter(NOMBRE_ARCHIVO), "");
+        } catch (IOException ex) {
+            Logger.getLogger(BaseDatosCredenciales.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void setUsuario(String usuario)

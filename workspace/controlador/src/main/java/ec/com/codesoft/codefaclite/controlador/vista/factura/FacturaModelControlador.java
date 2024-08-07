@@ -324,6 +324,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     null, //No tiene valor del subsidio
                     descripcion, 
                     presupuestoTmp.getId().toString(), 
+                    null,
                     presupuestoTmp.getCatalogoProducto(), 
                     presupuestoTmp.getId(),
                     null,
@@ -357,6 +358,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                                 productoSeleccionado.getPrecioSinSubsidio(),
                                 productoSeleccionado.getNombre(),
                                 productoSeleccionado.getCodigoPersonalizado(),
+                                productoSeleccionado.getCodigoUPC(),
                                 productoSeleccionado.getCatalogoProducto(),
                                 productoSeleccionado.getIdProducto(),
                                 null, //Verificar este tema cuando vaya a trabar con varios LOTES
@@ -623,6 +625,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 productoSeleccionado.getPrecioSinSubsidio(),
                 descripcion, 
                 productoSeleccionado.getCodigoPersonalizado(), 
+                productoSeleccionado.getCodigoUPC(),
                 productoSeleccionado.getCatalogoProducto(), 
                 productoSeleccionado.getIdProducto(), 
                 (lote!=null)?lote:null,
@@ -660,6 +663,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             BigDecimal valorSinSubsidio,
             String descripcion,
             String codigo,
+            String codigoAuxiliar,
             CatalogoProducto catalogoProducto,
             Long referenciaId,  
             Lote lote,
@@ -678,6 +682,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         facturaDetalle.setKardexItemEspecifico(kardexItemEspecifico);
         facturaDetalle.setCatalogoProducto(catalogoProducto);
         facturaDetalle.setCodigoPrincipal(codigo);
+        facturaDetalle.setCodigoSecundario(codigoAuxiliar);
         facturaDetalle.setTipoDocumentoEnum(tipoDocumentoReferencia);
         facturaDetalle.setPrecioSinSubsidio(valorSinSubsidio);
         facturaDetalle.setReservadoEnum(reservaEnumSiNo);

@@ -80,6 +80,7 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
                 String usuario=getTxtUsuarioRegistro().getText();
                 String clave=new String(getTxtClaveRegistro().getPassword());
                 String claveRepetida=new String(getTxtRepetirClaveRegistro().getPassword());
+                String nombreDb=(String) getCmbBaseDeDatos().getSelectedItem();
                 
                 //Validaciones de que los campos no esten blanco
                 if(usuario.equals("") || clave.equals("") || claveRepetida.equals(""))
@@ -95,7 +96,7 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
                     return;
                 }
                 
-                grabarDatos(usuario,clave);
+                grabarDatos(usuario,clave,nombreDb);
                 DialogoCodefac.mensaje("Correcto","Las credenciales para la base de datos fueron grabados correctamente \n\n Nota: Se recomienda anotar estos datos en un lugar seguro,\n porque son importanes y requeridos para el funcionamiento del software ",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 dispose();
             }
@@ -123,12 +124,18 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
         });
     }
     
-    private void grabarDatos(String usuario,String clave)
+    private void grabarDatos(String usuario,String clave,String nombreDb)
     {
         BaseDatosCredenciales credenciales = new BaseDatosCredenciales();
         credenciales.setUsuario(usuario);
         credenciales.setClave(clave);
+        credenciales.setNombreDb(nombreDb);
         datosGrabados = true;
+    }
+    
+    private void grabarDatos(String usuario,String clave)
+    {
+        grabarDatos(usuario, clave, null);
     }
     
     public enum ModoEnum

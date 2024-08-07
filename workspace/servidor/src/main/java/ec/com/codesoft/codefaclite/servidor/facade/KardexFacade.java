@@ -236,7 +236,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         Query query = getEntityManager().createNativeQuery(queryString);
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(5,EnumSiNo.SI.getLetra());
-        Integer totalMinimo=(Integer) query.getSingleResult();
+        Number totalMinimo= (Number) query.getSingleResult();
         return Long.parseLong(totalMinimo+"");
     }
 

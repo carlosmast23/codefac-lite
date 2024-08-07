@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -45,6 +47,8 @@ public abstract class AbstractFacade<T>
      */
     public static String usuarioDb;
     public static String claveDb;
+    //Por defecto dejo seteado la base de datos en derby
+    public static TipoBaseDatosEnum baseDatosEnum=TipoBaseDatosEnum.DERBY;
     
     public static final String namePersistence="pu_ejemplo";
     private Class<T> entityClass;
@@ -223,6 +227,20 @@ public abstract class AbstractFacade<T>
             //Esta linea se ejecuta si existe la base de datos
             //TODO: Utilizar propertys para cambiar el url cuando es en Linux porque no funciona y tiene otra sintaxis
             Map<String,String> properties=new HashMap<String,String>();
+            
+            if(baseDatosEnum.equals(TipoBaseDatosEnum.MYSQL))
+            {
+                properties.put("jakarta.persistence.jdbc.url","jdbc:mysql://localhost:3306/codefac");
+                properties.put("jakarta.persistence.jdbc.driver","com.mysql.cj.jdbc.Driver");
+                properties.put("eclipselink.target-database","MySQL");
+            }
+            else if(baseDatosEnum.equals(TipoBaseDatosEnum.DERBY))
+            {
+                properties.put("jakarta.persistence.jdbc.url","jdbc:derby:Derby2.DB");
+                properties.put("jakarta.persistence.jdbc.driver","org.apache.derby.jdbc.EmbeddedDriver");
+                properties.put("eclipselink.target-database","DERBY");
+            }
+            
             properties.put("jakarta.persistence.jdbc.user", AbstractFacade.usuarioDb);
             properties.put("jakarta.persistence.jdbc.password", AbstractFacade.claveDb);
             
@@ -247,12 +265,6 @@ public abstract class AbstractFacade<T>
                 {
                     throw new PersistenciaDuplicadaException("Ya existe una versión de Codefac abierto");
                 }
-                /*
-                if(sqlException.getErrorCode()==40000)
-                {
-                    throw new PersistenceException("No existe base de datos");
-                }*/
-
                 sqlException=sqlException.getNextException();
 
             }
@@ -413,5 +425,7 @@ public abstract class AbstractFacade<T>
     {
         return entityManager.getTransaction();
     }
+    
+    
 
 }

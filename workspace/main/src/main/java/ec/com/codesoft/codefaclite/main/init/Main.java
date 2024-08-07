@@ -58,6 +58,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+//import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.GestorTareasProgramadas;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.RespaldoProgramadoTarea;
 //import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
@@ -71,6 +72,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoComandoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
@@ -108,6 +110,8 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import java.awt.Font;
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -956,12 +960,21 @@ public class Main {
         AbstractFacade.usuarioDb = credenciales.getUsuario();
         AbstractFacade.claveDb = credenciales.getClave();
         
+        TipoBaseDatosEnum tipoDb= TipoBaseDatosEnum.buscarDato(credenciales.getNombreDb());
+        
+        if(tipoDb!=null)
+        {
+            AbstractFacade.baseDatosEnum=tipoDb;
+        }
+        
         /**
          * Cargar la persistencia del servidor
          */
         try {
             
             AbstractFacade.cargarEntityManager();
+            verificarCreacionBaseDatosMysql();
+            
         } catch (PersistenceException e) {
             try {
                 System.out.println(e.getMessage());
@@ -995,6 +1008,31 @@ public class Main {
             System.exit(0);//Salir si existe otra instancia abierta
         }
 
+    }
+    
+    //Esta opción solo es para MySql para verificar cuando no tenga tablas
+    private static void verificarCreacionBaseDatosMysql()
+    {
+        if(AbstractFacade.baseDatosEnum.equals(TipoBaseDatosEnum.MYSQL))
+        {
+            EntityManager em=AbstractFacade.entityManager;
+             // Verificar la existencia de tablas
+            Query queryTables = em.createNativeQuery(
+                "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'codefac'"
+            );
+            List<String> tables = queryTables.getResultList();
+            
+            //Si no tiene ninguna tabla empiezo a crear dede cero las tablas en Mysql
+            if (tables.isEmpty()) {
+
+                try {
+                    UtilidadesServidor.crearBaseDatos();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+        }
     }
     
     private static void abrirDialogoCredencialesDB(ConfiguracionesInicalesModel.ModoEnum tipoRegistro)

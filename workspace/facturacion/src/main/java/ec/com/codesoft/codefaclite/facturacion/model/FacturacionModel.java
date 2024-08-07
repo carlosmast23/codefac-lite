@@ -1346,6 +1346,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 productoSeleccionado.getPrecioSinSubsidio(),
                                 productoSeleccionado.getNombre(),
                                 productoSeleccionado.getCodigoPersonalizado(),
+                                productoSeleccionado.getCodigoUPC(),
                                 productoSeleccionado.getCatalogoProducto(),
                                 entity.getIdProducto(),
                                 null,
@@ -1484,6 +1485,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     null, //Este tipo de valores no tienen subsidio
                     descripción, 
                     ordenTrabajoTmp.getId().toString(), 
+                    null,
                     ordenTrabajoTmp.getCatalogoProducto(), 
                     ordenTrabajoTmp.getId(), 
                     null,
@@ -1548,6 +1550,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     null, //Este tipo de valores no tienen subsidio
                     rubroEstudianteTmp.getRubroNivel().getNombre(), 
                     rubroEstudianteTmp.getId().toString(), 
+                    null,
                     rubroEstudianteTmp.getRubroNivel().getCatalogoProducto(), 
                     rubroEstudianteTmp.getId(), 
                     null,
@@ -4778,6 +4781,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             null, //No tiene valor del subsidio
                             producto.getNombre(),
                             producto.getCodigoPersonalizado(),
+                            producto.getCodigoUPC(),
                             producto.getCatalogoProducto(),
                             producto.getIdProducto(),
                             null,

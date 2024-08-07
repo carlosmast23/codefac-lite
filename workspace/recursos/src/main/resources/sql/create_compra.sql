@@ -139,6 +139,8 @@ create table COMPRA_DETALLE
     IRBPNR decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.2.3)*/
     TOTAL_FINAL decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.3.1)*/
+    CODIGO_SECUNDARIO varchar(100),
     primary key (ID)
 );
 

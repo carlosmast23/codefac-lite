@@ -71,6 +71,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Column(name = "CODIGO_PRINCIPAL")
     private String codigoPrincipal;
     
+    @Column(name = "CODIGO_SECUNDARIO")
+    private String codigoSecundario;
+    
     @Column(name = "PRESENTACION_CODIGO")
     private String presentacionCodigo;
     /**
@@ -502,6 +505,13 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         return totalDetalle.add(iva).add(this.valorIce);
     }
 
+    public String getCodigoSecundario() {
+        return codigoSecundario;
+    }
+
+    public void setCodigoSecundario(String codigoSecundario) {
+        this.codigoSecundario = codigoSecundario;
+    }
 
     public String getCodigoPrincipal() {
         return codigoPrincipal;

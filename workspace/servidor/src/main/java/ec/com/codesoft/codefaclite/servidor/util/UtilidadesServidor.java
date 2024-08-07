@@ -126,9 +126,10 @@ public class UtilidadesServidor {
 
     public static void crearBaseDatos() throws SQLException {
         try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            Connection conn =obtenerConexionDB();
+            //Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             //obtenemos la conexión si no existe crea la base
-            Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;create=true;user="+AbstractFacade.usuarioDb);
+            /*Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;create=true;user="+AbstractFacade.usuarioDb);
             //Establecer autentificacion en derby
             Statement s = conn.createStatement();
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");
@@ -136,7 +137,7 @@ public class UtilidadesServidor {
             //System.out.println("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user."+AbstractFacade.usuarioDb+", '"+AbstractFacade.claveDb+"')");
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user."+AbstractFacade.usuarioDb+"','"+AbstractFacade.claveDb+"')");            
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.propertiesOnly', 'true')");
-            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.language.sequence.preallocator', '1')");
+            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.language.sequence.preallocator', '1')");*/
 
             if (conn != null) {
 
@@ -149,6 +150,17 @@ public class UtilidadesServidor {
                         String[] sentencias = sql.split(";");
                         for (String sentencia : sentencias) {
                             LOG.log(Level.INFO, sentencia);
+                            
+                            if(AbstractFacade.baseDatosEnum.equals(AbstractFacade.TipoBaseDatosEnum.MYSQL))
+                            {
+                                //Si tiene sentencias solo para Mysql entonces no ejecuto de otras base de datos
+                                if(sentencia.indexOf("@ONLY_DERBY")>=0)
+                                {
+                                    continue;
+                                }
+                                
+                                sentencia=normalizarSentenciasMysql(sentencia);
+                            }
                             //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
                             byte ptext[] = sentencia.getBytes();
                             PreparedStatement pstm = conn.prepareStatement(new String(ptext, "UTF-8"));
@@ -182,11 +194,63 @@ public class UtilidadesServidor {
 
             }
             conn.close();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CrearBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * Query que permite normalizar los querys que estaban enfocados para derby para pasar a formato Mysql
+     * @param sentencia
+     * @return 
+     */
+    private static String normalizarSentenciasMysql(String sentencia)
+    {
+        sentencia = sentencia.replace("GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1)", "AUTO_INCREMENT");
+        sentencia = sentencia.replace("GENERATED ALWAYS AS IDENTITY (START WITH 1)", "AUTO_INCREMENT");
+        sentencia = sentencia.replace("GENERATED ALWAYS AS IDENTITY(START WITH 1)", "AUTO_INCREMENT");
+        sentencia = sentencia.replace("GENERATED ALWAYS AS IDENTITY( START WITH 1)", "AUTO_INCREMENT");
+        sentencia = sentencia.replace("generated always as IDENTITY(start with 1)", "AUTO_INCREMENT");
+        sentencia = sentencia.replace("generated always as IDENTITY(start with 1)", "AUTO_INCREMENT");
+        return sentencia;
+    }
+    
+    
+    public static Connection obtenerConexionDB()
+    {
+        Connection conn =null;
+        if(AbstractFacade.baseDatosEnum.equals(AbstractFacade.TipoBaseDatosEnum.DERBY))
+        {
+            try {
+                Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+                conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;create=true;user="+AbstractFacade.usuarioDb);
+                Statement s = conn.createStatement();
+                s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");
+                s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.authentication.provider', 'BUILTIN')");
+                //System.out.println("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user."+AbstractFacade.usuarioDb+", '"+AbstractFacade.claveDb+"')");
+                s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user."+AbstractFacade.usuarioDb+"','"+AbstractFacade.claveDb+"')");
+                s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.propertiesOnly', 'true')");
+                s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.language.sequence.preallocator', '1')");
+            } catch (SQLException ex) {
+                Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else if(AbstractFacade.baseDatosEnum.equals(AbstractFacade.TipoBaseDatosEnum.MYSQL))
+        {
+            try { 
+                String url = "jdbc:mysql://localhost:3306/codefac";
+                String user = AbstractFacade.usuarioDb;  // Reemplaza con tu usuario de MySQL
+                String password = AbstractFacade.claveDb;  // Reemplaza con tu contraseña de MySQL
+                conn =  DriverManager.getConnection(url, user, password);
+                //conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;create=true;user="+AbstractFacade.usuarioDb);
+            } catch (SQLException ex) {
+                Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return conn;
     }
 
     /*

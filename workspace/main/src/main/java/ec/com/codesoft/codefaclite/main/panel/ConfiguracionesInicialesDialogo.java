@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.panel;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -61,6 +62,8 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        cmbBaseDeDatos = new javax.swing.JComboBox<>();
 
         jLabel3.setText("jLabel3");
 
@@ -167,13 +170,13 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         jLabel7.setText("Repetir Clave:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel7, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText("Usuario:");
+        jLabel8.setText("Base de Datos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -182,7 +185,7 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         jPanel3.add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -190,7 +193,7 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         jPanel3.add(txtUsuarioRegistro, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -200,7 +203,7 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         btnAceptarRegistro.setText("Aceptar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 5);
@@ -210,13 +213,13 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         btnCancelarRegistro.setText("Cancelar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 10);
         jPanel3.add(btnCancelarRegistro, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -226,7 +229,7 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         jLabel9.setText("Clave:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel9, gridBagConstraints);
@@ -250,6 +253,23 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         jPanel3.add(jLabel12, gridBagConstraints);
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Usuario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel10, gridBagConstraints);
+
+        cmbBaseDeDatos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Derby", "MySql" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(cmbBaseDeDatos, gridBagConstraints);
 
         tabCredenciales.addTab("Registrar Credenciales", jPanel3);
 
@@ -305,7 +325,9 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
     private javax.swing.JButton btnAceptarRegistro;
     private javax.swing.JButton btnCancelarIngreso;
     private javax.swing.JButton btnCancelarRegistro;
+    private javax.swing.JComboBox<String> cmbBaseDeDatos;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -404,6 +426,14 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
 
     public void setTxtUsuarioIngreso(JTextField txtUsuarioIngreso) {
         this.txtUsuarioIngreso = txtUsuarioIngreso;
+    }
+
+    public JComboBox<String> getCmbBaseDeDatos() {
+        return cmbBaseDeDatos;
+    }
+
+    public void setCmbBaseDeDatos(JComboBox<String> cmbBaseDeDatos) {
+        this.cmbBaseDeDatos = cmbBaseDeDatos;
     }
     
     

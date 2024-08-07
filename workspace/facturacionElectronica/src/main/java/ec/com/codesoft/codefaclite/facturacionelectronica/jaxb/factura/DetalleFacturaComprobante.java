@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(propOrder = {
     "codigoPrincipal",
+    "codigoAuxiliar",
     "descripcion",
     "unidadMedida",
     "cantidad",
@@ -43,6 +44,9 @@ public class DetalleFacturaComprobante extends DetalleComprobanteAbstract {
     private BigDecimal precioSinSubsidio;
 
     private String codigoPrincipal;
+    
+    private String codigoAuxiliar;
+    
 
     //@XmlElementWrapper(name = "formasDePago")
     //@XmlElement(name = "formaPago")
@@ -97,6 +101,17 @@ public class DetalleFacturaComprobante extends DetalleComprobanteAbstract {
     public void setCodigoPrincipal(String codigoPrincipal) {
         this.codigoPrincipal = codigoPrincipal;
     }
+
+    @XmlElement(name = "codigoAuxiliar")
+    public String getCodigoAuxiliar() {
+        return codigoAuxiliar;
+    }
+
+    public void setCodigoAuxiliar(String codigoAuxiliar) {
+        this.codigoAuxiliar = codigoAuxiliar;
+    }
+    
+    
 
     @XmlElement(name = "precioSinSubsidio")
     public BigDecimal getPrecioSinSubsidio() {

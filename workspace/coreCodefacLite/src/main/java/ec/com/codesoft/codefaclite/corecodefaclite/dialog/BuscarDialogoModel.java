@@ -8,7 +8,9 @@ package ec.com.codesoft.codefaclite.corecodefaclite.dialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.panel.DialogoBuscadorForm;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBusquedaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -115,6 +117,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         this.modeloTablaBuscar = modeloTablaBuscar;
         this.paginaActual=0;
     }*/
+    
+    private static TipoBaseDatosEnum TIPO_BASE_DATOS=null;
     
     public BuscarDialogoModel(InterfaceModelFind model) 
     {        
@@ -273,6 +277,18 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     private void iniciarValores()
     {
         UtilidadesComboBox.llenarComboBox(getCmbTipoBusqueda(),TipoBusquedaEnum.values());
+        
+        //Verificar el tipo de base de datos que estamos trabajando
+        if(TIPO_BASE_DATOS==null)
+        {
+            try {
+                TIPO_BASE_DATOS=ServiceFactory.getFactory().getUtilidadesServiceIf().obtenerTipoBaseDatos();
+            } catch (RemoteException ex) {
+                Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     private Map<Integer,Object> obtenerDatosFiltro()
@@ -952,6 +968,13 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             
             
             
+        }
+        
+        //Validar si esta en Mysql hacer algunos ajustes
+        if(TIPO_BASE_DATOS.equals(TipoBaseDatosEnum.MYSQL))
+        {
+            //En mysql utilizart el UNSIGNED
+            queryDialog.query=queryDialog.query.replace("AS BIGINT","AS UNSIGNED");
         }
 
     }

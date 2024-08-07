@@ -405,6 +405,10 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
     private void llenarDatosMapImpuestos(Map<Integer,TotalImpuesto> mapImpuestos,DetalleFacturaNotaCeditoAbstract detalle,ImpuestoDetalle impuestoDetalleIva,Boolean notaCredito)
     {
         TotalImpuesto totalImpuestoIva =mapImpuestos.get(impuestoDetalleIva.getTarifa());
+        
+        System.out.println("D> Base imponible: "+detalle.getTotal());
+        System.out.println("D> Valor: "+detalle.getIva());
+        
         if(totalImpuestoIva==null)
         {
             totalImpuestoIva = new TotalImpuesto();
@@ -412,9 +416,6 @@ public abstract class ComprobanteDataFacturaNotaCreditoAbstract implements Compr
             totalImpuestoIva.setCodigo(impuestoDetalleIva.getImpuesto().getCodigoSri());
             totalImpuestoIva.setCodigoPorcentaje(impuestoDetalleIva.getCodigo() + "");
             totalImpuestoIva.setValor(detalle.getIva());
-            
-            System.out.println("D> Base imponible: "+detalle.getTotal());
-            System.out.println("D> Valor: "+detalle.getIva());
             
         }
         else
