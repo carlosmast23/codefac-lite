@@ -276,7 +276,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         PanelValores.add(jLabel9, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText("SUBTOTAL 12%:");
+        jLabel10.setText("SUBTOTAL Imp:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -303,7 +303,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         PanelValores.add(jLabel17, gridBagConstraints);
 
         jLabel19.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel19.setText("IVA 12%:");
+        jLabel19.setText("IVA %:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;

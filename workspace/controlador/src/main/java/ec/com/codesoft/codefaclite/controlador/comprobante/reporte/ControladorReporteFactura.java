@@ -217,8 +217,7 @@ public class ControladorReporteFactura {
                         BigDecimal totalMenosNotaCredito = BigDecimal.ZERO;
                         BigDecimal totalNotaCredito = BigDecimal.ZERO;
                         Boolean calcularTotalesSinNotasCredito = false;
-                        String preimpresoNotaCreditoAfecta = "";
-                        String valorNotaCredito = "";
+                        String preimpresoNotaCreditoAfecta = "";                        
                         ComprobanteEntity.ComprobanteEnumEstado estadoEnum= factura.getEstadoEnum();
                         
                         BigDecimal descuentoConImpuestos = (factura.getDescuentoImpuestos() != null) ? factura.getDescuentoImpuestos() : BigDecimal.ZERO;
@@ -1239,6 +1238,14 @@ public class ControladorReporteFactura {
             @Override
             public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
                 return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_DETALLE).toString();
+                //return dato.getZona();
+            }
+        }),
+        
+        AGRUPADO_POR_IVA("Agrupado por IVA",new CampoAgruparIf() {
+            @Override
+            public String obtenerCampoAgrupar(AgrupadoReporteIf dato) {
+                return dato.getValorCampoAgrupar(TipoReporteEnum.AGRUPADO_POR_IVA).toString();
                 //return dato.getZona();
             }
         }),

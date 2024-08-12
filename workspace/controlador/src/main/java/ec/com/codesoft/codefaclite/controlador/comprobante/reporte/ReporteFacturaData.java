@@ -637,6 +637,9 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
             case AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE:
                 String campoAgrupadoDetalle=campoAdicional+" | "+razonSocialTmp;
                 return campoAgrupadoDetalle;
+                
+            case AGRUPADO_POR_IVA:
+                return "Impuesto "+porcentajeIva+"%";
         }
         
         /*String nombreCampo=nombreCampoAgrupadoIf.getNombreCampoAgrupado();

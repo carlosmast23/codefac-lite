@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_documentos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cda46cf-cd6e-4c09-b67c-62113b7f5ab2">
 	<property name="ireport.zoom" value="1.8181818181818943"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="33"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
@@ -252,7 +252,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sub. 12%]]></text>
+				<text><![CDATA[Sub. Imp]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="577" y="0" width="45" height="20" uuid="8047c355-d065-4057-8b49-4070430e318e"/>
@@ -280,7 +280,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[IVA 12%]]></text>
+				<text><![CDATA[IVA %]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="622" y="0" width="45" height="20" uuid="030cdd35-1067-4c6c-a575-e4d9acb21186"/>
@@ -820,7 +820,7 @@
 					<font isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[IVA 12%:]]></text>
+				<text><![CDATA[IVA %:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="600" y="110" width="100" height="20" uuid="23b9471a-c8c2-42c4-aa0f-0b99652f83fd">
@@ -837,7 +837,7 @@
 					<font isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[IVA 12%:]]></text>
+				<text><![CDATA[IVA %:]]></text>
 			</staticText>
 			<subreport>
 				<reportElement x="0" y="152" width="802" height="54" uuid="22e9a120-a3b6-4839-b07b-ceaa9f3ba399"/>
@@ -994,7 +994,7 @@
 					<font isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[Subtotal 12%:]]></text>
+				<text><![CDATA[Subtotal Imp:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="126" y="90" width="100" height="20" uuid="66946fb5-bd4e-4552-800f-dc1cd3e1f2bf"/>
@@ -1054,7 +1054,7 @@
 					<font isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[Subtotal 12%:]]></text>
+				<text><![CDATA[Subtotal Imp:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="700" y="90" width="100" height="20" uuid="598406f4-651a-437a-8cbc-c2200a89eaab">
