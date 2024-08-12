@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
@@ -151,7 +152,7 @@ public class UtilidadesServidor {
                         for (String sentencia : sentencias) {
                             LOG.log(Level.INFO, sentencia);
                             
-                            if(AbstractFacade.baseDatosEnum.equals(AbstractFacade.TipoBaseDatosEnum.MYSQL))
+                            if(AbstractFacade.baseDatosEnum.equals(TipoBaseDatosEnum.MYSQL))
                             {
                                 //Si tiene sentencias solo para Mysql entonces no ejecuto de otras base de datos
                                 if(sentencia.indexOf("@ONLY_DERBY")>=0)
@@ -219,7 +220,7 @@ public class UtilidadesServidor {
     public static Connection obtenerConexionDB()
     {
         Connection conn =null;
-        if(AbstractFacade.baseDatosEnum.equals(AbstractFacade.TipoBaseDatosEnum.DERBY))
+        if(AbstractFacade.baseDatosEnum.equals(TipoBaseDatosEnum.DERBY))
         {
             try {
                 Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -237,7 +238,7 @@ public class UtilidadesServidor {
                 Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        else if(AbstractFacade.baseDatosEnum.equals(AbstractFacade.TipoBaseDatosEnum.MYSQL))
+        else if(AbstractFacade.baseDatosEnum.equals(TipoBaseDatosEnum.MYSQL))
         {
             try { 
                 String url = "jdbc:mysql://localhost:3306/codefac";

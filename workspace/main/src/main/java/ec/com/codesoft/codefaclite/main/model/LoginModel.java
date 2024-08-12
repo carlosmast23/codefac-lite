@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
@@ -126,8 +127,22 @@ public class LoginModel extends LoginFormDialog{
                 Empresa empresaSeleccionada= (Empresa) getCmbEmpresa().getSelectedItem();
                 if(empresaSeleccionada!=null)
                 {                    
-                    GeneralPanelModel.terminarAutorizarComprobantesPendientes(empresaSeleccionada);        
-                    GeneralPanelModel.generarRespaldoBaseDatosPorCorreo(empresaSeleccionada);
+                    try {
+                        DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
+                            @Override
+                            public void procesar() {
+                                GeneralPanelModel.terminarAutorizarComprobantesPendientes(empresaSeleccionada);
+                                GeneralPanelModel.generarRespaldoBaseDatosPorCorreo(empresaSeleccionada);
+                            }
+                            
+                            @Override
+                            public String getMensaje() {
+                                return "Cerrando el Sistema ...";
+                            }                    
+                        });
+                    } catch (ExcepcionCodefacLite ex) {
+                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                 }
                 
