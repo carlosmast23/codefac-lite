@@ -8,10 +8,8 @@ package ec.com.codesoft.codefaclite.controlador.core.swing;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImpresora;
-import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -26,19 +24,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
-import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -57,6 +50,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -64,6 +59,11 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author Carlos
  */
 public class ReporteCodefac {
+    
+    //todo: variale temporal para un ajuste en los reportes que tienen ticket para no hacer varias consultas
+    @Deprecated
+    public static Integer AJUSTE_MARGEN_TICKET=null;
+    
     public static void generarReporte(String pathReporte,Map parametros,Collection datos)
     {
         try {
@@ -324,7 +324,46 @@ public class ReporteCodefac {
             if(report==null)
             {
                 InputStream inputStream= recursoCodefac.getResourceInputStream(nombre);
-                report =JasperCompileManager.compileReport(inputStream);
+                
+                
+                ///Verificar si esta imprimiendo con impresoras Pos para hacer la correcion de margenes
+                if(FormatoHojaEnum.TICKET.equals(formatoReporte))
+                {   
+                    if(AJUSTE_MARGEN_TICKET==null)
+                    {
+                        String ajustarMargenTxt=ParametroUtilidades.obtenerValorParametroSinEmpresa(ParametroCodefac.AJUSTAR_MARGEN_TICKET);
+                        if(!UtilidadesTextos.verificarNullOVacio(ajustarMargenTxt))
+                        {
+                            AJUSTE_MARGEN_TICKET=Integer.parseInt(ajustarMargenTxt);
+                        }
+                        else
+                        {
+                            AJUSTE_MARGEN_TICKET=0;
+                        }                    
+                    }                    
+                    
+                    if(AJUSTE_MARGEN_TICKET>0)
+                    {
+                    
+                        JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+                        jasperDesign.setLeftMargin(jasperDesign.getLeftMargin()+AJUSTE_MARGEN_TICKET);
+
+                        int currentWidth = jasperDesign.getColumnWidth();
+                        //int totalColumns = jasperDesign.getColumnCount();
+                        int newColumnWidth = currentWidth - AJUSTE_MARGEN_TICKET; // Ajusta según el incremento del margen
+
+                        jasperDesign.setColumnWidth(newColumnWidth);
+                        report =JasperCompileManager.compileReport(jasperDesign);
+                    }
+                }
+                
+                //en el caso que no haya compilado, compilo en esta opción
+                if(report==null)
+                {
+                    report =JasperCompileManager.compileReport(inputStream);
+                }
+                
+                
                 ReporteProxy.agregar(recursoCodefac,nombre,report);
                 
             }

@@ -161,6 +161,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbAgregarDetalleInicio = new javax.swing.JComboBox<>();
         jLabel124 = new javax.swing.JLabel();
         cmbMostrarStockVenta = new javax.swing.JComboBox<>();
+        jLabel125 = new javax.swing.JLabel();
+        txtAjustarMargenTicket = new javax.swing.JSpinner();
         jPanel15 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
@@ -1023,10 +1025,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(txtCopiasFactura, gridBagConstraints);
 
         jLabel86.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel86.setText("Numeró de copias:");
+        jLabel86.setText("Ajustar Margen Ticket:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel86, gridBagConstraints);
@@ -1199,6 +1201,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbMostrarStockVenta, gridBagConstraints);
+
+        jLabel125.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel125.setText("Numeró de copias:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel125, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(txtAjustarMargenTicket, gridBagConstraints);
 
         jTabbedPane1.addTab("Ventas", jPanel4);
 
@@ -2755,6 +2773,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel122;
     private javax.swing.JLabel jLabel123;
     private javax.swing.JLabel jLabel124;
+    private javax.swing.JLabel jLabel125;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -2886,6 +2905,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblEspacioVertical1;
     private javax.swing.JLabel lblMensaje;
+    private javax.swing.JSpinner txtAjustarMargenTicket;
     private javax.swing.JSpinner txtAlertaDiasPorCaducarProducto;
     private javax.swing.JTextArea txtCodigoHtml;
     private javax.swing.JSpinner txtCopiasComanda;
@@ -3509,6 +3529,16 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setTxtCopiasFactura(JSpinner txtCopiasFactura) {
         this.txtCopiasFactura = txtCopiasFactura;
     }
+
+    public JSpinner getTxtAjustarMargenTicket() {
+        return txtAjustarMargenTicket;
+    }
+
+    public void setTxtAjustarMargenTicket(JSpinner txtAjustarMargenTicket) {
+        this.txtAjustarMargenTicket = txtAjustarMargenTicket;
+    }
+    
+    
 
     public JComboBox<EnumSiNo> getCmbBuscadorSoloInventario() {
         return cmbBuscadorSoloInventario;

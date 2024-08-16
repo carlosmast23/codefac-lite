@@ -248,6 +248,8 @@ public class ParametroCodefac implements Serializable {
     
     public static final String COPIAS_IMPRESORA_VENTA="copias_impresora_venta";
     
+    public static final String AJUSTAR_MARGEN_TICKET="ajustar_margen_ticket";
+    
     public static final String DIAS_CREDITO_ALERTA="dias_credito_alerta";
     
     public static final String PUNTO_EMISION_DEFECTO_PRESUPUESTOS="punto_emision_defecto_presupuestos";

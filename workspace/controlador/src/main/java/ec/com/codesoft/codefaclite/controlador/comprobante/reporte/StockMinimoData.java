@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class StockMinimoData implements ExcelDatosInterface{
     
-    public static String NOMBRE_CABECERA_EXCEL[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Disp","Reserv","Pvp1" ,"Cantidad Min","Costo","´Último Costo","Utilidad","F.Caducidad","Reg.Sanitario"};
+    public static String NOMBRE_CABECERA_EXCEL[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Disp","Reserv","Pvp1","Pvp2","Cantidad Min","Costo","´Último Costo","Utilidad","F.Caducidad","Reg.Sanitario"};
     
     private Long kardexId;
     private String codigo;
@@ -40,6 +40,7 @@ public class StockMinimoData implements ExcelDatosInterface{
     private String ultimoCosto;
     private String bodega;
     private BigDecimal pvp1;
+    private BigDecimal pvp2;
     private BigDecimal utilidad1;
     private BigDecimal reserva;
     private BigDecimal disponible;
@@ -185,6 +186,16 @@ public class StockMinimoData implements ExcelDatosInterface{
     public BigDecimal getPvp1() {
         return pvp1;
     }
+
+    public BigDecimal getPvp2() {
+        return pvp2;
+    }
+
+    public void setPvp2(BigDecimal pvp2) {
+        this.pvp2 = pvp2;
+    }
+    
+    
 
     public void setPvp1(BigDecimal pvp1) {
         this.pvp1 = pvp1;
@@ -338,6 +349,7 @@ public class StockMinimoData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.disponible,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.reserva,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.pvp1,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.pvp2,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.cantidadMinima, Excel.TipoDataEnum.NUMERO));        
         tiposDatos.add(new TipoDato(this.costo,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.ultimoCosto,Excel.TipoDataEnum.NUMERO));

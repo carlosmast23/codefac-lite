@@ -387,10 +387,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
         titulo.add("Documento");
         titulo.add("Estado");
         titulo.add("Tipo");
-        titulo.add("Subtotal 12%");
+        titulo.add("Subtotal Imp");
         titulo.add("Subtotal 0% ");
         titulo.add("Descuentos");
-        titulo.add("IVA 12%");
+        titulo.add("IVA %");
         titulo.add("Valor Afecta");
         titulo.add("Total");        
         return titulo;

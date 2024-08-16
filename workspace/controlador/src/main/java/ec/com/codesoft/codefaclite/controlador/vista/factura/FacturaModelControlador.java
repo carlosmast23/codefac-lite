@@ -69,6 +69,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -2017,8 +2018,11 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             }
             
             //Agregar la forma de pago
-            FormaPago formaPago=facturaProcesando.getFormaPagos().get(0);
-            datoAdicionalList.add(new InformacionAdicional("Forma de Pago",formaPago.getSriFormaPago().getAlias()));
+            if(!UtilidadesLista.verificarListaVaciaONull(facturaProcesando.getFormaPagos()))
+            {
+                FormaPago formaPago=facturaProcesando.getFormaPagos().get(0);
+                datoAdicionalList.add(new InformacionAdicional("Forma de Pago",formaPago.getSriFormaPago().getAlias()));
+            }   
             
             //Agregar dato de la autorizacion si es manual y tiene seteado ese campo en la nota de venta
             if(facturaProcesando.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))

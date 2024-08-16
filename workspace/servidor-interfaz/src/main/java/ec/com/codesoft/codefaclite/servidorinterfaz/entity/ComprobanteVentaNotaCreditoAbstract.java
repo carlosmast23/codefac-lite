@@ -354,13 +354,15 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
                     
                     //System.out.println("Total: " + detalle.());
                     
-                    BigDecimal ivaTmp=detalle.getTotalFinal().subtract(detalle.getTotal());
+                    BigDecimal valorIce=detalle.calcularIceValor();
+                    BigDecimal ivaTmp=detalle.getTotalFinal().subtract(detalle.getTotal()).subtract(valorIce);
+                    
                     resultado.impuestoIva=resultado.impuestoIva.add(ivaTmp);
                     
                     //resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(precio.multiply(detalle.getCantidad()));
                     //resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getTotal());
                     //resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getSubtotalSinDescuentos());
-                    resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getTotalFinal().subtract(ivaTmp)).add(descuentoTmp);
+                    resultado.subTotalConImpuestos = resultado.subTotalConImpuestos.add(detalle.getTotalFinal().subtract(ivaTmp)).subtract(valorIce).add(descuentoTmp);
                 }
                 else
                 {

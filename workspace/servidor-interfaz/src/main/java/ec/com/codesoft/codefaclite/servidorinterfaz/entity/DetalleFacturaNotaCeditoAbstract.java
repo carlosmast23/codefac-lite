@@ -397,11 +397,32 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         BigDecimal subtotalMenosDescuento=getCalcularTotalDetalleSinRedondeo();
         
         BigDecimal valorIvaDecimal = new BigDecimal(ivaPorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
-        totalFinal=subtotalMenosDescuento.multiply(valorIvaDecimal);
+        
+        //BigDecimal valorIceDecimal=calcularIceValor();
+        BigDecimal valorIceDecimal=BigDecimal.ONE;
+        if(icePorcentaje!=null)
+        {
+            valorIceDecimal= new BigDecimal(icePorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
+        }
+        
+        
+        totalFinal=subtotalMenosDescuento.multiply(valorIceDecimal).multiply(valorIvaDecimal);
         //En teoria la diferencia es el iva que debe ir para cuadrar
         totalFinal=totalFinal.setScale(2, BigDecimal.ROUND_HALF_UP);
         //return setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     
+    }
+    
+    public BigDecimal calcularIceValor()
+    {
+        if(icePorcentaje!=null)
+        {
+            //BigDecimal icePorcentajeTmp=new BigDecimal(icePorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);
+            BigDecimal icePorcentajeTmp=new BigDecimal(icePorcentaje.toString()).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+            return total.multiply(icePorcentajeTmp).setScale(2,BigDecimal.ROUND_HALF_UP);
+            
+        }
+        return BigDecimal.ZERO;
     }
 
     public void calculaIva() {

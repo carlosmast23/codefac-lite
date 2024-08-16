@@ -502,6 +502,11 @@ public class StockReporteModel extends StockMinimoPanel{
                 //data.setPvp1(producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP));
                 //data.setUtilidad1(producto.getValorUnitario().subtract(costoPromedio).setScale(2,RoundingMode.HALF_UP));
                 data.setPvp1(valorUnitario.setScale(2, RoundingMode.HALF_UP));
+                if(producto.getPrecioDistribuidor()!=null)
+                {
+                    data.setPvp2(producto.getPrecioDistribuidor().setScale(2, RoundingMode.HALF_UP));
+                }
+                
                 data.setUtilidad1(valorUnitario.subtract(costoPromedio).setScale(2, RoundingMode.HALF_UP));
 
                 data.setAplicacion(producto.getAplicacionProducto());

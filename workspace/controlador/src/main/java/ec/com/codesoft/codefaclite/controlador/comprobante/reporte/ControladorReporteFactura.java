@@ -543,7 +543,15 @@ public class ControladorReporteFactura {
                 dataFacturaCopia.setResponsable((detalle.getResponsable()!=null)?detalle.getResponsable().getNombresCompletos():"");
                 
                 dataFacturaCopia.setCosto(detalle.getCostoPromedio()+"");
-                dataFacturaCopia.setPorcentajeIva(detalle.getCatalogoProducto().getIva().getTarifa()+"");
+                
+                if(detalle.getIvaPorcentaje()!=null)
+                {
+                    dataFacturaCopia.setPorcentajeIva(detalle.getIvaPorcentaje() +"");
+                }
+                else
+                {
+                    dataFacturaCopia.setPorcentajeIva("12");
+                }
                 
                 //TODO: Por el momento se realiza la consulta directa del producto pero esta parte tiene que estar en el servidor
                 String nombreCategoria="Sin asignar";
