@@ -403,6 +403,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
         titulos.add(titulos.size(),"Costo");
         titulos.add(titulos.size(),"Forma de Pago");
         titulos.add(titulos.size(),"% Iva");
+        titulos.add(titulos.size(),"Cod Producto");
+        titulos.add(titulos.size(),"Present");
         
         titulos.add(0,"Clave de Acceso");
         titulos.add(1,"Fecha Max Pago");

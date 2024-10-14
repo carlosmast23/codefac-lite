@@ -137,8 +137,22 @@ public abstract class AbstractFacade<T>
     
     public List<T> findByMap(Map<String, Object> parametros)
     {
+        return findByMap(parametros,null);
+
+    }   
+    
+    public List<T> findByMap(Map<String, Object> parametros,String orderField)
+    {
         String queryString = buildQueryString(entityClass, parametros);
+        
+        boolean asc=true;
+        if (orderField != null && !orderField.isEmpty()) 
+        {
+            queryString += " ORDER BY e." + orderField + (asc ? " ASC" : " DESC");
+        }
+        
         Query query=getEntityManager().createQuery(queryString);
+        
         
         /**
          * Setear los valores
@@ -148,13 +162,11 @@ public abstract class AbstractFacade<T>
                 query.setParameter(parametro.replace(".",""), parametros.get(parametro));
             }
         }
+        
         query.setFlushMode(FlushModeType.COMMIT);
         //query.setHint(QueryHints.READ_ONLY, HintValues.TRUE);
         return query.getResultList();
-
-    }   
-    
-
+    }
     
     private String buildQueryString(Class clase, Map<String, Object> parametros) {
         String objectName = "e";

@@ -574,6 +574,8 @@ public class ControladorReporteFactura {
                 dataFacturaCopia.setCategoria(nombreCategoria);
                 dataFacturaCopia.setPrecioUnitarioReporte(detalle.getPrecioUnitario().setScale(0,BigDecimal.ROUND_DOWN).toString());
                 dataFacturaCopia.setComponenteProducto(detalle.getComponentesTexto());
+                dataFacturaCopia.setPresentacionProducto(detalle.getPresentacionCodigo());
+                
                 resultados.add(dataFacturaCopia);
             }
         } catch (CloneNotSupportedException ex) {

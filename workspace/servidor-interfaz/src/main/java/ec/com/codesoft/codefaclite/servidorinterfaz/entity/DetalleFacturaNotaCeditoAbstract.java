@@ -357,6 +357,17 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         {
             descuento=BigDecimal.ZERO;
         }
+        
+        if(cantidad==null)
+        {
+            cantidad=BigDecimal.ZERO;
+        }
+        
+        if(BigDecimal.ZERO.compareTo(cantidad)==0)
+        {
+            return precioUnitario.subtract(descuento);
+        }
+        
         BigDecimal descuentoUnitario=descuento.divide(cantidad,6,BigDecimal.ROUND_UP);
         return precioUnitario.subtract(descuentoUnitario);
     }

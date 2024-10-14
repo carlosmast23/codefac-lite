@@ -69,6 +69,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
      */
     protected String codigoProducto;
     protected String nombreProducto;
+    protected String presentacionProducto;
     protected String nombreProductoOriginal;
     protected String categoria;
     protected String cantidad;
@@ -491,6 +492,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         this.porcentajeIva = porcentajeIva;
     }
 
+    public String getPresentacionProducto() {
+        return presentacionProducto;
+    }
+
+    public void setPresentacionProducto(String presentacionProducto) {
+        this.presentacionProducto = presentacionProducto;
+    }
+
     
     
     
@@ -521,6 +530,7 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.claveAcceso, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaMaximaPago, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.vendedor, Excel.TipoDataEnum.TEXTO));
+        //tiposDatos.add(new TipoDato(this.codigoProducto, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreProducto, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.cantidad, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.numeroFactura, Excel.TipoDataEnum.TEXTO));
@@ -548,6 +558,8 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         
 
         tiposDatos.add(new TipoDato(this.porcentajeIva, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.codigoProducto, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.presentacionProducto, Excel.TipoDataEnum.TEXTO));
         
         return tiposDatos;
     }

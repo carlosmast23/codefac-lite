@@ -728,6 +728,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
 
                 System.out.println(kardex.getCostoPromedio());
                 System.out.println(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+                
+                //TODO: Este caso no se porque esta de esta manera pero es temporal y en el caso que tenga null coloca ZERO para evitar problemas
+                if(kardex.getCostoPromedio()==null)
+                {
+                    kardex.setCostoPromedio(BigDecimal.ZERO);
+                }
 
                 //Calcular el precio promedio con respecto al nuevo valor
                 if(kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)>0)
@@ -924,6 +930,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                 
                 for (KardexDetalle detalle : detallesTmp) 
                 {
+                    if(detalle.getKardex().getProducto().getCodigoPersonalizado().equals("THA250"))
+                    {
+                        System.out.println("revisar ---");
+                    }
                     grabarKardexDetallSinTransaccion(detalle,detalle.getKardex().getLote(),false);                    
                 } 
                 

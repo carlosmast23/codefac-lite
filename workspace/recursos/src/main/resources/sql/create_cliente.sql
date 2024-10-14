@@ -20,7 +20,7 @@ create table CLIENTE(
     NOMBRE_LEGAL varchar(256),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
     TIPO_IDENTIFICACION varchar(1),
-    IDENTIFICACION varchar(15) not null, 
+    IDENTIFICACION varchar(20) not null, 
     TIPO_CLIENTE varchar(12),
     DIRECCION varchar(1024), 
     TELEFONO_CONVENCIONAL varchar(9),

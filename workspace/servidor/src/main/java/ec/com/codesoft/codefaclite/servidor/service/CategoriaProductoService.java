@@ -69,12 +69,13 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
     public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa) throws java.rmi.RemoteException
     {
         //CategoriaProducto categoria;
+        //categoria.getDescripcion();
         //categoria.getEmpresa();
         //categoria.getEstado();
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
         mapParametros.put("empresa", empresa);
-        return getFacade().findByMap(mapParametros);
+        return getFacade().findByMap(mapParametros,"nombre");
     }
     
     public CategoriaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
@@ -83,7 +84,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
         mapParametros.put("empresa", empresa);
         mapParametros.put("nombre",nombre);
-        List<CategoriaProducto> resultados=getFacade().findByMap(mapParametros);
+        List<CategoriaProducto> resultados=getFacade().findByMap(mapParametros,"nombre");
         if(resultados.size()>0)
         {
             return resultados.get(0);

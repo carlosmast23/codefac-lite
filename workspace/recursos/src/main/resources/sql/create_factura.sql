@@ -33,7 +33,7 @@ create table FACTURA
     USUARIO_ID decimal,
     ESTADO varchar(1),
     RAZON_SOCIAL varchar(256),
-    IDENTIFICACION varchar(15),
+    IDENTIFICACION varchar(20),
     DIRECCION varchar(1024),
     TELEFONO varchar(64),
     TIPO_FACTURACION varchar(1),

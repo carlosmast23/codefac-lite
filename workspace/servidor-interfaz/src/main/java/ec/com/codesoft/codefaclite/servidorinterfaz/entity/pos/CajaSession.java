@@ -486,7 +486,13 @@ public class CajaSession implements Serializable
                 }
                 else if(ingresoCaja.getCartera()!=null)
                 {
-                    if(ingresoCaja.getFormaPago().getAlias().equals("Efectivo"))
+                    //Cuando no tiene forma de pago asumo que es en efectivo
+                    if(ingresoCaja.getFormaPago()==null)
+                    {
+                        //totalVentas=totalVentas.add(ingresoCaja.obtenerValorConSigno());
+                        Logger.getLogger(CajaSession.class.getName()).log(Level.SEVERE,"Problema con Comprobante: "+ingresoCaja.getDescripcion()+" Valor: "+ingresoCaja.getValor()+" > no Tiene Forma de Pago");
+                    }
+                    else if(ingresoCaja.getFormaPago().getAlias().equals("Efectivo"))
                     {
                         totalVentas=totalVentas.add(ingresoCaja.obtenerValorConSigno());
                     }
