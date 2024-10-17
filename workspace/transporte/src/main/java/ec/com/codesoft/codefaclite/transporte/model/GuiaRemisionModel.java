@@ -901,7 +901,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         detalle.setCodigoAdicional("");
         detalle.setCodigoInterno(getTxtCodigoDetalle().getText()); //Todo: Ver si en este campo para futuras versiones se graba mejor el codigo de los productos , sevicios , etc
         detalle.setDescripcion(getTxtDescripcionDetalle().getText());
-        detalle.setReferenciaId(null); //TODO: Por el momento mando null para saber que fue agregado manualmente
+        detalle.setReferenciaId(Long.parseLong(detalle.getCodigoInterno())); //TODO: Por el momento mando null para saber que fue agregado manualmente
         destinatario.addProducto(detalle);
         
         

@@ -20,6 +20,8 @@
 	<parameter name="ambiente" class="java.lang.String"/>
 	<parameter name="autorizacion" class="java.lang.String"/>
 	<parameter name="imagen_logo" class="java.lang.Object"/>
+	<parameter name="telefonos_cliente" class="java.lang.String"/>
+	<parameter name="pl_celular" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -231,6 +233,15 @@
 				</textElement>
 				<text><![CDATA[Normal]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="195" y="119" width="104" height="17" uuid="b8d88e17-2304-4d45-97d4-c8d5a1616bc1">
+					<printWhenExpression><![CDATA[new Boolean($P{telefonos_cliente}!=null && !$P{telefonos_cliente}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Telf: "+$P{pl_celular}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 </jasperReport>
