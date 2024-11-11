@@ -351,6 +351,8 @@ public class DestinatarioGuiaRemision implements Serializable{
             detalle.setCodigoInterno(facturaDetalle.getReferenciaId()+""); //Todo: Ver si en este campo para futuras versiones se graba mejor el codigo de los productos , sevicios , etc
             detalle.setDescripcion(facturaDetalle.getDescripcion().replace("\n"," "));
             detalle.setReferenciaId(facturaDetalle.getId());
+            detalle.setTipoReferenciaEnum(DetalleProductoGuiaRemision.TipoReferenciaEnum.FACTURA);
+            
             destinatario.addProducto(detalle);
         }        
         

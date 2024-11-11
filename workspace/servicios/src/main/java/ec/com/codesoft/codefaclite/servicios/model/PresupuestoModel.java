@@ -839,7 +839,6 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     precio=producto.obtenerPrecioVentaPorNombre(numeroPrecio);                
                 }*/
                 BigDecimal precio=producto.obtenerPrecioPresupuesto(session.getEmpresa());
-                //getTxtPrecioCompra().setText(producto.getValorUnitario()+"");
                 getTxtPrecioCompra().setText(precio+""); 
             }
             else
@@ -1198,10 +1197,10 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 }
                 
                 presupuestoDetalle.setReservadoEnum(EnumSiNo.getEnumByBoolean(getChkReserva().isSelected()));
-                presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2, BigDecimal.ROUND_HALF_UP));                
-                presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2, BigDecimal.ROUND_HALF_UP));
-                presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
-                presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2, BigDecimal.ROUND_HALF_UP));
+                presupuestoDetalle.setPrecioCompra(precioCompra.setScale(4, BigDecimal.ROUND_HALF_UP));                
+                presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(4, BigDecimal.ROUND_HALF_UP));
+                presupuestoDetalle.setPrecioVenta(precioVenta.setScale(4, BigDecimal.ROUND_HALF_UP));
+                presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(4, BigDecimal.ROUND_HALF_UP));
                 presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
                 
                 if (estado) {

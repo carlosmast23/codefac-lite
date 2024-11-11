@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -37,6 +38,9 @@ public class DetalleProductoGuiaRemision implements Serializable{
     private String descripcion;
     @Column(name = "CANTIDAD")
     private BigDecimal cantidad;
+    
+    @Column(name = "TIPO_REFERENCIA")
+    private String tipoReferencia;
     
     @Column(name = "REFERENCIA_ID")
     private Long referenciaId; //Almacena la referencia al producto , TODO: verificar si tambien se graba cuando son de otro lado la referencia por ejemplo de presupuestos , por el momento se asume que viene de la tabla de productos
@@ -101,6 +105,28 @@ public class DetalleProductoGuiaRemision implements Serializable{
     public void setDestinatario(DestinatarioGuiaRemision destinatario) {
         this.destinatario = destinatario;
     }
+
+    public String getTipoReferencia() {
+        return tipoReferencia;
+    }
+
+    public void setTipoReferencia(String tipoReferencia) {
+        this.tipoReferencia = tipoReferencia;
+    }
+    
+    public TipoReferenciaEnum getTipoReferenciaEnum() {
+        return TipoReferenciaEnum.buscarPorLetra(tipoReferencia);
+    }
+
+    public void setTipoReferenciaEnum(TipoReferenciaEnum tipoReferenciaEnum) 
+    {
+        if(tipoReferenciaEnum==null)
+        {
+            return ;
+        }
+        
+        this.tipoReferencia = tipoReferenciaEnum.getLetra();
+    }
     
     
 
@@ -137,7 +163,48 @@ public class DetalleProductoGuiaRemision implements Serializable{
         return true;
     }
     
+    public enum TipoReferenciaEnum
+    {
+        FACTURA("f", "factura"),
+        PRODUCTO("p", "producto");
+
+        private String letra;
+        private String nombre;
+
+        private TipoReferenciaEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static TipoReferenciaEnum buscarPorLetra(String letra)
+        {
+            if(UtilidadesTextos.verificarNullOVacio(letra))
+            {
+                return null;
+            }
+            
+            for(TipoReferenciaEnum enumerador : TipoReferenciaEnum.values())
+            {
+                if(enumerador.getLetra().equals(letra))
+                {
+                    return enumerador;
+                }
+            }
+            
+            return null;
+        }
+  
+       
     
+    }
     
     
     

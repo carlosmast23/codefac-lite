@@ -111,6 +111,8 @@ create table DETALLE_PRODUCTO_GUIA_REMISION
     DESCRIPCION varchar(256),
     CANTIDAD decimal(13,5),
     REFERENCIA_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.3.3)*/
+    TIPO_REFERENCIA varchar(1),
     primary key (ID)
 );
 

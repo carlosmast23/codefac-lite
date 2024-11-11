@@ -87,16 +87,18 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                     throw new ServicioCodefacException("No se puede emitir guias de remisión con cantidades iguales o menores que cero\nProducto con problema: "+detallesProducto.getDescripcion());
                 }
                 
-                
-                if(detallesProducto.getReferenciaId()!=null)
-                {                
-                    FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
-                    FacturaDetalle facturaDetalle= facturaDetalleFacade.find(detallesProducto.getReferenciaId());                
-                    //Verificar que los saldos no sean superiores a los diponibles en las facturas
-                    BigDecimal saldo=consultarSaldoDetalleFactura(facturaDetalle);
-                    if(new BigDecimal(detallesProducto.getCantidad()+"").compareTo(saldo)>0)
+                //Hacer esta validacion cuando viene enlazado con una factura
+                if(DetalleProductoGuiaRemision.TipoReferenciaEnum.FACTURA.equals(detallesProducto.getTipoReferenciaEnum()))
+                {
+                    if (detallesProducto.getReferenciaId() != null) 
                     {
-                        throw new ServicioCodefacException("La cantidad del producto "+detallesProducto.getDescripcion()+" es superior al saldo de "+saldo+" pendiente en la factura");
+                        FacturaDetalleFacade facturaDetalleFacade = new FacturaDetalleFacade();
+                        FacturaDetalle facturaDetalle = facturaDetalleFacade.find(detallesProducto.getReferenciaId());
+                        //Verificar que los saldos no sean superiores a los diponibles en las facturas
+                        BigDecimal saldo = consultarSaldoDetalleFactura(facturaDetalle);
+                        if (new BigDecimal(detallesProducto.getCantidad() + "").compareTo(saldo) > 0) {
+                            throw new ServicioCodefacException("La cantidad del producto " + detallesProducto.getDescripcion() + " es superior al saldo de " + saldo + " pendiente en la factura");
+                        }
                     }
                 }
                 
@@ -177,19 +179,22 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                     for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {
                         for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
                             //Solo hacer cambios de estado cuando existe una referencia a una factura
-                            if(detallesProducto.getReferenciaId()!=null)
+                            if(DetalleProductoGuiaRemision.TipoReferenciaEnum.FACTURA.equals(detallesProducto.getTipoReferenciaEnum()))
                             {
-                                Long facturaId=detallesProducto.getReferenciaId();
-                                FacturaDetalleFacade facturaDetalleFacade=new FacturaDetalleFacade();
-                                FacturaDetalle facturaDetalle= facturaDetalleFacade.find(facturaId);;
+                                if (detallesProducto.getReferenciaId() != null) 
+                                {
+                                    Long facturaId = detallesProducto.getReferenciaId();
+                                    FacturaDetalleFacade facturaDetalleFacade = new FacturaDetalleFacade();
+                                    FacturaDetalle facturaDetalle = facturaDetalleFacade.find(facturaId);;
 
-                                //TODO: Por el momento dejo pendiente de validar cuando un mismo producto puede ir en partes en varias guias de remision
-                                Factura facturaEditar=facturaDetalle.getFactura();
-                                //if(facturaEditar.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
-                                //{
-                                System.out.println("Factura enviada en guia de remision editar: "+facturaEditar.getPreimpreso());
-                                facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
-                                entityManager.merge(facturaEditar);
+                                    //TODO: Por el momento dejo pendiente de validar cuando un mismo producto puede ir en partes en varias guias de remision
+                                    Factura facturaEditar = facturaDetalle.getFactura();
+                                    //if(facturaEditar.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
+                                    //{
+                                    System.out.println("Factura enviada en guia de remision editar: " + facturaEditar.getPreimpreso());
+                                    facturaEditar.setEstadoEnviadoGuiaRemisionEnum(EnumSiNo.SI);
+                                    entityManager.merge(facturaEditar);
+                                }
                             }
                         }
                         
@@ -234,6 +239,12 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         //detalle.getDestinatario().getFacturaReferencia()
         //g.get
         Map<String,Object> mapParametros=new HashMap<String, Object>();
+        
+        if(facturaDetalle==null || facturaDetalle.getId()==null)
+        {
+            return BigDecimal.ZERO;
+        }
+        
         mapParametros.put("referenciaId", facturaDetalle.getId());
         mapParametros.put("destinatario.facturaReferencia", facturaDetalle.getFactura());
         DetalleProductoGuiaRemisionFacade facade=new DetalleProductoGuiaRemisionFacade();

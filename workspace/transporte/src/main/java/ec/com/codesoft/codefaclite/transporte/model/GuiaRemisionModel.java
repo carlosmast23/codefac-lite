@@ -227,31 +227,34 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
             for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
                 
-                if(detallesProducto.getReferenciaId()!=null)
-                {
-                    FacturaDetalle facturaDetalle= consultarFacturaDetalle(detallesProducto.getReferenciaId());
-                    ConsolidadoCargaData data=mapResulados.get(facturaDetalle.getReferenciaId());
-                    if(data==null)
+                if(DetalleProductoGuiaRemision.TipoReferenciaEnum.FACTURA.equals(detallesProducto.getTipoReferenciaEnum()))
+                {                
+                    if (detallesProducto.getReferenciaId() != null) 
                     {
-                        data=new ConsolidadoCargaData(detallesProducto);                    
-                        mapResulados.put(facturaDetalle.getReferenciaId(),data);
-                    }
-                    else
-                    {
-                        data.agregarCantidad(detallesProducto.getCantidad());
-                    }
+                        FacturaDetalle facturaDetalle = consultarFacturaDetalle(detallesProducto.getReferenciaId());
+                        ConsolidadoCargaData data = mapResulados.get(facturaDetalle.getReferenciaId());
+                        if (data == null) 
+                        {
+                            data = new ConsolidadoCargaData(detallesProducto);
+                            mapResulados.put(facturaDetalle.getReferenciaId(), data);
+                        } 
+                        else 
+                        {
+                            data.agregarCantidad(detallesProducto.getCantidad());
+                        }
 
+                        //Agregar el valor total del detalle                
+                        BigDecimal totalDetalle = facturaDetalle.calcularTotalFinal();
+                        data.setTotal(data.getTotal().add(totalDetalle));
 
-                    //Agregar el valor total del detalle                
-                    BigDecimal totalDetalle=facturaDetalle.calcularTotalFinal();
-                    data.setTotal(data.getTotal().add(totalDetalle));
-
-                    if(data.getCodigoInterno().equals("12210"))
-                    {
-                        System.out.println("Dato principal ,valor= "+totalDetalle+" -> "+facturaDetalle.getFactura().getPreimpreso());
-                        System.out.println("Destinatario Detalle"+destinatario.getCodDucumentoSustento());
-                    }
-                }                
+                        if (data.getCodigoInterno().equals("12210")) 
+                        {
+                            System.out.println("Dato principal ,valor= " + totalDetalle + " -> " + facturaDetalle.getFactura().getPreimpreso());
+                            System.out.println("Destinatario Detalle" + destinatario.getCodDucumentoSustento());
+                        }
+                    }                
+                }
+                
             }
         }
         
@@ -901,7 +904,18 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         detalle.setCodigoAdicional("");
         detalle.setCodigoInterno(getTxtCodigoDetalle().getText()); //Todo: Ver si en este campo para futuras versiones se graba mejor el codigo de los productos , sevicios , etc
         detalle.setDescripcion(getTxtDescripcionDetalle().getText());
-        detalle.setReferenciaId(Long.parseLong(detalle.getCodigoInterno())); //TODO: Por el momento mando null para saber que fue agregado manualmente
+        
+        if(productoSeleccionado!=null)
+        {
+            detalle.setReferenciaId(productoSeleccionado.getIdProducto());
+            detalle.setTipoReferenciaEnum(DetalleProductoGuiaRemision.TipoReferenciaEnum.PRODUCTO);
+        }
+        else
+        {
+            detalle.setReferenciaId(Long.parseLong(detalle.getCodigoInterno())); //TODO: Por el momento mando null para saber que fue agregado manualmente
+            detalle.setTipoReferenciaEnum(DetalleProductoGuiaRemision.TipoReferenciaEnum.FACTURA);
+        }
+        
         destinatario.addProducto(detalle);
         
         

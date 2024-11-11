@@ -2609,6 +2609,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     datoAdicional4.setValor(valor);
                     datoAdicional4.setTipoEnum(ComprobanteAdicional.Tipo.TIPO_OTRO);
                     datoAdicional4.setGuiaRemision(guiaRemision);
+                    guiaRemision.addDatoAdicional(datoAdicional4);
                     //guiaRemision.addDatoAdic(datoAdicional4); //Todo: Faclta setear valores para este caso
                     break;
             }
