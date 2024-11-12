@@ -136,6 +136,11 @@ public class ParametroCodefac implements Serializable {
      */
     public static final String FACTURAR_INVENTARIO_NEGATIVO="facturar_inventario_negativo";
     
+    /*
+    Parametro que me permite ocultar datos como el valor de la cierre de la caja
+    */
+    public static final String VISUALIZAR_CIERRE_CAJA="visualizar_cierre_caja";
+    
     public static final String AGREGAR_PRODUCTO_DIRECTO_LECTOR_BARRAS="agregar_producto_directo_lector_barras";
     
     public static final String VENDEDOR_OBLIGATORIO_VENTA="vendedor_obligatorio_venta" ;

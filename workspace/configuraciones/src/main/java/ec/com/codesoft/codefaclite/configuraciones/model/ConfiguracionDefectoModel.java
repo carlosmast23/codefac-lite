@@ -230,6 +230,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbVisualizarCierreCaja(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbAdvertenciaActualizarCostos(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbBuscadorSoloInventario(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbCalculaDescuentoCostos(),EnumSiNo.values());
@@ -732,6 +733,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             enumSiNo = EnumSiNo.getEnumByLetra((parametroFacturarInventarioNegativo != null) ? parametroFacturarInventarioNegativo.getValor() : null);
             getCmbFacturarInventarioNegativo().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
             
+            ParametroCodefac parametroVisualizarCierreCaja = parametrosTodos.get(ParametroCodefac.VISUALIZAR_CIERRE_CAJA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroVisualizarCierreCaja != null) ? parametroVisualizarCierreCaja.getValor() : null);
+            getCmbVisualizarCierreCaja().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
+            
             ParametroCodefac parametroAdvertenciaActualizarCosto = parametrosTodos.get(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroAdvertenciaActualizarCosto != null) ? parametroAdvertenciaActualizarCosto.getValor() : null);
             getCmbAdvertenciaActualizarCostos().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
@@ -1029,6 +1034,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbFacturarInventarioNegativo().getSelectedItem();
         agregarParametro(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO);
+        
+        enumSiNo = (EnumSiNo) getCmbVisualizarCierreCaja().getSelectedItem();
+        agregarParametro(ParametroCodefac.VISUALIZAR_CIERRE_CAJA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.VISUALIZAR_CIERRE_CAJA);
         
         enumSiNo = (EnumSiNo) getCmbAdvertenciaActualizarCostos().getSelectedItem();
         agregarParametro(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);

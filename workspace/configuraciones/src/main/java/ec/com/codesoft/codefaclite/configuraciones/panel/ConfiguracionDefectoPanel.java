@@ -339,6 +339,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbActivarIvaFeriado = new javax.swing.JComboBox<>();
         jPanel14 = new javax.swing.JPanel();
         jLabel112 = new javax.swing.JLabel();
+        cmbVisualizarCierreCaja = new javax.swing.JComboBox<>();
+        lblEspacio14355 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
         jLabel118 = new javax.swing.JLabel();
         cmbVentaProductoModoDescuento = new javax.swing.JComboBox<>();
@@ -2611,9 +2613,28 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("General", jPanel9);
 
+        jPanel14.setLayout(new java.awt.GridBagLayout());
+
         jLabel112.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel112.setText("Reporte Cierre de Caja:");
-        jPanel14.add(jLabel112);
+        jLabel112.setText("Visualizar cierre caja: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel14.add(jLabel112, gridBagConstraints);
+
+        cmbVisualizarCierreCaja.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel14.add(cmbVisualizarCierreCaja, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel14.add(lblEspacio14355, gridBagConstraints);
 
         jTabbedPane1.addTab("Pos", jPanel14);
 
@@ -2742,6 +2763,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbVendedorObligatorioVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbVentaProductoModoDescuento;
     private javax.swing.JComboBox<EnumSiNo> cmbVentanasMultiples;
+    private javax.swing.JComboBox<EnumSiNo> cmbVisualizarCierreCaja;
     private javax.swing.JComboBox<EnumSiNo> jComboFiltrarFacturaPorUsuario;
     private javax.swing.JEditorPane jEditorPanelVistaPrevia;
     private javax.swing.JLabel jLabel1;
@@ -2892,6 +2914,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio123;
+    private javax.swing.JLabel lblEspacio14355;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio3345;
     private javax.swing.JLabel lblEspacio42;
@@ -3943,6 +3966,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbMostrarStockVenta(JComboBox<EnumSiNo> cmbMostrarStockVenta) {
         this.cmbMostrarStockVenta = cmbMostrarStockVenta;
+    }
+
+    public JComboBox<EnumSiNo> getCmbVisualizarCierreCaja() {
+        return cmbVisualizarCierreCaja;
+    }
+
+    public void setCmbVisualizarCierreCaja(JComboBox<EnumSiNo> cmbVisualizarCierreCaja) {
+        this.cmbVisualizarCierreCaja = cmbVisualizarCierreCaja;
     }
     
     
