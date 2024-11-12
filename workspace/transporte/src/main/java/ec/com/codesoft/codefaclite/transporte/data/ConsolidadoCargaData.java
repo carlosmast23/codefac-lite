@@ -44,6 +44,12 @@ public class ConsolidadoCargaData {
     {
         try {
             FacturaDetalle facturaDetalle= ServiceFactory.getFactory().getFacturaDetalleServiceIf().buscarPorId(referenciaId);
+            
+            if(facturaDetalle==null)
+            {
+                return "";
+            }
+            
             //TODO: Solo queda hecho para el caso que asumiendo es inventario pero tocaria hacer por tipo de documento
             Producto producto= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
             if(producto!=null)

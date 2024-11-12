@@ -226,35 +226,34 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         
         for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
             for (DetalleProductoGuiaRemision detallesProducto : destinatario.getDetallesProductos()) {
-                
-                if(DetalleProductoGuiaRemision.TipoReferenciaEnum.FACTURA.equals(detallesProducto.getTipoReferenciaEnum()))
-                {                
-                    if (detallesProducto.getReferenciaId() != null) 
-                    {
+
+                if (detallesProducto.getReferenciaId() != null) {
+                    //FacturaDetalle facturaDetalle = consultarFacturaDetalle(detallesProducto.getReferenciaId());
+                    ConsolidadoCargaData data = mapResulados.get(detallesProducto.getReferenciaId());
+                    if (data == null) {
+                        data = new ConsolidadoCargaData(detallesProducto);
+                        mapResulados.put(detallesProducto.getReferenciaId(), data);
+                    } else {
+                        data.agregarCantidad(detallesProducto.getCantidad());
+                    }
+
+                    //Agregar el valor total del detalle                
+                    BigDecimal totalDetalle = BigDecimal.ZERO;
+                    if (DetalleProductoGuiaRemision.TipoReferenciaEnum.FACTURA.equals(detallesProducto.getTipoReferenciaEnum())) {
                         FacturaDetalle facturaDetalle = consultarFacturaDetalle(detallesProducto.getReferenciaId());
-                        ConsolidadoCargaData data = mapResulados.get(facturaDetalle.getReferenciaId());
-                        if (data == null) 
-                        {
-                            data = new ConsolidadoCargaData(detallesProducto);
-                            mapResulados.put(facturaDetalle.getReferenciaId(), data);
-                        } 
-                        else 
-                        {
-                            data.agregarCantidad(detallesProducto.getCantidad());
-                        }
+                        totalDetalle = facturaDetalle.calcularTotalFinal();
+                    }
 
-                        //Agregar el valor total del detalle                
-                        BigDecimal totalDetalle = facturaDetalle.calcularTotalFinal();
-                        data.setTotal(data.getTotal().add(totalDetalle));
+                    //BigDecimal totalDetalle = facturaDetalle.calcularTotalFinal();
+                    data.setTotal(data.getTotal().add(totalDetalle));
 
-                        if (data.getCodigoInterno().equals("12210")) 
+                    /*if (data.getCodigoInterno().equals("12210")) 
                         {
-                            System.out.println("Dato principal ,valor= " + totalDetalle + " -> " + facturaDetalle.getFactura().getPreimpreso());
+                            System.out.println("Dato principal ,valor= " + totalDetalle + " -> " + detallesProducto.getFactura().getPreimpreso());
                             System.out.println("Destinatario Detalle" + destinatario.getCodDucumentoSustento());
-                        }
-                    }                
+                        }*/
                 }
-                
+
             }
         }
         
