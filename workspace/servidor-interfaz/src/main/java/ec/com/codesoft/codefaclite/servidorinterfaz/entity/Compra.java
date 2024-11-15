@@ -380,7 +380,7 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
         for(CompraDetalle detalle: detalles)
         {
             //TODO: Por el momento queda seteado para 12%
-            if(detalle.getIvaPorcentaje()!=null && detalle.getIvaPorcentaje()==12)
+            if(detalle.getIvaPorcentaje()!=null && detalle.getIvaPorcentaje()!=0)
             {
                 descuentoImpuestosTmp=descuentoImpuestosTmp.add(detalle.getDescuento());
             }
