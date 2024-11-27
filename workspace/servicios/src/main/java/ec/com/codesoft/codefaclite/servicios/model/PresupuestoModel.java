@@ -150,7 +150,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         addListenerCombos();
         addListenerTablas();
         addListenerTextos();
-        addListenerCheckBox();
+        addListenerCheckBox();        
         initDatosTabla();
         this.getCmbFechaPresupuesto().setDate(UtilidadesFecha.getFechaHoy());
         this.setEnabled(false);
@@ -463,6 +463,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     public void limpiar() {        
         limpiarDetalles();
         limpiarTotales();
+        listenerCargadorProveedor();
         this.getTxtOrdenTrabajo().setText("");
         this.getTxtCliente().setText("");
         this.getCmbDetallesOrdenTrabajo().removeAllItems();
@@ -933,29 +934,31 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getChkInventarioProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) 
-            {
-                try {
-                    persona=ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(session.getEmpresa().getIdentificacion(),session.getEmpresa());
-                    
-                    //Si no existe creado el dato le creo un proveedor con la misma identificación
-                    if(persona==null)
-                    {
-                        persona=ServiceFactory.getFactory().getPersonaServiceIf().crearProveedorDesdeEmpresa(session.getEmpresa());
-                    }
-                    
-                    if(persona != null)
-                    {
-                        getTxtProveedorDetalle().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
-                    }
-                    
-                } catch (RemoteException ex) {
-                    Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
+            {                
+                listenerCargadorProveedor();
             }
         });
+    }
+    
+    public void listenerCargadorProveedor()
+    {
+        try {
+            persona = ServiceFactory.getFactory().getPersonaServiceIf().buscarPorIdentificacion(session.getEmpresa().getIdentificacion(), session.getEmpresa());
+
+            //Si no existe creado el dato le creo un proveedor con la misma identificación
+            if (persona == null) {
+                persona = ServiceFactory.getFactory().getPersonaServiceIf().crearProveedorDesdeEmpresa(session.getEmpresa());
+            }
+
+            if (persona != null) {
+                getTxtProveedorDetalle().setText(persona.getRazonSocial() + " - " + persona.getIdentificacion());
+            }
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void addListenerTextos()

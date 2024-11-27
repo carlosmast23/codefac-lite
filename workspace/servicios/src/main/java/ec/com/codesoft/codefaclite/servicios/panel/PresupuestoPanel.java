@@ -735,6 +735,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jPanel1.add(jLabel20, new java.awt.GridBagConstraints());
 
         chkInventarioProveedor.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkInventarioProveedor.setSelected(true);
         chkInventarioProveedor.setText("mi empresa");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
