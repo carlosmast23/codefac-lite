@@ -148,10 +148,19 @@ public class ProformaModel extends FacturacionModel{
                     FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
                     setearValoresDefaultFactura(CrudEnum.CREAR);
                     //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                    
+                    Boolean enviarCorreo=getChkEnviarCorreo().isSelected();
+                    if(factura.getDetalles().isEmpty())
+                    {
+                        enviarCorreo=false;
+                    }
 
-                    factura = servicio.grabarProforma(factura,getChkEnviarCorreo().isSelected(),getChkImprimirSinCodigo().isSelected(),getChkImprimirUbicacion().isSelected());
+                    factura = servicio.grabarProforma(factura,enviarCorreo,getChkImprimirSinCodigo().isSelected(),getChkImprimirUbicacion().isSelected());
                     //DialogoCodefac.mensaje("Correcto", "Proforma generada correctamente", MENSAJE_CORRECTO);
-                    imprimirProforma();
+                    if(!factura.getDetalles().isEmpty())
+                    {
+                        imprimirProforma();
+                    }
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(ProformaModel.class.getName()).log(Level.SEVERE, null, ex);                                        

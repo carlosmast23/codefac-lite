@@ -1193,7 +1193,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
             
         //Agregar el tipo de documento seleccionado
-        facturaDetalle.setTipoDocumentoEnum(tipoDocumentoEnumSeleccionado);
+        if(facturaDetalle.getTipoDocumentoEnum()==null)
+        {
+            facturaDetalle.setTipoDocumentoEnum(tipoDocumentoEnumSeleccionado);
+        }
         
        
         //facturaDetalle.setCantidad(new BigDecimal(interfaz.obtenerTxtCantidad()));

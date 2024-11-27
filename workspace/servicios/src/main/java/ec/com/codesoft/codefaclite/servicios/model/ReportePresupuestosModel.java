@@ -308,10 +308,10 @@ public class ReportePresupuestosModel extends ReportePresupuestosPanel {
             String kilometraje="";
             if(objetoMantenimiento!=null)
             {
-                if(objetoMantenimiento.getKilometraje()!=null)
+                /*if(objetoMantenimiento.getKilometraje()!=null)
                 {
                     kilometraje="["+objetoMantenimiento.getKilometraje()+"km]";
-                }
+                }*/
             }
             presupuestoData.setObjetoMantenimiento((objetoMantenimiento!=null)?objetoMantenimiento.getNombre()+kilometraje:"");
             

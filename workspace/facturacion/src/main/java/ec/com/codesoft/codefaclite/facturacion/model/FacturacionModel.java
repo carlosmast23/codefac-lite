@@ -1944,12 +1944,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             DialogoCodefac.mensaje("Error con el cliente", factura.getCliente().validarIdentificacion().getMensaje(), DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Error con la identificacion del cliente seleccionado");
         }*/
-
-        if (factura.getDetalles().isEmpty()) {
-            DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
-        }
         
+        DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+        //TODO: Solo hacer las verificaciones para cuando no sean PROFORMAS
+        //porque para el resto de documentos si debe validar que no guade vacio
+        if(!DocumentoEnum.PROFORMA.equals(documentoEnum))
+        {
+            if(factura.getDetalles().isEmpty()) 
+            {
+                DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
+            }
+        }
+
         if(factura.getCliente()!=null)
         {
             //Verificar que si consumidor final no permita facturar un valor superior a 200 dolares
@@ -1964,8 +1971,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             }
             else
-            {
-                DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+            {                
                 //Advertir cuando no exista ningun correo para que el usuario pueda ingresar antes de enviar al cliente
                 if (!factura.verificarExistenCorreosIngresados() && !documentoEnum.equals(documentoEnum.NOTA_VENTA_INTERNA)) {
                     if (!DialogoCodefac.dialogoPregunta("Advertencia", "No esta ningun correo ingresado para informar al cliente.\nDesea continuar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {

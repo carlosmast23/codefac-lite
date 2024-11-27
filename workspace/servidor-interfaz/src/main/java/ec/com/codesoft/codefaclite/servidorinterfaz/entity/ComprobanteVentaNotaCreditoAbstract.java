@@ -154,6 +154,11 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     }
 
     public BigDecimal getIce() {
+        if(ice==null)
+        {
+            ice=BigDecimal.ZERO;
+        }
+        
         return ice;
     }
 
