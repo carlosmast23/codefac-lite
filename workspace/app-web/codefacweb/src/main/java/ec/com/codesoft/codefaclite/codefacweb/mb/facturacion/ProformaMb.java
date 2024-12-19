@@ -94,8 +94,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
+import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -290,7 +292,16 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
                 mostrarDialogoResultado(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
             }
             else if (tipoPaginaEnum.equals(TipoPaginaEnum.FACTURA)) {
-                factura = servicio.grabar(factura);
+                
+                CarteraParametro carteraParametro=new CarteraParametro(
+                        factura.getVentaCreditoBool(), 
+                        factura.getDiasCredito(),
+                        null
+                );
+                
+                //factura = servicio.grabar(factura);
+                factura = servicio.grabar(factura, null, carteraParametro, ModoProcesarEnum.NORMAL);
+                
                 
                 //TODO:Toca validar que solo sea para electronica unir con el controlador para la factura
                 if (documentoSeleccionado.equals(DocumentoEnum.FACTURA)) 
