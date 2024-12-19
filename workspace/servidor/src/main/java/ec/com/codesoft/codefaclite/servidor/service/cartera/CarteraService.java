@@ -644,7 +644,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         //Si existen más de 1 cuota creo que las diferentes cuotas
         Boolean crearCarteraUnica=true;
-        if(carteraParametro!=null)
+        if(carteraParametro!=null && carteraParametro.habilitarCredito)
         {
             if(carteraParametro.numeroCuotas!=null)
             {

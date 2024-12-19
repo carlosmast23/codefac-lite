@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servicios.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador.IvaOpcionEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -127,6 +128,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         txtEmpleadoDetalle = new javax.swing.JTextField();
         btnEmpleadoBuscar = new javax.swing.JButton();
         lblEspacio1234 = new javax.swing.JLabel();
+        cmbIvaOpcion = new javax.swing.JComboBox<>();
         jLabel27 = new javax.swing.JLabel();
         cmbTipoPresupuesto = new javax.swing.JComboBox<>();
         llblEspacio50 = new javax.swing.JLabel();
@@ -808,6 +810,13 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel1.add(pnlDatosAdicionalesDetalle, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbIvaOpcion, gridBagConstraints);
+
         jTabbedPane1.addTab("Detalles", jPanel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -980,6 +989,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<OrdenTrabajoDetalle> cmbDetallesOrdenTrabajo;
     private javax.swing.JComboBox<Presupuesto.EstadoEnum> cmbEstadoPresupuesto;
     private org.jdesktop.swingx.JXDatePicker cmbFechaPresupuesto;
+    private javax.swing.JComboBox<IvaOpcionEnum> cmbIvaOpcion;
     private javax.swing.JComboBox<String> cmbOpcionDiaMes;
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoPresupuesto;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -1488,8 +1498,15 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setLblPrecioVenta(JLabel lblPrecioVenta) {
         this.lblPrecioVenta = lblPrecioVenta;
     }
-    
-    
 
+    public JComboBox<IvaOpcionEnum> getCmbIvaOpcion() {
+        return cmbIvaOpcion;
+    }
+
+    public void setCmbIvaOpcion(JComboBox<IvaOpcionEnum> cmbIvaOpcion) {
+        this.cmbIvaOpcion = cmbIvaOpcion;
+    }
+    
+    
     
 }

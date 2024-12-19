@@ -414,6 +414,17 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         query.setParameter(1,autorizacion);
         return query.getResultList();
     }
+    
+    public List<Factura> buscarPorNumeroOrden(Integer numeroOrden) throws RemoteException,ServicioCodefacException
+    {
+        /*Factura f;
+        f.getEs*/
+        String queryString=" SELECT f FROM Factura f WHERE f.numeroOrden=?1 AND f.estado=?2 ORDER BY f.id ";
+        Query query=getEntityManager().createQuery(queryString);
+        query.setParameter(1,numeroOrden);
+        query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+        return query.getResultList();
+    }
       
       public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto)
       {

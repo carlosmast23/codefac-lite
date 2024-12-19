@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.vista.crm.ProductoModelControlador;
 import ec.com.codesoft.codefaclite.controlador.vista.servicio.PresupuestoControlador;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -61,6 +62,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
@@ -546,6 +548,17 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         } catch (RemoteException ex) {
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        //Cagar el combo de cargar con o sin iva el precio de compra
+        List ivaOpcionList=new ArrayList<ProductoModelControlador.IvaOpcionEnum>()
+        {
+            {
+                add(ProductoModelControlador.IvaOpcionEnum.SIN_IVA);
+                add(ProductoModelControlador.IvaOpcionEnum.CON_IVA);
+            }
+        };
+        
+        UtilidadesComboBox.llenarComboBox(getCmbIvaOpcion(), ivaOpcionList);
 
         
     }
@@ -712,6 +725,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     //if(tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
                     //{
                         buscarProductosConInventario();
+                        getCmbIvaOpcion().setSelectedIndex(0);
                     //}
                     //else if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
                     //{
@@ -1187,6 +1201,13 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 
                 BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
                 
+                ProductoModelControlador.IvaOpcionEnum ivaOpcionEnum= (ProductoModelControlador.IvaOpcionEnum) getCmbIvaOpcion().getSelectedItem();
+                
+                if(ivaOpcionEnum.CON_IVA.equals(ivaOpcionEnum))
+                {
+                    precioCompra=UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), precioCompra, 4);
+                }
+                
                 BigDecimal descuentoCompra = new BigDecimal(getTxtDescuentoPrecioCompra().getText());
                 
                 BigDecimal precioVenta = new BigDecimal(getTxtPrecioVenta().getText());
@@ -1409,7 +1430,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getTxtSubtotalVentas().setText(subtotalVenta.setScale(2, RoundingMode.HALF_UP).toString());
         getTxtDescuentoVentas().setText(descuentoVenta.toString());
 
-        BigDecimal valorIva=UtilidadesImpuestos.calcularValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), totalVenta);
+        //BigDecimal valorIva=UtilidadesImpuestos.calcularValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), totalVenta);
+        BigDecimal valorIva=totalVenta.setScale(2, RoundingMode.HALF_UP).subtract(subtotalVenta.setScale(2, RoundingMode.HALF_UP));
         
         getLblIva().setText(valorIva.setScale(2,ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO)+"");
                 

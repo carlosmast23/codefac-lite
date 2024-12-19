@@ -163,6 +163,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbMostrarStockVenta = new javax.swing.JComboBox<>();
         jLabel125 = new javax.swing.JLabel();
         txtAjustarMargenTicket = new javax.swing.JSpinner();
+        jLabel126 = new javax.swing.JLabel();
+        txtValorMinimoSorteo = new javax.swing.JSpinner();
         jPanel15 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
@@ -993,10 +995,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel4.add(cmbMostrarCostoConIva, gridBagConstraints);
 
         jLabel82.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel82.setText("Pvp Defecto:");
+        jLabel82.setText("Cupon de sorteo minimo valor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel82, gridBagConstraints);
@@ -1219,6 +1221,22 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(txtAjustarMargenTicket, gridBagConstraints);
+
+        jLabel126.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel126.setText("Pvp Defecto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel126, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(txtValorMinimoSorteo, gridBagConstraints);
 
         jTabbedPane1.addTab("Ventas", jPanel4);
 
@@ -2796,6 +2814,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel123;
     private javax.swing.JLabel jLabel124;
     private javax.swing.JLabel jLabel125;
+    private javax.swing.JLabel jLabel126;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -2967,6 +2986,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JSpinner txtPvp4MargenUtilidad;
     private javax.swing.JSpinner txtPvp5MargenUtilidad;
     private javax.swing.JSpinner txtPvp6MargenUtilidad;
+    private javax.swing.JSpinner txtValorMinimoSorteo;
     private javax.swing.JTextField txtVariableGeneralComprobantes;
     // End of variables declaration//GEN-END:variables
 
@@ -3975,6 +3995,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setCmbVisualizarCierreCaja(JComboBox<EnumSiNo> cmbVisualizarCierreCaja) {
         this.cmbVisualizarCierreCaja = cmbVisualizarCierreCaja;
     }
+
+    public JSpinner getTxtValorMinimoSorteo() {
+        return txtValorMinimoSorteo;
+    }
+
+    public void setTxtValorMinimoSorteo(JSpinner txtValorMinimoSorteo) {
+        this.txtValorMinimoSorteo = txtValorMinimoSorteo;
+    }
+    
     
     
     

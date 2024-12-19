@@ -563,6 +563,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             
             parametro = parametrosTodos.get(ParametroCodefac.NUMERO_DECIMALES_RIDE);
             getTxtNumeroDecimalesRide().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 2);
+            
+            parametro = parametrosTodos.get(ParametroCodefac.VALOR_MINIMO_SORTEO);
+            getTxtValorMinimoSorteo().setValue((parametro != null) ? Integer.parseInt(parametro.getValor()): 2);
             //getTxtMotivoTrasladoGuiaRemision().setText(motivoGuiaRemision);
             
             parametro = parametrosTodos.get(ParametroCodefac.COPIAS_IMPRESORA_COMANDA);
@@ -1231,6 +1234,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         agregarParametro(ParametroCodefac.NUMERO_DECIMALES_RIDE, getTxtNumeroDecimalesRide().getValue().toString());
         agregarParametroEditar(ParametroCodefac.NUMERO_DECIMALES_RIDE);    
+        
+        agregarParametro(ParametroCodefac.VALOR_MINIMO_SORTEO, getTxtValorMinimoSorteo().getValue().toString());
+        agregarParametroEditar(ParametroCodefac.VALOR_MINIMO_SORTEO);  
         
         agregarParametro(ParametroCodefac.COPIAS_IMPRESORA_COMANDA, getTxtCopiasComanda().getValue().toString());
         agregarParametroEditar(ParametroCodefac.COPIAS_IMPRESORA_COMANDA);   

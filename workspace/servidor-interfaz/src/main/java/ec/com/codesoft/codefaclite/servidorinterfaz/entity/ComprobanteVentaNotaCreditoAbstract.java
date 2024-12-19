@@ -261,6 +261,16 @@ public abstract class ComprobanteVentaNotaCreditoAbstract<T extends ComprobanteA
     
     public BigDecimal calcularDescuentosTotales()
     {
+        if(descuentoImpuestos==null)
+        {
+            descuentoImpuestos=BigDecimal.ZERO;
+        }
+        
+        if(descuentoSinImpuestos==null)
+        {
+            descuentoSinImpuestos=BigDecimal.ZERO;
+        }
+        
         return descuentoImpuestos.add(descuentoSinImpuestos);
     }
     

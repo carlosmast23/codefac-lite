@@ -36,6 +36,7 @@ public class ComandaBusquedaDialogo extends ProformaBusqueda{
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Secuencial", 0.2d));
+        titulo.add(new ColumnaDialogo("#Orden", 0.2d));
         titulo.add(new ColumnaDialogo("Mesa", 0.3d));
         titulo.add(new ColumnaDialogo("Mesero", 0.15d));        
         titulo.add(new ColumnaDialogo("fecha", 0.15d));
@@ -53,6 +54,7 @@ public class ComandaBusquedaDialogo extends ProformaBusqueda{
     @Override
     public void agregarObjeto(Factura t, Vector dato) {
         dato.add(t.getId());
+        dato.add(t.getNumeroOrden());
         dato.add((t.getMesa()!=null)?t.getMesa().toString():"");
         dato.add((t.getUsuario()!=null)?t.getUsuario().getNick():"");
         if(t.getFechaEmision()!=null)
@@ -71,6 +73,7 @@ public class ComandaBusquedaDialogo extends ProformaBusqueda{
     public Vector<String> getNamePropertysObject() {
         Vector<String> propiedades = new Vector<String>();
         propiedades.add("secuencial");
+        propiedades.add("# orden");
         propiedades.add("mesa");
         propiedades.add("usuario");//TODO: Ver como puedo hacer para establecer una propiedad personalizada        
         propiedades.add("fechaEmision");

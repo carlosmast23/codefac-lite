@@ -319,7 +319,10 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             {
                 if(totalImpuesto.getValor().floatValue()>0)
                 {
-                    descuentoAdicional=descuentoAdicional.add(new BigDecimal(totalImpuesto.getDescuentoAdicional()));
+                    BigDecimal descuentoAdicionalTmp=new BigDecimal(totalImpuesto.getDescuentoAdicional().trim());
+                    
+                    descuentoAdicional=descuentoAdicional.add(descuentoAdicionalTmp);
+                    //descuentoAdicional=descuentoAdicional.add(new BigDecimal(totalImpuesto.getDescuentoAdicional()));
                 }
             }
         }

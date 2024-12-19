@@ -418,8 +418,9 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
         
         
         totalFinal=subtotalMenosDescuento.multiply(valorIceDecimal).multiply(valorIvaDecimal);
+        
         //En teoria la diferencia es el iva que debe ir para cuadrar
-        totalFinal=totalFinal.setScale(2, BigDecimal.ROUND_HALF_UP);
+        totalFinal=totalFinal.setScale(4, BigDecimal.ROUND_HALF_UP);
         //return setTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     
     }

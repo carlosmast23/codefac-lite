@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ComandaBusquedaDialogo;
@@ -121,7 +122,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.general.ParametrosClienteEscritorio;
 import ec.com.codesoft.codefaclite.facturacion.nocallback.FacturaRespuestaNoCallBack;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -145,9 +147,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.ArqueoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
@@ -174,6 +178,7 @@ import java.awt.event.ItemListener;
 import static java.awt.image.ImageObserver.WIDTH;
 import java.io.File;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -471,6 +476,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
 
     private void addListenerButtons() { 
+        
+        getBtnBuscarOrden().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    getSpnNumeroOrdenComanda().commitEdit();
+                    Factura factura=ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorNumeroOrdenActivo((Integer)getSpnNumeroOrdenComanda().getValue());
+                    if(factura!=null)
+                    {
+                        formularioActual.estadoFormularioEnum=EstadoFormularioEnum.EDITAR;
+                        formularioActual.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;                     
+                        formularioActual.eventoCambiarEstado();
+                        cargarDatosPantallaFactura(factura);
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje(new CodefacMsj("No existe comanda con ese número de orden",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    }
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
         
         getPnlDatosAdicionales().getBtnCargarXml().addActionListener(new ActionListener() {
@@ -1948,7 +1981,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
         //TODO: Solo hacer las verificaciones para cuando no sean PROFORMAS
         //porque para el resto de documentos si debe validar que no guade vacio
-        if(!DocumentoEnum.PROFORMA.equals(documentoEnum))
+        if(!DocumentoEnum.PROFORMA.equals(documentoEnum) && !DocumentoEnum.COMANDA.equals(documentoEnum))
         {
             if(factura.getDetalles().isEmpty()) 
             {
@@ -2149,6 +2182,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     reporteVentaManual(factura,documentoEnum,true,false);
                 }
+                
+                ////Imprimir el ticket para el sorte
+                imprimirTicketSorteo(factura);
             }
             else if(documentoEnum.equals(DocumentoEnum.COMANDA))
             {
@@ -2736,6 +2772,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                 }
                 
+                imprimirTicketSorteo(factura);
+                
             }
             else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
@@ -2759,12 +2797,33 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                
+                imprimirTicketSorteo(factura);
             }
             else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
             {
                 FacturaModelControlador.imprimirComanda(factura, panelPadre);
             }
         }
+    }
+    
+    private void imprimirTicketSorteo(Factura venta)
+    {
+        Integer valorMinimoTicket=ParametroUtilidades.obtenerValorParametroInteger(session.getEmpresa(), ParametroCodefac.VALOR_MINIMO_SORTEO,0);
+        
+        if(valorMinimoTicket >0)
+        {
+            if(venta.getTotal().intValue()>=valorMinimoTicket)
+            {
+                Map<String,Object> parametros=new HashMap<String,Object>();
+                parametros.put("numero",venta.getId()+"");                
+                parametros.put("cliente",venta.getRazonSocial()+"");                
+                parametros.put("telefonos",venta.getTelefono()+"");                
+                
+                ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,"ticket_sorteo.jrxml", parametros, new ArrayList(), panelPadre, "Sorteo", OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.TICKET,ConfiguracionImpresoraEnum.IMPRESORA_POR_DEFECTO,ReporteCodefac.ImpresionAutomaticaEnum.COMANDA);
+            }
+        }
+    
     }
     
 
@@ -2790,26 +2849,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void cargarDatosBuscar()
     {
         TipoDocumentoEnum tipoReferenciaEnum =null;
+        
+        //cargar datos del restaurante
+        getCmbMesaComanda().setSelectedItem(factura.getMesa());
+        getTxtNotaMesa().setText(factura.getNota());
+        getTxtValorRecibido().setText(factura.getValorRecibido()+"");
+        if(factura.getNumeroOrden()!=null)
+        {
+            getSpnNumeroOrdenComanda().setValue(factura.getNumeroOrden());
+        }
+        
         ///Cargar los datos de la factura segun el tipo de datos del primer detalle
         if(factura.getDetalles().size()==0)
         {
             DialogoCodefac.mensaje(new CodefacMsj("La factura no tiene detalles", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
-            return;
+            //Por defecto le pongo tipo de documento Inventario cuando tiene detalles
+            tipoReferenciaEnum=TipoDocumentoEnum.INVENTARIO;
+            //return;
         }
         else
         {
             tipoReferenciaEnum = factura.getDetalles().get(0).getTipoDocumentoEnum();
         }       
         
-        //cargar datos del restaurante
-        getCmbMesaComanda().setSelectedItem(factura.getMesa());
-        getTxtNotaMesa().setText(factura.getNota());
-        getTxtValorRecibido().setText(factura.getValorRecibido()+"");
         
-        if(factura.getNumeroOrden()!=null)
-        {
-            getSpnNumeroOrdenComanda().setValue(factura.getNumeroOrden());
-        }
+        
+
         
         getCmbDocumento().setSelectedItem(factura.getCodigoDocumentoEnum());
         controlador.setTipoDocumentoEnumSeleccionado(tipoReferenciaEnum);

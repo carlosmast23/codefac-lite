@@ -1634,6 +1634,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     
     public static void imprimirComanda(Factura facturaProcesando,InterfazComunicacionPanel panelPadre)
     {
+        if(facturaProcesando.getDetalles().size()==0)
+        {
+            return ;
+        }
         
         Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando,false); 
@@ -1747,6 +1751,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         //ReporteCodefac.generarReporteInternalFramePlantilla(parametro, mapParametros, dataReporte, this.panelPadre, "Comprobante de Venta ", OrientacionReporteEnum.VERTICAL,formatoEnum);
         ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,nombreReporte, mapParametros, dataReporte, panelPadre, nombre, OrientacionReporteEnum.VERTICAL,formatoEnum,configuracion,impresionAutomaticaEnum);
+        
 
     }
     
@@ -2028,7 +2033,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             }   
             
             //Agregar dato de la autorizacion si es manual y tiene seteado ese campo en la nota de venta
-            if(facturaProcesando.getTipoFacturacionEnum().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
+            if(ComprobanteEntity.TipoEmisionEnum.NORMAL.equals(facturaProcesando.getTipoFacturacionEnum()))
             {
                 if(!UtilidadesTextos.verificarNullOVacio(facturaProcesando.getClaveAcceso()))
                 {

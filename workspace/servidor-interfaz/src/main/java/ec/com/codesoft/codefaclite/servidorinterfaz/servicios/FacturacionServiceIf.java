@@ -92,4 +92,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     
     public Factura editarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo,Boolean imprimirUbicacion) throws RemoteException,ServicioCodefacException;
     
+    public Factura buscarPorNumeroOrdenActivo(Integer numeroOrden) throws RemoteException,ServicioCodefacException;
+    
 }

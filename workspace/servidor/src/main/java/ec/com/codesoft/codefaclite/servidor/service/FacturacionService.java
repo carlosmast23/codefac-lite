@@ -146,6 +146,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return getFacade().buscarPorPremimpresoYEstadoFacade(secuencial, puntoEstablecimiento, puntoEmision, estadoEnum);
     }
     
+    public Factura buscarPorNumeroOrdenActivo(Integer numeroOrden) throws RemoteException,ServicioCodefacException
+    {
+         List<Factura> resultadoList=getFacade().buscarPorNumeroOrden(numeroOrden);
+        
+        if(resultadoList.size()>0)
+        {
+            return resultadoList.get(0);
+        }
+        return null;
+    }
+    
     public Factura buscarPorAutorizacion(String autorizacion) throws RemoteException,ServicioCodefacException
     {
         List<Factura> resultadoList=getFacade().buscarPorAutorizacionFacade(autorizacion);
