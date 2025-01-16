@@ -190,7 +190,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         //si no existe pvp de un cliente lo intento de nuevo
-        if(UtilidadesTextos.verificarNullOVacio(pvpDefecto))
+        if(UtilidadesTextos.verificarNullOVacio(pvpDefecto) ||  pvpDefecto.equals("null"))
         {
             //Buscar cual es el precio por defecto que se debe cargar cuando se esta utilizando otro adicional
             String pvpDefectoTmp = ParametroUtilidades.obtenerValorParametro(session.getEmpresa(), ParametroCodefac.PRECIO_VENTA_DEFECTO);
@@ -612,7 +612,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         if (calcularAhorro) {
             descuentoDefecto=productoSeleccionado.getValorUnitario().subtract(valorUnitario);
-            valorUnitario=productoSeleccionado.getValorUnitario();            
+            valorUnitario=productoSeleccionado.getValorUnitario();           
+            //el descuento siempre va a ser en valor
+            interfaz.setCheckPorcentajeSeleccion(false);
+            
             //El precio para hacer e calculo del ahorro siempre va a hacer el primero
             
             //facturaDetalle.setDescuento(productoSeleccionado.getValorUnitario().subtract(valorUnitario));
@@ -966,7 +969,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     seleccionarPorcentaje=false;
                 }
             }
-            interfaz.cargarPreciosPorcentaje(descuentosList,true);
+            interfaz.cargarPreciosPorcentaje(descuentosList,seleccionarPorcentaje);
         }
         //Dejar seleccionado el ultimo precio por defecto para que las siguientes veces continue con ese mismo precio
         if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.AGREGAR_PVP_ANTERIOR,EnumSiNo.SI))
@@ -1663,6 +1666,10 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             {
                 nombre=aliasNotaVenta;
             }
+        }
+        else
+        {
+            nombre="Factura";
         }
         
         FormatoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, FormatoReporteEnum.A2);
@@ -2386,6 +2393,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         public EnumSiNo obtenerComboIva();
         public Factura obtenerFactura();
         public Boolean obtenerCheckPorcentajeSeleccion();
+        public void setCheckPorcentajeSeleccion(Boolean seleccion);
         public Long obtenerKardexId();
         
         public void limpiarComboPrecioVenta();

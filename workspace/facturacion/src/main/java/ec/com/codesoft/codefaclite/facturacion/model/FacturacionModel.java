@@ -5465,6 +5465,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public Boolean obtenerCheckPorcentajeSeleccion() {
         return getCheckPorcentaje().isSelected();
     }
+    
+    @Override
+    public void setCheckPorcentajeSeleccion(Boolean seleccion) {
+        getCheckPorcentaje().setSelected(seleccion);
+    }
 
     @Override
     public void limpiarComboPrecioVenta() {

@@ -134,7 +134,7 @@ create table NOTA_CREDITO_ADICIONAL
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     NOTA_CREDITO_ID BIGINT,
     CAMPO varchar(150),
-    VALOR varchar(150),
+    VALOR varchar(300),
     TIPO varchar(1),
     NUMERO integer ,
     primary key (ID)

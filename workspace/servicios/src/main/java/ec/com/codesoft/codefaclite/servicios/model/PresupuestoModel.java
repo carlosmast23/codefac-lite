@@ -1427,7 +1427,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         //BigDecimal subtotalVentas=(presupuesto.getTotalVenta()!=null)?presupuesto.getTotalVenta():BigDecimal.ZERO;
         //BigDecimal descuentoVentas=(presupuesto.getDescuentoVenta()!=null)?presupuesto.getDescuentoVenta():BigDecimal.ZERO;
         
-        getTxtSubtotalVentas().setText(subtotalVenta.setScale(2, RoundingMode.HALF_UP).toString());
+        getTxtSubtotalVentas().setText(subtotalVenta.setScale(4, RoundingMode.HALF_UP).toString());
         getTxtDescuentoVentas().setText(descuentoVenta.toString());
 
         //BigDecimal valorIva=UtilidadesImpuestos.calcularValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), totalVenta);

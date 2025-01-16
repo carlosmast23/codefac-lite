@@ -321,6 +321,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             if(detalle.getCostoUnitario()!=null)
             {
                 kardexDetalle.setPrecioUnitario(detalle.getCostoUnitario());
+                kardexDetalle.setCostoPersonalizado(detalle.getCostoUnitario());
             }
             else
             {

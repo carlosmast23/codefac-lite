@@ -51,6 +51,8 @@ create table KARDEX_DETALLE(
     DESCUENTO decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.0.1.5)*/
     USUARIO_NICK varchar(100),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.3.4)*/
+    COSTO_PERSONALIZADO decimal(13,2),,
     primary key (ID)
 );
 

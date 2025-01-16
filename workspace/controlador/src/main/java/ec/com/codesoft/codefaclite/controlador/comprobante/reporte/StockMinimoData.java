@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class StockMinimoData implements ExcelDatosInterface{
     
-    public static String NOMBRE_CABECERA_EXCEL[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Iva","Stock","Disp","Reserv","Pvp1","Pvp2","Cantidad Min","Costo","´Último Costo","Utilidad","F.Caducidad","Reg.Sanitario"};
+    public static String NOMBRE_CABECERA_EXCEL[] = {"Código","Codigo2","Lote","Bodega","Producto","Marca","Categoria","Aplicación","Ubicación","Tipo","Iva","Stock","Disp","Reserv","Pvp1","Pvp2","Cantidad Min","Costo","´Último Costo","Utilidad","F.Caducidad","Reg.Sanitario"};
     
     private Long kardexId;
     private String codigo;
@@ -344,6 +344,7 @@ public class StockMinimoData implements ExcelDatosInterface{
         tiposDatos.add(new TipoDato(this.categoria, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.aplicacion, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.ubicacion, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato((this.tipo!=null?this.tipo.getNombre():""), Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.ivaPorcentaje, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.stock,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.disponible,Excel.TipoDataEnum.NUMERO));

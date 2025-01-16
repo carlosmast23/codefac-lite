@@ -221,7 +221,17 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setEmpresa(session.getEmpresa());
         persona.setObservaciones(getTxtObservaciones().getText());
         persona.setCampoAdicional(getTxtCampoAdicional().getText());
-        persona.setPvpDefecto(getCmbPrecioVentaDefecto().getSelectedItem()+"");
+        
+        //Solo grabar el numero de precio en el caso que se haya seleccionado alguno
+        Producto.PrecioVenta precioVenta=(Producto.PrecioVenta) getCmbPrecioVentaDefecto().getSelectedItem();
+        if(precioVenta!=null)
+        {
+            persona.setPvpDefecto(precioVenta.getAlias());
+        }
+        else
+        {
+            persona.setPvpDefecto(null);
+        }
                 
         
         //Grabar la variable de obligado a llevar contabilidad

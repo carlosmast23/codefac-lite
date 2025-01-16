@@ -101,6 +101,9 @@ public class KardexDetalle implements Serializable {
     @Column(name = "USUARIO_NICK")
     private String usuarioNick;
     
+    @Column(name = "COSTO_PERSONALIZADO")
+    private BigDecimal costoPersonalizado;
+    
     /**
      * Variable para almacenar el tipo de documento de la referencia para luego poder hacar una consulta
      */
@@ -302,8 +305,14 @@ public class KardexDetalle implements Serializable {
     public void setUsuarioNick(String usuarioNick) {
         this.usuarioNick = usuarioNick;
     }
-    
-    
+
+    public BigDecimal getCostoPersonalizado() {
+        return costoPersonalizado;
+    }
+
+    public void setCostoPersonalizado(BigDecimal costoPersonalizado) {
+        this.costoPersonalizado = costoPersonalizado;
+    }
     
     
 
