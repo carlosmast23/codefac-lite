@@ -55,6 +55,9 @@ public class KardexDetalle implements Serializable {
     @Column(name = "CANTIDAD")
     private BigDecimal cantidad;
     
+    @Column(name = "RESERVA")
+    private BigDecimal reserva;
+    
     @Column(name = "PRECIO_UNITARIO")
     private BigDecimal precioUnitario;
     
@@ -313,6 +316,15 @@ public class KardexDetalle implements Serializable {
     public void setCostoPersonalizado(BigDecimal costoPersonalizado) {
         this.costoPersonalizado = costoPersonalizado;
     }
+
+    public BigDecimal getReserva() {
+        return reserva;
+    }
+
+    public void setReserva(BigDecimal reserva) {
+        this.reserva = reserva;
+    }
+    
     
     
 

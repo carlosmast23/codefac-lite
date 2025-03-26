@@ -435,9 +435,10 @@ public class KardexModel extends KardexPanel {
             
             kardexData.setDescripcion(kardexDetalle.getDescripcion());
             
-            kardexData.setProductoNombre(kardexDetalle.getKardex().getProducto().getNombre()+"");
+            Producto producto= kardexDetalle.getKardex().getProducto();
+            kardexData.setProductoNombre(producto.getNombre()+" ["+producto.getCodigoPersonalizado()+"]");
             
-            kardexData.setProductoId(kardexDetalle.getKardex().getProducto().getIdProducto()+"");
+            kardexData.setProductoId(producto.getIdProducto()+"");
             
             //Obtener solo la HORA y MINUTO de un DATE
             String horaKardex="";

@@ -340,6 +340,7 @@ public class Kardex implements Serializable,Cloneable {
         return stockTmp;
     }
     
+    @Deprecated
     public void procesarReserva(BigDecimal cantidadReserva,SignoEnum sigEnum)
     {
             BigDecimal stockActual=BigDecimal.ZERO;

@@ -116,17 +116,17 @@ import java.util.Arrays;
 @ViewScoped 
 public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterface, Serializable {
 
-    private static final String ID_COMPONENTE_MONITOR="monitor";        
+    private static final String ID_COMPONENTE_MONITOR="monitor";           
     
         
-    private Factura factura;      
+    private Factura factura;        
 
     /**
      * Esta referencia me permite saber cual factura esta seleccionada para editar 
      */
     private FacturaDetalle facturaDetalle; 
 
-    private List<Producto.PrecioVenta> precioVentaList;
+    private List<Producto.PrecioVenta> precioVentaList; 
     private List<DocumentoEnum> documentos;     
     private List<PuntoEmision> puntosEmision; 
     private List<CategoriaProducto> categoriaList;
@@ -136,6 +136,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     //private List<SriFormaPago> sriFormaPagosList;
 
     private Producto productoSeleccionado;  
+    private Kardex kardexProductoSeleccionado;
     private DocumentoEnum documentoSeleccionado;
     private PuntoEmision puntoEmisionSeleccionado;
     private FacturaAdicional facturaAdicionalSeleccionada;
@@ -173,7 +174,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     private java.util.Date fechaEmision;
     
 
-    @ManagedProperty(value = "#{sessionMb}")
+    @ManagedProperty(value = "#{sessionMb}") 
     private SessionMb sessionMb;
 
     @ManagedProperty(value = "#{parametrosWeb}")
@@ -512,6 +513,9 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         System.out.println("Metodo ejecutando seleccionar producto");
         //System.out.println("Documento seleccionado : "+documentoSeleccionado.getNombre());
         productoSeleccionado = (Producto) event.getObject(); 
+        kardexProductoSeleccionado=controlador.obtenerKardexDesdeProducto(productoSeleccionado);
+        System.out.println("kardexSeleccionado: "+kardexProductoSeleccionado);
+        System.out.println("kardex Stock: "+kardexProductoSeleccionado.getStock().setScale(2, RoundingMode.HALF_UP));
         precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();
         controlador.agregarProductoVista(productoSeleccionado,null,null,BigDecimal.ZERO,null,null);
         //cargarDetalleFacturaAgregar(productoSeleccionado); 
@@ -1424,6 +1428,11 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         return facturaDetalle;
     }
 
+    @Override
+    public void setCheckPorcentajeSeleccion(Boolean seleccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     /**
      * =============================================================
      *              TIPO PAGINA ENUMA
@@ -1789,6 +1798,14 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
 
     public void setIndiceTabComanda(Integer indiceTabComanda) {
         this.indiceTabComanda = indiceTabComanda;
+    }
+
+    public Kardex getKardexProductoSeleccionado() {
+        return kardexProductoSeleccionado;
+    }
+
+    public void setKardexProductoSeleccionado(Kardex kardexProductoSeleccionado) {
+        this.kardexProductoSeleccionado = kardexProductoSeleccionado;
     }
     
     

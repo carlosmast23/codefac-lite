@@ -268,7 +268,7 @@
 					<text><![CDATA[Usuario]]></text>
 				</staticText>
 				<textField>
-					<reportElement mode="Opaque" x="0" y="9" width="277" height="15" backcolor="#F7F7F7" uuid="449484d1-ccf7-48a9-9a26-41056daea72e"/>
+					<reportElement mode="Opaque" x="0" y="9" width="557" height="15" backcolor="#F7F7F7" uuid="449484d1-ccf7-48a9-9a26-41056daea72e"/>
 					<box>
 						<pen lineStyle="Dashed"/>
 						<topPen lineWidth="0.75" lineStyle="Dashed"/>

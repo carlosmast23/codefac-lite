@@ -726,8 +726,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardex.setPrecioUltimo(kardex.getPrecioUltimo().setScale(4, RoundingMode.HALF_UP));
                 }
 
-                System.out.println(kardex.getCostoPromedio());
-                System.out.println(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+                //System.out.println(kardex.getCostoPromedio());
+                //System.out.println(kardexDetalle.obtenerPrecioUnitarioConDescuento());
                 
                 //TODO: Este caso no se porque esta de esta manera pero es temporal y en el caso que tenga null coloca ZERO para evitar problemas
                 if(kardex.getCostoPromedio()==null)
@@ -764,10 +764,20 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
          
         BigDecimal signo=new BigDecimal(kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventarioNumero());
         kardexDetalle.setSigno(signo.intValue());
-        //Integer stockFinal=kardex.getStock()+signo.intValue()*kardexDetalle.getCantidad().intValue();
+        
+        //Esta parte recalcula las nuevas cantidades del stock
         BigDecimal cantidadMovimiento=signo.multiply(kardexDetalle.getCantidad());
         BigDecimal stockFinal=kardex.getStock().add(cantidadMovimiento);
         kardex.setStock(stockFinal);
+        
+        //Esta para recalcula las nuevas cantidad de las reservas
+        if(kardexDetalle.getReserva()!=null)
+        {
+            BigDecimal cantidadReserva=signo.multiply(kardexDetalle.getReserva());
+            BigDecimal reservaFinal=kardex.getReserva().add(cantidadReserva);
+            kardex.setStock(reservaFinal);
+        }
+        
         
         //Actualizar los totales de los lotes
         /*Lote lote=kardexDetalle.getLote();
@@ -1924,18 +1934,21 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         //ServiceFactosry.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
         List<PresupuestoDetalle> detalles=presupuesto.getPresupuestoDetalles();
         for (PresupuestoDetalle detalle : detalles) 
-        {
+        {            
             if(detalle.getReservadoEnum()!=null && detalle.getReservadoEnum().equals(EnumSiNo.SI))
-            {
-                Kardex kardex=detalle.getKardex();        
-                if(kardex!=null)
+            {                   
+                Kardex kardex=detalle.getKardex();
+                KardexDetalle kardexDetalle=crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.AJUSTE_EXACTO_INVENTARIO, BigDecimal.ZERO, BigDecimal.ONE,presupuesto.getUsuario());        
+                kardexDetalle.setReserva(detalle.getCantidad());
+                grabarKardexDetallSinTransaccion(kardexDetalle,null,true);
+                /*if(kardex!=null)
                 {
                     kardex.procesarReserva(detalle.getCantidad(),SignoEnum.POSITIVO);
                     //kardex.setStock(kardex.getStock().subtract(detalle.getCantidad()));
                     //kardex.setReserva(kardex.getReserva().add(detalle.getCantidad()));
 
                     entityManager.merge(kardex);
-                }
+                }*/
             }
             
         }

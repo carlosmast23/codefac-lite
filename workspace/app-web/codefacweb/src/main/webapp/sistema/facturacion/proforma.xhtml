@@ -240,7 +240,7 @@
                                     </div>
                                     <div class="p-col-3 p-md-4 p-lg-2" >
                                         <p:commandButton  process="@this,:formulario:acordionCabecera:cmbDocumento" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 100%" title="Buscar Producto"  >
-                                            <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle,cmbPreciosVenta"  />
+                                            <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle,cmbPreciosVenta,formulario:tabDatosFactura:lblStock"  />
                                         </p:commandButton>                                        
                                     </div>
                                     <div class="p-col-2 p-md-2 p-lg-2" >
@@ -258,10 +258,19 @@
                                         <p:outputLabel style="font-weight: bold;text-align: right">Inc Iva:</p:outputLabel>
                                         <!--<p:graphicImage value="#{proformaMb.productoSeleccionado.obtenerImagenProducto}" style="height: 25px" />-->
                                     </div>
+
                                     <div class="p-col-6 p-md-6 p-lg-6" >
                                         <p:selectOneMenu  id="cmbIncluyeIvaDetalle" value="#{proformaMb.incluyeIvaDetalleEnum}" converter="siNoEnumConverter" disabled="#{!proformaMb.cmbIvaDetalleEnable}" >
                                             <f:selectItems value="#{proformaMb.enumSiNoList}" var="opcion" itemValue="#{opcion.letra}" />
                                         </p:selectOneMenu>
+                                    </div>
+                                    
+                                    <div class="p-col-3 p-md-3 p-lg-3" >
+                                        <b>Stock: </b>
+                                        <p:outputLabel id="lblStock" value="#{proformaMb.kardexProductoSeleccionado.stock}">
+                                            <f:converter converterId="javax.faces.Number"/>
+                                            <f:attribute name="maxFractionDigits" value="2"/>
+                                        </p:outputLabel>
                                     </div>
                                 </div>
 
@@ -303,7 +312,7 @@
                                     </div>
                                     <div class="p-col-5 p-md-5 p-lg-5" >
                                         <p:selectBooleanCheckbox id="chkDescuento" value="#{proformaMb.descuentoPorcentaje}" itemLabel="% descuento"/>
-                                    </div>
+                                    </div>       
                                 </div>   
 
                             </div>

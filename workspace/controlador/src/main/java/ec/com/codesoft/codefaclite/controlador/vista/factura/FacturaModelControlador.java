@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataLiquidacionCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -63,6 +64,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.InformacionAdicionalData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
@@ -369,7 +371,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                                 BigDecimal.ZERO
                         );
                         
-                        Kardex kardexSeleccionado= interfaz.obtenerKardexDesdeProducto(productoSeleccionado);
+                        Kardex kardexSeleccionado= obtenerKardexDesdeProducto(productoSeleccionado);
                         
                         if(kardexSeleccionado!=null)
                         {
@@ -659,6 +661,21 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         //Seleccionar el precio por defecto para cargar en la vista
         interfaz.seleccionarPvpPorNombre(pvpDefecto);
+    }
+    
+    public Kardex obtenerKardexDesdeProducto(Producto producto)
+    {
+        try {
+            BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
+            Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
+            //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
+            return ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaModelControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public FacturaDetalle crearFacturaDetalle(
@@ -2424,7 +2441,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         public void cargarCliente(PersonaEstablecimiento cliente);
         public void setPresupuestoSeleccionado(Presupuesto presupuestoSeleccionado);
-        public Kardex obtenerKardexDesdeProducto(Producto producto);
+        //public Kardex obtenerKardexDesdeProducto(Producto producto);
         public void seleccionarPvpPorNombre(String nombrePvp);
         public void mostrarEtiquetasAhorro(Boolean activar);
         public FacturaDetalle obtenerFacturaDetalle();

@@ -4639,20 +4639,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public Kardex obtenerKardexDesdeProducto(Producto producto)
-    {
-        try {
-            BodegaServiceIf service = ServiceFactory.getFactory().getBodegaServiceIf();
-            Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
-            //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
-            return ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+    
 
     private void addListenerCamposTexto() {
         
@@ -4804,7 +4791,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Bodega bodegaVenta = service.obtenerBodegaVenta(session.getSucursal());
         //Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProductoyBodegayLote(bodegaVenta, producto,null);
         //kardexSeleccionado=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorDefectoVenta(bodegaVenta, producto);ASD
-        kardexSeleccionado = obtenerKardexDesdeProducto(producto);
+        kardexSeleccionado = controlador.obtenerKardexDesdeProducto(producto);
         //Obtener el producto original para cargar desde codigo porque daba problemas
         Lote lote = null;
         java.sql.Date fechaCaducidad = null;

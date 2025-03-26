@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesPorcentajes;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -30,6 +32,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.math.RoundingMode;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -418,13 +421,15 @@ public class Presupuesto implements Serializable
             }
         }
         ResultadoTotales resultado=new ResultadoTotales();
+        BigDecimal totalPagar=calcularTotalMenosDescuentos();
+        resultado.valorPagarCliente=UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), totalPagar).setScale(2, RoundingMode.HALF_UP);        
         
-        resultado.valorPagarCliente=calcularTotalMenosDescuentos();
+        //resultado.valorPagarCliente=calcularTotalMenosDescuentos();
         resultado.valoresProveedores=totalProveedores;
         resultado.produccionInterna=totalProduccionInterna;
 
         BigDecimal utilidad
-                = calcularTotalMenosDescuentos().
+                = totalPagar.
                         subtract(totalProveedores).
                         subtract(totalProduccionInterna);
         

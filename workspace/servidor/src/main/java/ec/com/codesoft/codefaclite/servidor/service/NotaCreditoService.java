@@ -76,7 +76,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         //Si el saldo de las notas de credito en el sistema es mayor que el valor de la nota de credito ya no permite generar más notas de credito
         if(saldoAdectaNCTotal.compareTo(notaCredito.getFactura().getTotal())>0)
         {
-            throw new ServicioCodefacException("No se puede generar la Nota de Crédito por que el total de la NC excede el total de la factura");
+            throw new ServicioCodefacException("No se puede generar la Nota de Crédito por que el total de la NC excede el total de la factura ["+saldoAdectaNCTotal+"]");
         }
     }
     
