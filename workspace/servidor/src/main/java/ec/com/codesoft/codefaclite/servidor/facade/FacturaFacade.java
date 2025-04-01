@@ -437,6 +437,9 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           
           String whereEstado="";
           
+          //filtro para solo ingresar los documentos de factura, nota de venta, y no ta de venta interna
+          String whereDocumentos=" AND ( F.CODIGO_DOCUMENTO='FAC' OR F.CODIGO_DOCUMENTO='NVI' OR F.CODIGO_DOCUMENTO='NVT' ) ";
+          
           if(fechaMayor!=null)
           {
               whereFechaMayor= " AND F.FECHA_EMISION <= ?1";
@@ -456,7 +459,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           
           String queryString="SELECT FD.ID, F.SECUENCIAL,F.FECHA_EMISION ,F.RAZON_SOCIAL,F.IDENTIFICACION,FD.DESCRIPCION AS NOMBRE_PRODUCTO  ,FD.FACTURA_ID,FD.TOTAL AS SUBTOTAL ,FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION AS COSTO , \n" +
 "			FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION AS UTILIDAD \n" +
-"		FROM FACTURA_DETALLE FD	INNER JOIN FACTURA F ON F.ID =FD.FACTURA_ID WHERE 1=1 "+ whereFechaMayor+whereFechaMenor+whereEstado ;
+"		FROM FACTURA_DETALLE FD	INNER JOIN FACTURA F ON F.ID =FD.FACTURA_ID WHERE 1=1 "+ whereFechaMayor+whereFechaMenor+whereEstado+whereDocumentos ;
       
           Query query=getEntityManager().createNativeQuery(queryString);
           Logger.getLogger(FacturaFacade.class.getName()).log(Level.INFO,queryString);

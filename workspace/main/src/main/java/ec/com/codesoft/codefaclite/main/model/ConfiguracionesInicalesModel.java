@@ -135,7 +135,7 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
     
     private void grabarDatos(String usuario,String clave)
     {
-        grabarDatos(usuario, clave, null);
+        grabarDatos(usuario, clave, "ROOT");
     }
     
     public enum ModoEnum
