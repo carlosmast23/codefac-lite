@@ -139,6 +139,9 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         this.model=model;
         iniciarValores();
         crearFiltrosVista();
+        
+        //Consultar una sola vez cual es la configuracion de busqueda automatica cada cierto tiempo
+        filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.SI);        
         initListener();
         //crearConsulta("");
         UtilidadVarios.medirTiempoProceso(new UtilidadVarios.ProcesoTiempoIf() {
@@ -152,10 +155,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();        
         normalizarTextoBusqueda=false;
-        agregarOyenteParaCerrarElDialogo();
-        
-        //Consultar una sola vez cual es la configuracion de busqueda
-        filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.SI);        
+        agregarOyenteParaCerrarElDialogo();        
+
     }
     
     /**
@@ -818,6 +819,12 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         getTxtBuscar().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                
+                //Pongo excepciones en la teclas que no generaron ninguna accion
+                if(e.getKeyCode()==KeyEvent.VK_DOWN)
+                {
+                    return;
+                }
                 
                 //Primero verifico si no se esta presionando un enter en la busqueda
                 if(e.getKeyCode()==KeyEvent.VK_ENTER)
