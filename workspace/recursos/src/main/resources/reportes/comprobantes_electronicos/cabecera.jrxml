@@ -234,7 +234,7 @@
 				<text><![CDATA[Normal]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="195" y="119" width="104" height="17" uuid="b8d88e17-2304-4d45-97d4-c8d5a1616bc1">
+				<reportElement mode="Transparent" x="195" y="119" width="104" height="17" forecolor="#FFFFFF" uuid="b8d88e17-2304-4d45-97d4-c8d5a1616bc1">
 					<printWhenExpression><![CDATA[new Boolean($P{pl_celular}!=null && !$P{pl_celular}.isEmpty() )]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
