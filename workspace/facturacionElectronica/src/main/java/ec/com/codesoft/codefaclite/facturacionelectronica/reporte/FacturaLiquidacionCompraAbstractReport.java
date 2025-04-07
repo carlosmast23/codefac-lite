@@ -22,6 +22,7 @@ import java.util.Map;
  */
 public abstract class FacturaLiquidacionCompraAbstractReport extends ComprobanteElectronicoReporte{
     
+    private final String SIMBOLO_DOLAR="$";
     private ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobante;
     //private Map<String,String> mapCodeAndNameFormaPago;
 
@@ -77,14 +78,14 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
         
         Map<String,Object> map=new HashMap<String,Object>();
         
-        map.put("subtotal_cero",respuesta.subTotalCero.toString());
-        map.put("subtotal",respuesta.subTotalImpuesto.toString());
-        map.put("descuento",comprobante.getInformacionComprobante().getTotalDescuento().toString());
+        map.put("subtotal_cero",SIMBOLO_DOLAR+respuesta.subTotalCero.toString());
+        map.put("subtotal",SIMBOLO_DOLAR+respuesta.subTotalImpuesto.toString());
+        map.put("descuento",SIMBOLO_DOLAR+comprobante.getInformacionComprobante().getTotalDescuento().toString());
         
-        map.put("ice",respuesta.ice.toString());
-        map.put("iva",respuesta.iva.toString());
-        map.put("ivaCinco",respuesta.ivaCinco.toString());
-        map.put("total",totalFactura()+"");
+        map.put("ice",SIMBOLO_DOLAR+respuesta.ice.toString());
+        map.put("iva",SIMBOLO_DOLAR+respuesta.iva.toString());
+        map.put("ivaCinco",SIMBOLO_DOLAR+respuesta.ivaCinco.toString());
+        map.put("total",SIMBOLO_DOLAR+totalFactura()+"");
         /**
          * Falta setear el iva que se esta usando en el sistema
          */
@@ -112,15 +113,15 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
             }
             
             data.setDescuento(detalleFacturaComprobante.getDescuento()+"");
-            data.setPrecio_total(detalleFacturaComprobante.getPrecioTotalSinImpuesto()+"");
-            data.setPrecio_unitario(detalleFacturaComprobante.getPrecioUnitario()+"");
+            data.setPrecio_total(SIMBOLO_DOLAR+detalleFacturaComprobante.getPrecioTotalSinImpuesto()+"");
+            data.setPrecio_unitario(SIMBOLO_DOLAR+detalleFacturaComprobante.getPrecioUnitario()+"");
             if(detalleFacturaComprobante.calcularSubsidioDetalle().compareTo(BigDecimal.ZERO)==0)
             {
-                data.setSubsidio("0");
+                data.setSubsidio(SIMBOLO_DOLAR+"0");
             }
             else
             {
-                data.setSubsidio(detalleFacturaComprobante.getPrecioSinSubsidio()+"");
+                data.setSubsidio(SIMBOLO_DOLAR+detalleFacturaComprobante.getPrecioSinSubsidio()+"");
                 //data.setSubsidio(
                 //        detalleFacturaComprobante.calcularSubsidioDetalle().subtract(detalleFacturaComprobante.getPrecioTotalSinImpuesto())+""); //Valor el subsidio para emitir en la factura
             }
@@ -148,7 +149,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
                     formaPagoData.setNombre("Sin Nombre");
                 }*/
                 formaPagoData.setNombre(formaPagoComprobante.getNombreTmp());
-                formaPagoData.setValor(formaPagoComprobante.getTotal().toString());            
+                formaPagoData.setValor(SIMBOLO_DOLAR+formaPagoComprobante.getTotal().toString());            
                 formaPagosData.add(formaPagoData);
             }
         }

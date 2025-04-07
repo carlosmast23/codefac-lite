@@ -209,7 +209,10 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
         UtilidadCodigoBarras.CodigoBarrasEnum codigoEnum = (UtilidadCodigoBarras.CodigoBarrasEnum) getCmbTipoCodigoBarras().getSelectedItem();
         
         String opcionLlevaIva=(String) getCmbPrecioConIva().getSelectedItem();        
-        String opcionImprimirIva=(String) getCmbImprimirPrecio().getSelectedItem();
+        String opcionImprimirPvp=(String) getCmbImprimirPrecio().getSelectedItem();
+        Boolean codificarPrecios=EnumSiNo.getEnumByNombre(getCmbPvpCodificado().getSelectedItem()+"").getBool();
+        Boolean mostrarDecimales=EnumSiNo.getEnumByNombre(getCmbMostrarDecimales().getSelectedItem()+"").getBool();
+        
                
         List<CodigoBarrasData> listaDatos=new ArrayList<CodigoBarrasData>();
         int dpi=(int) getTxtDpi().getValue();
@@ -230,7 +233,7 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                 codigoBarraData.setPrecio("");
                 
                 //Solo agregar el precio si esta activa la opcion
-                if(opcionImprimirIva.equals("SI"))
+                if(opcionImprimirPvp.equals("SI"))
                 {
                     if (opcionLlevaIva.equals("SI")) 
                     {
@@ -239,6 +242,21 @@ public class ImprimirCodidoBarrasModel extends ImprimirCodigoBarrasPanel{
                     else if (opcionLlevaIva.equals("NO")) 
                     {
                         codigoBarraData.setPrecio("$"+producto.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
+                    }
+                    
+                    //En el caso que no quiera decimales les quito
+                    if(!mostrarDecimales)
+                    {
+                        String[] resultadoArray=codigoBarraData.getPrecio().split(".");
+                        codigoBarraData.setPrecio(codigoBarraData.getPrecio().split("\\.")[0]);
+                    }
+                    
+                    //Remplazar los valores en el caso que use letras
+                    if(codificarPrecios)
+                    {
+                        String pvpTexto=codigoBarraData.getPrecio();                        
+                        pvpTexto=UtilidadesTextos.encriptarSimplePorSecuencia("$1234567890"," AUTOCENFLI",pvpTexto);
+                        codigoBarraData.setPrecio(pvpTexto);
                     }
                 }
                 

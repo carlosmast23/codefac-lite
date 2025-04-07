@@ -213,7 +213,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         }
                 
         
-        String queryString = "SELECT p FROM Producto p WHERE p.estado=?2 and ( p.tipoProductoCodigo=?7 or p.tipoProductoCodigo=?8 ) "+wherePresentaciones+whereEmpresa +whereCodigo+whereNombre;
+        String queryString = "SELECT p FROM Producto p WHERE p.estado=?2 and ( p.tipoProductoCodigo=?7 or p.tipoProductoCodigo=?8 or p.tipoProductoCodigo=?9 ) "+wherePresentaciones+whereEmpresa +whereCodigo+whereNombre;
         
         Query query = getEntityManager().createQuery(queryString);
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
@@ -240,6 +240,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         
         query.setParameter(7, "p");
         query.setParameter(8, "e");
+        query.setParameter(9, "m");
         
         //Cuando este configurado como datos compartidos no tomo en cuenta de donde esta cogiendo la empresa
         

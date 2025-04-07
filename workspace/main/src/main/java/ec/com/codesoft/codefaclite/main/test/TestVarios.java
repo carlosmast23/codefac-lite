@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.test;
 
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,8 +19,8 @@ public class TestVarios {
     
     public static void main(String args[])
     {
-        System.out.println(UtilidadesSistema.generarClaveSoporte());
-        BigDecimal.ONE.setScale(2, RoundingMode.HALF_UP);
+        String respuesta=UtilidadesTextos.encriptarSimplePorSecuencia("1234567890","AUTOCENFLI","Mi número es 5.60");
+        System.out.println(respuesta);
     }
     
 }

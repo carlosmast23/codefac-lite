@@ -34,6 +34,8 @@ public class ProductoPresentacionDetalleService extends ServiceAbstract<Producto
         return getFacade().findByMap(mapParametros);
     }
     
+    //TODO: Este metodo esta causando conflicto cuando se consulta muchas veces, se pone el sistema exageradamente lento
+    @Deprecated
     public ProductoPresentacionDetalle buscarPorProductoEmpaquetado(Producto productoEmpaquetado) throws ServicioCodefacException, RemoteException 
     {
         //ProductoPresentacionDetalle d;

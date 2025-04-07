@@ -4,7 +4,13 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import jakarta.persistence.Query;
+import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -16,4 +22,6 @@ public class ProductoPresentacionDetalleFacade extends AbstractFacade<ProductoPr
         super(ProductoPresentacionDetalle.class);
     }
     
+    
+   
 }

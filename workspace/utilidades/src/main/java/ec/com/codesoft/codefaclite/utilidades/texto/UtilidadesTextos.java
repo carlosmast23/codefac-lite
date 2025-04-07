@@ -359,4 +359,25 @@ public abstract class UtilidadesTextos {
         return false;
     }
     
+    /**
+     * Funcion que me permite hacer un remplazao de datos por otros caracteres
+     * @param valoresOriginales
+     * @param valoresCodificados
+     * @param texto
+     * @return 
+     */
+    public static String encriptarSimplePorSecuencia(String valoresOriginales, String valoresCodificados, String texto) {
+        if (valoresOriginales.length() != valoresCodificados.length()) {
+            throw new IllegalArgumentException("Las cadenas de valores deben tener la misma longitud.");
+        }
+
+        for (int i = 0; i < valoresOriginales.length(); i++) {
+            char original = valoresOriginales.charAt(i);
+            char reemplazo = valoresCodificados.charAt(i);
+            texto = texto.replace(original, reemplazo);
+        }
+
+        return texto;
+    }
+    
 }

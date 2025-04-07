@@ -64,6 +64,10 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         txtPiePagina = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtBordeIzquierdo = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        cmbPvpCodificado = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        cmbMostrarDecimales = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -77,7 +81,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -114,7 +118,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         jLabel1.setText("Nota: Ingresar las cantidades que desea generar en los códigos de barras");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         jPanel1.add(jLabel1, gridBagConstraints);
 
         cmbFormatoImpresion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "POS", "A4", "ZEBRA" }));
@@ -125,10 +129,10 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbFormatoImpresion, gridBagConstraints);
 
-        jLabel2.setText("Borde:");
+        jLabel2.setText("Mostrar Decimales:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -250,7 +254,7 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtPiePagina, gridBagConstraints);
@@ -269,6 +273,38 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtBordeIzquierdo, gridBagConstraints);
 
+        jLabel12.setText("Borde:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel12, gridBagConstraints);
+
+        cmbPvpCodificado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NO", "SI" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbPvpCodificado, gridBagConstraints);
+
+        jLabel13.setText("PVP cod:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel13, gridBagConstraints);
+
+        cmbMostrarDecimales.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SI", "NO" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbMostrarDecimales, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -281,11 +317,15 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<FormatoHojaImpresionEnum> cmbFormatoHoja;
     private javax.swing.JComboBox<String> cmbFormatoImpresion;
     private javax.swing.JComboBox<String> cmbImprimirPrecio;
+    private javax.swing.JComboBox<String> cmbMostrarDecimales;
     private javax.swing.JComboBox<String> cmbPrecioConIva;
+    private javax.swing.JComboBox<String> cmbPvpCodificado;
     private javax.swing.JComboBox<UtilidadCodigoBarras.CodigoBarrasEnum> cmbTipoCodigoBarras;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -407,6 +447,22 @@ public abstract class ImprimirCodigoBarrasPanel extends ControladorCodefacInterf
 
     public void setTxtBordeIzquierdo(JTextField txtBordeIzquierdo) {
         this.txtBordeIzquierdo = txtBordeIzquierdo;
+    }
+
+    public JComboBox<String> getCmbPvpCodificado() {
+        return cmbPvpCodificado;
+    }
+
+    public void setCmbPvpCodificado(JComboBox<String> cmbPvpCodificado) {
+        this.cmbPvpCodificado = cmbPvpCodificado;
+    }
+
+    public JComboBox<String> getCmbMostrarDecimales() {
+        return cmbMostrarDecimales;
+    }
+
+    public void setCmbMostrarDecimales(JComboBox<String> cmbMostrarDecimales) {
+        this.cmbMostrarDecimales = cmbMostrarDecimales;
     }
 
     

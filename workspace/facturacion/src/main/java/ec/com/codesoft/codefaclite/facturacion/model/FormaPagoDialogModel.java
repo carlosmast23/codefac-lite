@@ -18,6 +18,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
@@ -85,6 +86,7 @@ public class FormaPagoDialogModel extends FormaPagoDialog{
                 formaPago.setSriFormaPago((SriFormaPago) getCmbFormaPagoSri().getSelectedItem());
                 formaPago.setUnidadTiempo(getCmbTiempo().getSelectedItem().toString());
                 formaPago.setTotal(new BigDecimal(getTxtValor().getText())); 
+                formaPago.setTotal(formaPago.getTotal().setScale(2, RoundingMode.HALF_UP)); 
                 dispose();
             }
         });

@@ -129,20 +129,40 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
      */
     public Producto buscarProductoDefectoCompras( Producto producto)throws RemoteException,ServicioCodefacException
     {
-        List<ProductoPresentacionDetalle> presentacionList=this.buscarPresentacionesPorProducto(producto);
         ProductoPresentacionDetalle presentacionDetalle=null;
-        if(presentacionList.size()>0)
-        {
-            presentacionDetalle=UtilidadesLista.obtenerDatoMayor(presentacionList, new Comparator<ProductoPresentacionDetalle>() 
-            {
-                @Override
-                public int compare(ProductoPresentacionDetalle o1, ProductoPresentacionDetalle o2) {
-                    return o1.getCantidad().compareTo(o2.getCantidad());
-                }
-
-            });
-        }
         
+        //Solo se puede buscar presentaciones desde el producto original
+        Producto productoOriginal=buscarProductoEmpaquePrincipal(producto);
+        //Producto productoOriginal= producto.buscarPresentacionDetalleProducto().getProductoOriginal();
+                
+        //Primero verifica si tiene una PRESENTACION POR DEFECTO
+        String presentacionDefecto = productoOriginal.getCodigoPresentacionDefectoCompra();
+        if (!UtilidadesTextos.verificarNullOVacio(presentacionDefecto)) 
+        {
+            ProductoPresentacionDetalle presentacion = productoOriginal.buscarProductoPorNombrePresentacionLocal(presentacionDefecto);
+            if(presentacion!=null)
+            {
+                return presentacion.getProductoEmpaquetado();
+            }
+            return productoOriginal;
+
+        } //Luego verifica por defecto la presentacion de mayor cantidad
+        else 
+        {
+            List<ProductoPresentacionDetalle> presentacionList=this.buscarPresentacionesPorProducto(productoOriginal);
+            if(presentacionList.size()>0)
+            {
+                presentacionDetalle = UtilidadesLista.obtenerDatoMayor(presentacionList, new Comparator<ProductoPresentacionDetalle>() {
+                    @Override
+                    public int compare(ProductoPresentacionDetalle o1, ProductoPresentacionDetalle o2) {
+                        return o1.getCantidad().compareTo(o2.getCantidad());
+                    }
+
+                });
+            }
+        }
+
+
         //Si el sistema no detecta ninguna presentacion entonces retorno el mismo producto
         if(presentacionDetalle==null)
         {

@@ -309,8 +309,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     }
 
     public void crearModeloTabla() {
-        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema", "Cod Xml", "Descripción compra","Iva","Ice","Cantidad","Precio","Desc","Lote"};
-        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class, String.class, String.class, String.class,String.class,String.class,String.class,String.class});
+        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema","Empaque", "Cod Xml", "Descripción compra","Iva","Ice","Cantidad","Precio","Desc","Lote"};
+        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class,String.class, String.class, String.class, String.class,String.class,String.class,String.class,String.class});
         getTblDetalles().setModel(modelo);
         UtilidadesTablas.definirTamanioColumnas(getTblDetalles(), new Integer[]{0});
     }
@@ -325,6 +325,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                 String nombreProductoSistema="";
                 String codigoProveedor="";
                 String ivaPorcentaje=value.getIvaPorcentaje()+"";
+                String nombrePresentacion=value.getProductoProveedor().getProducto().obtenerNombrePresentacion();
+                
                 if(value.getProductoProveedor()!=null)
                 {
                     codigoSistema=value.getProductoProveedor().getProducto().getCodigoPersonalizado();
@@ -338,11 +340,14 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     codigoLote=value.getLote().getCodigo(); 
                 }
                 
+                
+                
 
                 return new Object[]{
                     value,
                     codigoSistema,
                     nombreProductoSistema,
+                    nombrePresentacion,
                     value.getCodigoProveedor(),
                     value.getDescripcion(),
                     ivaPorcentaje,
