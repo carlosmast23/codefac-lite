@@ -79,6 +79,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
         Map<String,Object> map=new HashMap<String,Object>();
         
         map.put("subtotal_cero",SIMBOLO_DOLAR+respuesta.subTotalCero.toString());
+        map.put("subtotal_cinco",SIMBOLO_DOLAR+respuesta.subTotalCinco.toString());
         map.put("subtotal",SIMBOLO_DOLAR+respuesta.subTotalImpuesto.toString());
         map.put("descuento",SIMBOLO_DOLAR+comprobante.getInformacionComprobante().getTotalDescuento().toString());
         

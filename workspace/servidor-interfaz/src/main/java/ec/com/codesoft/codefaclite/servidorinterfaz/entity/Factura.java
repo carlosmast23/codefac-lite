@@ -1062,17 +1062,55 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     }
     
     @Deprecated //Metodo que no es optimo, lo mejor seria grabar como dato en la factura
-    public BigDecimal obtenerIvaCinco()
+    public ImpuestoTotal obtenerIvaCinco()
     {        
+        ImpuestoTotal impuestoTotal=new ImpuestoTotal();
+        
+                
+        BigDecimal ivaCinco=BigDecimal.ZERO;
         BigDecimal ivaQuince=BigDecimal.ZERO;
+        
+        BigDecimal subtotalCinco=BigDecimal.ZERO;
+        BigDecimal subtotalQuince=BigDecimal.ZERO;
+        
         for (FacturaDetalle detalle : detalles) 
         {
+            System.out.println(detalle.getDescripcion());
+            System.out.println(detalle.getIvaPorcentaje());
             if(detalle.getIvaPorcentaje()==5)
             {
-                ivaQuince=ivaQuince.add(detalle.getIva());
+                ivaCinco=ivaCinco.add(detalle.getIva());
+                subtotalCinco=subtotalCinco.add(detalle.getTotal());
             }
+            else if(detalle.getIvaPorcentaje()==15)
+            {
+                ivaQuince=ivaQuince.add(detalle.getIva());
+                subtotalQuince=subtotalQuince.add(detalle.getTotal());
+            }
+            
         }
-        return ivaQuince;
+        
+        impuestoTotal.ivaQuince=ivaQuince;
+        impuestoTotal.ivaCinco=ivaCinco;
+        impuestoTotal.subtotalCinco=subtotalCinco;
+        impuestoTotal.subtotalQuince=subtotalQuince;
+        
+        return impuestoTotal;
+    }
+    
+    public static class ImpuestoTotal
+    {
+        public BigDecimal ivaCinco;
+        public BigDecimal subtotalCinco;
+        public BigDecimal subtotalQuince;
+        public BigDecimal ivaQuince;
+        public BigDecimal ivaCero;
+
+        public ImpuestoTotal() {
+            
+        }
+        
+        
     }
 
 }

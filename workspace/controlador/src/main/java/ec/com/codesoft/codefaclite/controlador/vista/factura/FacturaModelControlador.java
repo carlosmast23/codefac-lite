@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura.ImpuestoTotal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
@@ -1982,7 +1983,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("telefonos", facturaProcesando.getTelefono());
             mapParametros.put("fechaIngreso", facturaProcesando.getFechaEmision().toString());
             //mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().add(facturaProcesando.getSubtotalSinImpuestos()).toString());
-            mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().toString());
+            //mapParametros.put("subtotal", facturaProcesando.getSubtotalImpuestos().toString());
             mapParametros.put("iva", facturaProcesando.getIva().toString());            
             mapParametros.put("ice", facturaProcesando.getIce().toString());
             mapParametros.put("total", facturaProcesando.getTotal().toString());
@@ -1997,8 +1998,13 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("tipo_orden",facturaProcesando.getTipoOrden());
             mapParametros.put("subtotal_cero",facturaProcesando.getSubtotalSinImpuestos().toString());
             
+            
             //Poner los valore cuando tenga iva del cinco porcentaje
-            BigDecimal ivaCinco=facturaProcesando.obtenerIvaCinco();
+            //ImpuestoTotal impuestoTotal=new Factura.ImpuestoTotal();
+            ImpuestoTotal impuestoTotal=facturaProcesando.obtenerIvaCinco();
+            
+            //BigDecimal ivaCinco=facturaProcesando.obtenerIvaCinco();
+            BigDecimal ivaCinco=impuestoTotal.ivaCinco;
             if(ivaCinco.compareTo(BigDecimal.ZERO)!=0)
             {
                 BigDecimal ivaQuince=facturaProcesando.getIva().subtract(ivaCinco);
@@ -2006,6 +2012,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 mapParametros.put("iva", ivaQuince+"");                
             }
             
+            mapParametros.put("subtotal_cinco", impuestoTotal.subtotalCinco+"");
+            mapParametros.put("subtotal", impuestoTotal.subtotalQuince+"");
          
             String porcentajeIva = "";
             if (facturaProcesando.getIvaSriId() != null) {

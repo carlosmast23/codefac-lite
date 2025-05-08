@@ -73,6 +73,7 @@ public class NotaCreditoReporte extends ComprobanteElectronicoReporte{
         
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("subtotal_cero",respuesta.subTotalCero.toString());
+        map.put("subtotal_cinco",respuesta.subTotalCinco.toString());
         map.put("subtotal",respuesta.subTotalImpuesto.toString());
         map.put("descuento",comprobante.obtenerTotalDescuentos().toString());
         //map.put("iva",comprobante.getInfoNotaCredito().getTotalSinImpuestos().subtract(comprobante.getInfoNotaCredito().getValorModificacion()).toString());
