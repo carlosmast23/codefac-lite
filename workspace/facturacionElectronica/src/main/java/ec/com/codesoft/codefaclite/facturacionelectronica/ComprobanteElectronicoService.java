@@ -939,7 +939,19 @@ public class ComprobanteElectronicoService implements Runnable {
     public static String normalizarXmlComprobante(String xmlStr)
     {
         //Normalizar el archivo xml cuando tiene un formato que no es legible por que tiene otros simbolos para las etiquetas de apartura y cierre
-        String xmlStrNormalizado = xmlStr.replace("&lt;", "<").replace("&gt;", ">");
+        
+        //Si se repite muchas veces el xml esta con ese formato, si no se repite es porque uso por un motivo en especial
+        String xmlStrNormalizado = xmlStr;
+        if(UtilidadesTextos.verificarLimiteOcurrencias(xmlStr, "&lt;",50))
+        {
+            xmlStrNormalizado = xmlStr.replace("&lt;", "<").replace("&gt;", ">");
+        }
+        
+        
+        
+        //Otros caracteres que puedan causar conflicto
+        //xmlStrNormalizado =xmlStrNormalizado.replaceAll("&lt;/?br\\s*/?&gt;", " ");
+        
 
         //Si tiene estos códigos toca hacer un tratamiento especial con la factura para que pueda ser procesada
         if (xmlStr.indexOf("&lt;") >= 0) 

@@ -380,4 +380,22 @@ public abstract class UtilidadesTextos {
         return texto;
     }
     
+    public static boolean verificarLimiteOcurrencias(String texto, String palabra,Integer limite) {
+    int contador = 0;
+    int index = 0;
+    texto = texto.toLowerCase();
+    palabra = palabra.toLowerCase();
+    
+    while ((index = texto.indexOf(palabra, index)) != -1) {
+        contador++;
+        index += palabra.length();
+        
+        if(contador>limite)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+    
 }
