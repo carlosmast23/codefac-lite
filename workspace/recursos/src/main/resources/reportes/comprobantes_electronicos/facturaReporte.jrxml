@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.9487171000000796"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="495"/>
+	<property name="ireport.zoom" value="2.8531167061101192"/>
+	<property name="ireport.x" value="115"/>
+	<property name="ireport.y" value="911"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -88,6 +88,7 @@
 	<parameter name="SUBREPORT_CABECERA" class="java.lang.Object"/>
 	<parameter name="telefonos_cliente" class="java.lang.String"/>
 	<parameter name="ivaCinco" class="java.lang.String"/>
+	<parameter name="subtotal_cinco" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -663,7 +664,7 @@
 				<textFieldExpression><![CDATA["Subtotal " +$P{iva_porcentaje}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="417" y="51" width="69" height="11" uuid="ce24b8b6-6c0d-4c94-b178-b0259fe4a0de"/>
+				<reportElement x="417" y="62" width="69" height="9" uuid="ce24b8b6-6c0d-4c94-b178-b0259fe4a0de"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -671,7 +672,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="true"/>
+					<font size="7" isBold="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA["IVA " +$P{iva_porcentaje}+"%"]]></textFieldExpression>
@@ -703,7 +704,7 @@
 				<textFieldExpression><![CDATA[$P{subtotal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="29" width="69" height="11" uuid="8a100274-a825-4483-b3f3-e03db4b09966"/>
+				<reportElement x="486" y="42" width="69" height="11" uuid="8a100274-a825-4483-b3f3-e03db4b09966"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -717,7 +718,7 @@
 				<textFieldExpression><![CDATA[$P{descuento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="51" width="69" height="11" uuid="eab30fe7-35ac-44db-b399-0ef6901bbfa0"/>
+				<reportElement x="486" y="62" width="69" height="9" uuid="eab30fe7-35ac-44db-b399-0ef6901bbfa0"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -725,13 +726,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="7"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{iva}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="73" width="69" height="14" uuid="ee338e0e-e028-4795-88d7-e613f19ad4d3"/>
+				<reportElement x="486" y="80" width="69" height="13" uuid="ee338e0e-e028-4795-88d7-e613f19ad4d3"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -739,13 +740,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="417" y="40" width="69" height="11" uuid="9980df47-d88d-4d68-b7a6-49d00de3f6fc"/>
+				<reportElement x="417" y="53" width="69" height="9" uuid="9980df47-d88d-4d68-b7a6-49d00de3f6fc"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -753,13 +754,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="true"/>
+					<font size="7" isBold="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[ICE]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="486" y="40" width="69" height="11" uuid="f7cbd9a3-487d-45b1-8990-33285f0b613d"/>
+				<reportElement x="486" y="53" width="69" height="9" uuid="f7cbd9a3-487d-45b1-8990-33285f0b613d"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -767,7 +768,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="7"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ice}]]></textFieldExpression>
@@ -816,7 +817,7 @@
 				<text><![CDATA[Subtotal 0%]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="417" y="29" width="69" height="11" uuid="22f6aafd-6c5f-4f01-99ba-88f0f6dc7ec2"/>
+				<reportElement x="417" y="42" width="69" height="11" uuid="22f6aafd-6c5f-4f01-99ba-88f0f6dc7ec2"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -830,7 +831,7 @@
 				<text><![CDATA[Descuento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="417" y="73" width="69" height="14" uuid="aa551d68-e966-4e06-baab-38a79ed77e21"/>
+				<reportElement x="417" y="80" width="69" height="13" uuid="aa551d68-e966-4e06-baab-38a79ed77e21"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -933,7 +934,48 @@
 				<subreportExpression><![CDATA[$P{pl_firmas_factura}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="417" y="62" width="69" height="11" uuid="74289c9c-475f-4d5b-a502-4a6a031c98bb"/>
+				<reportElement x="417" y="71" width="69" height="9" uuid="74289c9c-475f-4d5b-a502-4a6a031c98bb"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="7" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["IVA 5%"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="486" y="71" width="69" height="9" uuid="9206c2ba-5194-4284-b7d7-d47c7a66202e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ivaCinco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="486" y="29" width="69" height="13" uuid="cb20fa75-8bdb-4a19-875f-3c5c3cf0772e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{subtotal_cinco}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="417" y="29" width="69" height="13" uuid="b4b90451-70fe-40fd-8621-a63c31efb0aa"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -944,22 +986,8 @@
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["IVA 5%"]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="486" y="62" width="69" height="11" uuid="9206c2ba-5194-4284-b7d7-d47c7a66202e"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8"/>
-					<paragraph rightIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{ivaCinco}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Subtotal 5%]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>

@@ -175,7 +175,7 @@ public abstract class ComprobanteElectronicoReporte
                     
                     //subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible());
                     ivaCinco=ivaCinco.add(impuesto.getValor());
-                    subtotalCinco=subtotalCinco.add(impuesto.getValor());
+                    subtotalCinco=subtotalCinco.add(impuesto.getBaseImponible());
                 }
                 else
                 {

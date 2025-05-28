@@ -10,12 +10,14 @@ import ec.com.codesoft.codefaclite.servidor.facade.cartera.CarteraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidor.service.SriFormaPagoService;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteVentaNotaCreditoAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -73,6 +75,7 @@ import org.apache.commons.net.ntp.TimeStamp;
 public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> implements CarteraServiceIf{
     
     private CarteraCruceService carteraCruceService=new CarteraCruceService();
+    private SriFormaPagoService sriFormaPagoService=new SriFormaPagoService();
     
     CarteraFacade carteraFacade;
     
@@ -761,8 +764,90 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @throws ServicioCodefacException
      * @throws RemoteException 
      */
-    private void crearCrucesFactura(Factura factura,Cartera carteraFactura,List<CarteraCruce> cruces,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
+    private void crearCrucesFactura(ComprobanteVentaNotaCreditoAbstract facturaOriginal,Cartera carteraFactura,List<CarteraCruce> cruces,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
+        Factura factura=null;
+        if(facturaOriginal instanceof Factura)
+        {
+            factura=(Factura) facturaOriginal;
+        }
+        
+        /**
+         * =================================================================
+         * CREAR CARTERA DEL RESTO DE FORMAS DE PAGO
+         * =================================================================
+         * Si esta habilitado el tema de credito no hago ningun cruce
+         */        
+        if(carteraParametro!=null && carteraParametro.habilitarCredito)
+            return;
+        
+        //Si no esta habilitado se genera un CRUCE AUTOMATICO como ABONO
+        List<FormaPago> formasPagoOtros =new ArrayList<FormaPago>(); 
+        
+        Cartera.TipoCarteraEnum tipoCartera=Cartera.TipoCarteraEnum.CLIENTE;
+        if(factura!=null)
+        {
+            formasPagoOtros=factura.buscarListaFormasPagoDistintaDeCartera();
+        }
+        else if(facturaOriginal instanceof Compra)
+        {
+            SriFormaPago formaPago=sriFormaPagoService.buscarPorId(1l);
+            formasPagoOtros.add(new FormaPago(facturaOriginal.getTotal(),formaPago));
+            tipoCartera=Cartera.TipoCarteraEnum.PROVEEDORES;
+        }
+        
+        for (FormaPago formaPago : formasPagoOtros) {
+                
+                //Crear la cartera para los abonos
+                Cartera carteraAbono = new Cartera(
+                        facturaOriginal.getCliente(),
+                        formaPago.getTotal(),
+                        formaPago.getTotal(),
+                        facturaOriginal.getPuntoEstablecimiento().toString(),
+                        facturaOriginal.getPuntoEmision().toString(),
+                        DocumentoEnum.ABONOS.getCodigo(),
+                        tipoCartera.getLetra(),
+                        facturaOriginal.getSucursalEmpresa(),
+                        facturaOriginal.getUsuario(),
+                        GeneralEnumEstado.ACTIVO);
+                
+                //Grabar la forma de pago que se esta generando con la cartera
+                carteraAbono.setSriFormaPago(formaPago.getSriFormaPago());
+
+                //Crear la cartera detalle del abono
+                CarteraDetalle carteraDetalleAbono = new CarteraDetalle();
+                carteraDetalleAbono.setReferenciaId(Long.parseLong(facturaOriginal.getSecuencial()+""));
+                carteraDetalleAbono.setCartera(carteraAbono);
+                carteraDetalleAbono.setCruces(new ArrayList<CarteraCruce>());
+                carteraDetalleAbono.setDescripcion("venta #"+facturaOriginal.getSecuencial());
+                carteraDetalleAbono.setSaldo(formaPago.getTotal());
+                carteraDetalleAbono.setTotal(formaPago.getTotal());
+                
+                carteraAbono.setReferenciaManual(facturaOriginal.getSecuencial()+"");
+                
+                carteraAbono.addDetalle(carteraDetalleAbono);
+                
+                //Grabar la NUEVA CARTERA DEL ABONO
+                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR,true);
+                
+                
+                //TODO: Este artificio toca hacer porque aunque se supone que el detalle debe estar relacionado por referencia al mismo objeto
+                //internamienta el metodo grabarCarteraSinTransaccion hace clonar los detalles y se pierde la referencia y los detalles dejan de estar enlazados 
+                //TODO: Tambien obtengo el primer dato con la seguridad que para este caso siempre solo agrega un detalle
+                carteraDetalleAbono=carteraAbono.getDetalles().get(0);
+                
+                //grabo la referencia del CRUCE AUTOMATICO con la Factura
+                CarteraCruce cruce = new CarteraCruce(formaPago.getTotal(), carteraFactura, carteraDetalleAbono);
+                cruces.add(cruce);
+            //}
+        }
+        
+        //Por el momento solo hago este artificio para resolver que se cree el cruce automatico para las compras
+        if(facturaOriginal instanceof Compra)
+        {
+            return;
+        }
+        
         /**
          * =====================================================================
          * CREAR CRUCE DE LA FACTURA CUANDO SE PAGA CON CREDITO CARTERA
@@ -826,62 +911,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         }    
         
-        /**
-         * =================================================================
-         * CREAR CARTERA DEL RESTO DE FORMAS DE PAGO
-         * =================================================================
-         * Si esta habilitado el tema de credito no hago ningun cruce
-         */        
-        if(carteraParametro!=null && carteraParametro.habilitarCredito)
-            return;
         
-        //Si no esta habilitado se genera un CRUCE AUTOMATICO como ABONO
-        List<FormaPago> formasPagoOtros = factura.buscarListaFormasPagoDistintaDeCartera();
-        for (FormaPago formaPago : formasPagoOtros) {
-                
-                //Crear la cartera para los abonos
-                Cartera carteraAbono = new Cartera(
-                        factura.getCliente(),
-                        formaPago.getTotal(),
-                        formaPago.getTotal(),
-                        factura.getPuntoEstablecimiento().toString(),
-                        factura.getPuntoEmision().toString(),
-                        DocumentoEnum.ABONOS.getCodigo(),
-                        Cartera.TipoCarteraEnum.CLIENTE.getLetra(),
-                        factura.getSucursalEmpresa(),
-                        factura.getUsuario(),
-                        GeneralEnumEstado.ACTIVO);
-                
-                //Grabar la forma de pago que se esta generando con la cartera
-                carteraAbono.setSriFormaPago(formaPago.getSriFormaPago());
-
-                //Crear la cartera detalle del abono
-                CarteraDetalle carteraDetalleAbono = new CarteraDetalle();
-                carteraDetalleAbono.setReferenciaId(Long.parseLong(factura.getSecuencial()+""));
-                carteraDetalleAbono.setCartera(carteraAbono);
-                carteraDetalleAbono.setCruces(new ArrayList<CarteraCruce>());
-                carteraDetalleAbono.setDescripcion("venta #"+factura.getSecuencial());
-                carteraDetalleAbono.setSaldo(formaPago.getTotal());
-                carteraDetalleAbono.setTotal(formaPago.getTotal());
-                
-                carteraAbono.setReferenciaManual(factura.getSecuencial()+"");
-                
-                carteraAbono.addDetalle(carteraDetalleAbono);
-                
-                //Grabar la NUEVA CARTERA DEL ABONO
-                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR,true);
-                
-                
-                //TODO: Este artificio toca hacer porque aunque se supone que el detalle debe estar relacionado por referencia al mismo objeto
-                //internamienta el metodo grabarCarteraSinTransaccion hace clonar los detalles y se pierde la referencia y los detalles dejan de estar enlazados 
-                //TODO: Tambien obtengo el primer dato con la seguridad que para este caso siempre solo agrega un detalle
-                carteraDetalleAbono=carteraAbono.getDetalles().get(0);
-                
-                //grabo la referencia del CRUCE AUTOMATICO con la Factura
-                CarteraCruce cruce = new CarteraCruce(formaPago.getTotal(), carteraFactura, carteraDetalleAbono);
-                cruces.add(cruce);
-            //}
-        }
     }
     
     private void crearCarteraFactura(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
@@ -924,6 +954,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 carteraDetalle.setTotal(detalle.getTotal());
                 cartera.addDetalle(carteraDetalle);
             }
+            crearCrucesFactura(compra, cartera, cruces,carteraParametro);
         }
     }
     

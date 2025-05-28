@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="180" pageHeight="400" columnWidth="170" leftMargin="5" rightMargin="5" topMargin="10" bottomMargin="10" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="2.8481237518744824"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.y" value="501"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -97,7 +97,7 @@
 					<text><![CDATA[Hora]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="45" y="14" width="60" height="11" uuid="afa56287-233f-4cc6-9f8a-0cbc907ba162"/>
+					<reportElement x="45" y="14" width="56" height="11" uuid="afa56287-233f-4cc6-9f8a-0cbc907ba162"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -110,7 +110,7 @@
 					<text><![CDATA[Identicación]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="105" y="14" width="30" height="11" uuid="0f98ced4-10cd-4f6a-a52b-d2911ecd20f0"/>
+					<reportElement x="101" y="14" width="25" height="11" uuid="0f98ced4-10cd-4f6a-a52b-d2911ecd20f0"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -137,7 +137,7 @@
 					<textFieldExpression><![CDATA[$F{formaPago}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="135" y="14" width="20" height="11" uuid="63aa2005-abc1-40d5-b480-eb447f574f24"/>
+					<reportElement x="126" y="14" width="15" height="11" uuid="63aa2005-abc1-40d5-b480-eb447f574f24"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -154,7 +154,7 @@
 		<groupFooter>
 			<band height="16">
 				<staticText>
-					<reportElement mode="Opaque" x="25" y="0" width="60" height="11" backcolor="#F0F0F0" uuid="c593e527-da28-4b95-bd98-f7b83ff2c7cd"/>
+					<reportElement mode="Opaque" x="0" y="0" width="60" height="11" backcolor="#F0F0F0" uuid="c593e527-da28-4b95-bd98-f7b83ff2c7cd"/>
 					<box>
 						<topPen lineWidth="0.75"/>
 						<leftPen lineWidth="0.75"/>
@@ -167,7 +167,7 @@
 					<text><![CDATA[Subtotal]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true">
-					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="85" y="0" width="29" height="11" backcolor="#F0F0F0" uuid="c4e218a8-ff46-44e0-b85c-094425e10ce2"/>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="60" y="0" width="41" height="11" backcolor="#F0F0F0" uuid="c4e218a8-ff46-44e0-b85c-094425e10ce2"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -327,7 +327,7 @@
 	<detail>
 		<band height="10" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="45" y="0" width="60" height="10" uuid="93c22398-9d9f-40a5-a975-8f1b075822bc"/>
+				<reportElement stretchType="RelativeToBandHeight" x="45" y="0" width="56" height="10" uuid="93c22398-9d9f-40a5-a975-8f1b075822bc"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -355,7 +355,7 @@
 				<textFieldExpression><![CDATA[$F{secuencial}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="105" y="0" width="30" height="10" uuid="a0af36eb-c959-4d6f-a011-17643dbbdd46"/>
+				<reportElement stretchType="RelativeToBandHeight" x="101" y="0" width="25" height="10" uuid="a0af36eb-c959-4d6f-a011-17643dbbdd46"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -383,7 +383,7 @@
 				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="135" y="0" width="20" height="10" uuid="477784d9-c443-48d0-bb7e-9ede697a0de7"/>
+				<reportElement stretchType="RelativeToBandHeight" x="126" y="0" width="15" height="10" uuid="477784d9-c443-48d0-bb7e-9ede697a0de7"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -486,7 +486,7 @@
 	<summary>
 		<band height="17">
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="101" y="5" width="34" height="12" backcolor="#E3E3E3" uuid="2d6b6a10-679d-437e-9599-e07fc84c2f28"/>
+				<reportElement mode="Opaque" x="89" y="5" width="34" height="12" backcolor="#E3E3E3" uuid="2d6b6a10-679d-437e-9599-e07fc84c2f28"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Dashed"/>
 					<leftPen lineWidth="0.0" lineStyle="Dashed"/>
@@ -500,7 +500,7 @@
 				<textFieldExpression><![CDATA[$V{TOTAL_FINAL}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="5" width="100" height="12" forecolor="#000000" backcolor="#E3E3E3" uuid="5743af8d-a12f-44b4-a83e-b32d3d2fdb76"/>
+				<reportElement mode="Opaque" x="1" y="5" width="88" height="12" forecolor="#000000" backcolor="#E3E3E3" uuid="5743af8d-a12f-44b4-a83e-b32d3d2fdb76"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Dashed"/>
 					<leftPen lineWidth="0.0" lineStyle="Dashed"/>
