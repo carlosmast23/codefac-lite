@@ -303,6 +303,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         p.setPresentacionList(null);
         
         List<ProductoComponenteDetalle> componenteDetalleList=p.getComponenteList();
+        p.setComponenteList(null);
+        
         List<ProductoActividad> actividadList=p.getActividadList();
         
         entityManager.flush();
@@ -968,10 +970,18 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 
                 List<ProductoPresentacionDetalle> productoPresentacionList = producto.getPresentacionList();
                 producto.setPresentacionList(null);
+                
+                List<ProductoComponenteDetalle> componenteList= producto.getComponenteList();
+                producto.setComponenteList(null);
+                
+                
                 grabarEmpaques(producto, productoPresentacionList,CrudEnum.EDITAR);
                 eliminarEmpaques(producto, productoPresentacionList);
+                
+                
                 //producto.setPresentacion(presentacion);
                 producto.setPresentacionList(productoPresentacionList);
+                producto.setComponenteList(componenteList);
 
                 entityManager.merge(producto.getCatalogoProducto());
                 entityManager.merge(producto);
