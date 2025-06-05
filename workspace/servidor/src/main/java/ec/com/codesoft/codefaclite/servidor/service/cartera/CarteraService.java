@@ -828,7 +828,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 carteraAbono.addDetalle(carteraDetalleAbono);
                 
                 //Grabar la NUEVA CARTERA DEL ABONO
-                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR,true);
+                grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR,carteraParametro.pagarConCaja);
                 
                 
                 //TODO: Este artificio toca hacer porque aunque se supone que el detalle debe estar relacionado por referencia al mismo objeto
@@ -936,6 +936,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             }
             
             //Metodo que permite crear los cruces automaticos cuando sea el caso
+            //TODO: revisar el caso que no tenga activo caja esa parte de afectar para la caja
             crearCrucesFactura(factura, cartera, cruces,carteraParametro);
             
         } else if (tipo.equals(tipo.PROVEEDORES)) {
