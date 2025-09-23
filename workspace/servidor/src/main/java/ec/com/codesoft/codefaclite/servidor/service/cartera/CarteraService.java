@@ -254,7 +254,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         actualizarReferenciasCartera(cartera);
         
         //Grabar los datos para la caja para ver como sale en la cartera
-        if(afectarCaja)
+        if(afectarCaja!=null && afectarCaja)
         {
             grabarMovimientosCaja(cartera,false);
         }

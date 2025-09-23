@@ -134,6 +134,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //Solo se puede buscar presentaciones desde el producto original
         Producto productoOriginal=buscarProductoEmpaquePrincipal(producto);
         //Producto productoOriginal= producto.buscarPresentacionDetalleProducto().getProductoOriginal();
+        
+        //Si no encuentra el producto principal puede ser que estaba eliminado o mal enlazado y retorna 
+        //TODO: No hago más validaciones porque en el siguiente paso verifica si el producto estaba activo
+        if(productoOriginal==null)
+        {
+            return producto;
+        }
                 
         //Primero verifica si tiene una PRESENTACION POR DEFECTO
         String presentacionDefecto = productoOriginal.getCodigoPresentacionDefectoCompra();

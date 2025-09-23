@@ -677,6 +677,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
                 //Verificar promociones
                 verificarPromocionDosPorUno(factura);
+                
+                //primero verificar la caja para ver si tiene permisos
+                agregarDatosParaCajaSession(factura,null);
+                
+                //TODO: dejo esta parte por el momento porque si no funciona no se habilita para grabar las ventas
+                carteraParametro.pagarConCaja=true;
                                
                 //Metodo que va a grabar la factura
                 grabarSinTransaccion(factura,carteraParametro);
@@ -691,8 +697,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     PrestamoService prestamoService=new PrestamoService();
                     prestamoService.grabarSinTransaccion(prestamo, factura);
                 }
-                                
-                agregarDatosParaCajaSession(factura,null);
+                                                
                 
                 //Validaciones adicionales despues de hacer todo el proceso
                 validacionPostGrabar(factura,modoProcesar);

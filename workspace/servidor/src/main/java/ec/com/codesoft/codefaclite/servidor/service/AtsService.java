@@ -426,7 +426,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 .add(compraAts.getBaseNoGraIva().setScale(2, RoundingMode.HALF_UP))
                 .add(compraAts.getMontoIva().setScale(2, RoundingMode.HALF_UP))
                 .add(compraAts.getMontoIce().setScale(2, RoundingMode.HALF_UP))
-                .compareTo(new BigDecimal("1000")) > 0) {
+                .compareTo(new BigDecimal("400")) > 0) {
             compraAts.setFormasDePago(formasPago);
         }
 

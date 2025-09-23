@@ -138,8 +138,7 @@ public class Main {
     private static JFrame frameAplicacion=new JFrame();
 
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
-    
-    
+        
     /**
      * TODO: Ver si mejor se usa un enum
      * Variable para saber el modo que inicia el aplicativo

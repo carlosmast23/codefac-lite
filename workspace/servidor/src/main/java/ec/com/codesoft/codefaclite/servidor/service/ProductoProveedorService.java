@@ -69,6 +69,7 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
     }
 
     public ProductoProveedor buscarActivoPorCodigoProveedor(String codigoProveedor, Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException {
+        //TODO: Mejorar esta parte para solo obtener productos y no empaques
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("codigoProveedor", codigoProveedor);
         mapParametros.put("producto.empresa", empresa);

@@ -736,12 +736,19 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
         {
             for (CompraDetalle compraDetalle : compraDetalles) {
                 Vector<Object> fila = new Vector<>();
+                
+                BigDecimal porcentajeRenta=compraDetalle.getPorcentajeRenta();
+                if(porcentajeRenta==null)
+                {
+                    porcentajeRenta=compraDetalle.getSriRetencionRenta().getPorcentaje();
+                }
+                
                 fila.add(compraDetalle);
                 fila.add(compraDetalle.getDescripcion());
                 fila.add(compraDetalle.getBaseImponibleRenta().toString());
                 fila.add(compraDetalle.getSriRetencionIva().getPorcentaje());
                 fila.add(compraDetalle.getValorSriRetencionIVA());
-                fila.add(compraDetalle.getSriRetencionRenta().getPorcentaje());
+                fila.add(porcentajeRenta);
                 fila.add(compraDetalle.getValorSriRetencionRenta().setScale(2, RoundingMode.HALF_UP));
                 totalRetencionIva = totalRetencionIva.add(compraDetalle.getValorSriRetencionIVA());
                 totalRetencionRenta = totalRetencionRenta.add(compraDetalle.getValorSriRetencionRenta());
@@ -932,13 +939,18 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
                     retencion.addDetalle(retencionDetalleIva);
                 }
 
+                //Coger el porcentaje que corresponde para hacer la retención
+                BigDecimal porcentajeRetener = compraDetalle.getPorcentajeRenta();
+                if (porcentajeRetener == null) {
+                    porcentajeRetener = compraDetalle.getSriRetencionRenta().getPorcentaje();
+                }
 
                 //Detalle para la retencion de la renta
                 RetencionDetalle retencionDetalleRenta=new RetencionDetalle();
                 retencionDetalleRenta.setBaseImponible(compraDetalle.getBaseImponibleRenta());
                 retencionDetalleRenta.setCodigoSri(compraDetalle.getSriRetencionRenta().getRetencion().getCodigo());
                 retencionDetalleRenta.setCodigoRetencionSri(compraDetalle.getSriRetencionRenta().getCodigo().toString());
-                retencionDetalleRenta.setPorcentajeRetener(compraDetalle.getSriRetencionRenta().getPorcentaje().setScale(2,BigDecimal.ROUND_HALF_UP));
+                retencionDetalleRenta.setPorcentajeRetener(porcentajeRetener.setScale(2,BigDecimal.ROUND_HALF_UP));
                 retencionDetalleRenta.setRetencion(retencion);
                 retencionDetalleRenta.setValorRetenido(compraDetalle.getValorSriRetencionRenta().setScale(5, RoundingMode.HALF_UP));
                 

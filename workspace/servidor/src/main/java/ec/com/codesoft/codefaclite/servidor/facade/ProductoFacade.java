@@ -247,7 +247,27 @@ public class ProductoFacade extends AbstractFacade<Producto>
         List<Producto> productos=query.getResultList();
         if(productos.size()>0)
         {
-            return productos.get(0);
+            
+            for (Producto producto : productos) {
+                //Verificar si no esta eliminado la presentaciones original
+                Producto productoConsultado = producto;
+
+                if (productoConsultado.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) 
+                {
+                    Producto productoOriginal = productoConsultado.buscarProductoEmpaquePrincipal();
+                    if (productoOriginal.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                    {                        
+                        return productoConsultado;
+                    }
+                }
+                else
+                {
+                    // Si es un producto original y opor consecuencia de la consulta esta activo devuelvo el mismo producto
+                    return productoConsultado;
+                }
+            }            
+            
+            return null;
         }
         return null;
         

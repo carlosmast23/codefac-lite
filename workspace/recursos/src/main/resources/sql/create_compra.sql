@@ -141,6 +141,8 @@ create table COMPRA_DETALLE
     TOTAL_FINAL decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.3.1)*/
     CODIGO_SECUNDARIO varchar(100),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.3.6)*/
+    PORCENTAJE_RENTA decimal(6,2),
     primary key (ID)
 );
 

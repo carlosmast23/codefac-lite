@@ -81,6 +81,9 @@ public class CompraDetalle extends DetalleFacturaNotaCeditoAbstract implements S
     @Column(name = "CODIGO_SUSTENTO_SRI")
     private String codigoSustentoSri;
     
+    @Column(name = "PORCENTAJE_RENTA")
+    private BigDecimal porcentajeRenta;
+    
     //@Column(name = "PORCENTAJE_IVA")
     //private Integer porcentajeIva;
     
@@ -337,6 +340,15 @@ public class CompraDetalle extends DetalleFacturaNotaCeditoAbstract implements S
         this.costoUnitario = costoUnitario;
     }
 
+    public BigDecimal getPorcentajeRenta() {
+        return porcentajeRenta;
+    }
+
+    public void setPorcentajeRenta(BigDecimal porcentajeRenta) {
+        this.porcentajeRenta = porcentajeRenta;
+    }
+
+    
 
     
     /**

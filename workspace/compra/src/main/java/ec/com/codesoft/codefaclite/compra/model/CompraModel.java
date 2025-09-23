@@ -98,6 +98,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
@@ -1800,6 +1801,7 @@ public class CompraModel extends CompraPanel{
         
         compraDetalle.setSriRetencionIva(sriRetencionIva);
         compraDetalle.setSriRetencionRenta(sriRetencionRenta);
+        compraDetalle.setPorcentajeRenta(sriRetencionRenta.getPorcentaje());
         
         BigDecimal valorRetencionIVA = compraDetalle.getIva().multiply(new BigDecimal(sriRetencionIva.getPorcentaje()+"")).divide(new BigDecimal("100"));
         BigDecimal valorRetencionRenta = compraDetalle.getTotal().multiply(new BigDecimal(sriRetencionRenta.getPorcentaje()+"")).divide(new BigDecimal("100"));
@@ -2232,7 +2234,32 @@ public class CompraModel extends CompraPanel{
         jPopupMenu.add(jMenuItemDatoAdicional);
         jMenuItemDatoAdicional.addActionListener(listenerEliminarReembolsoPopUp);
         getTblFacturaReembolso().setComponentPopupMenu(jPopupMenu);
+        
+        //Agregar un popup para cambiar los porcentajes de las retenciones
+        JPopupMenu jPopupMenuRet=new JPopupMenu();
+        JMenuItem jMenuItemDatoAdicionalRet=new JMenuItem("Cambiar porcentaje");
+        jPopupMenuRet.add(jMenuItemDatoAdicionalRet);
+        jMenuItemDatoAdicionalRet.addActionListener(listenerRetencionRentaPopUp);
+        getCmbRetencionRenta().setComponentPopupMenu(jPopupMenuRet);
     }
+    
+    private ActionListener listenerRetencionRentaPopUp=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SriRetencionRenta sriRetencionRenta=(SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+            if(sriRetencionRenta!=null)
+            {
+                String input = JOptionPane.showInputDialog(null, "Ingrese el porcentaje:", "Porcentaje de Retención", JOptionPane.QUESTION_MESSAGE);
+                if(!UtilidadesTextos.verificarNullOVacio(input))
+                {
+                    BigDecimal nuevoPorcentaje=UtilidadBigDecimal.convertirTextoEnBigDecimal(input);
+                    sriRetencionRenta.setPorcentaje(nuevoPorcentaje);                    
+                    
+                }
+
+            }
+        }
+    };
     
     private ActionListener listenerEliminarReembolsoPopUp=new ActionListener() {
         @Override
